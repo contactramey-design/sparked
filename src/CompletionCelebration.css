@@ -1,0 +1,109 @@
+.completion-celebration-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 40;
+}
+
+.completion-celebration-confetti {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle at 10% 20%, #f97316 2px, transparent 2px),
+    radial-gradient(circle at 80% 0%, #22c55e 3px, transparent 3px),
+    radial-gradient(circle at 0% 80%, #0ea5e9 2px, transparent 2px),
+    radial-gradient(circle at 90% 90%, #e11d48 4px, transparent 4px);
+  background-size: 120px 120px;
+  opacity: 0.55;
+  animation: confettiFloat 10s linear infinite;
+}
+
+@keyframes confettiFloat {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(40px);
+  }
+}
+
+.completion-celebration-modal {
+  position: relative;
+  max-width: 720px;
+  width: 100%;
+  background: #fefce8;
+  border-radius: 20px;
+  padding: 1.5rem;
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+  gap: 1.25rem;
+  box-shadow: 0 20px 60px rgba(15, 23, 42, 0.35);
+  z-index: 41;
+}
+
+.completion-close-button {
+  position: absolute;
+  top: 0.6rem;
+  right: 0.6rem;
+  border: none;
+  background: transparent;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.completion-certificate {
+  border-radius: 16px;
+  padding: 1.25rem;
+  background: #fffbeb;
+  border: 2px dashed rgba(234, 179, 8, 0.9);
+  text-align: center;
+}
+
+.completion-certificate h2 {
+  margin: 0 0 0.3rem;
+}
+
+.certificate-subtitle {
+  margin: 0;
+  font-size: 0.85rem;
+  opacity: 0.8;
+}
+
+.certificate-name {
+  margin: 0.4rem 0;
+  font-size: 1.4rem;
+  font-weight: 800;
+}
+
+.certificate-body,
+.certificate-unit,
+.certificate-footer {
+  margin: 0.2rem 0;
+}
+
+.certificate-unit {
+  font-weight: 600;
+}
+
+.completion-badge-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.completion-badge-canvas {
+  width: 220px;
+  height: 220px;
+  border-radius: 999px;
+  background: #0f172a;
+}
+
+@media (max-width: 800px) {
+  .completion-celebration-modal {
+    grid-template-columns: 1fr;
+  }
+}
+
