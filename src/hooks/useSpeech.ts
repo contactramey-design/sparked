@@ -6,8 +6,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { appConfig } from '../config'
 
-const DEFAULT_RATE = 0.92
-const DEFAULT_PITCH = 1.05
+const DEFAULT_RATE = 0.98
+const DEFAULT_PITCH = 1.08
 const LANG = 'en-US'
 
 // Voice names (partial match) that tend to sound more natural and kid-friendly
@@ -140,6 +140,9 @@ export function useSpeech() {
           await audio.play()
         } catch (e) {
           if ((e as Error).name !== 'AbortError') {
+            if (process.env.NODE_ENV === 'development') {
+              console.warn('TTS cloud failed, using browser voice:', (e as Error).message)
+            }
             if (window.speechSynthesis) fallbackSpeak(t, options)
           }
           abortRef.current = null

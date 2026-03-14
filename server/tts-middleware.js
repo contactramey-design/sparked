@@ -43,8 +43,10 @@ export function ttsMiddleware() {
         return
       }
 
-      const voiceId = process.env.ELEVENLABS_VOICE_ID || '21m00tcm4tlvdq8ikwam'
+      const voiceId = process.env.ELEVENLABS_VOICE_ID || 'EXAVITQu4vr4xnSDxMaL' // Bella – warm, friendly; override with ELEVENLABS_VOICE_ID for others
       const truncated = text.length > MAX_TEXT_LENGTH ? text.slice(0, MAX_TEXT_LENGTH) : text
+      const stability = Number(process.env.ELEVENLABS_STABILITY) || 0.45
+      const similarityBoost = Number(process.env.ELEVENLABS_SIMILARITY_BOOST) || 0.8
 
       const response = await fetch(`${ELEVENLABS_BASE}/${voiceId}`, {
         method: 'POST',
@@ -55,7 +57,11 @@ export function ttsMiddleware() {
         },
         body: JSON.stringify({
           text: truncated,
-          model_id: process.env.ELEVENLABS_MODEL_ID || 'eleven_monolingual_v1',
+          model_id: process.env.ELEVENLABS_MODEL_ID || 'eleven_multilingual_v2',
+          voice_settings: {
+            stability,
+            similarity_boost: similarityBoost,
+          },
         }),
       })
 
