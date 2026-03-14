@@ -1,3 +1,4 @@
+// Completion celebration modal and badge (single component)
 import React, { useEffect, useRef } from 'react'
 import './CompletionCelebration.css'
 
