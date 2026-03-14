@@ -28,16 +28,14 @@ const TrackPage: React.FC = () => {
         <p className="track-overview-description">{track.description}</p>
       </header>
 
-      {track.id === 'social-safety' && (
+      {track.introVideoUrl ? (
         <div className="track-intro-video video-wrapper">
           <video controls style={{ width: '100%', borderRadius: '12px' }}>
-            <source src="/safetyAppIntro.mp4" type="video/mp4" />
+            <source src={track.introVideoUrl} type="video/mp4" />
             Sorry, your browser doesn’t support the video tag.
           </video>
         </div>
-      )}
-
-      {track.id !== 'social-safety' && (
+      ) : (
         <div className="track-intro-placeholder card">
           <p>
             Imagine SpArki in this track&apos;s world – for AI &amp; Coding, SpArki

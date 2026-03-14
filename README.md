@@ -6,12 +6,9 @@ This template provides a minimal setup to get React working in Vite with HMR and
 
 ## Adding videos or images to the site
 
-Place files in the **`public`** folder. They are served from the site root:
+Place files in the **`public`** folder. They are served from the site root (e.g. `/my-video.mp4`). No `import` needed for public assets.
 
-- `public/sparkiadventureintro.mp4` → use in code as **`/sparkiadventureintro.mp4`**
-- `public/my-video.mp4` → use as **`/my-video.mp4`**
-
-In a React component: `<video><source src="/my-video.mp4" type="video/mp4" /></video>`. No `import` needed for public assets.
+**Course and track videos:** Unit videos and track intro videos are configured in **`src/curriculum.ts`**. See **[VIDEOS.md](VIDEOS.md)** for where to plug in unit `videoUrl` and track `introVideoUrl`.
 
 Currently, two official plugins are available:
 

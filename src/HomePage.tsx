@@ -1,7 +1,11 @@
-import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useState, useEffect } from 'react'
+import { Link, useSearchParams } from 'react-router-dom'
 import { appConfig } from './config'
 import { useAuth } from './AuthContext'
+import { getPlayerStats } from './progress'
+import { ParentViewContent } from './ParentDashboard'
+
+type ViewMode = 'kid' | 'parent'
 
 const TIERS = [
   {
@@ -17,7 +21,7 @@ const TIERS = [
     title: 'AI & Coding',
     description: 'Discover what AI is, how code works, and how software helps people.',
     path: '/track/ai-coding',
-    imageSrc: '/ai-coding-card.png',
+    imageSrc: '/sparkiaicodingcardhomepage.png',
     imageAlt: 'SpArki in the AI and Coding world',
   },
   {
@@ -77,12 +81,105 @@ function TierCard({
 
 const HomePage: React.FC = () => {
   const { isLoggedIn } = useAuth()
+  const [searchParams, setSearchParams] = useSearchParams()
+  const viewParam = searchParams.get('view')
+  const [viewMode, setViewMode] = useState<ViewMode>(
+    viewParam === 'parent' ? 'parent' : 'kid',
+  )
+  const [username, setUsername] = useState('')
+  const [sparkles, setSparkles] = useState(0)
+
+  useEffect(() => {
+    const next = viewParam === 'parent' ? 'parent' : 'kid'
+    setViewMode(next)
+  }, [viewParam])
+
+  useEffect(() => {
+    if (!isLoggedIn) return
+    try {
+      const name = window.localStorage.getItem(appConfig.progress.usernameStorageKey) || ''
+      setUsername(name)
+      setSparkles(getPlayerStats().totalSparkles)
+    } catch {
+      // ignore
+    }
+  }, [isLoggedIn])
+
+  const setView = (mode: ViewMode) => {
+    setViewMode(mode)
+    if (mode === 'parent') {
+      setSearchParams({ view: 'parent' }, { replace: true })
+    } else {
+      setSearchParams({}, { replace: true })
+    }
+  }
 
   const loginPath = '/login'
   const redirectParam = (path: string) =>
     `${loginPath}?redirect=${encodeURIComponent(path)}`
 
   const ctaHref = isLoggedIn ? '/tracks' : `/login?redirect=${encodeURIComponent('/tracks')}`
+
+  if (isLoggedIn) {
+    return (
+      <section className="home-page home-hub">
+        <div className="hub-toggle-bar" role="tablist" aria-label="View: Kid or Parent">
+          <span className="hub-toggle-label">View:</span>
+          <button
+            type="button"
+            role="tab"
+            aria-selected={viewMode === 'kid'}
+            className={viewMode === 'kid' ? 'active' : ''}
+            onClick={() => setView('kid')}
+          >
+            Kid
+          </button>
+          <button
+            type="button"
+            role="tab"
+            aria-selected={viewMode === 'parent'}
+            className={viewMode === 'parent' ? 'active' : ''}
+            onClick={() => setView('parent')}
+          >
+            Parent
+          </button>
+        </div>
+
+        {viewMode === 'kid' && (
+          <>
+            <p className="hub-kid-line">
+              Hi {username || 'Explorer'} · {sparkles} sparkles
+            </p>
+            <div className="home-tiers">
+              <h2 className="home-tiers-title">Choose your adventure</h2>
+              <div className="home-tier-grid">
+                {TIERS.map((tier) => (
+                  <TierCard key={tier.id} tier={tier} href={tier.path} />
+                ))}
+              </div>
+            </div>
+          </>
+        )}
+
+        {viewMode === 'parent' && (
+          <div className="hub-parent-wrap">
+            <ParentViewContent />
+          </div>
+        )}
+
+        <div className="home-footer-actions">
+          <a
+            href={appConfig.parentResources.handbookPdfUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="link-muted"
+          >
+            Parent Guide
+          </a>
+        </div>
+      </section>
+    )
+  }
 
   return (
     <section className="home-page">
@@ -115,7 +212,7 @@ const HomePage: React.FC = () => {
         <h2 className="home-tiers-title">Choose your adventure</h2>
         <div className="home-tier-grid">
           {TIERS.map((tier) => {
-            const href = isLoggedIn ? tier.path : redirectParam(tier.path)
+            const href = redirectParam(tier.path)
             return (
               <TierCard
                 key={tier.id}
@@ -128,11 +225,9 @@ const HomePage: React.FC = () => {
       </div>
 
       <div className="home-footer-actions">
-        {!isLoggedIn && (
-          <Link to={loginPath} className="secondary-button">
-            Grown-up? Sign in
-          </Link>
-        )}
+        <Link to={loginPath} className="secondary-button">
+          Grown-up? Sign in
+        </Link>
         <a
           href={appConfig.parentResources.handbookPdfUrl}
           target="_blank"

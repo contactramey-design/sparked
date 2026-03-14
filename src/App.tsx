@@ -12,7 +12,6 @@ import { AuthProvider, useAuth } from './AuthContext'
 import ProtectedRoute from './ProtectedRoute'
 import HomePage from './HomePage'
 import LoginPage from './LoginPage'
-import DashboardPage from './DashboardPage'
 import LessonPage from './Lesson'
 import TrackListPage from './TrackListPage'
 import TrackPage from './TrackPage'
@@ -52,8 +51,7 @@ function AppHeader() {
           <nav className="main-nav" aria-label="Main navigation">
             <Link to="/">Home</Link>
             <Link to="/tracks">Courses</Link>
-            <Link to="/dashboard">Dashboard</Link>
-            {!kidLock && <Link to="/parent">Parent</Link>}
+            {!kidLock && <Link to="/?view=parent">Parent</Link>}
             <button
               type="button"
               onClick={logout}
@@ -80,8 +78,7 @@ function AppHeader() {
       <nav className="main-nav" aria-label="Main navigation">
         <Link to="/">Home</Link>
         <Link to="/tracks">Courses</Link>
-        <Link to="/dashboard">Dashboard</Link>
-        {!kidLock && <Link to="/parent">Parent</Link>}
+        {!kidLock && <Link to="/?view=parent">Parent</Link>}
         <button
           type="button"
           onClick={logout}
@@ -142,7 +139,7 @@ const App: React.FC = () => {
                 path="/dashboard"
                 element={
                   <ProtectedRoute>
-                    <DashboardPage />
+                    <Navigate to="/" replace />
                   </ProtectedRoute>
                 }
               />
@@ -190,7 +187,7 @@ const App: React.FC = () => {
                 path="/parent"
                 element={
                   <ProtectedRoute>
-                    <Navigate to="/dashboard?view=parent" replace />
+                    <Navigate to="/?view=parent" replace />
                   </ProtectedRoute>
                 }
               />

@@ -1,3 +1,7 @@
+/**
+ * Curriculum: tracks and units. Unit video: add videoUrl to a unit (file in public/).
+ * Track intro video: add introVideoUrl to a track. See VIDEOS.md.
+ */
 export type AgeGroupId = 'age2'
 
 export type TrackId = 'ai-coding' | 'social-safety'
@@ -46,6 +50,8 @@ export interface TrackConfig {
   title: string
   description: string
   order: number
+  /** Optional intro video for the track overview page. Put file in public/ and use path from root (e.g. '/safetyAppIntro.mp4'). */
+  introVideoUrl?: string
 }
 
 export interface CurriculumConfig {
@@ -70,6 +76,7 @@ export const curriculum: CurriculumConfig = {
       description:
         'SpArki helps you practice safe watching, kind comments, and healthy screen time.',
       order: 2,
+      introVideoUrl: '/safetyAppIntro.mp4',
     },
   ],
   units: [
