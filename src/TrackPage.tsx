@@ -2,6 +2,8 @@ import React from 'react'
 import { Link, useParams, useNavigate } from 'react-router-dom'
 import { curriculum } from './curriculum'
 import { getUnitStatus, isUnitLockedForTrack, getHasSafetyPass } from './progress'
+import ListenButton from './components/ListenButton'
+import { VIDEO_POSTER_DATA_URL } from './videoPoster'
 
 const TrackPage: React.FC = () => {
   const { trackId } = useParams<{ trackId: string }>()
@@ -24,8 +26,14 @@ const TrackPage: React.FC = () => {
         <Link to="/tracks" className="link-back">
           ← Back to Tracks
         </Link>
-        <h1 className="track-overview-title">{track.title}</h1>
-        <p className="track-overview-description">{track.description}</p>
+        <div className="flex flex-wrap items-center gap-2">
+          <h1 className="track-overview-title">{track.title}</h1>
+          <ListenButton text={track.title} ariaLabel="Listen to track title" size="sm" />
+        </div>
+        <div className="flex flex-wrap items-center gap-2">
+          <p className="track-overview-description">{track.description}</p>
+          <ListenButton text={track.description} ariaLabel="Listen to track description" size="sm" />
+        </div>
       </header>
 
       {track.introVideoUrl ? (
@@ -36,6 +44,7 @@ const TrackPage: React.FC = () => {
           <video
             controls
             preload="metadata"
+            poster={VIDEO_POSTER_DATA_URL}
             style={{ width: '100%', borderRadius: '12px' }}
             title={track.id === 'social-safety' ? 'Safety intro' : undefined}
             aria-label={track.id === 'social-safety' ? 'Safety intro video' : undefined}

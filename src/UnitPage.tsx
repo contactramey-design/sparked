@@ -22,7 +22,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
-import ListenButton from '@/components/ListenButton'
+import ListenButton from './components/ListenButton'
 import { VIDEO_POSTER_DATA_URL } from './videoPoster'
 
 function isYouTubeEmbedUrl(url: string): boolean {
