@@ -10,6 +10,8 @@ import SnapchatSafetyQuiz from './SnapchatSafetyQuiz'
 import RobloxSafetyQuiz from './RobloxSafetyQuiz'
 import FortniteSafetyQuiz from './FortniteSafetyQuiz'
 import RedditForumsSafetyQuiz from './RedditForumsSafetyQuiz'
+import ExampleCollectorQuiz from './ExampleCollectorQuiz'
+import BodyCodeChainQuiz from './BodyCodeChainQuiz'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import {
@@ -20,6 +22,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
+import ListenButton from '@/components/ListenButton'
+import { VIDEO_POSTER_DATA_URL } from './videoPoster'
 
 function isYouTubeEmbedUrl(url: string): boolean {
   return /youtube\.com\/embed\/|youtu\.be\//i.test(url)
@@ -60,24 +64,18 @@ const UnitPage: React.FC = () => {
   const [materialFinished, setMaterialFinished] = useState(false)
   const [thinkPromptOpen, setThinkPromptOpen] = useState<number | null>(null)
   const materialEndRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    if (!materialEndRef.current || materialFinished) return
-    const el = materialEndRef.current
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0]?.isIntersecting) setMaterialFinished(true)
-      },
-      { threshold: 0.5, rootMargin: '0px 0px 100px 0px' },
-    )
-    observer.observe(el)
-    return () => observer.disconnect()
-  }, [materialFinished])
+  const quizSectionRef = useRef<HTMLDivElement>(null)
 
   const nextUnit =
     unit && unit.unlocksUnitId
       ? curriculum.units.find((u) => u.id === unit.unlocksUnitId)
       : null
+
+  useEffect(() => {
+    if (materialFinished && quizSectionRef.current) {
+      quizSectionRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
+  }, [materialFinished])
 
   if (!unit) {
     navigate('/tracks', { replace: true })
@@ -195,6 +193,30 @@ const UnitPage: React.FC = () => {
     }
   }
 
+  const handleAI1Complete = (correctCount: number) => {
+    const total = 10
+    const result = updateUnitAfterQuiz(unit, correctCount, total)
+    setEarnedSparkles(result.earnedThisAttempt)
+    const updatedStatus = result.progress.units[unit.id]
+    const justMastered = !!updatedStatus?.mastered
+    setMastered(justMastered)
+    if (!wasAlreadyMastered && justMastered) {
+      setShowCelebration(true)
+    }
+  }
+
+  const handleAI2Complete = (correctCount: number) => {
+    const total = 5
+    const result = updateUnitAfterQuiz(unit, correctCount, total)
+    setEarnedSparkles(result.earnedThisAttempt)
+    const updatedStatus = result.progress.units[unit.id]
+    const justMastered = !!updatedStatus?.mastered
+    setMastered(justMastered)
+    if (!wasAlreadyMastered && justMastered) {
+      setShowCelebration(true)
+    }
+  }
+
   const correctCountText =
     score !== null
       ? `You got ${score} out of ${unit.quizQuestions.length} correct.`
@@ -264,7 +286,14 @@ const UnitPage: React.FC = () => {
           {unit.thinkPrompts && thinkPromptOpen !== null && unit.thinkPrompts[thinkPromptOpen] && (
             <>
               <DialogHeader>
-                <DialogTitle>{unit.thinkPrompts[thinkPromptOpen].label}</DialogTitle>
+                <div className="flex items-center gap-2">
+                  <DialogTitle>{unit.thinkPrompts[thinkPromptOpen].label}</DialogTitle>
+                  <ListenButton
+                    text={`${unit.thinkPrompts[thinkPromptOpen].label}. ${unit.thinkPrompts[thinkPromptOpen].text}`}
+                    ariaLabel="Listen to this question"
+                    size="sm"
+                  />
+                </div>
                 <DialogDescription id="think-prompt-desc">{unit.thinkPrompts[thinkPromptOpen].text}</DialogDescription>
               </DialogHeader>
               <DialogFooter>
@@ -297,7 +326,7 @@ const UnitPage: React.FC = () => {
                 className="unit-video-iframe"
               />
             ) : (
-              <video controls width="100%" poster="/ai-1-poster.png">
+              <video controls width="100%" poster={VIDEO_POSTER_DATA_URL} preload="metadata">
                 <source src={videoSrc} type="video/mp4" />
                 Sorry, your browser does not support embedded videos.
               </video>
@@ -306,12 +335,18 @@ const UnitPage: React.FC = () => {
         )}
 
         <div className="mt-8 space-y-8">
-          <h2 className="text-3xl font-bold text-center text-blue-600 md:text-4xl" style={{ fontSize: 'min(1.75rem, 5vw)' }}>
-            Learn with SpArki
-          </h2>
-          <p className="text-center text-lg text-slate-700 md:text-xl" style={{ minHeight: '1.25rem' }}>
-            {unit.summary}
-          </p>
+          <div className="flex flex-wrap items-center justify-center gap-2">
+            <h2 className="text-3xl font-bold text-center text-blue-600 md:text-4xl" style={{ fontSize: 'min(1.75rem, 5vw)' }}>
+              Learn with SpArki
+            </h2>
+            <ListenButton text="Learn with SpArki" ariaLabel="Listen to heading" size="sm" />
+          </div>
+          <div className="flex flex-wrap items-center justify-center gap-2">
+            <p className="text-center text-lg text-slate-700 md:text-xl" style={{ minHeight: '1.25rem' }}>
+              {unit.summary}
+            </p>
+            <ListenButton text={unit.summary} ariaLabel="Listen to summary" size="sm" />
+          </div>
 
           {(() => {
             const { story, rules } = parseContentBlocks(unit.contentBlocks)
@@ -319,26 +354,35 @@ const UnitPage: React.FC = () => {
               <>
                 {rules.length > 0 && (
                   <div className="grid gap-4 sm:gap-6 md:grid-cols-2">
-                    {rules.map((rule, index) => (
-                      <Card key={index} className="border-2 border-blue-100 bg-blue-50/50 shadow-sm">
-                        <CardHeader className="pb-2">
-                          <CardTitle className="flex items-start gap-2 text-left text-lg text-blue-900">
-                            <span className="mt-0.5 text-2xl" role="img" aria-hidden>🤖</span>
-                            <span>
-                              {rule.label && <span className="font-extrabold">{rule.label}: </span>}
-                              {rule.text}
-                            </span>
-                          </CardTitle>
-                        </CardHeader>
-                      </Card>
-                    ))}
+                    {rules.map((rule, index) => {
+                      const ruleText = rule.label ? `${rule.label}: ${rule.text}` : rule.text
+                      return (
+                        <Card key={index} className="border-2 border-blue-100 bg-blue-50/50 shadow-sm">
+                          <CardHeader className="pb-2">
+                            <div className="flex items-start justify-between gap-2">
+                              <CardTitle className="flex items-start gap-2 text-left text-lg text-blue-900 flex-1">
+                                <span className="mt-0.5 text-2xl" role="img" aria-hidden>🤖</span>
+                                <span>
+                                  {rule.label && <span className="font-extrabold">{rule.label}: </span>}
+                                  {rule.text}
+                                </span>
+                              </CardTitle>
+                              <ListenButton text={ruleText} ariaLabel={`Listen to rule ${index + 1}`} size="sm" className="flex-shrink-0" />
+                            </div>
+                          </CardHeader>
+                        </Card>
+                      )
+                    })}
                   </div>
                 )}
 
                 {story && (
                   <Card className="border-2 border-pink-200 bg-pink-50/60 shadow-md">
                     <CardHeader>
-                      <CardTitle className="text-xl text-pink-900 md:text-2xl">Story Time with SpArki</CardTitle>
+                      <div className="flex items-center gap-2">
+                        <CardTitle className="text-xl text-pink-900 md:text-2xl">Story Time with SpArki</CardTitle>
+                        <ListenButton text={`Story Time with SpArki. ${story}`} ariaLabel="Listen to story" size="sm" />
+                      </div>
                     </CardHeader>
                     <CardContent className="space-y-4">
                       <p className="text-base leading-relaxed text-slate-800 md:text-lg" style={{ fontSize: 'min(1.25rem, 4vw)' }}>
@@ -376,7 +420,10 @@ const UnitPage: React.FC = () => {
 
           <Card className="border-2 border-yellow-200 bg-yellow-50/60">
             <CardHeader>
-              <CardTitle className="text-xl text-yellow-900 md:text-2xl">Unit Activity</CardTitle>
+              <div className="flex items-center gap-2">
+                <CardTitle className="text-xl text-yellow-900 md:text-2xl">Unit Activity</CardTitle>
+                <ListenButton text={`Unit Activity. ${unit.activity.description}`} ariaLabel="Listen to activity" size="sm" />
+              </div>
             </CardHeader>
             <CardContent>
               <p className="text-base leading-relaxed text-slate-800 md:text-lg" style={{ fontSize: 'min(1.25rem, 4vw)' }}>
@@ -385,10 +432,10 @@ const UnitPage: React.FC = () => {
             </CardContent>
           </Card>
 
-          <div ref={materialEndRef} className="unit-material-end border-t-2 border-dashed border-slate-200 pt-8">
+          <div ref={materialEndRef} className="unit-material-end w-full flex flex-col items-center justify-center border-t-2 border-dashed border-slate-200 pt-8">
             <Button
               size="lg"
-              className="w-full min-h-[3.5rem] text-lg md:max-w-md md:mx-auto"
+              className="w-full min-h-[3.5rem] max-w-md text-lg shrink-0"
               onClick={() => setMaterialFinished(true)}
               aria-label="I've finished the material — show my quiz"
             >
@@ -398,7 +445,9 @@ const UnitPage: React.FC = () => {
         </div>
       </div>
 
-      {materialFinished && unit.id === 'safety-instagram' && (
+      {materialFinished && (
+        <div ref={quizSectionRef} className="unit-quiz-section mt-6" style={{ scrollMarginTop: '1rem' }}>
+      {unit.id === 'safety-instagram' && (
         <div className="unit-quiz-section mt-6">
           <InstagramSafetyQuiz
             unit={unit}
@@ -464,7 +513,29 @@ const UnitPage: React.FC = () => {
           />
         </div>
       )}
-      {materialFinished && unit.id !== 'safety-instagram' && unit.id !== 'safety-tiktok' && unit.id !== 'safety-snapchat' && unit.id !== 'safety-roblox' && unit.id !== 'safety-fortnite' && unit.id !== 'safety-reddit' && (
+      {materialFinished && unit.id === 'ai-1-what-is-ai' && (
+        <div className="unit-quiz-section mt-6">
+          <ExampleCollectorQuiz
+            unit={unit}
+            nextUnit={nextUnit ?? null}
+            earnedSparkles={earnedSparkles}
+            mastered={mastered}
+            onComplete={handleAI1Complete}
+          />
+        </div>
+      )}
+      {materialFinished && unit.id === 'ai-2-coding-games' && (
+        <div className="unit-quiz-section mt-6">
+          <BodyCodeChainQuiz
+            unit={unit}
+            nextUnit={nextUnit ?? null}
+            earnedSparkles={earnedSparkles}
+            mastered={mastered}
+            onComplete={handleAI2Complete}
+          />
+        </div>
+      )}
+      {unit.id !== 'safety-instagram' && unit.id !== 'safety-tiktok' && unit.id !== 'safety-snapchat' && unit.id !== 'safety-roblox' && unit.id !== 'safety-fortnite' && unit.id !== 'safety-reddit' && unit.id !== 'ai-1-what-is-ai' && unit.id !== 'ai-2-coding-games' && (
         <div className="unit-quiz-section mt-6">
           <GameQuiz
             unit={unit}
@@ -479,6 +550,8 @@ const UnitPage: React.FC = () => {
             nextUnit={nextUnit ?? null}
             correctCountText={correctCountText}
           />
+        </div>
+      )}
         </div>
       )}
     </section>
