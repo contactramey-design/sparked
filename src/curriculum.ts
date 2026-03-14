@@ -76,7 +76,7 @@ export const curriculum: CurriculumConfig = {
       description:
         'SpArki helps you practice safe watching, kind comments, and healthy screen time.',
       order: 2,
-      introVideoUrl: '/safetyAppIntro.mp4',
+      introVideoUrl: '/safety_into.mp4',
     },
   ],
   units: [

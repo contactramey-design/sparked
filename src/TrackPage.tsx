@@ -30,7 +30,16 @@ const TrackPage: React.FC = () => {
 
       {track.introVideoUrl ? (
         <div className="track-intro-video video-wrapper">
-          <video controls style={{ width: '100%', borderRadius: '12px' }}>
+          {track.id === 'social-safety' && (
+            <h2 className="track-intro-video-title">Safety intro</h2>
+          )}
+          <video
+            controls
+            preload="metadata"
+            style={{ width: '100%', borderRadius: '12px' }}
+            title={track.id === 'social-safety' ? 'Safety intro' : undefined}
+            aria-label={track.id === 'social-safety' ? 'Safety intro video' : undefined}
+          >
             <source src={track.introVideoUrl} type="video/mp4" />
             Sorry, your browser doesn’t support the video tag.
           </video>
