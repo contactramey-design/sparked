@@ -437,9 +437,9 @@ const UnitPage: React.FC = () => {
               size="lg"
               className="w-full min-h-[3.5rem] max-w-md text-lg shrink-0"
               onClick={() => setMaterialFinished(true)}
-              aria-label="I've finished the material — show my quiz"
+              aria-label="Finished, show quiz"
             >
-              I&apos;ve finished the material — show my quiz
+              Finished, show quiz
             </Button>
           </div>
         </div>

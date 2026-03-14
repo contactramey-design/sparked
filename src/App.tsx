@@ -32,7 +32,7 @@ function AppHeader() {
   if (isHome || isLogin) {
     return (
       <header className="app-header">
-        <div className="logo-placeholder">SpArki</div>
+        <div className="logo-placeholder" aria-hidden>🤖 SpArki</div>
         <div className="app-titles">
           <h1>{appConfig.appName}</h1>
           <p>{appConfig.tagline}</p>
@@ -69,7 +69,7 @@ function AppHeader() {
   return (
     <header className="app-header">
       <Link to="/" className="logo-placeholder" aria-label="SpArki home">
-        SpArki
+        🤖 SpArki
       </Link>
       <div className="app-titles">
         <h1>{appConfig.appName}</h1>

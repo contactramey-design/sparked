@@ -5,10 +5,26 @@
   --bg-soft: #fef3c7;       /* warm background */
 }
 
+/* Gentle kid-friendly animations */
+@keyframes header-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
+
+@keyframes soft-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.92; }
+}
+
+@keyframes page-fade-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 body {
   margin: 0;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  background: var(--bg-soft);
+  background: #fff;
 }
 
 #root {
@@ -45,33 +61,42 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0.85rem 1.5rem;
-  background: rgba(15, 23, 42, 0.22);
-  backdrop-filter: blur(10px);
+  padding: 0.9rem 1.5rem;
+  background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 50%, #93c5fd 100%);
   color: white;
+  border-radius: 0 0 20px 20px;
+  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.25);
+  animation: soft-pulse 4s ease-in-out infinite;
 }
 
 .logo-placeholder {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.3);
+  min-width: 56px;
+  height: 56px;
+  padding: 0 6px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.35);
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: 800;
+  font-size: 1.1rem;
   text-decoration: none;
   color: inherit;
+  animation: header-float 2.5s ease-in-out infinite;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .app-titles h1 {
   margin: 0;
-  font-size: 1.2rem;
+  font-size: 1.25rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
 }
 
 .app-titles p {
-  margin: 0;
-  font-size: 0.85rem;
+  margin: 0.15rem 0 0;
+  font-size: 0.8rem;
+  opacity: 0.95;
 }
 
 .main-nav {
@@ -82,9 +107,16 @@ body {
 .main-nav a {
   color: white;
   text-decoration: none;
-  padding: 0.4rem 0.85rem;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.25);
+  padding: 0.5rem 1rem;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.3);
+  font-weight: 600;
+  transition: transform 0.15s, background 0.15s;
+}
+
+.main-nav a:hover {
+  background: rgba(255, 255, 255, 0.45);
+  transform: scale(1.05);
 }
 
 .main-nav a:focus-visible,
@@ -96,11 +128,18 @@ body {
 .nav-button {
   font: inherit;
   color: white;
-  background: rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.3);
   border: none;
-  padding: 0.4rem 0.85rem;
-  border-radius: 999px;
+  padding: 0.5rem 1rem;
+  border-radius: 14px;
   cursor: pointer;
+  font-weight: 600;
+  transition: transform 0.15s, background 0.15s;
+}
+
+.nav-button:hover {
+  background: rgba(255, 255, 255, 0.45);
+  transform: scale(1.05);
 }
 
 .app-main {
@@ -108,6 +147,8 @@ body {
   max-width: 1120px;
   margin: 0 auto 1.5rem;
   padding: 1.25rem;
+  background: #fff;
+  animation: page-fade-in 0.35s ease-out;
 }
 
 .app-footer {
@@ -801,7 +842,42 @@ body {
 }
 
 .unit-page-single .lesson-header {
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
+  padding: 1rem 1.25rem;
+  background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+  border-radius: 16px;
+  border: 2px solid #93c5fd;
+  box-shadow: 0 2px 12px rgba(59, 130, 246, 0.12);
+  animation: page-fade-in 0.4s ease-out;
+}
+
+.unit-page-single .lesson-header h2 {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #1e40af;
+  margin: 0;
+}
+
+.unit-page-single .lesson-header .welcome-subtitle {
+  margin: 0.25rem 0 0;
+  font-size: 0.95rem;
+  color: #3b82f6;
+  font-weight: 600;
+}
+
+.unit-page-single .lesson-header .link-back {
+  padding: 0.5rem 1rem;
+  border-radius: 12px;
+  background: #fff;
+  border: 2px solid #93c5fd;
+  color: #2563eb;
+  font-weight: 600;
+  transition: transform 0.15s, background 0.15s;
+}
+
+.unit-page-single .lesson-header .link-back:hover {
+  background: #dbeafe;
+  transform: scale(1.03);
 }
 
 .unit-material-section {
@@ -869,12 +945,22 @@ body {
   margin-bottom: 0.5rem;
   padding-top: 1.5rem;
   padding-bottom: 1rem;
-  border-top: 2px dashed rgba(37, 99, 235, 0.3);
+  border-top: 2px dashed rgba(59, 130, 246, 0.35);
   min-height: 5rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+}
+
+/* Kid-friendly finish button with subtle hover animation */
+.unit-material-end button {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.unit-material-end button:hover {
+  transform: scale(1.03);
+  box-shadow: 0 4px 20px rgba(37, 99, 235, 0.25);
 }
 
 .finish-material-button {
@@ -893,15 +979,15 @@ body {
   border-radius: 12px;
 }
 
-/* Cyberpunk-style background layer for unit pages */
+/* Kid-friendly light background for unit pages */
 .unit-page-single::before {
   content: '';
   position: absolute;
   inset: -40px;
   background:
-    radial-gradient(circle at 10% 0%, rgba(56, 189, 248, 0.15), transparent 55%),
-    radial-gradient(circle at 90% 0%, rgba(250, 204, 21, 0.18), transparent 55%);
-  opacity: 0.9;
+    radial-gradient(circle at 10% 0%, rgba(147, 197, 253, 0.2), transparent 50%),
+    radial-gradient(circle at 90% 100%, rgba(253, 224, 71, 0.12), transparent 50%);
+  opacity: 1;
   z-index: -2;
 }
 
@@ -919,32 +1005,26 @@ body {
   width: 140%;
   height: 220px;
   background-image:
-    linear-gradient(to right, rgba(148, 163, 184, 0.25) 1px, transparent 1px),
-    linear-gradient(to top, rgba(148, 163, 184, 0.25) 1px, transparent 1px);
-  background-size: 24px 24px;
+    linear-gradient(to right, rgba(191, 219, 254, 0.2) 1px, transparent 1px),
+    linear-gradient(to top, rgba(191, 219, 254, 0.2) 1px, transparent 1px);
+  background-size: 28px 28px;
   transform-origin: center top;
   transform: perspective(600px) rotateX(65deg);
-  opacity: 0.55;
-  animation: grid-glow 6s ease-in-out infinite alternate;
+  opacity: 0.4;
+  animation: grid-glow 8s ease-in-out infinite alternate;
 }
 
 @keyframes grid-glow {
-  0% {
-    opacity: 0.4;
-    filter: hue-rotate(0deg);
-  }
-  100% {
-    opacity: 0.7;
-    filter: hue-rotate(25deg);
-  }
+  0% { opacity: 0.3; }
+  100% { opacity: 0.5; }
 }
 
 .unit-polygon {
   position: absolute;
-  border: 2px solid rgba(56, 189, 248, 0.5);
-  box-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
-  border-radius: 12px;
-  opacity: 0.65;
+  border: 2px solid rgba(147, 197, 253, 0.35);
+  box-shadow: 0 0 12px rgba(147, 197, 253, 0.2);
+  border-radius: 16px;
+  opacity: 0.5;
   animation: polygon-float 4s ease-in-out infinite alternate;
 }
 
