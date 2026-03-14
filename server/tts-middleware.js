@@ -2,6 +2,9 @@
  * Vite dev middleware: POST /api/tts with body { text } → ElevenLabs TTS → audio/mpeg.
  * Set ELEVENLABS_API_KEY (and optionally ELEVENLABS_VOICE_ID) in .env.
  */
+import dotenv from 'dotenv'
+dotenv.config()
+
 const ELEVENLABS_BASE = 'https://api.elevenlabs.io/v1/text-to-speech'
 const MAX_TEXT_LENGTH = 2500
 
