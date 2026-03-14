@@ -10,9 +10,33 @@ import SnapchatSafetyQuiz from './SnapchatSafetyQuiz'
 import RobloxSafetyQuiz from './RobloxSafetyQuiz'
 import FortniteSafetyQuiz from './FortniteSafetyQuiz'
 import RedditForumsSafetyQuiz from './RedditForumsSafetyQuiz'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog'
 
 function isYouTubeEmbedUrl(url: string): boolean {
   return /youtube\.com\/embed\/|youtu\.be\//i.test(url)
+}
+
+/** Parse contentBlocks into story (first "Story:") and rules (rest, with optional prefix label). */
+function parseContentBlocks(blocks: string[]) {
+  const storyBlock = blocks.find((b) => /^Story:/i.test(b))
+  const story = storyBlock ? storyBlock.replace(/^Story:\s*/i, '').trim() : null
+  const ruleBlocks = blocks.filter((b) => !/^Story:/i.test(b))
+  const rules = ruleBlocks.map((block) => {
+    const match = block.match(/^(Rule|Safety|Kindness|Myth-buster|Idea|Feelings|Pause|Scenario|Examples|Game):\s*(.*)/i)
+    const label = match ? match[1] : null
+    const text = match ? match[2].trim() : block
+    return { label, text }
+  })
+  return { story, rules }
 }
 
 const UnitPage: React.FC = () => {
@@ -235,29 +259,21 @@ const UnitPage: React.FC = () => {
         />
       )}
 
-      {thinkPromptOpen !== null && unit.thinkPrompts?.[thinkPromptOpen] && (
-        <div
-          className="think-prompt-overlay"
-          role="dialog"
-          aria-label="Think about this"
-          onClick={() => setThinkPromptOpen(null)}
-        >
-          <div
-            className="think-prompt-modal card"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <h3>{unit.thinkPrompts![thinkPromptOpen].label}</h3>
-            <p>{unit.thinkPrompts![thinkPromptOpen].text}</p>
-            <button
-              type="button"
-              className="primary-button"
-              onClick={() => setThinkPromptOpen(null)}
-            >
-              OK, I thought about it!
-            </button>
-          </div>
-        </div>
-      )}
+      <Dialog open={thinkPromptOpen !== null} onOpenChange={(open) => !open && setThinkPromptOpen(null)}>
+        <DialogContent className="max-w-md" aria-describedby="think-prompt-desc">
+          {unit.thinkPrompts && thinkPromptOpen !== null && unit.thinkPrompts[thinkPromptOpen] && (
+            <>
+              <DialogHeader>
+                <DialogTitle>{unit.thinkPrompts[thinkPromptOpen].label}</DialogTitle>
+                <DialogDescription id="think-prompt-desc">{unit.thinkPrompts[thinkPromptOpen].text}</DialogDescription>
+              </DialogHeader>
+              <DialogFooter>
+                <Button onClick={() => setThinkPromptOpen(null)}>OK, I thought about it!</Button>
+              </DialogFooter>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
 
       <header className="lesson-header">
         <div>
@@ -269,11 +285,9 @@ const UnitPage: React.FC = () => {
         </Link>
       </header>
 
-      <div className="unit-material-section card">
-        <p className="unit-summary">{unit.summary}</p>
-
+      <div className="unit-material-section rounded-2xl border border-slate-200 bg-white/95 p-6 shadow-lg md:p-8">
         {showVideo && (
-          <div className="video-wrapper">
+          <div className="video-wrapper mb-8">
             {videoSrc && isYouTubeEmbedUrl(videoSrc) ? (
               <iframe
                 src={videoSrc}
@@ -291,44 +305,96 @@ const UnitPage: React.FC = () => {
           </div>
         )}
 
-        <div className="unit-content-blocks">
-          <h3>Learn with SpArki</h3>
-          <ul>
-            {unit.contentBlocks.map((block, index) => (
-              <li key={index}>{block}</li>
-            ))}
-          </ul>
-        </div>
+        <div className="mt-8 space-y-8">
+          <h2 className="text-3xl font-bold text-center text-blue-600 md:text-4xl" style={{ fontSize: 'min(1.75rem, 5vw)' }}>
+            Learn with SpArki
+          </h2>
+          <p className="text-center text-lg text-slate-700 md:text-xl" style={{ minHeight: '1.25rem' }}>
+            {unit.summary}
+          </p>
 
-        {unit.thinkPrompts && unit.thinkPrompts.length > 0 && (
-          <div className="unit-think-prompts">
-            <h3>Pause & think</h3>
-            {unit.thinkPrompts.map((prompt, index) => (
-              <button
-                key={index}
-                type="button"
-                className="think-prompt-button"
-                onClick={() => setThinkPromptOpen(index)}
-              >
-                {prompt.label}
-              </button>
-            ))}
+          {(() => {
+            const { story, rules } = parseContentBlocks(unit.contentBlocks)
+            return (
+              <>
+                {rules.length > 0 && (
+                  <div className="grid gap-4 sm:gap-6 md:grid-cols-2">
+                    {rules.map((rule, index) => (
+                      <Card key={index} className="border-2 border-blue-100 bg-blue-50/50 shadow-sm">
+                        <CardHeader className="pb-2">
+                          <CardTitle className="flex items-start gap-2 text-left text-lg text-blue-900">
+                            <span className="mt-0.5 text-2xl" role="img" aria-hidden>🤖</span>
+                            <span>
+                              {rule.label && <span className="font-extrabold">{rule.label}: </span>}
+                              {rule.text}
+                            </span>
+                          </CardTitle>
+                        </CardHeader>
+                      </Card>
+                    ))}
+                  </div>
+                )}
+
+                {story && (
+                  <Card className="border-2 border-pink-200 bg-pink-50/60 shadow-md">
+                    <CardHeader>
+                      <CardTitle className="text-xl text-pink-900 md:text-2xl">Story Time with SpArki</CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      <p className="text-base leading-relaxed text-slate-800 md:text-lg" style={{ fontSize: 'min(1.25rem, 4vw)' }}>
+                        {story}
+                      </p>
+                      <div className="h-24 rounded-lg border-2 border-dashed border-pink-200 bg-pink-100/50 flex items-center justify-center text-pink-600 text-sm font-medium" aria-hidden>
+                        Illustration placeholder
+                      </div>
+                    </CardContent>
+                  </Card>
+                )}
+              </>
+            )
+          })()}
+
+          {unit.thinkPrompts && unit.thinkPrompts.length > 0 && (
+            <div className="space-y-4">
+              <h3 className="text-xl font-bold text-slate-800 md:text-2xl">Pause & Think</h3>
+              <div className="flex flex-wrap gap-3">
+                {unit.thinkPrompts.map((prompt, index) => (
+                  <Button
+                    key={index}
+                    variant="outline"
+                    size="lg"
+                    className="min-h-[3rem] border-2 border-amber-300 bg-amber-50 text-amber-900 hover:bg-amber-100"
+                    onClick={() => setThinkPromptOpen(index)}
+                    aria-label={`Open: ${prompt.label}`}
+                  >
+                    {prompt.label}
+                  </Button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          <Card className="border-2 border-yellow-200 bg-yellow-50/60">
+            <CardHeader>
+              <CardTitle className="text-xl text-yellow-900 md:text-2xl">Unit Activity</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-base leading-relaxed text-slate-800 md:text-lg" style={{ fontSize: 'min(1.25rem, 4vw)' }}>
+                {unit.activity.description}
+              </p>
+            </CardContent>
+          </Card>
+
+          <div ref={materialEndRef} className="unit-material-end border-t-2 border-dashed border-slate-200 pt-8">
+            <Button
+              size="lg"
+              className="w-full min-h-[3.5rem] text-lg md:max-w-md md:mx-auto"
+              onClick={() => setMaterialFinished(true)}
+              aria-label="I've finished the material — show my quiz"
+            >
+              I&apos;ve finished the material — show my quiz
+            </Button>
           </div>
-        )}
-
-        <div className="unit-activity card">
-          <h3>Unit Activity</h3>
-          <p>{unit.activity.description}</p>
-        </div>
-
-        <div ref={materialEndRef} className="unit-material-end">
-          <button
-            type="button"
-            className="primary-button finish-material-button"
-            onClick={() => setMaterialFinished(true)}
-          >
-            I&apos;ve finished the material — show my quiz
-          </button>
         </div>
       </div>
 
