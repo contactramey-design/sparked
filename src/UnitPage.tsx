@@ -6,6 +6,7 @@ import CompletionCelebration from './CompletionCelebration'
 import GameQuiz from './GameQuiz'
 import InstagramSafetyQuiz from './InstagramSafetyQuiz'
 import TikTokSafetyQuiz from './TikTokSafetyQuiz'
+import SnapchatSafetyQuiz from './SnapchatSafetyQuiz'
 
 function isYouTubeEmbedUrl(url: string): boolean {
   return /youtube\.com\/embed\/|youtu\.be\//i.test(url)
@@ -108,6 +109,18 @@ const UnitPage: React.FC = () => {
   }
 
   const handleTikTokComplete = (correctCount: number) => {
+    const total = 8
+    const result = updateUnitAfterQuiz(unit, correctCount, total)
+    setEarnedSparkles(result.earnedThisAttempt)
+    const updatedStatus = result.progress.units[unit.id]
+    const justMastered = !!updatedStatus?.mastered
+    setMastered(justMastered)
+    if (!wasAlreadyMastered && justMastered) {
+      setShowCelebration(true)
+    }
+  }
+
+  const handleSnapchatComplete = (correctCount: number) => {
     const total = 8
     const result = updateUnitAfterQuiz(unit, correctCount, total)
     setEarnedSparkles(result.earnedThisAttempt)
@@ -302,7 +315,18 @@ const UnitPage: React.FC = () => {
           />
         </div>
       )}
-      {materialFinished && unit.id !== 'safety-instagram' && unit.id !== 'safety-tiktok' && (
+      {materialFinished && unit.id === 'safety-snapchat' && (
+        <div className="unit-quiz-section mt-6">
+          <SnapchatSafetyQuiz
+            unit={unit}
+            nextUnit={nextUnit ?? null}
+            earnedSparkles={earnedSparkles}
+            mastered={mastered}
+            onComplete={handleSnapchatComplete}
+          />
+        </div>
+      )}
+      {materialFinished && unit.id !== 'safety-instagram' && unit.id !== 'safety-tiktok' && unit.id !== 'safety-snapchat' && (
         <div className="unit-quiz-section mt-6">
           <GameQuiz
             unit={unit}
