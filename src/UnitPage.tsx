@@ -8,6 +8,7 @@ import InstagramSafetyQuiz from './InstagramSafetyQuiz'
 import TikTokSafetyQuiz from './TikTokSafetyQuiz'
 import SnapchatSafetyQuiz from './SnapchatSafetyQuiz'
 import RobloxSafetyQuiz from './RobloxSafetyQuiz'
+import FortniteSafetyQuiz from './FortniteSafetyQuiz'
 
 function isYouTubeEmbedUrl(url: string): boolean {
   return /youtube\.com\/embed\/|youtu\.be\//i.test(url)
@@ -135,6 +136,18 @@ const UnitPage: React.FC = () => {
 
   const handleRobloxComplete = (correctCount: number) => {
     const total = 8
+    const result = updateUnitAfterQuiz(unit, correctCount, total)
+    setEarnedSparkles(result.earnedThisAttempt)
+    const updatedStatus = result.progress.units[unit.id]
+    const justMastered = !!updatedStatus?.mastered
+    setMastered(justMastered)
+    if (!wasAlreadyMastered && justMastered) {
+      setShowCelebration(true)
+    }
+  }
+
+  const handleFortniteComplete = (correctCount: number) => {
+    const total = 6
     const result = updateUnitAfterQuiz(unit, correctCount, total)
     setEarnedSparkles(result.earnedThisAttempt)
     const updatedStatus = result.progress.units[unit.id]
@@ -350,7 +363,18 @@ const UnitPage: React.FC = () => {
           />
         </div>
       )}
-      {materialFinished && unit.id !== 'safety-instagram' && unit.id !== 'safety-tiktok' && unit.id !== 'safety-snapchat' && unit.id !== 'safety-roblox' && (
+      {materialFinished && unit.id === 'safety-fortnite' && (
+        <div className="unit-quiz-section mt-6">
+          <FortniteSafetyQuiz
+            unit={unit}
+            nextUnit={nextUnit ?? null}
+            earnedSparkles={earnedSparkles}
+            mastered={mastered}
+            onComplete={handleFortniteComplete}
+          />
+        </div>
+      )}
+      {materialFinished && unit.id !== 'safety-instagram' && unit.id !== 'safety-tiktok' && unit.id !== 'safety-snapchat' && unit.id !== 'safety-roblox' && unit.id !== 'safety-fortnite' && (
         <div className="unit-quiz-section mt-6">
           <GameQuiz
             unit={unit}
