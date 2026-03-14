@@ -12,6 +12,7 @@ import FortniteSafetyQuiz from './FortniteSafetyQuiz'
 import RedditForumsSafetyQuiz from './RedditForumsSafetyQuiz'
 import ExampleCollectorQuiz from './ExampleCollectorQuiz'
 import BodyCodeChainQuiz from './BodyCodeChainQuiz'
+import SoftwareExplorerQuiz from './SoftwareExplorerQuiz'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import {
@@ -207,6 +208,18 @@ const UnitPage: React.FC = () => {
 
   const handleAI2Complete = (correctCount: number) => {
     const total = 5
+    const result = updateUnitAfterQuiz(unit, correctCount, total)
+    setEarnedSparkles(result.earnedThisAttempt)
+    const updatedStatus = result.progress.units[unit.id]
+    const justMastered = !!updatedStatus?.mastered
+    setMastered(justMastered)
+    if (!wasAlreadyMastered && justMastered) {
+      setShowCelebration(true)
+    }
+  }
+
+  const handleAI3Complete = (correctCount: number) => {
+    const total = 6
     const result = updateUnitAfterQuiz(unit, correctCount, total)
     setEarnedSparkles(result.earnedThisAttempt)
     const updatedStatus = result.progress.units[unit.id]
@@ -535,7 +548,18 @@ const UnitPage: React.FC = () => {
           />
         </div>
       )}
-      {unit.id !== 'safety-instagram' && unit.id !== 'safety-tiktok' && unit.id !== 'safety-snapchat' && unit.id !== 'safety-roblox' && unit.id !== 'safety-fortnite' && unit.id !== 'safety-reddit' && unit.id !== 'ai-1-what-is-ai' && unit.id !== 'ai-2-coding-games' && (
+      {materialFinished && unit.id === 'ai-3-software-explorers' && (
+        <div className="unit-quiz-section mt-6">
+          <SoftwareExplorerQuiz
+            unit={unit}
+            nextUnit={nextUnit ?? null}
+            earnedSparkles={earnedSparkles}
+            mastered={mastered}
+            onComplete={handleAI3Complete}
+          />
+        </div>
+      )}
+      {unit.id !== 'safety-instagram' && unit.id !== 'safety-tiktok' && unit.id !== 'safety-snapchat' && unit.id !== 'safety-roblox' && unit.id !== 'safety-fortnite' && unit.id !== 'safety-reddit' && unit.id !== 'ai-1-what-is-ai' && unit.id !== 'ai-2-coding-games' && unit.id !== 'ai-3-software-explorers' && (
         <div className="unit-quiz-section mt-6">
           <GameQuiz
             unit={unit}

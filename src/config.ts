@@ -22,6 +22,14 @@ export interface ChatConfig {
   systemPrompt: string
 }
 
+/** Optional cloud TTS (e.g. ElevenLabs) for better voice. Backend must accept POST { text } and return audio (e.g. audio/mpeg). */
+export interface TtsConfig {
+  /** Set to true to use cloud TTS when endpoint is set */
+  useCloud?: boolean
+  /** Your backend URL that proxies to ElevenLabs/other TTS (hides API key). POST body: { text: string }, response: audio stream */
+  endpoint?: string
+}
+
 export interface AppConfig {
   appName: string
   welcomeMessage: string
@@ -30,6 +38,8 @@ export interface AppConfig {
   parentResources: ParentResourcesConfig
   progress: ProgressConfig
   chat: ChatConfig
+  /** Optional: better read-aloud voice via cloud TTS (e.g. ElevenLabs). Leave unset to use browser voices only. */
+  tts?: TtsConfig
 }
 
 export const appConfig: AppConfig = {
@@ -60,4 +70,6 @@ export const appConfig: AppConfig = {
       'You keep kids safe, never ask for private information, and always remind them that ' +
       'human curiosity, kindness, and grown-up guidance come first.',
   },
+  // Cloud TTS: add ELEVENLABS_API_KEY to .env (dev) or Vercel env (prod). Falls back to browser voice if API unavailable.
+  tts: { useCloud: true, endpoint: '/api/tts' },
 }
