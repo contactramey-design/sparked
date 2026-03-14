@@ -140,7 +140,7 @@ export function useSpeech() {
           await audio.play()
         } catch (e) {
           if ((e as Error).name !== 'AbortError') {
-            if (process.env.NODE_ENV === 'development') {
+            if (import.meta.env.DEV) {
               console.warn('TTS cloud failed, using browser voice:', (e as Error).message)
             }
             if (window.speechSynthesis) fallbackSpeak(t, options)
