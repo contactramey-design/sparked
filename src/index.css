@@ -1,5 +1,9 @@
-/* Global reset and base styles for SpArkI's Adventures Academy */
+/* Tailwind – bundled with Vite (no CDN), COPPA-safe */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
+/* Global reset and base styles for SpArkI's Adventures Academy */
 *,
 *::before,
 *::after {

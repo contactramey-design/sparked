@@ -1,6 +1,7 @@
 import { curriculum, type UnitConfig } from './curriculum'
 
 const STORAGE_KEY = 'sparki_age2_progress'
+const SAFETY_PASS_KEY = 'sparki_safety_pass_v1'
 
 export interface UnitProgress {
   unitId: string
@@ -77,6 +78,28 @@ export function getUnitStatus(unitId: string): UnitProgress | null {
 export function getTotalSparkles(): number {
   const progress = loadProgress()
   return progress.totalSparkles
+}
+
+export function getHasSafetyPass(): boolean {
+  if (typeof window === 'undefined') return false
+  try {
+    return window.localStorage.getItem(SAFETY_PASS_KEY) === 'true'
+  } catch {
+    return false
+  }
+}
+
+export function setHasSafetyPass(value: boolean): void {
+  if (typeof window === 'undefined') return
+  try {
+    if (value) {
+      window.localStorage.setItem(SAFETY_PASS_KEY, 'true')
+    } else {
+      window.localStorage.removeItem(SAFETY_PASS_KEY)
+    }
+  } catch {
+    // ignore storage issues
+  }
 }
 
 function updateGamification(progress: ChildProgress): void {

@@ -2,12 +2,13 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { appConfig } from './config'
 import { curriculum } from './curriculum'
-import { loadProgress } from './progress'
+import { loadProgress, getHasSafetyPass, setHasSafetyPass } from './progress'
 import { useAuth } from './AuthContext'
 
 const ParentDashboard: React.FC = () => {
   const progress = loadProgress()
   const { kidLock, setKidLock } = useAuth()
+  const hasSafetyPass = getHasSafetyPass()
 
   return (
     <section className="lesson-page">
@@ -30,6 +31,24 @@ const ParentDashboard: React.FC = () => {
           >
             Open Parent Guide (PDF)
           </a>
+        </div>
+
+        <div className="lesson-media card">
+          <h3>Unlock full Safety track</h3>
+          <p>
+            Your child can explore one safety lesson for free. To unlock the full Social
+            Media Safety &amp; Kindness track (Instagram, TikTok, Roblox, and more),
+            turn on the Safety Pass below. This setting is stored only on this device and
+            does not send any personal data to our servers.
+          </p>
+          <label className="parent-toggle">
+            <input
+              type="checkbox"
+              checked={hasSafetyPass}
+              onChange={(e) => setHasSafetyPass(e.target.checked)}
+            />
+            <span>Safety Pass active on this device</span>
+          </label>
         </div>
 
         <div className="lesson-media card">

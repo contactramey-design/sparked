@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { appConfig } from './config'
 import { useAuth } from './AuthContext'
 
@@ -40,24 +40,43 @@ function TierCard({
   const [imgFailed, setImgFailed] = useState(false)
 
   return (
-    <Link to={href} className="home-tier-card" title={tier.title}>
-      {imgFailed ? (
-        <span className="home-tier-placeholder">{tier.title}</span>
-      ) : (
-        <img
-          src={tier.imageSrc}
-          alt={tier.imageAlt}
-          className="home-tier-image"
-          onError={() => setImgFailed(true)}
-        />
-      )}
+    <Link to={href} className="home-tier-card glitch-card" title={tier.title}>
+      <div className="glitch-card-outer" aria-hidden />
+      <div className="glitch-card-inner">
+        <div className="glitch-card-img-wrap">
+          {imgFailed ? (
+            <span className="home-tier-placeholder">{tier.title}</span>
+          ) : (
+            <img
+              src={tier.imageSrc}
+              alt={tier.imageAlt}
+              className="home-tier-image"
+              onError={() => setImgFailed(true)}
+            />
+          )}
+          <div className="glitch-card-corners">
+            <span className="glitch-corner tl" />
+            <span className="glitch-corner tr" />
+            <span className="glitch-corner bl" />
+            <span className="glitch-corner br" />
+          </div>
+          <div className="glitch-card-info">
+            <span className="glitch-card-status" aria-hidden>
+              ADVENTURE
+            </span>
+            <h3 className="glitch-card-title">{tier.title}</h3>
+            <p className="glitch-card-desc">{tier.description}</p>
+            <span className="glitch-card-cta">Start adventure →</span>
+          </div>
+        </div>
+      </div>
+      <div className="glitch-scanlines" aria-hidden />
     </Link>
   )
 }
 
 const HomePage: React.FC = () => {
   const { isLoggedIn } = useAuth()
-  const location = useLocation()
 
   const loginPath = '/login'
   const redirectParam = (path: string) =>

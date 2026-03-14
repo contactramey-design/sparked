@@ -37,11 +37,11 @@ export const appConfig: AppConfig = {
   welcomeMessage: 'Welcome, Junior AI Explorer!',
   tagline: 'Learning AI the safe, playful, and human-first way.',
   theme: {
-    primaryColor: '#0ea5e9',
-    secondaryColor: '#fbbf24',
-    backgroundColor: '#fefce8',
-    textColor: '#1e3a5f',
-    accentColor: '#f97316',
+    primaryColor: '#2563eb',   // bright blue
+    secondaryColor: '#facc15', // bright yellow
+    backgroundColor: '#fef3c7',
+    textColor: '#1e293b',
+    accentColor: '#ef4444',    // bright red accent
   },
   parentResources: {
     handbookPdfUrl: 'https://example.com/parents-handbook.pdf',
