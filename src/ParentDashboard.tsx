@@ -5,21 +5,14 @@ import { curriculum } from './curriculum'
 import { loadProgress, getHasSafetyPass, setHasSafetyPass } from './progress'
 import { useAuth } from './AuthContext'
 
-const ParentDashboard: React.FC = () => {
+/** Parent view content only (used in merged Dashboard page and standalone /parent redirect) */
+export const ParentViewContent: React.FC = () => {
   const progress = loadProgress()
   const { kidLock, setKidLock } = useAuth()
   const hasSafetyPass = getHasSafetyPass()
 
   return (
-    <section className="lesson-page">
-      <header className="lesson-header">
-        <h2>Parent &amp; Grown-Up Progress View</h2>
-        <Link to="/dashboard" className="link-back">
-          ← Back to Dashboard
-        </Link>
-      </header>
-
-      <div className="lesson-layout">
+    <div className="lesson-layout">
         <div className="lesson-media card">
           <h3>Parent Guide</h3>
           <p>Learn how we keep kids safe while they explore AI and technology.</p>
@@ -118,8 +111,19 @@ const ParentDashboard: React.FC = () => {
           </table>
         </div>
       </div>
-    </section>
   )
 }
+
+const ParentDashboard: React.FC = () => (
+  <section className="lesson-page">
+    <header className="lesson-header">
+      <h2>Parent &amp; Grown-Up Progress View</h2>
+      <Link to="/dashboard" className="link-back">
+        ← Back to Dashboard
+      </Link>
+    </header>
+    <ParentViewContent />
+  </section>
+)
 
 export default ParentDashboard

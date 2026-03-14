@@ -114,11 +114,13 @@ const HomeworkAdventurePage: React.FC = () => {
           </p>
 
           <div className="video-wrapper">
+            <p className="video-caption">Watch how Homework Adventure works</p>
             <video
               controls
               style={{ width: '100%', borderRadius: 'var(--radius-md)' }}
+              aria-label="SpArki Homework Adventure intro video"
             >
-              <source src="/homeworkIntro.mp4" type="video/mp4" />
+              <source src="/sparkiadventureintro.mp4" type="video/mp4" />
               Sorry, your browser doesn’t support the video tag.
             </video>
           </div>

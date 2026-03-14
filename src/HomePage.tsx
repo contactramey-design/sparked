@@ -82,12 +82,32 @@ const HomePage: React.FC = () => {
   const redirectParam = (path: string) =>
     `${loginPath}?redirect=${encodeURIComponent(path)}`
 
+  const ctaHref = isLoggedIn ? '/tracks' : `/login?redirect=${encodeURIComponent('/tracks')}`
+
   return (
     <section className="home-page">
       <div className="home-hero">
+        <div className="home-hero-sparki" aria-hidden>
+          <img
+            src="/sparki-hero.jpg"
+            alt=""
+            className="home-hero-character"
+            onError={(e) => {
+              e.currentTarget.style.display = 'none'
+              const next = e.currentTarget.nextElementSibling
+              if (next) (next as HTMLElement).style.display = 'block'
+            }}
+          />
+          <span className="home-hero-character-emoji" aria-hidden>
+            🤖✨
+          </span>
+        </div>
         <div className="home-hero-content">
           <h1 className="home-title">{appConfig.appName}</h1>
           <p className="home-tagline">{appConfig.tagline}</p>
+          <Link to={ctaHref} className="home-hero-cta primary-button">
+            Join the Adventure!
+          </Link>
         </div>
       </div>
 
