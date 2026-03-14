@@ -4,7 +4,7 @@ import { curriculum } from './curriculum'
 import { updateUnitAfterQuiz, getUnitStatus, getHasSafetyPass } from './progress'
 import CompletionCelebration from './CompletionCelebration'
 import GameQuiz from './GameQuiz'
-import SafeAppAdventureQuiz from './SafeAppAdventureQuiz'
+import InstagramSafetyQuiz from './InstagramSafetyQuiz'
 
 function isYouTubeEmbedUrl(url: string): boolean {
   return /youtube\.com\/embed\/|youtu\.be\//i.test(url)
@@ -269,7 +269,7 @@ const UnitPage: React.FC = () => {
 
       {materialFinished && unit.id === 'safety-instagram' && (
         <div className="unit-quiz-section mt-6">
-          <SafeAppAdventureQuiz
+          <InstagramSafetyQuiz
             unit={unit}
             nextUnit={nextUnit ?? null}
             earnedSparkles={earnedSparkles}
