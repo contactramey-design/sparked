@@ -22,3 +22,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Local video copies (canonical copy lives in public/)
+sparkiadventureintro.mp4
