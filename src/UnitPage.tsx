@@ -2,6 +2,8 @@ import React, { useState, useRef, useEffect } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { curriculum } from './curriculum'
 import { updateUnitAfterQuiz, getUnitStatus, getHasSafetyPass } from './progress'
+import { useTranslation } from './contexts/LocaleContext'
+import { useTranslatedUnit, useTranslatedTrack } from './hooks/useTranslatedCurriculum'
 import CompletionCelebration from './CompletionCelebration'
 import GameQuiz from './GameQuiz'
 import InstagramSafetyQuiz from './InstagramSafetyQuiz'
@@ -49,7 +51,12 @@ function parseContentBlocks(blocks: string[]) {
 const UnitPage: React.FC = () => {
   const { unitId } = useParams<{ unitId: string }>()
   const navigate = useNavigate()
-  const unit = curriculum.units.find((u) => u.id === unitId)
+  const { t } = useTranslation()
+  const unit = curriculum.units.find((u) => u.id === unitId) ?? null
+  const translatedUnit = useTranslatedUnit(unit)
+  const track = unit ? curriculum.tracks.find((tr) => tr.id === unit.trackId) ?? null : null
+  const translatedTrack = useTranslatedTrack(track)
+  const displayTrack = translatedTrack ?? track
 
   const [selected, setSelected] = useState<number[]>(
     unit ? Array(unit.quizQuestions.length).fill(-1) : [],
@@ -86,7 +93,7 @@ const UnitPage: React.FC = () => {
     return null
   }
 
-  const track = curriculum.tracks.find((t) => t.id === unit.trackId)
+  const displayUnit = translatedUnit ?? unit
 
   const isPaidSafety =
     unit.trackId === 'social-safety' && !unit.isFree
@@ -277,11 +284,11 @@ const UnitPage: React.FC = () => {
 
         <header className="lesson-header">
           <div>
-            <h2>{unit.title}</h2>
-            {track && <p className="welcome-subtitle">{track.title}</p>}
+            <h2>{displayUnit.title}</h2>
+            {displayTrack && <p className="welcome-subtitle">{displayTrack.title}</p>}
           </div>
           <Link to={`/track/${unit.trackId}`} className="link-back">
-            ← Back to Track
+            {t('curriculum.backToTrack')}
           </Link>
         </header>
 
@@ -316,28 +323,28 @@ const UnitPage: React.FC = () => {
               ? window.localStorage.getItem('spark_academy_username') || 'Explorer'
               : 'Explorer'
           }
-          unitTitle={unit.title}
+          unitTitle={displayUnit.title}
           onClose={() => setShowCelebration(false)}
         />
       )}
 
       <Dialog open={thinkPromptOpen !== null} onOpenChange={(open) => !open && setThinkPromptOpen(null)}>
         <DialogContent className="max-w-md" aria-describedby="think-prompt-desc">
-          {unit.thinkPrompts && thinkPromptOpen !== null && unit.thinkPrompts[thinkPromptOpen] && (
+          {displayUnit.thinkPrompts && thinkPromptOpen !== null && displayUnit.thinkPrompts[thinkPromptOpen] && (
             <>
               <DialogHeader>
                 <div className="flex items-center gap-2">
-                  <DialogTitle>{unit.thinkPrompts[thinkPromptOpen].label}</DialogTitle>
+                  <DialogTitle>{displayUnit.thinkPrompts[thinkPromptOpen].label}</DialogTitle>
                   <ListenButton
-                    text={`${unit.thinkPrompts[thinkPromptOpen].label}. ${unit.thinkPrompts[thinkPromptOpen].text}`}
+                    text={`${displayUnit.thinkPrompts[thinkPromptOpen].label}. ${displayUnit.thinkPrompts[thinkPromptOpen].text}`}
                     ariaLabel="Listen to this question"
                     size="sm"
                   />
                 </div>
-                <DialogDescription id="think-prompt-desc">{unit.thinkPrompts[thinkPromptOpen].text}</DialogDescription>
+                <DialogDescription id="think-prompt-desc">{displayUnit.thinkPrompts[thinkPromptOpen].text}</DialogDescription>
               </DialogHeader>
               <DialogFooter>
-                <Button onClick={() => setThinkPromptOpen(null)}>OK, I thought about it!</Button>
+                <Button onClick={() => setThinkPromptOpen(null)}>{t('curriculum.okThoughtAboutIt')}</Button>
               </DialogFooter>
             </>
           )}
@@ -346,11 +353,11 @@ const UnitPage: React.FC = () => {
 
       <header className="lesson-header">
         <div>
-          <h2>{unit.title}</h2>
-          {track && <p className="welcome-subtitle">{track.title}</p>}
+          <h2>{displayUnit.title}</h2>
+          {displayTrack && <p className="welcome-subtitle">{displayTrack.title}</p>}
         </div>
         <Link to={`/track/${unit.trackId}`} className="link-back">
-          ← Back to Track
+          {t('curriculum.backToTrack')}
         </Link>
       </header>
 
@@ -360,7 +367,7 @@ const UnitPage: React.FC = () => {
             {videoSrc && isYouTubeEmbedUrl(videoSrc) ? (
               <iframe
                 src={videoSrc}
-                title={`Video for ${unit.title}`}
+                title={`Video for ${displayUnit.title}`}
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
                 className="unit-video-iframe"
@@ -377,19 +384,19 @@ const UnitPage: React.FC = () => {
         <div className="mt-8 space-y-8">
           <div className="flex flex-wrap items-center justify-center gap-2">
             <h2 className="text-3xl font-bold text-center text-blue-600 md:text-4xl" style={{ fontSize: 'min(1.75rem, 5vw)' }}>
-              Learn with SpArki
+              {t('curriculum.learnWithSparkiHeading')}
             </h2>
-            <ListenButton text="Learn with SpArki" ariaLabel="Listen to heading" size="sm" />
+            <ListenButton text={t('curriculum.learnWithSparkiHeading')} ariaLabel="Listen to heading" size="sm" />
           </div>
           <div className="flex flex-wrap items-center justify-center gap-2">
             <p className="text-center text-lg text-slate-700 md:text-xl" style={{ minHeight: '1.25rem' }}>
-              {unit.summary}
+              {displayUnit.summary}
             </p>
-            <ListenButton text={unit.summary} ariaLabel="Listen to summary" size="sm" />
+            <ListenButton text={displayUnit.summary} ariaLabel="Listen to summary" size="sm" />
           </div>
 
           {(() => {
-            const { story, rules } = parseContentBlocks(unit.contentBlocks)
+            const { story, rules } = parseContentBlocks(displayUnit.contentBlocks)
             return (
               <>
                 {rules.length > 0 && (
@@ -420,8 +427,8 @@ const UnitPage: React.FC = () => {
                   <Card className="border-2 border-pink-200 bg-pink-50/60 shadow-md">
                     <CardHeader>
                       <div className="flex items-center gap-2">
-                        <CardTitle className="text-xl text-pink-900 md:text-2xl">Story Time with SpArki</CardTitle>
-                        <ListenButton text={`Story Time with SpArki. ${story}`} ariaLabel="Listen to story" size="sm" />
+                        <CardTitle className="text-xl text-pink-900 md:text-2xl">{t('curriculum.storyTimeWithSparki')}</CardTitle>
+                        <ListenButton text={`${t('curriculum.storyTimeWithSparki')}. ${story}`} ariaLabel="Listen to story" size="sm" />
                       </div>
                     </CardHeader>
                     <CardContent className="space-y-4">
@@ -438,11 +445,11 @@ const UnitPage: React.FC = () => {
             )
           })()}
 
-          {unit.thinkPrompts && unit.thinkPrompts.length > 0 && (
+          {displayUnit.thinkPrompts && displayUnit.thinkPrompts.length > 0 && (
             <div className="space-y-4">
-              <h3 className="text-xl font-bold text-slate-800 md:text-2xl">Pause & Think</h3>
+              <h3 className="text-xl font-bold text-slate-800 md:text-2xl">{t('curriculum.pauseAndThink')}</h3>
               <div className="flex flex-wrap gap-3">
-                {unit.thinkPrompts.map((prompt, index) => (
+                {displayUnit.thinkPrompts.map((prompt, index) => (
                   <Button
                     key={index}
                     variant="outline"
@@ -461,13 +468,13 @@ const UnitPage: React.FC = () => {
           <Card className="border-2 border-yellow-200 bg-yellow-50/60">
             <CardHeader>
               <div className="flex items-center gap-2">
-                <CardTitle className="text-xl text-yellow-900 md:text-2xl">Unit Activity</CardTitle>
-                <ListenButton text={`Unit Activity. ${unit.activity.description}`} ariaLabel="Listen to activity" size="sm" />
+                <CardTitle className="text-xl text-yellow-900 md:text-2xl">{t('curriculum.unitActivity')}</CardTitle>
+                <ListenButton text={`${t('curriculum.unitActivity')}. ${displayUnit.activity.description}`} ariaLabel="Listen to activity" size="sm" />
               </div>
             </CardHeader>
             <CardContent>
               <p className="text-base leading-relaxed text-slate-800 md:text-lg" style={{ fontSize: 'min(1.25rem, 4vw)' }}>
-                {unit.activity.description}
+                {displayUnit.activity.description}
               </p>
             </CardContent>
           </Card>
@@ -477,9 +484,9 @@ const UnitPage: React.FC = () => {
               size="lg"
               className="w-full min-h-[3.5rem] max-w-md text-lg shrink-0"
               onClick={() => setMaterialFinished(true)}
-              aria-label="Finished, show quiz"
+              aria-label={t('curriculum.finishedShowQuiz')}
             >
-              Finished, show quiz
+              {t('curriculum.finishedShowQuiz')}
             </Button>
           </div>
         </div>
@@ -490,7 +497,7 @@ const UnitPage: React.FC = () => {
       {unit.id === 'safety-instagram' && (
         <div className="unit-quiz-section mt-6">
           <InstagramSafetyQuiz
-            unit={unit}
+            unit={displayUnit}
             nextUnit={nextUnit ?? null}
             earnedSparkles={earnedSparkles}
             mastered={mastered}
@@ -501,7 +508,7 @@ const UnitPage: React.FC = () => {
       {materialFinished && unit.id === 'safety-tiktok' && (
         <div className="unit-quiz-section mt-6">
           <TikTokSafetyQuiz
-            unit={unit}
+            unit={displayUnit}
             nextUnit={nextUnit ?? null}
             earnedSparkles={earnedSparkles}
             mastered={mastered}
@@ -512,7 +519,7 @@ const UnitPage: React.FC = () => {
       {materialFinished && unit.id === 'safety-snapchat' && (
         <div className="unit-quiz-section mt-6">
           <SnapchatSafetyQuiz
-            unit={unit}
+            unit={displayUnit}
             nextUnit={nextUnit ?? null}
             earnedSparkles={earnedSparkles}
             mastered={mastered}
@@ -523,7 +530,7 @@ const UnitPage: React.FC = () => {
       {materialFinished && unit.id === 'safety-roblox' && (
         <div className="unit-quiz-section mt-6">
           <RobloxSafetyQuiz
-            unit={unit}
+            unit={displayUnit}
             nextUnit={nextUnit ?? null}
             earnedSparkles={earnedSparkles}
             mastered={mastered}
@@ -534,7 +541,7 @@ const UnitPage: React.FC = () => {
       {materialFinished && unit.id === 'safety-fortnite' && (
         <div className="unit-quiz-section mt-6">
           <FortniteSafetyQuiz
-            unit={unit}
+            unit={displayUnit}
             nextUnit={nextUnit ?? null}
             earnedSparkles={earnedSparkles}
             mastered={mastered}
@@ -545,7 +552,7 @@ const UnitPage: React.FC = () => {
       {materialFinished && unit.id === 'safety-reddit' && (
         <div className="unit-quiz-section mt-6">
           <RedditForumsSafetyQuiz
-            unit={unit}
+            unit={displayUnit}
             nextUnit={nextUnit ?? null}
             earnedSparkles={earnedSparkles}
             mastered={mastered}
@@ -556,7 +563,7 @@ const UnitPage: React.FC = () => {
       {materialFinished && unit.id === 'ai-1-what-is-ai' && (
         <div className="unit-quiz-section mt-6">
           <ExampleCollectorQuiz
-            unit={unit}
+            unit={displayUnit}
             nextUnit={nextUnit ?? null}
             earnedSparkles={earnedSparkles}
             mastered={mastered}
@@ -567,7 +574,7 @@ const UnitPage: React.FC = () => {
       {materialFinished && unit.id === 'ai-2-coding-games' && (
         <div className="unit-quiz-section mt-6">
           <BodyCodeChainQuiz
-            unit={unit}
+            unit={displayUnit}
             nextUnit={nextUnit ?? null}
             earnedSparkles={earnedSparkles}
             mastered={mastered}
@@ -578,7 +585,7 @@ const UnitPage: React.FC = () => {
       {materialFinished && unit.id === 'ai-3-software-explorers' && (
         <div className="unit-quiz-section mt-6">
           <SoftwareExplorerQuiz
-            unit={unit}
+            unit={displayUnit}
             nextUnit={nextUnit ?? null}
             earnedSparkles={earnedSparkles}
             mastered={mastered}
@@ -589,7 +596,7 @@ const UnitPage: React.FC = () => {
       {materialFinished && unit.id === 'ai-4-ai-in-the-world' && (
         <div className="unit-quiz-section mt-6">
           <WorldAIHelperQuiz
-            unit={unit}
+            unit={displayUnit}
             nextUnit={nextUnit ?? null}
             earnedSparkles={earnedSparkles}
             mastered={mastered}
@@ -600,7 +607,7 @@ const UnitPage: React.FC = () => {
       {materialFinished && unit.id === 'ai-5-ethical-coding' && (
         <div className="unit-quiz-section mt-6">
           <FairCodeAdventureQuiz
-            unit={unit}
+            unit={displayUnit}
             nextUnit={nextUnit ?? null}
             earnedSparkles={earnedSparkles}
             mastered={mastered}
@@ -611,7 +618,7 @@ const UnitPage: React.FC = () => {
       {unit.id !== 'safety-instagram' && unit.id !== 'safety-tiktok' && unit.id !== 'safety-snapchat' && unit.id !== 'safety-roblox' && unit.id !== 'safety-fortnite' && unit.id !== 'safety-reddit' && unit.id !== 'ai-1-what-is-ai' && unit.id !== 'ai-2-coding-games' && unit.id !== 'ai-3-software-explorers' && unit.id !== 'ai-4-ai-in-the-world' && unit.id !== 'ai-5-ethical-coding' && (
         <div className="unit-quiz-section mt-6">
           <GameQuiz
-            unit={unit}
+            unit={displayUnit}
             selected={selected}
             onAnswer={handleChange}
             onSubmit={handleSubmit}

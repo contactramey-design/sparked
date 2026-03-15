@@ -1,45 +1,44 @@
 /**
  * Read-aloud for kids: uses the browser's Web Speech API (speechSynthesis), with
  * optional cloud TTS (e.g. ElevenLabs via your backend) when config.tts is set.
- * Picks a friendly, natural-sounding browser voice when available (Google, Samantha, etc.).
+ * Picks a friendly voice for the current locale (en or es); cloud TTS speaks the text in its language.
  */
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { appConfig } from '../config'
+import { useLocale } from '../contexts/LocaleContext'
 
 const DEFAULT_RATE = 0.98
 const DEFAULT_PITCH = 1.08
-const LANG = 'en-US'
 
-// Voice names (partial match) that tend to sound more natural and kid-friendly
-const PREFERRED_VOICE_NAMES = [
-  'Google US English',   // Chrome – natural
-  'Microsoft Zira',      // Windows – friendly
-  'Samantha',            // Apple – warm
-  'Karen',               // Apple (AU)
-  'Victoria',            // Apple
-  'Daniel',              // Apple (UK)
-  'Samantha (Enhanced)',
-  'Alex',                // Apple
+const PREFERRED_VOICE_EN = [
+  'Google US English', 'Microsoft Zira', 'Samantha', 'Karen', 'Victoria', 'Daniel', 'Samantha (Enhanced)', 'Alex',
+]
+const PREFERRED_VOICE_ES = [
+  'Google español', 'Microsoft Sabina', 'Paulina', 'Juan', 'Monica', 'Spanish',
 ]
 
-function pickBestVoice(voices: SpeechSynthesisVoice[]): SpeechSynthesisVoice | null {
+function pickBestVoice(voices: SpeechSynthesisVoice[], lang: 'en' | 'es'): SpeechSynthesisVoice | null {
   if (!voices.length) return null
-  const enUs = voices.filter((v) => v.lang.startsWith('en-US') || v.lang === 'en_US')
-  const pool = enUs.length ? enUs : voices
-
-  for (const name of PREFERRED_VOICE_NAMES) {
-    const found = pool.find(
+  const isEs = lang === 'es'
+  const langMatch = isEs
+    ? (v: SpeechSynthesisVoice) => v.lang.startsWith('es') || v.lang === 'es_ES'
+    : (v: SpeechSynthesisVoice) => v.lang.startsWith('en-US') || v.lang === 'en_US'
+  const pool = voices.filter(langMatch)
+  const fallbackPool = pool.length ? pool : voices
+  const names = isEs ? PREFERRED_VOICE_ES : PREFERRED_VOICE_EN
+  for (const name of names) {
+    const found = fallbackPool.find(
       (v) => v.name.includes(name) || v.name.toLowerCase().includes(name.toLowerCase())
     )
     if (found) return found
   }
-
-  const defaultEn = pool.find((v) => v.default)
-  if (defaultEn) return defaultEn
-  return pool[0] ?? voices[0] ?? null
+  const defaultVoice = fallbackPool.find((v) => v.default)
+  if (defaultVoice) return defaultVoice
+  return fallbackPool[0] ?? voices[0] ?? null
 }
 
 export function useSpeech() {
+  const { locale } = useLocale()
   const [isSpeaking, setIsSpeaking] = useState(false)
   const voiceRef = useRef<SpeechSynthesisVoice | null>(null)
   const audioRef = useRef<HTMLAudioElement | null>(null)
@@ -48,8 +47,8 @@ export function useSpeech() {
   const loadVoices = useCallback(() => {
     if (typeof window === 'undefined' || !window.speechSynthesis) return
     const voices = window.speechSynthesis.getVoices()
-    voiceRef.current = pickBestVoice(voices)
-  }, [])
+    voiceRef.current = pickBestVoice(voices, locale)
+  }, [locale])
 
   useEffect(() => {
     if (typeof window === 'undefined') return
@@ -92,14 +91,14 @@ export function useSpeech() {
       const utterance = new SpeechSynthesisUtterance(t)
       utterance.rate = options?.rate ?? DEFAULT_RATE
       utterance.pitch = options?.pitch ?? DEFAULT_PITCH
-      utterance.lang = LANG
+      utterance.lang = locale === 'es' ? 'es-ES' : 'en-US'
       if (voiceRef.current) utterance.voice = voiceRef.current
       utterance.onstart = () => setIsSpeaking(true)
       utterance.onend = () => setIsSpeaking(false)
       utterance.onerror = () => setIsSpeaking(false)
       window.speechSynthesis.speak(utterance)
     },
-    [loadVoices]
+    [loadVoices, locale],
   )
 
   const speak = useCallback(

@@ -4,9 +4,11 @@ import { appConfig } from './config'
 import { curriculum } from './curriculum'
 import { loadProgress, getHasSafetyPass, setHasSafetyPass } from './progress'
 import { useAuth } from './AuthContext'
+import { useTranslation } from './contexts/LocaleContext'
 
 /** Parent view content only (used in merged Dashboard page and standalone /parent redirect) */
 export const ParentViewContent: React.FC = () => {
+  const { t } = useTranslation()
   const progress = loadProgress()
   const { kidLock, setKidLock } = useAuth()
   const hasSafetyPass = getHasSafetyPass()
@@ -99,8 +101,8 @@ export const ParentViewContent: React.FC = () => {
 
                 return (
                   <tr key={unit.id}>
-                    <td>{track?.title ?? ''}</td>
-                    <td>{unit.title}</td>
+                    <td>{track ? (t(`curriculum.tracks.${track.id}.title`) || track.title) : ''}</td>
+                    <td>{t(`curriculum.units.${unit.id}.title`) || unit.title}</td>
                     <td>{scoreText}</td>
                     <td>{attemptsText}</td>
                     <td>{statusText}</td>

@@ -1,0 +1,240 @@
+{
+  "chooseAdventure": "Choose Your Adventure with SpArki",
+  "chooseAdventureSubtitle": "SpArki, the blue robotic teddy-bear teacher, has two paths for Age 5–11 explorers. Pick one to begin.",
+  "learnWithSparki": "Learn with SpArki",
+  "backToTracks": "← Back to Tracks",
+  "backToTrack": "← Back to Track",
+  "unitsInTrack": "Units in this track",
+  "learnWithSparkiHeading": "Learn with SpArki",
+  "finishedShowQuiz": "Finished, show quiz",
+  "pauseAndThink": "Pause & Think",
+  "unitActivity": "Unit Activity",
+  "okThoughtAboutIt": "OK, I thought about it!",
+  "storyTimeWithSparki": "Story Time with SpArki",
+  "tracks": {
+    "ai-coding": {
+      "title": "AI, Coding & Software Adventures",
+      "description": "Join SpArki to learn what AI is, how code works, and how software helps people."
+    },
+    "social-safety": {
+      "title": "Social Media Safety & Kindness",
+      "description": "SpArki helps you practice safe watching, kind comments, and healthy screen time."
+    }
+  },
+  "units": {
+    "ai-1-what-is-ai": {
+      "title": "What Is AI?",
+      "summary": "SpArki shows how AI can sort and draw by learning from examples instead of magic.",
+      "contentBlocks": [
+        "Story: SpArki helps sort toys into boxes using examples.",
+        "Idea: AI learns from patterns in examples, not from magic.",
+        "Pause: Look around the room and find 3 things you could sort."
+      ],
+      "activity": {
+        "title": "Design Your Own AI Helper",
+        "description": "Draw your own AI helper and label what it sorts for you (toys, snacks, books, or something else)."
+      },
+      "quizQuestions": [
+        { "prompt": "AI learns from…", "options": ["Magic", "Examples", "Guessing once"] },
+        { "prompt": "SpArki uses AI to help…", "options": ["Sort toys", "Take naps", "Hide homework"] },
+        { "prompt": "A pattern is something that…", "options": ["Happens one time", "Repeats again and again", "Is always random"] }
+      ],
+      "thinkPrompts": [
+        { "label": "Think about this!", "text": "Look around the room. Can you find 3 things you could sort into groups? (e.g. toys, books, crayons)" },
+        { "label": "Think about this!", "text": "SpArki learns from examples, not magic. What is one example you could show a friend so they learn something new?" }
+      ]
+    },
+    "ai-2-coding-games": {
+      "title": "Coding as Games",
+      "summary": "SpArki turns code into silly \"if this, then that\" games you can act out with your body.",
+      "contentBlocks": [
+        "Game: If I clap, you jump. If I stomp, you spin—this is like an if/then rule.",
+        "Idea: Code is a list of instructions the computer follows exactly."
+      ],
+      "activity": {
+        "title": "Act Out Algorithms",
+        "description": "Create a short \"algorithm\" for a classmate to follow (like getting from the door to a chair)."
+      },
+      "quizQuestions": [
+        { "prompt": "Code is like…", "options": ["Random scribbles", "A recipe or set of rules", "A secret language only robots know"] },
+        { "prompt": "If the code says \"if it rains, open umbrella\", the umbrella opens when…", "options": ["It is sunny", "It rains", "It is bedtime"] }
+      ]
+    },
+    "ai-3-software-explorers": {
+      "title": "Software Explorers",
+      "summary": "Kids explore what \"software\" means by looking at apps, games, and tools they already use.",
+      "contentBlocks": [
+        "Examples: drawing apps, math games, video chat.",
+        "Idea: software is instructions that live inside devices."
+      ],
+      "activity": {
+        "title": "Software Scavenger Hunt",
+        "description": "With a grown-up, find 3 examples of helpful software at home or at school and draw them."
+      },
+      "quizQuestions": [
+        { "prompt": "Which is software?", "options": ["A math game app", "A wooden block", "A snack"] },
+        { "prompt": "Software lives inside…", "options": ["Stories only", "Devices and computers", "Shoes"] }
+      ]
+    },
+    "ai-4-ai-in-the-world": {
+      "title": "AI in Our World",
+      "summary": "SpArki shows friendly examples of AI in schools, farms, and hospitals, and talks about when AI might be wrong.",
+      "contentBlocks": [
+        "Story: AI helps sort mail, suggest songs, and translate languages.",
+        "Pause: Think of one place you have seen AI (even if you did not know it yet)."
+      ],
+      "activity": {
+        "title": "AI Around Us",
+        "description": "Make a simple \"AI map\" of your school or home—mark where AI might live (like in tablets, speakers, or cars)."
+      },
+      "quizQuestions": [
+        { "prompt": "AI can help people by…", "options": ["Doing every job alone", "Helping with patterns and guesses", "Deciding everything for humans"] }
+      ]
+    },
+    "ai-5-ethical-coding": {
+      "title": "Kind & Fair Coding",
+      "summary": "Kids talk about fairness, kindness, and how humans are responsible for how AI is used.",
+      "contentBlocks": [
+        "Scenario: a game that only shows some kids as heroes.",
+        "Idea: we can change the rules to be more fair and kind."
+      ],
+      "activity": {
+        "title": "Fix the Story",
+        "description": "Work with a grown-up to change a short \"unfair\" story into a kinder, more fair version."
+      },
+      "quizQuestions": [
+        { "prompt": "Who is responsible for how AI behaves?", "options": ["Only the robot", "The people who design and use it", "Nobody"] }
+      ]
+    },
+    "safety-instagram": {
+      "title": "Staying Safe on Instagram",
+      "summary": "SpArki shows how to share photos safely, keep your account private, and always ask a grown-up first.",
+      "contentBlocks": [
+        "Story: A classmate wants to post a photo of the whole class. SpArki helps them ask a grown-up before sharing.",
+        "Rule: Keep your account private so only people you and a grown-up know can follow you.",
+        "Rule: Never put your full name, school, or address in your bio.",
+        "Pause: Think of one grown-up you can ask if you see a strange message online."
+      ],
+      "activity": {
+        "title": "Design a Safe Profile",
+        "description": "Draw a pretend profile page that shows fun things (like pets or hobbies) but no private info. Share it with a grown-up."
+      },
+      "quizQuestions": [
+        { "prompt": "Who should you ask before posting a picture online?", "options": ["No one", "A trusted grown-up", "A stranger"] },
+        { "prompt": "What should your account settings be?", "options": ["Public to everyone", "Private to people you and a grown-up know", "Shared with all strangers"] },
+        { "prompt": "Which information should you keep off your profile?", "options": ["Your favorite color", "Your school and address", "Your favorite animal"] },
+        { "prompt": "If a stranger sends you a message, what do you do?", "options": ["Reply and make a new friend", "Ignore, block, and tell a grown-up", "Send them your name"] },
+        { "prompt": "Who decides what you can post?", "options": ["Only you", "You and a trusted grown-up together", "Whoever comments first"] }
+      ],
+      "thinkPrompts": [
+        { "label": "Think about this!", "text": "Who is one grown-up you could ask before posting a photo? Talk to them about it!" },
+        { "label": "Think about this!", "text": "What would you never put in your profile? (Hint: school name, address, phone number)" }
+      ]
+    },
+    "safety-tiktok": {
+      "title": "Kind & Safe TikTok",
+      "summary": "SpArki explains how to keep videos private, turn off strangers, and handle mean comments kindly and safely.",
+      "contentBlocks": [
+        "Rule: Only post videos with a grown-up's permission.",
+        "Safety: Turn off \"everyone\" so only friends you and a grown-up know can see your videos.",
+        "Kindness: You never have to reply to mean comments. It is okay to block and report.",
+        "Pause: Practice what you would say to a grown-up if you see something that feels yucky online."
+      ],
+      "activity": {
+        "title": "Kind Comment Practice",
+        "description": "With a grown-up, write 3 kind comments you could leave on someone's video that are safe and encouraging."
+      },
+      "quizQuestions": [
+        { "prompt": "Before posting a video, you should…", "options": ["Ask a trusted grown-up", "Post it fast", "Show it to strangers"] },
+        { "prompt": "Who should be able to see your videos?", "options": ["Everyone in the world", "Only people you and a grown-up know", "Only strangers"] },
+        { "prompt": "If someone leaves a mean comment, you can…", "options": ["Be mean back", "Block, report, and tell a grown-up", "Share it with more people"] },
+        { "prompt": "What information should stay private?", "options": ["Dance moves", "School name and address", "Pet's nickname"] },
+        { "prompt": "When something online feels wrong, you should…", "options": ["Keep it secret", "Tell a trusted grown-up right away", "Try to fix it alone"] }
+      ]
+    },
+    "safety-snapchat": {
+      "title": "Snaps, Streaks & Safety",
+      "summary": "SpArki teaches that snaps do not really \"disappear\" and that streaks are never more important than feelings or safety.",
+      "contentBlocks": [
+        "Myth-buster: Snaps can be screenshotted or saved, so treat them like any other picture.",
+        "Rule: Never send pictures you would not want a teacher or grown-up to see.",
+        "Feelings: It is okay to break a streak if you need a break or feel uncomfortable.",
+        "Pause: Think of one safe snap you could send, like a pet or a drawing."
+      ],
+      "activity": {
+        "title": "Safe Snap Ideas",
+        "description": "Draw or list 5 silly but safe snap ideas you could share with friends, then check them with a grown-up."
+      },
+      "quizQuestions": [
+        { "prompt": "Do snaps always disappear forever?", "options": ["Yes, always", "No, they can be saved or screenshotted", "Only if you are careful"] },
+        { "prompt": "What is a safe kind of picture to send?", "options": ["Your address", "Your school ID", "Your pet wearing a silly hat"] },
+        { "prompt": "If someone asks for a picture that feels wrong, you should…", "options": ["Send it quickly", "Say no and tell a grown-up", "Hide your feelings"] },
+        { "prompt": "Streaks are…", "options": ["More important than safety", "Fun, but never more important than feelings or safety", "Required homework"] },
+        { "prompt": "Who can help you decide what is okay to send?", "options": ["A trusted grown-up", "A stranger online", "No one"] }
+      ]
+    },
+    "safety-roblox": {
+      "title": "Safe Play on Roblox",
+      "summary": "SpArki shows how to use chat filters, block strangers, and never share private info while playing games.",
+      "contentBlocks": [
+        "Rule: Use in-game safety settings and let a grown-up help set them up.",
+        "Safety: Never share your real name, age, school, or address in chat.",
+        "Boundary: You never have to join voice chat or private games with strangers.",
+        "Pause: Practice what you would do if someone in a game makes you feel weird or scared."
+      ],
+      "activity": {
+        "title": "Family Game Rules",
+        "description": "With your grown-up, write 3 simple family rules for playing games safely online."
+      },
+      "quizQuestions": [
+        { "prompt": "What is okay to share in game chat?", "options": ["Your full name", "Your address", "A nickname that does not reveal private info"] },
+        { "prompt": "If a stranger invites you to a private game, you should…", "options": ["Join right away", "Say no, leave, and tell a grown-up", "Give them your phone number"] },
+        { "prompt": "Who should help set your safety settings?", "options": ["No one", "A trusted grown-up", "A random player"] },
+        { "prompt": "If someone is mean in chat, you can…", "options": ["Be mean back", "Block, report, and take a break", "Tell no one"] },
+        { "prompt": "Games should make you feel…", "options": ["Scared and pressured", "Safe and mostly happy", "Forced to keep playing"] }
+      ]
+    },
+    "safety-fortnite": {
+      "title": "Fortnite & Voice Chat Boundaries",
+      "summary": "SpArki explains how to mute, block, and set kind rules for talking to others in fast-paced games.",
+      "contentBlocks": [
+        "Rule: Only use voice chat with people you and a grown-up know.",
+        "Safety: You can mute or leave any time a conversation feels bad.",
+        "Kindness: Teasing that hurts is not okay, even if it is \"just a game.\"",
+        "Pause: Practice a sentence you could say to a grown-up if someone is yelling at you in a game."
+      ],
+      "activity": {
+        "title": "Voice Chat Plan",
+        "description": "With a grown-up, create a short plan for when you will mute, leave, or take a break from voice chat."
+      },
+      "quizQuestions": [
+        { "prompt": "Who is it safest to talk with in voice chat?", "options": ["People you and a grown-up know", "Any player", "Strangers who play well"] },
+        { "prompt": "If someone is yelling or being mean, you can…", "options": ["Mute or leave and tell a grown-up", "Stay and listen", "Yell back"] },
+        { "prompt": "Is it okay to tease if someone is upset?", "options": ["Yes, it is funny", "No, we should be kind even in games", "Only if they lose"] },
+        { "prompt": "Private info you should never share in voice chat includes…", "options": ["Your favorite snack", "Your full name and address", "Your favorite emote"] },
+        { "prompt": "Who can you talk to if a game makes you feel upset?", "options": ["A trusted grown-up", "No one", "Only other players"] }
+      ]
+    },
+    "safety-reddit": {
+      "title": "Reading Safely on Reddit & Forums",
+      "summary": "SpArki talks about how posts and comments are not always true, and how to avoid grown-up spaces and scary content.",
+      "contentBlocks": [
+        "Idea: Anyone can post online, so not everything you read is true or kind.",
+        "Rule: Stick to kid-friendly spaces a grown-up has checked first.",
+        "Safety: Never click strange links or messages that promise prizes.",
+        "Pause: Practice saying \"Can you check this with me?\" to a grown-up when you are unsure."
+      ],
+      "activity": {
+        "title": "Healthy Online Spaces",
+        "description": "Together with a grown-up, make a list of websites and apps that are \"green light\" safe for you right now."
+      },
+      "quizQuestions": [
+        { "prompt": "Are all posts and comments on the internet true?", "options": ["Yes, always", "No, anyone can post anything", "Only if they have many likes"] },
+        { "prompt": "Where should you spend time online?", "options": ["Kid-friendly spaces a grown-up has checked", "Any forum you find", "Secret chats"] },
+        { "prompt": "If you see a scary or confusing post, you should…", "options": ["Keep reading alone", "Show a trusted grown-up and talk about it", "Click every link"] },
+        { "prompt": "Links that promise prizes or money are often…", "options": ["Safe and real", "Tricks or scams", "Only for adults"] },
+        { "prompt": "When something online feels \"off\", a good first step is to…", "options": ["Hide it", "Talk to a trusted grown-up", "Pretend it did not happen"] }
+      ]
+    }
+  }
+}

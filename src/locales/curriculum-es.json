@@ -1,0 +1,240 @@
+{
+  "chooseAdventure": "Elige tu aventura con SpArki",
+  "chooseAdventureSubtitle": "SpArki, el profesor teddy-bear robot azul, tiene dos caminos para exploradores de 5 a 11 años. Elige uno para empezar.",
+  "learnWithSparki": "Aprender con SpArki",
+  "backToTracks": "← Volver a los cursos",
+  "backToTrack": "← Volver al curso",
+  "unitsInTrack": "Unidades en este curso",
+  "learnWithSparkiHeading": "Aprende con SpArki",
+  "finishedShowQuiz": "Terminé, mostrar quiz",
+  "pauseAndThink": "Pausa y piensa",
+  "unitActivity": "Actividad de la unidad",
+  "okThoughtAboutIt": "¡Listo, ya pensé!",
+  "storyTimeWithSparki": "Hora del cuento con SpArki",
+  "tracks": {
+    "ai-coding": {
+      "title": "IA, programación y aventuras con software",
+      "description": "Únete a SpArki para aprender qué es la IA, cómo funciona el código y cómo el software ayuda a las personas."
+    },
+    "social-safety": {
+      "title": "Seguridad en redes sociales y amabilidad",
+      "description": "SpArki te ayuda a practicar el uso seguro de pantallas, comentarios amables y un tiempo de pantalla saludable."
+    }
+  },
+  "units": {
+    "ai-1-what-is-ai": {
+      "title": "¿Qué es la IA?",
+      "summary": "SpArki muestra cómo la IA puede ordenar y dibujar aprendiendo de ejemplos en lugar de magia.",
+      "contentBlocks": [
+        "Historia: SpArki ayuda a ordenar juguetes en cajas usando ejemplos.",
+        "Idea: La IA aprende de patrones en los ejemplos, no de magia.",
+        "Pausa: Mira a tu alrededor y encuentra 3 cosas que podrías ordenar."
+      ],
+      "activity": {
+        "title": "Diseña tu propio ayudante de IA",
+        "description": "Dibuja tu propio ayudante de IA y etiqueta qué ordena para ti (juguetes, snacks, libros u otra cosa)."
+      },
+      "quizQuestions": [
+        { "prompt": "La IA aprende de…", "options": ["Magia", "Ejemplos", "Adivinar una vez"] },
+        { "prompt": "SpArki usa la IA para ayudar a…", "options": ["Ordenar juguetes", "Dormir siestas", "Esconder la tarea"] },
+        { "prompt": "Un patrón es algo que…", "options": ["Pasa una sola vez", "Se repite una y otra vez", "Siempre es aleatorio"] }
+      ],
+      "thinkPrompts": [
+        { "label": "¡Piensa en esto!", "text": "Mira a tu alrededor. ¿Puedes encontrar 3 cosas que podrías ordenar en grupos? (por ejemplo: juguetes, libros, crayones)" },
+        { "label": "¡Piensa en esto!", "text": "SpArki aprende de ejemplos, no de magia. ¿Cuál es un ejemplo que podrías mostrarle a un amigo para que aprenda algo nuevo?" }
+      ]
+    },
+    "ai-2-coding-games": {
+      "title": "Programar como juegos",
+      "summary": "SpArki convierte el código en juegos divertidos de \"si esto, entonces aquello\" que puedes actuar con tu cuerpo.",
+      "contentBlocks": [
+        "Juego: Si aplaudo, tú saltas. Si piso fuerte, tú giras—esto es como una regla si/entonces.",
+        "Idea: El código es una lista de instrucciones que la computadora sigue exactamente."
+      ],
+      "activity": {
+        "title": "Actúa algoritmos",
+        "description": "Crea un \"algoritmo\" corto para que un compañero lo siga (como ir de la puerta a una silla)."
+      },
+      "quizQuestions": [
+        { "prompt": "El código es como…", "options": ["Garabatos al azar", "Una receta o conjunto de reglas", "Un idioma secreto que solo los robots conocen"] },
+        { "prompt": "Si el código dice \"si llueve, abre el paraguas\", el paraguas se abre cuando…", "options": ["Hace sol", "Llueve", "Es hora de dormir"] }
+      ]
+    },
+    "ai-3-software-explorers": {
+      "title": "Exploradores de software",
+      "summary": "Los niños exploran qué significa \"software\" mirando apps, juegos y herramientas que ya usan.",
+      "contentBlocks": [
+        "Ejemplos: apps de dibujo, juegos de matemáticas, videollamadas.",
+        "Idea: el software son instrucciones que viven dentro de los dispositivos."
+      ],
+      "activity": {
+        "title": "Búsqueda del tesoro de software",
+        "description": "Con un adulto, encuentra 3 ejemplos de software útil en casa o en la escuela y dibújalos."
+      },
+      "quizQuestions": [
+        { "prompt": "¿Cuál es software?", "options": ["Una app de juego de matemáticas", "Un bloque de madera", "Un snack"] },
+        { "prompt": "El software vive dentro de…", "options": ["Solo historias", "Dispositivos y computadoras", "Zapatos"] }
+      ]
+    },
+    "ai-4-ai-in-the-world": {
+      "title": "La IA en nuestro mundo",
+      "summary": "SpArki muestra ejemplos amigables de la IA en escuelas, granjas y hospitales, y habla de cuándo la IA puede equivocarse.",
+      "contentBlocks": [
+        "Historia: La IA ayuda a ordenar el correo, sugerir canciones y traducir idiomas.",
+        "Pausa: Piensa en un lugar donde hayas visto la IA (aunque no lo supieras aún)."
+      ],
+      "activity": {
+        "title": "La IA a nuestro alrededor",
+        "description": "Haz un \"mapa de IA\" simple de tu escuela o casa—marca dónde podría vivir la IA (como en tablets, altavoces o autos)."
+      },
+      "quizQuestions": [
+        { "prompt": "La IA puede ayudar a las personas…", "options": ["Haciendo todo el trabajo sola", "Ayudando con patrones y suposiciones", "Decidiendo todo por los humanos"] }
+      ]
+    },
+    "ai-5-ethical-coding": {
+      "title": "Programación amable y justa",
+      "summary": "Los niños hablan de justicia, amabilidad y cómo los humanos son responsables de cómo se usa la IA.",
+      "contentBlocks": [
+        "Escenario: un juego que solo muestra a algunos niños como héroes.",
+        "Idea: podemos cambiar las reglas para que sean más justas y amables."
+      ],
+      "activity": {
+        "title": "Arregla la historia",
+        "description": "Trabaja con un adulto para cambiar una historia corta \"injusta\" en una versión más amable y justa."
+      },
+      "quizQuestions": [
+        { "prompt": "¿Quién es responsable de cómo se comporta la IA?", "options": ["Solo el robot", "Las personas que la diseñan y la usan", "Nadie"] }
+      ]
+    },
+    "safety-instagram": {
+      "title": "Mantenerse seguro en Instagram",
+      "summary": "SpArki muestra cómo compartir fotos de forma segura, mantener tu cuenta privada y siempre preguntar a un adulto primero.",
+      "contentBlocks": [
+        "Historia: Un compañero quiere publicar una foto de toda la clase. SpArki les ayuda a preguntar a un adulto antes de compartir.",
+        "Regla: Mantén tu cuenta privada para que solo las personas que tú y un adulto conocen puedan seguirte.",
+        "Regla: Nunca pongas tu nombre completo, escuela o dirección en tu biografía.",
+        "Pausa: Piensa en un adulto al que puedas preguntar si ves un mensaje extraño en línea."
+      ],
+      "activity": {
+        "title": "Diseña un perfil seguro",
+        "description": "Dibuja una página de perfil de mentira que muestre cosas divertidas (como mascotas o pasatiempos) pero sin información privada. Compártela con un adulto."
+      },
+      "quizQuestions": [
+        { "prompt": "¿A quién debes preguntar antes de publicar una foto en línea?", "options": ["A nadie", "A un adulto de confianza", "A un desconocido"] },
+        { "prompt": "¿Cómo deben estar configuradas tu cuenta?", "options": ["Pública para todos", "Privada para personas que tú y un adulto conocen", "Compartida con todos los desconocidos"] },
+        { "prompt": "¿Qué información debes mantener fuera de tu perfil?", "options": ["Tu color favorito", "Tu escuela y dirección", "Tu animal favorito"] },
+        { "prompt": "Si un desconocido te envía un mensaje, ¿qué haces?", "options": ["Responder y hacer un nuevo amigo", "Ignorar, bloquear y decirle a un adulto", "Enviarle tu nombre"] },
+        { "prompt": "¿Quién decide qué puedes publicar?", "options": ["Solo tú", "Tú y un adulto de confianza juntos", "Quien comente primero"] }
+      ],
+      "thinkPrompts": [
+        { "label": "¡Piensa en esto!", "text": "¿Quién es un adulto al que podrías preguntar antes de publicar una foto? ¡Habla con él o ella!" },
+        { "label": "¡Piensa en esto!", "text": "¿Qué nunca pondrías en tu perfil? (Pista: nombre de la escuela, dirección, número de teléfono)" }
+      ]
+    },
+    "safety-tiktok": {
+      "title": "TikTok amable y seguro",
+      "summary": "SpArki explica cómo mantener los videos privados, bloquear desconocidos y manejar comentarios groseros con amabilidad y seguridad.",
+      "contentBlocks": [
+        "Regla: Solo publica videos con el permiso de un adulto.",
+        "Seguridad: Desactiva \"todos\" para que solo amigos que tú y un adulto conocen puedan ver tus videos.",
+        "Amabilidad: Nunca tienes que responder a comentarios groseros. Está bien bloquear y reportar.",
+        "Pausa: Practica qué le dirías a un adulto si ves algo que te hace sentir mal en línea."
+      ],
+      "activity": {
+        "title": "Práctica de comentarios amables",
+        "description": "Con un adulto, escribe 3 comentarios amables que podrías dejar en el video de alguien que sean seguros y alentadores."
+      },
+      "quizQuestions": [
+        { "prompt": "Antes de publicar un video, debes…", "options": ["Preguntar a un adulto de confianza", "Publicarlo rápido", "Mostrárselo a desconocidos"] },
+        { "prompt": "¿Quién debería poder ver tus videos?", "options": ["Todos en el mundo", "Solo personas que tú y un adulto conocen", "Solo desconocidos"] },
+        { "prompt": "Si alguien deja un comentario grosero, puedes…", "options": ["Ser grosero de vuelta", "Bloquear, reportar y decirle a un adulto", "Compartirlo con más personas"] },
+        { "prompt": "¿Qué información debe permanecer privada?", "options": ["Pasos de baile", "Nombre de la escuela y dirección", "Apodo de tu mascota"] },
+        { "prompt": "Cuando algo en línea se siente mal, debes…", "options": ["Guardarlo en secreto", "Decirle a un adulto de confianza de inmediato", "Intentar arreglarlo solo"] }
+      ]
+    },
+    "safety-snapchat": {
+      "title": "Snaps, rachas y seguridad",
+      "summary": "SpArki enseña que los snaps no \"desaparecen\" de verdad y que las rachas nunca son más importantes que los sentimientos o la seguridad.",
+      "contentBlocks": [
+        "Desmitificador: Los snaps pueden ser capturados o guardados, así que trátalos como cualquier otra foto.",
+        "Regla: Nunca envíes fotos que no querrías que un profesor o adulto viera.",
+        "Sentimientos: Está bien romper una racha si necesitas un descanso o te sientes incómodo.",
+        "Pausa: Piensa en un snap seguro que podrías enviar, como una mascota o un dibujo."
+      ],
+      "activity": {
+        "title": "Ideas de snaps seguros",
+        "description": "Dibuja o haz una lista de 5 ideas de snaps tontos pero seguros que podrías compartir con amigos, luego revísalas con un adulto."
+      },
+      "quizQuestions": [
+        { "prompt": "¿Los snaps siempre desaparecen para siempre?", "options": ["Sí, siempre", "No, pueden guardarse o capturarse", "Solo si tienes cuidado"] },
+        { "prompt": "¿Qué tipo de foto es seguro enviar?", "options": ["Tu dirección", "Tu identificación escolar", "Tu mascota con un sombrero gracioso"] },
+        { "prompt": "Si alguien pide una foto que se siente mal, debes…", "options": ["Enviarla rápido", "Decir no y contarle a un adulto", "Ocultar tus sentimientos"] },
+        { "prompt": "Las rachas son…", "options": ["Más importantes que la seguridad", "Divertidas, pero nunca más importantes que los sentimientos o la seguridad", "Tarea obligatoria"] },
+        { "prompt": "¿Quién puede ayudarte a decidir qué está bien enviar?", "options": ["Un adulto de confianza", "Un desconocido en línea", "Nadie"] }
+      ]
+    },
+    "safety-roblox": {
+      "title": "Jugar seguro en Roblox",
+      "summary": "SpArki muestra cómo usar filtros de chat, bloquear desconocidos y nunca compartir información privada mientras juegas.",
+      "contentBlocks": [
+        "Regla: Usa la configuración de seguridad del juego y deja que un adulto te ayude a configurarla.",
+        "Seguridad: Nunca compartas tu nombre real, edad, escuela o dirección en el chat.",
+        "Límite: Nunca tienes que unirte al chat de voz o juegos privados con desconocidos.",
+        "Pausa: Practica qué harías si alguien en un juego te hace sentir raro o asustado."
+      ],
+      "activity": {
+        "title": "Reglas de juego en familia",
+        "description": "Con tu adulto, escribe 3 reglas familiares simples para jugar de forma segura en línea."
+      },
+      "quizQuestions": [
+        { "prompt": "¿Qué está bien compartir en el chat del juego?", "options": ["Tu nombre completo", "Tu dirección", "Un apodo que no revele información privada"] },
+        { "prompt": "Si un desconocido te invita a un juego privado, debes…", "options": ["Unirte de inmediato", "Decir no, irte y contarle a un adulto", "Darle tu número de teléfono"] },
+        { "prompt": "¿Quién debería ayudarte a configurar tu seguridad?", "options": ["Nadie", "Un adulto de confianza", "Un jugador al azar"] },
+        { "prompt": "Si alguien es grosero en el chat, puedes…", "options": ["Ser grosero de vuelta", "Bloquear, reportar y tomar un descanso", "No decirle a nadie"] },
+        { "prompt": "Los juegos deberían hacerte sentir…", "options": ["Asustado y presionado", "Seguro y mayormente feliz", "Obligado a seguir jugando"] }
+      ]
+    },
+    "safety-fortnite": {
+      "title": "Fortnite y límites del chat de voz",
+      "summary": "SpArki explica cómo silenciar, bloquear y establecer reglas amables para hablar con otros en juegos rápidos.",
+      "contentBlocks": [
+        "Regla: Solo usa el chat de voz con personas que tú y un adulto conocen.",
+        "Seguridad: Puedes silenciar o irte cuando una conversación se sienta mal.",
+        "Amabilidad: Las burlas que lastiman no están bien, aunque sea \"solo un juego\".",
+        "Pausa: Practica una oración que podrías decirle a un adulto si alguien te grita en un juego."
+      ],
+      "activity": {
+        "title": "Plan para el chat de voz",
+        "description": "Con un adulto, crea un plan corto de cuándo silenciarás, te irás o tomarás un descanso del chat de voz."
+      },
+      "quizQuestions": [
+        { "prompt": "¿Con quién es más seguro hablar en el chat de voz?", "options": ["Personas que tú y un adulto conocen", "Cualquier jugador", "Desconocidos que juegan bien"] },
+        { "prompt": "Si alguien grita o es grosero, puedes…", "options": ["Silenciar o irte y decirle a un adulto", "Quedarte y escuchar", "Gritar de vuelta"] },
+        { "prompt": "¿Está bien burlarse si alguien está molesto?", "options": ["Sí, es gracioso", "No, debemos ser amables incluso en juegos", "Solo si pierde"] },
+        { "prompt": "La información privada que nunca debes compartir en el chat de voz incluye…", "options": ["Tu snack favorito", "Tu nombre completo y dirección", "Tu emote favorito"] },
+        { "prompt": "¿Con quién puedes hablar si un juego te hace sentir mal?", "options": ["Un adulto de confianza", "Nadie", "Solo otros jugadores"] }
+      ]
+    },
+    "safety-reddit": {
+      "title": "Leer de forma segura en Reddit y foros",
+      "summary": "SpArki habla de cómo las publicaciones y comentarios no siempre son verdaderos, y cómo evitar espacios de adultos y contenido aterrador.",
+      "contentBlocks": [
+        "Idea: Cualquiera puede publicar en línea, así que no todo lo que lees es verdadero o amable.",
+        "Regla: Quédate en espacios aptos para niños que un adulto haya revisado primero.",
+        "Seguridad: Nunca hagas clic en enlaces o mensajes extraños que prometan premios.",
+        "Pausa: Practica decir \"¿Puedes revisar esto conmigo?\" a un adulto cuando no estés seguro."
+      ],
+      "activity": {
+        "title": "Espacios en línea saludables",
+        "description": "Junto con un adulto, haz una lista de sitios web y apps que sean \"luz verde\" seguros para ti ahora mismo."
+      },
+      "quizQuestions": [
+        { "prompt": "¿Todas las publicaciones y comentarios en internet son verdaderos?", "options": ["Sí, siempre", "No, cualquiera puede publicar cualquier cosa", "Solo si tienen muchos likes"] },
+        { "prompt": "¿Dónde deberías pasar tiempo en línea?", "options": ["Espacios aptos para niños que un adulto haya revisado", "Cualquier foro que encuentres", "Chats secretos"] },
+        { "prompt": "Si ves una publicación aterradora o confusa, debes…", "options": ["Seguir leyendo solo", "Mostrarle a un adulto de confianza y hablar de ello", "Hacer clic en cada enlace"] },
+        { "prompt": "Los enlaces que prometen premios o dinero a menudo son…", "options": ["Seguros y reales", "Trucos o estafas", "Solo para adultos"] },
+        { "prompt": "Cuando algo en línea se siente \"raro\", un buen primer paso es…", "options": ["Ocultarlo", "Hablar con un adulto de confianza", "Hacer como si no hubiera pasado"] }
+      ]
+    }
+  }
+}

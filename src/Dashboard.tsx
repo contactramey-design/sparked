@@ -3,8 +3,10 @@ import { Link } from 'react-router-dom'
 import { appConfig } from './config'
 import { curriculum } from './curriculum'
 import { getPlayerStats } from './progress'
+import { useTranslation } from './contexts/LocaleContext'
 
 const Dashboard: React.FC = () => {
+  const { t } = useTranslation()
   const [username, setUsername] = useState('')
   const [stats, setStats] = useState(getPlayerStats())
 
@@ -113,10 +115,10 @@ const Dashboard: React.FC = () => {
               .sort((a, b) => a.order - b.order)
               .map((track) => (
                 <div key={track.id} className="card track-card">
-                  <h4>{track.title}</h4>
-                  <p>{track.description}</p>
+                  <h4>{t(`curriculum.tracks.${track.id}.title`) || track.title}</h4>
+                  <p>{t(`curriculum.tracks.${track.id}.description`) || track.description}</p>
                   <Link to={`/track/${track.id}`} className="primary-button">
-                    Learn with SpArki
+                    {t('curriculum.learnWithSparki')}
                   </Link>
                 </div>
               ))}

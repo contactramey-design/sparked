@@ -2,18 +2,22 @@ import React from 'react'
 import { Link, useParams, useNavigate } from 'react-router-dom'
 import { curriculum } from './curriculum'
 import { getUnitStatus, isUnitLockedForTrack, getHasSafetyPass } from './progress'
+import { useTranslation } from './contexts/LocaleContext'
+import { useTranslatedTrack } from './hooks/useTranslatedCurriculum'
 import ListenButton from './components/ListenButton'
 import { VIDEO_POSTER_DATA_URL } from './videoPoster'
 
 const TrackPage: React.FC = () => {
+  const { t } = useTranslation()
   const { trackId } = useParams<{ trackId: string }>()
   const navigate = useNavigate()
   const hasSafetyPass = getHasSafetyPass()
 
-  const track = curriculum.tracks.find((t) => t.id === trackId)
+  const track = curriculum.tracks.find((tr) => tr.id === trackId)
   const units = curriculum.units.filter((u) => u.trackId === trackId)
+  const translatedTrack = track ? useTranslatedTrack(track) : null
 
-  if (!track) {
+  if (!track || !translatedTrack) {
     navigate('/tracks', { replace: true })
     return null
   }
@@ -24,15 +28,15 @@ const TrackPage: React.FC = () => {
     <section className="lesson-page track-overview-page">
       <header className="track-overview-header">
         <Link to="/tracks" className="link-back">
-          ← Back to Tracks
+          {t('curriculum.backToTracks')}
         </Link>
         <div className="flex flex-wrap items-center gap-2">
-          <h1 className="track-overview-title">{track.title}</h1>
-          <ListenButton text={track.title} ariaLabel="Listen to track title" size="sm" />
+          <h1 className="track-overview-title">{translatedTrack.title}</h1>
+          <ListenButton text={translatedTrack.title} ariaLabel="Listen to track title" size="sm" />
         </div>
         <div className="flex flex-wrap items-center gap-2">
-          <p className="track-overview-description">{track.description}</p>
-          <ListenButton text={track.description} ariaLabel="Listen to track description" size="sm" />
+          <p className="track-overview-description">{translatedTrack.description}</p>
+          <ListenButton text={translatedTrack.description} ariaLabel="Listen to track description" size="sm" />
         </div>
       </header>
 
@@ -61,7 +65,7 @@ const TrackPage: React.FC = () => {
       )}
 
       <div className="track-units-list">
-        <h2 className="track-units-title">Units in this track</h2>
+        <h2 className="track-units-title">{t('curriculum.unitsInTrack')}</h2>
         <ul className="track-unit-cards">
           {sortedUnits.map((unit, index) => {
             const lockedByProgress = isUnitLockedForTrack(unit.id)
@@ -94,8 +98,8 @@ const TrackPage: React.FC = () => {
                       </span>
                     )}
                   </div>
-                  <h3 className="track-unit-card-title">{unit.title}</h3>
-                  <p className="track-unit-card-summary">{unit.summary}</p>
+                  <h3 className="track-unit-card-title">{t(`curriculum.units.${unit.id}.title`) || unit.title}</h3>
+                  <p className="track-unit-card-summary">{t(`curriculum.units.${unit.id}.summary`) || unit.summary}</p>
                   {isLocked ? (
                     <div className="track-unit-card-action">
                       {lockedByPayment ? (

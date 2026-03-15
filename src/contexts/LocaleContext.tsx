@@ -1,12 +1,17 @@
 import React, { createContext, useCallback, useContext, useMemo, useState } from 'react'
 import en from '../locales/en.json'
 import es from '../locales/es.json'
+import curriculumEn from '../locales/curriculum-en.json'
+import curriculumEs from '../locales/curriculum-es.json'
 
 const STORAGE_KEY = 'spark_academy_locale'
 
 export type Locale = 'en' | 'es'
 
-const messages: Record<Locale, Record<string, unknown>> = { en, es }
+const messages: Record<Locale, Record<string, unknown>> = {
+  en: { ...en, curriculum: curriculumEn as Record<string, unknown> },
+  es: { ...es, curriculum: curriculumEs as Record<string, unknown> },
+}
 
 function getByPath(obj: unknown, path: string): unknown {
   const keys = path.split('.')
@@ -30,6 +35,8 @@ interface LocaleContextValue {
   locale: Locale
   setLocale: (next: Locale | ((prev: Locale) => Locale)) => void
   t: (key: string, vars?: Record<string, string | number>) => string
+  /** Get raw value (string, array, or object) for keys like curriculum.units.xxx.contentBlocks */
+  get: (key: string) => unknown
 }
 
 const LocaleContext = createContext<LocaleContextValue | null>(null)
@@ -66,9 +73,14 @@ export function LocaleProvider({ children }: { children: React.ReactNode }) {
     [locale],
   )
 
+  const get = useCallback(
+    (key: string): unknown => getByPath(messages[locale], key),
+    [locale],
+  )
+
   const value = useMemo<LocaleContextValue>(
-    () => ({ locale, setLocale, t }),
-    [locale, setLocale, t],
+    () => ({ locale, setLocale, t, get }),
+    [locale, setLocale, t, get],
   )
 
   return <LocaleContext.Provider value={value}>{children}</LocaleContext.Provider>
