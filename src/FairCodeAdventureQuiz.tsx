@@ -97,7 +97,6 @@ const FairCodeAdventureQuiz: React.FC<FairCodeAdventureQuizProps> = ({
   const playAgain = () => {
     setStep('welcome')
     setCurrentIndex(0)
-    setFairCount(0)
     setFeedback(null)
     setSparkiEmotion('🤖')
   }
