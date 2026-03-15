@@ -66,7 +66,6 @@ const FairCodeAdventureQuiz: React.FC<FairCodeAdventureQuizProps> = ({
 }) => {
   const [step, setStep] = useState<'welcome' | 'game' | 'complete'>('welcome')
   const [currentIndex, setCurrentIndex] = useState(0)
-  const [fairCount, setFairCount] = useState(0)
   const [feedback, setFeedback] = useState<{ isFair: boolean; text: string } | null>(null)
   const [sparkiEmotion, setSparkiEmotion] = useState('🤖')
 
@@ -77,7 +76,6 @@ const FairCodeAdventureQuiz: React.FC<FairCodeAdventureQuizProps> = ({
   const handleChoice = (isFair: boolean) => {
     if (!scenario) return
     if (isFair) {
-      setFairCount((c) => c + 1)
       setFeedback({ isFair: true, text: `✅ PERFECT! ${scenario.explanation}` })
       setSparkiEmotion('🤩')
     } else {
