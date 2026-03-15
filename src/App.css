@@ -1110,14 +1110,6 @@ body {
   margin-bottom: 1.5rem;
 }
 
-.track-intro-video-title {
-  font-size: 1.5rem;
-  font-weight: 700;
-  text-align: center;
-  color: var(--accent-color, #2563eb);
-  margin: 0 0 0.75rem;
-}
-
 .track-units-list {
   margin-top: 0.5rem;
 }

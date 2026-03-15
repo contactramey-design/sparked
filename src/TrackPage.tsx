@@ -38,12 +38,6 @@ const TrackPage: React.FC = () => {
 
       {track.introVideoUrl ? (
         <div className="track-intro-video video-wrapper">
-          {track.id === 'social-safety' && (
-            <h2 className="track-intro-video-title">Safety intro</h2>
-          )}
-          {track.id === 'ai-coding' && (
-            <h2 className="track-intro-video-title">Coding intro</h2>
-          )}
           <video
             controls
             preload="metadata"
