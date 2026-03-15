@@ -47,17 +47,16 @@ const Dashboard: React.FC = () => {
         <div className="welcome-card card">
           <h2>{appConfig.welcomeMessage}</h2>
           <label className="username-label">
-            Your explorer name:
+            {t('dashboard.explorerName')}
             <input
               type="text"
-              placeholder="Type your name"
+              placeholder={t('dashboard.explorerPlaceholder')}
               value={username}
               onChange={(e) => handleNameChange(e.target.value)}
             />
           </label>
           <p className="welcome-subtitle">
-            Hi {username || 'Explorer'}! SpArki, your AI teddy-bear teacher, is
-            ready to learn with you.
+            {t('dashboard.welcomeLine', { name: username || 'Explorer' })}
           </p>
           <div className="video-placeholder hero-image-wrapper">
             <img
@@ -69,9 +68,9 @@ const Dashboard: React.FC = () => {
         </div>
 
         <div className="progress-card card">
-          <h3>SpArki Sparkles</h3>
+          <h3>{t('dashboard.sparkiSparkles')}</h3>
           <p className="points-count">
-            Level {stats.level} · {stats.totalSparkles} sparkles
+            {t('dashboard.levelSparkles', { level: stats.level, sparkles: stats.totalSparkles })}
           </p>
           <div className="progress-bar">
             <div
@@ -80,35 +79,30 @@ const Dashboard: React.FC = () => {
             />
           </div>
           <p className="progress-help">
-            Earn sparkles by completing unit quizzes with your best effort. SpArki
-            cheers for trying, not perfection!
+            {t('dashboard.progressHelp1')}
           </p>
           <p className="progress-help">
             {stats.nextLevelSparklesRemaining > 0
-              ? `Earn ${stats.nextLevelSparklesRemaining} more sparkles to reach Level ${
-                  stats.level + 1
-                }.`
-              : 'You are at the top level for now—amazing work!'}
+              ? t('dashboard.progressHelp2Earn', { count: stats.nextLevelSparklesRemaining, level: stats.level + 1 })
+              : t('dashboard.progressHelp2Top')}
           </p>
           <p className="progress-help">
-            Streak: {stats.currentStreakDays || 0} day
-            {stats.currentStreakDays === 1 ? '' : 's'} in a row
+            {t('dashboard.streakDays', { count: stats.currentStreakDays || 0 })}
             {stats.longestStreakDays > 1
-              ? ` · Longest streak: ${stats.longestStreakDays} days`
+              ? ` · ${t('dashboard.longestStreak', { days: stats.longestStreakDays })}`
               : ''}
           </p>
           <p className="progress-help">
-            Units mastered: {stats.totalUnitsMastered} / {stats.totalUnits}
+            {t('dashboard.unitsMastered', { mastered: stats.totalUnitsMastered, total: stats.totalUnits })}
           </p>
         </div>
       </div>
 
       <div className="dashboard-grid">
         <div className="card card-span-full">
-          <h3>Your courses</h3>
+          <h3>{t('dashboard.yourCourses')}</h3>
           <p>
-            Pick a track to join SpArki on an AI, coding, or safety adventure.
-            Start with K–2; more age groups are coming soon.
+            {t('dashboard.yourCoursesDesc')}
           </p>
           <div className="dashboard-track-cards">
             {[...curriculum.tracks]
@@ -126,13 +120,12 @@ const Dashboard: React.FC = () => {
         </div>
 
         <div className="card">
-          <h3>Homework Adventure (Preview)</h3>
+          <h3>{t('dashboard.homeworkPreviewTitle')}</h3>
           <p>
-            Grown-ups can upload a homework page and let SpArki turn it into a
-            gentle story-based quest.
+            {t('dashboard.homeworkPreviewDesc')}
           </p>
           <Link to="/homework" className="secondary-button">
-            Open Homework Adventure
+            {t('dashboard.openHomeworkAdventure')}
           </Link>
         </div>
       </div>

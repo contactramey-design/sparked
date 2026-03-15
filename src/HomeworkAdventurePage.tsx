@@ -1,5 +1,7 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import { VIDEO_POSTER_DATA_URL } from './videoPoster'
+import { useTranslation } from './contexts/LocaleContext'
 
 interface HomeworkAdventureStep {
   id: string
@@ -15,24 +17,8 @@ interface HomeworkAdventure {
   steps: HomeworkAdventureStep[]
 }
 
-const LOCAL_MOCK_ADVENTURE: HomeworkAdventure = {
-  title: 'The Lost Math Treasure',
-  subject: 'math',
-  topic: 'addition within 20',
-  steps: [
-    {
-      id: 'step-1',
-      story:
-        'SpArki and you find a treasure map with numbers on it. The first clue says: "Solve the first addition problem on your worksheet to light up the map."',
-      prompt:
-        'Look at the first addition problem on your homework. Solve it on your paper, then say your answer out loud.',
-      hint:
-        'Add the two numbers slowly. You can count on your fingers or draw dots to help you.',
-    },
-  ],
-}
-
 const HomeworkAdventurePage: React.FC = () => {
+  const { t, locale } = useTranslation()
   const [file, setFile] = useState<File | null>(null)
   const [previewUrl, setPreviewUrl] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
@@ -40,6 +26,28 @@ const HomeworkAdventurePage: React.FC = () => {
   const [adventure, setAdventure] = useState<HomeworkAdventure | null>(null)
   const [currentStepIndex, setCurrentStepIndex] = useState(0)
   const [showHint, setShowHint] = useState(false)
+  const [videoFeatureEnabled, setVideoFeatureEnabled] = useState<boolean | null>(null)
+  const [videoUrl, setVideoUrl] = useState<string | null>(null)
+  const [videoLoading, setVideoLoading] = useState(false)
+  const [videoError, setVideoError] = useState<string | null>(null)
+
+  useEffect(() => {
+    if (!adventure) return
+    let cancelled = false
+    fetch('/api/config')
+      .then((res) => res.json().catch(() => ({})))
+      .then((data) => {
+        if (!cancelled && typeof data.videoFeatureEnabled === 'boolean') {
+          setVideoFeatureEnabled(data.videoFeatureEnabled)
+        } else {
+          setVideoFeatureEnabled(false)
+        }
+      })
+      .catch(() => {
+        if (!cancelled) setVideoFeatureEnabled(false)
+      })
+    return () => { cancelled = true }
+  }, [adventure])
 
   const handleFileChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
     const chosen = event.target.files?.[0] ?? null
@@ -47,6 +55,8 @@ const HomeworkAdventurePage: React.FC = () => {
     setAdventure(null)
     setCurrentStepIndex(0)
     setShowHint(false)
+    setVideoUrl(null)
+    setVideoError(null)
 
     if (!chosen) {
       setFile(null)
@@ -55,7 +65,7 @@ const HomeworkAdventurePage: React.FC = () => {
     }
 
     if (!chosen.type.startsWith('image/')) {
-      setError('Please choose a JPG or PNG homework photo.')
+      setError(t('homeworkPage.errorFileType'))
       setFile(null)
       setPreviewUrl(null)
       return
@@ -72,18 +82,36 @@ const HomeworkAdventurePage: React.FC = () => {
     setAdventure(null)
     setCurrentStepIndex(0)
     setShowHint(false)
+    setVideoUrl(null)
+    setVideoError(null)
 
     if (!file) {
-      setError('Please choose a homework image first.')
+      setError(t('homeworkPage.errorChooseFirst'))
       return
     }
 
     setLoading(true)
     try {
-      // In this rebuild we fall back to a local mock.
-      // You can later swap this for a real /api/homework call.
-      setAdventure(LOCAL_MOCK_ADVENTURE)
-      setCurrentStepIndex(0)
+      const formData = new FormData()
+      formData.append('image', file)
+      const res = await fetch('/api/process-homework', {
+        method: 'POST',
+        body: formData,
+      })
+      const data = await res.json().catch(() => ({}))
+      if (!res.ok) {
+        const msg = typeof data?.error === 'string' ? data.error : t('homeworkPage.errorGeneric')
+        setError(msg)
+        return
+      }
+      if (data?.title && data?.subject != null && Array.isArray(data?.steps)) {
+        setAdventure(data as HomeworkAdventure)
+        setCurrentStepIndex(0)
+      } else {
+        setError(t('homeworkPage.errorCreate'))
+      }
+    } catch {
+      setError(t('homeworkPage.errorGeneric'))
     } finally {
       setLoading(false)
     }
@@ -92,31 +120,60 @@ const HomeworkAdventurePage: React.FC = () => {
   const currentStep =
     adventure && adventure.steps.length > 0 ? adventure.steps[currentStepIndex] : null
 
+  const handleCreateVideo = async () => {
+    if (!adventure) return
+    setVideoError(null)
+    setVideoLoading(true)
+    try {
+      const res = await fetch('/api/generate-adventure-video', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ adventure }),
+      })
+      const data = await res.json().catch(() => ({}))
+      if (!res.ok) {
+        if (res.status === 403) {
+          setVideoFeatureEnabled(false)
+        }
+        setVideoError(typeof data?.error === 'string' ? data.error : t('homeworkPage.videoErrorGeneric'))
+        return
+      }
+      if (data.videoUrl) {
+        setVideoUrl(data.videoUrl)
+      } else {
+        setVideoError(t('homeworkPage.videoErrorNoUrl'))
+      }
+    } catch {
+      setVideoError(t('homeworkPage.errorGeneric'))
+    } finally {
+      setVideoLoading(false)
+    }
+  }
+
   return (
-    <section className="lesson-page">
+    <section className="lesson-page" key={locale}>
       <header className="lesson-header">
         <div>
-          <h2>Homework Adventure (K–2)</h2>
+          <h2>{t('homeworkPage.title')}</h2>
           <p className="welcome-subtitle">
-            Turn a homework page into a safe, guided story adventure with SpArki.
+            {t('homeworkPage.subtitle')}
           </p>
         </div>
         <Link to="/dashboard" className="link-back">
-          ← Back to Dashboard
+          {t('common.backToDashboard')}
         </Link>
       </header>
 
       <div className="lesson-layout">
         <div className="lesson-media">
-          <p>
-            Grown-ups can upload a K–2 homework page, and SpArki will turn it into a short,
-            story-based quest that guides (but never gives away the answers).
-          </p>
+          <p>{t('homeworkPage.intro')}</p>
 
           <div className="video-wrapper">
-            <p className="video-caption">Watch how Homework Adventure works</p>
+            <p className="video-caption">{t('homeworkPage.videoCaption')}</p>
             <video
               controls
+              preload="metadata"
+              poster={VIDEO_POSTER_DATA_URL}
               style={{ width: '100%', borderRadius: 'var(--radius-md)' }}
               aria-label="SpArki Homework Adventure intro video"
             >
@@ -126,15 +183,11 @@ const HomeworkAdventurePage: React.FC = () => {
           </div>
 
           <div className="activity-section">
-            <h3>Grown-Up Upload</h3>
-            <p>
-              This tool is designed for grown-ups. Please make sure you have permission to share
-              the homework page and avoid including full names, addresses, or school details in
-              the photo.
-            </p>
+            <h3>{t('homeworkPage.grownUpUpload')}</h3>
+            <p>{t('homeworkPage.grownUpUploadDesc')}</p>
             <form className="homework-upload-form" onSubmit={handleGenerate}>
               <label className="file-input-label">
-                Homework image (JPG/PNG)
+                {t('homeworkPage.fileLabel')}
                 <input
                   type="file"
                   accept="image/*"
@@ -153,22 +206,19 @@ const HomeworkAdventurePage: React.FC = () => {
               )}
               {error && <p className="quiz-error">{error}</p>}
               <button type="submit" className="primary-button" disabled={loading}>
-                {loading ? 'Creating adventure…' : 'Create adventure'}
+                {loading ? t('homeworkPage.creatingButton') : t('homeworkPage.createButton')}
               </button>
             </form>
           </div>
         </div>
 
         <div className="lesson-quiz card">
-          <h3>SpArki&apos;s Homework Adventure</h3>
+          <h3>{t('homeworkPage.sparkiAdventureTitle')}</h3>
           {!adventure && (
             <>
-              <p>
-                After you create an adventure, you&apos;ll see SpArki&apos;s story steps and gentle
-                hints here. You can already explore SpArki&apos;s core units and quizzes today.
-              </p>
+              <p>{t('homeworkPage.afterCreateDesc')}</p>
               <Link to="/tracks" className="secondary-button">
-                Explore K–2 Units
+                {t('homeworkPage.exploreUnits')}
               </Link>
             </>
           )}
@@ -184,7 +234,7 @@ const HomeworkAdventurePage: React.FC = () => {
                 <p className="homework-step-prompt">{currentStep.prompt}</p>
                 {showHint ? (
                   <p className="homework-step-hint">
-                    <strong>SpArki&apos;s hint:</strong> {currentStep.hint}
+                    <strong>{t('homeworkPage.hintLabel')}</strong> {currentStep.hint}
                   </p>
                 ) : (
                   <button
@@ -192,10 +242,41 @@ const HomeworkAdventurePage: React.FC = () => {
                     className="secondary-button"
                     onClick={() => setShowHint(true)}
                   >
-                    Need a gentle hint?
+                    {t('homeworkPage.hintButton')}
                   </button>
                 )}
               </div>
+              {videoFeatureEnabled === true && (
+                <div className="homework-video-section" style={{ marginTop: '1.5rem' }}>
+                  {!videoUrl ? (
+                    <>
+                      <p>{t('homeworkPage.videoSectionIntro')}</p>
+                      <button
+                        type="button"
+                        className="primary-button"
+                        disabled={videoLoading}
+                        onClick={handleCreateVideo}
+                      >
+                        {videoLoading ? t('homeworkPage.creatingVideo') : t('homeworkPage.createVideo')}
+                      </button>
+                      {videoError && <p className="quiz-error">{videoError}</p>}
+                    </>
+                  ) : (
+                    <>
+                      <p>{t('homeworkPage.videoSectionTitle')}</p>
+                      <video
+                        src={videoUrl}
+                        controls
+                        preload="metadata"
+                        style={{ width: '100%', borderRadius: 'var(--radius-md)' }}
+                        aria-label="SpArki adventure video"
+                      >
+                        Your browser does not support the video tag.
+                      </video>
+                    </>
+                  )}
+                </div>
+              )}
             </div>
           )}
         </div>

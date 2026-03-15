@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { curriculum } from './curriculum'
 import { updateUnitAfterQuiz, getUnitStatus, getHasSafetyPass } from './progress'
-import { useTranslation } from './contexts/LocaleContext'
+import { useTranslation, useLocale } from './contexts/LocaleContext'
 import { useTranslatedUnit, useTranslatedTrack } from './hooks/useTranslatedCurriculum'
 import CompletionCelebration from './CompletionCelebration'
 import GameQuiz from './GameQuiz'
@@ -28,6 +28,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import ListenButton from './components/ListenButton'
+import SparkiAvatar from './components/SparkiAvatar'
 import { VIDEO_POSTER_DATA_URL } from './videoPoster'
 
 function isYouTubeEmbedUrl(url: string): boolean {
@@ -52,6 +53,7 @@ const UnitPage: React.FC = () => {
   const { unitId } = useParams<{ unitId: string }>()
   const navigate = useNavigate()
   const { t } = useTranslation()
+  const { locale } = useLocale()
   const unit = curriculum.units.find((u) => u.id === unitId) ?? null
   const translatedUnit = useTranslatedUnit(unit)
   const track = unit ? curriculum.tracks.find((tr) => tr.id === unit.trackId) ?? null : null
@@ -110,7 +112,7 @@ const UnitPage: React.FC = () => {
     setError(null)
 
     if (selected.some((i) => i === -1)) {
-      setError('Please answer all questions before checking your score.')
+      setError(t('unit.answerAllFirst'))
       return
     }
 
@@ -269,7 +271,11 @@ const UnitPage: React.FC = () => {
       ? `You got ${score} out of ${unit.quizQuestions.length} correct.`
       : ''
 
-  const videoSrc = unit.videoUrl ?? (unit.id === 'ai-1-what-is-ai' ? '/Unit1b_intro_.mp4' : undefined)
+  const fallbackVideo = unit.id === 'ai-1-what-is-ai' ? '/Unit1b_intro_.mp4' : undefined
+  const videoSrc =
+    locale === 'es' && unit.videoUrlEs
+      ? unit.videoUrlEs
+      : (unit.videoUrl ?? fallbackVideo)
   const showVideo = !!videoSrc
 
   if (lockedByPayment) {
@@ -283,9 +289,12 @@ const UnitPage: React.FC = () => {
         </div>
 
         <header className="lesson-header">
-          <div>
-            <h2>{displayUnit.title}</h2>
-            {displayTrack && <p className="welcome-subtitle">{displayTrack.title}</p>}
+          <div className="flex flex-wrap items-center gap-3">
+            <SparkiAvatar size="md" />
+            <div>
+              <h2>{displayUnit.title}</h2>
+              {displayTrack && <p className="welcome-subtitle">{displayTrack.title}</p>}
+            </div>
           </div>
           <Link to={`/track/${unit.trackId}`} className="link-back">
             {t('curriculum.backToTrack')}
@@ -352,9 +361,12 @@ const UnitPage: React.FC = () => {
       </Dialog>
 
       <header className="lesson-header">
-        <div>
-          <h2>{displayUnit.title}</h2>
-          {displayTrack && <p className="welcome-subtitle">{displayTrack.title}</p>}
+        <div className="flex flex-wrap items-center gap-3">
+          <SparkiAvatar size="md" />
+          <div>
+            <h2>{displayUnit.title}</h2>
+            {displayTrack && <p className="welcome-subtitle">{displayTrack.title}</p>}
+          </div>
         </div>
         <Link to={`/track/${unit.trackId}`} className="link-back">
           {t('curriculum.backToTrack')}

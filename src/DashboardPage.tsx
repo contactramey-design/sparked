@@ -2,10 +2,12 @@ import React, { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import Dashboard from './Dashboard'
 import { ParentViewContent } from './ParentDashboard'
+import { useTranslation } from './contexts/LocaleContext'
 
 type ViewMode = 'child' | 'parent'
 
 const DashboardPage: React.FC = () => {
+  const { t, locale } = useTranslation()
   const [searchParams, setSearchParams] = useSearchParams()
   const viewParam = searchParams.get('view')
   const [viewMode, setViewMode] = useState<ViewMode>(
@@ -27,10 +29,10 @@ const DashboardPage: React.FC = () => {
   }
 
   return (
-    <section className="dashboard-page">
+    <section className="dashboard-page" key={locale}>
       <div className="dashboard-view-toggle-wrap card">
-        <span className="dashboard-view-toggle-label">Switch view:</span>
-        <div className="dashboard-view-toggle" role="tablist" aria-label="Dashboard view">
+        <span className="dashboard-view-toggle-label">{t('dashboardPage.switchView')}</span>
+        <div className="dashboard-view-toggle" role="tablist" aria-label={t('dashboardPage.dashboardViewAria')}>
           <button
             type="button"
             role="tab"
@@ -40,7 +42,7 @@ const DashboardPage: React.FC = () => {
             className={viewMode === 'child' ? 'active' : ''}
             onClick={() => setView('child')}
           >
-            Kid view
+            {t('dashboardPage.kidView')}
           </button>
           <button
             type="button"
@@ -51,7 +53,7 @@ const DashboardPage: React.FC = () => {
             className={viewMode === 'parent' ? 'active' : ''}
             onClick={() => setView('parent')}
           >
-            Parent view
+            {t('dashboardPage.parentView')}
           </button>
         </div>
       </div>

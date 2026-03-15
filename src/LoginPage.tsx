@@ -1,11 +1,13 @@
 import React from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from './AuthContext'
+import { useTranslation } from './contexts/LocaleContext'
 
 const LoginPage: React.FC = () => {
   const { login } = useAuth()
   const navigate = useNavigate()
   const location = useLocation()
+  const { t, locale } = useTranslation()
 
   const searchParams = new URLSearchParams(location.search)
   const redirect = searchParams.get('redirect') ?? '/'
@@ -17,27 +19,25 @@ const LoginPage: React.FC = () => {
   }
 
   return (
-    <section className="lesson-page">
+    <section className="lesson-page" key={locale}>
       <header className="lesson-header">
-        <h2>Grown-up Sign In</h2>
+        <h2>{t('login.title')}</h2>
       </header>
       <div className="lesson-layout">
         <div className="lesson-media card">
           {fromRedirect && (
             <p className="login-redirect-note">
-              Some pages are for signed-in grown-ups only. Sign in to continue.
+              {t('login.redirectNote')}
             </p>
           )}
           <p>
-            This simple sign-in remembers that a grown-up has opened SpArki&apos;s
-            Academy on this device. No email or password is required in this demo.
+            {t('login.intro')}
           </p>
           <button type="button" className="primary-button" onClick={handleLogin}>
-            Sign in and open home
+            {t('login.submitButton')}
           </button>
           <p className="login-coppa-note">
-            Grown-ups: Sign in once on this device so your family can use SpArki.
-            This keeps the experience parent-approved.
+            {t('login.coppaNote')}
           </p>
         </div>
       </div>
@@ -46,4 +46,3 @@ const LoginPage: React.FC = () => {
 }
 
 export default LoginPage
-

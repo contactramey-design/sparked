@@ -8,10 +8,9 @@ const STORAGE_KEY = 'spark_academy_locale'
 
 export type Locale = 'en' | 'es'
 
-const messages: Record<Locale, Record<string, unknown>> = {
-  en: { ...en, curriculum: curriculumEn as Record<string, unknown> },
-  es: { ...es, curriculum: curriculumEs as Record<string, unknown> },
-}
+const enFull = { ...en, curriculum: curriculumEn as Record<string, unknown> } as Record<string, unknown>
+const esFull = { ...es, curriculum: curriculumEs as Record<string, unknown> } as Record<string, unknown>
+const messages: Record<Locale, Record<string, unknown>> = { en: enFull, es: esFull }
 
 function getByPath(obj: unknown, path: string): unknown {
   const keys = path.split('.')

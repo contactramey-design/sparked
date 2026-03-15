@@ -86,7 +86,7 @@ function TierCard({
 
 const HomePage: React.FC = () => {
   const { isLoggedIn } = useAuth()
-  const { t } = useTranslation()
+  const { t, locale } = useTranslation()
   const [searchParams, setSearchParams] = useSearchParams()
   const viewParam = searchParams.get('view')
   const [viewMode, setViewMode] = useState<ViewMode>(
@@ -168,7 +168,7 @@ const HomePage: React.FC = () => {
         )}
 
         {viewMode === 'parent' && (
-          <div className="hub-parent-wrap">
+          <div className="hub-parent-wrap" key={locale}>
             <ParentViewContent />
           </div>
         )}
