@@ -74,7 +74,8 @@ const UnitPage: React.FC = () => {
 
   useEffect(() => {
     if (materialFinished && quizSectionRef.current) {
-      quizSectionRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      // Scroll only enough to bring quiz into view; don't force it to top (avoids "page break" and cutting off content above)
+      quizSectionRef.current.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' })
     }
   }, [materialFinished])
 
@@ -459,7 +460,7 @@ const UnitPage: React.FC = () => {
       </div>
 
       {materialFinished && (
-        <div ref={quizSectionRef} className="unit-quiz-section mt-6" style={{ scrollMarginTop: '1rem' }}>
+        <div ref={quizSectionRef} className="unit-quiz-section mt-6" style={{ scrollMarginTop: '1.5rem', scrollMarginBottom: '1.5rem' }}>
       {unit.id === 'safety-instagram' && (
         <div className="unit-quiz-section mt-6">
           <InstagramSafetyQuiz
