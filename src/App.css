@@ -143,8 +143,8 @@ body {
 }
 
 .app-main {
-  flex: 1 1 auto; /* allow growing with content so unit + quiz can scroll in document */
-  min-height: 0; /* allow flex item to shrink; content still expands naturally */
+  flex: 1 1 auto; /* grow with content so unit + quiz get a scrollable page */
+  min-height: auto; /* main must be at least as tall as content so document scrolls (no cut-off) */
   max-width: 1120px;
   margin: 0 auto 1.5rem;
   padding: 1.25rem;
@@ -432,7 +432,6 @@ body {
 
 .safety-quiz {
   position: relative;
-  overflow-x: hidden; /* clip horizontal only so quiz content can extend and page scrolls */
   animation: popIn 0.6s ease-out both;
 }
 
@@ -835,12 +834,11 @@ body {
   margin-top: 0.5rem;
 }
 
-/* Unit page – single column, material first then quiz at end */
+/* Unit page – single column, material first then quiz at end; no overflow so only window scrolls */
 .unit-page-single {
   max-width: 720px;
   margin: 0 auto;
   position: relative;
-  overflow-x: hidden; /* avoid clipping bottom content; only hide horizontal bleed from ::before */
   padding-bottom: 2rem; /* room to scroll past quiz when loaded */
 }
 
