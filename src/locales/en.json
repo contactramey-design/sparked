@@ -1,0 +1,48 @@
+{
+  "header": {
+    "appName": "SpArki's Adventures Academy",
+    "tagline": "Learning AI the safe, playful, and human-first way.",
+    "home": "Home",
+    "courses": "Courses",
+    "parent": "Parent",
+    "signIn": "Sign in",
+    "signOut": "Sign out",
+    "skipToMain": "Skip to main content"
+  },
+  "footer": {
+    "copyright": "Learning AI the safe way.",
+    "about": "About",
+    "privacy": "Privacy",
+    "contact": "Contact",
+    "grownUp": "Grown-up?"
+  },
+  "home": {
+    "joinAdventure": "Join the Adventure!",
+    "chooseAdventure": "Choose your adventure",
+    "grownUpSignIn": "Grown-up? Sign in",
+    "parentGuide": "Parent Guide",
+    "view": "View:",
+    "kid": "Kid",
+    "parent": "Parent",
+    "hiSparkles": "Hi {name} · {count} sparkles",
+    "startAdventure": "Start adventure →",
+    "adventure": "ADVENTURE",
+    "tiers": {
+      "safety": {
+        "title": "Internet Safety",
+        "description": "Learn safe watching, kind comments, and healthy screen time with SpArki.",
+        "imageAlt": "SpArki in the Internet Safety world"
+      },
+      "ai-coding": {
+        "title": "AI & Coding",
+        "description": "Discover what AI is, how code works, and how software helps people.",
+        "imageAlt": "SpArki in the AI and Coding world"
+      },
+      "homework": {
+        "title": "Homework Adventure",
+        "description": "Turn homework into a story-based quest. Grown-up uploads; SpArki guides.",
+        "imageAlt": "SpArki as Homework Adventure tutor"
+      }
+    }
+  }
+}

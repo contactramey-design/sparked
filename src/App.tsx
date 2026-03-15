@@ -9,6 +9,7 @@ import {
 } from 'react-router-dom'
 import { appConfig } from './config'
 import { AuthProvider, useAuth } from './AuthContext'
+import { LocaleProvider, useTranslation } from './contexts/LocaleContext'
 import ProtectedRoute from './ProtectedRoute'
 import HomePage from './HomePage'
 import LoginPage from './LoginPage'
@@ -23,9 +24,31 @@ import AboutPage from './AboutPage'
 import ContactPage from './ContactPage'
 import './App.css'
 
+function SkipToMainLabel() {
+  const { t } = useTranslation()
+  return <>{t('header.skipToMain')}</>
+}
+
+function LangSwitcher() {
+  const { locale, setLocale } = useTranslation()
+  return (
+    <button
+      type="button"
+      onClick={() => setLocale((prev) => (prev === 'en' ? 'es' : 'en'))}
+      className="lang-switcher"
+      aria-label={locale === 'en' ? 'Switch to Spanish' : 'Cambiar a inglés'}
+      title={locale === 'en' ? 'Español' : 'English'}
+    >
+      <span className="lang-switcher-icon" aria-hidden>🌐</span>
+      <span className="lang-switcher-text">{locale === 'en' ? 'EN' : 'ES'}</span>
+    </button>
+  )
+}
+
 function AppHeader() {
   const location = useLocation()
   const { isLoggedIn, logout, kidLock } = useAuth()
+  const { t } = useTranslation()
   const isHome = location.pathname === '/'
   const isLogin = location.pathname === '/login'
 
@@ -34,34 +57,39 @@ function AppHeader() {
       <header className="app-header">
         <div className="logo-placeholder" aria-hidden>🤖 SpArki</div>
         <div className="app-titles">
-          <h1>{appConfig.appName}</h1>
-          <p>{appConfig.tagline}</p>
+          <h1>{t('header.appName')}</h1>
+          <p>{t('header.tagline')}</p>
         </div>
-        {isHome && !isLoggedIn && (
-          <nav className="main-nav" aria-label="Main navigation">
-            <Link to="/login">Sign in</Link>
-          </nav>
-        )}
-        {isLogin && (
-          <nav className="main-nav" aria-label="Main navigation">
-            <Link to="/">Home</Link>
-          </nav>
-        )}
-        {isHome && isLoggedIn && (
-          <nav className="main-nav" aria-label="Main navigation">
-            <Link to="/">Home</Link>
-            <Link to="/tracks">Courses</Link>
-            {!kidLock && <Link to="/?view=parent">Parent</Link>}
-            <button
-              type="button"
-              onClick={logout}
-              className="nav-button"
-              aria-label="Sign out"
-            >
-              Sign out
-            </button>
-          </nav>
-        )}
+        <nav className="main-nav" aria-label="Main navigation">
+          {isHome && !isLoggedIn && (
+            <>
+              <Link to="/login">{t('header.signIn')}</Link>
+              <LangSwitcher />
+            </>
+          )}
+          {isLogin && (
+            <>
+              <Link to="/">{t('header.home')}</Link>
+              <LangSwitcher />
+            </>
+          )}
+          {isHome && isLoggedIn && (
+            <>
+              <Link to="/">{t('header.home')}</Link>
+              <Link to="/tracks">{t('header.courses')}</Link>
+              {!kidLock && <Link to="/?view=parent">{t('header.parent')}</Link>}
+              <LangSwitcher />
+              <button
+                type="button"
+                onClick={logout}
+                className="nav-button"
+                aria-label={t('header.signOut')}
+              >
+                {t('header.signOut')}
+              </button>
+            </>
+          )}
+        </nav>
       </header>
     )
   }
@@ -72,20 +100,21 @@ function AppHeader() {
         🤖 SpArki
       </Link>
       <div className="app-titles">
-        <h1>{appConfig.appName}</h1>
-        <p>{appConfig.tagline}</p>
+        <h1>{t('header.appName')}</h1>
+        <p>{t('header.tagline')}</p>
       </div>
       <nav className="main-nav" aria-label="Main navigation">
-        <Link to="/">Home</Link>
-        <Link to="/tracks">Courses</Link>
-        {!kidLock && <Link to="/?view=parent">Parent</Link>}
+        <Link to="/">{t('header.home')}</Link>
+        <Link to="/tracks">{t('header.courses')}</Link>
+        {!kidLock && <Link to="/?view=parent">{t('header.parent')}</Link>}
+        <LangSwitcher />
         <button
           type="button"
           onClick={logout}
           className="nav-button"
-          aria-label="Sign out"
+          aria-label={t('header.signOut')}
         >
-          Sign out
+          {t('header.signOut')}
         </button>
       </nav>
     </header>
@@ -94,20 +123,20 @@ function AppHeader() {
 
 function AppFooter() {
   const { kidLock } = useAuth()
+  const { t } = useTranslation()
   return (
     <footer className="app-footer">
       <small>
-        © {new Date().getFullYear()} SpArki&apos;s Adventures Academy · Learning AI
-        the safe way.
+        © {new Date().getFullYear()} {t('header.appName')} · {t('footer.copyright')}
       </small>
       <span className="app-footer-links">
-        <Link to="/about">About</Link>
-        <Link to="/privacy">Privacy</Link>
-        <Link to="/contact">Contact</Link>
+        <Link to="/about">{t('footer.about')}</Link>
+        <Link to="/privacy">{t('footer.privacy')}</Link>
+        <Link to="/contact">{t('footer.contact')}</Link>
       </span>
       {kidLock && (
-        <Link to="/parent" className="footer-grownup-link" aria-label="Grown-up sign in">
-          Grown-up?
+        <Link to="/parent" className="footer-grownup-link" aria-label={t('footer.grownUp')}>
+          {t('footer.grownUp')}
         </Link>
       )}
     </footer>
@@ -126,9 +155,10 @@ const App: React.FC = () => {
   return (
     <BrowserRouter>
       <AuthProvider>
+        <LocaleProvider>
         <div className="app" style={themeStyle}>
           <a href="#app-main" className="skip-link">
-            Skip to main content
+            <SkipToMainLabel />
           </a>
           <AppHeader />
           <main id="app-main" className="app-main">
@@ -200,6 +230,7 @@ const App: React.FC = () => {
           </main>
           <AppFooter />
         </div>
+        </LocaleProvider>
       </AuthProvider>
     </BrowserRouter>
   )

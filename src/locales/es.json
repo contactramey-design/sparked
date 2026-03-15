@@ -1,0 +1,48 @@
+{
+  "header": {
+    "appName": "Academia de Aventuras SpArki",
+    "tagline": "Aprende sobre IA de forma segura, divertida y centrada en las personas.",
+    "home": "Inicio",
+    "courses": "Cursos",
+    "parent": "Adulto",
+    "signIn": "Entrar",
+    "signOut": "Salir",
+    "skipToMain": "Saltar al contenido principal"
+  },
+  "footer": {
+    "copyright": "Aprende sobre IA de forma segura.",
+    "about": "Nosotros",
+    "privacy": "Privacidad",
+    "contact": "Contacto",
+    "grownUp": "¿Eres adulto?"
+  },
+  "home": {
+    "joinAdventure": "¡Únete a la aventura!",
+    "chooseAdventure": "Elige tu aventura",
+    "grownUpSignIn": "¿Eres adulto? Entrar",
+    "parentGuide": "Guía para adultos",
+    "view": "Ver:",
+    "kid": "Niño",
+    "parent": "Adulto",
+    "hiSparkles": "Hola {name} · {count} chispas",
+    "startAdventure": "Comenzar aventura →",
+    "adventure": "AVENTURA",
+    "tiers": {
+      "safety": {
+        "title": "Seguridad en Internet",
+        "description": "Aprende a ver con seguridad, comentar con amabilidad y usar la pantalla de forma sana con SpArki.",
+        "imageAlt": "SpArki en el mundo de la seguridad en Internet"
+      },
+      "ai-coding": {
+        "title": "IA y Programación",
+        "description": "Descubre qué es la IA, cómo funciona el código y cómo el software ayuda a las personas.",
+        "imageAlt": "SpArki en el mundo de la IA y la programación"
+      },
+      "homework": {
+        "title": "Aventura de Tareas",
+        "description": "Convierte las tareas en una búsqueda con historia. El adulto sube; SpArki guía.",
+        "imageAlt": "SpArki como tutor de Aventura de Tareas"
+      }
+    }
+  }
+}

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { appConfig } from './config'
 import { useAuth } from './AuthContext'
+import { useTranslation } from './contexts/LocaleContext'
 import { getPlayerStats } from './progress'
 import { ParentViewContent } from './ParentDashboard'
 
@@ -42,18 +43,22 @@ function TierCard({
   href: string
 }) {
   const [imgFailed, setImgFailed] = useState(false)
+  const { t } = useTranslation()
+  const title = t(`home.tiers.${tier.id}.title`)
+  const description = t(`home.tiers.${tier.id}.description`)
+  const imageAlt = t(`home.tiers.${tier.id}.imageAlt`)
 
   return (
-    <Link to={href} className="home-tier-card glitch-card" title={tier.title}>
+    <Link to={href} className="home-tier-card glitch-card" title={title}>
       <div className="glitch-card-outer" aria-hidden />
       <div className="glitch-card-inner">
         <div className="glitch-card-img-wrap">
           {imgFailed ? (
-            <span className="home-tier-placeholder">{tier.title}</span>
+            <span className="home-tier-placeholder">{title}</span>
           ) : (
             <img
               src={tier.imageSrc}
-              alt={tier.imageAlt}
+              alt={imageAlt}
               className="home-tier-image"
               onError={() => setImgFailed(true)}
             />
@@ -66,11 +71,11 @@ function TierCard({
           </div>
           <div className="glitch-card-info">
             <span className="glitch-card-status" aria-hidden>
-              ADVENTURE
+              {t('home.adventure')}
             </span>
-            <h3 className="glitch-card-title">{tier.title}</h3>
-            <p className="glitch-card-desc">{tier.description}</p>
-            <span className="glitch-card-cta">Start adventure →</span>
+            <h3 className="glitch-card-title">{title}</h3>
+            <p className="glitch-card-desc">{description}</p>
+            <span className="glitch-card-cta">{t('home.startAdventure')}</span>
           </div>
         </div>
       </div>
@@ -81,6 +86,7 @@ function TierCard({
 
 const HomePage: React.FC = () => {
   const { isLoggedIn } = useAuth()
+  const { t } = useTranslation()
   const [searchParams, setSearchParams] = useSearchParams()
   const viewParam = searchParams.get('view')
   const [viewMode, setViewMode] = useState<ViewMode>(
@@ -123,8 +129,8 @@ const HomePage: React.FC = () => {
   if (isLoggedIn) {
     return (
       <section className="home-page home-hub">
-        <div className="hub-toggle-bar" role="tablist" aria-label="View: Kid or Parent">
-          <span className="hub-toggle-label">View:</span>
+        <div className="hub-toggle-bar" role="tablist" aria-label={`${t('home.view')} ${t('home.kid')} ${t('home.parent')}`}>
+          <span className="hub-toggle-label">{t('home.view')}</span>
           <button
             type="button"
             role="tab"
@@ -132,7 +138,7 @@ const HomePage: React.FC = () => {
             className={viewMode === 'kid' ? 'active' : ''}
             onClick={() => setView('kid')}
           >
-            Kid
+            {t('home.kid')}
           </button>
           <button
             type="button"
@@ -141,17 +147,17 @@ const HomePage: React.FC = () => {
             className={viewMode === 'parent' ? 'active' : ''}
             onClick={() => setView('parent')}
           >
-            Parent
+            {t('home.parent')}
           </button>
         </div>
 
         {viewMode === 'kid' && (
           <>
             <p className="hub-kid-line">
-              Hi {username || 'Explorer'} · {sparkles} sparkles
+              {t('home.hiSparkles', { name: username || 'Explorer', count: sparkles })}
             </p>
             <div className="home-tiers">
-              <h2 className="home-tiers-title">Choose your adventure</h2>
+              <h2 className="home-tiers-title">{t('home.chooseAdventure')}</h2>
               <div className="home-tier-grid">
                 {TIERS.map((tier) => (
                   <TierCard key={tier.id} tier={tier} href={tier.path} />
@@ -174,7 +180,7 @@ const HomePage: React.FC = () => {
             rel="noreferrer"
             className="link-muted"
           >
-            Parent Guide
+            {t('home.parentGuide')}
           </a>
         </div>
       </section>
@@ -200,16 +206,16 @@ const HomePage: React.FC = () => {
           </span>
         </div>
         <div className="home-hero-content">
-          <h1 className="home-title">{appConfig.appName}</h1>
-          <p className="home-tagline">{appConfig.tagline}</p>
+          <h1 className="home-title">{t('header.appName')}</h1>
+          <p className="home-tagline">{t('header.tagline')}</p>
           <Link to={ctaHref} className="home-hero-cta primary-button">
-            Join the Adventure!
+            {t('home.joinAdventure')}
           </Link>
         </div>
       </div>
 
       <div className="home-tiers">
-        <h2 className="home-tiers-title">Choose your adventure</h2>
+        <h2 className="home-tiers-title">{t('home.chooseAdventure')}</h2>
         <div className="home-tier-grid">
           {TIERS.map((tier) => {
             const href = redirectParam(tier.path)
@@ -226,7 +232,7 @@ const HomePage: React.FC = () => {
 
       <div className="home-footer-actions">
         <Link to={loginPath} className="secondary-button">
-          Grown-up? Sign in
+          {t('home.grownUpSignIn')}
         </Link>
         <a
           href={appConfig.parentResources.handbookPdfUrl}
@@ -234,7 +240,7 @@ const HomePage: React.FC = () => {
           rel="noreferrer"
           className="link-muted"
         >
-          Parent Guide
+          {t('home.parentGuide')}
         </a>
       </div>
     </section>
