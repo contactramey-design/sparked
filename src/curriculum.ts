@@ -69,6 +69,7 @@ export const curriculum: CurriculumConfig = {
       description:
         'Join SpArki to learn what AI is, how code works, and how software helps people.',
       order: 1,
+      introVideoUrl: '/coding_intro.mp4',
     },
     {
       id: 'social-safety',

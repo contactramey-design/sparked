@@ -41,13 +41,16 @@ const TrackPage: React.FC = () => {
           {track.id === 'social-safety' && (
             <h2 className="track-intro-video-title">Safety intro</h2>
           )}
+          {track.id === 'ai-coding' && (
+            <h2 className="track-intro-video-title">Coding intro</h2>
+          )}
           <video
             controls
             preload="metadata"
             poster={VIDEO_POSTER_DATA_URL}
             style={{ width: '100%', borderRadius: '12px' }}
-            title={track.id === 'social-safety' ? 'Safety intro' : undefined}
-            aria-label={track.id === 'social-safety' ? 'Safety intro video' : undefined}
+            title={track.id === 'social-safety' ? 'Safety intro' : track.id === 'ai-coding' ? 'Coding intro' : undefined}
+            aria-label={track.id === 'social-safety' ? 'Safety intro video' : track.id === 'ai-coding' ? 'Coding intro video' : undefined}
           >
             <source src={track.introVideoUrl} type="video/mp4" />
             Sorry, your browser doesn’t support the video tag.
