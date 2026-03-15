@@ -22,6 +22,7 @@ import HomeworkAdventurePage from './HomeworkAdventurePage'
 import PrivacyPage from './PrivacyPage'
 import AboutPage from './AboutPage'
 import ContactPage from './ContactPage'
+import SparkiAvatar from './components/SparkiAvatar'
 import './App.css'
 
 function SkipToMainLabel() {
@@ -55,7 +56,10 @@ function AppHeader() {
   if (isHome || isLogin) {
     return (
       <header className="app-header">
-        <div className="logo-placeholder" aria-hidden>🤖 SpArki</div>
+        <div className="logo-placeholder flex items-center gap-2" aria-hidden>
+          <SparkiAvatar size="sm" />
+          <span>SpArki</span>
+        </div>
         <div className="app-titles">
           <h1>{t('header.appName')}</h1>
           <p>{t('header.tagline')}</p>
@@ -96,8 +100,9 @@ function AppHeader() {
 
   return (
     <header className="app-header">
-      <Link to="/" className="logo-placeholder" aria-label="SpArki home">
-        🤖 SpArki
+      <Link to="/" className="logo-placeholder flex items-center gap-2" aria-label="SpArki home">
+        <SparkiAvatar size="sm" />
+        <span>SpArki</span>
       </Link>
       <div className="app-titles">
         <h1>{t('header.appName')}</h1>

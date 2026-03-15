@@ -7,9 +7,29 @@ export default {
   theme: {
     extend: {
       colors: {
-        primary: '#2563eb',
-        accent: '#facc15',
+        primary: '#60A5FA',
+        accent: '#F472B6',
         danger: '#ef4444',
+        sparki: {
+          blue: '#60A5FA',
+          pink: '#F472B6',
+          mint: '#34D399',
+          yellow: '#FBBF24',
+          soft: '#F0F9FF',
+          softEnd: '#E0F2FE',
+        },
+      },
+      fontFamily: {
+        heading: ['Fredoka One', 'system-ui', 'sans-serif'],
+        body: ['Baloo 2', 'Comic Neue', 'system-ui', 'sans-serif'],
+      },
+      borderRadius: {
+        '3xl': '1.5rem',
+        '4xl': '2rem',
+      },
+      boxShadow: {
+        sparkle: '0 10px 30px -10px rgba(96, 165, 250, 0.4)',
+        'sparkle-pink': '0 10px 30px -10px rgba(244, 114, 182, 0.35)',
       },
       animation: {
         'float-bounce': 'floatBounce 3s ease-in-out infinite',

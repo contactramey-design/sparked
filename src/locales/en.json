@@ -136,7 +136,14 @@
     "creatingVideo": "Creating your video…",
     "videoSectionTitle": "SpArki's adventure for this homework",
     "videoErrorGeneric": "Could not create video.",
-    "videoErrorNoUrl": "No video URL returned."
+    "videoErrorNoUrl": "No video URL returned.",
+    "consentTitle": "Parent consent",
+    "consentDesc": "Before we process a homework image, we need verifiable parental consent. Your email and confirmation are stored only for compliance; we do not use them for marketing.",
+    "consentEmailLabel": "Parent or guardian email",
+    "consentEmailPlaceholder": "your@email.com",
+    "consentCheckbox": "I have permission to share this homework page and agree to the processing described in the Privacy policy.",
+    "consentAgree": "I agree",
+    "consentCancel": "Cancel"
   },
   "unit": {
     "answerAllFirst": "Please answer all questions before checking your score."

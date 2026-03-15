@@ -1,7 +1,17 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import { VIDEO_POSTER_DATA_URL } from './videoPoster'
 import { useTranslation } from './contexts/LocaleContext'
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from '@/components/ui/dialog'
+
+const HOMEWORK_CONSENT_KEY = 'sparki_homework_consent'
 
 interface HomeworkAdventureStep {
   id: string
@@ -30,6 +40,23 @@ const HomeworkAdventurePage: React.FC = () => {
   const [videoUrl, setVideoUrl] = useState<string | null>(null)
   const [videoLoading, setVideoLoading] = useState(false)
   const [videoError, setVideoError] = useState<string | null>(null)
+  const [hasConsent, setHasConsent] = useState(false)
+  const [showConsentModal, setShowConsentModal] = useState(false)
+  const [consentEmail, setConsentEmail] = useState('')
+  const [consentCheckbox, setConsentCheckbox] = useState(false)
+  const [consentError, setConsentError] = useState<string | null>(null)
+
+  useEffect(() => {
+    try {
+      const raw = window.sessionStorage.getItem(HOMEWORK_CONSENT_KEY)
+      if (raw) {
+        const data = JSON.parse(raw)
+        if (data?.email && data?.agreedAt) setHasConsent(true)
+      }
+    } catch {
+      setHasConsent(false)
+    }
+  }, [])
 
   useEffect(() => {
     if (!adventure) return
@@ -76,20 +103,8 @@ const HomeworkAdventurePage: React.FC = () => {
     setPreviewUrl(url)
   }
 
-  const handleGenerate: React.FormEventHandler<HTMLFormElement> = async (event) => {
-    event.preventDefault()
-    setError(null)
-    setAdventure(null)
-    setCurrentStepIndex(0)
-    setShowHint(false)
-    setVideoUrl(null)
-    setVideoError(null)
-
-    if (!file) {
-      setError(t('homeworkPage.errorChooseFirst'))
-      return
-    }
-
+  const doGenerate = useCallback(async () => {
+    if (!file) return
     setLoading(true)
     try {
       const formData = new FormData()
@@ -114,6 +129,54 @@ const HomeworkAdventurePage: React.FC = () => {
       setError(t('homeworkPage.errorGeneric'))
     } finally {
       setLoading(false)
+    }
+  }, [file, t])
+
+  const handleGenerate: React.FormEventHandler<HTMLFormElement> = async (event) => {
+    event.preventDefault()
+    setError(null)
+    setAdventure(null)
+    setCurrentStepIndex(0)
+    setShowHint(false)
+    setVideoUrl(null)
+    setVideoError(null)
+
+    if (!file) {
+      setError(t('homeworkPage.errorChooseFirst'))
+      return
+    }
+    if (!hasConsent) {
+      setShowConsentModal(true)
+      return
+    }
+    await doGenerate()
+  }
+
+  const handleConsentSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    setConsentError(null)
+    const email = consentEmail.trim()
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setConsentError('Please enter a valid email address.')
+      return
+    }
+    if (!consentCheckbox) {
+      setConsentError('Please confirm you have permission to share this homework.')
+      return
+    }
+    try {
+      sessionStorage.setItem(
+        HOMEWORK_CONSENT_KEY,
+        JSON.stringify({ email, agreedAt: Date.now() })
+      )
+      setHasConsent(true)
+      setShowConsentModal(false)
+      setConsentEmail('')
+      setConsentCheckbox(false)
+      setConsentError(null)
+      doGenerate()
+    } catch {
+      setConsentError(t('homeworkPage.errorGeneric'))
     }
   }
 
@@ -152,6 +215,49 @@ const HomeworkAdventurePage: React.FC = () => {
 
   return (
     <section className="lesson-page" key={locale}>
+      <Dialog open={showConsentModal} onOpenChange={(open) => { setShowConsentModal(open); if (!open) setConsentError(null) }}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{t('homeworkPage.consentTitle')}</DialogTitle>
+            <DialogDescription>{t('homeworkPage.consentDesc')}</DialogDescription>
+          </DialogHeader>
+          <form onSubmit={handleConsentSubmit}>
+            <label className="block text-sm font-medium mt-2 mb-1">
+              {t('homeworkPage.consentEmailLabel')}
+            </label>
+            <input
+              type="email"
+              value={consentEmail}
+              onChange={(e) => setConsentEmail(e.target.value)}
+              placeholder={t('homeworkPage.consentEmailPlaceholder')}
+              className="w-full border border-slate-300 rounded-md px-3 py-2 mb-3"
+              autoComplete="email"
+            />
+            <label className="flex items-start gap-2 mt-2 mb-3 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={consentCheckbox}
+                onChange={(e) => setConsentCheckbox(e.target.checked)}
+                className="mt-1"
+              />
+              <span className="text-sm">{t('homeworkPage.consentCheckbox')}</span>
+            </label>
+            {consentError && <p className="quiz-error text-sm mb-2">{consentError}</p>}
+            <DialogFooter className="gap-2 sm:gap-0">
+              <button
+                type="button"
+                className="secondary-button"
+                onClick={() => { setShowConsentModal(false); setConsentError(null) }}
+              >
+                {t('homeworkPage.consentCancel')}
+              </button>
+              <button type="submit" className="primary-button">
+                {t('homeworkPage.consentAgree')}
+              </button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
       <header className="lesson-header">
         <div>
           <h2>{t('homeworkPage.title')}</h2>

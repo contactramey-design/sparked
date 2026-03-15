@@ -2,13 +2,14 @@ import React from 'react'
 import { Link, useParams, useNavigate } from 'react-router-dom'
 import { curriculum } from './curriculum'
 import { getUnitStatus, isUnitLockedForTrack, getHasSafetyPass } from './progress'
-import { useTranslation } from './contexts/LocaleContext'
+import { useTranslation, useLocale } from './contexts/LocaleContext'
 import { useTranslatedTrack } from './hooks/useTranslatedCurriculum'
 import ListenButton from './components/ListenButton'
 import { VIDEO_POSTER_DATA_URL } from './videoPoster'
 
 const TrackPage: React.FC = () => {
   const { t } = useTranslation()
+  const { locale } = useLocale()
   const { trackId } = useParams<{ trackId: string }>()
   const navigate = useNavigate()
   const hasSafetyPass = getHasSafetyPass()
@@ -22,6 +23,10 @@ const TrackPage: React.FC = () => {
     return null
   }
 
+  const introVideoSrc =
+    locale === 'es' && track.introVideoUrlEs
+      ? track.introVideoUrlEs
+      : track.introVideoUrl
   const sortedUnits = [...units]
 
   return (
@@ -40,7 +45,7 @@ const TrackPage: React.FC = () => {
         </div>
       </header>
 
-      {track.introVideoUrl ? (
+      {introVideoSrc ? (
         <div className="track-intro-video video-wrapper">
           <video
             controls
@@ -50,7 +55,7 @@ const TrackPage: React.FC = () => {
             title={track.id === 'social-safety' ? 'Safety intro' : track.id === 'ai-coding' ? 'Coding intro' : undefined}
             aria-label={track.id === 'social-safety' ? 'Safety intro video' : track.id === 'ai-coding' ? 'Coding intro video' : undefined}
           >
-            <source src={track.introVideoUrl} type="video/mp4" />
+            <source src={introVideoSrc} type="video/mp4" />
             Sorry, your browser doesn’t support the video tag.
           </video>
         </div>

@@ -41,6 +41,8 @@ export interface UnitConfig {
   unlocksUnitId?: string
   /** Optional video: URL to MP4/WebM or YouTube embed (e.g. https://www.youtube.com/embed/...) */
   videoUrl?: string
+  /** Optional Spanish video: same as videoUrl but for locale es */
+  videoUrlEs?: string
   /** Optional "Think about this!" prompts shown during material */
   thinkPrompts?: ThinkPrompt[]
 }
@@ -52,6 +54,8 @@ export interface TrackConfig {
   order: number
   /** Optional intro video for the track overview page. Put file in public/ and use path from root (e.g. '/safetyAppIntro.mp4'). */
   introVideoUrl?: string
+  /** Optional Spanish intro video for locale es */
+  introVideoUrlEs?: string
 }
 
 export interface CurriculumConfig {

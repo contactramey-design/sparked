@@ -1,5 +1,6 @@
 // Completion celebration modal and badge (single component)
 import React, { useEffect, useRef } from 'react'
+import SparkiAvatar from './components/SparkiAvatar'
 import './CompletionCelebration.css'
 
 interface CompletionCelebrationProps {
@@ -34,20 +35,21 @@ const CompletionCelebration: React.FC<CompletionCelebrationProps> = ({
       height / 2,
       140,
     )
-    gradient.addColorStop(0, '#f97316')
-    gradient.addColorStop(1, '#facc15')
+    gradient.addColorStop(0, '#60A5FA')
+    gradient.addColorStop(0.6, '#F472B6')
+    gradient.addColorStop(1, '#FBBF24')
     ctx.fillStyle = gradient
     ctx.beginPath()
     ctx.arc(width / 2, height / 2, 130, 0, Math.PI * 2)
     ctx.fill()
 
-    ctx.strokeStyle = '#fef3c7'
+    ctx.strokeStyle = '#F0F9FF'
     ctx.lineWidth = 8
     ctx.beginPath()
     ctx.arc(width / 2, height / 2, 118, 0, Math.PI * 2)
     ctx.stroke()
 
-    ctx.fillStyle = '#0f172a'
+    ctx.fillStyle = '#1e40af'
     ctx.textAlign = 'center'
     ctx.font = 'bold 24px system-ui'
     ctx.fillText('SpArki Badge', width / 2, height / 2 - 20)
@@ -97,11 +99,14 @@ const CompletionCelebration: React.FC<CompletionCelebrationProps> = ({
 
         <div className="completion-badge-section">
           <h3>Your SpArki Badge</h3>
-          <canvas
-            ref={canvasRef}
-            className="completion-badge-canvas"
-            aria-label="SpArki completion badge"
-          />
+          <div className="completion-badge-wrap">
+            <SparkiAvatar size="lg" static />
+            <canvas
+              ref={canvasRef}
+              className="completion-badge-canvas"
+              aria-label="SpArki completion badge"
+            />
+          </div>
           <button
             type="button"
             className="secondary-button"

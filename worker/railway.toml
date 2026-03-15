@@ -1,0 +1,5 @@
+# Railway deploy config for Homework Adventure video worker.
+# In Railway: set this service's Root Directory to "worker" so it uses this folder.
+
+[deploy]
+startCommand = "node index.js"

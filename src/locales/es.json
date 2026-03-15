@@ -136,7 +136,14 @@
     "creatingVideo": "Creando tu video…",
     "videoSectionTitle": "Aventura de SpArki para estas tareas",
     "videoErrorGeneric": "No se pudo crear el video.",
-    "videoErrorNoUrl": "No se devolvió la URL del video."
+    "videoErrorNoUrl": "No se devolvió la URL del video.",
+    "consentTitle": "Consentimiento del adulto",
+    "consentDesc": "Antes de procesar una imagen de tareas, necesitamos el consentimiento verificable del adulto. Tu correo y confirmación se guardan solo para cumplimiento; no los usamos para marketing.",
+    "consentEmailLabel": "Correo del adulto o tutor",
+    "consentEmailPlaceholder": "tu@email.com",
+    "consentCheckbox": "Tengo permiso para compartir esta página de tareas y acepto el tratamiento descrito en la política de privacidad.",
+    "consentAgree": "Acepto",
+    "consentCancel": "Cancelar"
   },
   "unit": {
     "answerAllFirst": "Responde todas las preguntas antes de ver tu puntuación."
