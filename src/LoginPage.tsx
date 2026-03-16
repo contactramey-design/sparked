@@ -91,18 +91,16 @@ const LoginPage: React.FC = () => {
               {status === 'sending' ? 'Sending…' : 'Send sign-in link'}
             </button>
           </form>
-          {import.meta.env.DEV && (
-            <button
-              type="button"
-              className="secondary-button mt-3"
-              onClick={() => {
-                devLogin()
-                navigate(redirect, { replace: true })
-              }}
-            >
-              Continue as demo parent (dev only)
-            </button>
-          )}
+          <button
+            type="button"
+            className="secondary-button mt-3"
+            onClick={() => {
+              devLogin()
+              navigate(redirect, { replace: true })
+            }}
+          >
+            Continue without email (demo)
+          </button>
           <p className="login-coppa-note">
             {t('login.coppaNote')}
           </p>

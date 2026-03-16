@@ -98,6 +98,39 @@ const UnitPage: React.FC = () => {
 
   const displayUnit = translatedUnit ?? unit
 
+  const instaImages = [
+    '/instasafetyillustration1.jpg',
+    '/instagsafetyillustration2.jpg',
+    '/instasafetyillustration3.png',
+    '/instasafetyillustration4.png',
+    '/instasafetyillustration5.png',
+    '/instasafetyillustartion6.jpeg',
+    '/instasafetyillustration7.png',
+  ]
+
+  const instaCaptionsEn = [
+    'SpArki introduces safe sharing on Instagram and reminds kids to pause before they post.',
+    'Kids learn to keep profiles private so only people they and a grown-up know can follow them.',
+    'SpArki shows how to crop and frame photos so faces, names, and school details stay private.',
+    'The class checks with a trusted grown-up before posting a group photo to make sure everyone is comfortable.',
+    'Profiles show pets, hobbies, and art—not full names, addresses, or school logos.',
+    'When a strange message appears, the child blocks, reports, and goes to a grown-up right away.',
+    'SpArki and the class celebrate safe, kind posts and agree to keep checking with grown-ups online.',
+  ]
+  const instaCaptionsEs = [
+    'SpArki presenta cómo compartir de forma segura en Instagram y recuerda hacer una pausa antes de publicar.',
+    'Los niños aprenden a mantener sus perfiles privados para que solo los sigan personas que ellos y un adulto conocen.',
+    'SpArki muestra cómo recortar y encuadrar fotos para que caras, nombres y detalles de la escuela queden privados.',
+    'La clase consulta con un adulto de confianza antes de publicar una foto de grupo para que todos estén cómodos.',
+    'Los perfiles muestran mascotas, pasatiempos y dibujos, no nombres completos, direcciones ni logos de la escuela.',
+    'Cuando aparece un mensaje extraño, el niño bloquea, reporta y va con un adulto de inmediato.',
+    'SpArki y la clase celebran publicaciones seguras y amables, y acuerdan seguir consultando a los adultos en línea.',
+  ]
+
+  const instaCaptions = locale === 'es' ? instaCaptionsEs : instaCaptionsEn
+  const currentInstaImage = instaImages[instaSlide] ?? instaImages[0]
+  const currentInstaCaption = instaCaptions[instaSlide] ?? ''
+
   const isPaidSafety =
     unit.trackId === 'social-safety' && !unit.isFree
   const lockedByPayment = isPaidSafety && !hasSafetyPass
@@ -449,39 +482,53 @@ const UnitPage: React.FC = () => {
                         {story}
                       </p>
                       {unit.id === 'safety-instagram' ? (
-                        <div className="space-y-2">
+                        <div className="space-y-3">
+                          <div className="flex flex-col items-center gap-2">
+                            <div className="w-full max-w-md">
+                              <div className="overflow-hidden rounded-2xl border-2 border-pink-300 bg-white shadow-md">
+                                <img
+                                  src={currentInstaImage}
+                                  alt={`Instagram safety illustration ${instaSlide + 1}`}
+                                  className="block w-full max-h-64 object-cover"
+                                  style={{
+                                    transform: `rotate(${(instaSlide - 3) * 2}deg)`,
+                                    transition: 'transform 250ms ease-out',
+                                  }}
+                                />
+                              </div>
+                            </div>
+                            {currentInstaCaption && (
+                              <p className="text-sm text-pink-800 text-center px-4">
+                                {currentInstaCaption}
+                              </p>
+                            )}
+                          </div>
                           <div className="overflow-x-auto">
                             <div className="flex gap-3 w-max pr-1">
-                              {[
-                                '/instasafetyillustration1.jpg',
-                                '/instagsafetyillustration2.jpg',
-                                '/instasafetyillustration3.png',
-                                '/instasafetyillustration4.png',
-                                '/instasafetyillustration5.png',
-                                '/instasafetyillustartion6.jpeg',
-                                '/instasafetyillustration7.png',
-                              ].map((src, index) => (
+                              {instaImages.map((src, index) => (
                                 <button
                                   key={src}
                                   type="button"
                                   onClick={() => setInstaSlide(index)}
                                   className={`rounded-xl border-2 bg-white/80 shadow-sm overflow-hidden transition-transform focus:outline-none focus-visible:ring-2 focus-visible:ring-pink-400 ${
-                                    instaSlide === index ? 'border-pink-400 scale-[1.02]' : 'border-pink-200'
+                                    instaSlide === index ? 'border-pink-400 scale-[1.02]' : 'border-pink-200 opacity-60'
                                   }`}
-                                  style={{ width: 160, flex: '0 0 auto' }}
+                                  style={{ width: 120, flex: '0 0 auto' }}
                                   aria-label={`Instagram safety illustration ${index + 1}`}
                                 >
                                   <img
                                     src={src}
-                                    alt={`Instagram safety illustration ${index + 1}`}
-                                    className="block w-full h-32 object-cover"
+                                    alt={`Instagram safety thumbnail ${index + 1}`}
+                                    className={`block w-full h-24 object-cover ${
+                                      instaSlide === index ? '' : 'blur-[1px]'
+                                    }`}
                                   />
                                 </button>
                               ))}
                             </div>
                           </div>
                           <div className="flex items-center justify-center gap-2">
-                            {Array.from({ length: 7 }).map((_, index) => (
+                            {instaImages.map((_, index) => (
                               <button
                                 key={index}
                                 type="button"
