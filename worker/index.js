@@ -5,6 +5,7 @@
  */
 import express from 'express'
 import fs from 'fs'
+import os from 'os'
 import path from 'path'
 import { put } from '@vercel/blob'
 import ffmpeg from 'fluent-ffmpeg'
@@ -143,7 +144,8 @@ app.post('/generate', async (req, res) => {
       if (!imageUrls.length) throw new Error('No images in manifest')
     }
 
-    const outPath = path.join(process.cwd(), `out_${Date.now()}.mp4`)
+    // Use OS tmp directory for output to avoid filesystem permission issues on hosts like Railway
+    const outPath = path.join(os.tmpdir(), `out_${Date.now()}.mp4`)
     await compositeVideo(adventure, audioBuffer, imageUrls, outPath)
 
     const buffer = await fs.promises.readFile(outPath)
