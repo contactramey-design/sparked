@@ -103,13 +103,12 @@ async function compositeVideo(adventure, audioBuffer, imageUrls) {
       .inputOptions(['-f', 'concat', '-safe', '0'])
       .input(audioPath)
       .outputOptions([
-        '-c:v', 'libvpx',
-        '-b:v', '1M',
-        '-c:a', 'libvorbis',
         '-shortest',
         '-pix_fmt', 'yuv420p',
-        '-f', 'webm',
       ])
+      .on('start', (cmd) => {
+        console.log('[ffmpeg] start', cmd)
+      })
       .save(outPath)
       .on('end', resolve)
       .on('error', reject)
