@@ -7,6 +7,7 @@ import express from 'express'
 import fs from 'fs'
 import os from 'os'
 import path from 'path'
+import { Writable } from 'stream'
 import { put } from '@vercel/blob'
 import ffmpeg from 'fluent-ffmpeg'
 import ffmpegStatic from 'ffmpeg-static'
@@ -68,8 +69,12 @@ function buildScript(steps) {
   return steps.map((s) => s.story).filter(Boolean).join(' ')
 }
 
-async function compositeVideo(adventure, audioBuffer, imageUrls, outPath) {
-  const tmpDir = path.join(path.dirname(outPath), `work_${Date.now()}`)
+/**
+ * Build MP4 in memory by piping ffmpeg to a buffer (avoids writing output to disk,
+ * which fails on some hosts like Render/Railway).
+ */
+async function compositeVideo(adventure, audioBuffer, imageUrls) {
+  const tmpDir = path.join(os.tmpdir(), `work_${Date.now()}`)
   await fs.promises.mkdir(tmpDir, { recursive: true })
   const audioPath = path.join(tmpDir, 'audio.mp3')
   await fs.promises.writeFile(audioPath, audioBuffer)
@@ -94,22 +99,30 @@ async function compositeVideo(adventure, audioBuffer, imageUrls, outPath) {
   lines.push(`file '${writtenPaths[writtenPaths.length - 1].replace(/\\/g, '/')}'`)
   await fs.promises.writeFile(listPath, lines.join('\n'))
 
-  await new Promise((resolve, reject) => {
+  const buffer = await new Promise((resolve, reject) => {
+    const chunks = []
+    const writable = new Writable({
+      write(chunk, _enc, cb) {
+        chunks.push(chunk)
+        cb()
+      },
+    })
+    writable.on('finish', () => resolve(Buffer.concat(chunks)))
+    writable.on('error', reject)
+
     ffmpeg()
       .input(listPath)
       .inputOptions(['-f', 'concat', '-safe', '0'])
       .input(audioPath)
-      .outputOptions(['-c:v', 'libx264', '-c:a', 'aac', '-shortest', '-pix_fmt', 'yuv420p'])
-      .format('mp4')
-      .output(outPath)
-      .on('end', resolve)
+      .outputOptions(['-c:v', 'libx264', '-c:a', 'aac', '-shortest', '-pix_fmt', 'yuv420p', '-f', 'mp4'])
+      .pipe(writable, { end: true })
       .on('error', reject)
-      .run()
   })
 
   try {
     await fs.promises.rm(tmpDir, { recursive: true, force: true })
   } catch {}
+  return buffer
 }
 
 app.post('/generate', async (req, res) => {
@@ -145,12 +158,7 @@ app.post('/generate', async (req, res) => {
       if (!imageUrls.length) throw new Error('No images in manifest')
     }
 
-    // Use OS tmp directory for output to avoid filesystem permission issues on hosts like Railway
-    const outPath = path.join(os.tmpdir(), `out_${Date.now()}.mp4`)
-    await compositeVideo(adventure, audioBuffer, imageUrls, outPath)
-
-    const buffer = await fs.promises.readFile(outPath)
-    await fs.promises.unlink(outPath).catch(() => {})
+    const buffer = await compositeVideo(adventure, audioBuffer, imageUrls)
 
     const token = process.env.BLOB_READ_WRITE_TOKEN
     if (!token) throw new Error('BLOB_READ_WRITE_TOKEN required for upload')
