@@ -475,7 +475,7 @@ const UnitPage: React.FC = () => {
                 )}
 
                 {story && (
-                  <Card className="border-2 border-pink-200 bg-pink-50/60 shadow-md">
+                  <Card className={`border-2 bg-pink-50/60 shadow-md ${unit.id === 'safety-instagram' ? 'storyboard-card' : 'border-pink-200 rounded-2xl'}`}>
                     <CardHeader>
                       <div className="flex items-center gap-2">
                         <CardTitle className="text-xl text-pink-900 md:text-2xl">
@@ -499,16 +499,13 @@ const UnitPage: React.FC = () => {
                       {unit.id === 'safety-instagram' ? (
                         <div className="space-y-3">
                           <div className="flex flex-col items-center gap-2">
-                            <div className="w-full max-w-md">
-                              <div className="overflow-hidden rounded-2xl border-2 border-pink-300 bg-white shadow-md">
+                            <div className="w-full max-w-md relative">
+                              <div className="storyboard-sparkles" aria-hidden />
+                              <div className="overflow-hidden rounded-3xl border-2 border-pink-200 bg-white shadow-md">
                                 <img
                                   src={currentInstaImage}
                                   alt={`Instagram safety illustration ${instaSlide + 1}`}
                                   className="block w-full max-h-64 object-cover"
-                                  style={{
-                                    transform: `rotate(${(instaSlide - 3) * 2}deg)`,
-                                    transition: 'transform 250ms ease-out',
-                                  }}
                                 />
                               </div>
                             </div>

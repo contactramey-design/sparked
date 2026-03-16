@@ -528,6 +528,61 @@ h1, h2, h3 {
   color: #b91c1c;
 }
 
+/* Storyboard cloud card for Instagram safety */
+.storyboard-card {
+  position: relative;
+  border-radius: 999px;
+  padding: 1.75rem 1.5rem 1.5rem;
+  background: radial-gradient(circle at 20% 0%, #fee2f2, #fdf2ff 40%, #e0f2fe 100%);
+  border: 3px solid rgba(236, 72, 153, 0.6);
+  box-shadow:
+    0 10px 25px rgba(236, 72, 153, 0.2),
+    0 0 0 4px rgba(254, 242, 242, 0.8);
+  overflow: hidden;
+}
+
+.storyboard-card::before,
+.storyboard-card::after {
+  content: '';
+  position: absolute;
+  pointer-events: none;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.8), transparent 60%);
+  opacity: 0.9;
+}
+
+.storyboard-card::before {
+  width: 180px;
+  height: 120px;
+  top: -40px;
+  left: 10%;
+}
+
+.storyboard-card::after {
+  width: 220px;
+  height: 140px;
+  bottom: -60px;
+  right: 0%;
+}
+
+.storyboard-sparkles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    radial-gradient(circle at 10% 20%, rgba(251, 191, 36, 0.5) 0, transparent 40%),
+    radial-gradient(circle at 80% 10%, rgba(96, 165, 250, 0.5) 0, transparent 45%),
+    radial-gradient(circle at 20% 80%, rgba(244, 114, 182, 0.55) 0, transparent 45%);
+  mix-blend-mode: screen;
+  opacity: 0.7;
+  animation: storyboard-glitter 6s ease-in-out infinite alternate;
+}
+
+@keyframes storyboard-glitter {
+  0% { opacity: 0.4; transform: translateY(0); }
+  50% { opacity: 0.75; transform: translateY(-4px); }
+  100% { opacity: 0.55; transform: translateY(0); }
+}
+
 /* Safety Instagram unit quiz animations */
 @keyframes floatBounce {
   0%, 100% { transform: translateY(0); }
