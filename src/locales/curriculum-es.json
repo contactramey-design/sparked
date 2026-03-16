@@ -11,6 +11,14 @@
   "unitActivity": "Actividad de la unidad",
   "okThoughtAboutIt": "¡Listo, ya pensé!",
   "storyTimeWithSparki": "Hora del cuento con SpArki",
+  "unitNumber": "Unidad {num}",
+  "lockedBadge": "Bloqueada",
+  "masteredBadge": "Completada",
+  "unitSparklesReward": "{count} chispas",
+  "lockedByPayment": "Pide a un adulto que active el Pase de Seguridad en la vista Adulto.",
+  "lockedByProgress": "Termina la unidad anterior para desbloquear esta.",
+  "startUnit": "Empezar unidad",
+  "sparklesEarnedSoFar": "{count} chispas ganadas hasta ahora",
   "tracks": {
     "ai-coding": {
       "title": "IA, programación y aventuras con software",

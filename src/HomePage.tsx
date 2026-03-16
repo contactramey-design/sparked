@@ -29,7 +29,7 @@ const TIERS = [
     id: 'homework',
     title: 'Homework Adventure',
     description: 'Turn homework into a story-based quest. Grown-up uploads; SpArki guides.',
-    path: '/homework',
+    path: '/coming-soon',
     imageSrc: '/homework-card.png',
     imageAlt: 'SpArki as Homework Adventure tutor',
   },

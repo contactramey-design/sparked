@@ -86,20 +86,24 @@ const TrackPage: React.FC = () => {
               <li key={unit.id} className="track-unit-card-wrapper">
                 <div className={`track-unit-card card ${isLocked ? 'track-unit-card-locked' : ''}`}>
                   <div className="track-unit-card-header">
-                    <span className="track-unit-number">Unit {index + 1}</span>
+                    <span className="track-unit-number">
+                      {t('curriculum.unitNumber', { num: index + 1 })}
+                    </span>
                     {isLocked && (
                       <span className="track-unit-badge track-unit-badge-locked" aria-hidden>
-                        🔒 Locked
+                        🔒 {t('curriculum.lockedBadge')}
                       </span>
                     )}
                     {!isLocked && mastered && (
                       <span className="track-unit-badge track-unit-badge-mastered" aria-hidden>
-                        ⭐ Mastered
+                        ⭐ {t('curriculum.masteredBadge')}
                       </span>
                     )}
                     {!isLocked && !mastered && (
                       <span className="track-unit-badge track-unit-badge-sparkles">
-                        {unit.sparklesReward} sparkles
+                        {t('curriculum.unitSparklesReward', {
+                          count: unit.sparklesReward,
+                        })}
                       </span>
                     )}
                   </div>
@@ -109,22 +113,24 @@ const TrackPage: React.FC = () => {
                     <div className="track-unit-card-action">
                       {lockedByPayment ? (
                         <span className="track-unit-locked-message">
-                          Ask a grown-up to unlock the Safety Pass in Parent view.
+                          {t('curriculum.lockedByPayment')}
                         </span>
                       ) : (
                         <span className="track-unit-locked-message">
-                          Finish the previous unit to unlock.
+                          {t('curriculum.lockedByProgress')}
                         </span>
                       )}
                     </div>
                   ) : (
                     <div className="track-unit-card-action">
                       <Link to={`/unit/${unit.id}`} className="primary-button">
-                        Start unit
+                        {t('curriculum.startUnit')}
                       </Link>
                       {earnedSparkles > 0 && !mastered && (
                         <span className="track-unit-sparkles-earned">
-                          {earnedSparkles} sparkles earned so far
+                          {t('curriculum.sparklesEarnedSoFar', {
+                            count: earnedSparkles,
+                          })}
                         </span>
                       )}
                     </div>

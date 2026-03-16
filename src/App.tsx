@@ -18,7 +18,6 @@ import TrackListPage from './TrackListPage'
 import TrackPage from './TrackPage'
 import UnitPage from './UnitPage'
 import ComingSoon from './ComingSoon'
-import HomeworkAdventurePage from './HomeworkAdventurePage'
 import PrivacyPage from './PrivacyPage'
 import AboutPage from './AboutPage'
 import ContactPage from './ContactPage'
@@ -214,7 +213,7 @@ const App: React.FC = () => {
                 path="/homework"
                 element={
                   <ProtectedRoute>
-                    <HomeworkAdventurePage />
+                    <ComingSoon />
                   </ProtectedRoute>
                 }
               />

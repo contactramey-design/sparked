@@ -11,6 +11,14 @@
   "unitActivity": "Unit Activity",
   "okThoughtAboutIt": "OK, I thought about it!",
   "storyTimeWithSparki": "Story Time with SpArki",
+  "unitNumber": "Unit {num}",
+  "lockedBadge": "Locked",
+  "masteredBadge": "Mastered",
+  "unitSparklesReward": "{count} sparkles",
+  "lockedByPayment": "Ask a grown-up to unlock the Safety Pass in Parent view.",
+  "lockedByProgress": "Finish the previous unit to unlock.",
+  "startUnit": "Start unit",
+  "sparklesEarnedSoFar": "{count} sparkles earned so far",
   "tracks": {
     "ai-coding": {
       "title": "AI, Coding & Software Adventures",

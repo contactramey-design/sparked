@@ -293,7 +293,10 @@ const HomeworkAdventurePage: React.FC = () => {
               style={{ width: '100%', borderRadius: 'var(--radius-md)' }}
               aria-label="SpArki Homework Adventure intro video"
             >
-              <source src="/sparkiadventureintro.mp4" type="video/mp4" />
+              <source
+                src={locale === 'es' ? '/sparkiadventureintro-es.mp4' : '/sparkiadventureintro.mp4'}
+                type="video/mp4"
+              />
               Sorry, your browser doesn’t support the video tag.
             </video>
           </div>
