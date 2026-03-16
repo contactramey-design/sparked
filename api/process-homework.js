@@ -24,6 +24,23 @@ async function parseMultipart(req) {
   })
 }
 
+async function loadSquadNames() {
+  try {
+    const fs = await import('fs')
+    const path = await import('path')
+    const squadPath = path.join(process.cwd(), 'public', 'adventure-assets', 'squad.json')
+    const raw = await fs.promises.readFile(squadPath, 'utf8')
+    const parsed = JSON.parse(raw)
+    if (!Array.isArray(parsed)) return []
+    return parsed
+      .map((m) => (m && typeof m.name === 'string' ? m.name.trim() : ''))
+      .filter(Boolean)
+  } catch {
+    // If the file is missing or invalid, just skip squad behavior
+    return []
+  }
+}
+
 async function analyzeAndGenerateAdventure(imageBuffer, mimeType, ageHint, subjectHint) {
   const apiKey = process.env.OPENAI_API_KEY
   if (!apiKey) {
@@ -32,11 +49,14 @@ async function analyzeAndGenerateAdventure(imageBuffer, mimeType, ageHint, subje
   const base64 = imageBuffer.toString('base64')
   const dataUrl = `data:${mimeType || 'image/jpeg'};base64,${base64}`
 
+  const squadNames = await loadSquadNames()
+  const squadText = squadNames.length ? ` There is a friendly teaching team: ${squadNames.join(', ')}. Weave the whole team into the adventure so the child is guided by each character. Use their names naturally in the story, but do not add any new personal details about them beyond being friendly helpers.` : ''
+
   const systemPrompt = `You are an educational assistant. You analyze homework images and create short Socratic story adventures for K-2 kids.
 Rules:
 - Describe only subject and topic (e.g. math, addition within 20; reading, sight words). Do NOT extract any names, school names, addresses, or other identifiers.
 - Generate a 5-10 minute adventure with 1-5 steps. Each step has: id (e.g. "step-1"), story (2-3 sentences setting the scene), prompt (what the child should do), hint (gentle Socratic hint, no direct answers).
-- Tie in safety or kindness where natural. Output ONLY valid JSON, no markdown or extra text.`
+- Tie in safety or kindness where natural.${squadText} Output ONLY valid JSON, no markdown or extra text.`
 
   const userContent = [
     {

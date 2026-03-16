@@ -40,7 +40,7 @@ If anything above fails, use the messages on `/api/setup-status` and the checkli
    | `BLOB_READ_WRITE_TOKEN` | The token from Step 1 |
    | `ASSET_BASE_URL` | `https://YOUR_VERCEL_APP.vercel.app` |
 
-   Use your actual Vercel URL (e.g. `https://sparkyedu.vercel.app` or your custom domain). No trailing slash.
+   All three variables are required. Use your actual Vercel URL (e.g. `https://sparkyedu.vercel.app` or your custom domain). No trailing slash on ASSET_BASE_URL or TTS_URL.
 
 6. Trigger a **Redeploy** if the service already deployed before you set the variables.
 7. Open **Settings** → **Networking** / **Public Networking** → generate a **Public domain** if you don’t have one.

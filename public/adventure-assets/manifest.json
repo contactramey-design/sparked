@@ -1,5 +1,5 @@
 {
-  "math": ["math-castle.jpg", "numbers-path.jpg", "sparki-default.svg"],
-  "reading": ["book-forest.jpg", "sparki-default.svg"],
+  "math": ["sparki-default.svg"],
+  "reading": ["sparki-default.svg"],
   "default": ["sparki-default.svg"]
 }

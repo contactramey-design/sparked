@@ -26,18 +26,41 @@ async function fetchTTS(text, ttsUrl) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ text }),
   })
-  if (!res.ok) throw new Error(`TTS failed: ${res.status}`)
+  if (!res.ok) {
+    const msg = `TTS failed: ${res.status}. Check ELEVENLABS_API_KEY on Vercel and that TTS_URL points to your app /api/tts.`
+    throw new Error(msg)
+  }
   return Buffer.from(await res.arrayBuffer())
 }
 
 async function getImageList(subject, assetBaseUrl) {
-  const base = assetBaseUrl || process.env.ASSET_BASE_URL || 'http://localhost:5173'
+  const base = assetBaseUrl || process.env.ASSET_BASE_URL
+  if (!base) throw new Error('ASSET_BASE_URL not set')
   const manifestUrl = `${base.replace(/\/$/, '')}/adventure-assets/manifest.json`
   const res = await fetch(manifestUrl)
-  if (!res.ok) throw new Error('Could not load asset manifest')
+  if (!res.ok) throw new Error(`Could not load asset manifest from ${manifestUrl}. Check ASSET_BASE_URL.`)
   const manifest = await res.json()
   const list = manifest[subject] || manifest.default || ['sparki-default.svg']
   return list.map((file) => `${base.replace(/\/$/, '')}/adventure-assets/${file}`)
+}
+
+async function getSquadImageList(assetBaseUrl) {
+  const base = assetBaseUrl || process.env.ASSET_BASE_URL
+  if (!base) throw new Error('ASSET_BASE_URL not set')
+  const squadUrl = `${base.replace(/\/$/, '')}/adventure-assets/squad.json`
+  const res = await fetch(squadUrl)
+  if (!res.ok) throw new Error(`Could not load squad from ${squadUrl}. Check ASSET_BASE_URL and squad.json.`)
+  const parsed = await res.json()
+  if (!Array.isArray(parsed) || !parsed.length) {
+    throw new Error('Squad not configured or empty')
+  }
+  const files = parsed
+    .map((m) => (m && typeof m.file === 'string' ? m.file.trim() : ''))
+    .filter(Boolean)
+  if (!files.length) {
+    throw new Error('Squad not configured or empty')
+  }
+  return files.map((file) => `${base.replace(/\/$/, '')}/adventure-assets/${file}`)
 }
 
 function buildScript(steps) {
@@ -61,7 +84,7 @@ async function compositeVideo(adventure, audioBuffer, imageUrls, outPath) {
     await fs.promises.writeFile(imgPath, Buffer.from(await res.arrayBuffer()))
     writtenPaths.push(imgPath)
   }
-  if (writtenPaths.length === 0) throw new Error('No images available')
+  if (writtenPaths.length === 0) throw new Error('No images available. Ensure ASSET_BASE_URL serves /adventure-assets/ and manifest lists existing files.')
   const lines = []
   for (const p of writtenPaths) {
     lines.push(`file '${p.replace(/\\/g, '/')}'`)
@@ -93,6 +116,7 @@ app.post('/generate', async (req, res) => {
     return res.status(400).json({ error: 'Missing adventure.steps' })
   }
   const locale = req.body?.locale || 'en'
+  const useSquad = !!req.body?.useSquad
   const ttsUrl = process.env.TTS_URL
   const assetBaseUrl = process.env.ASSET_BASE_URL
   const blobToken = process.env.BLOB_READ_WRITE_TOKEN
@@ -100,14 +124,24 @@ app.post('/generate', async (req, res) => {
   if (!ttsUrl || !blobToken) {
     return res.status(503).json({ error: 'Worker not configured: TTS_URL and BLOB_READ_WRITE_TOKEN required' })
   }
+  if (!assetBaseUrl || !assetBaseUrl.startsWith('http')) {
+    return res.status(503).json({ error: 'Worker not configured: ASSET_BASE_URL must be your app URL (e.g. https://your-app.vercel.app)' })
+  }
 
-  let audioPath
   try {
     const script = buildScript(adventure.steps)
     if (!script.trim()) throw new Error('Empty script')
     const audioBuffer = await fetchTTS(script, ttsUrl)
-    const imageUrls = await getImageList(adventure.subject || 'default', assetBaseUrl)
-    if (!imageUrls.length) throw new Error('No images in manifest')
+    let imageUrls
+    if (useSquad) {
+      const squadImageUrls = await getSquadImageList(assetBaseUrl)
+      if (!squadImageUrls.length) throw new Error('Squad not configured or empty')
+      // One slide per step, cycling through squad members
+      imageUrls = adventure.steps.map((_, i) => squadImageUrls[i % squadImageUrls.length])
+    } else {
+      imageUrls = await getImageList(adventure.subject || 'default', assetBaseUrl)
+      if (!imageUrls.length) throw new Error('No images in manifest')
+    }
 
     const outPath = path.join(process.cwd(), `out_${Date.now()}.mp4`)
     await compositeVideo(adventure, audioBuffer, imageUrls, outPath)

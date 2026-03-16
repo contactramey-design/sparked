@@ -207,7 +207,8 @@ const HomeworkAdventurePage: React.FC = () => {
         if (res.status === 403) {
           setVideoFeatureEnabled(false)
         }
-        setVideoError(typeof data?.error === 'string' ? data.error : t('homeworkPage.videoErrorGeneric'))
+        const msg = typeof data?.error === 'string' ? data.error : t('homeworkPage.videoErrorGeneric')
+        setVideoError(msg)
         return
       }
       if (data.videoUrl) {
