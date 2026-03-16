@@ -14,6 +14,15 @@ async function ttsPlugin() {
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), ttsPlugin()],
+  build: {
+    chunkSizeWarningLimit: 700,
+  },
+  server: {
+    proxy: {
+      // All /api/* requests go to local API server (config, process-homework, generate-adventure-video)
+      '/api': { target: 'http://localhost:3001', changeOrigin: true },
+    },
+  },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),

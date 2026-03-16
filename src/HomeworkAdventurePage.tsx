@@ -37,6 +37,7 @@ const HomeworkAdventurePage: React.FC = () => {
   const [currentStepIndex, setCurrentStepIndex] = useState(0)
   const [showHint, setShowHint] = useState(false)
   const [videoFeatureEnabled, setVideoFeatureEnabled] = useState<boolean | null>(null)
+  const [homeworkConfigured, setHomeworkConfigured] = useState<boolean | null>(null)
   const [videoUrl, setVideoUrl] = useState<string | null>(null)
   const [videoLoading, setVideoLoading] = useState(false)
   const [videoError, setVideoError] = useState<string | null>(null)
@@ -59,22 +60,30 @@ const HomeworkAdventurePage: React.FC = () => {
   }, [])
 
   useEffect(() => {
-    if (!adventure) return
     let cancelled = false
     fetch('/api/config')
       .then((res) => res.json().catch(() => ({})))
       .then((data) => {
-        if (!cancelled && typeof data.videoFeatureEnabled === 'boolean') {
+        if (cancelled) return
+        if (typeof data.videoFeatureEnabled === 'boolean') {
           setVideoFeatureEnabled(data.videoFeatureEnabled)
         } else {
           setVideoFeatureEnabled(false)
         }
+        if (typeof data.homeworkAdventureConfigured === 'boolean') {
+          setHomeworkConfigured(data.homeworkAdventureConfigured)
+        } else {
+          setHomeworkConfigured(null)
+        }
       })
       .catch(() => {
-        if (!cancelled) setVideoFeatureEnabled(false)
+        if (!cancelled) {
+          setVideoFeatureEnabled(false)
+          setHomeworkConfigured(null)
+        }
       })
     return () => { cancelled = true }
-  }, [adventure])
+  }, [])
 
   const handleFileChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
     const chosen = event.target.files?.[0] ?? null
@@ -113,13 +122,13 @@ const HomeworkAdventurePage: React.FC = () => {
         method: 'POST',
         body: formData,
       })
-      const data = await res.json().catch(() => ({}))
+      const data = await res.json().catch(() => ({ error: t('homeworkPage.errorGeneric') }))
       if (!res.ok) {
         const msg = typeof data?.error === 'string' ? data.error : t('homeworkPage.errorGeneric')
         setError(msg)
         return
       }
-      if (data?.title && data?.subject != null && Array.isArray(data?.steps)) {
+      if (data?.title && data?.subject != null && Array.isArray(data?.steps) && data.steps.length > 0) {
         setAdventure(data as HomeworkAdventure)
         setCurrentStepIndex(0)
       } else {
@@ -310,8 +319,17 @@ const HomeworkAdventurePage: React.FC = () => {
                   />
                 </div>
               )}
+              {homeworkConfigured === false && (
+                <p className="quiz-error" role="alert">
+                  {t('homeworkPage.errorNotConfigured')}
+                </p>
+              )}
               {error && <p className="quiz-error">{error}</p>}
-              <button type="submit" className="primary-button" disabled={loading}>
+              <button
+                type="submit"
+                className="primary-button"
+                disabled={loading || homeworkConfigured === false}
+              >
                 {loading ? t('homeworkPage.creatingButton') : t('homeworkPage.createButton')}
               </button>
             </form>
@@ -334,13 +352,18 @@ const HomeworkAdventurePage: React.FC = () => {
               <h4>{adventure.title}</h4>
               <p className="homework-adventure-meta">
                 {adventure.subject} · {adventure.topic}
+                {adventure.steps.length > 1 && (
+                  <span className="homework-step-indicator" style={{ marginLeft: '0.5rem' }}>
+                    (Step {currentStepIndex + 1} of {adventure.steps.length})
+                  </span>
+                )}
               </p>
               <div className="homework-step">
-                <p className="homework-step-story">{currentStep.story}</p>
-                <p className="homework-step-prompt">{currentStep.prompt}</p>
+                <p className="homework-step-story">{currentStep.story ?? ''}</p>
+                <p className="homework-step-prompt">{currentStep.prompt ?? ''}</p>
                 {showHint ? (
                   <p className="homework-step-hint">
-                    <strong>{t('homeworkPage.hintLabel')}</strong> {currentStep.hint}
+                    <strong>{t('homeworkPage.hintLabel')}</strong> {currentStep.hint ?? ''}
                   </p>
                 ) : (
                   <button
@@ -352,6 +375,28 @@ const HomeworkAdventurePage: React.FC = () => {
                   </button>
                 )}
               </div>
+              {adventure.steps.length > 1 && (
+                <div className="homework-step-nav" style={{ display: 'flex', gap: '0.5rem', marginTop: '1rem', flexWrap: 'wrap' }}>
+                  <button
+                    type="button"
+                    className="secondary-button"
+                    disabled={currentStepIndex === 0}
+                    onClick={() => { setCurrentStepIndex((i) => Math.max(0, i - 1)); setShowHint(false) }}
+                    aria-label={t('homeworkPage.prevStep')}
+                  >
+                    {t('homeworkPage.prevStep')}
+                  </button>
+                  <button
+                    type="button"
+                    className="secondary-button"
+                    disabled={currentStepIndex >= adventure.steps.length - 1}
+                    onClick={() => { setCurrentStepIndex((i) => Math.min(adventure.steps.length - 1, i + 1)); setShowHint(false) }}
+                    aria-label={t('homeworkPage.nextStep')}
+                  >
+                    {t('homeworkPage.nextStep')}
+                  </button>
+                </div>
+              )}
               {videoFeatureEnabled === true && (
                 <div className="homework-video-section" style={{ marginTop: '1.5rem' }}>
                   {!videoUrl ? (
@@ -365,7 +410,13 @@ const HomeworkAdventurePage: React.FC = () => {
                       >
                         {videoLoading ? t('homeworkPage.creatingVideo') : t('homeworkPage.createVideo')}
                       </button>
-                      {videoError && <p className="quiz-error">{videoError}</p>}
+                      {videoError && (
+                        <p className="quiz-error">
+                          {videoError}
+                          <br />
+                          <small style={{ opacity: 0.9 }}>Check /api/setup-status to verify all services are configured.</small>
+                        </p>
+                      )}
                     </>
                   ) : (
                     <>

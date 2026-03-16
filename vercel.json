@@ -4,5 +4,10 @@
       "path": "/api/cron/cleanup-adventure-videos",
       "schedule": "0 2 * * *"
     }
-  ]
+  ],
+  "functions": {
+    "api/generate-adventure-video.js": {
+      "maxDuration": 300
+    }
+  }
 }

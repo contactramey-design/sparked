@@ -688,7 +688,7 @@ h1, h2, h3 {
   gap: 1.25rem;
   padding: 1.25rem 1.5rem;
   color: white;
-  background: url('/sparki’s adventures.jpg') center/cover no-repeat;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
 }
 
 .home-hero::before {

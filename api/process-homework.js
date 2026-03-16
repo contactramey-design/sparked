@@ -84,46 +84,74 @@ Respond with a single JSON object: { "title": string, "subject": string, "topic"
   if (!adventure.title || !adventure.subject || !adventure.topic || !Array.isArray(adventure.steps)) {
     throw new Error('Invalid adventure shape from model')
   }
-  return adventure
+  // Normalize steps: ensure each has id, story, prompt, hint (strings)
+  const steps = adventure.steps
+    .map((s, i) => ({
+      id: typeof s?.id === 'string' ? s.id : `step-${i + 1}`,
+      story: typeof s?.story === 'string' ? s.story : '',
+      prompt: typeof s?.prompt === 'string' ? s.prompt : '',
+      hint: typeof s?.hint === 'string' ? s.hint : '',
+    }))
+    .filter((s) => s.story || s.prompt)
+  if (steps.length === 0) {
+    throw new Error('Adventure had no valid steps; please try another image.')
+  }
+  return { ...adventure, steps }
 }
 
 export default async function handler(req, res) {
-  if (req.method !== 'POST') {
-    res.status(405).json({ error: 'Method not allowed' })
-    return
-  }
-
-  let imageBuffer = null
-  let mimeType = 'image/jpeg'
-  let ageHint = ''
-  let subjectHint = ''
-
   try {
-    const { fields, files } = await parseMultipart(req)
-    const file = files?.image?.[0] ?? files?.image
-    if (!file?.filepath) {
-      res.status(400).json({ error: 'Missing or invalid "image" file' })
+    if (req.method !== 'POST') {
+      res.status(405).json({ error: 'Method not allowed' })
       return
     }
-    const fs = await import('fs')
-    imageBuffer = await fs.promises.readFile(file.filepath)
-    mimeType = file.mimetype || mimeType
-    ageHint = (fields?.age?.[0] ?? fields?.age ?? '').toString().trim()
-    subjectHint = (fields?.subjectHint?.[0] ?? fields?.subjectHint ?? '').toString().trim()
-  } catch (e) {
-    if (e.code === 'LIMIT_FILE_SIZE' || e.message?.includes('maxFileSize')) {
-      res.status(413).json({ error: 'Image too large. Please use an image under 4 MB.' })
+
+    let imageBuffer = null
+    let mimeType = 'image/jpeg'
+    let ageHint = ''
+    let subjectHint = ''
+
+    try {
+      const { fields, files } = await parseMultipart(req)
+      const file = files?.image?.[0] ?? files?.image
+      if (!file?.filepath) {
+        res.status(400).json({ error: 'Missing or invalid "image" file' })
+        return
+      }
+      const fs = await import('fs')
+      imageBuffer = await fs.promises.readFile(file.filepath)
+      mimeType = file.mimetype || mimeType
+      ageHint = (fields?.age?.[0] ?? fields?.age ?? '').toString().trim()
+      subjectHint = (fields?.subjectHint?.[0] ?? fields?.subjectHint ?? '').toString().trim()
+    } catch (e) {
+      if (e.code === 'LIMIT_FILE_SIZE' || e.message?.includes('maxFileSize')) {
+        res.status(413).json({ error: 'Image too large. Please use an image under 4 MB.' })
+        return
+      }
+      res.status(400).json({ error: 'Invalid upload. Please send one image as multipart field "image".' })
       return
     }
-    res.status(400).json({ error: 'Invalid upload. Please send one image as multipart field "image".' })
-    return
-  }
 
   try {
     const adventure = await analyzeAndGenerateAdventure(imageBuffer, mimeType, ageHint, subjectHint)
     res.status(200).json(adventure)
   } catch (e) {
     const message = e.message || 'Something went wrong.'
-    res.status(500).json({ error: message })
+    console.error('[process-homework]', message)
+    // User-safe messages for common cases so the UI can show them
+    const safeMessage =
+      message.includes('OPENAI_API_KEY') ? 'Service not configured. Please try again later.'
+      : message.includes('429') || message.includes('Rate limit') ? 'Too many requests. Please try again in a moment.'
+      : message.includes('Invalid adventure') || message.includes('no valid steps') ? 'Could not create adventure from this image. Try another photo.'
+      : message.includes('OpenAI') || message.includes('fetch') ? 'Adventure service error. Please try again.'
+      : message
+    res.status(500).json({ error: safeMessage })
+    return
+  }
+  } catch (outer) {
+    try {
+      res.status(500).json({ error: 'Something went wrong. Please try again.' })
+    } catch (_) {}
   }
 }
+

@@ -2,6 +2,18 @@
 
 Follow in order. You need: Vercel project with OpenAI connected, Railway account, and this repo deployed on Vercel.
 
+**Check what’s configured (no secrets):** Open **`/api/setup-status`** in the browser (e.g. `https://your-app.vercel.app/api/setup-status` or `http://localhost:3001/api/setup-status`). It tells you what is set and what to add. See also **docs/CONNECTED-ACCOUNTS-SETUP.md** for the full checklist (GitHub, Vercel, Railway, OpenAI, ElevenLabs, Blob).
+
+---
+
+## Setup complete — you're done when
+
+1. **`/api/setup-status`** shows all four sections with positive messages (homeworkAdventure configured, video featureEnabled + workerConfigured, tts configured, blob configured).
+2. **Homework Adventure** in the app: upload image → Create adventure → you see steps.
+3. **Create video** appears; when you click it, a video loads and plays (or you see a clear error from the worker; check Railway logs if needed).
+
+If anything above fails, use the messages on `/api/setup-status` and the checklist in **docs/CONNECTED-ACCOUNTS-SETUP.md**. After changing env vars, **redeploy** both Vercel and (if you changed worker vars) Railway.
+
 ---
 
 ## Step 1: Vercel Blob (for video + cron)
@@ -19,7 +31,7 @@ Follow in order. You need: Vercel project with OpenAI connected, Railway account
 1. Go to [Railway Dashboard](https://railway.app/dashboard) → **New Project**.
 2. Choose **Deploy from GitHub repo** → select the **sparkyedu** repo.
 3. After the service is created, open it → **Settings** (or **Variables**).
-4. Set **Root Directory**: `worker` (so Railway builds and runs only the `worker` folder).
+4. Set **Root Directory** to `worker` (no leading slash — so Railway builds and runs only the `worker` folder).
 5. Open **Variables** and add (replace placeholders with your real values):
 
    | Name | Value |
@@ -59,6 +71,10 @@ Follow in order. You need: Vercel project with OpenAI connected, Railway account
 
 ## Step 5: Test the flow
 
+**Local E2E (optional):** To test “Create adventure” locally, run `npm run dev:local` to start the app + local API (no Vercel login). Put `OPENAI_API_KEY` in `.env`, then open http://localhost:5173 and try Homework Adventure. Or use `npm run dev:vercel` for the same API as production.
+
+**Deployed:**
+
 1. Open your live app → go to **Homework Adventure** (e.g. `/homework`).
 2. Select a homework image (JPG/PNG) and click **Create adventure**.
 3. The **parent consent** modal should appear. Enter an email and check the box → **I agree**. The adventure should generate (OpenAI).
@@ -71,6 +87,36 @@ If **Create video** never appears or you get 403, check:
 - Redeploy Vercel after changing env vars.
 
 If video creation fails (500 or worker error), check Railway logs and that `TTS_URL`, `BLOB_READ_WRITE_TOKEN`, and `ASSET_BASE_URL` are set correctly in Railway.
+
+---
+
+## Verify connections
+
+- **Vercel:** `VIDEO_FEATURE_ENABLED` = `true`, `VIDEO_WORKER_URL` = Railway public URL (no trailing slash), `BLOB_READ_WRITE_TOKEN` set. Redeploy after env changes.
+- **Railway:** Root Directory = `worker`, Variables: `TTS_URL`, `BLOB_READ_WRITE_TOKEN`, `ASSET_BASE_URL`. Public domain enabled under Networking.
+- **Blob:** Token created from the Blob store’s **Tokens** (not account-level). Same token used on Vercel and Railway.
+
+---
+
+## After adding OpenAI credits – redeploy and full test
+
+1. **Redeploy Vercel** so the app uses your key and credits:  
+   Vercel → your project → **Deployments** → **⋮** on latest → **Redeploy** (or push a new commit to trigger a deploy).
+2. **Test in the browser:** Open your live app → **Homework Adventure** → choose a small JPG/PNG → consent → **Create adventure**. You should get an adventure (one request uses a small amount of OpenAI credit).
+3. **Full test from terminal (optional):**  
+   - Add **OPENAI_API_KEY** to a `.env` in the project root (same value as Vercel).  
+   - Run `npm run dev:api`.  
+   - In another terminal: `./scripts/test-homework-api.sh http://localhost:3001`.  
+   - You should see HTTP 200 and "OK: Got adventure with title" / "Got steps".
+
+---
+
+## Debug: Create adventure returns 500 or does not work
+
+1. **Check config:** Open `https://YOUR_APP.vercel.app/api/config`. You should see `homeworkAdventureConfigured: true`. If `false`, add **OPENAI_API_KEY** in Vercel → Settings → Environment Variables, then Redeploy.
+2. **Vercel logs:** Deployments → latest → Functions / Logs. After trying Create adventure, look for `[process-homework]` — the next message is the real error.
+3. **Local test:** Run `npm run dev:local`, add **OPENAI_API_KEY** to `.env`, use a small JPG/PNG under 4 MB.
+4. **Script:** With `npm run dev:api` running, run `./scripts/test-homework-api.sh http://localhost:3001`.
 
 ---
 

@@ -115,9 +115,12 @@ app.post('/generate', async (req, res) => {
     const buffer = await fs.promises.readFile(outPath)
     await fs.promises.unlink(outPath).catch(() => {})
 
+    const token = process.env.BLOB_READ_WRITE_TOKEN
+    if (!token) throw new Error('BLOB_READ_WRITE_TOKEN required for upload')
     const blob = await put(`adventure-videos/${Date.now()}-${Math.random().toString(36).slice(2)}.mp4`, buffer, {
       access: 'public',
       contentType: 'video/mp4',
+      token,
     })
     return res.json({ videoUrl: blob.url })
   } catch (e) {

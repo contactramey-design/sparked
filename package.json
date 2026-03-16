@@ -5,6 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:api": "node server/local-api.js",
+    "dev:local": "node server/run-dev-with-api.js",
+    "dev:vercel": "vercel dev",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview"

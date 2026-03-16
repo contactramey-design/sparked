@@ -131,6 +131,7 @@
     "errorChooseFirst": "Please choose a homework image first.",
     "errorGeneric": "Something went wrong. Ask a grown-up to try again.",
     "errorCreate": "Could not create adventure. Please try another photo.",
+    "errorNotConfigured": "Adventure generation is not set up yet. Please add OPENAI_API_KEY in project settings and redeploy.",
     "videoSectionIntro": "SpArki's adventure for this homework — watch a short video with narration.",
     "createVideo": "Create video",
     "creatingVideo": "Creating your video…",
@@ -143,7 +144,9 @@
     "consentEmailPlaceholder": "your@email.com",
     "consentCheckbox": "I have permission to share this homework page and agree to the processing described in the Privacy policy.",
     "consentAgree": "I agree",
-    "consentCancel": "Cancel"
+    "consentCancel": "Cancel",
+    "prevStep": "Previous step",
+    "nextStep": "Next step"
   },
   "unit": {
     "answerAllFirst": "Please answer all questions before checking your score."

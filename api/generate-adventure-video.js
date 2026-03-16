@@ -4,11 +4,8 @@
  * Returns: { videoUrl } or 403 if VIDEO_FEATURE_ENABLED !== 'true'.
  * Calls video worker; parent-authorized context only (enforce via consent/session in app).
  */
-const DEFAULT_MAX_DURATION = 300 // seconds
-
 export const config = {
   api: { responseLimit: false },
-  maxDuration: DEFAULT_MAX_DURATION,
 }
 
 export default async function handler(req, res) {
@@ -63,8 +60,9 @@ export default async function handler(req, res) {
     })
     const data = await response.json().catch(() => ({}))
     if (!response.ok) {
+      const workerMessage = typeof data?.error === 'string' ? data.error : ''
       res.status(response.status >= 400 ? response.status : 500).json({
-        error: data.error || 'Video generation failed.',
+        error: workerMessage || 'Video generation failed.',
       })
       return
     }
