@@ -43,21 +43,83 @@ export default async function handler(req, res) {
     res.status(400).json({ error: 'Missing adventure.steps' })
     return
   }
-  try {
-    const response = await fetch(`${workerUrl.replace(/\/$/, '')}/generate`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        adventure: {
-          title: adventure.title,
-          subject: adventure.subject,
-          topic: adventure.topic,
-          steps: adventure.steps,
-        },
-        locale: body.locale || 'en',
-        useSquad: true,
-      }),
+  const generateUrl = `${workerUrl.replace(/\/$/, '')}/generate`
+  const timeoutMs = 120_000 // Render free tier cold start can take 30–60s
+  const maxAttempts = 3
+  const retryDelayMs = 4000
+
+  const payload = {
+    adventure: {
+      title: adventure.title,
+      subject: adventure.subject,
+      topic: adventure.topic,
+      steps: adventure.steps,
+    },
+    locale: body.locale || 'en',
+    useSquad: true,
+  }
+
+  let lastError = null
+  let response = null
+
+  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+    const controller = new AbortController()
+    const timeoutId = setTimeout(() => controller.abort(), timeoutMs)
+    try {
+      response = await fetch(generateUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+        signal: controller.signal,
+      })
+      clearTimeout(timeoutId)
+      break
+    } catch (e) {
+      clearTimeout(timeoutId)
+      lastError = e
+      if (attempt < maxAttempts) {
+        console.warn(`[generate-adventure-video] attempt ${attempt}/${maxAttempts} failed:`, e.code || e.name, e.message)
+        await new Promise((r) => setTimeout(r, retryDelayMs))
+      }
+    }
+  }
+
+  if (lastError && !response) {
+    const e = lastError
+    const code = e.code ?? e.cause?.code
+    const message = e.message ?? String(e)
+    const causeMessage = e.cause?.message
+    const isAbort = e.name === 'AbortError'
+    const isNetwork =
+      code === 'ECONNREFUSED' ||
+      code === 'ETIMEDOUT' ||
+      code === 'ECONNRESET' ||
+      code === 'ENOTFOUND' ||
+      message?.includes('fetch') ||
+      causeMessage?.includes('connect')
+
+    console.error('[generate-adventure-video] worker unreachable after', maxAttempts, 'attempts', {
+      code,
+      message,
+      cause: causeMessage,
+      url: generateUrl,
     })
+
+    const debugRequested =
+      process.env.DEBUG_VIDEO_WORKER === 'true' || req.headers['x-debug-video-worker'] === 'true'
+    const debug = debugRequested ? { code, message, cause: causeMessage, url: generateUrl } : undefined
+
+    return res.status(500).json({
+      error: isAbort
+        ? 'Video worker is starting up. Please try again in a moment.'
+        : isNetwork
+          ? 'Could not reach video worker. Check VIDEO_WORKER_URL and that the Render service is running.'
+          : 'Video generation failed. Please try again.',
+      ...(debug && { debug }),
+    })
+  }
+
+  try {
     const raw = await response.text()
     let data = {}
     try {
@@ -79,11 +141,7 @@ export default async function handler(req, res) {
       res.status(500).json({ error: 'No video URL returned.' })
     }
   } catch (e) {
-    console.error('[generate-adventure-video]', e.message || e)
-    res.status(500).json({
-      error: e.message?.includes('fetch') || e.code === 'ECONNREFUSED'
-        ? 'Could not reach video worker. Check VIDEO_WORKER_URL and Render.'
-        : 'Video generation failed. Please try again.',
-    })
+    console.error('[generate-adventure-video] reading worker response', e.message || e)
+    res.status(500).json({ error: 'Video generation failed. Please try again.' })
   }
 }

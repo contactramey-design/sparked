@@ -22,8 +22,8 @@ export default async function handler(req, res) {
       workerConfigured: Boolean(process.env.VIDEO_WORKER_URL?.trim()),
       message:
         process.env.VIDEO_FEATURE_ENABLED === 'true' && process.env.VIDEO_WORKER_URL
-          ? 'Video feature on — worker URL set. Ensure Railway worker is deployed and has TTS_URL, BLOB_READ_WRITE_TOKEN, ASSET_BASE_URL.'
-          : 'Set VIDEO_FEATURE_ENABLED=true and VIDEO_WORKER_URL=<Railway public URL> in Vercel, then redeploy.',
+          ? 'Video feature on — worker URL set. Ensure Render worker is deployed and has TTS_URL, BLOB_READ_WRITE_TOKEN, ASSET_BASE_URL. Check GET /api/video-worker-health to test connectivity.'
+          : 'Set VIDEO_FEATURE_ENABLED=true and VIDEO_WORKER_URL=<Render public URL> in Vercel, then redeploy.',
     },
     // TTS: used by worker for video narration (and Listen buttons)
     tts: {

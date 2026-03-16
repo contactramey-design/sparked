@@ -68,6 +68,11 @@ const server = http.createServer(async (req, res) => {
       await m.default(req, wrapped)
       return
     }
+    if (url === '/api/video-worker-health' && req.method === 'GET') {
+      const m = await import('../api/video-worker-health.js')
+      await m.default(req, wrapped)
+      return
+    }
     if (url === '/api/process-homework' && req.method === 'POST') {
       const m = await import('../api/process-homework.js')
       await m.default(req, wrapped)
@@ -91,7 +96,7 @@ const server = http.createServer(async (req, res) => {
 })
 
 server.listen(PORT, () => {
-  console.log(`Local API: http://localhost:${PORT} (config, process-homework, generate-adventure-video)`)
+  console.log(`Local API: http://localhost:${PORT} (config, setup-status, video-worker-health, process-homework, generate-adventure-video)`)
 }).on('error', (err) => {
   if (err.code === 'EADDRINUSE') {
     console.error(`Port ${PORT} is in use. Stop the other process (e.g. lsof -ti:${PORT} | xargs kill) and run npm run dev:local again.`)
