@@ -35,11 +35,16 @@ function isYouTubeEmbedUrl(url: string): boolean {
   return /youtube\.com\/embed\/|youtu\.be\//i.test(url)
 }
 
-/** Parse contentBlocks into story (first "Story:") and rules (rest, with optional prefix label). */
+/** Parse contentBlocks into story (first Story/Historia) and rules (rest, with optional prefix label). */
 function parseContentBlocks(blocks: string[]) {
-  const storyBlock = blocks.find((b) => /^Story:/i.test(b))
-  const story = storyBlock ? storyBlock.replace(/^Story:\s*/i, '').trim() : null
-  const ruleBlocks = blocks.filter((b) => !/^Story:/i.test(b))
+  const storyPrefixes = [/^Story:\s*/i, /^Historia:\s*/i]
+  const storyBlock = blocks.find((b) => storyPrefixes.some((re) => re.test(b)))
+  let story: string | null = null
+  if (storyBlock) {
+    const prefix = storyPrefixes.find((re) => re.test(storyBlock))
+    story = prefix ? storyBlock.replace(prefix, '').trim() : storyBlock.trim()
+  }
+  const ruleBlocks = blocks.filter((b) => !storyPrefixes.some((re) => re.test(b)))
   const rules = ruleBlocks.map((block) => {
     const match = block.match(/^(Rule|Safety|Kindness|Myth-buster|Idea|Feelings|Pause|Scenario|Examples|Game):\s*(.*)/i)
     const label = match ? match[1] : null
