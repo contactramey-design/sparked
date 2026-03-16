@@ -497,9 +497,9 @@ const UnitPage: React.FC = () => {
                         {story}
                       </p>
                       {unit.id === 'safety-instagram' ? (
-                        <div className="space-y-3">
+                        <div className="space-y-3 max-w-xl mx-auto text-center">
                           <div className="flex flex-col items-center gap-2">
-                            <div className="w-full max-w-md relative">
+                            <div className="w-full max-w-md relative mx-auto">
                               <div className="storyboard-sparkles" aria-hidden />
                               <div className="overflow-hidden rounded-3xl border-2 border-pink-200 bg-white shadow-md">
                                 <img
@@ -510,7 +510,7 @@ const UnitPage: React.FC = () => {
                               </div>
                             </div>
                             {currentInstaCaption && (
-                              <p className="text-sm text-pink-800 text-center px-4">
+                              <p className="text-sm text-pink-800 text-center px-4 break-words">
                                 {currentInstaCaption}
                               </p>
                             )}
