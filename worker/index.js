@@ -100,6 +100,7 @@ async function compositeVideo(adventure, audioBuffer, imageUrls, outPath) {
       .inputOptions(['-f', 'concat', '-safe', '0'])
       .input(audioPath)
       .outputOptions(['-c:v', 'libx264', '-c:a', 'aac', '-shortest', '-pix_fmt', 'yuv420p'])
+      .format('mp4')
       .output(outPath)
       .on('end', resolve)
       .on('error', reject)
