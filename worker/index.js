@@ -96,25 +96,43 @@ async function compositeVideo(adventure, audioBuffer, imageUrls) {
   lines.push(`file '${writtenPaths[writtenPaths.length - 1].replace(/\\/g, '/')}'`)
   await fs.promises.writeFile(listPath, lines.join('\n'))
 
-  const outPath = path.join(tmpDir, 'out.mp4')
-
+  // Render is failing to write MP4 outputs to both /tmp and the app dir with:
+  // "Error opening output file ... Invalid argument".
+  // WebM supports non-seekable outputs, so we stream it to memory.
   const buffer = await new Promise((resolve, reject) => {
+    const chunks = []
+    const writable = new Writable({
+      write(chunk, _enc, cb) {
+        chunks.push(chunk)
+        cb()
+      },
+    })
+    writable.on('finish', () => resolve(Buffer.concat(chunks)))
+    writable.on('error', reject)
+
     ffmpeg()
       .input(listPath)
       .inputOptions(['-f', 'concat', '-safe', '0'])
       .input(audioPath)
-      .outputOptions(['-c:v', 'libx264', '-c:a', 'aac', '-shortest', '-pix_fmt', 'yuv420p'])
-      .output(outPath)
-      .on('end', async () => {
-        try {
-          const data = await fs.promises.readFile(outPath)
-          resolve(data)
-        } catch (err) {
-          reject(err)
-        }
-      })
+      .outputOptions([
+        '-c:v',
+        'libvpx-vp9',
+        '-b:v',
+        '1M',
+        '-deadline',
+        'realtime',
+        '-cpu-used',
+        '4',
+        '-c:a',
+        'libopus',
+        '-shortest',
+        '-pix_fmt',
+        'yuv420p',
+        '-f',
+        'webm',
+      ])
+      .pipe(writable, { end: true })
       .on('error', reject)
-      .run()
   })
 
   try {
@@ -160,9 +178,9 @@ app.post('/generate', async (req, res) => {
 
     const token = process.env.BLOB_READ_WRITE_TOKEN
     if (!token) throw new Error('BLOB_READ_WRITE_TOKEN required for upload')
-    const blob = await put(`adventure-videos/${Date.now()}-${Math.random().toString(36).slice(2)}.mp4`, buffer, {
+    const blob = await put(`adventure-videos/${Date.now()}-${Math.random().toString(36).slice(2)}.webm`, buffer, {
       access: 'public',
-      contentType: 'video/mp4',
+      contentType: 'video/webm',
       token,
     })
     return res.json({ videoUrl: blob.url })
