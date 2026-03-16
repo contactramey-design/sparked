@@ -109,22 +109,22 @@ const UnitPage: React.FC = () => {
   ]
 
   const instaCaptionsEn = [
-    'SpArki introduces safe sharing on Instagram and reminds kids to pause before they post.',
-    'Kids learn to keep profiles private so only people they and a grown-up know can follow them.',
-    'SpArki shows how to crop and frame photos so faces, names, and school details stay private.',
-    'The class checks with a trusted grown-up before posting a group photo to make sure everyone is comfortable.',
-    'Profiles show pets, hobbies, and art—not full names, addresses, or school logos.',
-    'When a strange message appears, the child blocks, reports, and goes to a grown-up right away.',
-    'SpArki and the class celebrate safe, kind posts and agree to keep checking with grown-ups online.',
+    'Sparki, Byte, and Zap enjoy a sunny picnic with their animal friends, laughing and sharing sandwiches together.',
+    'Sparki, Byte, and Zap look at a cute picnic photo on the phone and think about posting it online.',
+    'A sneaky stranger tries to follow their account, so Sparki’s heart glows red to warn the squad.',
+    'Sparki taps the private settings and blocks the stranger while Byte and Zap cheer for the safety rules.',
+    'Sparki, Byte, and Zap show the phone to a kind grown-up who helps them double-check the post.',
+    'Together they post safely and only real friends leave kind, happy comments on the picnic photo.',
+    'Sparki, Byte, and Zap celebrate staying safe online and promise to always check with a grown-up first.',
   ]
   const instaCaptionsEs = [
-    'SpArki presenta cómo compartir de forma segura en Instagram y recuerda hacer una pausa antes de publicar.',
-    'Los niños aprenden a mantener sus perfiles privados para que solo los sigan personas que ellos y un adulto conocen.',
-    'SpArki muestra cómo recortar y encuadrar fotos para que caras, nombres y detalles de la escuela queden privados.',
-    'La clase consulta con un adulto de confianza antes de publicar una foto de grupo para que todos estén cómodos.',
-    'Los perfiles muestran mascotas, pasatiempos y dibujos, no nombres completos, direcciones ni logos de la escuela.',
-    'Cuando aparece un mensaje extraño, el niño bloquea, reporta y va con un adulto de inmediato.',
-    'SpArki y la clase celebran publicaciones seguras y amables, y acuerdan seguir consultando a los adultos en línea.',
+    'Sparki, Byte y Zap disfrutan de un picnic al sol con sus amigos animales, riendo y compartiendo sándwiches.',
+    'Sparki, Byte y Zap miran una foto divertida del picnic en el teléfono y piensan si deberían publicarla.',
+    'Un desconocido intenta seguir su cuenta y el corazón de Sparki se pone rojo para avisar a todo el equipo.',
+    'Sparki activa la cuenta privada y bloquea al desconocido mientras Byte y Zap celebran las reglas de seguridad.',
+    'Sparki, Byte y Zap le muestran el teléfono a un adulto de confianza que les ayuda a revisar la publicación.',
+    'Juntos publican de forma segura y solo los amigos de verdad dejan comentarios amables en la foto del picnic.',
+    'Sparki, Byte y Zap celebran que se cuidaron en internet y prometen preguntar siempre a un adulto primero.',
   ]
 
   const instaCaptions = locale === 'es' ? instaCaptionsEs : instaCaptionsEn
@@ -473,8 +473,18 @@ const UnitPage: React.FC = () => {
                   <Card className="border-2 border-pink-200 bg-pink-50/60 shadow-md">
                     <CardHeader>
                       <div className="flex items-center gap-2">
-                        <CardTitle className="text-xl text-pink-900 md:text-2xl">{t('curriculum.storyTimeWithSparki')}</CardTitle>
-                        <ListenButton text={`${t('curriculum.storyTimeWithSparki')}. ${story}`} ariaLabel="Listen to story" size="sm" />
+                        <CardTitle className="text-xl text-pink-900 md:text-2xl">
+                          {t('curriculum.storyTimeWithSparki')}
+                        </CardTitle>
+                        <ListenButton
+                          text={
+                            unit.id === 'safety-instagram' && currentInstaCaption
+                              ? `${t('curriculum.storyTimeWithSparki')}. ${story} ${currentInstaCaption}`
+                              : `${t('curriculum.storyTimeWithSparki')}. ${story}`
+                          }
+                          ariaLabel="Listen to story"
+                          size="sm"
+                        />
                       </div>
                     </CardHeader>
                     <CardContent className="space-y-4">
