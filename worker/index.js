@@ -69,10 +69,6 @@ function buildScript(steps) {
   return steps.map((s) => s.story).filter(Boolean).join(' ')
 }
 
-/**
- * Build MP4 in memory by piping ffmpeg to a buffer (avoids writing output to disk,
- * which fails on some hosts like Render/Railway).
- */
 async function compositeVideo(adventure, audioBuffer, imageUrls) {
   const tmpDir = path.join(os.tmpdir(), `work_${Date.now()}`)
   await fs.promises.mkdir(tmpDir, { recursive: true })
@@ -99,39 +95,25 @@ async function compositeVideo(adventure, audioBuffer, imageUrls) {
   lines.push(`file '${writtenPaths[writtenPaths.length - 1].replace(/\\/g, '/')}'`)
   await fs.promises.writeFile(listPath, lines.join('\n'))
 
-  const buffer = await new Promise((resolve, reject) => {
-    const chunks = []
-    const writable = new Writable({
-      write(chunk, _enc, cb) {
-        chunks.push(chunk)
-        cb()
-      },
-    })
-    writable.on('finish', () => resolve(Buffer.concat(chunks)))
-    writable.on('error', reject)
+  const outPath = path.join(tmpDir, 'out.mp4')
 
+  const buffer = await new Promise((resolve, reject) => {
     ffmpeg()
       .input(listPath)
       .inputOptions(['-f', 'concat', '-safe', '0'])
       .input(audioPath)
-      // MP4 normally needs seekable output; when streaming to a pipe/stdout we must
-      // enable fragmented MP4, otherwise ffmpeg fails with:
-      // "Error opening output file pipe:1. Error opening output files: Invalid argument"
-      .outputOptions([
-        '-c:v',
-        'libx264',
-        '-c:a',
-        'aac',
-        '-shortest',
-        '-pix_fmt',
-        'yuv420p',
-        '-movflags',
-        'frag_keyframe+empty_moov',
-        '-f',
-        'mp4',
-      ])
-      .pipe(writable, { end: true })
+      .outputOptions(['-c:v', 'libx264', '-c:a', 'aac', '-shortest', '-pix_fmt', 'yuv420p'])
+      .output(outPath)
+      .on('end', async () => {
+        try {
+          const data = await fs.promises.readFile(outPath)
+          resolve(data)
+        } catch (err) {
+          reject(err)
+        }
+      })
       .on('error', reject)
+      .run()
   })
 
   try {
