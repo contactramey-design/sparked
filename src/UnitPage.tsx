@@ -475,7 +475,7 @@ const UnitPage: React.FC = () => {
                 )}
 
                 {story && (
-                  <Card className={`border-2 bg-pink-50/60 shadow-md ${unit.id === 'safety-instagram' ? 'storyboard-card' : 'border-pink-200 rounded-2xl'}`}>
+                  <Card className="border-2 border-pink-200 bg-pink-50/60 shadow-md rounded-2xl">
                     <CardHeader>
                       <div className="flex items-center gap-2">
                         <CardTitle className="text-xl text-pink-900 md:text-2xl">
