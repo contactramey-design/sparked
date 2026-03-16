@@ -1,21 +1,49 @@
-import React from 'react'
+import React, { useMemo, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from './AuthContext'
 import { useTranslation } from './contexts/LocaleContext'
 
 const LoginPage: React.FC = () => {
-  const { login } = useAuth()
+  const { configured, isLoggedIn, signInWithEmail, devLogin } = useAuth()
   const navigate = useNavigate()
   const location = useLocation()
   const { t, locale } = useTranslation()
+  const [email, setEmail] = useState('')
+  const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle')
+  const [error, setError] = useState<string | null>(null)
 
   const searchParams = new URLSearchParams(location.search)
   const redirect = searchParams.get('redirect') ?? '/'
   const fromRedirect = !!searchParams.get('redirect')
 
-  const handleLogin = () => {
-    login()
-    navigate(redirect, { replace: true })
+  const trimmedEmail = useMemo(() => email.trim(), [email])
+  const canSubmit = configured && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail)
+
+  React.useEffect(() => {
+    if (isLoggedIn) {
+      navigate(redirect, { replace: true })
+    }
+  }, [isLoggedIn, navigate, redirect])
+
+  const handleSendLink: React.FormEventHandler<HTMLFormElement> = async (e) => {
+    e.preventDefault()
+    setError(null)
+    if (!configured) {
+      setError('Supabase is not configured. Add VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY to .env.local.')
+      return
+    }
+    if (!canSubmit) {
+      setError('Enter a valid email address.')
+      return
+    }
+    setStatus('sending')
+    const res = await signInWithEmail(trimmedEmail)
+    if (!res.ok) {
+      setStatus('error')
+      setError(res.error)
+      return
+    }
+    setStatus('sent')
   }
 
   return (
@@ -33,9 +61,48 @@ const LoginPage: React.FC = () => {
           <p>
             {t('login.intro')}
           </p>
-          <button type="button" className="primary-button" onClick={handleLogin}>
-            {t('login.submitButton')}
-          </button>
+          <form onSubmit={handleSendLink} className="mt-4">
+            <label className="block text-sm font-medium mb-2">
+              Parent email
+            </label>
+            <input
+              type="email"
+              className="w-full border border-slate-300 rounded-md px-3 py-2"
+              placeholder="parent@example.com"
+              value={email}
+              onChange={(e) => {
+                setEmail(e.target.value)
+                setStatus('idle')
+                setError(null)
+              }}
+              autoComplete="email"
+            />
+            {error && <p className="quiz-error text-sm mt-2">{error}</p>}
+            {status === 'sent' && (
+              <p className="text-sm mt-2" style={{ opacity: 0.9 }}>
+                Check your email for a sign-in link. After you click it, you’ll come back here and be signed in.
+              </p>
+            )}
+            <button
+              type="submit"
+              className="primary-button mt-3"
+              disabled={!canSubmit || status === 'sending'}
+            >
+              {status === 'sending' ? 'Sending…' : 'Send sign-in link'}
+            </button>
+          </form>
+          {import.meta.env.DEV && (
+            <button
+              type="button"
+              className="secondary-button mt-3"
+              onClick={() => {
+                devLogin()
+                navigate(redirect, { replace: true })
+              }}
+            >
+              Continue as demo parent (dev only)
+            </button>
+          )}
           <p className="login-coppa-note">
             {t('login.coppaNote')}
           </p>

@@ -15,6 +15,7 @@
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.15",
     "@radix-ui/react-slot": "^1.2.4",
+    "@supabase/supabase-js": "^2.99.2",
     "@types/react-router-dom": "^5.3.3",
     "@vercel/blob": "^2.3.1",
     "animate.css": "^4.1.1",

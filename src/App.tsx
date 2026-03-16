@@ -48,7 +48,7 @@ function LangSwitcher() {
 
 function AppHeader() {
   const location = useLocation()
-  const { isLoggedIn, logout, kidLock } = useAuth()
+  const { isLoggedIn, signOut, kidLock } = useAuth()
   const { t } = useTranslation()
   const isHome = location.pathname === '/'
   const isLogin = location.pathname === '/login'
@@ -85,7 +85,7 @@ function AppHeader() {
               <LangSwitcher />
               <button
                 type="button"
-                onClick={logout}
+                onClick={() => void signOut()}
                 className="nav-button"
                 aria-label={t('header.signOut')}
               >
@@ -115,7 +115,7 @@ function AppHeader() {
         <LangSwitcher />
         <button
           type="button"
-          onClick={logout}
+          onClick={() => void signOut()}
           className="nav-button"
           aria-label={t('header.signOut')}
         >

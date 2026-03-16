@@ -5,13 +5,11 @@
  */
 import express from 'express'
 import fs from 'fs'
-import os from 'os'
 import path from 'path'
-import { Writable } from 'stream'
 import { put } from '@vercel/blob'
 import ffmpeg from 'fluent-ffmpeg'
 import ffmpegStatic from 'ffmpeg-static'
-
+console.log('[worker] version=webm-file-output v1')
 ffmpeg.setFfmpegPath(ffmpegStatic)
 
 const app = express()
@@ -96,44 +94,28 @@ async function compositeVideo(adventure, audioBuffer, imageUrls) {
   lines.push(`file '${writtenPaths[writtenPaths.length - 1].replace(/\\/g, '/')}'`)
   await fs.promises.writeFile(listPath, lines.join('\n'))
 
-  // Render is failing to write MP4 outputs to both /tmp and the app dir with:
-  // "Error opening output file ... Invalid argument".
-  // WebM supports non-seekable outputs, so we stream it to memory.
-  const buffer = await new Promise((resolve, reject) => {
-    const chunks = []
-    const writable = new Writable({
-      write(chunk, _enc, cb) {
-        chunks.push(chunk)
-        cb()
-      },
-    })
-    writable.on('finish', () => resolve(Buffer.concat(chunks)))
-    writable.on('error', reject)
+  // Fallback: write WebM to a temp file, then read it back.
+  const outPath = path.join(tmpDir, 'out.webm')
 
+  await new Promise((resolve, reject) => {
     ffmpeg()
       .input(listPath)
       .inputOptions(['-f', 'concat', '-safe', '0'])
       .input(audioPath)
       .outputOptions([
-        '-c:v',
-        'libvpx-vp9',
-        '-b:v',
-        '1M',
-        '-deadline',
-        'realtime',
-        '-cpu-used',
-        '4',
-        '-c:a',
-        'libopus',
+        '-c:v', 'libvpx',
+        '-b:v', '1M',
+        '-c:a', 'libvorbis',
         '-shortest',
-        '-pix_fmt',
-        'yuv420p',
-        '-f',
-        'webm',
+        '-pix_fmt', 'yuv420p',
+        '-f', 'webm',
       ])
-      .pipe(writable, { end: true })
+      .save(outPath)
+      .on('end', resolve)
       .on('error', reject)
   })
+
+  const buffer = await fs.promises.readFile(outPath)
 
   try {
     await fs.promises.rm(tmpDir, { recursive: true, force: true })

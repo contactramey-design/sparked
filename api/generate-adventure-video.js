@@ -65,6 +65,7 @@ export default async function handler(req, res) {
   let lastError = null
   let response = null
 
+  const retryableStatuses = [502, 503, 504]
   for (let attempt = 1; attempt <= maxAttempts; attempt++) {
     const controller = new AbortController()
     const timeoutId = setTimeout(() => controller.abort(), timeoutMs)
@@ -76,7 +77,15 @@ export default async function handler(req, res) {
         signal: controller.signal,
       })
       clearTimeout(timeoutId)
-      break
+      const retryable = retryableStatuses.includes(response.status) && attempt < maxAttempts
+      if (retryable) {
+        await response.text() // consume body so connection can close
+        console.warn(`[generate-adventure-video] attempt ${attempt}/${maxAttempts} got ${response.status}, retrying...`)
+        response = null
+        await new Promise((r) => setTimeout(r, retryDelayMs))
+      } else {
+        break
+      }
     } catch (e) {
       clearTimeout(timeoutId)
       lastError = e
@@ -131,10 +140,16 @@ export default async function handler(req, res) {
       if (!response.ok) data = { error: raw.slice(0, 200) || `Worker returned ${response.status}` }
     }
     if (!response.ok) {
+      const isGatewayError = [502, 503, 504].includes(response.status)
+      const isHtml = raw.trimStart().toLowerCase().startsWith('<!')
       const workerMessage = typeof data?.error === 'string' ? data.error : ''
-      console.error('[generate-adventure-video] worker', response.status, workerMessage || raw.slice(0, 300))
+      const userMessage =
+        isGatewayError && isHtml
+          ? 'Video worker is temporarily unavailable. Please try again in a moment.'
+          : workerMessage || 'Video generation failed.'
+      console.error('[generate-adventure-video] worker', response.status, isGatewayError && isHtml ? '(gateway error)' : workerMessage || raw.slice(0, 300))
       res.status(response.status >= 400 ? response.status : 500).json({
-        error: workerMessage || 'Video generation failed.',
+        error: userMessage,
       })
       return
     }
