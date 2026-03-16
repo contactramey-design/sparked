@@ -74,6 +74,7 @@ const UnitPage: React.FC = () => {
   const hasSafetyPass = getHasSafetyPass()
 
   const [materialFinished, setMaterialFinished] = useState(false)
+  const [instaSlide, setInstaSlide] = useState(0)
   const [thinkPromptOpen, setThinkPromptOpen] = useState<number | null>(null)
   const materialEndRef = useRef<HTMLDivElement>(null)
   const quizSectionRef = useRef<HTMLDivElement>(null)
@@ -447,9 +448,57 @@ const UnitPage: React.FC = () => {
                       <p className="text-base leading-relaxed text-slate-800 md:text-lg" style={{ fontSize: 'min(1.25rem, 4vw)' }}>
                         {story}
                       </p>
-                      <div className="h-24 rounded-lg border-2 border-dashed border-pink-200 bg-pink-100/50 flex items-center justify-center text-pink-600 text-sm font-medium" aria-hidden>
-                        Illustration placeholder
-                      </div>
+                      {unit.id === 'safety-instagram' ? (
+                        <div className="space-y-2">
+                          <div className="overflow-x-auto">
+                            <div className="flex gap-3 w-max pr-1">
+                              {[
+                                '/instasafetyillustration1.jpg',
+                                '/instagsafetyillustration2.jpg',
+                                '/instasafetyillustration3.png',
+                                '/instasafetyillustration4.png',
+                                '/instasafetyillustration5.png',
+                                '/instasafetyillustartion6.jpeg',
+                                '/instasafetyillustration7.png',
+                              ].map((src, index) => (
+                                <button
+                                  key={src}
+                                  type="button"
+                                  onClick={() => setInstaSlide(index)}
+                                  className={`rounded-xl border-2 bg-white/80 shadow-sm overflow-hidden transition-transform focus:outline-none focus-visible:ring-2 focus-visible:ring-pink-400 ${
+                                    instaSlide === index ? 'border-pink-400 scale-[1.02]' : 'border-pink-200'
+                                  }`}
+                                  style={{ width: 160, flex: '0 0 auto' }}
+                                  aria-label={`Instagram safety illustration ${index + 1}`}
+                                >
+                                  <img
+                                    src={src}
+                                    alt={`Instagram safety illustration ${index + 1}`}
+                                    className="block w-full h-32 object-cover"
+                                  />
+                                </button>
+                              ))}
+                            </div>
+                          </div>
+                          <div className="flex items-center justify-center gap-2">
+                            {Array.from({ length: 7 }).map((_, index) => (
+                              <button
+                                key={index}
+                                type="button"
+                                onClick={() => setInstaSlide(index)}
+                                className={`h-2.5 w-2.5 rounded-full ${
+                                  instaSlide === index ? 'bg-pink-500' : 'bg-pink-200'
+                                }`}
+                                aria-label={`Go to illustration ${index + 1}`}
+                              />
+                            ))}
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="h-24 rounded-lg border-2 border-dashed border-pink-200 bg-pink-100/50 flex items-center justify-center text-pink-600 text-sm font-medium" aria-hidden>
+                          Illustration placeholder
+                        </div>
+                      )}
                     </CardContent>
                   </Card>
                 )}
