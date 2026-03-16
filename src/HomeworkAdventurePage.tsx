@@ -36,11 +36,7 @@ const HomeworkAdventurePage: React.FC = () => {
   const [adventure, setAdventure] = useState<HomeworkAdventure | null>(null)
   const [currentStepIndex, setCurrentStepIndex] = useState(0)
   const [showHint, setShowHint] = useState(false)
-  const [videoFeatureEnabled, setVideoFeatureEnabled] = useState<boolean | null>(null)
   const [homeworkConfigured, setHomeworkConfigured] = useState<boolean | null>(null)
-  const [videoUrl, setVideoUrl] = useState<string | null>(null)
-  const [videoLoading, setVideoLoading] = useState(false)
-  const [videoError, setVideoError] = useState<string | null>(null)
   const [hasConsent, setHasConsent] = useState(false)
   const [showConsentModal, setShowConsentModal] = useState(false)
   const [consentEmail, setConsentEmail] = useState('')
@@ -65,11 +61,6 @@ const HomeworkAdventurePage: React.FC = () => {
       .then((res) => res.json().catch(() => ({})))
       .then((data) => {
         if (cancelled) return
-        if (typeof data.videoFeatureEnabled === 'boolean') {
-          setVideoFeatureEnabled(data.videoFeatureEnabled)
-        } else {
-          setVideoFeatureEnabled(false)
-        }
         if (typeof data.homeworkAdventureConfigured === 'boolean') {
           setHomeworkConfigured(data.homeworkAdventureConfigured)
         } else {
@@ -78,7 +69,6 @@ const HomeworkAdventurePage: React.FC = () => {
       })
       .catch(() => {
         if (!cancelled) {
-          setVideoFeatureEnabled(false)
           setHomeworkConfigured(null)
         }
       })
@@ -91,8 +81,6 @@ const HomeworkAdventurePage: React.FC = () => {
     setAdventure(null)
     setCurrentStepIndex(0)
     setShowHint(false)
-    setVideoUrl(null)
-    setVideoError(null)
 
     if (!chosen) {
       setFile(null)
@@ -147,8 +135,6 @@ const HomeworkAdventurePage: React.FC = () => {
     setAdventure(null)
     setCurrentStepIndex(0)
     setShowHint(false)
-    setVideoUrl(null)
-    setVideoError(null)
 
     if (!file) {
       setError(t('homeworkPage.errorChooseFirst'))
@@ -191,37 +177,6 @@ const HomeworkAdventurePage: React.FC = () => {
 
   const currentStep =
     adventure && adventure.steps.length > 0 ? adventure.steps[currentStepIndex] : null
-
-  const handleCreateVideo = async () => {
-    if (!adventure) return
-    setVideoError(null)
-    setVideoLoading(true)
-    try {
-      const res = await fetch('/api/generate-adventure-video', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ adventure }),
-      })
-      const data = await res.json().catch(() => ({}))
-      if (!res.ok) {
-        if (res.status === 403) {
-          setVideoFeatureEnabled(false)
-        }
-        const msg = typeof data?.error === 'string' ? data.error : t('homeworkPage.videoErrorGeneric')
-        setVideoError(msg)
-        return
-      }
-      if (data.videoUrl) {
-        setVideoUrl(data.videoUrl)
-      } else {
-        setVideoError(t('homeworkPage.videoErrorNoUrl'))
-      }
-    } catch {
-      setVideoError(t('homeworkPage.errorGeneric'))
-    } finally {
-      setVideoLoading(false)
-    }
-  }
 
   return (
     <section className="lesson-page" key={locale}>
@@ -399,43 +354,6 @@ const HomeworkAdventurePage: React.FC = () => {
                   >
                     {t('homeworkPage.nextStep')}
                   </button>
-                </div>
-              )}
-              {videoFeatureEnabled === true && (
-                <div className="homework-video-section" style={{ marginTop: '1.5rem' }}>
-                  {!videoUrl ? (
-                    <>
-                      <p>{t('homeworkPage.videoSectionIntro')}</p>
-                      <button
-                        type="button"
-                        className="primary-button"
-                        disabled={videoLoading}
-                        onClick={handleCreateVideo}
-                      >
-                        {videoLoading ? t('homeworkPage.creatingVideo') : t('homeworkPage.createVideo')}
-                      </button>
-                      {videoError && (
-                        <p className="quiz-error">
-                          {videoError}
-                          <br />
-                          <small style={{ opacity: 0.9 }}>Check /api/setup-status to verify all services are configured.</small>
-                        </p>
-                      )}
-                    </>
-                  ) : (
-                    <>
-                      <p>{t('homeworkPage.videoSectionTitle')}</p>
-                      <video
-                        src={videoUrl}
-                        controls
-                        preload="metadata"
-                        style={{ width: '100%', borderRadius: 'var(--radius-md)' }}
-                        aria-label="SpArki adventure video"
-                      >
-                        Your browser does not support the video tag.
-                      </video>
-                    </>
-                  )}
                 </div>
               )}
             </div>

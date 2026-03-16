@@ -124,7 +124,7 @@ const Dashboard: React.FC = () => {
           <p>
             {t('dashboard.homeworkPreviewDesc')}
           </p>
-          <Link to="/coming-soon" className="secondary-button">
+          <Link to="/homework" className="secondary-button">
             {t('dashboard.openHomeworkAdventure')}
           </Link>
         </div>
