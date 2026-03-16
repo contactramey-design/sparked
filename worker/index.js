@@ -114,7 +114,22 @@ async function compositeVideo(adventure, audioBuffer, imageUrls) {
       .input(listPath)
       .inputOptions(['-f', 'concat', '-safe', '0'])
       .input(audioPath)
-      .outputOptions(['-c:v', 'libx264', '-c:a', 'aac', '-shortest', '-pix_fmt', 'yuv420p', '-f', 'mp4'])
+      // MP4 normally needs seekable output; when streaming to a pipe/stdout we must
+      // enable fragmented MP4, otherwise ffmpeg fails with:
+      // "Error opening output file pipe:1. Error opening output files: Invalid argument"
+      .outputOptions([
+        '-c:v',
+        'libx264',
+        '-c:a',
+        'aac',
+        '-shortest',
+        '-pix_fmt',
+        'yuv420p',
+        '-movflags',
+        'frag_keyframe+empty_moov',
+        '-f',
+        'mp4',
+      ])
       .pipe(writable, { end: true })
       .on('error', reject)
   })
