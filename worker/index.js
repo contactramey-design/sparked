@@ -70,7 +70,8 @@ function buildScript(steps) {
 }
 
 async function compositeVideo(adventure, audioBuffer, imageUrls) {
-  const tmpDir = path.join(os.tmpdir(), `work_${Date.now()}`)
+  const baseTmp = process.env.WORKER_TMP_DIR || process.cwd()
+  const tmpDir = path.join(baseTmp, `work_${Date.now()}`)
   await fs.promises.mkdir(tmpDir, { recursive: true })
   const audioPath = path.join(tmpDir, 'audio.mp3')
   await fs.promises.writeFile(audioPath, audioBuffer)
