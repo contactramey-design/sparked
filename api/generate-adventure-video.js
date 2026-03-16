@@ -19,7 +19,10 @@ export default async function handler(req, res) {
     return
   }
 
-  const workerUrl = process.env.VIDEO_WORKER_URL
+  let workerUrl = (process.env.VIDEO_WORKER_URL || '').trim()
+  // Fix common typo: ttps:// → https://
+  if (workerUrl.startsWith('ttps://')) workerUrl = 'h' + workerUrl
+  else if (workerUrl.startsWith('ttp://')) workerUrl = 'ht' + workerUrl
   if (!workerUrl) {
     res.status(503).json({ error: 'Video worker not configured.' })
     return

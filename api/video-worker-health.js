@@ -10,8 +10,11 @@ export default async function handler(req, res) {
   }
   res.setHeader('Cache-Control', 'no-store, max-age=0')
 
-  const workerUrl = process.env.VIDEO_WORKER_URL
-  if (!workerUrl?.trim()) {
+  let workerUrl = (process.env.VIDEO_WORKER_URL || '').trim()
+  // Fix common typo: ttps:// → https://
+  if (workerUrl.startsWith('ttps://')) workerUrl = 'h' + workerUrl
+  else if (workerUrl.startsWith('ttp://')) workerUrl = 'ht' + workerUrl
+  if (!workerUrl) {
     return res.status(200).json({
       ok: false,
       workerReachable: false,
