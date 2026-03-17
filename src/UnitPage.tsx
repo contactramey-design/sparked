@@ -136,9 +136,8 @@ const UnitPage: React.FC = () => {
   const currentInstaImage = instaImages[instaSlide] ?? instaImages[0]
   const currentInstaCaption = instaCaptions[instaSlide] ?? ''
 
-  const isPaidSafety =
-    unit.trackId === 'social-safety' && !unit.isFree
-  const lockedByPayment = isPaidSafety && !hasSafetyPass
+  const isPaidUnit = !unit.isFree
+  const lockedByPayment = isPaidUnit && !hasSafetyPass
 
   const handleChange = (qIndex: number, optionIndex: number) => {
     const next = [...selected]

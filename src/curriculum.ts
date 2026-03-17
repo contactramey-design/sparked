@@ -93,7 +93,7 @@ export const curriculum: CurriculumConfig = {
         'SpArki shows how AI can sort and draw by learning from examples instead of magic.',
       estMinutes: 20,
       ageGroup: 'age2',
-      isFree: true,
+      isFree: false,
       sparklesReward: 10,
       contentBlocks: [
         'Story: SpArki helps sort toys into boxes using examples.',
@@ -141,7 +141,7 @@ export const curriculum: CurriculumConfig = {
         'SpArki turns code into silly “if this, then that” games you can act out with your body.',
       estMinutes: 20,
       ageGroup: 'age2',
-      isFree: true,
+      isFree: false,
       sparklesReward: 10,
       contentBlocks: [
         'Game: If I clap, you jump. If I stomp, you spin—this is like an if/then rule.',
@@ -177,7 +177,7 @@ export const curriculum: CurriculumConfig = {
         'Kids explore what “software” means by looking at apps, games, and tools they already use.',
       estMinutes: 20,
       ageGroup: 'age2',
-      isFree: true,
+      isFree: false,
       sparklesReward: 10,
       contentBlocks: [
         'Examples: drawing apps, math games, video chat.',
@@ -213,7 +213,7 @@ export const curriculum: CurriculumConfig = {
         'SpArki shows friendly examples of AI in schools, farms, and hospitals, and talks about when AI might be wrong.',
       estMinutes: 20,
       ageGroup: 'age2',
-      isFree: true,
+      isFree: false,
       sparklesReward: 10,
       contentBlocks: [
         'Story: AI helps sort mail, suggest songs, and translate languages.',
@@ -243,7 +243,7 @@ export const curriculum: CurriculumConfig = {
         'Kids talk about fairness, kindness, and how humans are responsible for how AI is used.',
       estMinutes: 20,
       ageGroup: 'age2',
-      isFree: true,
+      isFree: false,
       sparklesReward: 10,
       contentBlocks: [
         'Scenario: a game that only shows some kids as heroes.',

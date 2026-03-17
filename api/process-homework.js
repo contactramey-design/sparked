@@ -52,17 +52,31 @@ async function analyzeAndGenerateAdventure(imageBuffer, mimeType, ageHint, subje
   const squadNames = await loadSquadNames()
   const squadText = squadNames.length ? ` There is a friendly teaching team: ${squadNames.join(', ')}. Weave the whole team into the adventure so the child is guided by each character. Use their names naturally in the story, but do not add any new personal details about them beyond being friendly helpers.` : ''
 
-  const langHint = locale === 'es'
-    ? 'Write all titles, subject/topic labels, and step text in simple, kid-friendly Spanish suitable for children in Latin America or the US.'
-    : 'Write all titles, subject/topic labels, and step text in simple, kid-friendly English suitable for children in the US.'
+  const isEs = locale === 'es'
 
-  const systemPrompt = `You are an educational assistant. You analyze homework images and create short Socratic story adventures for K-2 kids.
+  const systemPrompt = isEs
+    ? `Eres un asistente educativo. Analizas imágenes de tareas y creas pequeñas aventuras con historia y preguntas para niños de K–2.
+Reglas:
+- Describe solo la asignatura y el tema (por ejemplo: matemáticas, sumas hasta 20; lectura, palabras de uso frecuente). NO extraigas nombres, nombres de escuela, direcciones ni otros datos identificables.
+- Genera una aventura de 5–10 minutos con entre 1 y 5 pasos. Cada paso tiene: id (por ejemplo "step-1"), story (2–3 frases que cuentan la escena), prompt (lo que el niño debe hacer) y hint (una pista suave, sin dar la respuesta).
+- Incluye seguridad o amabilidad cuando sea natural.
+- Escribe TODOS los textos (title, subject, topic, story, prompt, hint) en español sencillo y amigable para niños de 5–8 años.
+${squadText}
+Responde SOLO con un objeto JSON válido, sin markdown ni texto extra.`
+    : `You are an educational assistant. You analyze homework images and create short Socratic story adventures for K-2 kids.
 Rules:
 - Describe only subject and topic (e.g. math, addition within 20; reading, sight words). Do NOT extract any names, school names, addresses, or other identifiers.
 - Generate a 5-10 minute adventure with 1-5 steps. Each step has: id (e.g. "step-1"), story (2-3 sentences setting the scene), prompt (what the child should do), hint (gentle Socratic hint, no direct answers).
 - Tie in safety or kindness where natural.
-- ${langHint}${squadText}
+- Write all titles, subject/topic labels, and step text in simple, kid-friendly English suitable for children in the US.
+${squadText}
 Output ONLY valid JSON, no markdown or extra text.`
+
+  const userTextEn = `Analyze this homework image and create an adventure. ${ageHint ? `Approximate grade: ${ageHint}.` : ''} ${subjectHint ? `Subject hint: ${subjectHint}.` : ''}
+Respond with a single JSON object: { "title": string, "subject": string, "topic": string, "steps": [ { "id": string, "story": string, "prompt": string, "hint": string } ] }`
+
+  const userTextEs = `Analiza esta imagen de tarea y crea una aventura. ${ageHint ? `Grado aproximado: ${ageHint}.` : ''} ${subjectHint ? `Pista de asignatura: ${subjectHint}.` : ''}
+Responde con un solo objeto JSON: { "title": string, "subject": string, "topic": string, "steps": [ { "id": string, "story": string, "prompt": string, "hint": string } ] }`
 
   const userContent = [
     {
@@ -71,8 +85,7 @@ Output ONLY valid JSON, no markdown or extra text.`
     },
     {
       type: 'text',
-      text: `Analyze this homework image and create an adventure. ${ageHint ? `Approximate grade: ${ageHint}.` : ''} ${subjectHint ? `Subject hint: ${subjectHint}.` : ''}
-Respond with a single JSON object: { "title": string, "subject": string, "topic": string, "steps": [ { "id": string, "story": string, "prompt": string, "hint": string } ] }`,
+      text: isEs ? userTextEs : userTextEn,
     },
   ]
 

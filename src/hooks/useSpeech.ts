@@ -45,8 +45,6 @@ export function useSpeech() {
   const { locale } = useLocale()
   const [isSpeaking, setIsSpeaking] = useState(false)
   const voiceRef = useRef<SpeechSynthesisVoice | null>(null)
-  const audioRef = useRef<HTMLAudioElement | null>(null)
-  const abortRef = useRef<AbortController | null>(null)
 
   const loadVoices = useCallback(() => {
     if (typeof window === 'undefined' || !window.speechSynthesis) return

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { appConfig } from './config'
 import { curriculum } from './curriculum'
@@ -12,6 +12,59 @@ export const ParentViewContent: React.FC = () => {
   const progress = loadProgress()
   const { kidLock, setKidLock } = useAuth()
   const hasSafetyPass = getHasSafetyPass()
+  const [unlockLoading, setUnlockLoading] = useState(false)
+  const [unlockError, setUnlockError] = useState<string | null>(null)
+
+  const checkoutStatus = useMemo(() => {
+    if (typeof window === 'undefined') return null
+    const params = new URLSearchParams(window.location.search)
+    const v = params.get('checkout')
+    if (v === 'success' || v === 'cancel') return v
+    return null
+  }, [])
+
+  useEffect(() => {
+    if (checkoutStatus !== 'success') return
+    setHasSafetyPass(true)
+    setUnlockError(null)
+
+    try {
+      const url = new URL(window.location.href)
+      url.searchParams.delete('checkout')
+      window.history.replaceState({}, '', url.toString())
+    } catch {
+      // ignore
+    }
+  }, [checkoutStatus])
+
+  async function handleUnlock() {
+    setUnlockError(null)
+    setUnlockLoading(true)
+    try {
+      const res = await fetch('/api/create-checkout-session', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({}),
+      })
+
+      const data = await res.json().catch(() => ({}))
+      if (!res.ok) {
+        const msg =
+          data && typeof data === 'object' && 'error' in data && typeof data.error === 'string'
+            ? data.error
+            : 'Checkout failed'
+        throw new Error(msg)
+      }
+      if (!data || typeof data.url !== 'string') {
+        throw new Error('Missing checkout URL')
+      }
+      window.location.assign(data.url)
+    } catch (e) {
+      setUnlockError(e instanceof Error ? e.message : 'Checkout failed')
+    } finally {
+      setUnlockLoading(false)
+    }
+  }
 
   return (
     <div className="lesson-layout">
@@ -31,14 +84,25 @@ export const ParentViewContent: React.FC = () => {
         <div className="lesson-media card">
           <h3>{t('parentDashboard.unlockSafetyTitle')}</h3>
           <p>{t('parentDashboard.unlockSafetyDesc')}</p>
-          <label className="parent-toggle">
-            <input
-              type="checkbox"
-              checked={hasSafetyPass}
-              onChange={(e) => setHasSafetyPass(e.target.checked)}
-            />
-            <span>{t('parentDashboard.safetyPassActive')}</span>
-          </label>
+
+          {hasSafetyPass ? (
+            <p className="welcome-subtitle">{t('parentDashboard.safetyPassActive')}</p>
+          ) : (
+            <>
+              <button
+                type="button"
+                className="primary-button"
+                onClick={() => void handleUnlock()}
+                disabled={unlockLoading}
+              >
+                {unlockLoading ? 'Opening checkout…' : 'Unlock Safety Pass'}
+              </button>
+              {checkoutStatus === 'cancel' && (
+                <p className="welcome-subtitle">Checkout canceled. You can try again anytime.</p>
+              )}
+              {unlockError && <p className="quiz-error">{unlockError}</p>}
+            </>
+          )}
         </div>
 
         <div className="lesson-media card">

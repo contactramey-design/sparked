@@ -77,9 +77,8 @@ const TrackPage: React.FC = () => {
             const status = getUnitStatus(unit.id)
             const mastered = !!status?.mastered
             const earnedSparkles = status?.earnedSparkles ?? 0
-            const isPaidSafety =
-              track.id === 'social-safety' && !unit.isFree
-            const lockedByPayment = isPaidSafety && !hasSafetyPass
+            const isPaidUnit = !unit.isFree
+            const lockedByPayment = isPaidUnit && !hasSafetyPass
             const isLocked = lockedByPayment || lockedByProgress
 
             return (

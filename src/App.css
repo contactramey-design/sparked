@@ -528,6 +528,61 @@ h1, h2, h3 {
   color: #b91c1c;
 }
 
+/* Bookcase */
+.books-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.book-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.book-cover-wrap {
+  width: 100%;
+  border-radius: 16px;
+  overflow: hidden;
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.08), rgba(236, 72, 153, 0.08));
+  border: 2px solid rgba(96, 165, 250, 0.25);
+  aspect-ratio: 16 / 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.book-cover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.book-title {
+  margin: 0;
+  font-size: 1.15rem;
+  color: #1e293b;
+}
+
+.book-blurb {
+  margin: 0;
+  color: #475569;
+  line-height: 1.35;
+}
+
+.book-meta {
+  margin: 0;
+  color: #334155;
+  font-size: 0.95rem;
+}
+
+.book-actions {
+  margin-top: auto;
+}
+
 /* Storyboard cloud card for Instagram safety */
 .storyboard-card {
   position: relative;
@@ -1430,6 +1485,10 @@ h1, h2, h3 {
   }
 
   .home-tier-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .books-grid {
     grid-template-columns: 1fr;
   }
 

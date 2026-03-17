@@ -19,6 +19,7 @@ import TrackPage from './TrackPage'
 import UnitPage from './UnitPage'
 import ComingSoon from './ComingSoon'
 import HomeworkAdventurePage from './HomeworkAdventurePage'
+import BooksPage from './BooksPage'
 import PrivacyPage from './PrivacyPage'
 import AboutPage from './AboutPage'
 import ContactPage from './ContactPage'
@@ -218,6 +219,7 @@ const App: React.FC = () => {
                   </ProtectedRoute>
                 }
               />
+              <Route path="/books" element={<BooksPage />} />
               <Route
                 path="/parent"
                 element={

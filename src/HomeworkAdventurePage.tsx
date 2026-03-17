@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import { VIDEO_POSTER_DATA_URL } from './videoPoster'
 import { useTranslation } from './contexts/LocaleContext'
+import { getHasSafetyPass } from './progress'
 import {
   Dialog,
   DialogContent,
@@ -42,6 +43,7 @@ const HomeworkAdventurePage: React.FC = () => {
   const [consentEmail, setConsentEmail] = useState('')
   const [consentCheckbox, setConsentCheckbox] = useState(false)
   const [consentError, setConsentError] = useState<string | null>(null)
+  const hasSafetyPass = getHasSafetyPass()
 
   useEffect(() => {
     try {
@@ -136,6 +138,11 @@ const HomeworkAdventurePage: React.FC = () => {
     setAdventure(null)
     setCurrentStepIndex(0)
     setShowHint(false)
+
+    if (!hasSafetyPass) {
+      setError(t('homeworkPage.errorLockedByPass'))
+      return
+    }
 
     if (!file) {
       setError(t('homeworkPage.errorChooseFirst'))
@@ -260,6 +267,11 @@ const HomeworkAdventurePage: React.FC = () => {
           <div className="activity-section">
             <h3>{t('homeworkPage.grownUpUpload')}</h3>
             <p>{t('homeworkPage.grownUpUploadDesc')}</p>
+            {!hasSafetyPass && (
+              <p className="quiz-error" role="alert">
+                {t('homeworkPage.lockedByPass')}
+              </p>
+            )}
             <form className="homework-upload-form" onSubmit={handleGenerate}>
               <label className="file-input-label">
                 {t('homeworkPage.fileLabel')}
