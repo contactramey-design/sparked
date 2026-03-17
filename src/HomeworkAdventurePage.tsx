@@ -106,6 +106,7 @@ const HomeworkAdventurePage: React.FC = () => {
     try {
       const formData = new FormData()
       formData.append('image', file)
+      formData.append('locale', locale)
       const res = await fetch('/api/process-homework', {
         method: 'POST',
         body: formData,
@@ -127,7 +128,7 @@ const HomeworkAdventurePage: React.FC = () => {
     } finally {
       setLoading(false)
     }
-  }, [file, t])
+  }, [file, t, locale])
 
   const handleGenerate: React.FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault()

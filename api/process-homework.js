@@ -41,7 +41,7 @@ async function loadSquadNames() {
   }
 }
 
-async function analyzeAndGenerateAdventure(imageBuffer, mimeType, ageHint, subjectHint) {
+async function analyzeAndGenerateAdventure(imageBuffer, mimeType, ageHint, subjectHint, locale = 'en') {
   const apiKey = process.env.OPENAI_API_KEY
   if (!apiKey) {
     throw new Error('OPENAI_API_KEY is not set')
@@ -52,11 +52,17 @@ async function analyzeAndGenerateAdventure(imageBuffer, mimeType, ageHint, subje
   const squadNames = await loadSquadNames()
   const squadText = squadNames.length ? ` There is a friendly teaching team: ${squadNames.join(', ')}. Weave the whole team into the adventure so the child is guided by each character. Use their names naturally in the story, but do not add any new personal details about them beyond being friendly helpers.` : ''
 
+  const langHint = locale === 'es'
+    ? 'Write all titles, subject/topic labels, and step text in simple, kid-friendly Spanish suitable for children in Latin America or the US.'
+    : 'Write all titles, subject/topic labels, and step text in simple, kid-friendly English suitable for children in the US.'
+
   const systemPrompt = `You are an educational assistant. You analyze homework images and create short Socratic story adventures for K-2 kids.
 Rules:
 - Describe only subject and topic (e.g. math, addition within 20; reading, sight words). Do NOT extract any names, school names, addresses, or other identifiers.
 - Generate a 5-10 minute adventure with 1-5 steps. Each step has: id (e.g. "step-1"), story (2-3 sentences setting the scene), prompt (what the child should do), hint (gentle Socratic hint, no direct answers).
-- Tie in safety or kindness where natural.${squadText} Output ONLY valid JSON, no markdown or extra text.`
+- Tie in safety or kindness where natural.
+- ${langHint}${squadText}
+Output ONLY valid JSON, no markdown or extra text.`
 
   const userContent = [
     {
@@ -130,6 +136,7 @@ export default async function handler(req, res) {
     let mimeType = 'image/jpeg'
     let ageHint = ''
     let subjectHint = ''
+    let locale = 'en'
 
     try {
       const { fields, files } = await parseMultipart(req)
@@ -143,6 +150,10 @@ export default async function handler(req, res) {
       mimeType = file.mimetype || mimeType
       ageHint = (fields?.age?.[0] ?? fields?.age ?? '').toString().trim()
       subjectHint = (fields?.subjectHint?.[0] ?? fields?.subjectHint ?? '').toString().trim()
+      const rawLocale = (fields?.locale?.[0] ?? fields?.locale ?? '').toString().trim()
+      if (rawLocale === 'es' || rawLocale === 'en') {
+        locale = rawLocale
+      }
     } catch (e) {
       if (e.code === 'LIMIT_FILE_SIZE' || e.message?.includes('maxFileSize')) {
         res.status(413).json({ error: 'Image too large. Please use an image under 4 MB.' })
@@ -153,7 +164,7 @@ export default async function handler(req, res) {
     }
 
   try {
-    const adventure = await analyzeAndGenerateAdventure(imageBuffer, mimeType, ageHint, subjectHint)
+    const adventure = await analyzeAndGenerateAdventure(imageBuffer, mimeType, ageHint, subjectHint, locale)
     res.status(200).json(adventure)
   } catch (e) {
     const message = e.message || 'Something went wrong.'

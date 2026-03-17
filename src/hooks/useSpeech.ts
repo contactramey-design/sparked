@@ -17,6 +17,10 @@ const PREFERRED_VOICE_ES = [
   'Google español', 'Microsoft Sabina', 'Paulina', 'Juan', 'Monica', 'Spanish',
 ]
 
+// Global audio/abort so only one clip can ever play at once across the app
+let globalAudio: HTMLAudioElement | null = null
+let globalAbort: AbortController | null = null
+
 function pickBestVoice(voices: SpeechSynthesisVoice[], lang: 'en' | 'es'): SpeechSynthesisVoice | null {
   if (!voices.length) return null
   const isEs = lang === 'es'
@@ -61,21 +65,24 @@ export function useSpeech() {
         window.speechSynthesis.onvoiceschanged = null
         window.speechSynthesis.cancel()
       }
-      abortRef.current?.abort()
-      if (audioRef.current) {
-        audioRef.current.pause()
-        audioRef.current.currentTime = 0
+      globalAbort?.abort()
+      globalAbort = null
+      if (globalAudio) {
+        globalAudio.pause()
+        globalAudio.currentTime = 0
+        globalAudio = null
       }
     }
   }, [loadVoices])
 
   const stop = useCallback(() => {
     if (typeof window === 'undefined') return
-    abortRef.current?.abort()
-    if (audioRef.current) {
-      audioRef.current.pause()
-      audioRef.current.currentTime = 0
-      audioRef.current = null
+    globalAbort?.abort()
+    globalAbort = null
+    if (globalAudio) {
+      globalAudio.pause()
+      globalAudio.currentTime = 0
+      globalAudio = null
     }
     if (window.speechSynthesis) {
       window.speechSynthesis.cancel()
@@ -112,7 +119,7 @@ export function useSpeech() {
       const useCloud = appConfig.tts?.useCloud && appConfig.tts?.endpoint
       if (useCloud) {
         const controller = new AbortController()
-        abortRef.current = controller
+        globalAbort = controller
         try {
           const res = await fetch(appConfig.tts!.endpoint!, {
             method: 'POST',
@@ -124,16 +131,20 @@ export function useSpeech() {
           const blob = await res.blob()
           const url = URL.createObjectURL(blob)
           const audio = new Audio(url)
-          audioRef.current = audio
+          globalAudio = audio
           setIsSpeaking(true)
           audio.onended = () => {
             URL.revokeObjectURL(url)
-            audioRef.current = null
+            if (globalAudio === audio) {
+              globalAudio = null
+            }
             setIsSpeaking(false)
           }
           audio.onerror = () => {
             URL.revokeObjectURL(url)
-            audioRef.current = null
+            if (globalAudio === audio) {
+              globalAudio = null
+            }
             setIsSpeaking(false)
           }
           await audio.play()
@@ -144,7 +155,9 @@ export function useSpeech() {
             }
             if (window.speechSynthesis) fallbackSpeak(t, options)
           }
-          abortRef.current = null
+          if (globalAbort === controller) {
+            globalAbort = null
+          }
           setIsSpeaking(false)
         }
         return
