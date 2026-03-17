@@ -4,7 +4,7 @@ import { useAuth } from './AuthContext'
 import { useTranslation } from './contexts/LocaleContext'
 
 const LoginPage: React.FC = () => {
-  const { configured, isLoggedIn, signInWithEmail, devLogin } = useAuth()
+  const { configured, isLoggedIn, signInWithEmail } = useAuth()
   const navigate = useNavigate()
   const location = useLocation()
   const { t, locale } = useTranslation()
@@ -91,16 +91,6 @@ const LoginPage: React.FC = () => {
               {status === 'sending' ? 'Sending…' : 'Send sign-in link'}
             </button>
           </form>
-          <button
-            type="button"
-            className="secondary-button mt-3"
-            onClick={() => {
-              devLogin()
-              navigate(redirect, { replace: true })
-            }}
-          >
-            Continue without email (demo)
-          </button>
           <p className="login-coppa-note">
             {t('login.coppaNote')}
           </p>
