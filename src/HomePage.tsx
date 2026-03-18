@@ -185,6 +185,9 @@ const HomePage: React.FC = () => {
         )}
 
         <div className="home-footer-actions">
+          <Link to="/shop" className="secondary-button">
+            Shop ebooks
+          </Link>
           <a
             href={appConfig.parentResources.handbookPdfUrl}
             target="_blank"
@@ -221,6 +224,9 @@ const HomePage: React.FC = () => {
           <p className="home-tagline">{t('header.tagline')}</p>
           <Link to={ctaHref} className="home-hero-cta primary-button">
             {t('home.joinAdventure')}
+          </Link>
+          <Link to="/shop" className="home-hero-cta secondary-button">
+            Shop ebooks
           </Link>
         </div>
       </div>
