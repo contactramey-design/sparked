@@ -29,13 +29,6 @@ export default async function handler(req, res) {
       return
     }
 
-    const stripeSecretKey = process.env.STRIPE_SECRET_KEY
-    const safetyPassPriceId = process.env.STRIPE_SAFETY_PASS_PRICE_ID
-    if (!stripeSecretKey || !safetyPassPriceId) {
-      res.status(500).json({ error: 'Server not configured for downloads.' })
-      return
-    }
-
     const url = new URL(req.url, `http://${req.headers.host || 'localhost'}`)
     const ebookId = (url.searchParams.get('ebookId') || '').toString().trim()
     const checkoutSessionId = (url.searchParams.get('checkout_session_id') || '').toString().trim()
@@ -64,6 +57,13 @@ export default async function handler(req, res) {
       res.setHeader('Content-Disposition', `attachment; filename="${ebookId}.pdf"`)
       res.setHeader('Cache-Control', 'private, no-store')
       res.status(200).end(fileBuffer)
+      return
+    }
+
+    const stripeSecretKey = process.env.STRIPE_SECRET_KEY
+    const safetyPassPriceId = process.env.STRIPE_SAFETY_PASS_PRICE_ID
+    if (!stripeSecretKey || !safetyPassPriceId) {
+      res.status(500).json({ error: 'Server not configured for downloads.' })
       return
     }
 
