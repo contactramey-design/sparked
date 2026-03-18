@@ -28,11 +28,21 @@ export default async function handler(req, res) {
         ? `${req.headers['x-forwarded-proto']}://${req.headers['x-forwarded-host']}`
         : req.headers.origin
 
+    const body = req?.body && typeof req.body === 'object' ? req.body : {}
+    const requestedReturnTo = typeof body?.returnTo === 'string' ? body.returnTo : null
+    const safeReturnTo =
+      requestedReturnTo && requestedReturnTo.startsWith('/ebook/')
+        ? requestedReturnTo
+        : null
+
     let success_url =
       successUrlEnv || `${origin || ''}/?view=parent&checkout=success`
     // Let the frontend store checkout session id and use it to validate entitlement for downloads.
     if (!success_url.includes('checkout_session_id=')) {
       success_url += `${success_url.includes('?') ? '&' : '?'}checkout_session_id={CHECKOUT_SESSION_ID}`
+    }
+    if (safeReturnTo && !success_url.includes('returnTo=')) {
+      success_url += `${success_url.includes('?') ? '&' : '?'}returnTo=${encodeURIComponent(safeReturnTo)}`
     }
     const cancel_url =
       cancelUrlEnv || `${origin || ''}/?view=parent&checkout=cancel`

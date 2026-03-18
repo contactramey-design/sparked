@@ -31,11 +31,17 @@ export const ParentViewContent: React.FC = () => {
     try {
       const url = new URL(window.location.href)
       const sessionId = url.searchParams.get('checkout_session_id')
+      const returnTo = url.searchParams.get('returnTo')
       setSafetyPassCheckoutSessionId(sessionId)
 
       url.searchParams.delete('checkout')
       url.searchParams.delete('checkout_session_id')
+      url.searchParams.delete('returnTo')
       window.history.replaceState({}, '', url.toString())
+
+      if (returnTo && returnTo.startsWith('/ebook/')) {
+        window.location.replace(returnTo)
+      }
     } catch {
       // ignore
     }

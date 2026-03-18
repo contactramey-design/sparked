@@ -1,12 +1,9 @@
 import React from 'react'
 import { books } from './books'
-import { getHasSafetyPass, getSafetyPassCheckoutSessionId } from './progress'
 import { useTranslation } from './contexts/LocaleContext'
 
 const BooksPage: React.FC = () => {
   const { locale } = useTranslation()
-  const hasSafetyPass = getHasSafetyPass()
-  const checkoutSessionId = getSafetyPassCheckoutSessionId()
 
   return (
     <section className="lesson-page" key={locale}>
@@ -45,20 +42,9 @@ const BooksPage: React.FC = () => {
               <strong>{book.price}</strong> · {book.storeLabel}
             </p>
             <div className="book-actions">
-              {hasSafetyPass && checkoutSessionId ? (
-                <a
-                  href={`/api/download-ebook?ebookId=${encodeURIComponent(book.id)}&checkout_session_id=${encodeURIComponent(
-                    checkoutSessionId,
-                  )}`}
-                  className="primary-button"
-                >
-                  Download PDF
-                </a>
-              ) : (
-                <a href="/login" className="secondary-button">
-                  Start trial to download PDFs
-                </a>
-              )}
+              <a href={`/ebook/${encodeURIComponent(book.id)}`} className="primary-button">
+                Read ebook
+              </a>
             </div>
           </article>
         ))}
