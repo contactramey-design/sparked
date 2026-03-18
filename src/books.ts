@@ -40,7 +40,7 @@ export const books: BookConfig[] = [
     price: '$4.99',
     storeLabelKey: 'books.ebook-3.storeLabel',
     url: 'https://example.com/ebook-3',
-    coverSrc: '/bookcase/ebook-3.png',
+    coverSrc: '/snapchatsafetycoverebook.png',
   },
   {
     id: 'ebook-4',
