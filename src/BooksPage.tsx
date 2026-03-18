@@ -38,7 +38,10 @@ const BooksPage: React.FC = () => {
               <strong>{book.price}</strong> · {t(book.storeLabelKey)}
             </p>
             <div className="book-actions">
-              <Link to={`/ebook/${encodeURIComponent(book.id)}`} className="primary-button">
+              <Link
+                to={`/ebook?ebookId=${encodeURIComponent(book.id)}`}
+                className="primary-button"
+              >
                 {t('booksPage.readEbook')}
               </Link>
             </div>

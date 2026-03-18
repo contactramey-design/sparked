@@ -208,6 +208,7 @@ const App: React.FC = () => {
               <Route path="/books" element={<BooksPage />} />
               <Route path="/shop" element={<BooksPage />} />
               <Route path="/ebook/:ebookId" element={<EbookViewerPage />} />
+              <Route path="/ebook" element={<EbookViewerPage />} />
               <Route
                 path="/parent"
                 element={

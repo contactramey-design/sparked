@@ -42,7 +42,7 @@ export const ParentViewContent: React.FC = () => {
       url.searchParams.delete('returnTo')
       window.history.replaceState({}, '', url.toString())
 
-      if (returnTo && returnTo.startsWith('/ebook/')) {
+      if (returnTo && (returnTo.startsWith('/ebook/') || returnTo.startsWith('/ebook?'))) {
         window.location.replace(returnTo)
       }
     } catch {

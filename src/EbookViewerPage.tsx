@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useParams, useSearchParams } from 'react-router-dom'
 import * as pdfjsLib from 'pdfjs-dist'
 import { books } from './books'
 import { getSafetyPassCheckoutSessionId } from './progress'
@@ -16,12 +16,17 @@ type PdfDoc = any
 
 const EbookViewerPage: React.FC = () => {
   const { ebookId } = useParams<{ ebookId: string }>()
+  const [searchParams] = useSearchParams()
+  const ebookIdFromQuery = searchParams.get('ebookId')
   const { t } = useTranslation()
 
   const ebook = useMemo(() => {
-    if (!ebookId) return null
-    return books.find((b) => b.id === ebookId) ?? null
-  }, [ebookId])
+    const effectiveId = ebookId || ebookIdFromQuery
+    if (!effectiveId) return null
+    return books.find((b) => b.id === effectiveId) ?? null
+  }, [ebookId, ebookIdFromQuery])
+
+  const effectiveEbookId = (ebookId || ebookIdFromQuery || '').toString().trim()
 
   const checkoutSessionId = getSafetyPassCheckoutSessionId()
 
@@ -43,19 +48,19 @@ const EbookViewerPage: React.FC = () => {
     pdfDocRef.current = null
     setEntitlementErrorKey(null)
 
-    if (!ebookId) {
+    if (!effectiveEbookId) {
       setEntitlementErrorKey('ebookViewer.errors.missingEbookId')
       return
     }
 
-    const isFreeTestEbook = ebookId === 'ebook-1'
+    const isFreeTestEbook = effectiveEbookId === 'ebook-1'
 
     if (!checkoutSessionId && !isFreeTestEbook) {
       setEntitlementErrorKey('ebookViewer.errors.startTrial')
       return
     }
 
-    const safeEbookId: string = ebookId
+    const safeEbookId: string = effectiveEbookId
     const safeCheckoutSessionId: string | null = checkoutSessionId
 
     let cancelled = false
@@ -194,7 +199,7 @@ const EbookViewerPage: React.FC = () => {
   }
 
   async function startTrial() {
-    if (!ebookId) return
+    if (!effectiveEbookId) return
 
     setEntitlementErrorKey(null)
     setLoadingPdf(true)
@@ -202,7 +207,7 @@ const EbookViewerPage: React.FC = () => {
       const res = await fetch('/api/create-checkout-session', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ returnTo: `/ebook/${ebookId}` }),
+        body: JSON.stringify({ returnTo: `/ebook?ebookId=${effectiveEbookId}` }),
       })
 
       const data = await res.json().catch(() => ({}))
@@ -241,7 +246,10 @@ const EbookViewerPage: React.FC = () => {
                   const res = await fetch('/api/create-ebook-checkout-session', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ ebookId: ebook.id, returnTo: `/ebook/${ebook.id}` }),
+                    body: JSON.stringify({
+                      ebookId: ebook.id,
+                      returnTo: `/ebook?ebookId=${encodeURIComponent(ebook.id)}`,
+                    }),
                   })
                   const data = await res.json().catch(() => ({}))
                   if (!res.ok || typeof data?.url !== 'string') {
