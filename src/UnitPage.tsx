@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { curriculum } from './curriculum'
-import { updateUnitAfterQuiz, getUnitStatus, getHasSafetyPass } from './progress'
+import { updateUnitAfterQuiz, getUnitStatus } from './progress'
 import { useTranslation, useLocale } from './contexts/LocaleContext'
 import { useTranslatedUnit, useTranslatedTrack } from './hooks/useTranslatedCurriculum'
 import CompletionCelebration from './CompletionCelebration'
@@ -76,7 +76,6 @@ const UnitPage: React.FC = () => {
   const wasAlreadyMastered = !!existingStatus?.mastered
   const [mastered, setMastered] = useState<boolean>(wasAlreadyMastered)
   const [showCelebration, setShowCelebration] = useState(false)
-  const hasSafetyPass = getHasSafetyPass()
 
   const [materialFinished, setMaterialFinished] = useState(false)
   const [instaSlide, setInstaSlide] = useState(0)
@@ -135,9 +134,6 @@ const UnitPage: React.FC = () => {
   const instaCaptions = locale === 'es' ? instaCaptionsEs : instaCaptionsEn
   const currentInstaImage = instaImages[instaSlide] ?? instaImages[0]
   const currentInstaCaption = instaCaptions[instaSlide] ?? ''
-
-  const isPaidUnit = !unit.isFree
-  const lockedByPayment = isPaidUnit && !hasSafetyPass
 
   const handleChange = (qIndex: number, optionIndex: number) => {
     const next = [...selected]
@@ -315,44 +311,6 @@ const UnitPage: React.FC = () => {
       ? unit.videoUrlEs
       : (unit.videoUrl ?? fallbackVideo)
   const showVideo = !!videoSrc
-
-  if (lockedByPayment) {
-    return (
-      <section className="lesson-page unit-page-single">
-        <div className="unit-cyber-layer">
-          <div className="unit-grid-plane" />
-          <div className="unit-polygon" />
-          <div className="unit-polygon" />
-          <div className="unit-polygon" />
-        </div>
-
-        <header className="lesson-header">
-          <div className="flex flex-wrap items-center gap-3">
-            <SparkiAvatar size="md" />
-            <div>
-              <h2>{displayUnit.title}</h2>
-              {displayTrack && <p className="welcome-subtitle">{displayTrack.title}</p>}
-            </div>
-          </div>
-          <Link to={`/track/${unit.trackId}`} className="link-back">
-            {t('curriculum.backToTrack')}
-          </Link>
-        </header>
-
-        <div className="unit-material-section card">
-          <h3>Locked for kids</h3>
-          <p>
-            This safety lesson is available when a grown-up turns on the Safety Pass
-            in the Parent area. One safety unit is always free so kids can learn core
-            rules without any purchase.
-          </p>
-          <Link to="/parent" className="secondary-button">
-            Grown-up? Open Parent view
-          </Link>
-        </div>
-      </section>
-    )
-  }
 
   return (
     <section className="lesson-page unit-page-single">

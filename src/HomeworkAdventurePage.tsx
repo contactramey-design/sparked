@@ -238,7 +238,7 @@ const HomeworkAdventurePage: React.FC = () => {
             {t('homeworkPage.subtitle')}
           </p>
         </div>
-        <Link to="/dashboard" className="link-back">
+        <Link to="/tracks" className="link-back">
           {t('common.backToDashboard')}
         </Link>
       </header>

@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link, useParams, useNavigate } from 'react-router-dom'
 import { curriculum } from './curriculum'
-import { getUnitStatus, isUnitLockedForTrack, getHasSafetyPass } from './progress'
+import { getUnitStatus, isUnitLockedForTrack } from './progress'
 import { useTranslation, useLocale } from './contexts/LocaleContext'
 import { useTranslatedTrack } from './hooks/useTranslatedCurriculum'
 import ListenButton from './components/ListenButton'
@@ -12,7 +12,6 @@ const TrackPage: React.FC = () => {
   const { locale } = useLocale()
   const { trackId } = useParams<{ trackId: string }>()
   const navigate = useNavigate()
-  const hasSafetyPass = getHasSafetyPass()
 
   const track = curriculum.tracks.find((tr) => tr.id === trackId)
   const units = curriculum.units.filter((u) => u.trackId === trackId)
@@ -77,9 +76,7 @@ const TrackPage: React.FC = () => {
             const status = getUnitStatus(unit.id)
             const mastered = !!status?.mastered
             const earnedSparkles = status?.earnedSparkles ?? 0
-            const isPaidUnit = !unit.isFree
-            const lockedByPayment = isPaidUnit && !hasSafetyPass
-            const isLocked = lockedByPayment || lockedByProgress
+            const isLocked = lockedByProgress
 
             return (
               <li key={unit.id} className="track-unit-card-wrapper">
@@ -110,15 +107,9 @@ const TrackPage: React.FC = () => {
                   <p className="track-unit-card-summary">{t(`curriculum.units.${unit.id}.summary`) || unit.summary}</p>
                   {isLocked ? (
                     <div className="track-unit-card-action">
-                      {lockedByPayment ? (
-                        <span className="track-unit-locked-message">
-                          {t('curriculum.lockedByPayment')}
-                        </span>
-                      ) : (
-                        <span className="track-unit-locked-message">
-                          {t('curriculum.lockedByProgress')}
-                        </span>
-                      )}
+                      <span className="track-unit-locked-message">
+                        {t('curriculum.lockedByProgress')}
+                      </span>
                     </div>
                   ) : (
                     <div className="track-unit-card-action">

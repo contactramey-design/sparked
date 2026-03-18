@@ -121,10 +121,21 @@ const HomePage: React.FC = () => {
   }
 
   const loginPath = '/login'
-  const redirectParam = (path: string) =>
-    `${loginPath}?redirect=${encodeURIComponent(path)}`
 
-  const ctaHref = isLoggedIn ? '/tracks' : `/login?redirect=${encodeURIComponent('/tracks')}`
+  // Academy is public: no login required just to explore tracks + units.
+  const ctaHref = '/tracks'
+
+  // Checkout success returns to /?view=parent&checkout=success.
+  // Parent view must mount even if the user isn't "logged in" via email/Supabase.
+  if (viewMode === 'parent' && !isLoggedIn) {
+    return (
+      <section className="home-page home-hub">
+        <div className="hub-parent-wrap" key={locale}>
+          <ParentViewContent />
+        </div>
+      </section>
+    )
+  }
 
   if (isLoggedIn) {
     return (
@@ -218,12 +229,11 @@ const HomePage: React.FC = () => {
         <h2 className="home-tiers-title">{t('home.chooseAdventure')}</h2>
         <div className="home-tier-grid">
           {TIERS.map((tier) => {
-            const href = redirectParam(tier.path)
             return (
               <TierCard
                 key={tier.id}
                 tier={tier}
-                href={href}
+                href={tier.path}
               />
             )
           })}

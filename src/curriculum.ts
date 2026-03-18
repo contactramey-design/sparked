@@ -93,7 +93,7 @@ export const curriculum: CurriculumConfig = {
         'SpArki shows how AI can sort and draw by learning from examples instead of magic.',
       estMinutes: 20,
       ageGroup: 'age2',
-      isFree: false,
+      isFree: true,
       sparklesReward: 10,
       contentBlocks: [
         'Story: SpArki helps sort toys into boxes using examples.',
@@ -141,7 +141,7 @@ export const curriculum: CurriculumConfig = {
         'SpArki turns code into silly “if this, then that” games you can act out with your body.',
       estMinutes: 20,
       ageGroup: 'age2',
-      isFree: false,
+      isFree: true,
       sparklesReward: 10,
       contentBlocks: [
         'Game: If I clap, you jump. If I stomp, you spin—this is like an if/then rule.',
@@ -177,7 +177,7 @@ export const curriculum: CurriculumConfig = {
         'Kids explore what “software” means by looking at apps, games, and tools they already use.',
       estMinutes: 20,
       ageGroup: 'age2',
-      isFree: false,
+      isFree: true,
       sparklesReward: 10,
       contentBlocks: [
         'Examples: drawing apps, math games, video chat.',
@@ -213,7 +213,7 @@ export const curriculum: CurriculumConfig = {
         'SpArki shows friendly examples of AI in schools, farms, and hospitals, and talks about when AI might be wrong.',
       estMinutes: 20,
       ageGroup: 'age2',
-      isFree: false,
+      isFree: true,
       sparklesReward: 10,
       contentBlocks: [
         'Story: AI helps sort mail, suggest songs, and translate languages.',
@@ -243,7 +243,7 @@ export const curriculum: CurriculumConfig = {
         'Kids talk about fairness, kindness, and how humans are responsible for how AI is used.',
       estMinutes: 20,
       ageGroup: 'age2',
-      isFree: false,
+      isFree: true,
       sparklesReward: 10,
       contentBlocks: [
         'Scenario: a game that only shows some kids as heroes.',
@@ -332,7 +332,7 @@ export const curriculum: CurriculumConfig = {
         'SpArki explains how to keep videos private, turn off strangers, and handle mean comments kindly and safely.',
       estMinutes: 20,
       ageGroup: 'age2',
-      isFree: false,
+      isFree: true,
       sparklesReward: 10,
       contentBlocks: [
         'Rule: Only post videos with a grown-up’s permission.',
@@ -388,7 +388,7 @@ export const curriculum: CurriculumConfig = {
         'SpArki teaches that snaps do not really “disappear” and that streaks are never more important than feelings or safety.',
       estMinutes: 20,
       ageGroup: 'age2',
-      isFree: false,
+      isFree: true,
       sparklesReward: 10,
       contentBlocks: [
         'Myth-buster: Snaps can be screenshotted or saved, so treat them like any other picture.',
@@ -444,7 +444,7 @@ export const curriculum: CurriculumConfig = {
         'SpArki shows how to use chat filters, block strangers, and never share private info while playing games.',
       estMinutes: 20,
       ageGroup: 'age2',
-      isFree: false,
+      isFree: true,
       sparklesReward: 10,
       contentBlocks: [
         'Rule: Use in-game safety settings and let a grown-up help set them up.',
@@ -500,7 +500,7 @@ export const curriculum: CurriculumConfig = {
         'SpArki explains how to mute, block, and set kind rules for talking to others in fast-paced games.',
       estMinutes: 20,
       ageGroup: 'age2',
-      isFree: false,
+      isFree: true,
       sparklesReward: 10,
       contentBlocks: [
         'Rule: Only use voice chat with people you and a grown-up know.',
@@ -556,7 +556,7 @@ export const curriculum: CurriculumConfig = {
         'SpArki talks about how posts and comments are not always true, and how to avoid grown-up spaces and scary content.',
       estMinutes: 20,
       ageGroup: 'age2',
-      isFree: false,
+      isFree: true,
       sparklesReward: 10,
       contentBlocks: [
         'Idea: Anyone can post online, so not everything you read is true or kind.',

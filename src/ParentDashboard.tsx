@@ -1,8 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { appConfig } from './config'
 import { curriculum } from './curriculum'
-import { loadProgress, getHasSafetyPass, setHasSafetyPass } from './progress'
+import { loadProgress, getHasSafetyPass, setHasSafetyPass, setSafetyPassCheckoutSessionId } from './progress'
 import { useAuth } from './AuthContext'
 import { useTranslation } from './contexts/LocaleContext'
 
@@ -28,9 +27,14 @@ export const ParentViewContent: React.FC = () => {
     setHasSafetyPass(true)
     setUnlockError(null)
 
+    // Capture checkout session id so the server can validate entitlement for downloads.
     try {
       const url = new URL(window.location.href)
+      const sessionId = url.searchParams.get('checkout_session_id')
+      setSafetyPassCheckoutSessionId(sessionId)
+
       url.searchParams.delete('checkout')
+      url.searchParams.delete('checkout_session_id')
       window.history.replaceState({}, '', url.toString())
     } catch {
       // ignore
@@ -71,14 +75,15 @@ export const ParentViewContent: React.FC = () => {
         <div className="lesson-media card">
           <h3>{t('parentDashboard.parentGuideTitle')}</h3>
           <p>{t('parentDashboard.parentGuideDesc')}</p>
-          <a
-            href={appConfig.parentResources.handbookPdfUrl}
-            target="_blank"
-            rel="noreferrer"
-            className="secondary-button"
-          >
-            {t('parentDashboard.openParentGuide')}
-          </a>
+          <ul className="list-disc pl-5 text-sm text-slate-700 space-y-1 mt-2">
+            <li>Keep devices in shared spaces when kids are exploring alone.</li>
+            <li>Use headphones only when a grown-up is nearby and can see the screen.</li>
+            <li>Ask kids to “teach back” what they learned in each unit in their own words.</li>
+            <li>Remind kids that they can always pause, leave, and ask a grown-up for help.</li>
+          </ul>
+          <p className="login-coppa-note mt-3">
+            A downloadable PDF parent handbook will be added here as soon as it is ready.
+          </p>
         </div>
 
         <div className="lesson-media card">
@@ -177,7 +182,7 @@ const ParentDashboard: React.FC = () => {
     <section className="lesson-page" key={locale}>
       <header className="lesson-header">
         <h2>{t('parentDashboard.title')}</h2>
-        <Link to="/dashboard" className="link-back">
+        <Link to="/tracks" className="link-back">
           {t('parentDashboard.backToDashboard')}
         </Link>
       </header>

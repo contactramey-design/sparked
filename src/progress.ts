@@ -2,6 +2,7 @@ import { curriculum, type UnitConfig } from './curriculum'
 
 const STORAGE_KEY = 'sparki_age2_progress'
 const SAFETY_PASS_KEY = 'sparki_safety_pass_v1'
+const SAFETY_PASS_CHECKOUT_SESSION_KEY = 'sparki_safety_pass_checkout_session_v1'
 
 export interface UnitProgress {
   unitId: string
@@ -96,6 +97,29 @@ export function setHasSafetyPass(value: boolean): void {
       window.localStorage.setItem(SAFETY_PASS_KEY, 'true')
     } else {
       window.localStorage.removeItem(SAFETY_PASS_KEY)
+    }
+  } catch {
+    // ignore storage issues
+  }
+}
+
+export function getSafetyPassCheckoutSessionId(): string | null {
+  if (typeof window === 'undefined') return null
+  try {
+    const raw = window.localStorage.getItem(SAFETY_PASS_CHECKOUT_SESSION_KEY)
+    return raw && raw.trim() ? raw : null
+  } catch {
+    return null
+  }
+}
+
+export function setSafetyPassCheckoutSessionId(sessionId: string | null): void {
+  if (typeof window === 'undefined') return
+  try {
+    if (sessionId) {
+      window.localStorage.setItem(SAFETY_PASS_CHECKOUT_SESSION_KEY, sessionId)
+    } else {
+      window.localStorage.removeItem(SAFETY_PASS_CHECKOUT_SESSION_KEY)
     }
   } catch {
     // ignore storage issues

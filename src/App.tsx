@@ -136,6 +136,7 @@ function AppFooter() {
         © {new Date().getFullYear()} {t('header.appName')} · {t('footer.copyright')}
       </small>
       <span className="app-footer-links">
+        <Link to="/shop">Shop</Link>
         <Link to="/about">{t('footer.about')}</Link>
         <Link to="/privacy">{t('footer.privacy')}</Link>
         <Link to="/contact">{t('footer.contact')}</Link>
@@ -181,51 +182,34 @@ const App: React.FC = () => {
               />
               <Route
                 path="/tracks"
-                element={
-                  <ProtectedRoute>
-                    <TrackListPage />
-                  </ProtectedRoute>
-                }
+                element={<TrackListPage />}
               />
               <Route
                 path="/track/:trackId"
                 element={
-                  <ProtectedRoute>
-                    <TrackPage />
-                  </ProtectedRoute>
+                  <TrackPage />
                 }
               />
               <Route
                 path="/unit/:unitId"
                 element={
-                  <ProtectedRoute>
-                    <UnitPage />
-                  </ProtectedRoute>
+                  <UnitPage />
                 }
               />
               <Route
                 path="/lesson/:id"
-                element={
-                  <ProtectedRoute>
-                    <LessonPage />
-                  </ProtectedRoute>
-                }
+                element={<LessonPage />}
               />
               <Route
                 path="/homework"
-                element={
-                  <ProtectedRoute>
-                    <HomeworkAdventurePage />
-                  </ProtectedRoute>
-                }
+                element={<HomeworkAdventurePage />}
               />
               <Route path="/books" element={<BooksPage />} />
+              <Route path="/shop" element={<BooksPage />} />
               <Route
                 path="/parent"
                 element={
-                  <ProtectedRoute>
-                    <Navigate to="/?view=parent" replace />
-                  </ProtectedRoute>
+                  <Navigate to="/?view=parent" replace />
                 }
               />
               <Route path="/coming-soon" element={<ComingSoon />} />

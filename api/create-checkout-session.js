@@ -28,8 +28,12 @@ export default async function handler(req, res) {
         ? `${req.headers['x-forwarded-proto']}://${req.headers['x-forwarded-host']}`
         : req.headers.origin
 
-    const success_url =
+    let success_url =
       successUrlEnv || `${origin || ''}/?view=parent&checkout=success`
+    // Let the frontend store checkout session id and use it to validate entitlement for downloads.
+    if (!success_url.includes('checkout_session_id=')) {
+      success_url += `${success_url.includes('?') ? '&' : '?'}checkout_session_id={CHECKOUT_SESSION_ID}`
+    }
     const cancel_url =
       cancelUrlEnv || `${origin || ''}/?view=parent&checkout=cancel`
 
