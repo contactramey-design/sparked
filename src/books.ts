@@ -17,8 +17,8 @@ export interface BookConfig {
 export const books: BookConfig[] = [
   {
     id: 'ebook-1',
-    title: 'SpArki Safety Ebook #1',
-    blurb: 'A gentle, kid-friendly safety story for families.',
+    title: 'Staying Safe on Instagram',
+    blurb: 'Learn how to keep profiles private, ask a grown-up before posting, and stay kind online.',
     price: '$4.99',
     storeLabel: 'Amazon KDP',
     url: 'https://example.com/ebook-1',
@@ -26,8 +26,8 @@ export const books: BookConfig[] = [
   },
   {
     id: 'ebook-2',
-    title: 'SpArki Safety Ebook #2',
-    blurb: 'Practice safe sharing, kind choices, and asking a grown-up first.',
+    title: 'Kind & Safe TikTok',
+    blurb: 'Practice video privacy, blocking strangers, and handling mean comments with kindness.',
     price: '$4.99',
     storeLabel: 'Amazon KDP',
     url: 'https://example.com/ebook-2',
@@ -35,8 +35,8 @@ export const books: BookConfig[] = [
   },
   {
     id: 'ebook-3',
-    title: 'SpArki Safety Ebook #3',
-    blurb: 'A warm story that teaches privacy and healthy boundaries online.',
+    title: 'Snaps, Streaks & Safety',
+    blurb: 'Learn how snaps can be saved, why feelings come first, and what to do if something feels off.',
     price: '$4.99',
     storeLabel: 'Amazon KDP',
     url: 'https://example.com/ebook-3',
@@ -44,8 +44,8 @@ export const books: BookConfig[] = [
   },
   {
     id: 'ebook-4',
-    title: 'SpArki Safety Ebook #4',
-    blurb: 'Kids learn “pause & think” skills in a fun adventure.',
+    title: 'Safe Play on Roblox',
+    blurb: 'Explore game chat boundaries, block strangers, and learn safe rules for playing with friends.',
     price: '$4.99',
     storeLabel: 'Amazon KDP',
     url: 'https://example.com/ebook-4',
@@ -53,8 +53,8 @@ export const books: BookConfig[] = [
   },
   {
     id: 'ebook-5',
-    title: 'SpArki Safety Ebook #5',
-    blurb: 'A cozy story that models kind comments and safe app use.',
+    title: 'Fortnite & Voice Chat Boundaries',
+    blurb: 'Practice muting, leaving, and setting kind safety rules for voice chat conversations.',
     price: '$4.99',
     storeLabel: 'Amazon KDP',
     url: 'https://example.com/ebook-5',
@@ -62,8 +62,8 @@ export const books: BookConfig[] = [
   },
   {
     id: 'ebook-6',
-    title: 'SpArki Safety Ebook #6',
-    blurb: 'A playful lesson about trust, consent, and telling a grown-up.',
+    title: 'Reading Safely on Reddit & Forums',
+    blurb: 'Learn how not everything online is true, how to use safe spaces, and when to ask a grown-up.',
     price: '$4.99',
     storeLabel: 'Amazon KDP',
     url: 'https://example.com/ebook-6',
@@ -71,8 +71,8 @@ export const books: BookConfig[] = [
   },
   {
     id: 'bundle',
-    title: '6‑Ebook Safety Bundle + 1 Month Free Academy',
-    blurb: 'All 6 ebooks plus a free month of Sparki Academy adventures.',
+    title: 'All 6 Safety Ebooks + Homework Adventure Trial',
+    blurb: 'Unlock the full ebook set and start a 30-day trial that brings Homework Adventure to life.',
     price: '$24.99',
     storeLabel: 'TikTok Shop / Amazon Bundle',
     url: 'https://example.com/bundle',
