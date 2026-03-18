@@ -127,9 +127,18 @@ const HomePage: React.FC = () => {
 
   // Checkout success returns to /?view=parent&checkout=success.
   // Parent view must mount even if the user isn't "logged in" via email/Supabase.
+  const shopBadge = (
+    <div className="home-shop-badge-row" aria-hidden={false}>
+      <Link to="/shop" className="home-shop-badge-link">
+        <span className="home-shop-badge-text">{t('footer.shop')}</span>
+      </Link>
+    </div>
+  )
+
   if (viewMode === 'parent' && !isLoggedIn) {
     return (
       <section className="home-page home-hub">
+        {shopBadge}
         <div className="hub-parent-wrap" key={locale}>
           <ParentViewContent />
         </div>
@@ -140,6 +149,7 @@ const HomePage: React.FC = () => {
   if (isLoggedIn) {
     return (
       <section className="home-page home-hub">
+        {shopBadge}
         <div className="hub-toggle-bar" role="tablist" aria-label={`${t('home.view')} ${t('home.kid')} ${t('home.parent')}`}>
           <span className="hub-toggle-label">{t('home.view')}</span>
           <button
@@ -203,6 +213,7 @@ const HomePage: React.FC = () => {
 
   return (
     <section className="home-page">
+      {shopBadge}
       <div className="home-hero">
         <div className="home-hero-sparki" aria-hidden>
           <img
