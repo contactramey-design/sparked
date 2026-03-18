@@ -39,11 +39,34 @@ export default async function handler(req, res) {
     const url = new URL(req.url, `http://${req.headers.host || 'localhost'}`)
     const ebookId = (url.searchParams.get('ebookId') || '').toString().trim()
     const checkoutSessionId = (url.searchParams.get('checkout_session_id') || '').toString().trim()
+    const isFreeTestEbook = ebookId === 'ebook-1'
 
     if (!ebookId || !ALLOWED_EBOOK_IDS.has(ebookId)) {
       res.status(400).json({ error: 'Invalid ebook id.' })
       return
     }
+
+    // Temporary test mode: allow `ebook-1` to download without Stripe.
+    if (isFreeTestEbook) {
+      const pdfPath = path.join(process.cwd(), 'private', 'ebooks', `${ebookId}.pdf`)
+      const pdfExists = await fs.promises
+        .access(pdfPath)
+        .then(() => true)
+        .catch(() => false)
+
+      if (!pdfExists) {
+        res.status(404).json({ error: 'PDF not found yet.' })
+        return
+      }
+
+      const fileBuffer = await fs.promises.readFile(pdfPath)
+      res.setHeader('Content-Type', 'application/pdf')
+      res.setHeader('Content-Disposition', `attachment; filename="${ebookId}.pdf"`)
+      res.setHeader('Cache-Control', 'private, no-store')
+      res.status(200).end(fileBuffer)
+      return
+    }
+
     if (!checkoutSessionId) {
       res.status(403).json({ error: 'Missing checkout session id.' })
       return

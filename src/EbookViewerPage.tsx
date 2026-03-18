@@ -48,13 +48,15 @@ const EbookViewerPage: React.FC = () => {
       return
     }
 
-    if (!checkoutSessionId) {
+    const isFreeTestEbook = ebookId === 'ebook-1'
+
+    if (!checkoutSessionId && !isFreeTestEbook) {
       setEntitlementErrorKey('ebookViewer.errors.startTrial')
       return
     }
 
     const safeEbookId: string = ebookId
-    const safeCheckoutSessionId: string = checkoutSessionId
+    const safeCheckoutSessionId: string | null = checkoutSessionId
 
     let cancelled = false
 
@@ -62,9 +64,11 @@ const EbookViewerPage: React.FC = () => {
       setLoadingPdf(true)
       try {
         const res = await fetch(
-          `/api/download-ebook?ebookId=${encodeURIComponent(
-            safeEbookId,
-          )}&checkout_session_id=${encodeURIComponent(safeCheckoutSessionId)}`,
+          isFreeTestEbook
+            ? `/api/download-ebook?ebookId=${encodeURIComponent(safeEbookId)}`
+            : `/api/download-ebook?ebookId=${encodeURIComponent(safeEbookId)}&checkout_session_id=${encodeURIComponent(
+                safeCheckoutSessionId as string,
+              )}`,
         )
 
         if (!res.ok) {
