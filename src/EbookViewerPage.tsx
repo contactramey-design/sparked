@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom'
 import * as pdfjsLib from 'pdfjs-dist'
 import { books } from './books'
 import { getSafetyPassCheckoutSessionId } from './progress'
+import { useTranslation } from './contexts/LocaleContext'
 
 // Vite bundler-friendly worker wiring.
 // See: https://mozilla.github.io/pdf.js/getting_started/
@@ -15,6 +16,7 @@ type PdfDoc = any
 
 const EbookViewerPage: React.FC = () => {
   const { ebookId } = useParams<{ ebookId: string }>()
+  const { t } = useTranslation()
 
   const ebook = useMemo(() => {
     if (!ebookId) return null
@@ -33,21 +35,21 @@ const EbookViewerPage: React.FC = () => {
   const [pageNumber, setPageNumber] = useState<number>(1)
   const [loadingPdf, setLoadingPdf] = useState(false)
   const [rendering, setRendering] = useState(false)
-  const [entitlementError, setEntitlementError] = useState<string | null>(null)
+  const [entitlementErrorKey, setEntitlementErrorKey] = useState<string | null>(null)
 
   useEffect(() => {
     setPageNumber(1)
     setNumPages(null)
     pdfDocRef.current = null
-    setEntitlementError(null)
+    setEntitlementErrorKey(null)
 
     if (!ebookId) {
-      setEntitlementError('Missing ebook id.')
+      setEntitlementErrorKey('ebookViewer.errors.missingEbookId')
       return
     }
 
     if (!checkoutSessionId) {
-      setEntitlementError('Start the trial to access ebooks.')
+      setEntitlementErrorKey('ebookViewer.errors.startTrial')
       return
     }
 
@@ -67,9 +69,9 @@ const EbookViewerPage: React.FC = () => {
 
         if (!res.ok) {
           if (res.status === 403) {
-            throw new Error('You need to unlock ebooks to read this PDF.')
+            throw new Error('FORBIDDEN_DOWNLOAD')
           }
-          throw new Error('Could not load the ebook. Please try again.')
+          throw new Error('DOWNLOAD_FAILED')
         }
 
         const arrayBuffer = await res.arrayBuffer()
@@ -84,7 +86,15 @@ const EbookViewerPage: React.FC = () => {
         setPageNumber(1)
       } catch (e) {
         if (cancelled) return
-        setEntitlementError(e instanceof Error ? e.message : 'Could not load the ebook.')
+        if (e instanceof Error) {
+          if (e.message === 'FORBIDDEN_DOWNLOAD') {
+            setEntitlementErrorKey('ebookViewer.errors.unlockRequired')
+          } else {
+            setEntitlementErrorKey('ebookViewer.errors.couldNotLoad')
+          }
+        } else {
+          setEntitlementErrorKey('ebookViewer.errors.couldNotLoad')
+        }
       } finally {
         if (!cancelled) setLoadingPdf(false)
       }
@@ -127,7 +137,7 @@ const EbookViewerPage: React.FC = () => {
     } catch (e) {
       // If rendering fails, show the entitlement error only if we didn't have a doc.
       // Otherwise, keep UI usable.
-      setEntitlementError(e instanceof Error ? e.message : 'Could not render this page.')
+      setEntitlementErrorKey('ebookViewer.errors.couldNotRender')
     } finally {
       if (token === renderTokenRef.current) setRendering(false)
     }
@@ -143,6 +153,10 @@ const EbookViewerPage: React.FC = () => {
 
   const canPrev = pageNumber > 1 && !loadingPdf
   const canNext = numPages ? pageNumber < numPages : false
+
+  const bundle = books.find((b) => b.id === 'bundle') ?? null
+  const bundlePrice = bundle?.price ?? '$9.99/mo'
+  const ebookTitle = ebook ? t(ebook.titleKey) : t('ebookViewer.readerTitle')
 
   const handlePrev = () => {
     if (!canPrev) return
@@ -171,7 +185,7 @@ const EbookViewerPage: React.FC = () => {
   async function startTrial() {
     if (!ebookId) return
 
-    setEntitlementError(null)
+    setEntitlementErrorKey(null)
     setLoadingPdf(true)
     try {
       const res = await fetch('/api/create-checkout-session', {
@@ -182,35 +196,35 @@ const EbookViewerPage: React.FC = () => {
 
       const data = await res.json().catch(() => ({}))
       if (!res.ok || typeof data?.url !== 'string') {
-        throw new Error(typeof data?.error === 'string' ? data.error : 'Checkout failed.')
+        throw new Error('CHECKOUT_FAILED')
       }
 
       window.location.assign(data.url)
     } catch (e) {
-      setEntitlementError(e instanceof Error ? e.message : 'Checkout failed.')
+      setEntitlementErrorKey('ebookViewer.errors.checkoutFailed')
       setLoadingPdf(false)
     }
   }
 
-  if (entitlementError) {
+  if (entitlementErrorKey) {
     return (
       <section className="lesson-page">
         <header className="lesson-header">
-          <h2>{ebook?.title ?? 'Ebook'}</h2>
+          <h2>{ebookTitle}</h2>
           <Link to="/shop" className="link-back">
-            Back to shop
+            {t('ebookViewer.backToShop')}
           </Link>
         </header>
 
         <div className="lesson-media card" role="alert" aria-live="polite">
-          <h3 style={{ marginTop: 0 }}>Unlock to read</h3>
-          <p>{entitlementError}</p>
+          <h3 style={{ marginTop: 0 }}>{t('ebookViewer.unlockToReadTitle')}</h3>
+          <p>{t(entitlementErrorKey)}</p>
           {ebook && ebook.id !== 'bundle' ? (
             <button
               type="button"
               className="primary-button"
               onClick={async () => {
-                setEntitlementError(null)
+                setEntitlementErrorKey(null)
                 setLoadingPdf(true)
                 try {
                   const res = await fetch('/api/create-ebook-checkout-session', {
@@ -220,28 +234,28 @@ const EbookViewerPage: React.FC = () => {
                   })
                   const data = await res.json().catch(() => ({}))
                   if (!res.ok || typeof data?.url !== 'string') {
-                    throw new Error(typeof data?.error === 'string' ? data.error : 'Checkout failed.')
+                    throw new Error('CHECKOUT_FAILED')
                   }
                   window.location.assign(data.url)
                 } catch (e) {
-                  setEntitlementError(e instanceof Error ? e.message : 'Checkout failed.')
+                  setEntitlementErrorKey('ebookViewer.errors.checkoutFailed')
                   setLoadingPdf(false)
                 }
               }}
             >
-              Buy for {ebook.price}
+              {t('ebookViewer.buyForButton', { price: ebook.price })}
             </button>
           ) : (
             <button type="button" className="primary-button" onClick={() => void startTrial()}>
-              Start 30-day free trial
+              {t('ebookViewer.startTrialButton')}
             </button>
           )}
 
           <button type="button" className="secondary-button mt-3" onClick={() => void startTrial()}>
-            Or unlock the bundle for $9.99/mo (trial)
+            {t('ebookViewer.bundleUnlockButton', { price: bundlePrice })}
           </button>
           <p className="login-coppa-note" style={{ marginTop: '0.75rem' }}>
-            After you unlock, the ebook will open on page 1 automatically.
+            {t('ebookViewer.afterUnlockNote')}
           </p>
         </div>
       </section>
@@ -251,9 +265,9 @@ const EbookViewerPage: React.FC = () => {
   return (
     <section className="lesson-page">
       <header className="lesson-header">
-        <h2>{ebook?.title ?? 'Ebook reader'}</h2>
+        <h2>{ebookTitle}</h2>
         <Link to="/shop" className="link-back">
-          Back to shop
+          {t('ebookViewer.backToShop')}
         </Link>
       </header>
 
@@ -268,20 +282,21 @@ const EbookViewerPage: React.FC = () => {
 
       <div className="ebook-toolbar">
         <button type="button" className="secondary-button" onClick={handlePrev} disabled={!canPrev}>
-          Prev
+          {t('ebookViewer.toolbar.prev')}
         </button>
         <span className="ebook-page-label">
-          Page {pageNumber}
-          {numPages ? ` of ${numPages}` : ''}
+          {numPages
+            ? t('ebookViewer.toolbar.pageOf', { page: pageNumber, numPages })
+            : t('ebookViewer.toolbar.pageSolo', { page: pageNumber })}
         </span>
         <button type="button" className="secondary-button" onClick={handleNext} disabled={!canNext}>
-          Next
+          {t('ebookViewer.toolbar.next')}
         </button>
       </div>
 
       {loadingPdf || rendering ? (
         <p className="login-coppa-note" aria-live="polite">
-          {loadingPdf ? 'Loading ebook…' : 'Rendering page…'}
+          {loadingPdf ? t('ebookViewer.loading.loadingEbook') : t('ebookViewer.loading.renderingPage')}
         </p>
       ) : null}
     </section>

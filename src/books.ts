@@ -1,7 +1,7 @@
 export interface BookConfig {
   id: string
-  title: string
-  blurb: string
+  titleKey: string
+  blurbKey: string
   price: string
   storeLabel: string
   url: string
@@ -17,8 +17,8 @@ export interface BookConfig {
 export const books: BookConfig[] = [
   {
     id: 'ebook-1',
-    title: 'Staying Safe on Instagram',
-    blurb: 'Learn how to keep profiles private, ask a grown-up before posting, and stay kind online.',
+    titleKey: 'books.ebook-1.title',
+    blurbKey: 'books.ebook-1.blurb',
     price: '$4.99',
     storeLabel: 'Amazon KDP',
     url: 'https://example.com/ebook-1',
@@ -26,8 +26,8 @@ export const books: BookConfig[] = [
   },
   {
     id: 'ebook-2',
-    title: 'Kind & Safe TikTok',
-    blurb: 'Practice video privacy, blocking strangers, and handling mean comments with kindness.',
+    titleKey: 'books.ebook-2.title',
+    blurbKey: 'books.ebook-2.blurb',
     price: '$4.99',
     storeLabel: 'Amazon KDP',
     url: 'https://example.com/ebook-2',
@@ -35,8 +35,8 @@ export const books: BookConfig[] = [
   },
   {
     id: 'ebook-3',
-    title: 'Snaps, Streaks & Safety',
-    blurb: 'Learn how snaps can be saved, why feelings come first, and what to do if something feels off.',
+    titleKey: 'books.ebook-3.title',
+    blurbKey: 'books.ebook-3.blurb',
     price: '$4.99',
     storeLabel: 'Amazon KDP',
     url: 'https://example.com/ebook-3',
@@ -44,8 +44,8 @@ export const books: BookConfig[] = [
   },
   {
     id: 'ebook-4',
-    title: 'Safe Play on Roblox',
-    blurb: 'Explore game chat boundaries, block strangers, and learn safe rules for playing with friends.',
+    titleKey: 'books.ebook-4.title',
+    blurbKey: 'books.ebook-4.blurb',
     price: '$4.99',
     storeLabel: 'Amazon KDP',
     url: 'https://example.com/ebook-4',
@@ -53,8 +53,8 @@ export const books: BookConfig[] = [
   },
   {
     id: 'ebook-5',
-    title: 'Fortnite & Voice Chat Boundaries',
-    blurb: 'Practice muting, leaving, and setting kind safety rules for voice chat conversations.',
+    titleKey: 'books.ebook-5.title',
+    blurbKey: 'books.ebook-5.blurb',
     price: '$4.99',
     storeLabel: 'Amazon KDP',
     url: 'https://example.com/ebook-5',
@@ -62,8 +62,8 @@ export const books: BookConfig[] = [
   },
   {
     id: 'ebook-6',
-    title: 'Reading Safely on Reddit & Forums',
-    blurb: 'Learn how not everything online is true, how to use safe spaces, and when to ask a grown-up.',
+    titleKey: 'books.ebook-6.title',
+    blurbKey: 'books.ebook-6.blurb',
     price: '$4.99',
     storeLabel: 'Amazon KDP',
     url: 'https://example.com/ebook-6',
@@ -71,9 +71,9 @@ export const books: BookConfig[] = [
   },
   {
     id: 'bundle',
-    title: 'All 6 Safety Ebooks + Homework Adventure Trial',
-    blurb: 'Unlock the full ebook set and start a 30-day trial that brings Homework Adventure to life.',
-    price: '$24.99',
+    titleKey: 'books.bundle.title',
+    blurbKey: 'books.bundle.blurb',
+    price: '$9.99/mo',
     storeLabel: 'TikTok Shop / Amazon Bundle',
     url: 'https://example.com/bundle',
     coverSrc: '/bookcase/bundle.png',

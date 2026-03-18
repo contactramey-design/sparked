@@ -14,7 +14,8 @@
     "about": "About",
     "privacy": "Privacy",
     "contact": "Contact",
-    "grownUp": "Grown-up?"
+    "grownUp": "Grown-up?",
+    "shop": "Shop"
   },
   "parentDashboard": {
     "title": "Parent & Grown-Up Progress View",
@@ -39,7 +40,16 @@
     "tableStatus": "Status",
     "statusMastered": "Mastered",
     "statusInProgress": "In progress",
-    "statusNotStarted": "Not started"
+    "statusNotStarted": "Not started",
+    "guideBullet1": "Keep devices in shared spaces when kids are exploring alone.",
+    "guideBullet2": "Use headphones only when a grown-up is nearby and can see the screen.",
+    "guideBullet3": "Ask kids to “teach back” what they learned in each unit in their own words.",
+    "guideBullet4": "Remind kids that they can always pause, leave, and ask a grown-up for help.",
+    "parentHandbookNote": "A downloadable PDF parent handbook will be added here as soon as it is ready.",
+    "openingCheckout": "Opening checkout…",
+    "unlockSafetyButton": "Unlock Safety Pass",
+    "checkoutCanceled": "Checkout canceled. You can try again anytime.",
+    "checkoutFailed": "Checkout failed. Please try again."
   },
   "common": {
     "backToHome": "← Back to Home",
@@ -51,7 +61,9 @@
     "redirectNote": "Some pages are for signed-in grown-ups only. Sign in to continue.",
     "intro": "This simple sign-in remembers that a grown-up has opened SpArki's Academy on this device. No email or password is required in this demo.",
     "submitButton": "Sign in and open home",
-    "coppaNote": "Grown-ups: Sign in once on this device so your family can use SpArki. This keeps the experience parent-approved."
+    "coppaNote": "Grown-ups: Sign in once on this device so your family can use SpArki. This keeps the experience parent-approved.",
+    "startTrialButton": "Start 30-day free trial (card required)",
+    "alreadyAccessButton": "I already have access on this device"
   },
   "dashboardPage": {
     "switchView": "Switch view:",
@@ -162,6 +174,7 @@
     "hiSparkles": "Hi {name} · {count} sparkles",
     "startAdventure": "Start adventure →",
     "adventure": "ADVENTURE",
+    "shopEbooks": "Shop ebooks",
     "tiers": {
       "safety": {
         "title": "Internet Safety",
@@ -178,6 +191,69 @@
         "description": "Turn homework into a story-based quest. Grown-up uploads; SpArki guides.",
         "imageAlt": "SpArki as Homework Adventure tutor"
       }
+    }
+  },
+  "booksPage": {
+    "title": "SpArki's Digital Bookcase",
+    "subtitle": "Family-friendly ebooks and bundles. Start the Safety Pass trial to download the PDFs.",
+    "deliveryNote": "PDFs are delivered from Sparki through a protected download link. (Kids never get access directly — only parents who unlock the Safety Pass.)",
+    "readEbook": "Read ebook"
+  },
+  "books": {
+    "ebook-1": {
+      "title": "Staying Safe on Instagram",
+      "blurb": "Learn how to keep profiles private, ask a grown-up before posting, and stay kind online."
+    },
+    "ebook-2": {
+      "title": "Kind & Safe TikTok",
+      "blurb": "Practice video privacy, blocking strangers, and handling mean comments with kindness."
+    },
+    "ebook-3": {
+      "title": "Snaps, Streaks & Safety",
+      "blurb": "Learn how snaps can be saved, why feelings come first, and what to do if something feels off."
+    },
+    "ebook-4": {
+      "title": "Safe Play on Roblox",
+      "blurb": "Explore game chat boundaries, block strangers, and learn safe rules for playing with friends."
+    },
+    "ebook-5": {
+      "title": "Fortnite & Voice Chat Boundaries",
+      "blurb": "Practice muting, leaving, and setting kind safety rules for voice chat conversations."
+    },
+    "ebook-6": {
+      "title": "Reading Safely on Reddit & Forums",
+      "blurb": "Learn how not everything online is true, how to use safe spaces, and when to ask a grown-up."
+    },
+    "bundle": {
+      "title": "All 6 Safety Ebooks + Homework Adventure Trial",
+      "blurb": "Unlock the full ebook set and start a 30-day free trial that brings Homework Adventure to life. After the trial, it's $9.99/mo."
+    }
+  },
+  "ebookViewer": {
+    "readerTitle": "Ebook reader",
+    "backToShop": "Back to shop",
+    "unlockToReadTitle": "Unlock to read",
+    "buyForButton": "Buy for {price}",
+    "startTrialButton": "Start 30-day free trial",
+    "bundleUnlockButton": "Or unlock the bundle for {price} (trial)",
+    "afterUnlockNote": "After you unlock, the ebook will open on page 1 automatically.",
+    "errors": {
+      "missingEbookId": "Missing ebook id.",
+      "startTrial": "Start the trial to access ebooks.",
+      "unlockRequired": "You need to unlock ebooks to read this PDF.",
+      "couldNotLoad": "Could not load the ebook. Please try again.",
+      "couldNotRender": "Could not render this page.",
+      "checkoutFailed": "Checkout failed. Please try again."
+    },
+    "toolbar": {
+      "prev": "Prev",
+      "next": "Next",
+      "pageSolo": "Page {page}",
+      "pageOf": "Page {page} of {numPages}"
+    },
+    "loading": {
+      "loadingEbook": "Loading ebook…",
+      "renderingPage": "Rendering page…"
     }
   }
 }

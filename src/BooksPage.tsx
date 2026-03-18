@@ -3,24 +3,19 @@ import { books } from './books'
 import { useTranslation } from './contexts/LocaleContext'
 
 const BooksPage: React.FC = () => {
-  const { locale } = useTranslation()
+  const { t, locale } = useTranslation()
 
   return (
     <section className="lesson-page" key={locale}>
       <header className="lesson-header">
         <div>
-          <h2>SpArki’s Digital Bookcase</h2>
-          <p className="welcome-subtitle">
-            Family-friendly ebooks and bundles. Start the Safety Pass trial to download the PDFs.
-          </p>
+          <h2>{t('booksPage.title')}</h2>
+          <p className="welcome-subtitle">{t('booksPage.subtitle')}</p>
         </div>
       </header>
 
       <div className="card">
-        <p className="book-blurb">
-          PDFs are delivered from Sparki through a protected download link. (Kids never get access directly — only
-          parents who unlock the Safety Pass.)
-        </p>
+        <p className="book-blurb">{t('booksPage.deliveryNote')}</p>
       </div>
 
       <div className="books-grid mt-4">
@@ -36,14 +31,14 @@ const BooksPage: React.FC = () => {
                 }}
               />
             </div>
-            <h3 className="book-title">{book.title}</h3>
-            <p className="book-blurb">{book.blurb}</p>
+            <h3 className="book-title">{t(book.titleKey)}</h3>
+            <p className="book-blurb">{t(book.blurbKey)}</p>
             <p className="book-meta">
               <strong>{book.price}</strong> · {book.storeLabel}
             </p>
             <div className="book-actions">
               <a href={`/ebook/${encodeURIComponent(book.id)}`} className="primary-button">
-                Read ebook
+                {t('booksPage.readEbook')}
               </a>
             </div>
           </article>

@@ -61,7 +61,7 @@ const LoginPage: React.FC = () => {
             className="primary-button mt-4"
             onClick={() => void handleStartTrial()}
           >
-            Start 30-day free trial (card required)
+            {t('login.startTrialButton')}
           </button>
           <button
             type="button"
@@ -71,7 +71,7 @@ const LoginPage: React.FC = () => {
               navigate(redirect, { replace: true })
             }}
           >
-            I already have access on this device
+            {t('login.alreadyAccessButton')}
           </button>
           <p className="login-coppa-note">
             {t('login.coppaNote')}

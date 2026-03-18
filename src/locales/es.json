@@ -14,7 +14,8 @@
     "about": "Nosotros",
     "privacy": "Privacidad",
     "contact": "Contacto",
-    "grownUp": "¿Eres adulto?"
+    "grownUp": "¿Eres adulto?",
+    "shop": "Tienda"
   },
   "parentDashboard": {
     "title": "Vista de progreso para adultos",
@@ -39,7 +40,16 @@
     "tableStatus": "Estado",
     "statusMastered": "Completado",
     "statusInProgress": "En progreso",
-    "statusNotStarted": "No empezado"
+    "statusNotStarted": "No empezado",
+    "guideBullet1": "Mantén los dispositivos en espacios compartidos cuando los niños exploran solos.",
+    "guideBullet2": "Usa auriculares solo cuando haya un adulto cerca y pueda ver la pantalla.",
+    "guideBullet3": "Pide a los niños que “expliquen con sus propias palabras” lo que aprendieron en cada unidad.",
+    "guideBullet4": "Recuerda que pueden pausar, salir y pedir ayuda a un adulto cuando lo necesiten.",
+    "parentHandbookNote": "Pronto se añadirá aquí un PDF descargable como guía para adultos.",
+    "openingCheckout": "Abriendo el pago…",
+    "unlockSafetyButton": "Desbloquear el Pase de Seguridad",
+    "checkoutCanceled": "Pago cancelado. Puedes intentarlo de nuevo cuando quieras.",
+    "checkoutFailed": "No se pudo completar el pago. Inténtalo de nuevo."
   },
   "common": {
     "backToHome": "← Volver al inicio",
@@ -51,7 +61,9 @@
     "redirectNote": "Algunas páginas son solo para adultos registrados. Entra para continuar.",
     "intro": "Este inicio de sesión sencillo recuerda que un adulto ha abierto la Academia SpArki en este dispositivo. No se requiere correo ni contraseña en esta demo.",
     "submitButton": "Entrar e ir al inicio",
-    "coppaNote": "Adultos: entren una vez en este dispositivo para que su familia pueda usar SpArki. Así la experiencia queda aprobada por los padres."
+    "coppaNote": "Adultos: entren una vez en este dispositivo para que su familia pueda usar SpArki. Así la experiencia queda aprobada por los padres.",
+    "startTrialButton": "Inicia la prueba gratis de 30 días (se requiere tarjeta)",
+    "alreadyAccessButton": "Ya tengo acceso en este dispositivo"
   },
   "dashboardPage": {
     "switchView": "Cambiar vista:",
@@ -162,6 +174,7 @@
     "hiSparkles": "Hola {name} · {count} chispas",
     "startAdventure": "Comenzar aventura →",
     "adventure": "AVENTURA",
+    "shopEbooks": "Ver ebooks",
     "tiers": {
       "safety": {
         "title": "Seguridad en Internet",
@@ -178,6 +191,69 @@
         "description": "Convierte las tareas en una búsqueda con historia. El adulto sube; SpArki guía.",
         "imageAlt": "SpArki como tutor de Aventura de Tareas"
       }
+    }
+  },
+  "booksPage": {
+    "title": "Estantería digital de SpArki",
+    "subtitle": "Ebooks y paquetes aptos para familias. Inicia la prueba del Pase de Seguridad para descargar los PDF.",
+    "deliveryNote": "Los PDF se entregan desde Sparki mediante un enlace de descarga protegido. (Los niños nunca acceden directamente: solo los padres que desbloquean el Pase de Seguridad.)",
+    "readEbook": "Leer ebook"
+  },
+  "books": {
+    "ebook-1": {
+      "title": "Mantenerse seguro en Instagram",
+      "blurb": "Aprende cómo mantener perfiles privados, pedirle a un adulto antes de publicar y ser amable en línea."
+    },
+    "ebook-2": {
+      "title": "TikTok: amable y seguro",
+      "blurb": "Practica la privacidad de los videos, bloquear a desconocidos y responder a comentarios groseros con amabilidad."
+    },
+    "ebook-3": {
+      "title": "Snaps, rachas y seguridad",
+      "blurb": "Aprende cómo se pueden guardar los snaps, por qué primero importan los sentimientos y qué hacer si algo no se siente bien."
+    },
+    "ebook-4": {
+      "title": "Jugar de forma segura en Roblox",
+      "blurb": "Explora los límites en el chat del juego, bloquea a desconocidos y aprende reglas seguras para jugar con amigos."
+    },
+    "ebook-5": {
+      "title": "Fortnite y límites para el chat de voz",
+      "blurb": "Practica silenciar, salir y crear reglas amables de seguridad para conversaciones por voz."
+    },
+    "ebook-6": {
+      "title": "Leer con seguridad en Reddit y foros",
+      "blurb": "Aprende que no todo en internet es verdad, cómo usar espacios seguros y cuándo pedir ayuda a un adulto."
+    },
+    "bundle": {
+      "title": "Los 6 ebooks de seguridad + prueba de Aventura de Tareas",
+      "blurb": "Desbloquea el conjunto completo de ebooks y empieza una prueba gratis de 30 días que trae la Aventura de Tareas a la vida. Después de la prueba, cuesta $9.99/mo."
+    }
+  },
+  "ebookViewer": {
+    "readerTitle": "Lector de ebook",
+    "backToShop": "Volver a la tienda",
+    "unlockToReadTitle": "Desbloquea para leer",
+    "buyForButton": "Compra por {price}",
+    "startTrialButton": "Inicia la prueba gratis de 30 días",
+    "bundleUnlockButton": "O desbloquea el paquete por {price} (prueba)",
+    "afterUnlockNote": "Después de desbloquear, el ebook se abrirá en la página 1 automáticamente.",
+    "errors": {
+      "missingEbookId": "Falta el id del ebook.",
+      "startTrial": "Inicia la prueba para acceder a los ebooks.",
+      "unlockRequired": "Necesitas desbloquear los ebooks para leer este PDF.",
+      "couldNotLoad": "No se pudo cargar el ebook. Inténtalo de nuevo.",
+      "couldNotRender": "No se pudo mostrar esta página.",
+      "checkoutFailed": "No se pudo completar el pago. Inténtalo de nuevo."
+    },
+    "toolbar": {
+      "prev": "Anterior",
+      "next": "Siguiente",
+      "pageSolo": "Página {page}",
+      "pageOf": "Página {page} de {numPages}"
+    },
+    "loading": {
+      "loadingEbook": "Cargando ebook…",
+      "renderingPage": "Mostrando página…"
     }
   }
 }

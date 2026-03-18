@@ -137,7 +137,7 @@ function AppFooter() {
         © {new Date().getFullYear()} {t('header.appName')} · {t('footer.copyright')}
       </small>
       <span className="app-footer-links">
-        <Link to="/shop">Shop</Link>
+        <Link to="/shop">{t('footer.shop')}</Link>
         <Link to="/about">{t('footer.about')}</Link>
         <Link to="/privacy">{t('footer.privacy')}</Link>
         <Link to="/contact">{t('footer.contact')}</Link>

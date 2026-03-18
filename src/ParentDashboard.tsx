@@ -12,7 +12,7 @@ export const ParentViewContent: React.FC = () => {
   const { kidLock, setKidLock } = useAuth()
   const hasSafetyPass = getHasSafetyPass()
   const [unlockLoading, setUnlockLoading] = useState(false)
-  const [unlockError, setUnlockError] = useState<string | null>(null)
+  const [unlockErrorKey, setUnlockErrorKey] = useState<string | null>(null)
 
   const checkoutStatus = useMemo(() => {
     if (typeof window === 'undefined') return null
@@ -24,7 +24,7 @@ export const ParentViewContent: React.FC = () => {
 
   useEffect(() => {
     if (checkoutStatus !== 'success') return
-    setUnlockError(null)
+    setUnlockErrorKey(null)
 
     // Capture checkout session id so the server can validate entitlement for downloads.
     try {
@@ -51,7 +51,7 @@ export const ParentViewContent: React.FC = () => {
   }, [checkoutStatus])
 
   async function handleUnlock() {
-    setUnlockError(null)
+    setUnlockErrorKey(null)
     setUnlockLoading(true)
     try {
       const res = await fetch('/api/create-checkout-session', {
@@ -62,18 +62,14 @@ export const ParentViewContent: React.FC = () => {
 
       const data = await res.json().catch(() => ({}))
       if (!res.ok) {
-        const msg =
-          data && typeof data === 'object' && 'error' in data && typeof data.error === 'string'
-            ? data.error
-            : 'Checkout failed'
-        throw new Error(msg)
+        throw new Error('CHECKOUT_FAILED')
       }
       if (!data || typeof data.url !== 'string') {
         throw new Error('Missing checkout URL')
       }
       window.location.assign(data.url)
     } catch (e) {
-      setUnlockError(e instanceof Error ? e.message : 'Checkout failed')
+      setUnlockErrorKey('parentDashboard.checkoutFailed')
     } finally {
       setUnlockLoading(false)
     }
@@ -85,13 +81,13 @@ export const ParentViewContent: React.FC = () => {
           <h3>{t('parentDashboard.parentGuideTitle')}</h3>
           <p>{t('parentDashboard.parentGuideDesc')}</p>
           <ul className="list-disc pl-5 text-sm text-slate-700 space-y-1 mt-2">
-            <li>Keep devices in shared spaces when kids are exploring alone.</li>
-            <li>Use headphones only when a grown-up is nearby and can see the screen.</li>
-            <li>Ask kids to “teach back” what they learned in each unit in their own words.</li>
-            <li>Remind kids that they can always pause, leave, and ask a grown-up for help.</li>
+            <li>{t('parentDashboard.guideBullet1')}</li>
+            <li>{t('parentDashboard.guideBullet2')}</li>
+            <li>{t('parentDashboard.guideBullet3')}</li>
+            <li>{t('parentDashboard.guideBullet4')}</li>
           </ul>
           <p className="login-coppa-note mt-3">
-            A downloadable PDF parent handbook will be added here as soon as it is ready.
+            {t('parentDashboard.parentHandbookNote')}
           </p>
         </div>
 
@@ -109,12 +105,12 @@ export const ParentViewContent: React.FC = () => {
                 onClick={() => void handleUnlock()}
                 disabled={unlockLoading}
               >
-                {unlockLoading ? 'Opening checkout…' : 'Unlock Safety Pass'}
+                {unlockLoading ? t('parentDashboard.openingCheckout') : t('parentDashboard.unlockSafetyButton')}
               </button>
               {checkoutStatus === 'cancel' && (
-                <p className="welcome-subtitle">Checkout canceled. You can try again anytime.</p>
+                <p className="welcome-subtitle">{t('parentDashboard.checkoutCanceled')}</p>
               )}
-              {unlockError && <p className="quiz-error">{unlockError}</p>}
+              {unlockErrorKey && <p className="quiz-error">{t(unlockErrorKey)}</p>}
             </>
           )}
         </div>
