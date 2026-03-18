@@ -9,6 +9,23 @@ const ALLOWED_EBOOK_IDS = new Set([
   'ebook-6',
 ])
 
+async function resolvePriceIdFromEnv(stripe, maybeId) {
+  if (!maybeId || typeof maybeId !== 'string') return null
+  const trimmed = maybeId.trim()
+  if (trimmed.startsWith('price_')) return trimmed
+  if (!trimmed.startsWith('prod_')) return null
+
+  // If we were given a Product ID, resolve to a usable Price ID.
+  // Prefer `default_price`; fall back to first active price.
+  const product = await stripe.products.retrieve(trimmed, { expand: ['default_price'] }).catch(() => null)
+  const defaultPrice = product?.default_price
+  if (typeof defaultPrice === 'string') return defaultPrice
+  if (defaultPrice?.id) return defaultPrice.id
+
+  const prices = await stripe.prices.list({ product: trimmed, active: true, limit: 5 })
+  return prices.data?.[0]?.id ?? null
+}
+
 function getEbookPriceId(ebookId) {
   switch (ebookId) {
     case 'ebook-1':
@@ -45,14 +62,15 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'Invalid ebook id.' })
     }
 
-    const priceId = getEbookPriceId(ebookId)
-    if (!priceId) {
-      return res.status(500).json({ error: `Missing Stripe price id for ${ebookId}` })
-    }
-
     const stripe = new Stripe(stripeSecretKey, {
       apiVersion: '2024-06-20',
     })
+
+    const maybeEnvId = getEbookPriceId(ebookId)
+    const priceId = await resolvePriceIdFromEnv(stripe, maybeEnvId)
+    if (!priceId) {
+      return res.status(500).json({ error: `Missing Stripe price id for ${ebookId}` })
+    }
 
     const origin =
       (req.headers['x-forwarded-proto'] && req.headers['x-forwarded-host'])

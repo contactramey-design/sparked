@@ -21,6 +21,21 @@ const PDF_REL_PATHS_BY_EBOOK_ID = {
   'ebook-5': 'Fortnite Safety Ebook.pdf',
 }
 
+async function resolvePriceIdFromEnv(stripe, maybeId) {
+  if (!maybeId || typeof maybeId !== 'string') return null
+  const trimmed = maybeId.trim()
+  if (trimmed.startsWith('price_')) return trimmed
+  if (!trimmed.startsWith('prod_')) return null
+
+  const product = await stripe.products.retrieve(trimmed, { expand: ['default_price'] }).catch(() => null)
+  const defaultPrice = product?.default_price
+  if (typeof defaultPrice === 'string') return defaultPrice
+  if (defaultPrice?.id) return defaultPrice.id
+
+  const prices = await stripe.prices.list({ product: trimmed, active: true, limit: 5 })
+  return prices.data?.[0]?.id ?? null
+}
+
 export default async function handler(req, res) {
   try {
     if (req.method !== 'GET') {
@@ -61,8 +76,8 @@ export default async function handler(req, res) {
     }
 
     const stripeSecretKey = process.env.STRIPE_SECRET_KEY
-    const safetyPassPriceId = process.env.STRIPE_SAFETY_PASS_PRICE_ID
-    if (!stripeSecretKey || !safetyPassPriceId) {
+    const safetyPassPriceOrProductId = process.env.STRIPE_SAFETY_PASS_PRICE_ID
+    if (!stripeSecretKey || !safetyPassPriceOrProductId) {
       res.status(500).json({ error: 'Server not configured for downloads.' })
       return
     }
@@ -96,9 +111,17 @@ export default async function handler(req, res) {
 
       const subscription = await stripe.subscriptions.retrieve(subscriptionId)
       const status = subscription?.status
+
+      const subscriptionPriceId = subscription?.items?.data?.[0]?.price?.id ?? null
+      const expectedPriceIdFromCheckoutMeta = (session?.metadata?.stripePriceId || '').toString().trim()
+
+      let expectedPriceId = expectedPriceIdFromCheckoutMeta || null
+      if (!expectedPriceId) {
+        expectedPriceId = await resolvePriceIdFromEnv(stripe, safetyPassPriceOrProductId)
+      }
+
       const isEntitled =
-        (status === 'active' || status === 'trialing') &&
-        subscription?.items?.data?.[0]?.price?.id === safetyPassPriceId
+        (status === 'active' || status === 'trialing') && subscriptionPriceId && expectedPriceId && subscriptionPriceId === expectedPriceId
 
       if (!isEntitled) {
         res.status(403).json({ error: 'Not entitled to download.' })
