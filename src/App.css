@@ -610,6 +610,26 @@ h1, h2, h3 {
   flex-wrap: wrap;
 }
 
+.ebook-canvas-flip {
+  animation: ebook-page-flip 520ms ease-in-out both;
+  transform-origin: left center;
+}
+
+@keyframes ebook-page-flip {
+  0% {
+    transform: perspective(1200px) rotateY(0deg);
+    filter: brightness(1);
+  }
+  45% {
+    transform: perspective(1200px) rotateY(-55deg);
+    filter: brightness(1.04);
+  }
+  100% {
+    transform: perspective(1200px) rotateY(0deg);
+    filter: brightness(1);
+  }
+}
+
 .ebook-page-label {
   font-weight: 700;
   color: #1e40af;

@@ -114,7 +114,14 @@ const EbookViewerPage: React.FC = () => {
     if (!doc || !canvas || !container) return
 
     const token = ++renderTokenRef.current
+    // Page-turn-ish animation whenever we render a new page.
+    // (We only use CSS animation; PDF.js still renders to the same canvas.)
+    canvas.classList.remove('ebook-canvas-flip')
     setRendering(true)
+    // Force reflow so the animation restarts reliably.
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+    canvas.offsetHeight
+    canvas.classList.add('ebook-canvas-flip')
 
     try {
       const page = await doc.getPage(n)
@@ -281,9 +288,6 @@ const EbookViewerPage: React.FC = () => {
       </div>
 
       <div className="ebook-toolbar">
-        <button type="button" className="secondary-button" onClick={handlePrev} disabled={!canPrev}>
-          {t('ebookViewer.toolbar.prev')}
-        </button>
         <span className="ebook-page-label">
           {numPages
             ? t('ebookViewer.toolbar.pageOf', { page: pageNumber, numPages })
