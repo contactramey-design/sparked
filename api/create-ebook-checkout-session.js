@@ -1,5 +1,33 @@
 import Stripe from 'stripe'
 
+const ALLOWED_EBOOK_IDS = new Set([
+  'ebook-1',
+  'ebook-2',
+  'ebook-3',
+  'ebook-4',
+  'ebook-5',
+  'ebook-6',
+])
+
+function getEbookPriceId(ebookId) {
+  switch (ebookId) {
+    case 'ebook-1':
+      return process.env.STRIPE_EBOOK_1_PRICE_ID
+    case 'ebook-2':
+      return process.env.STRIPE_EBOOK_2_PRICE_ID
+    case 'ebook-3':
+      return process.env.STRIPE_EBOOK_3_PRICE_ID
+    case 'ebook-4':
+      return process.env.STRIPE_EBOOK_4_PRICE_ID
+    case 'ebook-5':
+      return process.env.STRIPE_EBOOK_5_PRICE_ID
+    case 'ebook-6':
+      return process.env.STRIPE_EBOOK_6_PRICE_ID
+    default:
+      return null
+  }
+}
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     res.setHeader('Allow', 'POST')
@@ -8,15 +36,18 @@ export default async function handler(req, res) {
 
   try {
     const stripeSecretKey = process.env.STRIPE_SECRET_KEY
-    const priceId = process.env.STRIPE_SAFETY_PASS_PRICE_ID
-    const successUrlEnv = process.env.STRIPE_CHECKOUT_SUCCESS_URL
-    const cancelUrlEnv = process.env.STRIPE_CHECKOUT_CANCEL_URL
-
     if (!stripeSecretKey) {
       return res.status(500).json({ error: 'Missing STRIPE_SECRET_KEY' })
     }
+
+    const ebookId = typeof req?.body?.ebookId === 'string' ? req.body.ebookId.trim() : ''
+    if (!ebookId || !ALLOWED_EBOOK_IDS.has(ebookId)) {
+      return res.status(400).json({ error: 'Invalid ebook id.' })
+    }
+
+    const priceId = getEbookPriceId(ebookId)
     if (!priceId) {
-      return res.status(500).json({ error: 'Missing STRIPE_SAFETY_PASS_PRICE_ID' })
+      return res.status(500).json({ error: `Missing Stripe price id for ${ebookId}` })
     }
 
     const stripe = new Stripe(stripeSecretKey, {
@@ -28,8 +59,11 @@ export default async function handler(req, res) {
         ? `${req.headers['x-forwarded-proto']}://${req.headers['x-forwarded-host']}`
         : req.headers.origin
 
-    const body = req?.body && typeof req.body === 'object' ? req.body : {}
-    const requestedReturnTo = typeof body?.returnTo === 'string' ? body.returnTo : null
+    const successUrlEnv = process.env.STRIPE_CHECKOUT_SUCCESS_URL
+    const cancelUrlEnv = process.env.STRIPE_CHECKOUT_CANCEL_URL
+
+    const requestedReturnTo =
+      typeof req?.body?.returnTo === 'string' ? req.body.returnTo : null
     const safeReturnTo =
       requestedReturnTo && requestedReturnTo.startsWith('/ebook/')
         ? requestedReturnTo
@@ -37,30 +71,32 @@ export default async function handler(req, res) {
 
     let success_url =
       successUrlEnv || `${origin || ''}/?view=parent&checkout=success`
-    // Let the frontend store checkout session id and use it to validate entitlement for downloads.
     if (!success_url.includes('checkout_session_id=')) {
       success_url += `${success_url.includes('?') ? '&' : '?'}checkout_session_id={CHECKOUT_SESSION_ID}`
     }
     if (!success_url.includes('entitlement_type=')) {
-      success_url += `${success_url.includes('?') ? '&' : '?'}entitlement_type=bundle`
+      success_url += `${success_url.includes('?') ? '&' : '?'}entitlement_type=ebook`
     }
     if (safeReturnTo && !success_url.includes('returnTo=')) {
       success_url += `${success_url.includes('?') ? '&' : '?'}returnTo=${encodeURIComponent(safeReturnTo)}`
     }
+    if (!success_url.includes('ebook_id=')) {
+      success_url += `${success_url.includes('?') ? '&' : '?'}ebook_id=${encodeURIComponent(ebookId)}`
+    }
+
     const cancel_url =
-      cancelUrlEnv || `${origin || ''}/?view=parent&checkout=cancel&entitlement_type=bundle`
+      cancelUrlEnv || `${origin || ''}/?view=parent&checkout=cancel&entitlement_type=ebook`
 
     const session = await stripe.checkout.sessions.create({
-      mode: 'subscription',
+      mode: 'payment',
       line_items: [{ price: priceId, quantity: 1 }],
-      subscription_data: {
-        trial_period_days: 30,
-      },
       allow_promotion_codes: true,
       success_url,
       cancel_url,
       metadata: {
-        entitlement_type: 'bundle',
+        entitlement_type: 'ebook',
+        ebookId,
+        // Helpful for debugging; not required for entitlement checks because we compare ebookId.
         stripePriceId: priceId,
       },
     })

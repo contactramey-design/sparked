@@ -24,18 +24,21 @@ export const ParentViewContent: React.FC = () => {
 
   useEffect(() => {
     if (checkoutStatus !== 'success') return
-    setHasSafetyPass(true)
     setUnlockError(null)
 
     // Capture checkout session id so the server can validate entitlement for downloads.
     try {
       const url = new URL(window.location.href)
       const sessionId = url.searchParams.get('checkout_session_id')
+      const entitlementType = url.searchParams.get('entitlement_type')
       const returnTo = url.searchParams.get('returnTo')
       setSafetyPassCheckoutSessionId(sessionId)
+      setHasSafetyPass(entitlementType === 'bundle')
 
       url.searchParams.delete('checkout')
       url.searchParams.delete('checkout_session_id')
+      url.searchParams.delete('entitlement_type')
+      url.searchParams.delete('ebook_id')
       url.searchParams.delete('returnTo')
       window.history.replaceState({}, '', url.toString())
 

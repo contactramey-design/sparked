@@ -205,8 +205,40 @@ const EbookViewerPage: React.FC = () => {
         <div className="lesson-media card" role="alert" aria-live="polite">
           <h3 style={{ marginTop: 0 }}>Unlock to read</h3>
           <p>{entitlementError}</p>
-          <button type="button" className="primary-button" onClick={() => void startTrial()}>
-            Start 30-day free trial
+          {ebook && ebook.id !== 'bundle' ? (
+            <button
+              type="button"
+              className="primary-button"
+              onClick={async () => {
+                setEntitlementError(null)
+                setLoadingPdf(true)
+                try {
+                  const res = await fetch('/api/create-ebook-checkout-session', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ ebookId: ebook.id, returnTo: `/ebook/${ebook.id}` }),
+                  })
+                  const data = await res.json().catch(() => ({}))
+                  if (!res.ok || typeof data?.url !== 'string') {
+                    throw new Error(typeof data?.error === 'string' ? data.error : 'Checkout failed.')
+                  }
+                  window.location.assign(data.url)
+                } catch (e) {
+                  setEntitlementError(e instanceof Error ? e.message : 'Checkout failed.')
+                  setLoadingPdf(false)
+                }
+              }}
+            >
+              Buy for {ebook.price}
+            </button>
+          ) : (
+            <button type="button" className="primary-button" onClick={() => void startTrial()}>
+              Start 30-day free trial
+            </button>
+          )}
+
+          <button type="button" className="secondary-button mt-3" onClick={() => void startTrial()}>
+            Or unlock the bundle for $9.99/mo (trial)
           </button>
           <p className="login-coppa-note" style={{ marginTop: '0.75rem' }}>
             After you unlock, the ebook will open on page 1 automatically.

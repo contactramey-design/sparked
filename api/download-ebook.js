@@ -42,22 +42,36 @@ export default async function handler(req, res) {
 
     const stripe = new Stripe(stripeSecretKey, { apiVersion: '2024-06-20' })
     const session = await stripe.checkout.sessions.retrieve(checkoutSessionId)
-    const subscriptionId = session?.subscription
-    if (!subscriptionId) {
-      res.status(403).json({ error: 'Subscription not found for this checkout.' })
-      return
-    }
+    const entitlementType = session?.metadata?.entitlement_type
 
-    const subscription = await stripe.subscriptions.retrieve(subscriptionId)
-    const status = subscription?.status
+    if (entitlementType === 'ebook') {
+      if (session?.payment_status !== 'paid') {
+        res.status(403).json({ error: 'Not entitled to download.' })
+        return
+      }
+      const sessionEbookId = (session?.metadata?.ebookId || '').toString().trim()
+      if (!sessionEbookId || sessionEbookId !== ebookId) {
+        res.status(403).json({ error: 'Not entitled to download.' })
+        return
+      }
+    } else {
+      // Default: bundle subscription entitlement.
+      const subscriptionId = session?.subscription
+      if (!subscriptionId) {
+        res.status(403).json({ error: 'Not entitled to download.' })
+        return
+      }
 
-    const isEntitled =
-      (status === 'active' || status === 'trialing') &&
-      subscription?.items?.data?.[0]?.price?.id === safetyPassPriceId
+      const subscription = await stripe.subscriptions.retrieve(subscriptionId)
+      const status = subscription?.status
+      const isEntitled =
+        (status === 'active' || status === 'trialing') &&
+        subscription?.items?.data?.[0]?.price?.id === safetyPassPriceId
 
-    if (!isEntitled) {
-      res.status(403).json({ error: 'Not entitled to download.' })
-      return
+      if (!isEntitled) {
+        res.status(403).json({ error: 'Not entitled to download.' })
+        return
+      }
     }
 
     // PDFs live outside `public/` so they can only be accessed via this protected endpoint.
