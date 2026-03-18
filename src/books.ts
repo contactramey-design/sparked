@@ -3,7 +3,7 @@ export interface BookConfig {
   titleKey: string
   blurbKey: string
   price: string
-  storeLabel: string
+  storeLabelKey: string
   url: string
   coverSrc: string
 }
@@ -20,7 +20,7 @@ export const books: BookConfig[] = [
     titleKey: 'books.ebook-1.title',
     blurbKey: 'books.ebook-1.blurb',
     price: '$4.99',
-    storeLabel: 'Amazon KDP',
+    storeLabelKey: 'books.ebook-1.storeLabel',
     url: 'https://example.com/ebook-1',
     coverSrc: '/bookcase/ebook-1.png',
   },
@@ -29,7 +29,7 @@ export const books: BookConfig[] = [
     titleKey: 'books.ebook-2.title',
     blurbKey: 'books.ebook-2.blurb',
     price: '$4.99',
-    storeLabel: 'Amazon KDP',
+    storeLabelKey: 'books.ebook-2.storeLabel',
     url: 'https://example.com/ebook-2',
     coverSrc: '/bookcase/ebook-2.png',
   },
@@ -38,7 +38,7 @@ export const books: BookConfig[] = [
     titleKey: 'books.ebook-3.title',
     blurbKey: 'books.ebook-3.blurb',
     price: '$4.99',
-    storeLabel: 'Amazon KDP',
+    storeLabelKey: 'books.ebook-3.storeLabel',
     url: 'https://example.com/ebook-3',
     coverSrc: '/bookcase/ebook-3.png',
   },
@@ -47,7 +47,7 @@ export const books: BookConfig[] = [
     titleKey: 'books.ebook-4.title',
     blurbKey: 'books.ebook-4.blurb',
     price: '$4.99',
-    storeLabel: 'Amazon KDP',
+    storeLabelKey: 'books.ebook-4.storeLabel',
     url: 'https://example.com/ebook-4',
     coverSrc: '/bookcase/ebook-4.png',
   },
@@ -56,7 +56,7 @@ export const books: BookConfig[] = [
     titleKey: 'books.ebook-5.title',
     blurbKey: 'books.ebook-5.blurb',
     price: '$4.99',
-    storeLabel: 'Amazon KDP',
+    storeLabelKey: 'books.ebook-5.storeLabel',
     url: 'https://example.com/ebook-5',
     coverSrc: '/bookcase/ebook-5.png',
   },
@@ -65,7 +65,7 @@ export const books: BookConfig[] = [
     titleKey: 'books.ebook-6.title',
     blurbKey: 'books.ebook-6.blurb',
     price: '$4.99',
-    storeLabel: 'Amazon KDP',
+    storeLabelKey: 'books.ebook-6.storeLabel',
     url: 'https://example.com/ebook-6',
     coverSrc: '/bookcase/ebook-6.png',
   },
@@ -74,7 +74,7 @@ export const books: BookConfig[] = [
     titleKey: 'books.bundle.title',
     blurbKey: 'books.bundle.blurb',
     price: '$9.99/mo',
-    storeLabel: 'TikTok Shop / Amazon Bundle',
+    storeLabelKey: 'books.bundle.storeLabel',
     url: 'https://example.com/bundle',
     coverSrc: '/bookcase/bundle.png',
   },

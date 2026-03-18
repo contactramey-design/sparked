@@ -202,31 +202,38 @@
   "books": {
     "ebook-1": {
       "title": "Mantenerse seguro en Instagram",
-      "blurb": "Aprende cómo mantener perfiles privados, pedirle a un adulto antes de publicar y ser amable en línea."
+      "blurb": "Aprende cómo mantener perfiles privados, pedirle a un adulto antes de publicar y ser amable en línea.",
+      "storeLabel": "Amazon KDP"
     },
     "ebook-2": {
       "title": "TikTok: amable y seguro",
-      "blurb": "Practica la privacidad de los videos, bloquear a desconocidos y responder a comentarios groseros con amabilidad."
+      "blurb": "Practica la privacidad de los videos, bloquear a desconocidos y responder a comentarios groseros con amabilidad.",
+      "storeLabel": "Amazon KDP"
     },
     "ebook-3": {
       "title": "Snaps, rachas y seguridad",
-      "blurb": "Aprende cómo se pueden guardar los snaps, por qué primero importan los sentimientos y qué hacer si algo no se siente bien."
+      "blurb": "Aprende cómo se pueden guardar los snaps, por qué primero importan los sentimientos y qué hacer si algo no se siente bien.",
+      "storeLabel": "Amazon KDP"
     },
     "ebook-4": {
       "title": "Jugar de forma segura en Roblox",
-      "blurb": "Explora los límites en el chat del juego, bloquea a desconocidos y aprende reglas seguras para jugar con amigos."
+      "blurb": "Explora los límites en el chat del juego, bloquea a desconocidos y aprende reglas seguras para jugar con amigos.",
+      "storeLabel": "Amazon KDP"
     },
     "ebook-5": {
       "title": "Fortnite y límites para el chat de voz",
-      "blurb": "Practica silenciar, salir y crear reglas amables de seguridad para conversaciones por voz."
+      "blurb": "Practica silenciar, salir y crear reglas amables de seguridad para conversaciones por voz.",
+      "storeLabel": "Amazon KDP"
     },
     "ebook-6": {
       "title": "Leer con seguridad en Reddit y foros",
-      "blurb": "Aprende que no todo en internet es verdad, cómo usar espacios seguros y cuándo pedir ayuda a un adulto."
+      "blurb": "Aprende que no todo en internet es verdad, cómo usar espacios seguros y cuándo pedir ayuda a un adulto.",
+      "storeLabel": "Amazon KDP"
     },
     "bundle": {
       "title": "Los 6 ebooks de seguridad + prueba de Aventura de Tareas",
-      "blurb": "Desbloquea el conjunto completo de ebooks y empieza una prueba gratis de 30 días que trae la Aventura de Tareas a la vida. Después de la prueba, cuesta $9.99/mo."
+      "blurb": "Desbloquea el conjunto completo de ebooks y empieza una prueba gratis de 30 días que trae la Aventura de Tareas a la vida. Después de la prueba, cuesta $9.99/mo.",
+      "storeLabel": "Paquete TikTok Shop / Amazon"
     }
   },
   "ebookViewer": {

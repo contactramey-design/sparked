@@ -34,7 +34,7 @@ const BooksPage: React.FC = () => {
             <h3 className="book-title">{t(book.titleKey)}</h3>
             <p className="book-blurb">{t(book.blurbKey)}</p>
             <p className="book-meta">
-              <strong>{book.price}</strong> · {book.storeLabel}
+              <strong>{book.price}</strong> · {t(book.storeLabelKey)}
             </p>
             <div className="book-actions">
               <a href={`/ebook/${encodeURIComponent(book.id)}`} className="primary-button">
