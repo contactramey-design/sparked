@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import { books } from './books'
 import { useTranslation } from './contexts/LocaleContext'
 
@@ -37,9 +38,9 @@ const BooksPage: React.FC = () => {
               <strong>{book.price}</strong> · {t(book.storeLabelKey)}
             </p>
             <div className="book-actions">
-              <a href={`/ebook/${encodeURIComponent(book.id)}`} className="primary-button">
+              <Link to={`/ebook/${encodeURIComponent(book.id)}`} className="primary-button">
                 {t('booksPage.readEbook')}
-              </a>
+              </Link>
             </div>
           </article>
         ))}
