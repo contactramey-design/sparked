@@ -53,6 +53,14 @@
     "weeklyTrackTitle": "Ruta semanal",
     "weeklyTrackDesc": "Tu profe generó unidades para esta semana. Abre la ruta para empezar.",
     "openWeeklyTrack": "Abrir la ruta semanal",
+    "weeklyTrackUnitsTitle": "Unidades",
+    "weeklyTrackBackToSchools": "Volver a Escuelas",
+    "weeklyTrackLoading": "Cargando…",
+    "weeklyTrackNoActive": "Todavía no hay una ruta semanal generada activa.",
+    "weeklyTrackWaiting": "Tu profesor generará una ruta semanal.",
+    "weeklyTrackOpenUnit": "Abrir unidad",
+    "weeklyTrackMastered": "Dominado",
+    "weeklyTrackNotStarted": "No empezado",
     "complianceTitle": "Cumplimiento y privacidad",
     "complianceDesc": "Resumen de COPPA / FERPA / CIPA y notas para escuelas.",
     "openCompliance": "Abrir página de cumplimiento"
@@ -120,6 +128,7 @@
     "tableStudent": "Código del estudiante",
     "tableSafety": "Seguridad en Internet",
     "tableAi": "IA y programación",
+    "tableHomework": "Aventuras de tarea",
     "tableOverall": "Total",
     "noStudents": "Aún no hay progreso. Los estudiantes aparecerán cuando sincronicen desde sus dispositivos.",
     "schemaNote": "Si ves errores de base de datos, crea las tablas/políticas escolares en Supabase (ver el archivo SQL incluido en el repo)."

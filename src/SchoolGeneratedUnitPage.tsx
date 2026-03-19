@@ -138,6 +138,7 @@ const SchoolGeneratedUnitPage: React.FC = () => {
           setUnitJson(cached)
           const quizLen = cached.quizQuestions?.length ?? 0
           setSelected(Array(quizLen).fill(-1))
+          // Offline mastery: fall back to local progress.
           const justExisting = !!getUnitStatus(unitIdSafe)?.mastered
           setMastered(justExisting)
           setWasAlreadyMastered(justExisting)
@@ -178,7 +179,20 @@ const SchoolGeneratedUnitPage: React.FC = () => {
         const quizLen = row.unit_json.quizQuestions?.length ?? 0
         setSelected(Array(quizLen).fill(-1))
 
-        const justExisting = !!getUnitStatus(unitIdSafe)?.mastered
+        // Mastery: read from Supabase so it works across devices/after refresh.
+        const { data: progressRow, error: progressErr } = await supabase
+          .from('school_student_progress')
+          .select('progress')
+          .eq('class_id', classId)
+          .eq('student_uid', uid)
+          .single()
+
+        const masteredFromSupabase =
+          !progressErr && progressRow?.progress && typeof progressRow.progress === 'object'
+            ? !!(progressRow.progress as any)?.units?.[unitIdSafe]?.mastered
+            : false
+
+        const justExisting = masteredFromSupabase || !!getUnitStatus(unitIdSafe)?.mastered
         setMastered(justExisting)
         setWasAlreadyMastered(justExisting)
       } catch (e: any) {

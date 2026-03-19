@@ -53,6 +53,14 @@
     "weeklyTrackTitle": "Weekly Track",
     "weeklyTrackDesc": "Your teacher generated units for this week. Open the track to start.",
     "openWeeklyTrack": "Open weekly track",
+    "weeklyTrackUnitsTitle": "Units",
+    "weeklyTrackBackToSchools": "Back to Schools",
+    "weeklyTrackLoading": "Loading…",
+    "weeklyTrackNoActive": "No active generated weekly track right now.",
+    "weeklyTrackWaiting": "Your teacher will generate a weekly track.",
+    "weeklyTrackOpenUnit": "Open unit",
+    "weeklyTrackMastered": "Mastered",
+    "weeklyTrackNotStarted": "Not started",
     "complianceTitle": "Compliance & privacy",
     "complianceDesc": "COPPA / FERPA / CIPA overview and school-use notes.",
     "openCompliance": "Open compliance page"
@@ -120,6 +128,7 @@
     "tableStudent": "Student code",
     "tableSafety": "Internet Safety",
     "tableAi": "AI & Coding",
+    "tableHomework": "Homework Adventures",
     "tableOverall": "Overall",
     "noStudents": "No student progress yet. Students will appear after they sync from their devices.",
     "schemaNote": "If you see database errors, create the school tables/policies in Supabase (see the included SQL file in the repo)."

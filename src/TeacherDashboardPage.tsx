@@ -100,6 +100,7 @@ const TeacherDashboardPage: React.FC = () => {
   const [newClassName, setNewClassName] = useState('')
 
   const [students, setStudents] = useState<StudentProgressRow[]>([])
+  const [homeworkGeneratedUnitIds, setHomeworkGeneratedUnitIds] = useState<string[]>([])
 
   const canUseSupabase = !!supabase
 
@@ -173,6 +174,51 @@ const TeacherDashboardPage: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [teacherOk, selectedClassId])
 
+  // Load the latest generated weekly units for this class so we can compute
+  // Homework Adventures progress from generated-unit quiz mastery.
+  useEffect(() => {
+    if (!teacherOk) return
+    if (!selectedClassId) return
+    if (!supabase) return
+
+    let cancelled = false
+    void (async () => {
+      try {
+        const nowIso = new Date().toISOString()
+        const { data: genRow, error: genErr } = await supabase
+          .from('school_weekly_generators')
+          .select('id')
+          .eq('class_id', selectedClassId)
+          .gt('expires_at', nowIso)
+          .order('created_at', { ascending: false })
+          .limit(1)
+          .single()
+
+        if (genErr) throw genErr
+        if (!genRow?.id || cancelled) {
+          setHomeworkGeneratedUnitIds([])
+          return
+        }
+
+        const { data: unitRows, error: unitErr } = await supabase
+          .from('school_weekly_generator_units')
+          .select('unit_id')
+          .eq('generator_id', genRow.id)
+          .order('created_at', { ascending: true })
+
+        if (unitErr) throw unitErr
+        if (cancelled) return
+        setHomeworkGeneratedUnitIds((unitRows ?? []).map((r) => r.unit_id).filter(Boolean))
+      } catch {
+        if (!cancelled) setHomeworkGeneratedUnitIds([])
+      }
+    })()
+
+    return () => {
+      cancelled = true
+    }
+  }, [teacherOk, selectedClassId])
+
   const selectedClass = classes.find((c) => c.id === selectedClassId) ?? null
 
   const aggregated = useMemo(() => {
@@ -191,9 +237,21 @@ const TeacherDashboardPage: React.FC = () => {
             students.reduce((sum, s) => sum + computeTrackCompletion(courseTrackIds.aiCoding, s.progress), 0) /
               totalStudents,
           )
-    const overallAvg = Math.round((safetyAvg + aiAvg) / 2)
-    return { totalStudents, safetyAvg, aiAvg, overallAvg }
-  }, [courseTrackIds.aiCoding, courseTrackIds.internetSafety, students])
+
+    const homeworkAvg =
+      totalStudents === 0 || homeworkGeneratedUnitIds.length === 0
+        ? 0
+        : Math.round(
+            students.reduce((sum, s) => {
+              const p = safeProgressObject(s.progress)
+              const masteredCount = homeworkGeneratedUnitIds.filter((id) => p.units?.[id]?.mastered).length
+              return sum + percent(masteredCount, homeworkGeneratedUnitIds.length)
+            }, 0) / totalStudents,
+          )
+
+    const overallAvg = Math.round((safetyAvg + aiAvg + homeworkAvg) / 3)
+    return { totalStudents, safetyAvg, aiAvg, homeworkAvg, overallAvg }
+  }, [courseTrackIds.aiCoding, courseTrackIds.internetSafety, homeworkGeneratedUnitIds, students])
 
   if (!canUseSupabase) {
     return (
@@ -237,7 +295,7 @@ const TeacherDashboardPage: React.FC = () => {
             <div className="stack-lg">
               <div className="muted">{t('teacherDashboard.subtitle')}</div>
               {!!error && <div className="muted">{error}</div>}
-              <div className="stack-lg">
+                  <div className="stack-lg">
                 <div>
                   <div className="muted">{t('teacherDashboard.classCompletion')}</div>
                   <Progress value={aggregated.overallAvg} />
@@ -386,12 +444,22 @@ const TeacherDashboardPage: React.FC = () => {
                         const rows = students.map((s) => {
                           const safety = computeTrackCompletion(courseTrackIds.internetSafety, s.progress)
                           const ai = computeTrackCompletion(courseTrackIds.aiCoding, s.progress)
-                          const overall = Math.round((safety + ai) / 2)
+                          const homeworkPercent =
+                            homeworkGeneratedUnitIds.length === 0
+                              ? 0
+                              : (() => {
+                                  const p = safeProgressObject(s.progress)
+                                  const masteredCount = homeworkGeneratedUnitIds.filter((id) => p.units?.[id]?.mastered).length
+                                  return percent(masteredCount, homeworkGeneratedUnitIds.length)
+                                })()
+
+                          const overall = Math.round((safety + ai + homeworkPercent) / 3)
                           return {
                             class_code: selectedClass?.class_code ?? '',
                             student_code: s.student_code,
                             internet_safety_percent: safety,
                             ai_coding_percent: ai,
+                            homework_percent: homeworkPercent,
                             overall_percent: overall,
                             updated_at: s.updated_at,
                           }
@@ -410,6 +478,7 @@ const TeacherDashboardPage: React.FC = () => {
                         <TableHead>{t('teacherDashboard.tableStudent')}</TableHead>
                         <TableHead>{t('teacherDashboard.tableSafety')}</TableHead>
                         <TableHead>{t('teacherDashboard.tableAi')}</TableHead>
+                        <TableHead>{t('teacherDashboard.tableHomework')}</TableHead>
                         <TableHead>{t('teacherDashboard.tableOverall')}</TableHead>
                       </TableRow>
                     </TableHeader>
@@ -417,7 +486,15 @@ const TeacherDashboardPage: React.FC = () => {
                       {students.map((s) => {
                         const safety = computeTrackCompletion(courseTrackIds.internetSafety, s.progress)
                         const ai = computeTrackCompletion(courseTrackIds.aiCoding, s.progress)
-                        const overall = Math.round((safety + ai) / 2)
+                        const homeworkPercent =
+                          homeworkGeneratedUnitIds.length === 0
+                            ? 0
+                            : (() => {
+                                const p = safeProgressObject(s.progress)
+                                const masteredCount = homeworkGeneratedUnitIds.filter((id) => p.units?.[id]?.mastered).length
+                                return percent(masteredCount, homeworkGeneratedUnitIds.length)
+                              })()
+                        const overall = Math.round((safety + ai + homeworkPercent) / 3)
                         return (
                           <TableRow key={s.id}>
                             <TableCell>
@@ -436,6 +513,12 @@ const TeacherDashboardPage: React.FC = () => {
                               <Progress value={ai} />
                               <div className="muted" style={{ fontSize: 12 }}>
                                 {ai}%
+                              </div>
+                            </TableCell>
+                            <TableCell>
+                              <Progress value={homeworkPercent} />
+                              <div className="muted" style={{ fontSize: 12 }}>
+                                {homeworkPercent}%
                               </div>
                             </TableCell>
                             <TableCell>
