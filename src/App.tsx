@@ -26,11 +26,14 @@ import AboutPage from './AboutPage'
 import ContactPage from './ContactPage'
 import CompliancePage from './CompliancePage'
 import TeacherDashboardPage from './TeacherDashboardPage'
+import TeacherWeeklyGeneratorPage from './TeacherWeeklyGeneratorPage.tsx'
 import SchoolsPage from './SchoolsPage'
 import SparkiAvatar from './components/SparkiAvatar'
 import InstallOnIpadBanner from './components/InstallOnIpadBanner'
 import OfflineBanner from './components/OfflineBanner'
 import { useSchoolMode } from './hooks/useSchoolMode'
+import SchoolWeeklyTrackPage from './SchoolWeeklyTrackPage.tsx'
+import SchoolGeneratedUnitPage from './SchoolGeneratedUnitPage.tsx'
 import './App.css'
 
 function SkipToMainLabel() {
@@ -239,7 +242,10 @@ function AppShell() {
           <Route path="/privacy" element={<PrivacyPage />} />
           <Route path="/compliance" element={<CompliancePage />} />
           <Route path="/schools" element={<SchoolsPage />} />
+          <Route path="/schools/weekly-track" element={<SchoolWeeklyTrackPage />} />
+          <Route path="/schools/unit/:unitId" element={<SchoolGeneratedUnitPage />} />
           <Route path="/teacher/dashboard" element={<TeacherDashboardPage />} />
+          <Route path="/teacher/generator" element={<TeacherWeeklyGeneratorPage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="*" element={<Navigate to="/" replace />} />

@@ -8,6 +8,9 @@
   "functions": {
     "api/generate-adventure-video.js": {
       "maxDuration": 300
+    },
+    "api/schools/generate-weekly-units.js": {
+      "maxDuration": 300
     }
   }
 }
