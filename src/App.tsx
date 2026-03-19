@@ -60,7 +60,6 @@ function AppHeader() {
       <header className="app-header">
         <div className="logo-placeholder flex items-center gap-2" aria-hidden>
           <SparkiAvatar size="sm" />
-          <span>SpArki</span>
         </div>
         <div className="app-titles">
           <h1>{t('header.appName')}</h1>
@@ -104,7 +103,6 @@ function AppHeader() {
     <header className="app-header">
       <Link to="/" className="logo-placeholder flex items-center gap-2" aria-label="SpArki home">
         <SparkiAvatar size="sm" />
-        <span>SpArki</span>
       </Link>
       <div className="app-titles">
         <h1>{t('header.appName')}</h1>
