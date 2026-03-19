@@ -19,6 +19,11 @@ export const ParentViewContent: React.FC = () => {
     const params = new URLSearchParams(window.location.search)
     const v = params.get('checkout')
     if (v === 'success' || v === 'cancel') return v
+    // Robust fallback: some Stripe env configs may omit `checkout=success`
+    // but still include `checkout_session_id` + `entitlement_type` params.
+    const checkoutSessionId = params.get('checkout_session_id')
+    const entitlementType = params.get('entitlement_type')
+    if (checkoutSessionId && entitlementType) return 'success'
     return null
   }, [])
 
