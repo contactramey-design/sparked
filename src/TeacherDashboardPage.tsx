@@ -304,6 +304,16 @@ const TeacherDashboardPage: React.FC = () => {
                   </div>
                 </div>
               </div>
+
+              <div className="schools-actions" style={{ justifyContent: 'flex-start' }}>
+                <Button
+                  onClick={() => {
+                    navigate('/teacher/generator')
+                  }}
+                >
+                  {t('teacherDashboard.generateWeeklyTrack')}
+                </Button>
+              </div>
             </div>
           </CardContent>
         </Card>

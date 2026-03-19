@@ -105,6 +105,7 @@
     "tabsClasses": "Clases",
     "tabsStudents": "Estudiantes",
     "tabsHomePackets": "Paquetes",
+    "generateWeeklyTrack": "Generar ruta semanal",
     "homePacketsTitle": "Paquetes para casa (Licencia)",
     "homePacketsDesc": "Las escuelas pueden subir paquetes opcionales (PDF) para continuar el aprendizaje en casa. Los estudiantes acceden con unirse a clase de forma anónima (sin nombres).",
     "homePacketsSetup": "Configuración: ejecuta supabase/licensing_curriculum_uploads.sql y crea un bucket privado llamado \"school-home-packets\". (La subida en la UI viene después.)",

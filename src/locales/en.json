@@ -105,6 +105,7 @@
     "tabsClasses": "Classes",
     "tabsStudents": "Students",
     "tabsHomePackets": "Home packets",
+    "generateWeeklyTrack": "Generate weekly track",
     "homePacketsTitle": "At-home curriculum packets (Licensing)",
     "homePacketsDesc": "Schools can upload optional at-home packets (PDFs) so learning continues at home. Students access them using anonymous class join (no names).",
     "homePacketsSetup": "Setup: run supabase/licensing_curriculum_uploads.sql and create a private Storage bucket named \"school-home-packets\". (UI upload comes next.)",

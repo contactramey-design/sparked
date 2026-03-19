@@ -439,10 +439,17 @@ export default async function handler(req, res) {
     }
 
     // Upload PDF (RLS via storage.objects policies).
-    await supabase.storage.from(pdfStorageBucket).upload(pdfStoragePath, pdfBuffer, {
-      contentType: 'application/pdf',
-      upsert: true,
-    })
+    // This should be non-fatal for the MVP: even if Storage policies/bucket aren't fully set up
+    // yet, the generator tables (weekly label + units) are what students consume.
+    try {
+      await supabase.storage.from(pdfStorageBucket).upload(pdfStoragePath, pdfBuffer, {
+        contentType: 'application/pdf',
+        upsert: true,
+      })
+    } catch (e) {
+      // eslint-disable-next-line no-console
+      console.warn('[generate-weekly-units] PDF upload failed (non-fatal):', e?.message || e)
+    }
 
     const unitIds = ['u1', 'u2', 'u3'].map((suffix) => `gen-${generatorId}-${suffix}`)
 
