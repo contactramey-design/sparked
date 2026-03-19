@@ -181,15 +181,15 @@ function AppFooter() {
 
 function AppShell() {
   const location = useLocation()
-  const { schoolMode } = useSchoolMode()
 
-  // Theme rule:
-  // - Regular home/parent experience should stay blue
-  // - Orange accents ONLY when School Mode is ON
-  // - Teacher/compliance pages are always "school experience" pages, so keep orange there.
-  const isTeacherOrComplianceRoute =
-    location.pathname.startsWith('/teacher') || location.pathname.startsWith('/compliance')
-  const useSchoolTheme = schoolMode || isTeacherOrComplianceRoute
+  // Theme rule (strict):
+  // - Orange ONLY on actual school routes (`/schools`, `/teacher/*`, `/compliance`)
+  // - Everything else (home + regular parent customer experience) stays BLUE
+  // Note: `schoolMode` toggle is for navigation/UI behavior; it should not recolor Home.
+  const useSchoolTheme =
+    location.pathname.startsWith('/schools') ||
+    location.pathname.startsWith('/teacher') ||
+    location.pathname.startsWith('/compliance')
 
   const theme = useSchoolTheme
     ? {
