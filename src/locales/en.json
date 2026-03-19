@@ -31,6 +31,10 @@
     "steps": "Tap Share → Add to Home Screen. Open it from the Home Screen for the best experience.",
     "gotIt": "Got it"
   },
+  "offline": {
+    "bannerTitle": "Offline mode",
+    "bannerBody": "Core lessons still work. Videos and ebooks work after they’ve been opened once."
+  },
   "schools": {
     "title": "Schools",
     "subtitle": "School-ready setup for iPads, privacy, and teacher progress.",
@@ -89,6 +93,10 @@
     "classCompletionValue": "Average completion: {percent}%",
     "tabsClasses": "Classes",
     "tabsStudents": "Students",
+    "tabsHomePackets": "Home packets",
+    "homePacketsTitle": "At-home curriculum packets (Licensing)",
+    "homePacketsDesc": "Schools can upload optional at-home packets (PDFs) so learning continues at home. Students access them using anonymous class join (no names).",
+    "homePacketsSetup": "Setup: run supabase/licensing_curriculum_uploads.sql and create a private Storage bucket named \"school-home-packets\". (UI upload comes next.)",
     "classesTitle": "Your classes",
     "addClassLabel": "Add a class",
     "addClassPlaceholder": "Class 3A",
@@ -364,9 +372,11 @@
       "missingEbookId": "Missing ebook id.",
       "startTrial": "Start the trial to access ebooks.",
       "unlockRequired": "You need to unlock ebooks to read this PDF.",
+      "offlineNotSaved": "This ebook is not saved offline yet. Go online and tap “Download for offline”.",
       "couldNotLoad": "Could not load the ebook. Please try again.",
       "couldNotRender": "Could not render this page.",
-      "checkoutFailed": "Checkout failed. Please try again."
+      "checkoutFailed": "Checkout failed. Please try again.",
+      "offlineSaveFailed": "Could not save for offline. Please try again."
     },
     "toolbar": {
       "prev": "Prev",
@@ -377,6 +387,11 @@
     "loading": {
       "loadingEbook": "Loading ebook…",
       "renderingPage": "Rendering page…"
+    },
+    "offline": {
+      "saveButton": "Download for offline",
+      "savedButton": "Saved for offline",
+      "saveHint": "Go online to save this ebook for offline reading."
     }
   }
 }

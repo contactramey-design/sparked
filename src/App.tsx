@@ -29,6 +29,7 @@ import TeacherDashboardPage from './TeacherDashboardPage'
 import SchoolsPage from './SchoolsPage'
 import SparkiAvatar from './components/SparkiAvatar'
 import InstallOnIpadBanner from './components/InstallOnIpadBanner'
+import OfflineBanner from './components/OfflineBanner'
 import { useSchoolMode } from './hooks/useSchoolMode'
 import './App.css'
 
@@ -175,83 +176,86 @@ function AppFooter() {
   )
 }
 
-const App: React.FC = () => {
+function AppShell() {
+  const location = useLocation()
+  const { schoolMode } = useSchoolMode()
+
+  const isSchoolRoute =
+    location.pathname.startsWith('/schools') ||
+    location.pathname.startsWith('/compliance') ||
+    location.pathname.startsWith('/teacher')
+
+  const useSchoolTheme = schoolMode || isSchoolRoute
+
+  const theme = useSchoolTheme
+    ? {
+        primaryColor: '#fb923c',
+        secondaryColor: '#fdba74',
+        backgroundColor: '#fff7ed',
+        textColor: '#7c2d12',
+        accentColor: '#ea580c',
+      }
+    : appConfig.theme
+
   const themeStyle = {
-    '--primary-color': appConfig.theme.primaryColor,
-    '--secondary-color': appConfig.theme.secondaryColor,
-    '--background-color': appConfig.theme.backgroundColor,
-    '--text-color': appConfig.theme.textColor,
-    '--accent-color': appConfig.theme.accentColor,
+    '--primary-color': theme.primaryColor,
+    '--secondary-color': theme.secondaryColor,
+    '--background-color': theme.backgroundColor,
+    '--text-color': theme.textColor,
+    '--accent-color': theme.accentColor,
   } as React.CSSProperties
 
+  return (
+    <div className="app" style={themeStyle}>
+      <a href="#app-main" className="skip-link">
+        <SkipToMainLabel />
+      </a>
+      <InstallOnIpadBanner />
+      <OfflineBanner />
+      <AppHeader />
+      <main id="app-main" className="app-main">
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <Navigate to="/" replace />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="/tracks" element={<TrackListPage />} />
+          <Route path="/track/:trackId" element={<TrackPage />} />
+          <Route path="/unit/:unitId" element={<UnitPage />} />
+          <Route path="/lesson/:id" element={<LessonPage />} />
+          <Route path="/homework" element={<HomeworkAdventurePage />} />
+          <Route path="/books" element={<BooksPage />} />
+          <Route path="/shop" element={<BooksPage />} />
+          <Route path="/ebook/:ebookId" element={<EbookViewerPage />} />
+          <Route path="/ebook" element={<EbookViewerPage />} />
+          <Route path="/parent" element={<Navigate to="/?view=parent" replace />} />
+          <Route path="/coming-soon" element={<ComingSoon />} />
+          <Route path="/privacy" element={<PrivacyPage />} />
+          <Route path="/compliance" element={<CompliancePage />} />
+          <Route path="/schools" element={<SchoolsPage />} />
+          <Route path="/teacher/dashboard" element={<TeacherDashboardPage />} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/contact" element={<ContactPage />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </main>
+      <AppFooter />
+    </div>
+  )
+}
+
+const App: React.FC = () => {
   return (
     <BrowserRouter>
       <AuthProvider>
         <LocaleProvider>
-        <div className="app" style={themeStyle}>
-          <a href="#app-main" className="skip-link">
-            <SkipToMainLabel />
-          </a>
-          <InstallOnIpadBanner />
-          <AppHeader />
-          <main id="app-main" className="app-main">
-            <Routes>
-              <Route path="/" element={<HomePage />} />
-              <Route path="/login" element={<LoginPage />} />
-              <Route
-                path="/dashboard"
-                element={
-                  <ProtectedRoute>
-                    <Navigate to="/" replace />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/tracks"
-                element={<TrackListPage />}
-              />
-              <Route
-                path="/track/:trackId"
-                element={
-                  <TrackPage />
-                }
-              />
-              <Route
-                path="/unit/:unitId"
-                element={
-                  <UnitPage />
-                }
-              />
-              <Route
-                path="/lesson/:id"
-                element={<LessonPage />}
-              />
-              <Route
-                path="/homework"
-                element={<HomeworkAdventurePage />}
-              />
-              <Route path="/books" element={<BooksPage />} />
-              <Route path="/shop" element={<BooksPage />} />
-              <Route path="/ebook/:ebookId" element={<EbookViewerPage />} />
-              <Route path="/ebook" element={<EbookViewerPage />} />
-              <Route
-                path="/parent"
-                element={
-                  <Navigate to="/?view=parent" replace />
-                }
-              />
-              <Route path="/coming-soon" element={<ComingSoon />} />
-              <Route path="/privacy" element={<PrivacyPage />} />
-              <Route path="/compliance" element={<CompliancePage />} />
-              <Route path="/schools" element={<SchoolsPage />} />
-              <Route path="/teacher/dashboard" element={<TeacherDashboardPage />} />
-              <Route path="/about" element={<AboutPage />} />
-              <Route path="/contact" element={<ContactPage />} />
-              <Route path="*" element={<Navigate to="/" replace />} />
-            </Routes>
-          </main>
-          <AppFooter />
-        </div>
+          <AppShell />
         </LocaleProvider>
       </AuthProvider>
     </BrowserRouter>

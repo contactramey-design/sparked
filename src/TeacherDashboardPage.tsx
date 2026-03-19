@@ -91,7 +91,7 @@ const TeacherDashboardPage: React.FC = () => {
   const { t } = useTranslation()
   const navigate = useNavigate()
 
-  const [tab, setTab] = useState<'classes' | 'students'>('classes')
+  const [tab, setTab] = useState<'classes' | 'students' | 'home'>('classes')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -254,6 +254,7 @@ const TeacherDashboardPage: React.FC = () => {
           <TabsList>
             <TabsTrigger value="classes">{t('teacherDashboard.tabsClasses')}</TabsTrigger>
             <TabsTrigger value="students">{t('teacherDashboard.tabsStudents')}</TabsTrigger>
+            <TabsTrigger value="home">{t('teacherDashboard.tabsHomePackets')}</TabsTrigger>
           </TabsList>
 
           <TabsContent value="classes">
@@ -457,6 +458,20 @@ const TeacherDashboardPage: React.FC = () => {
                   </Table>
 
                   <div className="muted">{t('teacherDashboard.schemaNote')}</div>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="home">
+            <Card>
+              <CardHeader>
+                <CardTitle>{t('teacherDashboard.homePacketsTitle')}</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="stack-lg">
+                  <p className="muted">{t('teacherDashboard.homePacketsDesc')}</p>
+                  <div className="muted">{t('teacherDashboard.homePacketsSetup')}</div>
                 </div>
               </CardContent>
             </Card>

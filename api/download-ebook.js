@@ -13,13 +13,7 @@ const ALLOWED_EBOOK_IDS = new Set([
 ])
 
 // PDFs are stored outside `public/` for protection.
-// By default we expect `private/ebooks/<ebookId>.pdf`, but during setup
-// you may have uploaded PDFs into the repo root with different filenames.
-const PDF_REL_PATHS_BY_EBOOK_ID = {
-  'ebook-3': 'Snapchat Safety Ebook.pdf',
-  'ebook-4': 'Roblox Safety Ebook.pdf',
-  'ebook-5': 'Fortnite Safety Ebook.pdf',
-}
+// Expected location: `private/ebooks/<ebookId>.pdf`
 
 async function resolvePriceIdFromEnv(stripe, maybeId) {
   if (!maybeId || typeof maybeId !== 'string') return null
@@ -130,11 +124,7 @@ export default async function handler(req, res) {
     }
 
     // PDFs live outside `public/` so they can only be accessed via this protected endpoint.
-    // Expected location: `private/ebooks/<ebookId>.pdf`
-    const mappedRelPath = PDF_REL_PATHS_BY_EBOOK_ID[ebookId]
-    const pdfPath = mappedRelPath
-      ? path.join(process.cwd(), mappedRelPath)
-      : path.join(process.cwd(), 'private', 'ebooks', `${ebookId}.pdf`)
+    const pdfPath = path.join(process.cwd(), 'private', 'ebooks', `${ebookId}.pdf`)
     const pdfExists = await fs.promises
       .access(pdfPath)
       .then(() => true)

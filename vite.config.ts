@@ -19,6 +19,9 @@ export default defineConfig({
     ttsPlugin(),
     VitePWA({
       registerType: 'autoUpdate',
+      strategies: 'injectManifest',
+      srcDir: 'src',
+      filename: 'sw.ts',
       includeAssets: ['globalposter.png'],
       manifest: {
         name: "Sparki's Adventures Academy",
@@ -31,37 +34,6 @@ export default defineConfig({
         icons: [
           { src: '/pwa-192.png', sizes: '192x192', type: 'image/png' },
           { src: '/pwa-512.png', sizes: '512x512', type: 'image/png' },
-        ],
-      },
-      workbox: {
-        navigateFallback: '/index.html',
-        runtimeCaching: [
-          {
-            urlPattern: ({ url }) => url.pathname.endsWith('.mp4'),
-            handler: 'CacheFirst',
-            options: {
-              cacheName: 'video-cache',
-              expiration: { maxEntries: 50, maxAgeSeconds: 60 * 60 * 24 * 30 },
-            },
-          },
-          {
-            urlPattern: ({ url }) =>
-              url.pathname.endsWith('.json') && url.pathname.includes('curriculum-'),
-            handler: 'StaleWhileRevalidate',
-            options: {
-              cacheName: 'curriculum-cache',
-              expiration: { maxEntries: 20, maxAgeSeconds: 60 * 60 * 24 * 7 },
-            },
-          },
-          {
-            urlPattern: ({ url }) => url.pathname.startsWith('/api/'),
-            handler: 'NetworkFirst',
-            options: {
-              cacheName: 'api-cache',
-              networkTimeoutSeconds: 6,
-              expiration: { maxEntries: 50, maxAgeSeconds: 60 * 5 },
-            },
-          },
         ],
       },
     }),

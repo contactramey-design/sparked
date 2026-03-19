@@ -4,6 +4,7 @@ import * as pdfjsLib from 'pdfjs-dist'
 import { books } from './books'
 import { getSafetyPassCheckoutSessionId } from './progress'
 import { useTranslation } from './contexts/LocaleContext'
+import { Button } from '@/components/ui/button'
 
 // Vite bundler-friendly worker wiring.
 // See: https://mozilla.github.io/pdf.js/getting_started/
@@ -13,6 +14,11 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = new URL(
 ).toString()
 
 type PdfDoc = any
+
+const EBOOK_CACHE_NAME = 'sparki-ebook-cache-v1'
+function offlineEbookPath(ebookId: string) {
+  return `/offline-ebooks/${encodeURIComponent(ebookId)}.pdf`
+}
 
 const EbookViewerPage: React.FC = () => {
   const { ebookId } = useParams<{ ebookId: string }>()
@@ -41,12 +47,16 @@ const EbookViewerPage: React.FC = () => {
   const [loadingPdf, setLoadingPdf] = useState(false)
   const [rendering, setRendering] = useState(false)
   const [entitlementErrorKey, setEntitlementErrorKey] = useState<string | null>(null)
+  const [offlineSaved, setOfflineSaved] = useState(false)
+  const [offlineSaveError, setOfflineSaveError] = useState<string | null>(null)
 
   useEffect(() => {
     setPageNumber(1)
     setNumPages(null)
     pdfDocRef.current = null
     setEntitlementErrorKey(null)
+    setOfflineSaved(false)
+    setOfflineSaveError(null)
 
     if (!effectiveEbookId) {
       setEntitlementErrorKey('ebookViewer.errors.missingEbookId')
@@ -68,13 +78,30 @@ const EbookViewerPage: React.FC = () => {
     async function load() {
       setLoadingPdf(true)
       try {
-        const res = await fetch(
-          isFreeTestEbook
-            ? `/api/download-ebook?ebookId=${encodeURIComponent(safeEbookId)}`
-            : `/api/download-ebook?ebookId=${encodeURIComponent(safeEbookId)}&checkout_session_id=${encodeURIComponent(
-                safeCheckoutSessionId as string,
-              )}`,
-        )
+        const url = isFreeTestEbook
+          ? `/api/download-ebook?ebookId=${encodeURIComponent(safeEbookId)}`
+          : `/api/download-ebook?ebookId=${encodeURIComponent(safeEbookId)}&checkout_session_id=${encodeURIComponent(
+              safeCheckoutSessionId as string,
+            )}`
+
+        // Offline-first: if offline, try cache.
+        if (typeof window !== 'undefined' && window.navigator && !window.navigator.onLine) {
+          const cache = await caches.open(EBOOK_CACHE_NAME)
+          const cached = await cache.match(offlineEbookPath(safeEbookId))
+          if (!cached) throw new Error('OFFLINE_NOT_CACHED')
+          setOfflineSaved(true)
+          const arrayBuffer = await cached.arrayBuffer()
+          if (cancelled) return
+          const loadingTask = pdfjsLib.getDocument({ data: arrayBuffer })
+          const doc = await loadingTask.promise
+          if (cancelled) return
+          pdfDocRef.current = doc
+          setNumPages(doc.numPages || null)
+          setPageNumber(1)
+          return
+        }
+
+        const res = await fetch(url)
 
         if (!res.ok) {
           if (res.status === 403) {
@@ -98,6 +125,8 @@ const EbookViewerPage: React.FC = () => {
         if (e instanceof Error) {
           if (e.message === 'FORBIDDEN_DOWNLOAD') {
             setEntitlementErrorKey('ebookViewer.errors.unlockRequired')
+          } else if (e.message === 'OFFLINE_NOT_CACHED') {
+            setEntitlementErrorKey('ebookViewer.errors.offlineNotSaved')
           } else {
             setEntitlementErrorKey('ebookViewer.errors.couldNotLoad')
           }
@@ -115,6 +144,29 @@ const EbookViewerPage: React.FC = () => {
       cancelled = true
     }
   }, [ebookId, checkoutSessionId])
+
+  const canSaveOffline = typeof window !== 'undefined' && !!effectiveEbookId && window.navigator?.onLine
+
+  const saveForOffline = async () => {
+    if (!effectiveEbookId) return
+    setOfflineSaveError(null)
+    try {
+      const isFreeTestEbook = effectiveEbookId === 'ebook-1'
+      const url = isFreeTestEbook
+        ? `/api/download-ebook?ebookId=${encodeURIComponent(effectiveEbookId)}`
+        : `/api/download-ebook?ebookId=${encodeURIComponent(effectiveEbookId)}&checkout_session_id=${encodeURIComponent(
+            checkoutSessionId as string,
+          )}`
+      const res = await fetch(url)
+      if (!res.ok) throw new Error('DOWNLOAD_FAILED')
+      const blob = await res.blob()
+      const cache = await caches.open(EBOOK_CACHE_NAME)
+      await cache.put(offlineEbookPath(effectiveEbookId), new Response(blob, { headers: { 'Content-Type': 'application/pdf' } }))
+      setOfflineSaved(true)
+    } catch {
+      setOfflineSaveError('ebookViewer.errors.offlineSaveFailed')
+    }
+  }
 
   const renderPage = async (n: number) => {
     const doc = pdfDocRef.current
@@ -309,6 +361,27 @@ const EbookViewerPage: React.FC = () => {
           {t('ebookViewer.toolbar.next')}
         </button>
       </div>
+
+      <div className="ebook-offline-row">
+        <Button
+          type="button"
+          variant="secondary"
+          disabled={!canSaveOffline}
+          onClick={() => void saveForOffline()}
+        >
+          {offlineSaved ? t('ebookViewer.offline.savedButton') : t('ebookViewer.offline.saveButton')}
+        </Button>
+        {!canSaveOffline && (
+          <span className="muted" style={{ fontSize: 12 }}>
+            {t('ebookViewer.offline.saveHint')}
+          </span>
+        )}
+      </div>
+      {offlineSaveError ? (
+        <p className="muted" role="status" aria-live="polite">
+          {t(offlineSaveError)}
+        </p>
+      ) : null}
 
       {loadingPdf || rendering ? (
         <p className="login-coppa-note" aria-live="polite">

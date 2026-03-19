@@ -9,12 +9,13 @@ import { useLocale } from '../contexts/LocaleContext'
 
 const DEFAULT_RATE = 0.98
 const DEFAULT_PITCH = 1.08
+const CLOUD_TTS_TIMEOUT_MS = 6500
 
 const PREFERRED_VOICE_EN = [
-  'Google US English', 'Microsoft Zira', 'Samantha', 'Karen', 'Victoria', 'Daniel', 'Samantha (Enhanced)', 'Alex',
+  'Siri', 'Premium', 'Enhanced', 'Google US English', 'Microsoft Zira', 'Samantha', 'Karen', 'Victoria', 'Daniel', 'Alex',
 ]
 const PREFERRED_VOICE_ES = [
-  'Google español', 'Microsoft Sabina', 'Paulina', 'Juan', 'Monica', 'Spanish',
+  'Siri', 'Premium', 'Enhanced', 'Google español', 'Microsoft Sabina', 'Paulina', 'Juan', 'Monica', 'Spanish',
 ]
 
 // Global audio/abort so only one clip can ever play at once across the app
@@ -114,17 +115,25 @@ export function useSpeech() {
 
       stop()
 
+      // Offline: skip cloud TTS entirely and use device voice.
+      if (typeof navigator !== 'undefined' && navigator.onLine === false) {
+        if (window.speechSynthesis) fallbackSpeak(t, options)
+        return
+      }
+
       const useCloud = appConfig.tts?.useCloud && appConfig.tts?.endpoint
       if (useCloud) {
         const controller = new AbortController()
         globalAbort = controller
         try {
+          const timeoutId = window.setTimeout(() => controller.abort(), CLOUD_TTS_TIMEOUT_MS)
           const res = await fetch(appConfig.tts!.endpoint!, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ text: t }),
             signal: controller.signal,
           })
+          window.clearTimeout(timeoutId)
           if (!res.ok) throw new Error('TTS request failed')
           const blob = await res.blob()
           const url = URL.createObjectURL(blob)
@@ -151,6 +160,9 @@ export function useSpeech() {
             if (import.meta.env.DEV) {
               console.warn('TTS cloud failed, using browser voice:', (e as Error).message)
             }
+            if (window.speechSynthesis) fallbackSpeak(t, options)
+          } else {
+            // Timeout or user stop; if timeout, fall back quickly to device voice.
             if (window.speechSynthesis) fallbackSpeak(t, options)
           }
           if (globalAbort === controller) {

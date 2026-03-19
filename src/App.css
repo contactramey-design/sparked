@@ -1730,6 +1730,31 @@ h1, h2, h3 {
   border-bottom: 1px solid rgba(0, 0, 0, 0.08);
 }
 
+.offline-banner {
+  position: sticky;
+  top: 0;
+  z-index: 59;
+  background: rgba(255, 237, 213, 0.95);
+  border-bottom: 1px solid rgba(234, 88, 12, 0.25);
+}
+
+.offline-banner-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  text-align: center;
+  color: #7c2d12;
+}
+
+.offline-banner-sub {
+  font-size: 13px;
+  opacity: 0.95;
+}
+
 .install-banner-inner {
   max-width: 1100px;
   margin: 0 auto;

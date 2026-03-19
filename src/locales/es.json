@@ -31,6 +31,10 @@
     "steps": "Toca Compartir → Añadir a pantalla de inicio. Ábrelo desde la pantalla de inicio para la mejor experiencia.",
     "gotIt": "Entendido"
   },
+  "offline": {
+    "bannerTitle": "Modo sin internet",
+    "bannerBody": "Las lecciones principales siguen funcionando. Los videos y ebooks funcionan después de abrirlos una vez."
+  },
   "schools": {
     "title": "Escuelas",
     "subtitle": "Configuración para iPads, privacidad y progreso para profesores.",
@@ -89,6 +93,10 @@
     "classCompletionValue": "Promedio de progreso: {percent}%",
     "tabsClasses": "Clases",
     "tabsStudents": "Estudiantes",
+    "tabsHomePackets": "Paquetes",
+    "homePacketsTitle": "Paquetes para casa (Licencia)",
+    "homePacketsDesc": "Las escuelas pueden subir paquetes opcionales (PDF) para continuar el aprendizaje en casa. Los estudiantes acceden con unirse a clase de forma anónima (sin nombres).",
+    "homePacketsSetup": "Configuración: ejecuta supabase/licensing_curriculum_uploads.sql y crea un bucket privado llamado \"school-home-packets\". (La subida en la UI viene después.)",
     "classesTitle": "Tus clases",
     "addClassLabel": "Añadir una clase",
     "addClassPlaceholder": "Clase 3A",
@@ -364,9 +372,11 @@
       "missingEbookId": "Falta el id del ebook.",
       "startTrial": "Inicia la prueba para acceder a los ebooks.",
       "unlockRequired": "Necesitas desbloquear los ebooks para leer este PDF.",
+      "offlineNotSaved": "Este ebook aún no está guardado sin internet. Conéctate y toca “Descargar para offline”.",
       "couldNotLoad": "No se pudo cargar el ebook. Inténtalo de nuevo.",
       "couldNotRender": "No se pudo mostrar esta página.",
-      "checkoutFailed": "No se pudo completar el pago. Inténtalo de nuevo."
+      "checkoutFailed": "No se pudo completar el pago. Inténtalo de nuevo.",
+      "offlineSaveFailed": "No se pudo guardar sin internet. Inténtalo de nuevo."
     },
     "toolbar": {
       "prev": "Anterior",
@@ -377,6 +387,11 @@
     "loading": {
       "loadingEbook": "Cargando ebook…",
       "renderingPage": "Mostrando página…"
+    },
+    "offline": {
+      "saveButton": "Descargar para offline",
+      "savedButton": "Guardado para offline",
+      "saveHint": "Conéctate para guardar este ebook y leerlo sin internet."
     }
   }
 }
