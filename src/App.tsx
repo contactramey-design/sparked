@@ -24,7 +24,11 @@ import EbookViewerPage from './EbookViewerPage'
 import PrivacyPage from './PrivacyPage'
 import AboutPage from './AboutPage'
 import ContactPage from './ContactPage'
+import CompliancePage from './CompliancePage'
+import TeacherDashboardPage from './TeacherDashboardPage'
 import SparkiAvatar from './components/SparkiAvatar'
+import InstallOnIpadBanner from './components/InstallOnIpadBanner'
+import { useSchoolMode } from './hooks/useSchoolMode'
 import './App.css'
 
 function SkipToMainLabel() {
@@ -52,6 +56,7 @@ function AppHeader() {
   const location = useLocation()
   const { isLoggedIn, signOut, kidLock } = useAuth()
   const { t } = useTranslation()
+  const { schoolMode, setSchoolMode } = useSchoolMode()
   const isHome = location.pathname === '/'
   const isLogin = location.pathname === '/login'
 
@@ -69,12 +74,14 @@ function AppHeader() {
           {isHome && !isLoggedIn && (
             <>
               <Link to="/login">{t('header.signIn')}</Link>
+              <Link to="/compliance">{t('header.forSchools')}</Link>
               <LangSwitcher />
             </>
           )}
           {isLogin && (
             <>
               <Link to="/">{t('header.home')}</Link>
+              <Link to="/compliance">{t('header.forSchools')}</Link>
               <LangSwitcher />
             </>
           )}
@@ -83,7 +90,19 @@ function AppHeader() {
               <Link to="/">{t('header.home')}</Link>
               <Link to="/tracks">{t('header.courses')}</Link>
               {!kidLock && <Link to="/?view=parent">{t('header.parent')}</Link>}
+              <Link to="/compliance">{t('header.forSchools')}</Link>
               <LangSwitcher />
+              {!kidLock && (
+                <button
+                  type="button"
+                  className="nav-button"
+                  onClick={() => setSchoolMode(!schoolMode)}
+                  aria-label={schoolMode ? t('header.exitSchoolMode') : t('header.enterSchoolMode')}
+                  title={schoolMode ? t('header.exitSchoolMode') : t('header.enterSchoolMode')}
+                >
+                  {schoolMode ? t('header.schoolModeOn') : t('header.schoolModeOff')}
+                </button>
+              )}
               <button
                 type="button"
                 onClick={() => void signOut()}
@@ -112,7 +131,19 @@ function AppHeader() {
         <Link to="/">{t('header.home')}</Link>
         <Link to="/tracks">{t('header.courses')}</Link>
         {!kidLock && <Link to="/?view=parent">{t('header.parent')}</Link>}
+        <Link to="/compliance">{t('header.forSchools')}</Link>
         <LangSwitcher />
+        {!kidLock && (
+          <button
+            type="button"
+            className="nav-button"
+            onClick={() => setSchoolMode(!schoolMode)}
+            aria-label={schoolMode ? t('header.exitSchoolMode') : t('header.enterSchoolMode')}
+            title={schoolMode ? t('header.exitSchoolMode') : t('header.enterSchoolMode')}
+          >
+            {schoolMode ? t('header.schoolModeOn') : t('header.schoolModeOff')}
+          </button>
+        )}
         <button
           type="button"
           onClick={() => void signOut()}
@@ -138,6 +169,7 @@ function AppFooter() {
         <Link to="/shop">{t('footer.shop')}</Link>
         <Link to="/about">{t('footer.about')}</Link>
         <Link to="/privacy">{t('footer.privacy')}</Link>
+        <Link to="/compliance">{t('footer.forSchools')}</Link>
         <Link to="/contact">{t('footer.contact')}</Link>
       </span>
       {kidLock && (
@@ -166,6 +198,7 @@ const App: React.FC = () => {
           <a href="#app-main" className="skip-link">
             <SkipToMainLabel />
           </a>
+          <InstallOnIpadBanner />
           <AppHeader />
           <main id="app-main" className="app-main">
             <Routes>
@@ -215,6 +248,8 @@ const App: React.FC = () => {
               />
               <Route path="/coming-soon" element={<ComingSoon />} />
               <Route path="/privacy" element={<PrivacyPage />} />
+              <Route path="/compliance" element={<CompliancePage />} />
+              <Route path="/teacher/dashboard" element={<TeacherDashboardPage />} />
               <Route path="/about" element={<AboutPage />} />
               <Route path="/contact" element={<ContactPage />} />
               <Route path="*" element={<Navigate to="/" replace />} />

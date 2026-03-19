@@ -5,6 +5,8 @@ import { useAuth } from './AuthContext'
 import { useTranslation } from './contexts/LocaleContext'
 import { awardDailyLoginBonus, getPlayerStats } from './progress'
 import { ParentViewContent } from './ParentDashboard'
+import { useSchoolMode } from './hooks/useSchoolMode'
+import SchoolJoinCard from './components/SchoolJoinCard'
 
 type ViewMode = 'kid' | 'parent'
 
@@ -87,6 +89,7 @@ function TierCard({
 const HomePage: React.FC = () => {
   const { isLoggedIn } = useAuth()
   const { t, locale } = useTranslation()
+  const { schoolMode } = useSchoolMode()
   const [searchParams, setSearchParams] = useSearchParams()
   const viewParam = searchParams.get('view')
   const [viewMode, setViewMode] = useState<ViewMode>(
@@ -259,6 +262,12 @@ const HomePage: React.FC = () => {
           </Link>
         </div>
       </div>
+
+      {schoolMode && (
+        <div className="home-school-join" style={{ marginTop: 14, marginBottom: 6 }}>
+          <SchoolJoinCard />
+        </div>
+      )}
 
       <div className="home-tiers">
         <h2 className="home-tiers-title">{t('home.chooseAdventure')}</h2>

@@ -1,4 +1,6 @@
 import { curriculum, type UnitConfig } from './curriculum'
+import { ensureAnonymousSchoolAuth, getSchoolSession } from '@/school/schoolSession'
+import { supabase } from '@/lib/supabaseClient'
 
 const STORAGE_KEY = 'sparki_age2_progress'
 const SAFETY_PASS_KEY = 'sparki_safety_pass_v1'
@@ -265,6 +267,27 @@ export function updateUnitAfterQuiz(
 
   updateGamification(progress)
   saveProgress(progress)
+
+  // School Mode (optional): sync anonymous progress to Supabase for teacher dashboard.
+  if (typeof window !== 'undefined') {
+    const { classId, studentCode } = getSchoolSession()
+    if (classId && studentCode && supabase) {
+      void (async () => {
+        const uid = await ensureAnonymousSchoolAuth()
+        if (!uid) return
+        await supabase.from('school_student_progress').upsert(
+          {
+            class_id: classId,
+            student_uid: uid,
+            student_code: studentCode,
+            progress,
+            updated_at: new Date().toISOString(),
+          },
+          { onConflict: 'class_id,student_uid' },
+        )
+      })()
+    }
+  }
 
   return { progress, earnedThisAttempt }
 }
