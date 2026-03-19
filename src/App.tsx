@@ -183,12 +183,13 @@ function AppShell() {
   const location = useLocation()
   const { schoolMode } = useSchoolMode()
 
-  const isSchoolRoute =
-    location.pathname.startsWith('/schools') ||
-    location.pathname.startsWith('/compliance') ||
-    location.pathname.startsWith('/teacher')
-
-  const useSchoolTheme = schoolMode || isSchoolRoute
+  // Theme rule:
+  // - Regular home/parent experience should stay blue
+  // - Orange accents ONLY when School Mode is ON
+  // - Teacher/compliance pages are always "school experience" pages, so keep orange there.
+  const isTeacherOrComplianceRoute =
+    location.pathname.startsWith('/teacher') || location.pathname.startsWith('/compliance')
+  const useSchoolTheme = schoolMode || isTeacherOrComplianceRoute
 
   const theme = useSchoolTheme
     ? {
