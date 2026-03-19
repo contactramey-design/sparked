@@ -76,7 +76,7 @@ export const books: BookConfig[] = [
     price: '$9.99/mo',
     storeLabelKey: 'books.bundle.storeLabel',
     url: 'https://example.com/bundle',
-    coverSrc: '/bookcase/bundle.png',
+    coverSrc: '/bundlecover.webp',
   },
 ]
 

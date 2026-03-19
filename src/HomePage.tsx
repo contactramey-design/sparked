@@ -238,7 +238,7 @@ const HomePage: React.FC = () => {
       <div className="home-hero">
         <div className="home-hero-sparki" aria-hidden>
           <img
-            src="/sparki-hero.jpg"
+            src="/sparkiacademylogo.webp"
             alt=""
             className="home-hero-character"
             onError={(e) => {

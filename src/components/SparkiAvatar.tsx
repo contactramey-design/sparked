@@ -32,7 +32,7 @@ const SparkiAvatar: React.FC<SparkiAvatarProps> = ({
       aria-label="Sparki the AI teddy bear"
     >
       <img
-        src="/sparki-hero.jpg"
+        src="/sparkiacademylogo.webp"
         alt=""
         className="w-full h-full object-cover"
         width={size === 'sm' ? 48 : size === 'md' ? 80 : 112}
