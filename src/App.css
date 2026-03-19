@@ -1752,6 +1752,38 @@ h1, h2, h3 {
   gap: 14px;
 }
 
+.schools-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.schools-mode-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.schools-mode-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(59, 130, 246, 0.12);
+  color: #1e40af;
+  font-weight: 800;
+  margin-bottom: 6px;
+}
+
+.schools-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
 .list {
   margin: 0;
   padding-left: 18px;
@@ -1779,5 +1811,11 @@ h1, h2, h3 {
   }
   .print-break {
     break-before: page;
+  }
+}
+
+@media (max-width: 900px) {
+  .schools-grid {
+    grid-template-columns: 1fr;
   }
 }

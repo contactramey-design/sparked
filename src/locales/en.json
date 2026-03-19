@@ -28,6 +28,25 @@
     "steps": "Tap Share → Add to Home Screen. Open it from the Home Screen for the best experience.",
     "gotIt": "Got it"
   },
+  "schools": {
+    "title": "Schools",
+    "subtitle": "School-ready setup for iPads, privacy, and teacher progress.",
+    "modeTitle": "School Mode switch",
+    "modeOn": "School Mode is ON",
+    "modeOff": "School Mode is OFF",
+    "modeDesc": "Turn School Mode on to show class-join and school-friendly navigation.",
+    "turnOn": "Turn on",
+    "turnOff": "Turn off",
+    "pwaTitle": "Install on iPad (Offline)",
+    "pwaDesc": "Install the app to Home Screen for the best offline experience.",
+    "openInstallGuide": "Open install guide",
+    "dashboardTitle": "Teacher dashboard",
+    "dashboardDesc": "Create classes, view anonymous progress, and export CSV.",
+    "openTeacherDashboard": "Open teacher dashboard",
+    "complianceTitle": "Compliance & privacy",
+    "complianceDesc": "COPPA / FERPA / CIPA overview and school-use notes.",
+    "openCompliance": "Open compliance page"
+  },
   "compliance": {
     "title": "For Schools: Safety & Compliance",
     "kidIntro": "Hi teachers and grown-ups! SpArki is built to be safe, simple, and respectful of kids’ privacy.",

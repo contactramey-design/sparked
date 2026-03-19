@@ -28,6 +28,25 @@
     "steps": "Toca Compartir → Añadir a pantalla de inicio. Ábrelo desde la pantalla de inicio para la mejor experiencia.",
     "gotIt": "Entendido"
   },
+  "schools": {
+    "title": "Escuelas",
+    "subtitle": "Configuración para iPads, privacidad y progreso para profesores.",
+    "modeTitle": "Interruptor de Modo escuela",
+    "modeOn": "Modo escuela ACTIVADO",
+    "modeOff": "Modo escuela DESACTIVADO",
+    "modeDesc": "Activa el Modo escuela para mostrar unirse a clase y navegación apta para escuelas.",
+    "turnOn": "Activar",
+    "turnOff": "Desactivar",
+    "pwaTitle": "Instalar en iPad (sin internet)",
+    "pwaDesc": "Instala la app en la pantalla de inicio para la mejor experiencia sin conexión.",
+    "openInstallGuide": "Abrir guía de instalación",
+    "dashboardTitle": "Panel del profesor",
+    "dashboardDesc": "Crea clases, ve progreso anónimo y exporta CSV.",
+    "openTeacherDashboard": "Abrir panel del profesor",
+    "complianceTitle": "Cumplimiento y privacidad",
+    "complianceDesc": "Resumen de COPPA / FERPA / CIPA y notas para escuelas.",
+    "openCompliance": "Abrir página de cumplimiento"
+  },
   "compliance": {
     "title": "Para escuelas: Seguridad y cumplimiento",
     "kidIntro": "¡Hola profes y adultos! SpArki está diseñado para ser seguro, simple y respetar la privacidad de los niños.",
