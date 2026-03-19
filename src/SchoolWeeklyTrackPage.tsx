@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { supabase } from './lib/supabaseClient'
 import { ensureAnonymousSchoolAuth, getSchoolSession } from '@/school/schoolSession'
+import { getUnitStatus } from './progress'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { readJsonFromCache, unitJsonPath, weeklyActiveGeneratorPath, writeJsonToCache } from './lib/schoolGeneratorCache'
@@ -248,6 +249,16 @@ const SchoolWeeklyTrackPage: React.FC = () => {
                       <div style={{ fontWeight: 800, fontSize: 16 }}>{u.title}</div>
                       <div className="muted" style={{ fontSize: 12 }}>
                         {u.summary ?? ''}
+                      </div>
+                      <div
+                        style={{
+                          marginTop: 6,
+                          fontSize: 12,
+                          fontWeight: 700,
+                          color: getUnitStatus(u.unitId)?.mastered ? '#0ea5e9' : '#64748b',
+                        }}
+                      >
+                        {getUnitStatus(u.unitId)?.mastered ? 'Mastered' : 'Not started'}
                       </div>
                     </div>
                     <Link to={`/schools/unit/${encodeURIComponent(u.unitId)}`}>
