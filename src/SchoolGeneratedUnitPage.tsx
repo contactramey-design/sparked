@@ -67,7 +67,11 @@ function parseContentBlocks(blocks: string[]) {
   return { story, rules }
 }
 
-function makeUnitConfigFromGenerated(unitId: string, unit: GeneratedUnitJson): UnitConfig {
+function makeUnitConfigFromGenerated(
+  unitId: string,
+  unit: GeneratedUnitJson,
+  t: (key: string, vars?: Record<string, string | number>) => string,
+): UnitConfig {
   return {
     // trackId is not used by the school-generated unit UI, but the type requires it.
     id: unitId,
@@ -82,10 +86,10 @@ function makeUnitConfigFromGenerated(unitId: string, unit: GeneratedUnitJson): U
     quizQuestions: unit.quizQuestions,
     activity: {
       id: `generated-act-${unitId}`,
-      title: unit.homeworkAdventure?.title ?? 'Home activity',
+      title: unit.homeworkAdventure?.title ?? t('schoolGeneratedUnit.homeActivityFallbackTitle'),
       description: unit.homeworkAdventure?.topic
-        ? `Homework topic: ${unit.homeworkAdventure.topic}`
-        : 'A family-friendly homework activity.',
+        ? t('schoolGeneratedUnit.homeworkTopic', { topic: unit.homeworkAdventure.topic })
+        : t('schoolGeneratedUnit.homeActivityFallbackDesc'),
     },
   }
 }
@@ -133,7 +137,7 @@ const SchoolGeneratedUnitPage: React.FC = () => {
 
         if (isOffline) {
           const cached = await readJsonFromCache<GeneratedUnitJson>(unitJsonPath(unitIdSafe))
-          if (!cached) throw new Error('No offline data for this unit yet. Ask your teacher to generate again while online.')
+          if (!cached) throw new Error(t('schoolGeneratedUnit.offlineMissing'))
           if (cancelled) return
           setUnitJson(cached)
           const quizLen = cached.quizQuestions?.length ?? 0
@@ -146,7 +150,7 @@ const SchoolGeneratedUnitPage: React.FC = () => {
         }
 
         const uid = await ensureAnonymousSchoolAuth()
-        if (!uid) throw new Error('Could not start anonymous school session.')
+        if (!uid) throw new Error(t('schoolGeneratedUnit.authFailed'))
 
         const { data: unitRow, error: unitErr } = await supabase
           .from('school_weekly_generator_units')
@@ -156,7 +160,7 @@ const SchoolGeneratedUnitPage: React.FC = () => {
 
         if (unitErr) throw unitErr
         const row = unitRow as GeneratorUnitRow | null
-        if (!row?.unit_json) throw new Error('Unit not found.')
+        if (!row?.unit_json) throw new Error(t('schoolGeneratedUnit.unitNotFound'))
 
         // Avoid showing expired generators.
         const { data: genRow, error: genErr } = await supabase
@@ -167,7 +171,7 @@ const SchoolGeneratedUnitPage: React.FC = () => {
         if (genErr) throw genErr
 
         if (genRow?.expires_at && new Date(genRow.expires_at).getTime() <= Date.now()) {
-          throw new Error('This generated unit has expired.')
+          throw new Error(t('schoolGeneratedUnit.expired'))
         }
 
         if (cancelled) return
@@ -208,7 +212,7 @@ const SchoolGeneratedUnitPage: React.FC = () => {
           setMastered(justExisting)
           setWasAlreadyMastered(justExisting)
         } else {
-          setError(e?.message ?? 'Failed to load unit.')
+          setError(e?.message ?? t('schoolGeneratedUnit.loadFailed'))
         }
       } finally {
         if (!cancelled) setLoading(false)
@@ -227,8 +231,8 @@ const SchoolGeneratedUnitPage: React.FC = () => {
 
   const unitConfig = useMemo(() => {
     if (!unitJson) return null
-    return makeUnitConfigFromGenerated(unitIdSafe, unitJson)
-  }, [unitIdSafe, unitJson])
+    return makeUnitConfigFromGenerated(unitIdSafe, unitJson, t)
+  }, [t, unitIdSafe, unitJson])
 
   useEffect(() => {
     // Reset homework stepper when unit changes.
@@ -241,7 +245,7 @@ const SchoolGeneratedUnitPage: React.FC = () => {
       <section className="lesson-page">
         <Card>
           <CardContent>
-            <p className="muted">Loading…</p>
+            <p className="muted">{t('schoolGeneratedUnit.loading')}</p>
           </CardContent>
         </Card>
       </section>
@@ -253,7 +257,7 @@ const SchoolGeneratedUnitPage: React.FC = () => {
       <section className="lesson-page">
         <header className="lesson-header">
           <Link to="/schools/weekly-track" className="link-back">
-            Back
+            {t('schoolGeneratedUnit.back')}
           </Link>
         </header>
         <Card>
@@ -310,11 +314,13 @@ const SchoolGeneratedUnitPage: React.FC = () => {
           <SparkiAvatar size="md" />
           <div>
             <h2>{unitJson.title}</h2>
-            <p className="welcome-subtitle muted">{parsed.story ? 'Lesson + Quiz + Homework' : 'Generated lesson'}</p>
+            <p className="welcome-subtitle muted">
+              {parsed.story ? t('schoolGeneratedUnit.lessonQuizHomework') : t('schoolGeneratedUnit.generatedLesson')}
+            </p>
           </div>
         </div>
         <Link to="/schools/weekly-track" className="link-back">
-          Back to Weekly Track
+          {t('schoolGeneratedUnit.backToWeeklyTrack')}
         </Link>
       </header>
 
@@ -408,13 +414,13 @@ const SchoolGeneratedUnitPage: React.FC = () => {
           <div className="mt-8 space-y-4">
             <Card>
               <CardHeader>
-                <CardTitle className="text-xl">Homework Adventure</CardTitle>
+                <CardTitle className="text-xl">{t('schoolGeneratedUnit.homeworkAdventureTitle')}</CardTitle>
                 <div className="muted">{unitJson.homeworkAdventure.title}</div>
               </CardHeader>
               <CardContent className="space-y-4">
                 {unitJson.homeworkAdventureVideoUrl && (
                   <div className="video-wrapper">
-                    <p className="video-caption muted">Video adventure</p>
+                    <p className="video-caption muted">{t('schoolGeneratedUnit.videoAdventure')}</p>
                     <video controls preload="metadata" poster={VIDEO_POSTER_DATA_URL} style={{ width: '100%', borderRadius: 'var(--radius-md)' }}>
                       <source src={unitJson.homeworkAdventureVideoUrl} />
                     </video>
@@ -426,7 +432,7 @@ const SchoolGeneratedUnitPage: React.FC = () => {
                     {unitJson.homeworkAdventure.subject} · {unitJson.homeworkAdventure.topic}
                   </div>
                   <div className="muted" style={{ fontSize: 12 }}>
-                    (Step {currentStepIndex + 1} of {homeworkSteps.length})
+                    {t('schoolGeneratedUnit.stepOf', { current: currentStepIndex + 1, total: homeworkSteps.length })}
                   </div>
                 </div>
 
@@ -441,11 +447,11 @@ const SchoolGeneratedUnitPage: React.FC = () => {
 
                     {showHint ? (
                       <p className="homework-step-hint muted">
-                        <strong>Hint:</strong> {homeworkSteps[currentStepIndex].hint}
+                        <strong>{t('schoolGeneratedUnit.hintLabel')}:</strong> {homeworkSteps[currentStepIndex].hint}
                       </p>
                     ) : (
                       <Button variant="secondary" onClick={() => setShowHint(true)}>
-                        Show hint
+                        {t('schoolGeneratedUnit.showHint')}
                       </Button>
                     )}
 
@@ -459,7 +465,7 @@ const SchoolGeneratedUnitPage: React.FC = () => {
                             setCurrentStepIndex((i) => Math.max(0, i - 1))
                           }}
                         >
-                          Prev
+                          {t('schoolGeneratedUnit.prev')}
                         </Button>
                         <Button
                           variant="secondary"
@@ -469,7 +475,7 @@ const SchoolGeneratedUnitPage: React.FC = () => {
                             setCurrentStepIndex((i) => Math.min(homeworkSteps.length - 1, i + 1))
                           }}
                         >
-                          Next
+                          {t('schoolGeneratedUnit.next')}
                         </Button>
                       </div>
                     )}

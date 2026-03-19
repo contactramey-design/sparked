@@ -61,6 +61,10 @@
     "weeklyTrackOpenUnit": "Abrir unidad",
     "weeklyTrackMastered": "Dominado",
     "weeklyTrackNotStarted": "No empezado",
+    "weeklyTrackLoadError": "No se pudo cargar la ruta semanal.",
+    "generatedUnitFallbackTitle": "Unidad generada",
+    "weeklyTrackQuizFallback": "Quiz",
+    "weeklyTrackUnitMeta": "Unidad {index} · {count} preguntas",
     "complianceTitle": "Cumplimiento y privacidad",
     "complianceDesc": "Resumen de COPPA / FERPA / CIPA y notas para escuelas.",
     "openCompliance": "Abrir página de cumplimiento"
@@ -132,7 +136,10 @@
     "tableHomework": "Aventuras de tarea",
     "tableOverall": "Total",
     "noStudents": "Aún no hay progreso. Los estudiantes aparecerán cuando sincronicen desde sus dispositivos.",
-    "schemaNote": "Si ves errores de base de datos, crea las tablas/políticas escolares en Supabase (ver el archivo SQL incluido en el repo)."
+    "schemaNote": "Si ves errores de base de datos, crea las tablas/políticas escolares en Supabase (ver el archivo SQL incluido en el repo).",
+    "errorLoadClasses": "No se pudieron cargar las clases.",
+    "errorLoadStudents": "No se pudieron cargar los estudiantes.",
+    "errorCreateClass": "No se pudo crear la clase."
   },
   "schoolJoin": {
     "title": "Unirte a tu clase (Modo escuela)",
@@ -406,5 +413,103 @@
       "savedButton": "Guardado para offline",
       "saveHint": "Conéctate para guardar este ebook y leerlo sin internet."
     }
+  },
+  "safetyQuiz": {
+    "common": {
+      "letsGo": "Vamos",
+      "next": "Siguiente",
+      "seeResults": "Ver resultados",
+      "correct": "Correcto",
+      "wrong": "Intentalo de nuevo",
+      "true": "VERDADERO",
+      "false": "FALSO",
+      "yes": "SI",
+      "no": "NO",
+      "questionOf": "Pregunta {current} de {total}",
+      "youGotOutOf": "Acertaste {score} de {total}",
+      "youEarnedSparkles": "Ganaste {count} chispas"
+    },
+    "instagram": {
+      "title": "Aventura de seguridad en Instagram con Sparki",
+      "subtitle": "Aprende a mantenerte seguro en Instagram",
+      "intro": "Responde verdadero o falso sobre seguridad en Instagram. Puedes acertarlas todas",
+      "feedbackCorrect": "Perfecto! Correcto!",
+      "feedbackWrong": "Prueba el otro boton",
+      "safeChoice": "Genial! Eleccion segura!",
+      "ctaNextUnit": "Ir a {unitTitle} ->"
+    },
+    "tiktok": {
+      "title": "Aventura TikTok segura y amable con Sparki",
+      "subtitle": "Aprende a usar TikTok con seguridad y amabilidad",
+      "intro": "Relaciona acciones con emojis. Puedes encontrar todas las opciones amables",
+      "matchOf": "Relacion {current} de {total}"
+    },
+    "snapchat": {
+      "title": "Aventura de seguridad de Snaps y rachas con Sparki",
+      "subtitle": "Snap o no? Aprende decisiones seguras",
+      "intro": "Te mostrare situaciones. Decide SI o NO."
+    },
+    "roblox": {
+      "title": "Aventura segura de Roblox con Sparki",
+      "subtitle": "Clasifica y aprende seguridad en Roblox",
+      "intro": "Seguro o no seguro? Hagamos Roblox divertido y seguro"
+    },
+    "fortnite": {
+      "title": "Mision de seguridad en Fortnite con Sparki",
+      "subtitle": "Sigue el camino seguro",
+      "intro": "Responde SI o NO en cada decision."
+    },
+    "reddit": {
+      "title": "Aventura de lectura segura con Sparki",
+      "subtitle": "Aprende decisiones seguras al leer en linea."
+    },
+    "safeApps": {
+      "title": "Aventura de apps seguras con Sparki",
+      "subtitle": "Toca VERDADERO o FALSO en cada pregunta."
+    }
+  },
+  "teacherGenerator": {
+    "title": "Generador semanal para docentes",
+    "subtitle": "Sube un PDF y genera un track semanal temporal + 3 unidades.",
+    "generateTitle": "Generar",
+    "classLabel": "Clase",
+    "pdfLabel": "PDF",
+    "videoToggle": "Generar video de tarea por unidad (puede tardar mas)",
+    "buttonIdle": "Generar track semanal",
+    "buttonBusy": "Generando...",
+    "resultTitle": "Track semanal generado",
+    "resultLabel": "Etiqueta",
+    "resultUnits": "Unidades",
+    "previewStudentPage": "Vista previa de pagina del estudiante",
+    "studentsAccessNote": "Los estudiantes pueden acceder desde /schools/weekly-track mientras este activo.",
+    "errorLoadClasses": "No se pudieron cargar las clases.",
+    "errorSelectClass": "Selecciona una clase primero.",
+    "errorChoosePdf": "Selecciona un PDF primero.",
+    "errorPdfType": "Sube un archivo PDF.",
+    "errorMissingSession": "Falta el token de sesion del docente.",
+    "errorGenerate": "No se pudieron generar las unidades semanales.",
+    "errorUnexpectedResponse": "Respuesta inesperada del servidor."
+  },
+  "schoolGeneratedUnit": {
+    "lessonQuizHomework": "Leccion + Quiz + Tarea",
+    "generatedLesson": "Leccion generada",
+    "back": "Volver",
+    "backToWeeklyTrack": "Volver al track semanal",
+    "loading": "Cargando...",
+    "offlineMissing": "No hay datos sin conexion para esta unidad todavia. Pidele a tu docente que la genere de nuevo en linea.",
+    "authFailed": "No se pudo iniciar una sesion anonima escolar.",
+    "unitNotFound": "Unidad no encontrada.",
+    "expired": "Esta unidad generada ya vencio.",
+    "loadFailed": "No se pudo cargar la unidad.",
+    "homeworkAdventureTitle": "Aventura de tarea",
+    "videoAdventure": "Aventura en video",
+    "stepOf": "(Paso {current} de {total})",
+    "hintLabel": "Pista",
+    "showHint": "Mostrar pista",
+    "prev": "Anterior",
+    "next": "Siguiente",
+    "homeActivityFallbackTitle": "Actividad en casa",
+    "homeActivityFallbackDesc": "Una actividad de tarea familiar y segura.",
+    "homeworkTopic": "Tema de tarea: {topic}"
   }
 }

@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import type { UnitConfig } from './curriculum'
+import { useTranslation } from './contexts/LocaleContext'
 
-const SAFE_APP_QUESTIONS: { text: string; answer: boolean; icon: string }[] = [
+const SAFE_APP_QUESTIONS_EN: { text: string; answer: boolean; icon: string }[] = [
   { text: 'YouTube Kids has filters for safe videos', answer: true, icon: '🎬' },
   { text: 'I can watch anything online', answer: false, icon: '🌐' },
   { text: 'Safe apps have grown-up approval', answer: true, icon: '👨‍👩‍👧' },
@@ -11,6 +12,17 @@ const SAFE_APP_QUESTIONS: { text: string; answer: boolean; icon: string }[] = [
   { text: 'Yucky videos are okay', answer: false, icon: '🙈' },
   { text: 'Ask a grown-up before opening new apps', answer: true, icon: '🙋' },
   { text: 'Share personal info in games', answer: false, icon: '🔒' },
+]
+
+const SAFE_APP_QUESTIONS_ES: { text: string; answer: boolean; icon: string }[] = [
+  { text: 'YouTube Kids tiene filtros para videos seguros', answer: true, icon: '🎬' },
+  { text: 'Puedo ver cualquier cosa en internet', answer: false, icon: '🌐' },
+  { text: 'Las apps seguras tienen aprobacion de un adulto', answer: true, icon: '👨‍👩‍👧' },
+  { text: 'Los anuncios siempre son seguros', answer: false, icon: '📢' },
+  { text: 'Los videos amables me hacen sentir bien', answer: true, icon: '😊' },
+  { text: 'Los videos feos estan bien', answer: false, icon: '🙈' },
+  { text: 'Pregunta a un adulto antes de abrir apps nuevas', answer: true, icon: '🙋' },
+  { text: 'Comparte datos personales en juegos', answer: false, icon: '🔒' },
 ]
 
 export interface SafeAppAdventureQuizProps {
@@ -28,14 +40,16 @@ const SafeAppAdventureQuiz: React.FC<SafeAppAdventureQuizProps> = ({
   mastered,
   onComplete,
 }) => {
+  const { t, locale } = useTranslation()
   const [step, setStep] = useState<'welcome' | 'quiz' | 'complete'>('welcome')
   const [currentQ, setCurrentQ] = useState(0)
   const [score, setScore] = useState(0)
   const [answered, setAnswered] = useState(false)
   const [feedback, setFeedback] = useState<'correct' | 'wrong' | null>(null)
 
-  const totalQuestions = SAFE_APP_QUESTIONS.length
-  const q = step === 'quiz' ? SAFE_APP_QUESTIONS[currentQ] : null
+  const questions = locale === 'es' ? SAFE_APP_QUESTIONS_ES : SAFE_APP_QUESTIONS_EN
+  const totalQuestions = questions.length
+  const q = step === 'quiz' ? questions[currentQ] : null
 
   const handleStart = () => setStep('quiz')
 
@@ -74,7 +88,7 @@ const SafeAppAdventureQuiz: React.FC<SafeAppAdventureQuizProps> = ({
             WebkitBackgroundClip: 'text',
           }}
         >
-          Sparki&apos;s Safe App Adventure
+          {t('safetyQuiz.safeApps.title')}
         </h2>
         <div className="my-6 flex justify-center">
           <span className="text-6xl sm:text-7xl animate-[floatBounce_3s_ease-in-out_infinite]" role="img" aria-label="Sparki robot">
@@ -82,10 +96,12 @@ const SafeAppAdventureQuiz: React.FC<SafeAppAdventureQuizProps> = ({
           </span>
         </div>
         <p className="text-blue-800 font-semibold text-lg mb-1">
-          Hi there! I&apos;m <span className="text-pink-500 font-bold">Sparki</span> 💙
+          {locale === 'es' ? '¡Hola! Soy' : "Hi there! I'm"} <span className="text-pink-500 font-bold">Sparki</span> 💙
         </p>
         <p className="text-blue-700 text-base mb-6 max-w-md mx-auto">
-          Let&apos;s learn about staying safe with apps! Tap <strong>TRUE</strong> or <strong>FALSE</strong> for each question.
+          {locale === 'es'
+            ? 'Aprendamos seguridad con apps. Toca VERDADERO o FALSO en cada pregunta.'
+            : "Let's learn about staying safe with apps! Tap TRUE or FALSE for each question."}
         </p>
         <button
           type="button"
@@ -93,7 +109,7 @@ const SafeAppAdventureQuiz: React.FC<SafeAppAdventureQuizProps> = ({
           className="px-8 py-4 rounded-full text-white text-xl font-bold shadow-lg hover:scale-105 active:scale-95 transition-transform"
           style={{ background: 'linear-gradient(135deg, #3b82f6, #8b5cf6, #ec4899)' }}
         >
-          🚀 Let&apos;s Go!
+          🚀 {t('safetyQuiz.common.letsGo')}
         </button>
       </div>
     )
@@ -113,7 +129,9 @@ const SafeAppAdventureQuiz: React.FC<SafeAppAdventureQuizProps> = ({
       >
         <div className="mb-4">
           <div className="flex justify-between items-center mb-1">
-            <span className="text-sm font-bold text-blue-700">Question {currentQ + 1} of {totalQuestions}</span>
+            <span className="text-sm font-bold text-blue-700">
+              {t('safetyQuiz.common.questionOf', { current: currentQ + 1, total: totalQuestions })}
+            </span>
             <span className="text-sm font-bold text-pink-600">⭐ {score}</span>
           </div>
           <div className="w-full h-4 rounded-full bg-white/70 overflow-hidden shadow-inner">
@@ -135,9 +153,15 @@ const SafeAppAdventureQuiz: React.FC<SafeAppAdventureQuizProps> = ({
             <p className="text-blue-800 font-semibold text-sm">
               {showFeedback
                 ? feedback === 'correct'
-                  ? "That's right! You're amazing! 🎉💙"
-                  : `The answer was ${q.answer ? 'TRUE ✅' : 'FALSE ❌'}. Let's choose safe! 💙`
-                : 'Is this TRUE or FALSE? Think carefully! 🤔'}
+                  ? locale === 'es'
+                    ? '¡Correcto! ¡Increible! 🎉💙'
+                    : "That's right! You're amazing! 🎉💙"
+                  : locale === 'es'
+                    ? `La respuesta era ${q.answer ? `${t('safetyQuiz.common.true')} ✅` : `${t('safetyQuiz.common.false')} ❌`}. Elijamos seguro 💙`
+                    : `The answer was ${q.answer ? `${t('safetyQuiz.common.true')} ✅` : `${t('safetyQuiz.common.false')} ❌`}. Let's choose safe! 💙`
+                : locale === 'es'
+                  ? '¿Esto es VERDADERO o FALSO? 🤔'
+                  : 'Is this TRUE or FALSE? Think carefully! 🤔'}
             </p>
           </div>
         </div>
@@ -159,7 +183,7 @@ const SafeAppAdventureQuiz: React.FC<SafeAppAdventureQuizProps> = ({
               className="px-8 py-4 rounded-2xl text-white text-xl font-bold shadow-lg flex items-center gap-2 hover:scale-105 active:scale-95 transition-transform"
               style={{ background: 'linear-gradient(135deg, #34d399, #10b981)' }}
             >
-              ✅ TRUE
+              ✅ {t('safetyQuiz.common.true')}
             </button>
             <button
               type="button"
@@ -167,7 +191,7 @@ const SafeAppAdventureQuiz: React.FC<SafeAppAdventureQuizProps> = ({
               className="px-8 py-4 rounded-2xl text-white text-xl font-bold shadow-lg flex items-center gap-2 hover:scale-105 active:scale-95 transition-transform"
               style={{ background: 'linear-gradient(135deg, #f472b6, #ec4899)' }}
             >
-              ❌ FALSE
+              ❌ {t('safetyQuiz.common.false')}
             </button>
           </div>
         ) : (
@@ -184,10 +208,22 @@ const SafeAppAdventureQuiz: React.FC<SafeAppAdventureQuizProps> = ({
               </div>
               {feedback === 'correct' && <div className="text-2xl mb-2">✨🌟💫⭐✨</div>}
               <p className={`text-xl font-bold ${feedback === 'correct' ? 'text-green-800' : 'text-red-800'}`}>
-                {feedback === 'correct' ? 'Yay! Safe choice!' : 'Oops! Try to remember this one!'}
+                {feedback === 'correct'
+                  ? locale === 'es'
+                    ? '¡Bien! ¡Eleccion segura!'
+                    : 'Yay! Safe choice!'
+                  : locale === 'es'
+                    ? 'Oops, intenta recordar esta'
+                    : 'Oops! Try to remember this one!'}
               </p>
               <p className={`text-base font-semibold mt-1 ${feedback === 'correct' ? 'text-green-700' : 'text-red-700'}`}>
-                {feedback === 'correct' ? 'Sparki says: "You\'re so smart!" 🤖💙' : 'Sparki says: "Let\'s choose safe!" 🤖'}
+                {feedback === 'correct'
+                  ? locale === 'es'
+                    ? 'Sparki dice: "¡Eres muy inteligente!" 🤖💙'
+                    : 'Sparki says: "You\'re so smart!" 🤖💙'
+                  : locale === 'es'
+                    ? 'Sparki dice: "¡Elijamos seguro!" 🤖'
+                    : 'Sparki says: "Let\'s choose safe!" 🤖'}
               </p>
             </div>
             <div className="text-center">
@@ -197,7 +233,7 @@ const SafeAppAdventureQuiz: React.FC<SafeAppAdventureQuizProps> = ({
                 className="px-8 py-3 rounded-full text-white text-lg font-bold shadow-lg hover:scale-105 active:scale-95 transition-transform"
                 style={{ background: 'linear-gradient(135deg, #8b5cf6, #6366f1)' }}
               >
-                {isLast ? '🏆 See Results!' : 'Next ➡️'}
+                {isLast ? `🏆 ${t('safetyQuiz.common.seeResults')}` : `${t('safetyQuiz.common.next')} ➡️`}
               </button>
             </div>
           </>
@@ -217,9 +253,11 @@ const SafeAppAdventureQuiz: React.FC<SafeAppAdventureQuizProps> = ({
           background: 'linear-gradient(135deg, #dbeafe 0%, #fce7f3 40%, #fef3c7 70%, #dbeafe 100%)',
         }}
       >
-        <h2 className="text-2xl sm:text-3xl font-extrabold text-purple-700 mb-3">🎉 Amazing Job! 🎉</h2>
+        <h2 className="text-2xl sm:text-3xl font-extrabold text-purple-700 mb-3">
+          {locale === 'es' ? '🎉 ¡Excelente trabajo! 🎉' : '🎉 Amazing Job! 🎉'}
+        </h2>
         <p className="text-xl text-blue-700 font-bold mb-4">
-          You got {correctCount} out of {totalQuestions} correct! ⭐
+          {t('safetyQuiz.common.youGotOutOf', { score: correctCount, total: totalQuestions })} ⭐
         </p>
 
         <div className="mb-5 flex justify-center">
@@ -241,7 +279,7 @@ const SafeAppAdventureQuiz: React.FC<SafeAppAdventureQuizProps> = ({
           ))}
         </div>
         <p className="text-lg font-bold text-amber-800 mb-2">
-          You earned <strong>{displaySparkles}</strong> sparkles!
+          {t('safetyQuiz.common.youEarnedSparkles', { count: displaySparkles })}
         </p>
 
         <div className="flex items-center gap-3 justify-center mb-4">
@@ -250,7 +288,9 @@ const SafeAppAdventureQuiz: React.FC<SafeAppAdventureQuizProps> = ({
           </div>
           <div className="bg-white/90 rounded-2xl rounded-tl-sm px-4 py-3 shadow-md text-left max-w-xs">
             <p className="text-blue-800 font-semibold text-sm">
-              You&apos;re a <span className="text-pink-500">Safe App Explorer</span> now! I&apos;m so proud of you! 💙✨
+              {locale === 'es'
+                ? '¡Ahora eres un Explorador de Apps Seguras! ¡Estoy muy orgulloso de ti! 💙✨'
+                : "You're a Safe App Explorer now! I'm so proud of you! 💙✨"}
             </p>
           </div>
         </div>
@@ -261,7 +301,7 @@ const SafeAppAdventureQuiz: React.FC<SafeAppAdventureQuizProps> = ({
             className="inline-block px-8 py-3 rounded-full text-white text-lg font-bold shadow-lg hover:scale-105 active:scale-95 transition-transform"
             style={{ background: 'linear-gradient(135deg, #3b82f6, #8b5cf6)' }}
           >
-            Go to {nextUnit.title} →
+            {t('safetyQuiz.instagram.ctaNextUnit', { unitTitle: nextUnit.title })}
           </Link>
         )}
       </div>

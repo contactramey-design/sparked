@@ -61,6 +61,10 @@
     "weeklyTrackOpenUnit": "Open unit",
     "weeklyTrackMastered": "Mastered",
     "weeklyTrackNotStarted": "Not started",
+    "weeklyTrackLoadError": "Failed to load weekly track.",
+    "generatedUnitFallbackTitle": "Generated unit",
+    "weeklyTrackQuizFallback": "Quiz",
+    "weeklyTrackUnitMeta": "Unit {index} · {count} questions",
     "complianceTitle": "Compliance & privacy",
     "complianceDesc": "COPPA / FERPA / CIPA overview and school-use notes.",
     "openCompliance": "Open compliance page"
@@ -132,7 +136,10 @@
     "tableHomework": "Homework Adventures",
     "tableOverall": "Overall",
     "noStudents": "No student progress yet. Students will appear after they sync from their devices.",
-    "schemaNote": "If you see database errors, create the school tables/policies in Supabase (see the included SQL file in the repo)."
+    "schemaNote": "If you see database errors, create the school tables/policies in Supabase (see the included SQL file in the repo).",
+    "errorLoadClasses": "Failed to load classes.",
+    "errorLoadStudents": "Failed to load students.",
+    "errorCreateClass": "Failed to create class."
   },
   "schoolJoin": {
     "title": "Join your class (School Mode)",
@@ -406,5 +413,103 @@
       "savedButton": "Saved for offline",
       "saveHint": "Go online to save this ebook for offline reading."
     }
+  },
+  "safetyQuiz": {
+    "common": {
+      "letsGo": "Let's Go!",
+      "next": "Next",
+      "seeResults": "See Results!",
+      "correct": "Correct",
+      "wrong": "Try again",
+      "true": "TRUE",
+      "false": "FALSE",
+      "yes": "YES",
+      "no": "NO",
+      "questionOf": "Question {current} of {total}",
+      "youGotOutOf": "You got {score} out of {total} correct!",
+      "youEarnedSparkles": "You earned {count} sparkles!"
+    },
+    "instagram": {
+      "title": "Sparki's Instagram Safety Adventure",
+      "subtitle": "Learn how to stay safe on Instagram!",
+      "intro": "Answer true or false about Instagram safety! Can you get them all right?",
+      "feedbackCorrect": "Perfect! You got it right!",
+      "feedbackWrong": "Try the other button!",
+      "safeChoice": "Yay! Safe choice!",
+      "ctaNextUnit": "Go to {unitTitle} ->"
+    },
+    "tiktok": {
+      "title": "Sparki's Kind & Safe TikTok Adventure",
+      "subtitle": "Learn to be kind and safe on TikTok!",
+      "intro": "Match actions to emojis! Can you find all the kind choices?",
+      "matchOf": "Match {current} of {total}"
+    },
+    "snapchat": {
+      "title": "Sparki's Snaps & Streaks Safety Adventure",
+      "subtitle": "Snap or Not? Learn safe Snapchat choices!",
+      "intro": "I'll show snapshots. You decide YES or NO."
+    },
+    "roblox": {
+      "title": "Sparki's Safe Roblox Adventure",
+      "subtitle": "Sort & Learn Roblox Safety!",
+      "intro": "Safe or Not Safe? Let's keep Roblox fun and safe!"
+    },
+    "fortnite": {
+      "title": "Sparki's Fortnite Safety Quest",
+      "subtitle": "Navigate the Safe Path!",
+      "intro": "Answer YES or NO at each fork."
+    },
+    "reddit": {
+      "title": "Sparki's Safe Reading Adventure",
+      "subtitle": "Learn safe reading choices online."
+    },
+    "safeApps": {
+      "title": "Sparki's Safe App Adventure",
+      "subtitle": "Tap TRUE or FALSE for each question."
+    }
+  },
+  "teacherGenerator": {
+    "title": "Teacher Weekly Generator",
+    "subtitle": "Upload a PDF and generate a temporary weekly track + 3 units.",
+    "generateTitle": "Generate",
+    "classLabel": "Class",
+    "pdfLabel": "PDF",
+    "videoToggle": "Generate homework video per unit (may take longer)",
+    "buttonIdle": "Generate Weekly Track",
+    "buttonBusy": "Generating...",
+    "resultTitle": "Generated Weekly Track",
+    "resultLabel": "Label",
+    "resultUnits": "Units",
+    "previewStudentPage": "Preview student page",
+    "studentsAccessNote": "Students can access this content from /schools/weekly-track while active.",
+    "errorLoadClasses": "Failed to load classes.",
+    "errorSelectClass": "Select a class first.",
+    "errorChoosePdf": "Choose a PDF first.",
+    "errorPdfType": "Please upload a PDF file.",
+    "errorMissingSession": "Missing teacher session token.",
+    "errorGenerate": "Failed to generate weekly units.",
+    "errorUnexpectedResponse": "Unexpected server response."
+  },
+  "schoolGeneratedUnit": {
+    "lessonQuizHomework": "Lesson + Quiz + Homework",
+    "generatedLesson": "Generated lesson",
+    "back": "Back",
+    "backToWeeklyTrack": "Back to Weekly Track",
+    "loading": "Loading...",
+    "offlineMissing": "No offline data for this unit yet. Ask your teacher to generate again while online.",
+    "authFailed": "Could not start anonymous school session.",
+    "unitNotFound": "Unit not found.",
+    "expired": "This generated unit has expired.",
+    "loadFailed": "Failed to load unit.",
+    "homeworkAdventureTitle": "Homework Adventure",
+    "videoAdventure": "Video adventure",
+    "stepOf": "(Step {current} of {total})",
+    "hintLabel": "Hint",
+    "showHint": "Show hint",
+    "prev": "Prev",
+    "next": "Next",
+    "homeActivityFallbackTitle": "Home activity",
+    "homeActivityFallbackDesc": "A family-friendly homework activity.",
+    "homeworkTopic": "Homework topic: {topic}"
   }
 }

@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import type { UnitConfig } from './curriculum'
+import { useTranslation } from './contexts/LocaleContext'
 
-const SNAP_SCENARIOS: { text: string; correct: boolean }[] = [
+const SNAP_SCENARIOS_EN: { text: string; correct: boolean }[] = [
   { text: 'Send a snap with your full name', correct: false },
   { text: 'Keep streaks with real friends only', correct: true },
   { text: 'Send mean snaps to someone', correct: false },
@@ -11,6 +12,17 @@ const SNAP_SCENARIOS: { text: string; correct: boolean }[] = [
   { text: 'Snaps disappear forever (safe to save)', correct: false },
   { text: 'Share private photos with strangers', correct: false },
   { text: 'Be kind in snaps', correct: true },
+]
+
+const SNAP_SCENARIOS_ES: { text: string; correct: boolean }[] = [
+  { text: 'Enviar un snap con tu nombre completo', correct: false },
+  { text: 'Mantener rachas solo con amigos reales', correct: true },
+  { text: 'Enviar snaps hirientes a alguien', correct: false },
+  { text: 'Las rachas son mas importantes que los sentimientos', correct: false },
+  { text: 'Preguntar a un adulto antes de enviar snaps', correct: true },
+  { text: 'Los snaps desaparecen para siempre (es seguro guardarlos)', correct: false },
+  { text: 'Compartir fotos privadas con desconocidos', correct: false },
+  { text: 'Ser amable en los snaps', correct: true },
 ]
 
 export interface SnapchatSafetyQuizProps {
@@ -28,14 +40,16 @@ const SnapchatSafetyQuiz: React.FC<SnapchatSafetyQuizProps> = ({
   mastered,
   onComplete,
 }) => {
+  const { t, locale } = useTranslation()
   const [step, setStep] = useState<'welcome' | 'quiz' | 'complete'>('welcome')
   const [currentScenario, setCurrentScenario] = useState(0)
   const [score, setScore] = useState(0)
   const [answered, setAnswered] = useState(false)
   const [feedback, setFeedback] = useState<'correct' | 'wrong' | null>(null)
 
-  const totalScenarios = SNAP_SCENARIOS.length
-  const scenario = step === 'quiz' ? SNAP_SCENARIOS[currentScenario] : null
+  const scenarios = locale === 'es' ? SNAP_SCENARIOS_ES : SNAP_SCENARIOS_EN
+  const totalScenarios = scenarios.length
+  const scenario = step === 'quiz' ? scenarios[currentScenario] : null
 
   const handleStart = () => setStep('quiz')
 
@@ -67,10 +81,10 @@ const SnapchatSafetyQuiz: React.FC<SnapchatSafetyQuizProps> = ({
         }}
       >
         <h2 className="text-3xl sm:text-4xl font-extrabold text-blue-900 mb-2">
-          👻 Sparki&apos;s Snaps &amp; Streaks Safety Adventure
+          👻 {t('safetyQuiz.snapchat.title')}
         </h2>
         <p className="text-base sm:text-lg text-blue-700 font-semibold mb-4">
-          Snap or Not? Learn safe Snapchat choices!
+          {t('safetyQuiz.snapchat.subtitle')}
         </p>
         <div className="my-6 flex justify-center">
           <span className="text-6xl sm:text-7xl animate-[floatBounce_3s_ease-in-out_infinite]" role="img" aria-label="Sparki robot">
@@ -78,10 +92,10 @@ const SnapchatSafetyQuiz: React.FC<SnapchatSafetyQuizProps> = ({
           </span>
         </div>
         <p className="text-lg text-blue-800 font-bold mb-1">
-          Hi! I&apos;m <span className="text-blue-600">Sparki</span> 💙
+          {locale === 'es' ? '¡Hola! Soy' : "Hi! I'm"} <span className="text-blue-600">Sparki</span> 💙
         </p>
         <p className="text-blue-700 text-base mb-6 max-w-md mx-auto font-semibold">
-          I&apos;ll show you snapshots. You decide: Snap it or not? Say YES or NO!
+          {t('safetyQuiz.snapchat.intro')}
         </p>
         <button
           type="button"
@@ -89,7 +103,7 @@ const SnapchatSafetyQuiz: React.FC<SnapchatSafetyQuizProps> = ({
           className="px-10 py-4 rounded-full text-white text-xl font-bold shadow-lg hover:scale-105 active:scale-95 transition-transform"
           style={{ background: 'linear-gradient(135deg, #0ea5e9, #06b6d4)' }}
         >
-          🚀 Let&apos;s Snap!
+          🚀 {t('safetyQuiz.common.letsGo')}
         </button>
       </div>
     )
@@ -109,8 +123,10 @@ const SnapchatSafetyQuiz: React.FC<SnapchatSafetyQuizProps> = ({
       >
         <div className="mb-6">
           <div className="flex justify-between items-center mb-2">
-            <span className="text-base font-bold text-blue-800">Scenario {currentScenario + 1} of {totalScenarios}</span>
-            <span className="text-base font-bold text-green-700">✅ {score} safe</span>
+            <span className="text-base font-bold text-blue-800">
+              {t('safetyQuiz.common.questionOf', { current: currentScenario + 1, total: totalScenarios })}
+            </span>
+            <span className="text-base font-bold text-green-700">✅ {score}</span>
           </div>
           <div className="w-full h-5 rounded-full bg-white/60 overflow-hidden shadow-inner border-2 border-blue-300">
             <div
@@ -131,9 +147,15 @@ const SnapchatSafetyQuiz: React.FC<SnapchatSafetyQuizProps> = ({
             <p className="text-blue-900 font-bold text-base">
               {showFeedback
                 ? feedback === 'correct'
-                  ? 'Perfect! Safe choice! 👻✨'
-                  : "Let's learn and try the next one! 💙"
-                : 'Snap or Not? Pick YES or NO! 👻'}
+                  ? locale === 'es'
+                    ? '¡Perfecto! ¡Eleccion segura! 👻✨'
+                    : 'Perfect! Safe choice! 👻✨'
+                  : locale === 'es'
+                    ? 'Aprendamos e intentemos la siguiente 💙'
+                    : "Let's learn and try the next one! 💙"
+                : locale === 'es'
+                  ? '¿Snap o no? Elige SI o NO 👻'
+                  : 'Snap or Not? Pick YES or NO! 👻'}
             </p>
           </div>
         </div>
@@ -155,7 +177,7 @@ const SnapchatSafetyQuiz: React.FC<SnapchatSafetyQuizProps> = ({
               className="rounded-full px-12 py-5 text-white text-2xl font-bold shadow-lg hover:scale-105 active:scale-95 transition-transform border-0"
               style={{ background: 'linear-gradient(135deg, #10b981, #059669)' }}
             >
-              ✅ YES
+              ✅ {t('safetyQuiz.common.yes')}
             </button>
             <button
               type="button"
@@ -163,7 +185,7 @@ const SnapchatSafetyQuiz: React.FC<SnapchatSafetyQuizProps> = ({
               className="rounded-full px-12 py-5 text-white text-2xl font-bold shadow-lg hover:scale-105 active:scale-95 transition-transform border-0"
               style={{ background: 'linear-gradient(135deg, #ef4444, #dc2626)' }}
             >
-              ❌ NO
+              ❌ {t('safetyQuiz.common.no')}
             </button>
           </div>
         ) : (
@@ -179,12 +201,22 @@ const SnapchatSafetyQuiz: React.FC<SnapchatSafetyQuizProps> = ({
                 {feedback === 'correct' ? '✅🎉' : '❌'}
               </div>
               <p className={`text-2xl font-bold mb-2 ${feedback === 'correct' ? 'text-green-800' : 'text-red-800'}`}>
-                {feedback === 'correct' ? 'Yay! Safe snaps!' : "Let's try safe!"}
+                {feedback === 'correct'
+                  ? locale === 'es'
+                    ? '¡Bien! ¡Snaps seguros!'
+                    : 'Yay! Safe snaps!'
+                  : locale === 'es'
+                    ? '¡Intentemos con seguridad!'
+                    : "Let's try safe!"}
               </p>
               <p className={`text-lg font-semibold ${feedback === 'correct' ? 'text-green-700' : 'text-red-700'}`}>
                 {feedback === 'correct'
-                  ? 'Sparki says: "You\'re so smart!" 🤖💙'
-                  : 'Sparki says: "Keeping snaps safe matters!" 🤖💙'}
+                  ? locale === 'es'
+                    ? 'Sparki dice: "¡Eres muy inteligente!" 🤖💙'
+                    : 'Sparki says: "You\'re so smart!" 🤖💙'
+                  : locale === 'es'
+                    ? 'Sparki dice: "¡Mantener snaps seguros importa!" 🤖💙'
+                    : 'Sparki says: "Keeping snaps safe matters!" 🤖💙'}
               </p>
             </div>
             <div className="text-center mt-4">
@@ -194,7 +226,7 @@ const SnapchatSafetyQuiz: React.FC<SnapchatSafetyQuizProps> = ({
                 className="px-8 py-3 rounded-full text-white text-lg font-bold shadow-lg hover:scale-105 active:scale-95 transition-transform"
                 style={{ background: 'linear-gradient(135deg, #0ea5e9, #0284c7)' }}
               >
-                {isLast ? '🏆 See Results!' : 'Next ➡️'}
+                {isLast ? `🏆 ${t('safetyQuiz.common.seeResults')}` : `${t('safetyQuiz.common.next')} ➡️`}
               </button>
             </div>
           </>
@@ -216,10 +248,10 @@ const SnapchatSafetyQuiz: React.FC<SnapchatSafetyQuizProps> = ({
         }}
       >
         <h2 className="text-3xl sm:text-4xl font-extrabold text-blue-900 mb-3">
-          🎉 You&apos;re a Safe Snap Hero! 🎉
+          {locale === 'es' ? '🎉 ¡Eres un heroe de snaps seguros! 🎉' : "🎉 You're a Safe Snap Hero! 🎉"}
         </h2>
         <p className="text-2xl text-blue-800 font-bold mb-6">
-          You made {correctCount} out of {totalScenarios} safe choices! 👻💙
+          {t('safetyQuiz.common.youGotOutOf', { score: correctCount, total: totalScenarios })} 👻💙
         </p>
 
         <div className="mb-6 flex justify-center">
@@ -244,7 +276,7 @@ const SnapchatSafetyQuiz: React.FC<SnapchatSafetyQuizProps> = ({
         </div>
 
         <p className="text-lg font-bold text-blue-900 mb-2">
-          You earned <strong>{displaySparkles}</strong> sparkles!
+          {t('safetyQuiz.common.youEarnedSparkles', { count: displaySparkles })}
         </p>
 
         <div className="flex items-center gap-3 justify-center mb-6">
@@ -253,7 +285,9 @@ const SnapchatSafetyQuiz: React.FC<SnapchatSafetyQuizProps> = ({
           </div>
           <div className="bg-white/85 rounded-2xl rounded-tl-sm px-5 py-3 shadow-md border-2 border-blue-200 text-left max-w-xs">
             <p className="text-blue-900 font-bold">
-              You kept your snaps safe! You&apos;re awesome! 💙👻
+              {locale === 'es'
+                ? '¡Mantuviste tus snaps seguros! ¡Eres genial! 💙👻'
+                : "You kept your snaps safe! You're awesome! 💙👻"}
             </p>
           </div>
         </div>
@@ -264,7 +298,7 @@ const SnapchatSafetyQuiz: React.FC<SnapchatSafetyQuizProps> = ({
             className="inline-block px-8 py-3 rounded-full text-white text-lg font-bold shadow-lg hover:scale-105 active:scale-95 transition-transform"
             style={{ background: 'linear-gradient(135deg, #0ea5e9, #06b6d4)' }}
           >
-            Go to {nextUnit.title} →
+            {t('safetyQuiz.instagram.ctaNextUnit', { unitTitle: nextUnit.title })}
           </Link>
         )}
       </div>

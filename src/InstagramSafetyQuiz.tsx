@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import type { UnitConfig } from './curriculum'
+import { useTranslation } from './contexts/LocaleContext'
 
-const INSTAGRAM_QUESTIONS: { text: string; answer: boolean }[] = [
+const INSTAGRAM_QUESTIONS_EN: { text: string; answer: boolean }[] = [
   { text: 'You should keep your Instagram account private', answer: true },
   { text: "It's okay to share your full name in your bio", answer: false },
   { text: 'Always ask a grown-up before posting a photo', answer: true },
@@ -11,6 +12,17 @@ const INSTAGRAM_QUESTIONS: { text: string; answer: boolean }[] = [
   { text: "It's fine to post photos without grown-up permission", answer: false },
   { text: 'Use privacy settings to control who sees your photos', answer: true },
   { text: 'Tell a grown-up if someone asks for your address', answer: true },
+]
+
+const INSTAGRAM_QUESTIONS_ES: { text: string; answer: boolean }[] = [
+  { text: 'Debes mantener tu cuenta de Instagram privada', answer: true },
+  { text: 'Está bien compartir tu nombre completo en tu biografía', answer: false },
+  { text: 'Siempre pide permiso a un adulto antes de publicar una foto', answer: true },
+  { text: 'Si tu cuenta es pública, extraños pueden seguirte', answer: true },
+  { text: 'Debes compartir el nombre de tu escuela en internet', answer: false },
+  { text: 'Está bien publicar fotos sin permiso de un adulto', answer: false },
+  { text: 'Usa la privacidad para controlar quién ve tus fotos', answer: true },
+  { text: 'Dile a un adulto si alguien te pide tu dirección', answer: true },
 ]
 
 export interface InstagramSafetyQuizProps {
@@ -28,14 +40,20 @@ const InstagramSafetyQuiz: React.FC<InstagramSafetyQuizProps> = ({
   mastered,
   onComplete,
 }) => {
+  const { t, locale } = useTranslation()
   const [step, setStep] = useState<'welcome' | 'quiz' | 'complete'>('welcome')
   const [currentQ, setCurrentQ] = useState(0)
   const [score, setScore] = useState(0)
   const [answered, setAnswered] = useState(false)
   const [feedback, setFeedback] = useState<'correct' | 'wrong' | null>(null)
 
-  const totalQuestions = INSTAGRAM_QUESTIONS.length
-  const q = step === 'quiz' ? INSTAGRAM_QUESTIONS[currentQ] : null
+  const questions = useMemo(
+    () => (locale === 'es' ? INSTAGRAM_QUESTIONS_ES : INSTAGRAM_QUESTIONS_EN),
+    [locale],
+  )
+
+  const totalQuestions = questions.length
+  const q = step === 'quiz' ? questions[currentQ] : null
 
   const handleStart = () => setStep('quiz')
 
@@ -67,10 +85,10 @@ const InstagramSafetyQuiz: React.FC<InstagramSafetyQuizProps> = ({
         }}
       >
         <h2 className="text-3xl sm:text-4xl font-extrabold text-pink-900 mb-2">
-          📱 Sparki&apos;s Instagram Safety Adventure
+          📱 {t('safetyQuiz.instagram.title')}
         </h2>
         <p className="text-base sm:text-lg text-blue-700 font-semibold mb-4">
-          Learn how to stay safe on Instagram!
+          {t('safetyQuiz.instagram.subtitle')}
         </p>
         <div className="my-6 flex justify-center">
           <span className="text-6xl sm:text-7xl animate-[floatBounce_3s_ease-in-out_infinite]" role="img" aria-label="Sparki robot">
@@ -78,10 +96,10 @@ const InstagramSafetyQuiz: React.FC<InstagramSafetyQuizProps> = ({
           </span>
         </div>
         <p className="text-lg text-blue-800 font-bold mb-1">
-          Hi! I&apos;m <span className="text-pink-600">Sparki</span> 💙
+          {locale === 'es' ? '¡Hola! Soy' : "Hi! I'm"} <span className="text-pink-600">Sparki</span> 💙
         </p>
         <p className="text-blue-700 text-base mb-6 max-w-md mx-auto font-semibold">
-          Answer true or false about Instagram safety! Can you get them all right?
+          {t('safetyQuiz.instagram.intro')}
         </p>
         <button
           type="button"
@@ -89,7 +107,7 @@ const InstagramSafetyQuiz: React.FC<InstagramSafetyQuizProps> = ({
           className="px-10 py-4 rounded-full text-white text-xl font-bold shadow-lg hover:scale-105 active:scale-95 transition-transform"
           style={{ background: 'linear-gradient(135deg, #ec4899, #db2777)' }}
         >
-          🚀 Let&apos;s Go!
+          🚀 {t('safetyQuiz.common.letsGo')}
         </button>
       </div>
     )
@@ -109,8 +127,12 @@ const InstagramSafetyQuiz: React.FC<InstagramSafetyQuizProps> = ({
       >
         <div className="mb-6">
           <div className="flex justify-between items-center mb-2">
-            <span className="text-base font-bold text-blue-800">Question {currentQ + 1} of {totalQuestions}</span>
-            <span className="text-base font-bold text-pink-700">✅ {score} correct</span>
+            <span className="text-base font-bold text-blue-800">
+              {t('safetyQuiz.common.questionOf', { current: currentQ + 1, total: totalQuestions })}
+            </span>
+            <span className="text-base font-bold text-pink-700">
+              ✅ {score} {locale === 'es' ? 'correctas' : 'correct'}
+            </span>
           </div>
           <div className="w-full h-5 rounded-full bg-white/60 overflow-hidden shadow-inner border-2 border-pink-300">
             <div
@@ -131,9 +153,11 @@ const InstagramSafetyQuiz: React.FC<InstagramSafetyQuizProps> = ({
             <p className="text-blue-900 font-bold text-base">
               {showFeedback
                 ? feedback === 'correct'
-                  ? "Perfect! You got it right! 🎉💖"
-                  : "Try the other button! 💙"
-                : 'Is this true or false? 💭'}
+                  ? `${t('safetyQuiz.instagram.feedbackCorrect')} 🎉💖`
+                  : `${t('safetyQuiz.instagram.feedbackWrong')} 💙`
+                : locale === 'es'
+                  ? '¿Esto es verdadero o falso? 💭'
+                  : 'Is this true or false? 💭'}
             </p>
           </div>
         </div>
@@ -155,7 +179,7 @@ const InstagramSafetyQuiz: React.FC<InstagramSafetyQuizProps> = ({
               className="rounded-3xl py-6 px-4 text-white text-2xl font-bold shadow-lg hover:scale-105 active:scale-95 transition-transform"
               style={{ background: 'linear-gradient(135deg, #10b981, #059669)' }}
             >
-              ✅ TRUE
+              ✅ {t('safetyQuiz.common.true')}
             </button>
             <button
               type="button"
@@ -163,7 +187,7 @@ const InstagramSafetyQuiz: React.FC<InstagramSafetyQuizProps> = ({
               className="rounded-3xl py-6 px-4 text-white text-2xl font-bold shadow-lg hover:scale-105 active:scale-95 transition-transform"
               style={{ background: 'linear-gradient(135deg, #ef4444, #dc2626)' }}
             >
-              ❌ FALSE
+              ❌ {t('safetyQuiz.common.false')}
             </button>
           </div>
         ) : (
@@ -179,12 +203,16 @@ const InstagramSafetyQuiz: React.FC<InstagramSafetyQuizProps> = ({
                 {feedback === 'correct' ? '✅💚' : '❌'}
               </div>
               <p className={`text-2xl font-bold mb-2 ${feedback === 'correct' ? 'text-green-800' : 'text-red-800'}`}>
-                {feedback === 'correct' ? 'Yay! Safe choice!' : 'Try again!'}
+                {feedback === 'correct' ? t('safetyQuiz.instagram.safeChoice') : t('safetyQuiz.common.wrong')}
               </p>
               <p className={`text-lg font-semibold ${feedback === 'correct' ? 'text-green-700' : 'text-red-700'}`}>
                 {feedback === 'correct'
-                  ? 'Sparki says: "Amazing! Keep learning!" 🤖💗'
-                  : `Sparki says: "Always ask a grown-up first! The answer is ${q.answer ? 'TRUE' : 'FALSE'}." 🤖`}
+                  ? locale === 'es'
+                    ? 'Sparki dice: "¡Increible! ¡Sigue aprendiendo!" 🤖💗'
+                    : 'Sparki says: "Amazing! Keep learning!" 🤖💗'
+                  : locale === 'es'
+                    ? `Sparki dice: "Primero pregunta a un adulto. La respuesta es ${q.answer ? t('safetyQuiz.common.true') : t('safetyQuiz.common.false')}." 🤖`
+                    : `Sparki says: "Always ask a grown-up first! The answer is ${q.answer ? t('safetyQuiz.common.true') : t('safetyQuiz.common.false')}." 🤖`}
               </p>
             </div>
             <div className="text-center mt-4">
@@ -194,7 +222,7 @@ const InstagramSafetyQuiz: React.FC<InstagramSafetyQuizProps> = ({
                 className="px-8 py-3 rounded-full text-white text-lg font-bold shadow-lg hover:scale-105 active:scale-95 transition-transform"
                 style={{ background: 'linear-gradient(135deg, #3b82f6, #ec4899)' }}
               >
-                {isLast ? '🏆 See Results!' : 'Next ➡️'}
+                {isLast ? `🏆 ${t('safetyQuiz.common.seeResults')}` : `${t('safetyQuiz.common.next')} ➡️`}
               </button>
             </div>
           </>
@@ -216,10 +244,10 @@ const InstagramSafetyQuiz: React.FC<InstagramSafetyQuizProps> = ({
         }}
       >
         <h2 className="text-3xl sm:text-4xl font-extrabold text-pink-900 mb-3">
-          🎉 You&apos;re an Instagram Safety Star! 🎉
+          {locale === 'es' ? '🎉 ¡Eres una estrella de seguridad en Instagram! 🎉' : "🎉 You're an Instagram Safety Star! 🎉"}
         </h2>
         <p className="text-2xl text-blue-800 font-bold mb-6">
-          You got {correctCount} out of {totalQuestions} correct! 🛡️
+          {t('safetyQuiz.common.youGotOutOf', { score: correctCount, total: totalQuestions })} 🛡️
         </p>
 
         <div className="mb-6 flex justify-center">
@@ -244,7 +272,7 @@ const InstagramSafetyQuiz: React.FC<InstagramSafetyQuizProps> = ({
         </div>
 
         <p className="text-lg font-bold text-pink-900 mb-2">
-          You earned <strong>{displaySparkles}</strong> sparkles!
+          {t('safetyQuiz.common.youEarnedSparkles', { count: displaySparkles })}
         </p>
 
         <div className="flex items-center gap-3 justify-center mb-6">
@@ -253,7 +281,7 @@ const InstagramSafetyQuiz: React.FC<InstagramSafetyQuizProps> = ({
           </div>
           <div className="bg-white/85 rounded-2xl rounded-tl-sm px-5 py-3 shadow-md border-2 border-pink-200 text-left max-w-xs">
             <p className="text-blue-900 font-bold">
-              Amazing! You&apos;re safe on Instagram! 💙📱
+              {locale === 'es' ? '¡Increible! ¡Estas seguro en Instagram! 💙📱' : "Amazing! You're safe on Instagram! 💙📱"}
             </p>
           </div>
         </div>
@@ -264,7 +292,7 @@ const InstagramSafetyQuiz: React.FC<InstagramSafetyQuizProps> = ({
             className="inline-block px-8 py-3 rounded-full text-white text-lg font-bold shadow-lg hover:scale-105 active:scale-95 transition-transform"
             style={{ background: 'linear-gradient(135deg, #ec4899, #db2777)' }}
           >
-            Go to {nextUnit.title} →
+            {t('safetyQuiz.instagram.ctaNextUnit', { unitTitle: nextUnit.title })}
           </Link>
         )}
       </div>

@@ -1,14 +1,24 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import type { UnitConfig } from './curriculum'
+import { useTranslation } from './contexts/LocaleContext'
 
-const FORTNITE_CHALLENGES: { text: string; correct: boolean }[] = [
+const FORTNITE_CHALLENGES_EN: { text: string; correct: boolean }[] = [
   { text: "Mute voice chat if it's mean", correct: true },
   { text: 'Block rude players', correct: true },
   { text: 'Set kind rules for talking', correct: true },
   { text: 'Talk to strangers', correct: false },
   { text: 'Share personal info in chat', correct: false },
   { text: 'Report bad behavior', correct: true },
+]
+
+const FORTNITE_CHALLENGES_ES: { text: string; correct: boolean }[] = [
+  { text: 'Silenciar chat de voz si es grosero', correct: true },
+  { text: 'Bloquear jugadores groseros', correct: true },
+  { text: 'Poner reglas amables al hablar', correct: true },
+  { text: 'Hablar con desconocidos', correct: false },
+  { text: 'Compartir datos personales en chat', correct: false },
+  { text: 'Reportar mal comportamiento', correct: true },
 ]
 
 export interface FortniteSafetyQuizProps {
@@ -26,14 +36,16 @@ const FortniteSafetyQuiz: React.FC<FortniteSafetyQuizProps> = ({
   mastered,
   onComplete,
 }) => {
+  const { t, locale } = useTranslation()
   const [step, setStep] = useState<'welcome' | 'quiz' | 'complete'>('welcome')
   const [currentChallenge, setCurrentChallenge] = useState(0)
   const [score, setScore] = useState(0)
   const [answered, setAnswered] = useState(false)
   const [feedback, setFeedback] = useState<'correct' | 'wrong' | null>(null)
 
-  const totalChallenges = FORTNITE_CHALLENGES.length
-  const challenge = step === 'quiz' ? FORTNITE_CHALLENGES[currentChallenge] : null
+  const challenges = locale === 'es' ? FORTNITE_CHALLENGES_ES : FORTNITE_CHALLENGES_EN
+  const totalChallenges = challenges.length
+  const challenge = step === 'quiz' ? challenges[currentChallenge] : null
 
   const handleStart = () => setStep('quiz')
 
@@ -67,10 +79,10 @@ const FortniteSafetyQuiz: React.FC<FortniteSafetyQuizProps> = ({
       >
         <div className="absolute inset-0 pointer-events-none opacity-10" style={{ backgroundImage: 'linear-gradient(0deg, transparent 24%, rgba(0,255,200,0.3) 25%, rgba(0,255,200,0.3) 26%, transparent 27%), linear-gradient(90deg, transparent 24%, rgba(0,255,200,0.3) 25%, rgba(0,255,200,0.3) 26%, transparent 27%)', backgroundSize: '50px 50px' }} />
         <h2 className="text-3xl sm:text-4xl font-black mb-2 relative" style={{ color: '#FFD700', textShadow: '0 0 20px rgba(255,215,0,0.8), 0 0 40px rgba(100,200,255,0.3)', textTransform: 'uppercase', letterSpacing: '2px' }}>
-          🎮 Sparki&apos;s Fortnite Safety Quest
+          🎮 {t('safetyQuiz.fortnite.title')}
         </h2>
         <p className="text-lg sm:text-xl font-bold mb-4 relative" style={{ color: '#64C8FF' }}>
-          Navigate the Safe Path!
+          {t('safetyQuiz.fortnite.subtitle')}
         </p>
         <div className="my-6 flex justify-center relative">
           <span className="text-6xl sm:text-7xl animate-[floatBounce_3s_ease-in-out_infinite]" role="img" aria-label="Sparki robot">
@@ -78,10 +90,10 @@ const FortniteSafetyQuiz: React.FC<FortniteSafetyQuizProps> = ({
           </span>
         </div>
         <p className="text-xl sm:text-2xl font-black mb-1 relative" style={{ color: '#FFD700' }}>
-          Hi! I&apos;m Sparki 💚
+          {locale === 'es' ? '¡Hola! Soy Sparki 💚' : "Hi! I'm Sparki 💚"}
         </p>
         <p className="text-base sm:text-lg font-bold mb-6 max-w-md mx-auto relative" style={{ color: '#64C8FF' }}>
-          Follow the safe path by making smart choices! Answer YES or NO at each fork. Let&apos;s stay safe in Fortnite!
+          {t('safetyQuiz.fortnite.intro')}
         </p>
         <button
           type="button"
@@ -89,7 +101,7 @@ const FortniteSafetyQuiz: React.FC<FortniteSafetyQuizProps> = ({
           className="relative px-10 py-4 rounded-lg text-black text-xl font-black shadow-lg hover:scale-105 active:scale-95 transition-transform"
           style={{ background: '#FFD700', border: '3px solid #CC9900', boxShadow: '0 6px 0 rgba(0,0,0,0.4), 0 0 20px rgba(255,215,0,0.6)' }}
         >
-          🚀 Start Quest!
+          🚀 {t('safetyQuiz.common.letsGo')}
         </button>
       </div>
     )
@@ -110,8 +122,10 @@ const FortniteSafetyQuiz: React.FC<FortniteSafetyQuizProps> = ({
       >
         <div className="mb-6">
           <div className="flex justify-between items-center mb-2">
-            <span className="text-base font-black uppercase" style={{ color: '#FFD700' }}>Question {currentChallenge + 1} of {totalChallenges}</span>
-            <span className="text-base font-black uppercase" style={{ color: '#64C8FF' }}>✅ {score} correct</span>
+            <span className="text-base font-black uppercase" style={{ color: '#FFD700' }}>
+              {t('safetyQuiz.common.questionOf', { current: currentChallenge + 1, total: totalChallenges })}
+            </span>
+            <span className="text-base font-black uppercase" style={{ color: '#64C8FF' }}>✅ {score}</span>
           </div>
           <div className="w-full h-6 rounded-sm overflow-hidden shadow-inner bg-black/30 border-2" style={{ borderColor: '#FFD700' }}>
             <div
@@ -132,9 +146,15 @@ const FortniteSafetyQuiz: React.FC<FortniteSafetyQuizProps> = ({
             <p className="font-bold text-base text-indigo-700">
               {showFeedback
                 ? feedback === 'correct'
-                  ? 'Perfect choice! Stay safe! 🎮✨'
-                  : "Let's find the safe choice! 💙"
-                : 'Choose wisely at this fork! 🎮'}
+                  ? locale === 'es'
+                    ? '¡Eleccion perfecta! ¡Mantente seguro! 🎮✨'
+                    : 'Perfect choice! Stay safe! 🎮✨'
+                  : locale === 'es'
+                    ? '¡Busquemos la opcion segura! 💙'
+                    : "Let's find the safe choice! 💙"
+                : locale === 'es'
+                  ? 'Elige sabiamente en esta decision 🎮'
+                  : 'Choose wisely at this fork! 🎮'}
             </p>
           </div>
         </div>
@@ -143,7 +163,9 @@ const FortniteSafetyQuiz: React.FC<FortniteSafetyQuizProps> = ({
           <p className="text-2xl sm:text-3xl font-bold text-indigo-800 leading-relaxed mb-2">
             {challenge.text}
           </p>
-          <p className="text-lg text-indigo-600 font-semibold">What&apos;s the safe choice?</p>
+          <p className="text-lg text-indigo-600 font-semibold">
+            {locale === 'es' ? '¿Cual es la opcion segura?' : "What's the safe choice?"}
+          </p>
         </div>
 
         {!showFeedback ? (
@@ -154,7 +176,7 @@ const FortniteSafetyQuiz: React.FC<FortniteSafetyQuizProps> = ({
               className="px-8 sm:px-12 py-5 rounded-lg text-lg sm:text-2xl font-bold border-3 shadow-lg hover:-translate-y-0.5 active:translate-y-0.5 transition-transform uppercase tracking-wide"
               style={{ background: '#00FF00', color: '#000', borderColor: '#00BB00', boxShadow: '0 6px 0 rgba(0,0,0,0.3)' }}
             >
-              ✅ YES
+              ✅ {t('safetyQuiz.common.yes')}
             </button>
             <button
               type="button"
@@ -162,7 +184,7 @@ const FortniteSafetyQuiz: React.FC<FortniteSafetyQuizProps> = ({
               className="px-8 sm:px-12 py-5 rounded-lg text-lg sm:text-2xl font-bold border-3 shadow-lg hover:-translate-y-0.5 active:translate-y-0.5 transition-transform uppercase tracking-wide text-white"
               style={{ background: '#FF3333', borderColor: '#BB0000', boxShadow: '0 6px 0 rgba(0,0,0,0.3)' }}
             >
-              ❌ NO
+              ❌ {t('safetyQuiz.common.no')}
             </button>
           </div>
         ) : (
@@ -178,12 +200,22 @@ const FortniteSafetyQuiz: React.FC<FortniteSafetyQuizProps> = ({
                 {feedback === 'correct' ? '✅🎉' : '❌'}
               </div>
               <p className={`text-2xl font-bold mb-2 ${feedback === 'correct' ? 'text-green-800' : 'text-red-800'}`}>
-                {feedback === 'correct' ? 'Great choice!' : "Let's choose safe!"}
+                {feedback === 'correct'
+                  ? locale === 'es'
+                    ? '¡Gran eleccion!'
+                    : 'Great choice!'
+                  : locale === 'es'
+                    ? '¡Elijamos seguro!'
+                    : "Let's choose safe!"}
               </p>
               <p className={`text-lg font-semibold ${feedback === 'correct' ? 'text-green-700' : 'text-red-700'}`}>
                 {feedback === 'correct'
-                  ? 'Sparki says: "Safe path forward!" 🤖💜'
-                  : 'Sparki says: "Safety in Fortnite matters!" 🤖💜'}
+                  ? locale === 'es'
+                    ? 'Sparki dice: "¡Camino seguro adelante!" 🤖💜'
+                    : 'Sparki says: "Safe path forward!" 🤖💜'
+                  : locale === 'es'
+                    ? 'Sparki dice: "¡La seguridad en Fortnite importa!" 🤖💜'
+                    : 'Sparki says: "Safety in Fortnite matters!" 🤖💜'}
               </p>
             </div>
             <div className="text-center mt-4">
@@ -193,7 +225,7 @@ const FortniteSafetyQuiz: React.FC<FortniteSafetyQuizProps> = ({
                 className="px-8 py-3 rounded-full text-white text-lg font-bold shadow-lg hover:scale-105 active:scale-95 transition-transform"
                 style={{ background: 'linear-gradient(135deg, #6366f1, #9333ea)' }}
               >
-                {isLast ? '🏆 See Results!' : 'Next ➡️'}
+                {isLast ? `🏆 ${t('safetyQuiz.common.seeResults')}` : `${t('safetyQuiz.common.next')} ➡️`}
               </button>
             </div>
           </>
@@ -216,10 +248,10 @@ const FortniteSafetyQuiz: React.FC<FortniteSafetyQuizProps> = ({
         }}
       >
         <h2 className="text-3xl sm:text-4xl font-extrabold mb-3 bg-gradient-to-r from-indigo-500 to-purple-500 bg-clip-text text-transparent">
-          🎉 Fortnite Safety Hero! 🎉
+          {locale === 'es' ? '🎉 ¡Heroe de seguridad en Fortnite! 🎉' : '🎉 Fortnite Safety Hero! 🎉'}
         </h2>
         <p className="text-2xl font-bold mb-6 text-indigo-300">
-          You made {correctCount} out of {totalChallenges} safe choices! 🎮💜
+          {t('safetyQuiz.common.youGotOutOf', { score: correctCount, total: totalChallenges })} 🎮💜
         </p>
 
         <div className="mb-6 flex justify-center">
@@ -244,7 +276,7 @@ const FortniteSafetyQuiz: React.FC<FortniteSafetyQuizProps> = ({
         </div>
 
         <p className="text-lg font-bold text-indigo-200 mb-2">
-          You earned <strong>{displaySparkles}</strong> sparkles!
+          {t('safetyQuiz.common.youEarnedSparkles', { count: displaySparkles })}
         </p>
 
         <div className="flex items-center gap-3 justify-center mb-6">
@@ -253,7 +285,9 @@ const FortniteSafetyQuiz: React.FC<FortniteSafetyQuizProps> = ({
           </div>
           <div className="bg-white/90 rounded-2xl rounded-tl-sm px-5 py-3 shadow-md border-2 border-indigo-200 text-left max-w-xs">
             <p className="font-bold text-indigo-700">
-              You completed the quest! Stay safe in Fortnite! 💜🎮
+              {locale === 'es'
+                ? '¡Completaste la mision! ¡Mantente seguro en Fortnite! 💜🎮'
+                : 'You completed the quest! Stay safe in Fortnite! 💜🎮'}
             </p>
           </div>
         </div>
@@ -264,7 +298,7 @@ const FortniteSafetyQuiz: React.FC<FortniteSafetyQuizProps> = ({
             className="inline-block px-8 py-3 rounded-full text-white text-lg font-bold shadow-lg hover:scale-105 active:scale-95 transition-transform"
             style={{ background: 'linear-gradient(135deg, #6366f1, #9333ea)' }}
           >
-            Go to {nextUnit.title} →
+            {t('safetyQuiz.instagram.ctaNextUnit', { unitTitle: nextUnit.title })}
           </Link>
         )}
       </div>

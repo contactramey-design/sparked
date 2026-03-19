@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import type { UnitConfig } from './curriculum'
+import { useTranslation } from './contexts/LocaleContext'
 
-const REDDIT_CHALLENGES: { text: string; correct: boolean }[] = [
+const REDDIT_CHALLENGES_EN: { text: string; correct: boolean }[] = [
   { text: 'Not everything online is true', correct: true },
   { text: 'You should avoid grown-up spaces online', correct: true },
   { text: 'You should believe every comment you read', correct: false },
@@ -11,6 +12,17 @@ const REDDIT_CHALLENGES: { text: string; correct: boolean }[] = [
   { text: 'You should click on unknown links from strangers', correct: false },
   { text: 'You should report bad or mean content you see', correct: true },
   { text: 'You should share your personal info in forums', correct: false },
+]
+
+const REDDIT_CHALLENGES_ES: { text: string; correct: boolean }[] = [
+  { text: 'No todo lo de internet es verdad', correct: true },
+  { text: 'Debes evitar espacios para adultos en linea', correct: true },
+  { text: 'Debes creer todos los comentarios que leas', correct: false },
+  { text: 'Debes preguntar a un adulto sobre publicaciones feas o confusas', correct: true },
+  { text: 'Es bueno leer comentarios amables de personas buenas', correct: true },
+  { text: 'Debes abrir enlaces desconocidos de extraños', correct: false },
+  { text: 'Debes reportar contenido grosero o dañino', correct: true },
+  { text: 'Debes compartir datos personales en foros', correct: false },
 ]
 
 export interface RedditForumsSafetyQuizProps {
@@ -28,14 +40,16 @@ const RedditForumsSafetyQuiz: React.FC<RedditForumsSafetyQuizProps> = ({
   mastered,
   onComplete,
 }) => {
+  const { t, locale } = useTranslation()
   const [step, setStep] = useState<'welcome' | 'quiz' | 'complete'>('welcome')
   const [currentChallenge, setCurrentChallenge] = useState(0)
   const [score, setScore] = useState(0)
   const [answered, setAnswered] = useState(false)
   const [feedback, setFeedback] = useState<'correct' | 'wrong' | null>(null)
 
-  const totalChallenges = REDDIT_CHALLENGES.length
-  const challenge = step === 'quiz' ? REDDIT_CHALLENGES[currentChallenge] : null
+  const challenges = locale === 'es' ? REDDIT_CHALLENGES_ES : REDDIT_CHALLENGES_EN
+  const totalChallenges = challenges.length
+  const challenge = step === 'quiz' ? challenges[currentChallenge] : null
 
   const handleStart = () => setStep('quiz')
 
@@ -68,10 +82,10 @@ const RedditForumsSafetyQuiz: React.FC<RedditForumsSafetyQuizProps> = ({
         }}
       >
         <h2 className="text-3xl sm:text-4xl font-black mb-2 uppercase tracking-wide" style={{ color: '#FF4500', textShadow: '0 3px 0 rgba(255, 69, 0, 0.4)' }}>
-          📱 Sparki&apos;s Safe Reading Adventure 📱
+          📱 {t('safetyQuiz.reddit.title')} 📱
         </h2>
         <p className="text-lg sm:text-xl font-bold mb-4" style={{ color: '#D946A6' }}>
-          On Reddit &amp; Forums!
+          {t('safetyQuiz.reddit.subtitle')}
         </p>
         <div className="my-6 flex justify-center">
           <span className="text-6xl sm:text-7xl animate-[floatBounce_3s_ease-in-out_infinite]" role="img" aria-label="Sparki robot">
@@ -79,10 +93,12 @@ const RedditForumsSafetyQuiz: React.FC<RedditForumsSafetyQuizProps> = ({
           </span>
         </div>
         <p className="text-xl sm:text-2xl font-black mb-1" style={{ color: '#4A5FC1' }}>
-          Hi! I&apos;m Sparki! 💙
+          {locale === 'es' ? '¡Hola! Soy Sparki! 💙' : "Hi! I'm Sparki! 💙"}
         </p>
         <p className="text-base sm:text-lg font-bold mb-6 max-w-2xl mx-auto" style={{ color: '#D946A6' }}>
-          I&apos;m here to help you learn how to read safely on Reddit and Forums! Answer TRUE or FALSE to 8 fun questions. Ready?
+          {locale === 'es'
+            ? 'Estoy aqui para ayudarte a leer con seguridad en Reddit y foros. Responde VERDADERO o FALSO a 8 preguntas. ¿Listo?'
+            : "I'm here to help you learn how to read safely on Reddit and Forums! Answer TRUE or FALSE to 8 fun questions. Ready?"}
         </p>
         <button
           type="button"
@@ -90,7 +106,7 @@ const RedditForumsSafetyQuiz: React.FC<RedditForumsSafetyQuizProps> = ({
           className="px-10 py-4 rounded-xl text-white text-xl font-black shadow-lg hover:scale-105 active:scale-95 transition-transform uppercase tracking-wide"
           style={{ background: 'linear-gradient(135deg, #4A90E2, #5BA3F5)', border: '3px solid #2E5CB8', boxShadow: '0 6px 0 rgba(0,0,0,0.3)' }}
         >
-          🚀 Start Adventure!
+          🚀 {t('safetyQuiz.common.letsGo')}
         </button>
       </div>
     )
@@ -111,8 +127,10 @@ const RedditForumsSafetyQuiz: React.FC<RedditForumsSafetyQuizProps> = ({
       >
         <div className="mb-6">
           <div className="flex justify-between items-center mb-2">
-            <span className="text-base font-black uppercase" style={{ color: '#FF4500' }}>Question {currentChallenge + 1} of {totalChallenges}</span>
-            <span className="text-base font-black uppercase" style={{ color: '#32CD32' }}>✅ {score} Correct</span>
+            <span className="text-base font-black uppercase" style={{ color: '#FF4500' }}>
+              {t('safetyQuiz.common.questionOf', { current: currentChallenge + 1, total: totalChallenges })}
+            </span>
+            <span className="text-base font-black uppercase" style={{ color: '#32CD32' }}>✅ {score}</span>
           </div>
           <div className="w-full h-6 rounded-lg overflow-hidden shadow-inner bg-white/20 border-2 border-orange-500">
             <div
@@ -133,9 +151,15 @@ const RedditForumsSafetyQuiz: React.FC<RedditForumsSafetyQuizProps> = ({
             <p className="font-bold text-base text-orange-700">
               {showFeedback
                 ? feedback === 'correct'
-                  ? "Perfect choice! You're so smart! ✨"
-                  : "It's okay! Let's learn together! 📚"
-                : 'Read carefully and choose TRUE or FALSE! 📖'}
+                  ? locale === 'es'
+                    ? '¡Eleccion perfecta! ¡Eres muy inteligente! ✨'
+                    : "Perfect choice! You're so smart! ✨"
+                  : locale === 'es'
+                    ? 'No pasa nada, aprendamos juntos 📚'
+                    : "It's okay! Let's learn together! 📚"
+                : locale === 'es'
+                  ? 'Lee con cuidado y elige VERDADERO o FALSO 📖'
+                  : 'Read carefully and choose TRUE or FALSE! 📖'}
             </p>
           </div>
         </div>
@@ -144,7 +168,9 @@ const RedditForumsSafetyQuiz: React.FC<RedditForumsSafetyQuizProps> = ({
           <p className="text-2xl sm:text-3xl font-bold leading-relaxed mb-3" style={{ color: '#D63300' }}>
             {challenge.text}
           </p>
-          <p className="text-lg font-semibold" style={{ color: '#FF4500' }}>📖 Is this true or false?</p>
+          <p className="text-lg font-semibold" style={{ color: '#FF4500' }}>
+            📖 {locale === 'es' ? '¿Esto es verdadero o falso?' : 'Is this true or false?'}
+          </p>
         </div>
 
         {!showFeedback ? (
@@ -155,7 +181,7 @@ const RedditForumsSafetyQuiz: React.FC<RedditForumsSafetyQuizProps> = ({
               className="px-8 sm:px-10 py-5 rounded-xl text-white text-xl font-black border-3 shadow-lg hover:-translate-y-0.5 active:translate-y-0.5 transition-transform uppercase tracking-wide"
               style={{ background: '#FF4500', borderColor: '#D63300', boxShadow: '0 6px 0 rgba(0,0,0,0.2)' }}
             >
-              ✓ TRUE
+              ✓ {t('safetyQuiz.common.true')}
             </button>
             <button
               type="button"
@@ -163,7 +189,7 @@ const RedditForumsSafetyQuiz: React.FC<RedditForumsSafetyQuizProps> = ({
               className="px-8 sm:px-10 py-5 rounded-xl text-white text-xl font-black border-3 shadow-lg hover:-translate-y-0.5 active:translate-y-0.5 transition-transform uppercase tracking-wide"
               style={{ background: '#FF6D3D', borderColor: '#E63400', boxShadow: '0 6px 0 rgba(0,0,0,0.2)' }}
             >
-              ✗ FALSE
+              ✗ {t('safetyQuiz.common.false')}
             </button>
           </div>
         ) : (
@@ -179,12 +205,20 @@ const RedditForumsSafetyQuiz: React.FC<RedditForumsSafetyQuizProps> = ({
                 {feedback === 'correct' ? '✅ 👍' : '❌'}
               </div>
               <p className={`text-2xl font-bold mb-2 ${feedback === 'correct' ? 'text-green-800' : 'text-pink-800'}`}>
-                {feedback === 'correct' ? 'Yay! Smart reading!' : 'Try again!'}
+                {feedback === 'correct'
+                  ? locale === 'es'
+                    ? '¡Bien! ¡Lectura inteligente!'
+                    : 'Yay! Smart reading!'
+                  : t('safetyQuiz.common.wrong')}
               </p>
               <p className={`text-lg font-semibold ${feedback === 'correct' ? 'text-green-700' : 'text-pink-700'}`}>
                 {feedback === 'correct'
-                  ? 'Sparki says: "You\'re reading safely!" 🤖💙'
-                  : 'Sparki says: "Always ask a grown-up!" 🤖💙'}
+                  ? locale === 'es'
+                    ? 'Sparki dice: "¡Estas leyendo con seguridad!" 🤖💙'
+                    : 'Sparki says: "You\'re reading safely!" 🤖💙'
+                  : locale === 'es'
+                    ? 'Sparki dice: "¡Siempre pregunta a un adulto!" 🤖💙'
+                    : 'Sparki says: "Always ask a grown-up!" 🤖💙'}
               </p>
             </div>
             <div className="text-center mt-4">
@@ -194,7 +228,7 @@ const RedditForumsSafetyQuiz: React.FC<RedditForumsSafetyQuizProps> = ({
                 className="px-8 py-3 rounded-full text-white text-lg font-bold shadow-lg hover:scale-105 active:scale-95 transition-transform"
                 style={{ background: 'linear-gradient(135deg, #4A90E2, #D946A6)' }}
               >
-                {isLast ? '🏆 See My Results!' : 'Next ➡️'}
+                {isLast ? `🏆 ${t('safetyQuiz.common.seeResults')}` : `${t('safetyQuiz.common.next')} ➡️`}
               </button>
             </div>
           </>
@@ -217,10 +251,10 @@ const RedditForumsSafetyQuiz: React.FC<RedditForumsSafetyQuizProps> = ({
         }}
       >
         <h2 className="text-3xl sm:text-4xl font-extrabold mb-3 bg-gradient-to-r from-orange-500 to-orange-400 bg-clip-text text-transparent">
-          🌟 Safe Reader Star! 🌟
+          {locale === 'es' ? '🌟 ¡Estrella de lectura segura! 🌟' : '🌟 Safe Reader Star! 🌟'}
         </h2>
         <p className="text-2xl font-bold mb-6" style={{ color: '#FF4500' }}>
-          You got {correctCount} out of {totalChallenges} correct! Amazing! 🌟
+          {t('safetyQuiz.common.youGotOutOf', { score: correctCount, total: totalChallenges })} 🌟
         </p>
 
         <div className="mb-6 flex justify-center">
@@ -245,7 +279,7 @@ const RedditForumsSafetyQuiz: React.FC<RedditForumsSafetyQuizProps> = ({
         </div>
 
         <p className="text-lg font-bold text-orange-200 mb-2">
-          You earned <strong>{displaySparkles}</strong> sparkles!
+          {t('safetyQuiz.common.youEarnedSparkles', { count: displaySparkles })}
         </p>
 
         <div className="flex items-center gap-3 justify-center mb-6">
@@ -254,7 +288,9 @@ const RedditForumsSafetyQuiz: React.FC<RedditForumsSafetyQuizProps> = ({
           </div>
           <div className="bg-white rounded-2xl rounded-tl-sm px-5 py-3 shadow-md border-2 border-blue-400 text-left max-w-xs">
             <p className="font-bold text-indigo-700">
-              You&apos;re an amazing safe reader! Keep asking grown-ups about things online! 💙📚
+              {locale === 'es'
+                ? '¡Eres un lector seguro increible! Sigue preguntando a adultos sobre internet 💙📚'
+                : "You're an amazing safe reader! Keep asking grown-ups about things online! 💙📚"}
             </p>
           </div>
         </div>
@@ -265,7 +301,7 @@ const RedditForumsSafetyQuiz: React.FC<RedditForumsSafetyQuizProps> = ({
             className="inline-block px-8 py-3 rounded-full text-white text-lg font-bold shadow-lg hover:scale-105 active:scale-95 transition-transform uppercase tracking-wide"
             style={{ background: 'linear-gradient(135deg, #4A90E2, #D946A6)' }}
           >
-            Go to {nextUnit.title} →
+            {t('safetyQuiz.instagram.ctaNextUnit', { unitTitle: nextUnit.title })}
           </Link>
         )}
       </div>

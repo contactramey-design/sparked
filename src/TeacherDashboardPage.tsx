@@ -136,7 +136,7 @@ const TeacherDashboardPage: React.FC = () => {
       setClasses(rows)
       if (!selectedClassId && rows[0]?.id) setSelectedClassId(rows[0].id)
     } catch (e: any) {
-      setError(e?.message ?? 'Failed to load classes.')
+      setError(e?.message ?? t('teacherDashboard.errorLoadClasses'))
     } finally {
       setLoading(false)
     }
@@ -155,7 +155,7 @@ const TeacherDashboardPage: React.FC = () => {
       if (e) throw e
       setStudents((data ?? []) as StudentProgressRow[])
     } catch (e: any) {
-      setError(e?.message ?? 'Failed to load students.')
+      setError(e?.message ?? t('teacherDashboard.errorLoadStudents'))
     } finally {
       setLoading(false)
     }
@@ -365,7 +365,7 @@ const TeacherDashboardPage: React.FC = () => {
                               setNewClassName('')
                               await refreshClasses()
                             } catch (e: any) {
-                              setError(e?.message ?? 'Failed to create class.')
+                              setError(e?.message ?? t('teacherDashboard.errorCreateClass'))
                             } finally {
                               setLoading(false)
                             }

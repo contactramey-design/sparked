@@ -65,7 +65,7 @@ const TeacherWeeklyGeneratorPage: React.FC = () => {
       setClasses(rows)
       if (!selectedClassId && rows[0]?.id) setSelectedClassId(rows[0].id)
     } catch (e: any) {
-      setError(e?.message ?? 'Failed to load classes.')
+      setError(e?.message ?? t('teacherGenerator.errorLoadClasses'))
     } finally {
       setLoading(false)
     }
@@ -90,13 +90,13 @@ const TeacherWeeklyGeneratorPage: React.FC = () => {
     setLoading(true)
     setResult(null)
     try {
-      if (!selectedClassId) throw new Error('Select a class first.')
-      if (!file) throw new Error('Choose a PDF first.')
-      if (file.type !== 'application/pdf') throw new Error('Please upload a PDF file.')
+      if (!selectedClassId) throw new Error(t('teacherGenerator.errorSelectClass'))
+      if (!file) throw new Error(t('teacherGenerator.errorChoosePdf'))
+      if (file.type !== 'application/pdf') throw new Error(t('teacherGenerator.errorPdfType'))
 
       const { data: sessionData } = await supabase.auth.getSession()
       const accessToken = sessionData.session?.access_token
-      if (!accessToken) throw new Error('Missing teacher session token.')
+      if (!accessToken) throw new Error(t('teacherGenerator.errorMissingSession'))
 
       const formData = new FormData()
       formData.append('pdf', file)
@@ -112,14 +112,14 @@ const TeacherWeeklyGeneratorPage: React.FC = () => {
 
       const data = await res.json().catch(() => ({}))
       if (!res.ok) {
-        throw new Error(typeof data?.error === 'string' ? data.error : 'Failed to generate weekly units.')
+        throw new Error(typeof data?.error === 'string' ? data.error : t('teacherGenerator.errorGenerate'))
       }
 
       const r = data as GeneratorResult
-      if (!r?.generatorId || !Array.isArray(r.units)) throw new Error('Unexpected server response.')
+      if (!r?.generatorId || !Array.isArray(r.units)) throw new Error(t('teacherGenerator.errorUnexpectedResponse'))
       setResult(r)
     } catch (e: any) {
-      setError(e?.message ?? 'Failed to generate weekly units.')
+      setError(e?.message ?? t('teacherGenerator.errorGenerate'))
     } finally {
       setLoading(false)
     }
@@ -130,7 +130,7 @@ const TeacherWeeklyGeneratorPage: React.FC = () => {
       <div className="page page-narrow">
         <Card>
           <CardHeader>
-            <CardTitle>Teacher Weekly Generator</CardTitle>
+            <CardTitle>{t('teacherGenerator.title')}</CardTitle>
           </CardHeader>
           <CardContent>
             <p className="muted">{t('teacherDashboard.supabaseMissing')}</p>
@@ -145,7 +145,7 @@ const TeacherWeeklyGeneratorPage: React.FC = () => {
       <div className="page page-narrow">
         <Card>
           <CardHeader>
-            <CardTitle>Teacher Weekly Generator</CardTitle>
+            <CardTitle>{t('teacherGenerator.title')}</CardTitle>
           </CardHeader>
           <CardContent>
             <p className="muted">{t('teacherDashboard.notTeacher')}</p>
@@ -159,19 +159,19 @@ const TeacherWeeklyGeneratorPage: React.FC = () => {
   return (
     <div className="page page-narrow">
       <header className="page-header">
-        <h2>Teacher Weekly Generator</h2>
-        <p className="muted">Upload a PDF and generate a temporary weekly track + 3 units.</p>
+        <h2>{t('teacherGenerator.title')}</h2>
+        <p className="muted">{t('teacherGenerator.subtitle')}</p>
       </header>
 
       <div className="stack-lg">
         <Card>
           <CardHeader>
-            <CardTitle>Generate</CardTitle>
+            <CardTitle>{t('teacherGenerator.generateTitle')}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="stack-lg">
               <label className="muted">
-                Class
+                {t('teacherGenerator.classLabel')}
                 <select
                   value={selectedClassId}
                   onChange={(e) => setSelectedClassId(e.target.value)}
@@ -194,7 +194,7 @@ const TeacherWeeklyGeneratorPage: React.FC = () => {
               </label>
 
               <label className="muted">
-                PDF
+                {t('teacherGenerator.pdfLabel')}
                 <input
                   type="file"
                   accept="application/pdf"
@@ -217,7 +217,7 @@ const TeacherWeeklyGeneratorPage: React.FC = () => {
 
               <label className="muted" style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
                 <input type="checkbox" checked={generateVideoPerUnit} onChange={(e) => setGenerateVideoPerUnit(e.target.checked)} />
-                Generate homework video per unit (may take longer)
+                {t('teacherGenerator.videoToggle')}
               </label>
 
               {!!error && (
@@ -232,7 +232,7 @@ const TeacherWeeklyGeneratorPage: React.FC = () => {
                   void submit()
                 }}
               >
-                {loading ? 'Generating…' : 'Generate Weekly Track'}
+                {loading ? t('teacherGenerator.buttonBusy') : t('teacherGenerator.buttonIdle')}
               </Button>
             </div>
           </CardContent>
@@ -241,17 +241,17 @@ const TeacherWeeklyGeneratorPage: React.FC = () => {
         {result && (
           <Card>
             <CardHeader>
-              <CardTitle>Generated Weekly Track</CardTitle>
+              <CardTitle>{t('teacherGenerator.resultTitle')}</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="stack-lg">
                 <div>
-                  <div className="muted">Label</div>
+                  <div className="muted">{t('teacherGenerator.resultLabel')}</div>
                   <div style={{ fontWeight: 700, fontSize: 16 }}>{result.weeklyTrackLabel}</div>
                 </div>
 
                 <div>
-                  <div className="muted">Units</div>
+                  <div className="muted">{t('teacherGenerator.resultUnits')}</div>
                   <div className="stack-md">
                     {result.units.map((u) => (
                       <div
@@ -278,7 +278,7 @@ const TeacherWeeklyGeneratorPage: React.FC = () => {
                             navigate(`/schools/unit/${u.unitId}`)
                           }}
                         >
-                          Preview student page
+                          {t('teacherGenerator.previewStudentPage')}
                         </Button>
                       </div>
                     ))}
@@ -286,7 +286,7 @@ const TeacherWeeklyGeneratorPage: React.FC = () => {
                 </div>
 
                 <div className="muted">
-                  Students can access this content from their `/schools/weekly-track` page while it is active.
+                  {t('teacherGenerator.studentsAccessNote')}
                 </div>
               </div>
             </CardContent>

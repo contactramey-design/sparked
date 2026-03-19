@@ -44,6 +44,36 @@ registerRoute(
   }),
 )
 
+// WebM caching with range requests for generated school/homework media.
+registerRoute(
+  ({ url }) => url.origin === self.location.origin && url.pathname.endsWith('.webm'),
+  new CacheFirst({
+    cacheName: 'video-webm-cache',
+    plugins: [
+      new CacheableResponsePlugin({ statuses: [200] }),
+      new RangeRequestsPlugin(),
+      new ExpirationPlugin({ maxEntries: 50, maxAgeSeconds: 60 * 60 * 24 * 30 }),
+    ],
+  }),
+)
+
+// Runtime image caching for covers, storyboard images, and posters.
+registerRoute(
+  ({ url }) =>
+    url.origin === self.location.origin &&
+    (url.pathname.endsWith('.png') ||
+      url.pathname.endsWith('.jpg') ||
+      url.pathname.endsWith('.jpeg') ||
+      url.pathname.endsWith('.webp')),
+  new StaleWhileRevalidate({
+    cacheName: 'image-cache',
+    plugins: [
+      new CacheableResponsePlugin({ statuses: [0, 200] }),
+      new ExpirationPlugin({ maxEntries: 300, maxAgeSeconds: 60 * 60 * 24 * 60 }),
+    ],
+  }),
+)
+
 // Curriculum JSON (if served as separate assets)
 registerRoute(
   ({ url }) => url.origin === self.location.origin && url.pathname.endsWith('.json') && url.pathname.includes('curriculum-'),

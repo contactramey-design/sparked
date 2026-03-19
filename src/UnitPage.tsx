@@ -94,6 +94,8 @@ const UnitPage: React.FC = () => {
 
   const [materialFinished, setMaterialFinished] = useState(false)
   const [instaSlide, setInstaSlide] = useState(0)
+  const instaTouchStartXRef = useRef<number | null>(null)
+  const instaTouchDeltaXRef = useRef(0)
   const [thinkPromptOpen, setThinkPromptOpen] = useState<number | null>(null)
   const materialEndRef = useRef<HTMLDivElement>(null)
   const quizSectionRef = useRef<HTMLDivElement>(null)
@@ -123,7 +125,7 @@ const UnitPage: React.FC = () => {
     '/instasafetyillustration3.png',
     '/instasafetyillustration4.png',
     '/instasafetyillustration5.png',
-    '/instasafetyillustartion6.jpeg',
+    '/instasafetyillustration6.jpeg',
     '/instasafetyillustration7.png',
   ]
 
@@ -149,6 +151,27 @@ const UnitPage: React.FC = () => {
   const instaCaptions = locale === 'es' ? instaCaptionsEs : instaCaptionsEn
   const currentInstaImage = instaImages[instaSlide] ?? instaImages[0]
   const currentInstaCaption = instaCaptions[instaSlide] ?? ''
+  const nextInstaSlide = () => setInstaSlide((prev) => (prev + 1) % instaImages.length)
+  const prevInstaSlide = () => setInstaSlide((prev) => (prev - 1 + instaImages.length) % instaImages.length)
+
+  const onInstaTouchStart: React.TouchEventHandler<HTMLDivElement> = (event) => {
+    instaTouchStartXRef.current = event.touches[0]?.clientX ?? null
+    instaTouchDeltaXRef.current = 0
+  }
+
+  const onInstaTouchMove: React.TouchEventHandler<HTMLDivElement> = (event) => {
+    if (instaTouchStartXRef.current === null) return
+    const currentX = event.touches[0]?.clientX ?? instaTouchStartXRef.current
+    instaTouchDeltaXRef.current = currentX - instaTouchStartXRef.current
+  }
+
+  const onInstaTouchEnd: React.TouchEventHandler<HTMLDivElement> = () => {
+    if (instaTouchStartXRef.current === null) return
+    if (instaTouchDeltaXRef.current <= -40) nextInstaSlide()
+    if (instaTouchDeltaXRef.current >= 40) prevInstaSlide()
+    instaTouchStartXRef.current = null
+    instaTouchDeltaXRef.current = 0
+  }
 
   const handleChange = (qIndex: number, optionIndex: number) => {
     const next = [...selected]
@@ -501,13 +524,19 @@ const UnitPage: React.FC = () => {
                       {unit.id === 'safety-instagram' ? (
                         <div className="space-y-3 max-w-xl mx-auto text-center">
                           <div className="flex flex-col items-center gap-2">
-                            <div className="w-full max-w-md relative mx-auto">
+                            <div className="w-full max-w-md relative mx-auto storyboard-card">
                               <div className="storyboard-sparkles" aria-hidden />
-                              <div className="overflow-hidden rounded-3xl border-2 border-pink-200 bg-white shadow-md">
+                              <div
+                                key={currentInstaImage}
+                                className="overflow-hidden rounded-3xl border-2 border-pink-200 bg-white shadow-md storyboard-main-slide"
+                                onTouchStart={onInstaTouchStart}
+                                onTouchMove={onInstaTouchMove}
+                                onTouchEnd={onInstaTouchEnd}
+                              >
                                 <img
                                   src={currentInstaImage}
                                   alt={`Instagram safety illustration ${instaSlide + 1}`}
-                                  className="block w-full max-h-64 object-cover"
+                                  className="block w-full max-h-64 object-cover storyboard-main-image"
                                 />
                               </div>
                             </div>
@@ -524,7 +553,7 @@ const UnitPage: React.FC = () => {
                                   key={src}
                                   type="button"
                                   onClick={() => setInstaSlide(index)}
-                                  className={`rounded-xl border-2 bg-white/80 shadow-sm overflow-hidden transition-transform focus:outline-none focus-visible:ring-2 focus-visible:ring-pink-400 ${
+                                  className={`rounded-xl border-2 bg-white/80 shadow-sm overflow-hidden transition-transform focus:outline-none focus-visible:ring-2 focus-visible:ring-pink-400 storyboard-thumb ${
                                     instaSlide === index ? 'border-pink-400 scale-[1.02]' : 'border-pink-200 opacity-60'
                                   }`}
                                   style={{ width: 120, flex: '0 0 auto' }}
@@ -540,6 +569,14 @@ const UnitPage: React.FC = () => {
                                 </button>
                               ))}
                             </div>
+                          </div>
+                          <div className="flex items-center justify-center gap-3">
+                            <Button type="button" variant="secondary" size="sm" onClick={prevInstaSlide}>
+                              {t('schoolGeneratedUnit.prev')}
+                            </Button>
+                            <Button type="button" variant="secondary" size="sm" onClick={nextInstaSlide}>
+                              {t('schoolGeneratedUnit.next')}
+                            </Button>
                           </div>
                           <div className="flex items-center justify-center gap-2">
                             {instaImages.map((_, index) => (

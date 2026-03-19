@@ -1,8 +1,9 @@
 import React, { useState, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import type { UnitConfig } from './curriculum'
+import { useTranslation } from './contexts/LocaleContext'
 
-const TIKTOK_PAIRS: { action: string; emoji: string }[] = [
+const TIKTOK_PAIRS_EN: { action: string; emoji: string }[] = [
   { action: 'Say nice things in comments', emoji: '❤️😊' },
   { action: 'Call someone mean names', emoji: '😠🚫' },
   { action: 'Turn off messages from strangers', emoji: '🔒' },
@@ -11,6 +12,17 @@ const TIKTOK_PAIRS: { action: string; emoji: string }[] = [
   { action: 'Be rude in comments', emoji: '😡' },
   { action: 'Use kind words', emoji: '🌟😄' },
   { action: 'Block mean people', emoji: '🛑' },
+]
+
+const TIKTOK_PAIRS_ES: { action: string; emoji: string }[] = [
+  { action: 'Di cosas amables en los comentarios', emoji: '❤️😊' },
+  { action: 'Insulta a alguien', emoji: '😠🚫' },
+  { action: 'Desactiva mensajes de desconocidos', emoji: '🔒' },
+  { action: 'Burlarte del video de alguien', emoji: '😢' },
+  { action: 'Animar a otra persona', emoji: '🎉🙌' },
+  { action: 'Ser grosero en comentarios', emoji: '😡' },
+  { action: 'Usar palabras amables', emoji: '🌟😄' },
+  { action: 'Bloquear personas groseras', emoji: '🛑' },
 ]
 
 const WRONG_EMOJIS = ['🎮', '🍕', '📚']
@@ -30,14 +42,16 @@ const TikTokSafetyQuiz: React.FC<TikTokSafetyQuizProps> = ({
   mastered,
   onComplete,
 }) => {
+  const { t, locale } = useTranslation()
   const [step, setStep] = useState<'welcome' | 'quiz' | 'complete'>('welcome')
   const [currentPair, setCurrentPair] = useState(0)
   const [score, setScore] = useState(0)
   const [answered, setAnswered] = useState(false)
   const [feedback, setFeedback] = useState<'correct' | 'wrong' | null>(null)
 
-  const totalPairs = TIKTOK_PAIRS.length
-  const pair = step === 'quiz' ? TIKTOK_PAIRS[currentPair] : null
+  const pairs = locale === 'es' ? TIKTOK_PAIRS_ES : TIKTOK_PAIRS_EN
+  const totalPairs = pairs.length
+  const pair = step === 'quiz' ? pairs[currentPair] : null
 
   const options = useMemo(() => {
     if (!pair) return []
@@ -75,10 +89,10 @@ const TikTokSafetyQuiz: React.FC<TikTokSafetyQuizProps> = ({
         }}
       >
         <h2 className="text-3xl sm:text-4xl font-extrabold text-pink-900 mb-2">
-          🎵 Sparki&apos;s Kind &amp; Safe TikTok Adventure
+          🎵 {t('safetyQuiz.tiktok.title')}
         </h2>
         <p className="text-base sm:text-lg text-blue-700 font-semibold mb-4">
-          Learn to be kind and safe on TikTok!
+          {t('safetyQuiz.tiktok.subtitle')}
         </p>
         <div className="my-6 flex justify-center">
           <span className="text-6xl sm:text-7xl animate-[floatBounce_3s_ease-in-out_infinite]" role="img" aria-label="Sparki robot">
@@ -86,10 +100,10 @@ const TikTokSafetyQuiz: React.FC<TikTokSafetyQuizProps> = ({
           </span>
         </div>
         <p className="text-lg text-blue-800 font-bold mb-1">
-          Hi! I&apos;m <span className="text-pink-600">Sparki</span> 💙
+          {locale === 'es' ? '¡Hola! Soy' : "Hi! I'm"} <span className="text-pink-600">Sparki</span> 💙
         </p>
         <p className="text-blue-700 text-base mb-6 max-w-md mx-auto font-semibold">
-          Match actions to emojis! Can you find all the kind choices?
+          {t('safetyQuiz.tiktok.intro')}
         </p>
         <button
           type="button"
@@ -97,7 +111,7 @@ const TikTokSafetyQuiz: React.FC<TikTokSafetyQuizProps> = ({
           className="px-10 py-4 rounded-full text-white text-xl font-bold shadow-lg hover:scale-105 active:scale-95 transition-transform"
           style={{ background: 'linear-gradient(135deg, #ec4899, #db2777)' }}
         >
-          🚀 Let&apos;s Go!
+          🚀 {t('safetyQuiz.common.letsGo')}
         </button>
       </div>
     )
@@ -117,8 +131,12 @@ const TikTokSafetyQuiz: React.FC<TikTokSafetyQuizProps> = ({
       >
         <div className="mb-6">
           <div className="flex justify-between items-center mb-2">
-            <span className="text-base font-bold text-blue-800">Match {currentPair + 1} of {totalPairs}</span>
-            <span className="text-base font-bold text-pink-700">💗 {score} matched</span>
+            <span className="text-base font-bold text-blue-800">
+              {t('safetyQuiz.tiktok.matchOf', { current: currentPair + 1, total: totalPairs })}
+            </span>
+            <span className="text-base font-bold text-pink-700">
+              💗 {score} {locale === 'es' ? 'aciertos' : 'matched'}
+            </span>
           </div>
           <div className="w-full h-5 rounded-full bg-white/60 overflow-hidden shadow-inner border-2 border-pink-300">
             <div
@@ -139,9 +157,15 @@ const TikTokSafetyQuiz: React.FC<TikTokSafetyQuizProps> = ({
             <p className="text-blue-900 font-bold text-base">
               {showFeedback
                 ? feedback === 'correct'
-                  ? 'Perfect match! 🎉💕'
-                  : 'Try another emoji! 💙'
-                : 'Match the action to its emoji! 🎵'}
+                  ? locale === 'es'
+                    ? '¡Relacion perfecta! 🎉💕'
+                    : 'Perfect match! 🎉💕'
+                  : locale === 'es'
+                    ? '¡Prueba otro emoji! 💙'
+                    : 'Try another emoji! 💙'
+                : locale === 'es'
+                  ? '¡Relaciona la accion con su emoji! 🎵'
+                  : 'Match the action to its emoji! 🎵'}
             </p>
           </div>
         </div>
@@ -182,12 +206,22 @@ const TikTokSafetyQuiz: React.FC<TikTokSafetyQuizProps> = ({
                 {feedback === 'correct' ? '✅💚' : '❌'}
               </div>
               <p className={`text-2xl font-bold mb-2 ${feedback === 'correct' ? 'text-green-800' : 'text-red-800'}`}>
-                {feedback === 'correct' ? 'Kind words make TikTok fun!' : "Let's try kind!"}
+                {feedback === 'correct'
+                  ? locale === 'es'
+                    ? '¡Las palabras amables hacen TikTok divertido!'
+                    : 'Kind words make TikTok fun!'
+                  : locale === 'es'
+                    ? '¡Probemos con amabilidad!'
+                    : "Let's try kind!"}
               </p>
               <p className={`text-lg font-semibold ${feedback === 'correct' ? 'text-green-700' : 'text-red-700'}`}>
                 {feedback === 'correct'
-                  ? 'Sparki says: "You\'re so kind!" 🤖💗'
-                  : 'Sparki says: "Always be safe and kind!" 🤖'}
+                  ? locale === 'es'
+                    ? 'Sparki dice: "¡Eres muy amable!" 🤖💗'
+                    : 'Sparki says: "You\'re so kind!" 🤖💗'
+                  : locale === 'es'
+                    ? 'Sparki dice: "¡Siempre con seguridad y amabilidad!" 🤖'
+                    : 'Sparki says: "Always be safe and kind!" 🤖'}
               </p>
             </div>
             <div className="text-center mt-4">
@@ -197,7 +231,7 @@ const TikTokSafetyQuiz: React.FC<TikTokSafetyQuizProps> = ({
                 className="px-8 py-3 rounded-full text-white text-lg font-bold shadow-lg hover:scale-105 active:scale-95 transition-transform"
                 style={{ background: 'linear-gradient(135deg, #3b82f6, #ec4899)' }}
               >
-                {isLast ? '🏆 See Results!' : 'Next ➡️'}
+                {isLast ? `🏆 ${t('safetyQuiz.common.seeResults')}` : `${t('safetyQuiz.common.next')} ➡️`}
               </button>
             </div>
           </>
@@ -219,10 +253,10 @@ const TikTokSafetyQuiz: React.FC<TikTokSafetyQuizProps> = ({
         }}
       >
         <h2 className="text-3xl sm:text-4xl font-extrabold text-pink-900 mb-3">
-          🎉 You&apos;re a Kind TikTok Star! 🎉
+          {locale === 'es' ? '🎉 ¡Eres una estrella amable de TikTok! 🎉' : "🎉 You're a Kind TikTok Star! 🎉"}
         </h2>
         <p className="text-2xl text-blue-800 font-bold mb-6">
-          You matched {correctCount} out of {totalPairs} perfectly! 🎵💗
+          {t('safetyQuiz.common.youGotOutOf', { score: correctCount, total: totalPairs })} 🎵💗
         </p>
 
         <div className="mb-6 flex justify-center">
@@ -247,7 +281,7 @@ const TikTokSafetyQuiz: React.FC<TikTokSafetyQuizProps> = ({
         </div>
 
         <p className="text-lg font-bold text-pink-900 mb-2">
-          You earned <strong>{displaySparkles}</strong> sparkles!
+          {t('safetyQuiz.common.youEarnedSparkles', { count: displaySparkles })}
         </p>
 
         <div className="flex items-center gap-3 justify-center mb-6">
@@ -256,7 +290,9 @@ const TikTokSafetyQuiz: React.FC<TikTokSafetyQuizProps> = ({
           </div>
           <div className="bg-white/85 rounded-2xl rounded-tl-sm px-5 py-3 shadow-md border-2 border-pink-200 text-left max-w-xs">
             <p className="text-blue-900 font-bold">
-              Amazing! You&apos;re kind and safe on TikTok! 💙🎵
+              {locale === 'es'
+                ? '¡Increible! ¡Eres amable y seguro en TikTok! 💙🎵'
+                : "Amazing! You're kind and safe on TikTok! 💙🎵"}
             </p>
           </div>
         </div>
@@ -267,7 +303,7 @@ const TikTokSafetyQuiz: React.FC<TikTokSafetyQuizProps> = ({
             className="inline-block px-8 py-3 rounded-full text-white text-lg font-bold shadow-lg hover:scale-105 active:scale-95 transition-transform"
             style={{ background: 'linear-gradient(135deg, #ec4899, #db2777)' }}
           >
-            Go to {nextUnit.title} →
+            {t('safetyQuiz.instagram.ctaNextUnit', { unitTitle: nextUnit.title })}
           </Link>
         )}
       </div>

@@ -774,11 +774,11 @@ h1, h2, h3 {
   color: #1e40af;
 }
 
-/* Storyboard cloud card for Instagram safety */
+/* Instagram storyboard card + swipe dial motion */
 .storyboard-card {
   position: relative;
-  border-radius: 999px;
-  padding: 1.75rem 1.5rem 1.5rem;
+  border-radius: 1.25rem;
+  padding: 0.9rem;
   background: radial-gradient(circle at 20% 0%, #fee2f2, #fdf2ff 40%, #e0f2fe 100%);
   border: 3px solid rgba(236, 72, 153, 0.6);
   box-shadow:
@@ -799,15 +799,38 @@ h1, h2, h3 {
 .storyboard-card::before {
   width: 180px;
   height: 120px;
-  top: -40px;
+  top: -24px;
   left: 10%;
 }
 
 .storyboard-card::after {
   width: 220px;
   height: 140px;
-  bottom: -60px;
+  bottom: -40px;
   right: 0%;
+}
+
+.storyboard-main-slide {
+  transform-origin: center;
+  animation: storyboard-dial-in 420ms ease-out;
+}
+
+.storyboard-main-image {
+  transition: transform 220ms ease, filter 220ms ease;
+}
+
+.storyboard-main-slide:hover .storyboard-main-image {
+  transform: scale(1.02);
+  filter: saturate(1.05);
+}
+
+.storyboard-thumb img {
+  transition: filter 220ms ease, transform 220ms ease;
+}
+
+.storyboard-thumb:hover img {
+  filter: blur(0) saturate(1.1);
+  transform: scale(1.03);
 }
 
 .storyboard-sparkles {
@@ -827,6 +850,17 @@ h1, h2, h3 {
   0% { opacity: 0.4; transform: translateY(0); }
   50% { opacity: 0.75; transform: translateY(-4px); }
   100% { opacity: 0.55; transform: translateY(0); }
+}
+
+@keyframes storyboard-dial-in {
+  0% {
+    transform: perspective(1100px) rotateY(-18deg) scale(0.985);
+    filter: brightness(0.98);
+  }
+  100% {
+    transform: perspective(1100px) rotateY(0deg) scale(1);
+    filter: brightness(1);
+  }
 }
 
 /* Safety Instagram unit quiz animations */

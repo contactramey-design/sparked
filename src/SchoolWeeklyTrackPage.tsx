@@ -82,7 +82,7 @@ const SchoolWeeklyTrackPage: React.FC = () => {
         }
 
         const uid = await ensureAnonymousSchoolAuth()
-        if (!uid) throw new Error('Could not start anonymous school session.')
+        if (!uid) throw new Error(t('schoolJoin.authFailed'))
 
         const nowIso = new Date().toISOString()
         const { data: genData, error: genErr } = await supabase
@@ -115,7 +115,7 @@ const SchoolWeeklyTrackPage: React.FC = () => {
 
         const cards: UnitCard[] = unitRows.map((r) => ({
           unitId: r.unit_id,
-          title: r.unit_json?.title ?? 'Generated unit',
+          title: r.unit_json?.title ?? t('schools.generatedUnitFallbackTitle'),
           summary: r.unit_json?.summary ?? '',
           quizCount: Array.isArray(r.unit_json?.quizQuestions) ? r.unit_json.quizQuestions.length : undefined,
           unitJson: r.unit_json,
@@ -189,7 +189,7 @@ const SchoolWeeklyTrackPage: React.FC = () => {
           }
         }
 
-        setError(e?.message ?? 'Failed to load weekly track.')
+        setError(e?.message ?? t('schools.weeklyTrackLoadError'))
       } finally {
         if (!cancelled) setLoading(false)
       }
@@ -270,7 +270,10 @@ const SchoolWeeklyTrackPage: React.FC = () => {
                   >
                     <div>
                       <div className="muted" style={{ fontSize: 12 }}>
-                        Unit {idx + 1} · {typeof u.quizCount === 'number' ? `${u.quizCount} questions` : 'Quiz'}
+                        {t('schools.weeklyTrackUnitMeta', {
+                          index: idx + 1,
+                          count: typeof u.quizCount === 'number' ? u.quizCount : t('schools.weeklyTrackQuizFallback'),
+                        })}
                       </div>
                       <div style={{ fontWeight: 800, fontSize: 16 }}>{u.title}</div>
                       <div className="muted" style={{ fontSize: 12 }}>
