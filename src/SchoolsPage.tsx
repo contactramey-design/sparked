@@ -5,11 +5,13 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { useSchoolMode } from './hooks/useSchoolMode'
 import SchoolJoinCard from './components/SchoolJoinCard'
+import { getSchoolSession } from '@/school/schoolSession'
 
 const SchoolsPage: React.FC = () => {
   const { t } = useTranslation()
   const { schoolMode, setSchoolMode } = useSchoolMode()
   const navigate = useNavigate()
+  const { classId } = getSchoolSession()
 
   return (
     <div className="page page-narrow">
@@ -46,6 +48,26 @@ const SchoolsPage: React.FC = () => {
         {schoolMode && <SchoolJoinCard />}
 
         <div className="schools-grid">
+          {classId && (
+            <Card>
+              <CardHeader>
+                <CardTitle>{t('schools.weeklyTrackTitle')}</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="muted">{t('schools.weeklyTrackDesc')}</p>
+                <div className="schools-actions">
+                  <Button
+                    onClick={() => {
+                      navigate('/schools/weekly-track')
+                    }}
+                  >
+                    {t('schools.openWeeklyTrack')}
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
           <Card>
             <CardHeader>
               <CardTitle>{t('schools.pwaTitle')}</CardTitle>

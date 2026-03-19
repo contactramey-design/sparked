@@ -50,6 +50,9 @@
     "dashboardTitle": "Teacher dashboard",
     "dashboardDesc": "Create classes, view anonymous progress, and export CSV.",
     "openTeacherDashboard": "Open teacher dashboard",
+    "weeklyTrackTitle": "Weekly Track",
+    "weeklyTrackDesc": "Your teacher generated units for this week. Open the track to start.",
+    "openWeeklyTrack": "Open weekly track",
     "complianceTitle": "Compliance & privacy",
     "complianceDesc": "COPPA / FERPA / CIPA overview and school-use notes.",
     "openCompliance": "Open compliance page"

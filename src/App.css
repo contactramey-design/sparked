@@ -102,6 +102,9 @@ h1, h2, h3 {
 }
 
 /* School theme (light orange): enabled by AppShell via data-school-theme */
+.app[data-school-theme='true'] {
+  background: var(--background-color) !important;
+}
 .app[data-school-theme='true'] .app-header {
   background: linear-gradient(
     135deg,
@@ -113,11 +116,11 @@ h1, h2, h3 {
 }
 
 .app[data-school-theme='true'] .app-main {
-  background: var(--background-color);
+  background: var(--background-color) !important;
 }
 
 .app[data-school-theme='true'] .app-footer {
-  background: rgba(253, 186, 116, 0.25);
+  background: rgba(253, 186, 116, 0.25) !important;
 }
 
 .app-titles {

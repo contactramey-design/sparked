@@ -50,6 +50,9 @@
     "dashboardTitle": "Panel del profesor",
     "dashboardDesc": "Crea clases, ve progreso anónimo y exporta CSV.",
     "openTeacherDashboard": "Abrir panel del profesor",
+    "weeklyTrackTitle": "Ruta semanal",
+    "weeklyTrackDesc": "Tu profe generó unidades para esta semana. Abre la ruta para empezar.",
+    "openWeeklyTrack": "Abrir la ruta semanal",
     "complianceTitle": "Cumplimiento y privacidad",
     "complianceDesc": "Resumen de COPPA / FERPA / CIPA y notas para escuelas.",
     "openCompliance": "Abrir página de cumplimiento"
