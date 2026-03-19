@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { appConfig } from './config'
 import { useAuth } from './AuthContext'
@@ -6,9 +6,6 @@ import { useTranslation } from './contexts/LocaleContext'
 import { awardDailyLoginBonus, getPlayerStats } from './progress'
 import { ParentViewContent } from './ParentDashboard'
 import { useSchoolMode } from './hooks/useSchoolMode'
-import SchoolJoinCard from './components/SchoolJoinCard'
-
-type ViewMode = 'kid' | 'parent'
 
 const TIERS = [
   {
@@ -90,20 +87,19 @@ const HomePage: React.FC = () => {
   const { isLoggedIn } = useAuth()
   const { t, locale } = useTranslation()
   const { schoolMode } = useSchoolMode()
-  const [searchParams, setSearchParams] = useSearchParams()
+  const [searchParams] = useSearchParams()
   const viewParam = searchParams.get('view')
-  const [viewMode, setViewMode] = useState<ViewMode>(
-    viewParam === 'parent' ? 'parent' : 'kid',
-  )
   const [username, setUsername] = useState('')
   const [sparkles, setSparkles] = useState(0)
   const [streakDays, setStreakDays] = useState(0)
   const [dailyBonusAwarded, setDailyBonusAwarded] = useState(0)
 
-  useEffect(() => {
-    const next = viewParam === 'parent' ? 'parent' : 'kid'
-    setViewMode(next)
-  }, [viewParam])
+  const isParentView = viewParam === 'parent'
+  const checkoutStatus = useMemo(() => {
+    const v = searchParams.get('checkout')
+    if (v === 'success' || v === 'cancel') return v
+    return null
+  }, [searchParams])
 
   useEffect(() => {
     if (!isLoggedIn) return
@@ -130,22 +126,12 @@ const HomePage: React.FC = () => {
     }
   }, [])
 
-  const setView = (mode: ViewMode) => {
-    setViewMode(mode)
-    if (mode === 'parent') {
-      setSearchParams({ view: 'parent' }, { replace: true })
-    } else {
-      setSearchParams({}, { replace: true })
-    }
-  }
-
   const loginPath = '/login'
 
   // Academy is public: no login required just to explore tracks + units.
   const ctaHref = '/tracks'
 
   // Checkout success returns to /?view=parent&checkout=success.
-  // Parent view must mount even if the user isn't "logged in" via email/Supabase.
   const shopBadge = (
     <div className="home-shop-badge-row" aria-hidden={false}>
       <Link to="/shop" className="home-shop-badge-link">
@@ -154,10 +140,18 @@ const HomePage: React.FC = () => {
     </div>
   )
 
-  if (viewMode === 'parent' && !isLoggedIn) {
+  if (isParentView && !isLoggedIn && !checkoutStatus) {
     return (
       <section className="home-page home-hub">
         {shopBadge}
+        <div className="home-footer-actions">
+          <Link to="/login?redirect=%2F%3Fview%3Dparent" className="secondary-button">
+            {t('login.title')}
+          </Link>
+          <Link to="/" className="link-muted">
+            {t('common.backToHome')}
+          </Link>
+        </div>
         <div className="hub-parent-wrap" key={locale}>
           <ParentViewContent />
         </div>
@@ -165,59 +159,14 @@ const HomePage: React.FC = () => {
     )
   }
 
-  if (isLoggedIn) {
+  if (isParentView) {
     return (
       <section className="home-page home-hub">
         {shopBadge}
-        <div className="hub-toggle-bar" role="tablist" aria-label={`${t('home.view')} ${t('home.kid')} ${t('home.parent')}`}>
-          <span className="hub-toggle-label">{t('home.view')}</span>
-          <button
-            type="button"
-            role="tab"
-            aria-selected={viewMode === 'kid'}
-            className={viewMode === 'kid' ? 'active' : ''}
-            onClick={() => setView('kid')}
-          >
-            {t('home.kid')}
-          </button>
-          <button
-            type="button"
-            role="tab"
-            aria-selected={viewMode === 'parent'}
-            className={viewMode === 'parent' ? 'active' : ''}
-            onClick={() => setView('parent')}
-          >
-            {t('home.parent')}
-          </button>
-        </div>
-
-        {viewMode === 'kid' && (
-          <>
-            <p className="hub-kid-line">
-              {t('home.hiSparkles', { name: username || 'Explorer', count: sparkles })}
-            </p>
-            {dailyBonusAwarded > 0 && (
-              <p className="home-daily-bonus-note">{t('home.dailyBonusLine', { count: dailyBonusAwarded })}</p>
-            )}
-            <p className="home-streak-note">{t('home.streakLine', { count: streakDays })}</p>
-            <div className="home-tiers">
-              <h2 className="home-tiers-title">{t('home.chooseAdventure')}</h2>
-              <div className="home-tier-grid">
-                {TIERS.map((tier) => (
-                  <TierCard key={tier.id} tier={tier} href={tier.path} />
-                ))}
-              </div>
-            </div>
-          </>
-        )}
-
-        {viewMode === 'parent' && (
-          <div className="hub-parent-wrap" key={locale}>
-            <ParentViewContent />
-          </div>
-        )}
-
         <div className="home-footer-actions">
+          <Link to="/" className="secondary-button">
+            {t('common.backToHome')}
+          </Link>
           <a
             href={appConfig.parentResources.handbookPdfUrl}
             target="_blank"
@@ -227,13 +176,21 @@ const HomePage: React.FC = () => {
             {t('home.parentGuide')}
           </a>
         </div>
+        <div className="hub-parent-wrap" key={locale}>
+          <ParentViewContent />
+        </div>
       </section>
     )
   }
 
   return (
     <section className="home-page">
-      {shopBadge}
+      {!schoolMode && shopBadge}
+      {isLoggedIn && (
+        <p className="hub-kid-line">
+          {t('home.hiSparkles', { name: username || 'Explorer', count: sparkles })}
+        </p>
+      )}
       {dailyBonusAwarded > 0 && (
         <p className="home-daily-bonus-note">{t('home.dailyBonusLine', { count: dailyBonusAwarded })}</p>
       )}
@@ -263,12 +220,6 @@ const HomePage: React.FC = () => {
         </div>
       </div>
 
-      {schoolMode && (
-        <div className="home-school-join" style={{ marginTop: 14, marginBottom: 6 }}>
-          <SchoolJoinCard />
-        </div>
-      )}
-
       <div className="home-tiers">
         <h2 className="home-tiers-title">{t('home.chooseAdventure')}</h2>
         <div className="home-tier-grid">
@@ -287,6 +238,9 @@ const HomePage: React.FC = () => {
       <div className="home-footer-actions">
         <Link to={loginPath} className="secondary-button">
           {t('home.grownUpSignIn')}
+        </Link>
+        <Link to="/tracks" className="secondary-button">
+          {t('header.courses')}
         </Link>
         <a
           href={appConfig.parentResources.handbookPdfUrl}

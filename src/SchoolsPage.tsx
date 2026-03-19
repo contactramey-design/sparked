@@ -4,6 +4,7 @@ import { useTranslation } from './contexts/LocaleContext'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { useSchoolMode } from './hooks/useSchoolMode'
+import SchoolJoinCard from './components/SchoolJoinCard'
 
 const SchoolsPage: React.FC = () => {
   const { t } = useTranslation()
@@ -41,6 +42,8 @@ const SchoolsPage: React.FC = () => {
             </div>
           </CardContent>
         </Card>
+
+        {schoolMode && <SchoolJoinCard />}
 
         <div className="schools-grid">
           <Card>

@@ -55,10 +55,33 @@ function LangSwitcher() {
 
 function AppHeader() {
   const location = useLocation()
-  const { isLoggedIn, signOut, kidLock } = useAuth()
+  const { isLoggedIn, kidLock } = useAuth()
   const { t } = useTranslation()
+  const isSchoolRoute =
+    location.pathname.startsWith('/schools') ||
+    location.pathname.startsWith('/compliance') ||
+    location.pathname.startsWith('/teacher')
   const isHome = location.pathname === '/'
   const isLogin = location.pathname === '/login'
+
+  if (isSchoolRoute) {
+    return (
+      <header className="app-header">
+        <Link to="/" className="logo-placeholder flex items-center gap-2" aria-label="SpArki home">
+          <SparkiAvatar size="sm" />
+        </Link>
+        <div className="app-titles">
+          <h1>{t('header.appName')}</h1>
+          <p>{t('header.tagline')}</p>
+        </div>
+        <nav className="main-nav" aria-label="School navigation">
+          <Link to="/schools">{t('header.schools')}</Link>
+          <Link to="/teacher/dashboard">{t('header.teacherDashboard')}</Link>
+          <LangSwitcher />
+        </nav>
+      </header>
+    )
+  }
 
   if (isHome || isLogin) {
     return (
@@ -88,18 +111,9 @@ function AppHeader() {
           {isHome && isLoggedIn && (
             <>
               <Link to="/">{t('header.home')}</Link>
-              <Link to="/tracks">{t('header.courses')}</Link>
               {!kidLock && <Link to="/?view=parent">{t('header.parent')}</Link>}
               <Link to="/schools">{t('header.forSchools')}</Link>
               <LangSwitcher />
-              <button
-                type="button"
-                onClick={() => void signOut()}
-                className="nav-button"
-                aria-label={t('header.signOut')}
-              >
-                {t('header.signOut')}
-              </button>
             </>
           )}
         </nav>
@@ -118,38 +132,39 @@ function AppHeader() {
       </div>
       <nav className="main-nav" aria-label="Main navigation">
         <Link to="/">{t('header.home')}</Link>
-        <Link to="/tracks">{t('header.courses')}</Link>
-        {!kidLock && <Link to="/?view=parent">{t('header.parent')}</Link>}
+        {isLoggedIn && !kidLock && <Link to="/?view=parent">{t('header.parent')}</Link>}
         <Link to="/schools">{t('header.forSchools')}</Link>
         <LangSwitcher />
-        <button
-          type="button"
-          onClick={() => void signOut()}
-          className="nav-button"
-          aria-label={t('header.signOut')}
-        >
-          {t('header.signOut')}
-        </button>
       </nav>
     </header>
   )
 }
 
 function AppFooter() {
-  const { kidLock } = useAuth()
+  const location = useLocation()
+  const { kidLock, isLoggedIn, signOut } = useAuth()
   const { t } = useTranslation()
   const { schoolMode } = useSchoolMode()
+  const isSchoolRoute =
+    location.pathname.startsWith('/schools') ||
+    location.pathname.startsWith('/compliance') ||
+    location.pathname.startsWith('/teacher')
   return (
     <footer className="app-footer">
       <small>
         © {new Date().getFullYear()} {t('header.appName')} · {t('footer.copyright')}
       </small>
       <span className="app-footer-links">
-        {!schoolMode && <Link to="/shop">{t('footer.shop')}</Link>}
+        {!schoolMode && !isSchoolRoute && <Link to="/shop">{t('footer.shop')}</Link>}
         <Link to="/about">{t('footer.about')}</Link>
         <Link to="/privacy">{t('footer.privacy')}</Link>
         <Link to="/schools">{t('footer.forSchools')}</Link>
         <Link to="/contact">{t('footer.contact')}</Link>
+        {isLoggedIn && !kidLock && (
+          <button type="button" className="footer-link-button" onClick={() => void signOut()}>
+            {t('header.signOut')}
+          </button>
+        )}
       </span>
       {kidLock && (
         <Link to="/parent" className="footer-grownup-link" aria-label={t('footer.grownUp')}>

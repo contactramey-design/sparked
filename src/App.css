@@ -279,11 +279,29 @@ h1, h2, h3 {
   text-decoration: none;
 }
 
+.footer-link-button {
+  font: inherit;
+  border: none;
+  background: transparent;
+  color: #4b5563;
+  cursor: pointer;
+  padding: 0;
+}
+
 .app-footer-links a:hover {
   text-decoration: underline;
 }
 
+.footer-link-button:hover {
+  text-decoration: underline;
+}
+
 .app-footer-links a:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}
+
+.footer-link-button:focus-visible {
   outline: 2px solid var(--primary-color);
   outline-offset: 2px;
 }
