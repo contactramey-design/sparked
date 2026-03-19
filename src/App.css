@@ -101,6 +101,25 @@ h1, h2, h3 {
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
+/* School theme (light orange): enabled by AppShell via data-school-theme */
+.app[data-school-theme='true'] .app-header {
+  background: linear-gradient(
+    135deg,
+    var(--primary-color) 0%,
+    var(--secondary-color) 55%,
+    rgba(255, 247, 237, 0.35) 100%
+  );
+  box-shadow: 0 4px 20px rgba(234, 88, 12, 0.28);
+}
+
+.app[data-school-theme='true'] .app-main {
+  background: var(--background-color);
+}
+
+.app[data-school-theme='true'] .app-footer {
+  background: rgba(253, 186, 116, 0.25);
+}
+
 .app-titles {
   min-width: 0;
   flex: 1 1 auto;

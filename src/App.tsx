@@ -209,7 +209,7 @@ function AppShell() {
   } as React.CSSProperties
 
   return (
-    <div className="app" style={themeStyle}>
+    <div className="app" style={themeStyle} data-school-theme={useSchoolTheme ? 'true' : 'false'}>
       <a href="#app-main" className="skip-link">
         <SkipToMainLabel />
       </a>
