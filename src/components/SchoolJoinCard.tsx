@@ -20,46 +20,10 @@ export default function SchoolJoinCard() {
   const [joined, setJoined] = useState(!!existing.classId && !!existing.studentCode)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const [initialProgressEnsured, setInitialProgressEnsured] = useState(false)
 
   useEffect(() => {
     setJoined(!!existing.classId && !!existing.studentCode)
   }, [existing.classId, existing.studentCode])
-
-  useEffect(() => {
-    if (!joined) return
-    if (initialProgressEnsured) return
-    if (!existing.classId || !existing.studentCode) return
-    if (!supabase) return
-
-    let cancelled = false
-    void (async () => {
-      try {
-        const uid = await ensureAnonymousSchoolAuth()
-        if (!uid) return
-
-        // Presence is enough for generator table RLS policies.
-        await supabase.from('school_student_progress').upsert(
-          {
-            class_id: existing.classId,
-            student_uid: uid,
-            student_code: existing.studentCode,
-            progress: { units: {} },
-            updated_at: new Date().toISOString(),
-          },
-          { onConflict: 'class_id,student_uid' },
-        )
-      } catch {
-        // Ignore: if this fails, the student will see an error when they try to load generated content.
-      } finally {
-        if (!cancelled) setInitialProgressEnsured(true)
-      }
-    })()
-
-    return () => {
-      cancelled = true
-    }
-  }, [existing.classId, existing.studentCode, initialProgressEnsured, joined])
 
   if (!supabase) {
     return (
@@ -139,29 +103,18 @@ export default function SchoolJoinCard() {
               try {
                 const sb = supabase
                 if (!sb) throw new Error(t('schoolJoin.supabaseMissing'))
+                // Create an anonymous school session (auth.uid()) before calling the RPC.
                 const uid = await ensureAnonymousSchoolAuth()
                 if (!uid) throw new Error(t('schoolJoin.authFailed'))
 
-                const { data: classes, error: e1 } = await sb
-                  .from('school_classes')
-                  .select('id')
-                  .eq('class_code', classCode.trim())
-                  .limit(1)
-                if (e1) throw e1
-                const classId = (classes?.[0] as any)?.id as string | undefined
-                if (!classId) throw new Error(t('schoolJoin.codeNotFound'))
+                const { data, error: rpcError } = await sb.rpc('student_join_class', {
+                  p_class_code: classCode.trim(),
+                  p_student_code: studentCode.trim(),
+                })
+                if (rpcError) throw rpcError
 
-                // Ensure the progress row exists so student RLS can read generator tables.
-                await sb.from('school_student_progress').upsert(
-                  {
-                    class_id: classId,
-                    student_uid: uid,
-                    student_code: studentCode.trim(),
-                    progress: { units: {} },
-                    updated_at: new Date().toISOString(),
-                  },
-                  { onConflict: 'class_id,student_uid' },
-                )
+                const classId = data as string | null | undefined
+                if (!classId) throw new Error(t('schoolJoin.codeNotFound'))
 
                 setSchoolSession(classId, studentCode.trim())
                 setJoined(true)

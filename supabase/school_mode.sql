@@ -75,3 +75,62 @@ using (
   )
 );
 
+-- =========================
+-- Strict student join (RPC)
+-- =========================
+-- Rationale (development & pilot safety):
+--  - Students should NOT need SELECT access to `public.school_classes`.
+--  - Instead, they call an RPC that validates `class_code` server-side and creates/ensures
+--    the student's `school_student_progress` row.
+--
+-- This function is used by the frontend `SchoolJoinCard`.
+
+drop policy if exists "students_can_select_school_classes" on public.school_classes;
+drop policy if exists "students_can_select_school_classes_debug" on public.school_classes;
+
+create or replace function public.student_join_class(
+  p_class_code text,
+  p_student_code text
+)
+returns uuid
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  v_class_id uuid;
+  v_code text;
+  v_student_code text;
+begin
+  v_code := btrim(p_class_code);
+  v_student_code := btrim(p_student_code);
+
+  if v_code is null or v_code = '' then
+    raise exception 'CLASS_CODE_REQUIRED';
+  end if;
+  if v_student_code is null or v_student_code = '' then
+    raise exception 'STUDENT_CODE_REQUIRED';
+  end if;
+
+  select c.id into v_class_id
+  from public.school_classes c
+  where c.class_code = v_code
+  limit 1;
+
+  if v_class_id is null then
+    raise exception 'CLASS_CODE_NOT_FOUND';
+  end if;
+
+  insert into public.school_student_progress (class_id, student_uid, student_code, progress)
+  values (v_class_id, auth.uid(), v_student_code, '{}'::jsonb)
+  on conflict (class_id, student_uid) do update
+  set
+    student_code = excluded.student_code,
+    updated_at = now();
+
+  return v_class_id;
+end;
+$$;
+
+grant execute on function public.student_join_class(text, text) to anon, authenticated;
+
