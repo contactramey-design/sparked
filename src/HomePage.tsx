@@ -3,7 +3,7 @@ import { Link, useSearchParams } from 'react-router-dom'
 import { appConfig } from './config'
 import { useAuth } from './AuthContext'
 import { useTranslation } from './contexts/LocaleContext'
-import { getPlayerStats } from './progress'
+import { awardDailyLoginBonus, getPlayerStats } from './progress'
 import { ParentViewContent } from './ParentDashboard'
 
 type ViewMode = 'kid' | 'parent'
@@ -94,6 +94,8 @@ const HomePage: React.FC = () => {
   )
   const [username, setUsername] = useState('')
   const [sparkles, setSparkles] = useState(0)
+  const [streakDays, setStreakDays] = useState(0)
+  const [dailyBonusAwarded, setDailyBonusAwarded] = useState(0)
 
   useEffect(() => {
     const next = viewParam === 'parent' ? 'parent' : 'kid'
@@ -105,11 +107,25 @@ const HomePage: React.FC = () => {
     try {
       const name = window.localStorage.getItem(appConfig.progress.usernameStorageKey) || ''
       setUsername(name)
-      setSparkles(getPlayerStats().totalSparkles)
     } catch {
       // ignore
     }
   }, [isLoggedIn])
+
+  useEffect(() => {
+    // Local habit loop: show streak + award one daily bonus once per day.
+    const stats = getPlayerStats()
+    setSparkles(stats.totalSparkles)
+    setStreakDays(stats.currentStreakDays)
+
+    const bonus = awardDailyLoginBonus(10)
+    if (bonus.awarded > 0) {
+      setDailyBonusAwarded(bonus.awarded)
+      const updated = getPlayerStats()
+      setSparkles(updated.totalSparkles)
+      setStreakDays(updated.currentStreakDays)
+    }
+  }, [])
 
   const setView = (mode: ViewMode) => {
     setViewMode(mode)
@@ -177,6 +193,10 @@ const HomePage: React.FC = () => {
             <p className="hub-kid-line">
               {t('home.hiSparkles', { name: username || 'Explorer', count: sparkles })}
             </p>
+            {dailyBonusAwarded > 0 && (
+              <p className="home-daily-bonus-note">{t('home.dailyBonusLine', { count: dailyBonusAwarded })}</p>
+            )}
+            <p className="home-streak-note">{t('home.streakLine', { count: streakDays })}</p>
             <div className="home-tiers">
               <h2 className="home-tiers-title">{t('home.chooseAdventure')}</h2>
               <div className="home-tier-grid">
@@ -211,6 +231,10 @@ const HomePage: React.FC = () => {
   return (
     <section className="home-page">
       {shopBadge}
+      {dailyBonusAwarded > 0 && (
+        <p className="home-daily-bonus-note">{t('home.dailyBonusLine', { count: dailyBonusAwarded })}</p>
+      )}
+      <p className="home-streak-note">{t('home.streakLine', { count: streakDays })}</p>
       <div className="home-hero">
         <div className="home-hero-sparki" aria-hidden>
           <img

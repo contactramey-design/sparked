@@ -36,6 +36,10 @@ const GameQuiz: React.FC<GameQuizProps> = ({
   titleOverride,
 }) => {
   const hasSubmitted = score !== null
+  const masteryPercent =
+    hasSubmitted && unit.quizQuestions.length > 0 && score !== null
+      ? Math.round((score / unit.quizQuestions.length) * 100)
+      : 0
 
   return (
     <div className="rounded-2xl bg-amber-50/90 border-2 border-amber-200/80 shadow-xl p-5 sm:p-6 animate-pop-in">
@@ -142,6 +146,12 @@ const GameQuiz: React.FC<GameQuizProps> = ({
       {hasSubmitted && (
         <div className="mt-5 p-4 rounded-xl bg-white/80 border border-amber-200 space-y-2 animate-pop-in">
           <p className="font-semibold text-slate-800">{correctCountText}</p>
+
+          <div className="gamequiz-mastery-bar" aria-hidden>
+            <div className="gamequiz-mastery-bar-fill" style={{ width: `${masteryPercent}%` }} />
+            {masteryPercent >= 80 && <div className="gamequiz-mastery-confetti" />}
+          </div>
+
           {earnedSparkles !== null && earnedSparkles > 0 && (
             <p className="text-amber-800">
               SpArki added <strong>{earnedSparkles}</strong> sparkles to your total!

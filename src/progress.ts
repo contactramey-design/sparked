@@ -3,6 +3,7 @@ import { curriculum, type UnitConfig } from './curriculum'
 const STORAGE_KEY = 'sparki_age2_progress'
 const SAFETY_PASS_KEY = 'sparki_safety_pass_v1'
 const SAFETY_PASS_CHECKOUT_SESSION_KEY = 'sparki_safety_pass_checkout_session_v1'
+const DAILY_LOGIN_BONUS_LAST_DATE_KEY = 'sparki_daily_login_bonus_last_date_v1'
 
 export interface UnitProgress {
   unitId: string
@@ -163,6 +164,31 @@ function updateGamification(progress: ChildProgress): void {
   }
 
   progress.lastPlayDate = today
+}
+
+/** Award a once-per-day sparkle bonus and update streak/lastPlayDate locally. */
+export function awardDailyLoginBonus(bonusSparkles = 10): { awarded: number; streakDays: number } {
+  if (typeof window === 'undefined') return { awarded: 0, streakDays: 0 }
+
+  try {
+    const today = new Date().toISOString().slice(0, 10)
+    const lastAwarded = window.localStorage.getItem(DAILY_LOGIN_BONUS_LAST_DATE_KEY)
+    if (lastAwarded === today) {
+      const stats = getPlayerStats()
+      return { awarded: 0, streakDays: stats.currentStreakDays }
+    }
+
+    const progress = loadProgress()
+    progress.totalSparkles += Math.max(0, bonusSparkles)
+    updateGamification(progress)
+    saveProgress(progress)
+
+    window.localStorage.setItem(DAILY_LOGIN_BONUS_LAST_DATE_KEY, today)
+
+    return { awarded: bonusSparkles, streakDays: progress.currentStreakDays }
+  } catch {
+    return { awarded: 0, streakDays: 0 }
+  }
 }
 
 export function getPlayerStats(): PlayerStats {

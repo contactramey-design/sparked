@@ -163,6 +163,11 @@
   "unit": {
     "answerAllFirst": "Responde todas las preguntas antes de ver tu puntuación."
   },
+  "unitReward": {
+    "youEarned": "¡Ganaste {count} chispas!",
+    "comeBackTomorrow": "Vuelve mañana para más.",
+    "currentStreak": "Racha: {days} días 🔥"
+  },
   "home": {
     "joinAdventure": "¡Únete a la aventura!",
     "chooseAdventure": "Elige tu aventura",
@@ -175,6 +180,8 @@
     "startAdventure": "Comenzar aventura →",
     "adventure": "AVENTURA",
     "shopEbooks": "Ver ebooks",
+    "streakLine": "Racha: {count} día(s) 🔥",
+    "dailyBonusLine": "¡Bono diario! +{count} chispas. ¡Vuelve mañana por más!",
     "tiers": {
       "safety": {
         "title": "Seguridad en Internet",

@@ -163,6 +163,11 @@
   "unit": {
     "answerAllFirst": "Please answer all questions before checking your score."
   },
+  "unitReward": {
+    "youEarned": "You earned {count} sparkles!",
+    "comeBackTomorrow": "Come back tomorrow for more.",
+    "currentStreak": "Streak: {days} days 🔥"
+  },
   "home": {
     "joinAdventure": "Join the Adventure!",
     "chooseAdventure": "Choose your adventure",
@@ -175,6 +180,8 @@
     "startAdventure": "Start adventure →",
     "adventure": "ADVENTURE",
     "shopEbooks": "Shop ebooks",
+    "streakLine": "Streak: {count} day(s) 🔥",
+    "dailyBonusLine": "Daily bonus! +{count} sparkles. Come back tomorrow for more!",
     "tiers": {
       "safety": {
         "title": "Internet Safety",

@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { curriculum } from './curriculum'
-import { updateUnitAfterQuiz, getUnitStatus } from './progress'
+import { getPlayerStats, updateUnitAfterQuiz, getUnitStatus } from './progress'
 import { useTranslation, useLocale } from './contexts/LocaleContext'
 import { useTranslatedUnit, useTranslatedTrack } from './hooks/useTranslatedCurriculum'
 import CompletionCelebration from './CompletionCelebration'
@@ -76,6 +76,21 @@ const UnitPage: React.FC = () => {
   const wasAlreadyMastered = !!existingStatus?.mastered
   const [mastered, setMastered] = useState<boolean>(wasAlreadyMastered)
   const [showCelebration, setShowCelebration] = useState(false)
+
+  const [showEndReward, setShowEndReward] = useState(false)
+  const [endRewardSparkles, setEndRewardSparkles] = useState(0)
+  const [endRewardStreakDays, setEndRewardStreakDays] = useState(0)
+  const endRewardTimeoutRef = useRef<number | null>(null)
+
+  const triggerEndReward = (sparkles: number) => {
+    if (typeof window === 'undefined') return
+    const stats = getPlayerStats()
+    setEndRewardSparkles(sparkles)
+    setEndRewardStreakDays(stats.currentStreakDays)
+    setShowEndReward(true)
+    if (endRewardTimeoutRef.current) window.clearTimeout(endRewardTimeoutRef.current)
+    endRewardTimeoutRef.current = window.setTimeout(() => setShowEndReward(false), 3200)
+  }
 
   const [materialFinished, setMaterialFinished] = useState(false)
   const [instaSlide, setInstaSlide] = useState(0)
@@ -158,12 +173,13 @@ const UnitPage: React.FC = () => {
 
     const result = updateUnitAfterQuiz(unit, correct, unit.quizQuestions.length)
     setEarnedSparkles(result.earnedThisAttempt)
+    triggerEndReward(result.earnedThisAttempt)
 
     const updatedStatus = result.progress.units[unit.id]
     const justMastered = !!updatedStatus?.mastered
     setMastered(justMastered)
 
-    if (!wasAlreadyMastered && justMastered) {
+    if (justMastered) {
       setShowCelebration(true)
     }
   }
@@ -172,10 +188,11 @@ const UnitPage: React.FC = () => {
     const total = 8
     const result = updateUnitAfterQuiz(unit, correctCount, total)
     setEarnedSparkles(result.earnedThisAttempt)
+    triggerEndReward(result.earnedThisAttempt)
     const updatedStatus = result.progress.units[unit.id]
     const justMastered = !!updatedStatus?.mastered
     setMastered(justMastered)
-    if (!wasAlreadyMastered && justMastered) {
+    if (justMastered) {
       setShowCelebration(true)
     }
   }
@@ -184,10 +201,11 @@ const UnitPage: React.FC = () => {
     const total = 8
     const result = updateUnitAfterQuiz(unit, correctCount, total)
     setEarnedSparkles(result.earnedThisAttempt)
+    triggerEndReward(result.earnedThisAttempt)
     const updatedStatus = result.progress.units[unit.id]
     const justMastered = !!updatedStatus?.mastered
     setMastered(justMastered)
-    if (!wasAlreadyMastered && justMastered) {
+    if (justMastered) {
       setShowCelebration(true)
     }
   }
@@ -196,10 +214,11 @@ const UnitPage: React.FC = () => {
     const total = 8
     const result = updateUnitAfterQuiz(unit, correctCount, total)
     setEarnedSparkles(result.earnedThisAttempt)
+    triggerEndReward(result.earnedThisAttempt)
     const updatedStatus = result.progress.units[unit.id]
     const justMastered = !!updatedStatus?.mastered
     setMastered(justMastered)
-    if (!wasAlreadyMastered && justMastered) {
+    if (justMastered) {
       setShowCelebration(true)
     }
   }
@@ -208,10 +227,11 @@ const UnitPage: React.FC = () => {
     const total = 8
     const result = updateUnitAfterQuiz(unit, correctCount, total)
     setEarnedSparkles(result.earnedThisAttempt)
+    triggerEndReward(result.earnedThisAttempt)
     const updatedStatus = result.progress.units[unit.id]
     const justMastered = !!updatedStatus?.mastered
     setMastered(justMastered)
-    if (!wasAlreadyMastered && justMastered) {
+    if (justMastered) {
       setShowCelebration(true)
     }
   }
@@ -220,10 +240,11 @@ const UnitPage: React.FC = () => {
     const total = 6
     const result = updateUnitAfterQuiz(unit, correctCount, total)
     setEarnedSparkles(result.earnedThisAttempt)
+    triggerEndReward(result.earnedThisAttempt)
     const updatedStatus = result.progress.units[unit.id]
     const justMastered = !!updatedStatus?.mastered
     setMastered(justMastered)
-    if (!wasAlreadyMastered && justMastered) {
+    if (justMastered) {
       setShowCelebration(true)
     }
   }
@@ -232,10 +253,11 @@ const UnitPage: React.FC = () => {
     const total = 8
     const result = updateUnitAfterQuiz(unit, correctCount, total)
     setEarnedSparkles(result.earnedThisAttempt)
+    triggerEndReward(result.earnedThisAttempt)
     const updatedStatus = result.progress.units[unit.id]
     const justMastered = !!updatedStatus?.mastered
     setMastered(justMastered)
-    if (!wasAlreadyMastered && justMastered) {
+    if (justMastered) {
       setShowCelebration(true)
     }
   }
@@ -244,10 +266,11 @@ const UnitPage: React.FC = () => {
     const total = 10
     const result = updateUnitAfterQuiz(unit, correctCount, total)
     setEarnedSparkles(result.earnedThisAttempt)
+    triggerEndReward(result.earnedThisAttempt)
     const updatedStatus = result.progress.units[unit.id]
     const justMastered = !!updatedStatus?.mastered
     setMastered(justMastered)
-    if (!wasAlreadyMastered && justMastered) {
+    if (justMastered) {
       setShowCelebration(true)
     }
   }
@@ -256,10 +279,11 @@ const UnitPage: React.FC = () => {
     const total = 5
     const result = updateUnitAfterQuiz(unit, correctCount, total)
     setEarnedSparkles(result.earnedThisAttempt)
+    triggerEndReward(result.earnedThisAttempt)
     const updatedStatus = result.progress.units[unit.id]
     const justMastered = !!updatedStatus?.mastered
     setMastered(justMastered)
-    if (!wasAlreadyMastered && justMastered) {
+    if (justMastered) {
       setShowCelebration(true)
     }
   }
@@ -268,10 +292,11 @@ const UnitPage: React.FC = () => {
     const total = 6
     const result = updateUnitAfterQuiz(unit, correctCount, total)
     setEarnedSparkles(result.earnedThisAttempt)
+    triggerEndReward(result.earnedThisAttempt)
     const updatedStatus = result.progress.units[unit.id]
     const justMastered = !!updatedStatus?.mastered
     setMastered(justMastered)
-    if (!wasAlreadyMastered && justMastered) {
+    if (justMastered) {
       setShowCelebration(true)
     }
   }
@@ -280,10 +305,11 @@ const UnitPage: React.FC = () => {
     const total = 6
     const result = updateUnitAfterQuiz(unit, correctCount, total)
     setEarnedSparkles(result.earnedThisAttempt)
+    triggerEndReward(result.earnedThisAttempt)
     const updatedStatus = result.progress.units[unit.id]
     const justMastered = !!updatedStatus?.mastered
     setMastered(justMastered)
-    if (!wasAlreadyMastered && justMastered) {
+    if (justMastered) {
       setShowCelebration(true)
     }
   }
@@ -292,10 +318,11 @@ const UnitPage: React.FC = () => {
     const total = 6
     const result = updateUnitAfterQuiz(unit, correctCount, total)
     setEarnedSparkles(result.earnedThisAttempt)
+    triggerEndReward(result.earnedThisAttempt)
     const updatedStatus = result.progress.units[unit.id]
     const justMastered = !!updatedStatus?.mastered
     setMastered(justMastered)
-    if (!wasAlreadyMastered && justMastered) {
+    if (justMastered) {
       setShowCelebration(true)
     }
   }
@@ -331,6 +358,24 @@ const UnitPage: React.FC = () => {
           unitTitle={displayUnit.title}
           onClose={() => setShowCelebration(false)}
         />
+      )}
+
+      {showEndReward && (
+        <div className="end-reward-overlay" role="status" aria-live="polite">
+          <div className="end-reward-modal card">
+            <button
+              type="button"
+              className="end-reward-close"
+              aria-label="Close reward"
+              onClick={() => setShowEndReward(false)}
+            >
+              ×
+            </button>
+            <h3 className="end-reward-title">{t('unitReward.youEarned', { count: endRewardSparkles })}</h3>
+            <p className="end-reward-sub">{t('unitReward.comeBackTomorrow')}</p>
+            <p className="end-reward-streak">{t('unitReward.currentStreak', { days: endRewardStreakDays })}</p>
+          </div>
+        </div>
       )}
 
       <Dialog open={thinkPromptOpen !== null} onOpenChange={(open) => !open && setThinkPromptOpen(null)}>
