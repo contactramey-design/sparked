@@ -111,7 +111,11 @@ export default function SchoolJoinCard() {
                   p_class_code: classCode.trim(),
                   p_student_code: studentCode.trim(),
                 })
-                if (rpcError) throw rpcError
+                if (rpcError) {
+                  const msg = rpcError.message ?? ''
+                  if (msg.includes('CLASS_CODE_NOT_FOUND')) throw new Error(t('schoolJoin.codeNotFound'))
+                  throw rpcError
+                }
 
                 const classId = data as string | null | undefined
                 if (!classId) throw new Error(t('schoolJoin.codeNotFound'))
