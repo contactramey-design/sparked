@@ -21,6 +21,7 @@ const WeeklyAdventurePage: React.FC = () => {
   const illustrationSrc = `/weekly/season1/week-${illustrationWeekFile}.png`
   const videoSrc = `/weekly/season1/week-${illustrationWeekFile}.mp4`
   const fallbackVideoSrc = '/Unit1b_intro_.mp4'
+  const weeklyBridgeThumbSrc = '/weekly/season1/sparkis-two-world-bridge.png'
   const fallbackIllustrationSrc = '/globalposter.png'
   const [illustrationFailed, setIllustrationFailed] = useState(false)
   const [videoFailed, setVideoFailed] = useState(false)
@@ -74,7 +75,7 @@ const WeeklyAdventurePage: React.FC = () => {
           <video
             controls
             preload="metadata"
-            poster={VIDEO_POSTER_DATA_URL}
+            poster={weeklyBridgeThumbSrc || VIDEO_POSTER_DATA_URL}
             onError={() => setVideoFailed(true)}
             className="weekly-story-video"
           >

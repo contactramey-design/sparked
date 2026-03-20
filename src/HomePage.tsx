@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { appConfig } from './config'
 import { useAuth } from './AuthContext'
@@ -92,8 +92,12 @@ const HomePage: React.FC = () => {
   const viewParam = searchParams.get('view')
   const [username, setUsername] = useState('')
   const [sparkles, setSparkles] = useState(0)
+  const [displaySparkles, setDisplaySparkles] = useState(0)
   const [streakDays, setStreakDays] = useState(0)
   const [dailyBonusAwarded, setDailyBonusAwarded] = useState(0)
+
+  const [sparklePulse, setSparklePulse] = useState(false)
+  const prevSparklesRef = useRef(0)
 
   const isParentView = viewParam === 'parent'
   const weeklyEpisode = useB2CWeeklyEpisode()
@@ -127,6 +131,43 @@ const HomePage: React.FC = () => {
       setStreakDays(updated.currentStreakDays)
     }
   }, [])
+
+  useEffect(() => {
+    // Animate the sparkles count so it feels alive as your progress grows.
+    const start = prevSparklesRef.current
+    const end = sparkles
+    if (start === end) {
+      setDisplaySparkles(end)
+      return
+    }
+
+    const durationMs = 700
+    const t0 = performance.now()
+    let raf = 0
+
+    const tick = (now: number) => {
+      const p = Math.min((now - t0) / durationMs, 1)
+      // Ease-out curve for a smoother landing.
+      const eased = 1 - Math.pow(1 - p, 3)
+      const value = Math.round(start + (end - start) * eased)
+      setDisplaySparkles(value)
+      if (p < 1) {
+        raf = window.requestAnimationFrame(tick)
+      } else {
+        prevSparklesRef.current = end
+      }
+    }
+
+    raf = window.requestAnimationFrame(tick)
+    return () => window.cancelAnimationFrame(raf)
+  }, [sparkles])
+
+  useEffect(() => {
+    if (dailyBonusAwarded <= 0) return
+    setSparklePulse(true)
+    const t = window.setTimeout(() => setSparklePulse(false), 900)
+    return () => window.clearTimeout(t)
+  }, [dailyBonusAwarded])
 
   const loginPath = '/login'
 
@@ -189,14 +230,73 @@ const HomePage: React.FC = () => {
     <section className="home-page">
       {!schoolMode && shopBadge}
       {isLoggedIn && (
-        <p className="hub-kid-line">
-          {t('home.hiSparkles', { name: username || 'Explorer', count: sparkles })}
-        </p>
+        <div className="home-floating-badges" aria-label={t('home.hiSparkles', { name: username || 'Explorer', count: displaySparkles })}>
+          <button
+            type="button"
+            className={`home-sparkles-bubble ${sparklePulse ? 'home-sparkles-bubble--pop' : ''}`}
+            onClick={() => setSparklePulse(true)}
+            aria-label={t('home.hiSparkles', { name: username || 'Explorer', count: displaySparkles })}
+          >
+            <span className="home-badge-icon" aria-hidden>
+              ✦
+            </span>
+            <span className="home-badge-value" aria-hidden>
+              {displaySparkles}
+            </span>
+            {dailyBonusAwarded > 0 && (
+              <span className="home-badge-plus" aria-hidden>
+                +{dailyBonusAwarded}
+              </span>
+            )}
+          </button>
+
+          <button
+            type="button"
+            className="home-streak-bubble"
+            onClick={() => setSparklePulse(true)}
+            aria-label={t('home.streakLine', { count: streakDays })}
+          >
+            <span className="home-badge-icon" aria-hidden>
+              🔥
+            </span>
+            <span className="home-badge-value" aria-hidden>
+              {streakDays}
+            </span>
+          </button>
+        </div>
       )}
-      {dailyBonusAwarded > 0 && (
-        <p className="home-daily-bonus-note">{t('home.dailyBonusLine', { count: dailyBonusAwarded })}</p>
-      )}
-      <p className="home-streak-note">{t('home.streakLine', { count: streakDays })}</p>
+      <div className="home-weekly-teaser card">
+        <div className="home-weekly-adventure">
+          <img
+            src="/weekly/season1/sparkis-two-world-bridge.png"
+            alt=""
+            className="home-weekly-thumb"
+            onError={(e) => {
+              e.currentTarget.style.display = 'none'
+            }}
+          />
+
+          <div className="home-weekly-adventure-left">
+            <div className="home-weekly-kicker text-sm font-semibold text-slate-500 uppercase tracking-wide">
+              {t('weekly.weeklyPage.weekLabel', { week: weeklyEpisode.resolved.weekIndex, total: weeklyEpisode.totalWeeks })}
+            </div>
+            <div className="home-weekly-adventure-text text-xl font-bold text-slate-800">
+              {t('weekly.weeklyPage.title')}
+            </div>
+          </div>
+
+          <Link to="/weekly" className="home-weekly-adventure-button">
+            <span className="home-weekly-adventure-button-glow" aria-hidden />
+            <span className="home-weekly-adventure-button-inner">
+              <span className="home-weekly-adventure-icon" aria-hidden>
+                🚀
+              </span>
+              <span>{t('weekly.weeklyPage.navLink')}</span>
+            </span>
+          </Link>
+        </div>
+      </div>
+
       <div className="home-hero">
         <div className="home-hero-sparki" aria-hidden>
           <img
@@ -218,28 +318,6 @@ const HomePage: React.FC = () => {
           <p className="home-tagline">{t('header.tagline')}</p>
           <Link to={ctaHref} className="home-hero-cta primary-button">
             {t('home.joinAdventure')}
-          </Link>
-        </div>
-      </div>
-
-      <div className="home-weekly-teaser card">
-        <div className="home-weekly-adventure">
-          <div className="home-weekly-adventure-left">
-            <div className="home-weekly-kicker text-sm font-semibold text-slate-500 uppercase tracking-wide">
-              {t('weekly.weeklyPage.weekLabel', { week: weeklyEpisode.resolved.weekIndex, total: weeklyEpisode.totalWeeks })}
-            </div>
-            <div className="home-weekly-adventure-text text-xl font-bold text-slate-800">
-              {t('weekly.weeklyPage.title')}
-            </div>
-          </div>
-          <Link to="/weekly" className="home-weekly-adventure-button">
-            <span className="home-weekly-adventure-button-glow" aria-hidden />
-            <span className="home-weekly-adventure-button-inner">
-              <span className="home-weekly-adventure-icon" aria-hidden>
-                🚀
-              </span>
-              <span>{t('weekly.weeklyPage.navLink')}</span>
-            </span>
           </Link>
         </div>
       </div>

@@ -956,6 +956,7 @@ h1, h2, h3 {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  position: relative;
 }
 
 .home-streak-note {
@@ -974,6 +975,128 @@ h1, h2, h3 {
   border: 2px solid rgba(245, 158, 11, 0.35);
   border-radius: 14px;
   padding: 0.6rem 1rem;
+}
+
+/* Floating progress badges (kids: small + animated, not across the header) */
+.home-floating-badges {
+  position: fixed;
+  right: 14px;
+  top: 120px;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.home-floating-badges button {
+  border: 0;
+  padding: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.home-sparkles-bubble,
+.home-streak-bubble {
+  pointer-events: auto;
+  width: 74px;
+  height: 74px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  color: #0f172a;
+  user-select: none;
+  transform-origin: center;
+  animation: homeBubbleFloat 3.2s ease-in-out infinite;
+  box-shadow: 0 18px 34px rgba(37, 99, 235, 0.16);
+}
+
+.home-sparkles-bubble {
+  background: radial-gradient(circle at 30% 30%, rgba(96, 165, 250, 0.95) 0%, rgba(37, 99, 235, 0.95) 45%, rgba(37, 99, 235, 0.25) 100%);
+  clip-path: polygon(
+    50% 0%,
+    62% 10%,
+    78% 12%,
+    70% 28%,
+    92% 40%,
+    72% 46%,
+    80% 70%,
+    60% 58%,
+    50% 100%,
+    40% 58%,
+    20% 70%,
+    28% 46%,
+    8% 40%,
+    30% 28%,
+    22% 12%,
+    38% 10%
+  );
+}
+
+.home-sparkles-bubble--pop {
+  animation: homeSparklePop 0.95s ease-out both, homeBubbleFloat 3.2s ease-in-out infinite;
+}
+
+.home-streak-bubble {
+  background: radial-gradient(circle at 30% 30%, rgba(251, 191, 36, 0.95) 0%, rgba(249, 115, 22, 0.95) 55%, rgba(249, 115, 22, 0.18) 100%);
+  clip-path: polygon(50% 0%, 62% 10%, 72% 22%, 78% 36%, 74% 58%, 60% 100%, 40% 100%, 26% 58%, 22% 36%, 28% 22%, 38% 10%);
+}
+
+.home-badge-icon {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 18px;
+  filter: drop-shadow(0 4px 8px rgba(15, 23, 42, 0.18));
+}
+
+.home-badge-value {
+  font-weight: 950;
+  font-size: 22px;
+  color: white;
+  line-height: 1;
+}
+
+.home-badge-plus {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 13px;
+  font-weight: 900;
+  color: rgba(255, 255, 255, 0.95);
+  background: rgba(0, 0, 0, 0.18);
+  padding: 3px 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+@keyframes homeBubbleFloat {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+@keyframes homeSparklePop {
+  0% {
+    transform: scale(1);
+  }
+  35% {
+    transform: scale(1.13);
+  }
+  65% {
+    transform: scale(0.98);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 
 /* Hub (logged-in home): toggle at top */
@@ -1979,8 +2102,9 @@ h1, h2, h3 {
   padding: 1.25rem 1.5rem;
   border-radius: 16px;
   border: 2px solid rgba(37, 99, 235, 0.2);
-  background: linear-gradient(135deg, #fff 0%, #eff6ff 100%);
+  background: linear-gradient(135deg, rgba(250, 204, 21, 0.22) 0%, rgba(96, 165, 250, 0.18) 45%, rgba(249, 115, 22, 0.16) 100%);
   box-shadow: 0 8px 24px rgba(37, 99, 235, 0.08);
+  overflow: hidden;
 }
 
 .home-weekly-adventure {
@@ -1989,6 +2113,28 @@ h1, h2, h3 {
   justify-content: space-between;
   gap: 14px;
   flex-wrap: wrap;
+}
+
+.home-weekly-thumb {
+  width: 72px;
+  height: 72px;
+  border-radius: 18px;
+  object-fit: cover;
+  border: 2px solid rgba(37, 99, 235, 0.25);
+  box-shadow: 0 14px 34px rgba(37, 99, 235, 0.12);
+  animation: homeThumbFloat 3.4s ease-in-out infinite;
+}
+
+@keyframes homeThumbFloat {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-3px);
+  }
+  100% {
+    transform: translateY(0);
+  }
 }
 
 .home-weekly-adventure-left {
@@ -2071,6 +2217,14 @@ h1, h2, h3 {
 .weekly-adventure-page .weekly-hero {
   max-width: 720px;
   margin: 1rem auto 0;
+  background: linear-gradient(
+    135deg,
+    rgba(249, 115, 22, 0.12) 0%,
+    rgba(250, 204, 21, 0.14) 35%,
+    rgba(37, 99, 235, 0.12) 100%
+  ) !important;
+  border: 2px solid rgba(37, 99, 235, 0.22);
+  box-shadow: 0 14px 42px rgba(37, 99, 235, 0.10);
 }
 
 .weekly-video-wrap {
