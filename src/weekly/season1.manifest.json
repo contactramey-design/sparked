@@ -1,0 +1,46 @@
+{
+  "seasonId": "season1",
+  "maxPublishedWeek": 8,
+  "weeks": [
+    {
+      "week": 1,
+      "safetyUnitId": "safety-instagram",
+      "aiUnitId": "ai-1-what-is-ai"
+    },
+    {
+      "week": 2,
+      "safetyUnitId": "safety-tiktok",
+      "aiUnitId": "ai-2-coding-games"
+    },
+    {
+      "week": 3,
+      "safetyUnitId": "safety-snapchat",
+      "aiUnitId": "ai-3-software-explorers"
+    },
+    {
+      "week": 4,
+      "safetyUnitId": "safety-roblox",
+      "aiUnitId": "ai-4-ai-in-the-world"
+    },
+    {
+      "week": 5,
+      "safetyUnitId": "safety-fortnite",
+      "aiUnitId": "ai-5-ethical-coding"
+    },
+    {
+      "week": 6,
+      "safetyUnitId": "safety-reddit",
+      "aiUnitId": "ai-1-what-is-ai"
+    },
+    {
+      "week": 7,
+      "safetyUnitId": "safety-instagram",
+      "aiUnitId": "ai-2-coding-games"
+    },
+    {
+      "week": 8,
+      "safetyUnitId": "safety-snapchat",
+      "aiUnitId": "ai-3-software-explorers"
+    }
+  ]
+}

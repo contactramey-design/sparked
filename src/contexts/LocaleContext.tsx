@@ -5,6 +5,8 @@ import curriculumEn from '../locales/curriculum-en.json'
 import curriculumEs from '../locales/curriculum-es.json'
 import aiCodingGamesEn from '../locales/aiCodingGames-en.json'
 import aiCodingGamesEs from '../locales/aiCodingGames-es.json'
+import weeklyEn from '../locales/weekly-en.json'
+import weeklyEs from '../locales/weekly-es.json'
 
 const STORAGE_KEY = 'spark_academy_locale'
 
@@ -14,11 +16,13 @@ const enFull = {
   ...en,
   curriculum: curriculumEn as Record<string, unknown>,
   aiCodingGames: aiCodingGamesEn as Record<string, unknown>,
+  weekly: weeklyEn as Record<string, unknown>,
 } as Record<string, unknown>
 const esFull = {
   ...es,
   curriculum: curriculumEs as Record<string, unknown>,
   aiCodingGames: aiCodingGamesEs as Record<string, unknown>,
+  weekly: weeklyEs as Record<string, unknown>,
 } as Record<string, unknown>
 const messages: Record<Locale, Record<string, unknown>> = { en: enFull, es: esFull }
 

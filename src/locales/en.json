@@ -96,7 +96,80 @@
     "contactBody": "If you’d like to run a school pilot, contact us via the Contact page.",
     "contactNote": "Tip: include your school name, grade level, and device type (iPad / Chromebook).",
     "legalTitle": "Legal note (formal)",
-    "legalBody": "This page is provided for informational purposes and does not constitute legal advice. Schools should consult their own policies and counsel to determine appropriate use."
+    "legalBody": "This page is provided for informational purposes and does not constitute legal advice. Schools should consult their own policies and counsel to determine appropriate use.",
+    "aiToolkit": {
+      "title": "AI Implementation Toolkit (CDE-aligned)",
+      "subtitle": "Use these teaching steps to keep AI human-first, safe, fair, and transparent.",
+      "listenAria": "Listen to AI toolkit overview",
+      "humanCentered": {
+        "title": "Human-centered AI",
+        "body": "AI should enhance teaching, not replace it. Keep the educator in charge—model how you check AI ideas, and guide students to make final decisions.",
+        "listenText": "Human-centered AI. AI should enhance teaching, not replace it. Keep the educator in charge—model how you check AI ideas, and guide students to make final decisions.",
+        "listenAria": "Listen to human-centered AI"
+      },
+      "studentWellBeing": {
+        "title": "Student well-being",
+        "body": "Use AI in ways that protect emotional safety. Remind students to pause, ask for help, and never share personal details with AI tools.",
+        "listenText": "Student well-being. Use AI in ways that protect emotional safety. Remind students to pause, ask for help, and never share personal details with AI tools.",
+        "listenAria": "Listen to student well-being"
+      },
+      "equityBias": {
+        "title": "Equity and bias",
+        "body": "Discuss that AI can be uneven. Compare answers, ask who might be left out, and treat AI outputs as starting points—not truth.",
+        "listenText": "Equity and bias. Discuss that AI can be uneven. Compare answers, ask who might be left out, and treat AI outputs as starting points, not truth.",
+        "listenAria": "Listen to equity and bias"
+      },
+      "transparency": {
+        "title": "Transparency and disclosure",
+        "body": "Show students what AI is doing (helping, not deciding). Teach them to explain when they used AI and to double-check results.",
+        "listenText": "Transparency and disclosure. Show students what AI is doing—helping, not deciding. Teach them to explain when they used AI and to double-check results.",
+        "listenAria": "Listen to transparency and disclosure"
+      },
+      "governanceProcurement": {
+        "title": "Governance and procurement",
+        "body": "Before using an AI tool, teachers and leaders review privacy, safety, accuracy, and what data it collects. Choose tools with clear controls and educator oversight.",
+        "listenText": "Governance and procurement. Before using an AI tool, teachers and leaders review privacy, safety, accuracy, and what data it collects. Choose tools with clear controls and educator oversight.",
+        "listenAria": "Listen to governance and procurement"
+      }
+    },
+    "teacherReadiness": {
+      "title": "Teacher readiness checklist",
+      "subtitle": "Check these steps before using AI with students. This checklist is local (no student profiles).",
+      "listenText": "Teacher readiness checklist. Check these steps before using AI with students. This checklist is local (no student profiles).",
+      "listenAria": "Listen to teacher readiness checklist",
+      "progress": "Progress: {done}/{total} checked",
+      "reset": "Reset checklist",
+      "items": {
+        "humanFirst": {
+          "label": "I kept teaching human-first and used AI as support.",
+          "aria": "Toggle human-first teaching checkbox"
+        },
+        "checkWithAdult": {
+          "label": "I taught students to check AI ideas with a grown-up when needed.",
+          "aria": "Toggle check with adult checkbox"
+        },
+        "aiCanBeWrong": {
+          "label": "I reminded students: AI can be wrong; we verify.",
+          "aria": "Toggle AI can be wrong checkbox"
+        },
+        "privacyRules": {
+          "label": "I set clear rules for privacy and what not to share.",
+          "aria": "Toggle privacy rules checkbox"
+        },
+        "criticalThinking": {
+          "label": "I practiced questions that help students think critically about outputs.",
+          "aria": "Toggle critical thinking checkbox"
+        },
+        "acceptableUse": {
+          "label": "I clarified acceptable vs. unacceptable AI use in class.",
+          "aria": "Toggle acceptable use checkbox"
+        },
+        "monitoring": {
+          "label": "I monitored and responded when outputs looked off or students needed help.",
+          "aria": "Toggle monitoring checkbox"
+        }
+      }
+    }
   },
   "forSchoolsHub": {
     "pageTitle": "Sparki Academy — Free Safety + AI Curriculum for iPads",
@@ -350,7 +423,16 @@
     "nextStep": "Next step"
   },
   "unit": {
-    "answerAllFirst": "Please answer all questions before checking your score."
+    "answerAllFirst": "Please answer all questions before checking your score.",
+    "aiDisclosure": {
+      "title": "AI Use Disclosure (human-first)",
+      "body": "AI can help with learning, but you are still the leader. Ask a grown-up to help you check AI ideas, and remember: AI can be wrong.",
+      "bullet1": "Use AI to help you learn, not to replace your thinking.",
+      "bullet2": "If something looks weird or wrong, pause and ask a grown-up.",
+      "bullet3": "We double-check AI answers together.",
+      "listenText": "AI Use Disclosure. AI can help with learning, but you are still the leader. Ask a grown-up to help you check AI ideas, and remember: AI can be wrong.",
+      "listenAria": "Listen to AI use disclosure"
+    }
   },
   "unitReward": {
     "youEarned": "You earned {count} sparkles!",

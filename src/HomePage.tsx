@@ -6,6 +6,7 @@ import { useTranslation } from './contexts/LocaleContext'
 import { awardDailyLoginBonus, getPlayerStats } from './progress'
 import { ParentViewContent } from './ParentDashboard'
 import { useSchoolMode } from './hooks/useSchoolMode'
+import { useB2CWeeklyEpisode } from './hooks/useB2CWeeklyEpisode'
 
 const TIERS = [
   {
@@ -95,6 +96,10 @@ const HomePage: React.FC = () => {
   const [dailyBonusAwarded, setDailyBonusAwarded] = useState(0)
 
   const isParentView = viewParam === 'parent'
+  const weeklyEpisode = useB2CWeeklyEpisode()
+  const weeklyWk = String(weeklyEpisode.resolved.weekIndex)
+  const weeklyTitleShort = t(`weekly.season1.weeks.${weeklyWk}.title`)
+  const weeklyTaglineShort = t(`weekly.season1.weeks.${weeklyWk}.tagline`)
   const checkoutStatus = useMemo(() => {
     const v = searchParams.get('checkout')
     if (v === 'success' || v === 'cancel') return v
@@ -216,6 +221,19 @@ const HomePage: React.FC = () => {
           <p className="home-tagline">{t('header.tagline')}</p>
           <Link to={ctaHref} className="home-hero-cta primary-button">
             {t('home.joinAdventure')}
+          </Link>
+        </div>
+      </div>
+
+      <div className="home-weekly-teaser card">
+        <p className="home-weekly-kicker text-sm font-semibold text-slate-500 uppercase tracking-wide">
+          {t('weekly.weeklyPage.seasonLabel')} · {t('weekly.weeklyPage.weekLabel', { week: weeklyEpisode.resolved.weekIndex, total: weeklyEpisode.totalWeeks })}
+        </p>
+        <h2 className="home-weekly-title text-xl font-bold text-slate-800 mt-1">{weeklyTitleShort}</h2>
+        <p className="home-weekly-desc text-slate-600 mt-2">{weeklyTaglineShort}</p>
+        <div className="home-weekly-actions mt-4">
+          <Link to="/weekly" className="primary-button">
+            {t('weekly.weeklyPage.title')}
           </Link>
         </div>
       </div>

@@ -4,10 +4,14 @@ import { curriculum } from './curriculum'
 import { loadProgress, getHasSafetyPass, setHasSafetyPass, setSafetyPassCheckoutSessionId } from './progress'
 import { useAuth } from './AuthContext'
 import { useTranslation } from './contexts/LocaleContext'
+import { useB2CWeeklyEpisode } from './hooks/useB2CWeeklyEpisode'
 
 /** Parent view content only (used in merged Dashboard page and standalone /parent redirect) */
 export const ParentViewContent: React.FC = () => {
   const { t } = useTranslation()
+  const weeklyEpisode = useB2CWeeklyEpisode()
+  const weeklyWk = String(weeklyEpisode.resolved.weekIndex)
+  const weeklyTitleShort = t(`weekly.season1.weeks.${weeklyWk}.title`)
   const progress = loadProgress()
   const { kidLock, setKidLock } = useAuth()
   const hasSafetyPass = getHasSafetyPass()
@@ -82,6 +86,19 @@ export const ParentViewContent: React.FC = () => {
 
   return (
     <div className="lesson-layout">
+        <div className="lesson-media card weekly-parent-teaser">
+          <h3>{t('weekly.parentDashboard.weeklyTeaser')}</h3>
+          <p className="text-slate-700 mt-2">
+            <strong>{weeklyTitleShort}</strong>
+            <span className="text-slate-500 text-sm block mt-1">
+              {t('weekly.weeklyPage.weekLabel', { week: weeklyEpisode.resolved.weekIndex, total: weeklyEpisode.totalWeeks })}
+            </span>
+          </p>
+          <Link to="/weekly" className="primary-button mt-3 inline-block">
+            {t('weekly.parentDashboard.weeklyTeaserLink')}
+          </Link>
+        </div>
+
         <div className="lesson-media card">
           <h3>{t('parentDashboard.parentGuideTitle')}</h3>
           <p>{t('parentDashboard.parentGuideDesc')}</p>

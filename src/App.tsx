@@ -36,6 +36,7 @@ import OfflineBanner from './components/OfflineBanner'
 import { useSchoolMode } from './hooks/useSchoolMode'
 import SchoolWeeklyTrackPage from './SchoolWeeklyTrackPage.tsx'
 import SchoolGeneratedUnitPage from './SchoolGeneratedUnitPage.tsx'
+import WeeklyAdventurePage from './WeeklyAdventurePage'
 import './App.css'
 
 function SkipToMainLabel() {
@@ -104,6 +105,7 @@ function AppHeader() {
         <nav className="main-nav" aria-label="Main navigation">
           {isHome && !isLoggedIn && (
             <>
+              <Link to="/weekly">{t('weekly.weeklyPage.navLink')}</Link>
               <Link to="/login">{t('header.signIn')}</Link>
               <Link to="/for-schools">{t('header.forSchools')}</Link>
               <LangSwitcher />
@@ -112,6 +114,7 @@ function AppHeader() {
           {isLogin && (
             <>
               <Link to="/">{t('header.home')}</Link>
+              <Link to="/weekly">{t('weekly.weeklyPage.navLink')}</Link>
               <Link to="/for-schools">{t('header.forSchools')}</Link>
               <LangSwitcher />
             </>
@@ -119,6 +122,7 @@ function AppHeader() {
           {isHome && isLoggedIn && (
             <>
               <Link to="/">{t('header.home')}</Link>
+              <Link to="/weekly">{t('weekly.weeklyPage.navLink')}</Link>
               {!kidLock && <Link to="/?view=parent">{t('header.parent')}</Link>}
               <Link to="/for-schools">{t('header.forSchools')}</Link>
               <LangSwitcher />
@@ -140,6 +144,7 @@ function AppHeader() {
       </div>
       <nav className="main-nav" aria-label="Main navigation">
         <Link to="/">{t('header.home')}</Link>
+        <Link to="/weekly">{t('weekly.weeklyPage.navLink')}</Link>
         {isLoggedIn && !kidLock && <Link to="/?view=parent">{t('header.parent')}</Link>}
         <Link to="/for-schools">{t('header.forSchools')}</Link>
         <LangSwitcher />
@@ -235,6 +240,7 @@ function AppShell() {
               </ProtectedRoute>
             }
           />
+          <Route path="/weekly" element={<WeeklyAdventurePage />} />
           <Route path="/tracks" element={<TrackListPage />} />
           <Route path="/track/:trackId" element={<TrackPage />} />
           <Route path="/unit/:unitId" element={<UnitPage />} />

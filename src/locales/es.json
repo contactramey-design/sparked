@@ -96,7 +96,80 @@
     "contactBody": "Si quieres hacer un piloto escolar, contáctanos en la página de Contacto.",
     "contactNote": "Consejo: incluye el nombre de tu escuela, grado y tipo de dispositivo (iPad / Chromebook).",
     "legalTitle": "Nota legal (formal)",
-    "legalBody": "Esta página es informativa y no constituye asesoría legal. Las escuelas deben consultar sus políticas y asesoría para decidir el uso adecuado."
+    "legalBody": "Esta página es informativa y no constituye asesoría legal. Las escuelas deben consultar sus políticas y asesoría para decidir el uso adecuado.",
+    "aiToolkit": {
+      "title": "Herramientas de implementación de IA (alineadas a CDE)",
+      "subtitle": "Usa estos pasos para que la IA sea primero humana, segura, justa y transparente.",
+      "listenAria": "Escuchar resumen de herramientas de IA",
+      "humanCentered": {
+        "title": "IA centrada en las personas",
+        "body": "La IA debe mejorar la enseñanza, no reemplazarla. Mantén el control: modela cómo revisas las ideas de la IA y guía a los estudiantes para tomar la decisión final.",
+        "listenText": "IA centrada en las personas. La IA debe mejorar la enseñanza, no reemplazarla. Mantén el control: modela cómo revisas las ideas de la IA y guía a los estudiantes para tomar la decisión final.",
+        "listenAria": "Escuchar IA centrada en las personas"
+      },
+      "studentWellBeing": {
+        "title": "Bienestar de los estudiantes",
+        "body": "Usa la IA de forma que proteja la seguridad emocional. Recuerda a los estudiantes que pausen, pidan ayuda y nunca compartan datos personales con herramientas de IA.",
+        "listenText": "Bienestar de los estudiantes. Usa la IA de forma que proteja la seguridad emocional. Recuerda a los estudiantes que pausen, pidan ayuda y nunca compartan datos personales con herramientas de IA.",
+        "listenAria": "Escuchar bienestar de los estudiantes"
+      },
+      "equityBias": {
+        "title": "Equidad y sesgos",
+        "body": "Habla de que la IA puede ser desigual. Compara respuestas, pregunta a quién podría dejar fuera y trata las salidas de la IA como puntos de inicio, no como la verdad.",
+        "listenText": "Equidad y sesgos. Habla de que la IA puede ser desigual. Compara respuestas, pregunta a quién podría dejar fuera y trata las salidas de la IA como puntos de inicio, no como la verdad.",
+        "listenAria": "Escuchar equidad y sesgos"
+      },
+      "transparency": {
+        "title": "Transparencia y explicación",
+        "body": "Muestra a los estudiantes lo que hace la IA (ayudar, no decidir). Enséñales a explicar cuándo usaron IA y a revisar dos veces los resultados.",
+        "listenText": "Transparencia y explicación. Muestra lo que hace la IA: ayuda, no decide. Enséñales a explicar cuándo usaron IA y a revisar dos veces los resultados.",
+        "listenAria": "Escuchar transparencia y explicación"
+      },
+      "governanceProcurement": {
+        "title": "Gobernanza y compra",
+        "body": "Antes de usar una herramienta de IA, docentes y líderes revisan privacidad, seguridad, precisión y qué datos recopila. Elige herramientas con controles claros y supervisión del equipo educativo.",
+        "listenText": "Gobernanza y compra. Antes de usar una herramienta de IA, docentes y líderes revisan privacidad, seguridad, precisión y qué datos recopila. Elige herramientas con controles claros y supervisión del equipo educativo.",
+        "listenAria": "Escuchar gobernanza y compra"
+      }
+    },
+    "teacherReadiness": {
+      "title": "Lista de verificación para docentes",
+      "subtitle": "Revisa estos pasos antes de usar IA con estudiantes. Esta lista es local (sin perfiles de estudiantes).",
+      "listenText": "Lista de verificación para docentes. Revisa estos pasos antes de usar IA con estudiantes. Esta lista es local (sin perfiles de estudiantes).",
+      "listenAria": "Escuchar lista de verificación para docentes",
+      "progress": "Progreso: {done}/{total} marcado",
+      "reset": "Reiniciar lista",
+      "items": {
+        "humanFirst": {
+          "label": "Mantuvé la enseñanza primero humana y usé la IA como apoyo.",
+          "aria": "Marcar casilla enseñanza primero humana"
+        },
+        "checkWithAdult": {
+          "label": "Enseñé a los estudiantes a revisar ideas de IA con un adulto cuando haga falta.",
+          "aria": "Marcar casilla revisar con adulto"
+        },
+        "aiCanBeWrong": {
+          "label": "Recordé a los estudiantes: la IA puede equivocarse; verificamos.",
+          "aria": "Marcar casilla la IA puede equivocarse"
+        },
+        "privacyRules": {
+          "label": "Puse reglas claras sobre privacidad y qué no compartir.",
+          "aria": "Marcar casilla reglas de privacidad"
+        },
+        "criticalThinking": {
+          "label": "Practicamos preguntas para pensar críticamente sobre las respuestas.",
+          "aria": "Marcar casilla pensamiento crítico"
+        },
+        "acceptableUse": {
+          "label": "Aclaré qué usos de IA están permitidos y cuáles no en clase.",
+          "aria": "Marcar casilla uso permitido"
+        },
+        "monitoring": {
+          "label": "Supervisé y respondí cuando las salidas se veían raras o cuando los estudiantes necesitaban ayuda.",
+          "aria": "Marcar casilla supervisión"
+        }
+      }
+    }
   },
   "forSchoolsHub": {
     "pageTitle": "Sparki Academy — Curso gratis de seguridad + IA para iPad",
@@ -350,7 +423,16 @@
     "nextStep": "Siguiente paso"
   },
   "unit": {
-    "answerAllFirst": "Responde todas las preguntas antes de ver tu puntuación."
+    "answerAllFirst": "Responde todas las preguntas antes de ver tu puntuación.",
+    "aiDisclosure": {
+      "title": "Aviso de uso de IA (primero lo humano)",
+      "body": "La IA puede ayudarte a aprender, pero tú sigues siendo la persona que decide. Pide a un adulto que te ayude a revisar las ideas de la IA, y recuerda: la IA puede equivocarse.",
+      "bullet1": "Usa la IA para aprender, no para reemplazar tu forma de pensar.",
+      "bullet2": "Si algo se ve raro o incorrecto, pausa y pide ayuda a un adulto.",
+      "bullet3": "Verificamos las respuestas de la IA juntos.",
+      "listenText": "Aviso de uso de IA. La IA puede ayudarte a aprender, pero tú sigues siendo la persona que decide. Pide a un adulto que te ayude a revisar las ideas de la IA, y recuerda: la IA puede equivocarse.",
+      "listenAria": "Escuchar aviso de uso de IA"
+    }
   },
   "unitReward": {
     "youEarned": "¡Ganaste {count} chispas!",

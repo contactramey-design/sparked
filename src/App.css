@@ -1971,3 +1971,70 @@ h1, h2, h3 {
     grid-template-columns: 1fr;
   }
 }
+
+/* B2C weekly adventure (Season 1) */
+.home-weekly-teaser {
+  max-width: 720px;
+  margin: 1.5rem auto 0;
+  padding: 1.25rem 1.5rem;
+  border-radius: 16px;
+  border: 2px solid rgba(37, 99, 235, 0.2);
+  background: linear-gradient(135deg, #fff 0%, #eff6ff 100%);
+  box-shadow: 0 8px 24px rgba(37, 99, 235, 0.08);
+}
+
+.home-weekly-actions .primary-button {
+  text-decoration: none;
+  display: inline-block;
+}
+
+.weekly-adventure-page .weekly-week-badge {
+  font-weight: 700;
+  color: #1d4ed8;
+  margin-top: 0.5rem;
+}
+
+.weekly-adventure-page .weekly-banner-note {
+  margin-top: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  background: #fef3c7;
+  border: 1px solid #fcd34d;
+  color: #92400e;
+  font-size: 0.95rem;
+}
+
+.weekly-adventure-page .weekly-hero {
+  max-width: 720px;
+  margin: 1rem auto 0;
+}
+
+.weekly-dual-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.25rem;
+  max-width: 900px;
+  margin: 1.5rem auto 0;
+}
+
+.weekly-unit-card .weekly-card-actions .primary-button,
+.weekly-unit-card .weekly-card-actions .secondary-button {
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
+}
+
+.weekly-adventure-page .weekly-parent-card {
+  max-width: 720px;
+  margin: 1.5rem auto 0;
+}
+
+.weekly-adventure-page .weekly-footer-nav {
+  max-width: 720px;
+  margin: 1.5rem auto 2rem;
+  text-align: center;
+}
+
+.weekly-parent-teaser .primary-button {
+  text-decoration: none;
+}

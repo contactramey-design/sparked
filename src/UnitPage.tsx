@@ -75,6 +75,11 @@ const UnitPage: React.FC = () => {
   const existingStatus = unit ? getUnitStatus(unit.id) : null
   const wasAlreadyMastered = !!existingStatus?.mastered
   const [mastered, setMastered] = useState<boolean>(wasAlreadyMastered)
+
+  // Video placeholder fallback:
+  // If a unit-specific MP4 isn't available yet in `public/`, the player will error.
+  // We swap to a shared placeholder so the video slot always renders and plays.
+  const [videoFailed, setVideoFailed] = useState(false)
   const [showCelebration, setShowCelebration] = useState(false)
 
   const [showEndReward, setShowEndReward] = useState(false)
@@ -118,6 +123,7 @@ const UnitPage: React.FC = () => {
   }
 
   const displayUnit = translatedUnit ?? unit
+  const isAiUnit = unit.trackId === 'ai-coding' || unit.id.startsWith('ai-')
 
   const instaImages = [
     '/instasafetyillustration1.jpg',
@@ -355,12 +361,20 @@ const UnitPage: React.FC = () => {
       ? t('aiCodingGames.gameQuiz.scoreSummary', { score, total: unit.quizQuestions.length })
       : ''
 
-  const fallbackVideo = unit.id === 'ai-1-what-is-ai' ? '/Unit1b_intro_.mp4' : undefined
+  // Always show the video "slot" at the top of every unit page.
+  // If a unit doesn't have its own `videoUrl` configured yet, we fall back to the shared placeholder.
+  const fallbackVideo = '/Unit1b_intro_.mp4'
   const videoSrc =
     locale === 'es' && unit.videoUrlEs
       ? unit.videoUrlEs
       : (unit.videoUrl ?? fallbackVideo)
   const showVideo = !!videoSrc
+
+  useEffect(() => {
+    setVideoFailed(false)
+  }, [unit.id, locale])
+
+  const effectiveVideoSrc = videoFailed ? fallbackVideo : videoSrc
 
   return (
     <section className="lesson-page unit-page-single">
@@ -449,12 +463,41 @@ const UnitPage: React.FC = () => {
                 className="unit-video-iframe"
               />
             ) : (
-              <video controls width="100%" poster={VIDEO_POSTER_DATA_URL} preload="metadata">
-                <source src={videoSrc} type="video/mp4" />
+              <video
+                controls
+                width="100%"
+                poster={VIDEO_POSTER_DATA_URL}
+                preload="metadata"
+                onError={() => setVideoFailed(true)}
+              >
+                <source src={effectiveVideoSrc} type="video/mp4" />
                 Sorry, your browser does not support embedded videos.
               </video>
             )}
           </div>
+        )}
+
+        {isAiUnit && (
+          <Card className="mb-8 border-2 border-amber-200 bg-amber-50/60 shadow-sm">
+            <CardHeader className="pb-2">
+              <div className="flex flex-wrap items-start justify-between gap-3">
+                <CardTitle className="text-xl text-amber-900 md:text-2xl">{t('unit.aiDisclosure.title')}</CardTitle>
+                <ListenButton
+                  text={t('unit.aiDisclosure.listenText')}
+                  ariaLabel={t('unit.aiDisclosure.listenAria')}
+                  size="sm"
+                />
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <p className="text-base leading-relaxed text-slate-800 md:text-lg">{t('unit.aiDisclosure.body')}</p>
+              <ul className="list-disc pl-6 text-slate-800">
+                <li>{t('unit.aiDisclosure.bullet1')}</li>
+                <li>{t('unit.aiDisclosure.bullet2')}</li>
+                <li>{t('unit.aiDisclosure.bullet3')}</li>
+              </ul>
+            </CardContent>
+          </Card>
         )}
 
         <div className="mt-8 space-y-8">
