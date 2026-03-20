@@ -6,7 +6,6 @@ import { useTranslation } from './contexts/LocaleContext'
 import { awardDailyLoginBonus, getPlayerStats } from './progress'
 import { ParentViewContent } from './ParentDashboard'
 import { useSchoolMode } from './hooks/useSchoolMode'
-import { useB2CWeeklyEpisode } from './hooks/useB2CWeeklyEpisode'
 
 const TIERS = [
   {
@@ -100,7 +99,6 @@ const HomePage: React.FC = () => {
   const prevSparklesRef = useRef(0)
 
   const isParentView = viewParam === 'parent'
-  const weeklyEpisode = useB2CWeeklyEpisode()
   const checkoutStatus = useMemo(() => {
     const v = searchParams.get('checkout')
     if (v === 'success' || v === 'cancel') return v
