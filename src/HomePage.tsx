@@ -288,6 +288,21 @@ const HomePage: React.FC = () => {
         </div>
       </div>
 
+      <div className="home-tiers">
+        <h2 className="home-tiers-title">{t('home.chooseAdventure')}</h2>
+        <div className="home-tier-grid">
+          {TIERS.map((tier) => {
+            return (
+              <TierCard
+                key={tier.id}
+                tier={tier}
+                href={tier.path}
+              />
+            )
+          })}
+        </div>
+      </div>
+
       <div className="home-weekly-teaser card">
         <div className="home-weekly-adventure">
           <img
@@ -317,21 +332,6 @@ const HomePage: React.FC = () => {
               <span>{t('weekly.weeklyPage.navLink')}</span>
             </span>
           </Link>
-        </div>
-      </div>
-
-      <div className="home-tiers">
-        <h2 className="home-tiers-title">{t('home.chooseAdventure')}</h2>
-        <div className="home-tier-grid">
-          {TIERS.map((tier) => {
-            return (
-              <TierCard
-                key={tier.id}
-                tier={tier}
-                href={tier.path}
-              />
-            )
-          })}
         </div>
       </div>
 

@@ -25,13 +25,11 @@ const WeeklyAdventurePage: React.FC = () => {
   const weekVideoSrc = `/weekly/season1/week-${videoWeekFile}.mp4`
   const weekPosterSrc = `/weekly/season1/week-${videoWeekFile}.png`
   const weeklyBridgeThumbSrc = '/weekly/season1/sparkis-two-world-bridge.png'
-  const [videoFailed, setVideoFailed] = useState(false)
   const [posterFailed, setPosterFailed] = useState(false)
   const [sparkles, setSparkles] = useState(0)
   const [streakDays, setStreakDays] = useState(0)
 
   useEffect(() => {
-    setVideoFailed(false)
     setPosterFailed(false)
     const stats = getPlayerStats()
     setSparkles(stats.totalSparkles)
@@ -80,13 +78,12 @@ const WeeklyAdventurePage: React.FC = () => {
           <div className="weekly-hero-media">
             <div className="weekly-video-wrap">
               <video
-                controls={!videoFailed}
-                preload="metadata"
+                controls
+                preload="none"
                 poster={effectivePosterSrc || VIDEO_POSTER_DATA_URL}
-                onError={() => setVideoFailed(true)}
                 className="weekly-story-video"
               >
-                {!videoFailed && <source src={weekVideoSrc} type="video/mp4" />}
+                <source src={weekVideoSrc} type="video/mp4" />
                 Sorry, your browser does not support embedded videos.
               </video>
             </div>
