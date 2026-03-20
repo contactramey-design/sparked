@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import type { UnitConfig } from './curriculum'
+import { useTranslation } from './contexts/LocaleContext'
 
 const ITEM_SET: { emoji: string; category: 0 | 1 }[] = [
   { emoji: '🐱', category: 0 },
@@ -14,9 +15,6 @@ const ITEM_SET: { emoji: string; category: 0 | 1 }[] = [
   { emoji: '🐕‍🦺', category: 1 },
   { emoji: '🦮', category: 1 },
 ]
-
-const CATEGORY_1_NAME = 'Cats'
-const CATEGORY_2_NAME = 'Dogs'
 
 function shuffle<T>(arr: T[]): T[] {
   const copy = [...arr]
@@ -42,6 +40,9 @@ const ExampleCollectorQuiz: React.FC<ExampleCollectorQuizProps> = ({
   mastered,
   onComplete,
 }) => {
+  const { t } = useTranslation()
+  const category1 = t('aiCodingGames.exampleCollector.categoryCat')
+  const category2 = t('aiCodingGames.exampleCollector.categoryDog')
   const [step, setStep] = useState<'welcome' | 'game' | 'complete'>('welcome')
   const [items, setItems] = useState(() => shuffle(ITEM_SET))
   const [currentIndex, setCurrentIndex] = useState(0)
@@ -95,17 +96,21 @@ const ExampleCollectorQuiz: React.FC<ExampleCollectorQuizProps> = ({
         }}
       >
         <h2 className="text-4xl sm:text-5xl font-black mb-4" style={{ color: '#FF4500' }}>
-          🤖 Sparki&apos;s Example Collector
+          {t('aiCodingGames.exampleCollector.title')}
         </h2>
         <p className="text-xl sm:text-2xl font-bold mb-6" style={{ color: '#FF6D3D' }}>
-          Learn how AI learns from examples!
+          {t('aiCodingGames.exampleCollector.subtitle')}
         </p>
         <div className="mb-8 p-6 rounded-xl text-left" style={{ background: 'rgba(255,69,0,0.1)', border: '3px solid #FF4500' }}>
           <p className="text-base sm:text-lg font-semibold mb-2 text-white">
-            Hi! I&apos;m Sparki 🤖 AI learns from examples, not magic. I&apos;ll show you items, and you sort them into two piles. Let&apos;s see if you understand the pattern!
+            {t('aiCodingGames.exampleCollector.intro')}
           </p>
           <p className="text-sm sm:text-base" style={{ color: '#FF6D3D' }}>
-            You&apos;ll get <strong>{CATEGORY_1_NAME}</strong> in one pile and <strong>{CATEGORY_2_NAME}</strong> in the other.
+            {t('aiCodingGames.exampleCollector.pilesLinePrefix')}
+            <strong>{category1}</strong>
+            {t('aiCodingGames.exampleCollector.pilesLineMid')}
+            <strong>{category2}</strong>
+            {t('aiCodingGames.exampleCollector.pilesLineSuffix')}
           </p>
         </div>
         <button
@@ -114,7 +119,7 @@ const ExampleCollectorQuiz: React.FC<ExampleCollectorQuizProps> = ({
           className="px-10 py-4 text-xl sm:text-2xl font-black text-white rounded-lg shadow-lg hover:scale-105 active:scale-95 transition-transform"
           style={{ background: 'linear-gradient(135deg, #FF4500, #FF6D3D)' }}
         >
-          🎮 Start Game!
+          {t('aiCodingGames.exampleCollector.startGame')}
         </button>
       </div>
     )
@@ -156,7 +161,7 @@ const ExampleCollectorQuiz: React.FC<ExampleCollectorQuizProps> = ({
           style={{ background: 'rgba(255,69,0,0.15)', border: '3px solid #FF4500' }}
         >
           <p className="text-sm font-bold mb-3" style={{ color: '#FF6D3D' }}>
-            Which category does this belong to?
+            {t('aiCodingGames.exampleCollector.whichCategory')}
           </p>
           <div className="text-6xl sm:text-7xl mb-6" aria-hidden>
             {item.emoji}
@@ -169,7 +174,7 @@ const ExampleCollectorQuiz: React.FC<ExampleCollectorQuizProps> = ({
               className="px-6 py-3 font-bold text-lg rounded-lg text-white border-2 disabled:opacity-70"
               style={{ background: 'linear-gradient(135deg, #4A5FC1, #5BA3F5)', borderColor: '#2E5CB8' }}
             >
-              {CATEGORY_1_NAME} ➡️
+              {category1} ➡️
             </button>
             <button
               type="button"
@@ -178,7 +183,7 @@ const ExampleCollectorQuiz: React.FC<ExampleCollectorQuizProps> = ({
               className="px-6 py-3 font-bold text-lg rounded-lg text-white border-2 disabled:opacity-70"
               style={{ background: 'linear-gradient(135deg, #D946A6, #E86FD8)', borderColor: '#B8167E' }}
             >
-              {CATEGORY_2_NAME} ➡️
+              {category2} ➡️
             </button>
           </div>
         </div>
@@ -191,7 +196,9 @@ const ExampleCollectorQuiz: React.FC<ExampleCollectorQuizProps> = ({
               color: feedback === 'correct' ? '#32CD32' : '#FF69B4',
             }}
           >
-            {feedback === 'correct' ? '✅ Correct! Great example!' : '❌ Oops! Try the other pile next time.'}
+            {feedback === 'correct'
+              ? t('aiCodingGames.exampleCollector.feedbackCorrect')
+              : t('aiCodingGames.exampleCollector.feedbackWrong')}
           </div>
         )}
       </div>
@@ -210,19 +217,19 @@ const ExampleCollectorQuiz: React.FC<ExampleCollectorQuizProps> = ({
         }}
       >
         <h2 className="text-3xl sm:text-4xl font-black mb-4" style={{ color: '#FF4500' }}>
-          🎉 You Did It!
+          {t('aiCodingGames.exampleCollector.completeTitle')}
         </h2>
         <p className="text-xl sm:text-2xl font-bold mb-6" style={{ color: '#FF6D3D' }}>
-          You sorted {correctCount} out of {totalItems} items correctly! You&apos;re learning like AI! 🌟
+          {t('aiCodingGames.exampleCollector.completeBody', { correct: correctCount, total: totalItems })}
         </p>
         <div className="mb-6 p-6 rounded-xl text-left" style={{ background: 'rgba(255,69,0,0.15)', border: '3px solid #FF4500' }}>
-          <p className="font-semibold mb-2 text-white">🤖 Sparki says:</p>
+          <p className="font-semibold mb-2 text-white">{t('aiCodingGames.common.sparkiSays')}</p>
           <p className="text-sm sm:text-base" style={{ color: '#FF6D3D' }}>
-            Great job! You figured out the pattern by looking at examples. That&apos;s exactly how AI learns—by studying examples and finding patterns. You&apos;re an AI expert! 🌟
+            {t('aiCodingGames.exampleCollector.sparkiComplete')}
           </p>
         </div>
         <p className="text-lg font-bold text-orange-200 mb-6">
-          You earned <strong>{displaySparkles}</strong> sparkles!
+          {t('aiCodingGames.common.youEarnedSparkles', { count: displaySparkles })}
         </p>
         <div className="flex flex-wrap justify-center gap-3">
           <button
@@ -231,7 +238,7 @@ const ExampleCollectorQuiz: React.FC<ExampleCollectorQuizProps> = ({
             className="px-8 py-3 rounded-lg text-white text-lg font-bold shadow-lg hover:scale-105 active:scale-95 transition-transform"
             style={{ background: 'linear-gradient(135deg, #FF4500, #FF6D3D)' }}
           >
-            🔄 Play Again
+            {t('aiCodingGames.common.playAgain')}
           </button>
           {mastered && nextUnit && (
             <Link
@@ -239,7 +246,7 @@ const ExampleCollectorQuiz: React.FC<ExampleCollectorQuizProps> = ({
               className="inline-block px-8 py-3 rounded-lg text-white text-lg font-bold shadow-lg hover:scale-105 active:scale-95 transition-transform"
               style={{ background: 'linear-gradient(135deg, #FF4500, #FF6D3D)' }}
             >
-              Go to {nextUnit.title} →
+              {t('aiCodingGames.common.goToNextUnit', { title: nextUnit.title })}
             </Link>
           )}
         </div>

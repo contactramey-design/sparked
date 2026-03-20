@@ -98,6 +98,58 @@
     "legalTitle": "Legal note (formal)",
     "legalBody": "This page is provided for informational purposes and does not constitute legal advice. Schools should consult their own policies and counsel to determine appropriate use."
   },
+  "forSchoolsHub": {
+    "pageTitle": "Sparki Academy — Free Safety + AI Curriculum for iPads",
+    "heroSubtitle": "Kid-safe lessons, bilingual EN/ES toggle, offline PWA on iPad, and a live teacher dashboard for pilots.",
+    "coursesTitle": "Three core learning paths",
+    "course1Name": "Internet & social safety",
+    "course1Desc": "Kind, age-appropriate units on apps, games, and staying safe online (Instagram, TikTok, Roblox, and more).",
+    "course2Name": "AI & coding adventures",
+    "course2Desc": "SpArki introduces how AI and code work — curiosity-first, human-guided, and screen-friendly for young learners.",
+    "course3Name": "Homework adventures (optional)",
+    "course3Desc": "AI-assisted story activities families or schools can use when enabled — core curriculum stays free.",
+    "spanishTitle": "Full Spanish support",
+    "spanishBody": "Toggle the site language to Spanish so lessons, quizzes, and UI match your classroom or home.",
+    "pwaHighlightTitle": "Offline-ready on iPad (PWA)",
+    "pwaHighlightBody": "Install to the Home Screen so lessons keep working when school Wi‑Fi drops. See step-by-step instructions below.",
+    "demoTitle": "~60 second pilot demo",
+    "demoCaption": "SpArki intro for schools (HeyGen or hosted video).",
+    "demoPlaceholder": "Add your HeyGen or hosted demo URL in Vercel as VITE_SCHOOL_DEMO_VIDEO_URL (YouTube, embed, or .mp4).",
+    "teacherMvpTitle": "Teacher dashboard (MVP — live)",
+    "teacherMvpBody": "Teachers sign in, create classes with join codes, view anonymous progress, export CSV, and generate weekly tracks from PDFs.",
+    "openTeacherDashboard": "Open teacher dashboard",
+    "openWeeklyGenerator": "Weekly generator",
+    "onePagerTitle": "One-pager PDF for admins",
+    "onePagerBody": "Open the print layout, then use your browser Print → Save as PDF to share with principals or IT.",
+    "openOnePager": "Open one-pager",
+    "schoolOpsTitle": "Class join & school mode",
+    "schoolOpsBody": "Students use anonymous codes — no names required. Turn on School Mode and join from the Schools hub.",
+    "openSchoolHub": "Open Schools hub"
+  },
+  "onePager": {
+    "printButton": "Print / Save as PDF",
+    "backToForSchools": "Back to For Schools",
+    "headline": "Sparki Academy",
+    "tagline": "Free Safety + AI Curriculum for iPads · Bilingual · Offline PWA",
+    "coursesHeader": "Three courses",
+    "course1Name": "Internet & social safety",
+    "course1Desc": "Safe, kind online habits across popular apps and games.",
+    "course2Name": "AI & coding",
+    "course2Desc": "Playful introduction to AI and how software helps people.",
+    "course3Name": "Homework adventures",
+    "course3Desc": "Optional AI-assisted activities when your school or family enables them.",
+    "spanishTitle": "Spanish",
+    "spanishBody": "Entire experience toggles to Spanish (lessons, quizzes, navigation).",
+    "pwaTitle": "Offline PWA (iPad)",
+    "pwaBody": "Safari: Share → Add to Home Screen. Core lessons work after first load; media caches as students use it.",
+    "complianceHeader": "Safety & compliance highlights",
+    "compliance1": "No ads; no behavioral trackers in the kid experience.",
+    "compliance2": "Designed for COPPA-aware use; recommend anonymous student codes for school pilots.",
+    "compliance3": "Progress can stay on-device; school sync uses anonymous class join.",
+    "compliance4": "FERPA/CIPA-aligned practices — schools keep their own filters and policies.",
+    "siteUrl": "www.sparkiedu.com",
+    "footerNote": "Informational only — not legal advice. © Sparki Academy."
+  },
   "teacherDashboard": {
     "title": "Teacher Dashboard",
     "subtitle": "Create classes, view anonymous progress, and export CSV.",
@@ -341,7 +393,9 @@
     "title": "SpArki's Digital Bookcase",
     "subtitle": "Family-friendly ebooks and bundles. Start the Safety Pass trial to download the PDFs.",
     "deliveryNote": "PDFs are delivered from Sparki through a protected download link. (Kids never get access directly — only parents who unlock the Safety Pass.)",
-    "readEbook": "Read ebook"
+    "readEbook": "Read ebook",
+    "tiktokPdfSoon": "PDF coming soon — this is the only title still being finalized.",
+    "tiktokReadStatus": "View status"
   },
   "books": {
     "ebook-1": {
@@ -384,6 +438,7 @@
     "readerTitle": "Ebook reader",
     "backToShop": "Back to shop",
     "unlockToReadTitle": "Unlock to read",
+    "tiktokComingSoonTitle": "TikTok ebook — PDF not ready yet",
     "buyForButton": "Buy for {price}",
     "startTrialButton": "Start 30-day free trial",
     "bundleUnlockButton": "Or unlock the bundle for {price} (trial)",
@@ -396,7 +451,8 @@
       "couldNotLoad": "Could not load the ebook. Please try again.",
       "couldNotRender": "Could not render this page.",
       "checkoutFailed": "Checkout failed. Please try again.",
-      "offlineSaveFailed": "Could not save for offline. Please try again."
+      "offlineSaveFailed": "Could not save for offline. Please try again.",
+      "tiktokComingSoon": "The Kind & Safe TikTok PDF is not available to open yet. Every other ebook has a live PDF. Check back soon or choose another title in the shop."
     },
     "toolbar": {
       "prev": "Prev",

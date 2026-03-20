@@ -1,6 +1,8 @@
 /**
- * Vercel serverless: POST /api/tts with body { text } → ElevenLabs TTS → audio/mpeg.
+ * Vercel serverless: POST /api/tts with body { text, locale? } → ElevenLabs TTS → audio/mpeg.
  * Set ELEVENLABS_API_KEY (and optionally ELEVENLABS_VOICE_ID) in Vercel env vars.
+ * For Spanish: pass locale "es" (or lang "es"). Optional ELEVENLABS_VOICE_ID_ES overrides voice for Spanish.
+ * Uses eleven_multilingual_v2 by default; sends language_code for clearer ES pronunciation when locale is es.
  */
 const ELEVENLABS_BASE = 'https://api.elevenlabs.io/v1/text-to-speech'
 const MAX_TEXT_LENGTH = 2500
@@ -27,16 +29,40 @@ export default async function handler(req, res) {
       return
     }
 
+    const localeRaw =
+      typeof body.locale === 'string'
+        ? body.locale.trim().toLowerCase()
+        : typeof body.lang === 'string'
+          ? body.lang.trim().toLowerCase()
+          : ''
+    const isSpanish = localeRaw === 'es' || localeRaw.startsWith('es-')
+
     const apiKey = process.env.ELEVENLABS_API_KEY
     if (!apiKey) {
       res.status(503).json({ error: 'TTS not configured. Set ELEVENLABS_API_KEY in project settings.' })
       return
     }
 
-    const voiceId = process.env.ELEVENLABS_VOICE_ID || 'EXAVITQu4vr4xnSDxMaL' // Bella – warm, friendly
+    const defaultVoice = process.env.ELEVENLABS_VOICE_ID || 'EXAVITQu4vr4xnSDxMaL' // Bella – warm, friendly
+    const voiceEs = (process.env.ELEVENLABS_VOICE_ID_ES || '').trim()
+    const voiceId = isSpanish && voiceEs ? voiceEs : defaultVoice
     const truncated = text.length > MAX_TEXT_LENGTH ? text.slice(0, MAX_TEXT_LENGTH) : text
     const stability = Number(process.env.ELEVENLABS_STABILITY) || 0.45
     const similarityBoost = Number(process.env.ELEVENLABS_SIMILARITY_BOOST) || 0.8
+    const modelId = process.env.ELEVENLABS_MODEL_ID || 'eleven_multilingual_v2'
+
+    const payload = {
+      text: truncated,
+      model_id: modelId,
+      voice_settings: {
+        stability,
+        similarity_boost: similarityBoost,
+      },
+    }
+    // Hint pronunciation for multilingual models (English vs Spanish).
+    if (modelId.includes('multilingual') && isSpanish) {
+      payload.language_code = 'es'
+    }
 
     const response = await fetch(`${ELEVENLABS_BASE}/${voiceId}`, {
       method: 'POST',
@@ -45,14 +71,7 @@ export default async function handler(req, res) {
         'Content-Type': 'application/json',
         Accept: 'audio/mpeg',
       },
-      body: JSON.stringify({
-        text: truncated,
-        model_id: process.env.ELEVENLABS_MODEL_ID || 'eleven_multilingual_v2',
-        voice_settings: {
-          stability,
-          similarity_boost: similarityBoost,
-        },
-      }),
+      body: JSON.stringify(payload),
     })
 
     if (!response.ok) {

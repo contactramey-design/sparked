@@ -1,26 +1,30 @@
 import React, { useState, useMemo, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import type { UnitConfig } from './curriculum'
+import { useTranslation } from './contexts/LocaleContext'
 
-const TASK_PAIRS = [
-  { id: 1, task: 'I need help finding a book 📚', location: 'library', emoji: '📚', locationName: 'Library' },
-  { id: 2, task: 'I need help staying safe while driving 🚗', location: 'car', emoji: '🚗', locationName: 'Car' },
-  { id: 3, task: 'I need help finding a good story 📖', location: 'school', emoji: '🏫', locationName: 'School' },
-  { id: 4, task: 'I need help spotting sick plants 🌾', location: 'farm', emoji: '🌾', locationName: 'Farm' },
-  { id: 5, task: 'I need help folding my laundry 👕', location: 'home', emoji: '🏠', locationName: 'Home' },
-  { id: 6, task: 'I need help keeping people healthy 🏥', location: 'hospital', emoji: '🏥', locationName: 'Hospital' },
+const TASK_META = [
+  { id: 1, location: 'library', emoji: '📚', taskKey: 't1' as const },
+  { id: 2, location: 'car', emoji: '🚗', taskKey: 't2' as const },
+  { id: 3, location: 'school', emoji: '🏫', taskKey: 't3' as const },
+  { id: 4, location: 'farm', emoji: '🌾', taskKey: 't4' as const },
+  { id: 5, location: 'home', emoji: '🏠', taskKey: 't5' as const },
+  { id: 6, location: 'hospital', emoji: '🏥', taskKey: 't6' as const },
 ] as const
 
-const ALL_LOCATIONS = [
-  { id: 'library', emoji: '📚', name: 'Library' },
-  { id: 'car', emoji: '🚗', name: 'Car' },
-  { id: 'school', emoji: '🏫', name: 'School' },
-  { id: 'farm', emoji: '🌾', name: 'Farm' },
-  { id: 'home', emoji: '🏠', name: 'Home' },
-  { id: 'hospital', emoji: '🏥', name: 'Hospital' },
-] as const
+const LOCATION_IDS = ['library', 'car', 'school', 'farm', 'home', 'hospital'] as const
+type LocationId = (typeof LOCATION_IDS)[number]
 
-const TOTAL = TASK_PAIRS.length
+const LOCATION_EMOJI: Record<LocationId, string> = {
+  library: '📚',
+  car: '🚗',
+  school: '🏫',
+  farm: '🌾',
+  home: '🏠',
+  hospital: '🏥',
+}
+
+const TOTAL = TASK_META.length
 
 function shuffle<T>(arr: readonly T[]): T[] {
   const copy = [...arr]
@@ -46,6 +50,30 @@ const WorldAIHelperQuiz: React.FC<WorldAIHelperQuizProps> = ({
   mastered,
   onComplete,
 }) => {
+  const { t } = useTranslation()
+
+  const taskPairs = useMemo(
+    () =>
+      TASK_META.map((row) => ({
+        id: row.id,
+        task: t(`aiCodingGames.worldAI.tasks.${row.taskKey}`),
+        location: row.location,
+        emoji: row.emoji,
+        locationName: t(`aiCodingGames.worldAI.locations.${row.location}`),
+      })),
+    [t],
+  )
+
+  const allLocations = useMemo(
+    () =>
+      LOCATION_IDS.map((id) => ({
+        id,
+        emoji: LOCATION_EMOJI[id],
+        name: t(`aiCodingGames.worldAI.locations.${id}`),
+      })),
+    [t],
+  )
+
   const [step, setStep] = useState<'welcome' | 'game' | 'question' | 'complete'>('welcome')
   const [currentTaskIndex, setCurrentTaskIndex] = useState(0)
   const [tasksCompleted, setTasksCompleted] = useState(0)
@@ -55,8 +83,9 @@ const WorldAIHelperQuiz: React.FC<WorldAIHelperQuizProps> = ({
   const [questionAnswered, setQuestionAnswered] = useState(false)
   const [questionFeedback, setQuestionFeedback] = useState<{ correct: boolean; text: string } | null>(null)
 
-  const currentTask = step === 'game' && currentTaskIndex < TOTAL ? TASK_PAIRS[currentTaskIndex] : null
-  const locationButtons = useMemo(() => shuffle([...ALL_LOCATIONS]), [currentTaskIndex])
+  const currentTask = step === 'game' && currentTaskIndex < TOTAL ? taskPairs[currentTaskIndex] : null
+
+  const locationButtons = useMemo(() => shuffle(allLocations), [currentTaskIndex, allLocations])
 
   const handleStart = () => setStep('game')
 
@@ -70,7 +99,9 @@ const WorldAIHelperQuiz: React.FC<WorldAIHelperQuizProps> = ({
     if (!currentTask || showSuccess) return
     if (locationId === currentTask.location) {
       setTasksCompleted((c) => c + 1)
-      setSuccessMessage(`✅ YES! AI helps with that at the ${currentTask.locationName}! 🎉`)
+      setSuccessMessage(
+        t('aiCodingGames.worldAI.matchCorrect', { place: currentTask.locationName }),
+      )
       setSparkiEmotion('🤩')
       setShowSuccess(true)
       setTimeout(() => {
@@ -80,7 +111,7 @@ const WorldAIHelperQuiz: React.FC<WorldAIHelperQuizProps> = ({
         setCurrentTaskIndex((i) => i + 1)
       }, 1500)
     } else {
-      setSuccessMessage('❌ Hmm, not quite! Think about where AI would help with that... Try again!')
+      setSuccessMessage(t('aiCodingGames.worldAI.matchWrong'))
       setSparkiEmotion('🤔')
       setShowSuccess(true)
       setTimeout(() => {
@@ -97,13 +128,13 @@ const WorldAIHelperQuiz: React.FC<WorldAIHelperQuizProps> = ({
     if (isYes) {
       setQuestionFeedback({
         correct: true,
-        text: "✅ Right! AI learns from examples, so sometimes it makes mistakes. That's why we ALWAYS check with a grown-up! 🧠 You're thinking critically! 💡",
+        text: t('aiCodingGames.worldAI.qFeedbackCorrect'),
       })
       setSparkiEmotion('🤩')
     } else {
       setQuestionFeedback({
         correct: false,
-        text: "❌ Actually, AI can sometimes be wrong! AI learns from examples, so it might make mistakes. That's why we ALWAYS check with a grown-up first! 🧠 Great learning moment! 💡",
+        text: t('aiCodingGames.worldAI.qFeedbackWrong'),
       })
       setSparkiEmotion('🤔')
     }
@@ -134,17 +165,17 @@ const WorldAIHelperQuiz: React.FC<WorldAIHelperQuizProps> = ({
         style={wrapperStyle}
       >
         <h2 className="text-4xl sm:text-5xl font-black mb-4" style={{ color: '#FFD700', textShadow: '0 3px 0 rgba(0,0,0,0.5)' }}>
-          🌍 Sparki&apos;s World AI Helper
+          {t('aiCodingGames.worldAI.title')}
         </h2>
         <p className="text-xl sm:text-2xl font-bold mb-6" style={{ color: '#FFD700' }}>
-          Discover where AI helpers work around the world!
+          {t('aiCodingGames.worldAI.subtitle')}
         </p>
         <div className="mb-8 p-6 rounded-xl text-left" style={{ background: 'rgba(255,215,0,0.15)', border: '3px solid #FFD700' }}>
           <p className="text-base sm:text-lg font-semibold mb-4 text-white">
-            Hi! I&apos;m Sparki! 🤖 AI is all around us! It helps at schools, hospitals, farms, and homes. Your job? Read what someone needs help with, then pick the RIGHT place where AI can help! 🌍 Think carefully—sometimes AI can make mistakes, so we need to be smart about it! Ready to become an AI Expert? 🧠✨
+            {t('aiCodingGames.worldAI.welcome')}
           </p>
           <p className="text-sm sm:text-base" style={{ color: '#FFD700' }}>
-            Learn how AI helpers around the world make places better—and why it&apos;s important to check their work! 🧠🌟
+            {t('aiCodingGames.worldAI.welcome2')}
           </p>
         </div>
         <button
@@ -153,7 +184,7 @@ const WorldAIHelperQuiz: React.FC<WorldAIHelperQuizProps> = ({
           className="px-10 py-4 text-xl sm:text-2xl font-black text-white rounded-lg shadow-lg hover:scale-105 active:scale-95 transition-transform"
           style={{ background: 'linear-gradient(135deg, #FFD700, #FFA500)' }}
         >
-          🎮 Start Exploring!
+          {t('aiCodingGames.worldAI.startExploring')}
         </button>
       </div>
     )
@@ -170,10 +201,10 @@ const WorldAIHelperQuiz: React.FC<WorldAIHelperQuizProps> = ({
             {sparkiEmotion}
           </div>
           <p className="text-xl sm:text-2xl font-bold" style={{ color: '#FFD700' }}>
-            Read the need, pick the place! 🌍
+            {t('aiCodingGames.worldAI.readNeedPickPlace')}
           </p>
           <p className="text-lg" style={{ color: '#FFA500' }}>
-            Task <strong>{tasksCompleted}</strong>/{TOTAL}
+            {t('aiCodingGames.worldAI.taskProgress', { done: tasksCompleted, total: TOTAL })}
           </p>
         </div>
 
@@ -199,7 +230,7 @@ const WorldAIHelperQuiz: React.FC<WorldAIHelperQuizProps> = ({
           style={{ background: 'rgba(255, 107, 157, 0.15)', border: '3px solid #FF6B9D' }}
         >
           <p className="text-lg font-bold mb-4 text-center" style={{ color: '#FFD700' }}>
-            🌍 Pick Where AI Helps:
+            {t('aiCodingGames.worldAI.pickWhereLabel')}
           </p>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
             {locationButtons.map((loc) => (
@@ -244,11 +275,11 @@ const WorldAIHelperQuiz: React.FC<WorldAIHelperQuizProps> = ({
           {sparkiEmotion}
         </div>
         <h2 className="text-3xl font-black mb-6" style={{ color: '#FFD700' }}>
-          Important Question!
+          {t('aiCodingGames.worldAI.importantQuestion')}
         </h2>
         <div className="mb-6 p-6 sm:p-8 rounded-xl mx-auto max-w-xl" style={{ background: 'rgba(255, 215, 0, 0.15)', border: '3px solid #FFD700' }}>
           <p className="text-xl sm:text-2xl font-bold mb-6" style={{ color: '#FFA500' }}>
-            Can AI sometimes be wrong?
+            {t('aiCodingGames.worldAI.canAiBeWrong')}
           </p>
           <div className="flex gap-4 justify-center flex-wrap">
             <button
@@ -258,7 +289,7 @@ const WorldAIHelperQuiz: React.FC<WorldAIHelperQuizProps> = ({
               className="px-8 py-4 text-xl font-bold text-white rounded-lg disabled:opacity-70"
               style={{ background: 'linear-gradient(135deg, #32CD32, #228B22)' }}
             >
-              ✅ Yes!
+              {t('aiCodingGames.worldAI.yesButton')}
             </button>
             <button
               type="button"
@@ -267,7 +298,7 @@ const WorldAIHelperQuiz: React.FC<WorldAIHelperQuizProps> = ({
               className="px-8 py-4 text-xl font-bold text-white rounded-lg disabled:opacity-70"
               style={{ background: 'linear-gradient(135deg, #FF8A3D, #FF6B9D)' }}
             >
-              ❌ No
+              {t('aiCodingGames.worldAI.noButton')}
             </button>
           </div>
         </div>
@@ -295,19 +326,19 @@ const WorldAIHelperQuiz: React.FC<WorldAIHelperQuizProps> = ({
         style={wrapperStyle}
       >
         <h2 className="text-3xl sm:text-4xl font-black mb-4" style={{ color: '#FFD700' }}>
-          🎉 You&apos;re a Software Explorer!
+          {t('aiCodingGames.worldAI.completeTitle')}
         </h2>
         <p className="text-xl sm:text-2xl font-bold mb-6" style={{ color: '#FFA500' }}>
-          You explored all the AI helpers around the world!
+          {t('aiCodingGames.worldAI.completeBody')}
         </p>
         <div className="mb-6 p-6 rounded-xl text-left" style={{ background: 'rgba(255,215,0,0.15)', border: '3px solid #FFD700' }}>
-          <p className="font-semibold mb-2 text-white">🤖 Sparki says:</p>
+          <p className="font-semibold mb-2 text-white">{t('aiCodingGames.common.sparkiSays')}</p>
           <p className="text-sm sm:text-base" style={{ color: '#FFD700' }}>
-            Awesome! You found all 6 tools! You now understand that software is like a toolbox—each tool helps us do different things. You&apos;re officially a Software Explorer! 🌟
+            {t('aiCodingGames.worldAI.sparkiComplete')}
           </p>
         </div>
         <p className="text-lg font-bold text-amber-200 mb-6">
-          You earned <strong>{displaySparkles}</strong> sparkles!
+          {t('aiCodingGames.common.youEarnedSparkles', { count: displaySparkles })}
         </p>
         <div className="flex flex-wrap justify-center gap-3">
           <button
@@ -316,7 +347,7 @@ const WorldAIHelperQuiz: React.FC<WorldAIHelperQuizProps> = ({
             className="px-8 py-3 rounded-lg text-white text-lg font-bold shadow-lg hover:scale-105 active:scale-95 transition-transform"
             style={{ background: 'linear-gradient(135deg, #FFD700, #FFA500)' }}
           >
-            🔄 Play Again
+            {t('aiCodingGames.common.playAgain')}
           </button>
           {mastered && nextUnit && (
             <Link
@@ -324,7 +355,7 @@ const WorldAIHelperQuiz: React.FC<WorldAIHelperQuizProps> = ({
               className="inline-block px-8 py-3 rounded-lg text-white text-lg font-bold shadow-lg hover:scale-105 active:scale-95 transition-transform"
               style={{ background: 'linear-gradient(135deg, #FFD700, #FFA500)' }}
             >
-              Go to {nextUnit.title} →
+              {t('aiCodingGames.common.goToNextUnit', { title: nextUnit.title })}
             </Link>
           )}
         </div>

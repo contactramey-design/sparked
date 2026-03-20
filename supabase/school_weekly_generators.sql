@@ -174,21 +174,3 @@ with check (
   )
 );
 
--- Students can read units only when they can read the parent generator
-create policy "student_read_weekly_generator_units"
-on public.school_weekly_generator_units
-for select
-using (
-  exists (
-    select 1
-    from public.school_weekly_generators g
-    where g.id = generator_id
-      and exists (
-        select 1
-        from public.school_student_progress sp
-        where sp.class_id = g.class_id
-          and sp.student_uid = auth.uid()
-      )
-  )
-);
-

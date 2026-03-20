@@ -9,7 +9,8 @@ export interface ListenButtonProps {
 }
 
 /**
- * COPPA-safe: uses browser Web Speech API only. No data sent to servers.
+ * Read-aloud: uses cloud TTS when configured (e.g. ElevenLabs via /api/tts with locale),
+ * otherwise the browser Web Speech API. Text is sent only to your own backend when cloud TTS is on.
  */
 const ListenButton: React.FC<ListenButtonProps> = ({
   text,

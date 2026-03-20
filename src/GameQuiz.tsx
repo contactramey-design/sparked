@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import type { UnitConfig } from './curriculum'
+import { useTranslation } from './contexts/LocaleContext'
 
 export interface GameQuizProps {
   unit: UnitConfig
@@ -35,6 +36,7 @@ const GameQuiz: React.FC<GameQuizProps> = ({
   badgeLabel,
   titleOverride,
 }) => {
+  const { t } = useTranslation()
   const hasSubmitted = score !== null
   const masteryPercent =
     hasSubmitted && unit.quizQuestions.length > 0 && score !== null
@@ -58,13 +60,13 @@ const GameQuiz: React.FC<GameQuizProps> = ({
             </span>
           )}
           <h3 className="text-xl font-bold text-slate-800 mt-0.5">
-            {titleOverride ?? "SpArki's Quiz"}
+            {titleOverride ?? t('aiCodingGames.gameQuiz.defaultTitle')}
           </h3>
         </div>
       </div>
 
       <p className="text-slate-600 text-sm mb-5">
-        Try your best! SpArki gives sparkles for effort and careful thinking, not perfection.
+        {t('aiCodingGames.gameQuiz.effortLine')}
       </p>
 
       {/* Progress dots */}
@@ -139,7 +141,7 @@ const GameQuiz: React.FC<GameQuizProps> = ({
           disabled={hasSubmitted}
           className="w-full py-3 px-5 rounded-xl font-bold text-white bg-primary hover:bg-blue-600 disabled:opacity-60 disabled:cursor-not-allowed transition-all shadow-md hover:shadow-lg"
         >
-          {hasSubmitted ? 'Submitted' : 'Check my score'}
+          {hasSubmitted ? t('aiCodingGames.gameQuiz.submitted') : t('aiCodingGames.gameQuiz.checkScore')}
         </button>
       </form>
 
@@ -154,21 +156,21 @@ const GameQuiz: React.FC<GameQuizProps> = ({
 
           {earnedSparkles !== null && earnedSparkles > 0 && (
             <p className="text-amber-800">
-              SpArki added <strong>{earnedSparkles}</strong> sparkles to your total!
+              {t('aiCodingGames.gameQuiz.sparklesAdded', { count: earnedSparkles })}
             </p>
           )}
           {wasAlreadyMastered && (
-            <p className="text-slate-600 text-sm">You&apos;ve already mastered this unit. Keep practicing anytime!</p>
+            <p className="text-slate-600 text-sm">{t('aiCodingGames.gameQuiz.alreadyMastered')}</p>
           )}
           {!wasAlreadyMastered && mastered && (
-            <p className="text-green-700 font-medium">Amazing work! You just mastered this unit.</p>
+            <p className="text-green-700 font-medium">{t('aiCodingGames.gameQuiz.justMastered')}</p>
           )}
           {mastered && nextUnit && (
             <Link
               to={`/unit/${nextUnit.id}`}
               className="inline-block mt-3 py-2.5 px-5 rounded-xl font-bold text-white bg-primary hover:bg-blue-600 shadow-md transition-all"
             >
-              Go to {nextUnit.title} →
+              {t('aiCodingGames.gameQuiz.goToNext', { title: nextUnit.title })}
             </Link>
           )}
         </div>

@@ -36,11 +36,19 @@ const TrackPage: React.FC = () => {
         </Link>
         <div className="flex flex-wrap items-center gap-2">
           <h1 className="track-overview-title">{translatedTrack.title}</h1>
-          <ListenButton text={translatedTrack.title} ariaLabel="Listen to track title" size="sm" />
+          <ListenButton
+            text={translatedTrack.title}
+            ariaLabel={t('aiCodingGames.trackPage.listenTitleAria')}
+            size="sm"
+          />
         </div>
         <div className="flex flex-wrap items-center gap-2">
           <p className="track-overview-description">{translatedTrack.description}</p>
-          <ListenButton text={translatedTrack.description} ariaLabel="Listen to track description" size="sm" />
+          <ListenButton
+            text={translatedTrack.description}
+            ariaLabel={t('aiCodingGames.trackPage.listenDescAria')}
+            size="sm"
+          />
         </div>
       </header>
 
@@ -51,20 +59,28 @@ const TrackPage: React.FC = () => {
             preload="metadata"
             poster={VIDEO_POSTER_DATA_URL}
             style={{ width: '100%', borderRadius: '12px' }}
-            title={track.id === 'social-safety' ? 'Safety intro' : track.id === 'ai-coding' ? 'Coding intro' : undefined}
-            aria-label={track.id === 'social-safety' ? 'Safety intro video' : track.id === 'ai-coding' ? 'Coding intro video' : undefined}
+            title={
+              track.id === 'social-safety'
+                ? t('aiCodingGames.trackPage.safetyVideoTitle')
+                : track.id === 'ai-coding'
+                  ? t('aiCodingGames.trackPage.codingVideoTitle')
+                  : undefined
+            }
+            aria-label={
+              track.id === 'social-safety'
+                ? t('aiCodingGames.trackPage.safetyVideoAria')
+                : track.id === 'ai-coding'
+                  ? t('aiCodingGames.trackPage.codingVideoAria')
+                  : undefined
+            }
           >
             <source src={introVideoSrc} type="video/mp4" />
-            Sorry, your browser doesn’t support the video tag.
+            {t('aiCodingGames.trackPage.videoUnsupported')}
           </video>
         </div>
       ) : (
         <div className="track-intro-placeholder card">
-          <p>
-            Imagine SpArki in this track&apos;s world – for AI &amp; Coding, SpArki
-            might be sorting glowing blocks; for Safety, SpArki might be holding
-            a friendly shield with a heart.
-          </p>
+          <p>{t('aiCodingGames.trackPage.introPlaceholder')}</p>
         </div>
       )}
 

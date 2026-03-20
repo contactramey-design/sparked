@@ -98,6 +98,58 @@
     "legalTitle": "Nota legal (formal)",
     "legalBody": "Esta página es informativa y no constituye asesoría legal. Las escuelas deben consultar sus políticas y asesoría para decidir el uso adecuado."
   },
+  "forSchoolsHub": {
+    "pageTitle": "Sparki Academy — Curso gratis de seguridad + IA para iPad",
+    "heroSubtitle": "Lecciones seguras para niños, sitio bilingüe EN/ES, PWA sin conexion en iPad y panel de profesor activo para pilotos.",
+    "coursesTitle": "Tres rutas de aprendizaje",
+    "course1Name": "Seguridad en internet y redes",
+    "course1Desc": "Unidades apropiadas por edad sobre apps, juegos y cuidarse en linea (Instagram, TikTok, Roblox y mas).",
+    "course2Name": "Aventuras de IA y programacion",
+    "course2Desc": "SpArki presenta que es la IA y el codigo — con curiosidad, guia humana y pantallas aptas para peques.",
+    "course3Name": "Aventuras de tarea (opcional)",
+    "course3Desc": "Actividades con IA para familias o escuelas cuando este activado — el curriculo base sigue gratis.",
+    "spanishTitle": "Espanol completo",
+    "spanishBody": "Activa el idioma Espanol para que lecciones, quizzes y la interfaz coincidan con tu clase o casa.",
+    "pwaHighlightTitle": "Listo sin internet en iPad (PWA)",
+    "pwaHighlightBody": "Instala en la pantalla de inicio para que las lecciones sigan si el WiFi escolar falla. Instrucciones abajo.",
+    "demoTitle": "Demo para pilotos (~60 s)",
+    "demoCaption": "Intro SpArki para escuelas (HeyGen u otro video alojado).",
+    "demoPlaceholder": "Anade la URL de HeyGen o video en Vercel como VITE_SCHOOL_DEMO_VIDEO_URL (YouTube, embed o .mp4).",
+    "teacherMvpTitle": "Panel del profesor (MVP — en vivo)",
+    "teacherMvpBody": "Los profes entran, crean clases con codigos, ven progreso anonimo, exportan CSV y generan rutas semanales desde PDF.",
+    "openTeacherDashboard": "Abrir panel del profesor",
+    "openWeeklyGenerator": "Generador semanal",
+    "onePagerTitle": "PDF de una pagina para directivos",
+    "onePagerBody": "Abre la vista para imprimir y usa Imprimir → Guardar como PDF para compartir con direccion o TI.",
+    "openOnePager": "Abrir una pagina",
+    "schoolOpsTitle": "Unirse a clase y modo escuela",
+    "schoolOpsBody": "Los estudiantes usan codigos anonimos — sin nombres. Activa Modo escuela y unete desde el hub Escuelas.",
+    "openSchoolHub": "Abrir hub Escuelas"
+  },
+  "onePager": {
+    "printButton": "Imprimir / Guardar PDF",
+    "backToForSchools": "Volver a Para escuelas",
+    "headline": "Sparki Academy",
+    "tagline": "Curso gratis Seguridad + IA para iPad · Bilingue · PWA sin conexion",
+    "coursesHeader": "Tres cursos",
+    "course1Name": "Seguridad en internet y redes",
+    "course1Desc": "Habitos seguros y amables en apps y juegos populares.",
+    "course2Name": "IA y programacion",
+    "course2Desc": "Introduccion ludica a la IA y como el software ayuda a las personas.",
+    "course3Name": "Aventuras de tarea",
+    "course3Desc": "Actividades opcionales con IA si la escuela o familia las activa.",
+    "spanishTitle": "Espanol",
+    "spanishBody": "Toda la experiencia cambia a espanol (lecciones, quizzes, navegacion).",
+    "pwaTitle": "PWA sin internet (iPad)",
+    "pwaBody": "Safari: Compartir → Anadir a pantalla de inicio. Las lecciones base funcionan tras la primera carga.",
+    "complianceHeader": "Seguridad y cumplimiento (resumen)",
+    "compliance1": "Sin anuncios; sin rastreo conductual en la experiencia infantil.",
+    "compliance2": "Pensado para uso consciente de COPPA; codigos anonimos recomendados en pilotos.",
+    "compliance3": "El progreso puede quedarse en el dispositivo; la escuela sincroniza con union anonima a clase.",
+    "compliance4": "Practicas alineadas a FERPA/CIPA — la escuela mantiene filtros y politicas propias.",
+    "siteUrl": "www.sparkiedu.com",
+    "footerNote": "Solo informativo — no es asesoria legal. © Sparki Academy."
+  },
   "teacherDashboard": {
     "title": "Panel del profesor",
     "subtitle": "Crea clases, ve progreso anónimo y exporta CSV.",
@@ -341,7 +393,9 @@
     "title": "Estantería digital de SpArki",
     "subtitle": "Ebooks y paquetes aptos para familias. Inicia la prueba del Pase de Seguridad para descargar los PDF.",
     "deliveryNote": "Los PDF se entregan desde Sparki mediante un enlace de descarga protegido. (Los niños nunca acceden directamente: solo los padres que desbloquean el Pase de Seguridad.)",
-    "readEbook": "Leer ebook"
+    "readEbook": "Leer ebook",
+    "tiktokPdfSoon": "PDF en camino — es el único título que aún estamos terminando.",
+    "tiktokReadStatus": "Ver estado"
   },
   "books": {
     "ebook-1": {
@@ -384,6 +438,7 @@
     "readerTitle": "Lector de ebook",
     "backToShop": "Volver a la tienda",
     "unlockToReadTitle": "Desbloquea para leer",
+    "tiktokComingSoonTitle": "Ebook TikTok — PDF aún no disponible",
     "buyForButton": "Compra por {price}",
     "startTrialButton": "Inicia la prueba gratis de 30 días",
     "bundleUnlockButton": "O desbloquea el paquete por {price} (prueba)",
@@ -396,7 +451,8 @@
       "couldNotLoad": "No se pudo cargar el ebook. Inténtalo de nuevo.",
       "couldNotRender": "No se pudo mostrar esta página.",
       "checkoutFailed": "No se pudo completar el pago. Inténtalo de nuevo.",
-      "offlineSaveFailed": "No se pudo guardar sin internet. Inténtalo de nuevo."
+      "offlineSaveFailed": "No se pudo guardar sin internet. Inténtalo de nuevo.",
+      "tiktokComingSoon": "El PDF de TikTok amable y seguro aún no se puede abrir. Los demás ebooks ya tienen PDF listo. Vuelve pronto u elige otro título en la tienda."
     },
     "toolbar": {
       "prev": "Anterior",

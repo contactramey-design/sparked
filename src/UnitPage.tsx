@@ -352,7 +352,7 @@ const UnitPage: React.FC = () => {
 
   const correctCountText =
     score !== null
-      ? `You got ${score} out of ${unit.quizQuestions.length} correct.`
+      ? t('aiCodingGames.gameQuiz.scoreSummary', { score, total: unit.quizQuestions.length })
       : ''
 
   const fallbackVideo = unit.id === 'ai-1-what-is-ai' ? '/Unit1b_intro_.mp4' : undefined

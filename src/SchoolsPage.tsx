@@ -75,7 +75,7 @@ const SchoolsPage: React.FC = () => {
             <CardContent>
               <p className="muted">{t('schools.pwaDesc')}</p>
               <div className="schools-actions">
-                <Link to="/compliance" className="secondary-button">
+                <Link to="/for-schools#school-compliance" className="secondary-button">
                   {t('schools.openInstallGuide')}
                 </Link>
               </div>
@@ -107,7 +107,7 @@ const SchoolsPage: React.FC = () => {
             <CardContent>
               <p className="muted">{t('schools.complianceDesc')}</p>
               <div className="schools-actions">
-                <Link to="/compliance" className="secondary-button">
+                <Link to="/for-schools" className="secondary-button">
                   {t('schools.openCompliance')}
                 </Link>
               </div>

@@ -1,53 +1,10 @@
-import React, { useState } from 'react'
+import React, { useState, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import type { UnitConfig } from './curriculum'
+import { useTranslation } from './contexts/LocaleContext'
 
-const SCENARIOS = [
-  {
-    id: 1,
-    situation: "You wrote an awesome game! A friend asks: 'Can I have your code?'",
-    fairChoice: "Share your code so they can learn! 📚",
-    unfairChoice: "Say 'No!' and keep it secret all to yourself! 🤐",
-    explanation: "✅ Sharing helps others learn and makes the world better! Teamwork rocks!",
-  },
-  {
-    id: 2,
-    situation: "Your app has a bug that makes it crash sometimes. Do you:",
-    fairChoice: "Tell everyone about it and fix it! 🔧",
-    unfairChoice: "Hide it so people don't know. 🙈",
-    explanation: "✅ Being honest helps people use your app safely! Trust matters!",
-  },
-  {
-    id: 3,
-    situation: "You're coding an AI. You notice it makes wrong choices for some kids. Do you:",
-    fairChoice: "Fix it so it's fair to EVERYONE! 🤝",
-    unfairChoice: "Leave it broken for some people. 😞",
-    explanation: "✅ Fair code treats everyone the same! That's what justice looks like!",
-  },
-  {
-    id: 4,
-    situation: "Your code collects data from users. Should you:",
-    fairChoice: "Ask permission and explain what you'll do with it! 🗣️",
-    unfairChoice: "Take their data without asking. 🚫",
-    explanation: "✅ Respecting privacy is SUPER important! People's data = their trust!",
-  },
-  {
-    id: 5,
-    situation: "You found a cool trick to make your code faster, but it's confusing. Do you:",
-    fairChoice: "Add comments so others understand it! 💡",
-    unfairChoice: "Leave no notes so only YOU understand it. 🤐",
-    explanation: "✅ Good coders help each other! Clear code = happy team!",
-  },
-  {
-    id: 6,
-    situation: "Your code could help sick people, but it might take time to build. Do you:",
-    fairChoice: "Work hard to build it right, even if it's slow! 🏥",
-    unfairChoice: "Rush it and launch it broken to get money fast! 💰",
-    explanation: "✅ Taking time to do it RIGHT means saving lives! That's real power!",
-  },
-] as const
-
-const TOTAL = SCENARIOS.length
+const SCENARIO_IDS = [1, 2, 3, 4, 5, 6] as const
+const TOTAL = SCENARIO_IDS.length
 
 export interface FairCodeAdventureQuizProps {
   unit: UnitConfig
@@ -64,22 +21,35 @@ const FairCodeAdventureQuiz: React.FC<FairCodeAdventureQuizProps> = ({
   mastered,
   onComplete,
 }) => {
+  const { t } = useTranslation()
+  const scenarios = useMemo(
+    () =>
+      SCENARIO_IDS.map((id) => ({
+        id,
+        situation: t(`aiCodingGames.fairCode.s${id}.situation`),
+        fairChoice: t(`aiCodingGames.fairCode.s${id}.fairChoice`),
+        unfairChoice: t(`aiCodingGames.fairCode.s${id}.unfairChoice`),
+        explanation: t(`aiCodingGames.fairCode.s${id}.explanation`),
+      })),
+    [t],
+  )
+
   const [step, setStep] = useState<'welcome' | 'game' | 'complete'>('welcome')
   const [currentIndex, setCurrentIndex] = useState(0)
   const [feedback, setFeedback] = useState<{ isFair: boolean; text: string } | null>(null)
   const [sparkiEmotion, setSparkiEmotion] = useState('🤖')
 
-  const scenario = step === 'game' && currentIndex < TOTAL ? SCENARIOS[currentIndex] : null
+  const scenario = step === 'game' && currentIndex < TOTAL ? scenarios[currentIndex] : null
 
   const handleStart = () => setStep('game')
 
   const handleChoice = (isFair: boolean) => {
     if (!scenario) return
     if (isFair) {
-      setFeedback({ isFair: true, text: `✅ PERFECT! ${scenario.explanation}` })
+      setFeedback({ isFair: true, text: t('aiCodingGames.fairCode.feedbackFair', { explanation: scenario.explanation }) })
       setSparkiEmotion('🤩')
     } else {
-      setFeedback({ isFair: false, text: `❌ Oops! Let's choose fair! ${scenario.explanation}` })
+      setFeedback({ isFair: false, text: t('aiCodingGames.fairCode.feedbackUnfair', { explanation: scenario.explanation }) })
       setSparkiEmotion('🤔')
     }
     setTimeout(() => {
@@ -113,14 +83,14 @@ const FairCodeAdventureQuiz: React.FC<FairCodeAdventureQuizProps> = ({
         style={wrapperStyle}
       >
         <h2 className="text-4xl sm:text-5xl font-black mb-4" style={{ color: '#FFD700', textShadow: '0 3px 0 rgba(0,0,0,0.5)' }}>
-          🤖 Sparki&apos;s Fair Code Adventure
+          {t('aiCodingGames.fairCode.title')}
         </h2>
         <p className="text-xl sm:text-2xl font-bold mb-6" style={{ color: '#FFD700' }}>
-          Learn about Ethical Coding!
+          {t('aiCodingGames.fairCode.subtitle')}
         </p>
         <div className="mb-8 p-6 rounded-xl text-left" style={{ background: 'rgba(255,215,0,0.15)', border: '3px solid #FFD700' }}>
           <p className="text-base sm:text-lg font-semibold mb-4 text-white">
-            Hi! I&apos;m Sparki! 🤖 Writing code is awesome, but we need to code FAIRLY! That means thinking about how our code affects everyone. You&apos;ll face 6 situations where you choose between Fair Code and Unfair Code. Fair Code = everyone wins! 🤝 Unfair Code = someone gets hurt! 😢 Ready to become an Ethical Coder? Let&apos;s go! 💪✨
+            {t('aiCodingGames.fairCode.welcomeBody')}
           </p>
         </div>
         <button
@@ -129,7 +99,7 @@ const FairCodeAdventureQuiz: React.FC<FairCodeAdventureQuizProps> = ({
           className="px-10 py-4 text-xl sm:text-2xl font-black text-white rounded-lg shadow-lg hover:scale-105 active:scale-95 transition-transform"
           style={{ background: 'linear-gradient(135deg, #FF8A3D, #FFD700)' }}
         >
-          🎮 Start Adventure!
+          {t('aiCodingGames.fairCode.startAdventure')}
         </button>
       </div>
     )
@@ -147,13 +117,13 @@ const FairCodeAdventureQuiz: React.FC<FairCodeAdventureQuizProps> = ({
             {sparkiEmotion}
           </div>
           <p className="text-xl sm:text-2xl font-bold" style={{ color: '#FFD700' }}>
-            What would YOU do? 🤔
+            {t('aiCodingGames.fairCode.whatWouldYouDo')}
           </p>
         </div>
 
         <div className="mb-6">
           <p className="text-lg font-bold mb-2" style={{ color: '#FFD700' }}>
-            Progress: <strong>{currentIndex}</strong>/{TOTAL}
+            {t('aiCodingGames.fairCode.progress', { current: currentIndex, total: TOTAL })}
           </p>
           <div
             className="rounded-xl h-6 overflow-hidden border-2 border-slate-600"
@@ -234,22 +204,22 @@ const FairCodeAdventureQuiz: React.FC<FairCodeAdventureQuizProps> = ({
         style={wrapperStyle}
       >
         <h2 className="text-3xl sm:text-4xl font-black mb-4" style={{ color: '#FFD700' }}>
-          🏆 Ethical Coder Badge!
+          {t('aiCodingGames.fairCode.completeTitle')}
         </h2>
         <div className="text-5xl sm:text-6xl my-6" aria-hidden style={{ textShadow: '0 3px 0 rgba(0,0,0,0.3)' }}>
           🏆🧠✨
         </div>
         <p className="text-xl sm:text-2xl font-bold mb-6" style={{ color: '#FFA500' }}>
-          You&apos;re an Ethical Coder!
+          {t('aiCodingGames.fairCode.completeBody')}
         </p>
         <div className="mb-6 p-6 rounded-xl text-left" style={{ background: 'rgba(255,215,0,0.15)', border: '3px solid #FFD700' }}>
-          <p className="font-semibold mb-2 text-white">🤖 Sparki says:</p>
+          <p className="font-semibold mb-2 text-white">{t('aiCodingGames.common.sparkiSays')}</p>
           <p className="text-sm sm:text-base" style={{ color: '#FFD700' }}>
-            You chose fair code every time! That means you understand—REAL power comes from writing code that helps EVERYONE. You&apos;re now an Ethical Coder! 🎉 Keep being fair! 💚
+            {t('aiCodingGames.fairCode.sparkiComplete')}
           </p>
         </div>
         <p className="text-lg font-bold text-amber-200 mb-6">
-          You earned <strong>{displaySparkles}</strong> sparkles!
+          {t('aiCodingGames.common.youEarnedSparkles', { count: displaySparkles })}
         </p>
         <div className="flex flex-wrap justify-center gap-3">
           <button
@@ -258,7 +228,7 @@ const FairCodeAdventureQuiz: React.FC<FairCodeAdventureQuizProps> = ({
             className="px-8 py-3 rounded-lg text-white text-lg font-bold shadow-lg hover:scale-105 active:scale-95 transition-transform"
             style={{ background: 'linear-gradient(135deg, #FFD700, #FFA500)' }}
           >
-            🔄 Play Again
+            {t('aiCodingGames.common.playAgain')}
           </button>
           {mastered && nextUnit && (
             <Link
@@ -266,7 +236,7 @@ const FairCodeAdventureQuiz: React.FC<FairCodeAdventureQuizProps> = ({
               className="inline-block px-8 py-3 rounded-lg text-white text-lg font-bold shadow-lg hover:scale-105 active:scale-95 transition-transform"
               style={{ background: 'linear-gradient(135deg, #FFD700, #FFA500)' }}
             >
-              Go to {nextUnit.title} →
+              {t('aiCodingGames.common.goToNextUnit', { title: nextUnit.title })}
             </Link>
           )}
         </div>

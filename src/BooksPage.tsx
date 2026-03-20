@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { books } from './books'
+import { books, EBOOK_ID_PENDING_PDF } from './books'
 import { useTranslation } from './contexts/LocaleContext'
 
 const BooksPage: React.FC = () => {
@@ -37,12 +37,17 @@ const BooksPage: React.FC = () => {
             <p className="book-meta">
               <strong>{book.price}</strong> · {t(book.storeLabelKey)}
             </p>
+            {book.id === EBOOK_ID_PENDING_PDF ? (
+              <p className="book-blurb muted" style={{ fontSize: '0.95rem' }}>
+                {t('booksPage.tiktokPdfSoon')}
+              </p>
+            ) : null}
             <div className="book-actions">
               <Link
                 to={`/ebook?ebookId=${encodeURIComponent(book.id)}`}
-                className="primary-button"
+                className={book.id === EBOOK_ID_PENDING_PDF ? 'secondary-button' : 'primary-button'}
               >
-                {t('booksPage.readEbook')}
+                {book.id === EBOOK_ID_PENDING_PDF ? t('booksPage.tiktokReadStatus') : t('booksPage.readEbook')}
               </Link>
             </div>
           </article>

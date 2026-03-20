@@ -305,7 +305,9 @@ const SchoolGeneratedUnitPage: React.FC = () => {
   }
 
   const correctCountText =
-    score !== null ? `You got ${score} out of ${unitConfig.quizQuestions.length} correct.` : ''
+    score !== null
+      ? t('aiCodingGames.gameQuiz.scoreSummary', { score, total: unitConfig.quizQuestions.length })
+      : ''
 
   return (
     <section className="lesson-page unit-page-single">

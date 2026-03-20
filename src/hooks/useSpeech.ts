@@ -46,6 +46,8 @@ export function useSpeech() {
   const { locale } = useLocale()
   const [isSpeaking, setIsSpeaking] = useState(false)
   const voiceRef = useRef<SpeechSynthesisVoice | null>(null)
+  /** True when the user hit Stop (vs. speak() clearing previous playback). Used to avoid TTS fallback after intentional abort. */
+  const userInitiatedStopRef = useRef(false)
 
   const loadVoices = useCallback(() => {
     if (typeof window === 'undefined' || !window.speechSynthesis) return
@@ -74,7 +76,7 @@ export function useSpeech() {
     }
   }, [loadVoices])
 
-  const stop = useCallback(() => {
+  const stopPlaybackOnly = useCallback(() => {
     if (typeof window === 'undefined') return
     globalAbort?.abort()
     globalAbort = null
@@ -86,8 +88,13 @@ export function useSpeech() {
     if (window.speechSynthesis) {
       window.speechSynthesis.cancel()
     }
-    setIsSpeaking(false)
   }, [])
+
+  const stop = useCallback(() => {
+    userInitiatedStopRef.current = true
+    stopPlaybackOnly()
+    setIsSpeaking(false)
+  }, [stopPlaybackOnly])
 
   const fallbackSpeak = useCallback(
     (t: string, options?: { rate?: number; pitch?: number }) => {
@@ -113,7 +120,9 @@ export function useSpeech() {
       const t = text?.trim()
       if (!t) return
 
-      stop()
+      userInitiatedStopRef.current = false
+      stopPlaybackOnly()
+      setIsSpeaking(false)
 
       // Offline: skip cloud TTS entirely and use device voice.
       if (typeof navigator !== 'undefined' && navigator.onLine === false) {
@@ -130,16 +139,21 @@ export function useSpeech() {
           const res = await fetch(appConfig.tts!.endpoint!, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ text: t }),
+            body: JSON.stringify({ text: t, locale }),
             signal: controller.signal,
           })
           window.clearTimeout(timeoutId)
           if (!res.ok) throw new Error('TTS request failed')
+          const contentType = (res.headers.get('content-type') || '').toLowerCase()
+          // API errors are often JSON; don't try to decode as audio.
+          if (contentType.includes('json')) {
+            throw new Error('TTS API returned JSON (not audio)')
+          }
           const blob = await res.blob()
+          if (!blob.size) throw new Error('TTS empty response')
           const url = URL.createObjectURL(blob)
           const audio = new Audio(url)
           globalAudio = audio
-          setIsSpeaking(true)
           audio.onended = () => {
             URL.revokeObjectURL(url)
             if (globalAudio === audio) {
@@ -154,28 +168,41 @@ export function useSpeech() {
             }
             setIsSpeaking(false)
           }
-          await audio.play()
-        } catch (e) {
-          if ((e as Error).name !== 'AbortError') {
-            if (import.meta.env.DEV) {
-              console.warn('TTS cloud failed, using browser voice:', (e as Error).message)
-            }
-            if (window.speechSynthesis) fallbackSpeak(t, options)
-          } else {
-            // Timeout or user stop; if timeout, fall back quickly to device voice.
-            if (window.speechSynthesis) fallbackSpeak(t, options)
+          setIsSpeaking(true)
+          try {
+            await audio.play()
+          } catch (playErr) {
+            // Common on iOS/Safari: user gesture is lost after await fetch(); fall back to device TTS.
+            URL.revokeObjectURL(url)
+            if (globalAudio === audio) globalAudio = null
+            setIsSpeaking(false)
+            throw playErr
           }
+        } catch (e) {
           if (globalAbort === controller) {
             globalAbort = null
           }
-          setIsSpeaking(false)
+          const aborted = (e as Error).name === 'AbortError'
+          if (aborted && userInitiatedStopRef.current) {
+            setIsSpeaking(false)
+            return
+          }
+          if (!aborted && import.meta.env.DEV) {
+            console.warn('TTS cloud failed, using browser voice:', (e as Error).message)
+          }
+          // Prefer browser speech when cloud fails, times out, or play() was blocked.
+          if (window.speechSynthesis) {
+            fallbackSpeak(t, options)
+          } else {
+            setIsSpeaking(false)
+          }
         }
         return
       }
 
       if (window.speechSynthesis) fallbackSpeak(t, options)
     },
-    [stop, fallbackSpeak]
+    [stopPlaybackOnly, fallbackSpeak, locale]
   )
 
   return { speak, stop, isSpeaking }

@@ -1,17 +1,21 @@
-import React, { useState, useMemo, useEffect } from 'react'
+import React, { useState, useMemo, useEffect, useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import type { UnitConfig } from './curriculum'
+import { useTranslation } from './contexts/LocaleContext'
 
-const TOOLS = [
-  { id: 'paint', emoji: '🎨', name: 'Drawing App', task: 'Draw a rainbow' },
-  { id: 'abc', emoji: '📚', name: 'Learning Game', task: 'Learn my ABCs' },
-  { id: 'music', emoji: '🎵', name: 'Music Maker', task: 'Make a song' },
-  { id: 'puzzle', emoji: '🧩', name: 'Puzzle Game', task: 'Play a puzzle' },
-  { id: 'video', emoji: '📺', name: 'Video Player', task: 'Watch safe videos' },
-  { id: 'sort', emoji: '📦', name: 'Sorting App', task: 'Organize my toys' },
-] as const
+const TOOL_IDS = ['paint', 'abc', 'music', 'puzzle', 'video', 'sort'] as const
+type ToolId = (typeof TOOL_IDS)[number]
 
-const TOTAL = TOOLS.length
+const TOOL_EMOJI: Record<ToolId, string> = {
+  paint: '🎨',
+  abc: '📚',
+  music: '🎵',
+  puzzle: '🧩',
+  video: '📺',
+  sort: '📦',
+}
+
+const TOTAL = TOOL_IDS.length
 
 function shuffle<T>(arr: T[]): T[] {
   const copy = [...arr]
@@ -37,15 +41,30 @@ const SoftwareExplorerQuiz: React.FC<SoftwareExplorerQuizProps> = ({
   mastered,
   onComplete,
 }) => {
+  const { t } = useTranslation()
+  const toolDef = useCallback(
+    (id: ToolId) => ({
+      id,
+      emoji: TOOL_EMOJI[id],
+      name: t(`aiCodingGames.softwareExplorer.tools.${id}.name`),
+      task: t(`aiCodingGames.softwareExplorer.tools.${id}.task`),
+    }),
+    [t],
+  )
+
   const [step, setStep] = useState<'welcome' | 'game' | 'complete'>('welcome')
-  const [taskOrder] = useState(() => shuffle([...TOOLS]))
+  const [taskOrder] = useState(() => shuffle([...TOOL_IDS]))
   const [currentTaskIndex, setCurrentTaskIndex] = useState(0)
   const [successMessage, setSuccessMessage] = useState<string | null>(null)
   const [sparkiEmotion, setSparkiEmotion] = useState('🤖')
   const [showSuccess, setShowSuccess] = useState(false)
 
-  const shuffledTools = useMemo(() => (step === 'game' ? shuffle([...TOOLS]) : []), [step])
-  const currentTool = step === 'game' ? taskOrder[currentTaskIndex] : null
+  const shuffledTools = useMemo(() => {
+    if (step !== 'game') return []
+    return shuffle([...TOOL_IDS]).map(toolDef)
+  }, [step, toolDef])
+
+  const currentTool = step === 'game' && currentTaskIndex < TOTAL ? toolDef(taskOrder[currentTaskIndex]) : null
 
   const playAgain = () => {
     setStep('welcome')
@@ -64,10 +83,15 @@ const SoftwareExplorerQuiz: React.FC<SoftwareExplorerQuizProps> = ({
     }
   }, [step, currentTaskIndex, onComplete])
 
-  const handleToolClick = (selected: (typeof TOOLS)[number]) => {
+  const handleToolClick = (selected: ReturnType<typeof toolDef>) => {
     if (!currentTool || showSuccess) return
     if (selected.id === currentTool.id) {
-      setSuccessMessage(`✅ Perfect! "${currentTool.task}" uses ${currentTool.name}! 🎉`)
+      setSuccessMessage(
+        t('aiCodingGames.softwareExplorer.successPerfect', {
+          task: currentTool.task,
+          name: currentTool.name,
+        }),
+      )
       setSparkiEmotion('🤩')
       setShowSuccess(true)
       setCurrentTaskIndex((i) => i + 1)
@@ -76,7 +100,7 @@ const SoftwareExplorerQuiz: React.FC<SoftwareExplorerQuizProps> = ({
         setSparkiEmotion('🤖')
       }, 1500)
     } else {
-      setSuccessMessage("❌ Oops! That's not right. Try again!")
+      setSuccessMessage(t('aiCodingGames.softwareExplorer.tryAgain'))
       setSparkiEmotion('🤔')
       setShowSuccess(true)
       setTimeout(() => {
@@ -96,17 +120,17 @@ const SoftwareExplorerQuiz: React.FC<SoftwareExplorerQuizProps> = ({
         }}
       >
         <h2 className="text-4xl sm:text-5xl font-black mb-4" style={{ color: '#FFD700', textShadow: '0 3px 0 rgba(0,0,0,0.5)' }}>
-          🗺️ Sparki&apos;s Software Explorer
+          {t('aiCodingGames.softwareExplorer.title')}
         </h2>
         <p className="text-xl sm:text-2xl font-bold mb-6" style={{ color: '#FFD700' }}>
-          Discover the tools that help us do amazing things!
+          {t('aiCodingGames.softwareExplorer.subtitle')}
         </p>
         <div className="mb-8 p-6 rounded-xl text-left" style={{ background: 'rgba(255,215,0,0.15)', border: '3px solid #FFD700' }}>
           <p className="text-base sm:text-lg font-semibold mb-2 text-white">
-            Hi! I&apos;m Sparki! 🤖 Help me explore a treasure map and discover 6 hidden software tools! Each chest contains a different tool. Your job is to match each task (like &quot;Draw a rainbow&quot;) to the right software tool. Can you find them all?
+            {t('aiCodingGames.softwareExplorer.intro')}
           </p>
           <p className="text-sm sm:text-base" style={{ color: '#FFD700' }}>
-            Learn how software is like a toolbox—different tools help us do different things! 🛠️✨
+            {t('aiCodingGames.softwareExplorer.intro2')}
           </p>
         </div>
         <button
@@ -115,7 +139,7 @@ const SoftwareExplorerQuiz: React.FC<SoftwareExplorerQuizProps> = ({
           className="px-10 py-4 text-xl sm:text-2xl font-black text-white rounded-lg shadow-lg hover:scale-105 active:scale-95 transition-transform"
           style={{ background: 'linear-gradient(135deg, #FFD700, #FFA500)' }}
         >
-          🎮 Start Exploring!
+          {t('aiCodingGames.softwareExplorer.startExploring')}
         </button>
       </div>
     )
@@ -135,13 +159,13 @@ const SoftwareExplorerQuiz: React.FC<SoftwareExplorerQuizProps> = ({
             {sparkiEmotion}
           </div>
           <p className="text-xl sm:text-2xl font-bold" style={{ color: '#FFD700' }}>
-            What should we do?
+            {t('aiCodingGames.softwareExplorer.whatShouldWeDo')}
           </p>
           <p className="text-lg sm:text-xl font-bold mb-1" style={{ color: '#FFA500' }}>
             {currentTool.task}
           </p>
           <p className="text-base sm:text-lg" style={{ color: '#FFA500' }}>
-            Matches found: <strong>{currentTaskIndex}</strong>/{TOTAL}
+            {t('aiCodingGames.softwareExplorer.matchesFound', { current: currentTaskIndex, total: TOTAL })}
           </p>
         </div>
 
@@ -150,7 +174,7 @@ const SoftwareExplorerQuiz: React.FC<SoftwareExplorerQuizProps> = ({
           style={{ background: 'rgba(255, 107, 157, 0.2)', border: '3px solid #FF6B9D' }}
         >
           <p className="text-sm font-bold mb-3" style={{ color: '#FFD700' }}>
-            🎯 Current Task:
+            {t('aiCodingGames.softwareExplorer.currentTaskLabel')}
           </p>
           <p className="text-2xl sm:text-3xl font-black" style={{ color: '#FFD700', textShadow: '0 2px 4px rgba(0,0,0,0.3)' }}>
             {currentTool.task} {currentTool.id === 'paint' ? '🌈' : ''}
@@ -200,19 +224,19 @@ const SoftwareExplorerQuiz: React.FC<SoftwareExplorerQuizProps> = ({
         }}
       >
         <h2 className="text-3xl sm:text-4xl font-black mb-4" style={{ color: '#FFD700' }}>
-          🎉 You&apos;re a Software Explorer!
+          {t('aiCodingGames.softwareExplorer.completeTitle')}
         </h2>
         <p className="text-xl sm:text-2xl font-bold mb-6" style={{ color: '#FFA500' }}>
-          You explored all the tools and became a Software Explorer!
+          {t('aiCodingGames.softwareExplorer.completeBody')}
         </p>
         <div className="mb-6 p-6 rounded-xl text-left" style={{ background: 'rgba(255,215,0,0.15)', border: '3px solid #FFD700' }}>
-          <p className="font-semibold mb-2 text-white">🤖 Sparki says:</p>
+          <p className="font-semibold mb-2 text-white">{t('aiCodingGames.common.sparkiSays')}</p>
           <p className="text-sm sm:text-base" style={{ color: '#FFD700' }}>
-            Awesome! You found all 6 tools! You now understand that software is like a toolbox—each tool helps us do different things. You&apos;re officially a Software Explorer! 🌟
+            {t('aiCodingGames.softwareExplorer.sparkiComplete')}
           </p>
         </div>
         <p className="text-lg font-bold text-amber-200 mb-6">
-          You earned <strong>{displaySparkles}</strong> sparkles!
+          {t('aiCodingGames.common.youEarnedSparkles', { count: displaySparkles })}
         </p>
         <div className="flex flex-wrap justify-center gap-3">
           <button
@@ -221,7 +245,7 @@ const SoftwareExplorerQuiz: React.FC<SoftwareExplorerQuizProps> = ({
             className="px-8 py-3 rounded-lg text-white text-lg font-bold shadow-lg hover:scale-105 active:scale-95 transition-transform"
             style={{ background: 'linear-gradient(135deg, #FFD700, #FFA500)' }}
           >
-            🔄 Play Again
+            {t('aiCodingGames.common.playAgain')}
           </button>
           {mastered && nextUnit && (
             <Link
@@ -229,7 +253,7 @@ const SoftwareExplorerQuiz: React.FC<SoftwareExplorerQuizProps> = ({
               className="inline-block px-8 py-3 rounded-lg text-white text-lg font-bold shadow-lg hover:scale-105 active:scale-95 transition-transform"
               style={{ background: 'linear-gradient(135deg, #FFD700, #FFA500)' }}
             >
-              Go to {nextUnit.title} →
+              {t('aiCodingGames.common.goToNextUnit', { title: nextUnit.title })}
             </Link>
           )}
         </div>

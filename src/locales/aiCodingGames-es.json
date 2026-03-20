@@ -1,0 +1,182 @@
+{
+  "common": {
+    "playAgain": "🔄 Jugar otra vez",
+    "goToNextUnit": "Ir a {title} →",
+    "sparkiSays": "🤖 SpArki dice:",
+    "youEarnedSparkles": "¡Ganaste {count} brillos!"
+  },
+  "exampleCollector": {
+    "title": "🤖 El recolector de ejemplos de SpArki",
+    "subtitle": "¡Aprende cómo la IA aprende con ejemplos!",
+    "intro": "¡Hola! Soy SpArki 🤖 La IA aprende con ejemplos, no con magia. Te mostraré cosas y tú las ordenarás en dos montones. ¡A ver si entiendes el patrón!",
+    "pilesLinePrefix": "Pondrás ",
+    "pilesLineMid": " en un montón y ",
+    "pilesLineSuffix": " en el otro.",
+    "startGame": "🎮 ¡Empezar juego!",
+    "itemOf": "Objeto {current} de {total}",
+    "scoreLine": "✅ {correct}/{total}",
+    "whichCategory": "¿A qué categoría pertenece esto?",
+    "feedbackCorrect": "✅ ¡Correcto! ¡Buen ejemplo!",
+    "feedbackWrong": "❌ ¡Uy! Prueba el otro montón la próxima vez.",
+    "completeTitle": "🎉 ¡Lo lograste!",
+    "completeBody": "¡Ordenaste {correct} de {total} objetos bien! ¡Aprendes como la IA! 🌟",
+    "sparkiComplete": "¡Genial! Descubriste el patrón mirando ejemplos. Así aprende la IA: estudiando ejemplos y buscando patrones. ¡Eres un experto en IA! 🌟",
+    "categoryCat": "Gatos",
+    "categoryDog": "Perros"
+  },
+  "bodyCodeChain": {
+    "title": "🤖 La cadena de código corporal de SpArki",
+    "subtitle": "¡Imita los movimientos de SpArki para ver cómo funciona el código!",
+    "intro": "¡Hola! Soy SpArki! 🤖 En cada ronda haré una secuencia de movimientos. Tú observas y recuerdas, ¡y luego haces exactamente lo mismo!",
+    "intro2": "Es como aprender código: sigue los pasos en orden. ¡Si aciertas, subes de nivel! 💪",
+    "startGame": "🎮 ¡Vamos!",
+    "sparkisTurn": "🎭 TURNO DE SPARKI 🎭",
+    "roundOf": "Ronda {current} de {total}",
+    "watchInstruction": "Mira a SpArki actuar...",
+    "yourTurnInstruction": "¡Tu turno! Toca las acciones en orden.",
+    "watchSparkiMove": "▶️ ¡Ver a SpArki moverse!",
+    "yourTurnHeading": "🎮 ¡TU TURNO! Haz estos movimientos:",
+    "feedbackWrongOrder": "❌ ¡Uy! No es el orden correcto. ¡Mira otra vez a SpArki!",
+    "feedbackPerfectRound": "✅ ¡Perfecto! ¡Lo copiaste exacto! ¡Ronda {round} completa!",
+    "completeTitle": "🎉 ¡Eres un maestro del código!",
+    "completeBody": "¡Acertaste {correct} de {total} rondas perfectas! 🌟",
+    "sparkiComplete": "¡Seguiste las instrucciones al pie de la letra! Eso es el código: pasos en el orden correcto. ¡Gran trabajo, programador corporal! 🌟",
+    "actions": {
+      "jump": "Saltar",
+      "spin": "Girar",
+      "clap": "Aplaudir",
+      "wave": "Saludar",
+      "sit": "Sentarse"
+    }
+  },
+  "softwareExplorer": {
+    "title": "🗺️ El explorador de software de SpArki",
+    "subtitle": "¡Descubre las herramientas que nos ayudan a hacer cosas increíbles!",
+    "intro": "¡Hola! Soy SpArki! 🤖 Ayúdame a explorar un mapa del tesoro y descubrir 6 herramientas de software escondidas. Tu trabajo es emparejar cada tarea (como \"Dibuja un arcoíris\") con la herramienta correcta. ¿Puedes encontrarlas todas?",
+    "intro2": "¡El software es como una caja de herramientas: cada una hace cosas distintas! 🛠️✨",
+    "startExploring": "🎮 ¡Empezar a explorar!",
+    "whatShouldWeDo": "¿Qué deberíamos hacer?",
+    "matchesFound": "Emparejamientos: {current}/{total}",
+    "currentTaskLabel": "🎯 Tarea actual:",
+    "successPerfect": "✅ ¡Perfecto! \"{task}\" usa {name}! 🎉",
+    "tryAgain": "❌ ¡Uy! No es correcto. ¡Inténtalo de nuevo!",
+    "completeTitle": "🎉 ¡Eres un explorador de software!",
+    "completeBody": "¡Exploraste todas las herramientas y te convertiste en explorador de software!",
+    "sparkiComplete": "¡Genial! Encontraste las 6 herramientas. Ahora entiendes que el software es una caja de herramientas: cada una ayuda de forma distinta. ¡Oficialmente eres explorador de software! 🌟",
+    "tools": {
+      "paint": { "name": "App de dibujo", "task": "Dibujar un arcoíris" },
+      "abc": { "name": "Juego de aprendizaje", "task": "Aprender el abecedario" },
+      "music": { "name": "Creador de música", "task": "Hacer una canción" },
+      "puzzle": { "name": "Juego de rompecabezas", "task": "Jugar un rompecabezas" },
+      "video": { "name": "Reproductor de video", "task": "Ver videos seguros" },
+      "sort": { "name": "App de ordenar", "task": "Organizar mis juguetes" }
+    }
+  },
+  "fairCode": {
+    "title": "🤖 La aventura del código justo de SpArki",
+    "subtitle": "¡Aprende sobre programación ética!",
+    "welcomeBody": "¡Hola! Soy SpArki! 🤖 Programar es genial, pero hay que hacerlo con JUSTICIA: pensar cómo nuestro código afecta a todos. Verás 6 situaciones donde eliges entre código justo y código injusto. Código justo = ¡todos ganan! 🤝 Código injusto = alguien sale perjudicado. 😢 ¿Listo para ser programador ético? ¡Vamos! 💪✨",
+    "startAdventure": "🎮 ¡Empezar aventura!",
+    "whatWouldYouDo": "¿Qué harías TÚ? 🤔",
+    "progress": "Progreso: {current}/{total}",
+    "feedbackFair": "✅ ¡PERFECTO! {explanation}",
+    "feedbackUnfair": "❌ ¡Uy! ¡Elige lo justo! {explanation}",
+    "completeTitle": "🏆 ¡Insignia de programador ético!",
+    "completeBody": "¡Eres un programador ético!",
+    "sparkiComplete": "¡Elegiste el código justo cada vez! Eso significa que entiendes: el VERDADERO poder es escribir código que ayude a TODOS. ¡Ahora eres programador ético! 🎉 ¡Sigue siendo justo! 💚",
+    "s1": {
+      "situation": "¡Hiciste un juego genial! Un amigo pregunta: \"¿Me das tu código?\"",
+      "fairChoice": "¡Comparte tu código para que aprenda! 📚",
+      "unfairChoice": "Decir \"¡No!\" y guardártelo solo para ti. 🤐",
+      "explanation": "✅ Compartir ayuda a otros a aprender y mejora el mundo. ¡El trabajo en equipo mola!"
+    },
+    "s2": {
+      "situation": "Tu app tiene un error que a veces la cierra. ¿Qué haces?",
+      "fairChoice": "¡Decírselo a todos y arreglarlo! 🔧",
+      "unfairChoice": "Ocultarlo para que nadie lo sepa. 🙈",
+      "explanation": "✅ Ser honesto ayuda a que la gente use tu app con seguridad. ¡La confianza importa!"
+    },
+    "s3": {
+      "situation": "Programas una IA y ves que elige mal para algunos niños. ¿Qué haces?",
+      "fairChoice": "¡Arreglarla para que sea justa con TODOS! 🤝",
+      "unfairChoice": "Dejarla mal para algunas personas. 😞",
+      "explanation": "✅ Un código justo trata a todos igual. ¡Así se ve la justicia!"
+    },
+    "s4": {
+      "situation": "Tu código recoge datos de usuarios. ¿Deberías...?",
+      "fairChoice": "¡Pedir permiso y explicar qué harás con ellos! 🗣️",
+      "unfairChoice": "Tomar sus datos sin preguntar. 🚫",
+      "explanation": "✅ Respetar la privacidad es MUY importante. ¡Los datos de la gente = su confianza!"
+    },
+    "s5": {
+      "situation": "Encontraste un truco para que tu código vaya más rápido, pero es confuso. ¿Qué haces?",
+      "fairChoice": "¡Añadir comentarios para que otros lo entiendan! 💡",
+      "unfairChoice": "No dejar notas para que solo TÚ lo entiendas. 🤐",
+      "explanation": "✅ Los buenos programadores se ayudan entre sí. ¡Código claro = equipo feliz!"
+    },
+    "s6": {
+      "situation": "Tu código podría ayudar a personas enfermas, pero llevará tiempo. ¿Qué haces?",
+      "fairChoice": "¡Trabajar duro para hacerlo bien, aunque sea lento! 🏥",
+      "unfairChoice": "¡Apurarlo y lanzarlo roto solo para ganar dinero rápido! 💰",
+      "explanation": "✅ Tomarse el tiempo para hacerlo BIEN puede salvar vidas. ¡Ese es el verdadero poder!"
+    }
+  },
+  "worldAI": {
+    "title": "🌍 El ayudante de IA mundial de SpArki",
+    "subtitle": "¡Descubre dónde trabajan los ayudantes de IA en el mundo!",
+    "welcome": "¡Hola! Soy SpArki! 🤖 La IA está por todas partes: ayuda en escuelas, hospitales, granjas y casas. Tu trabajo: leer qué necesita alguien y elegir el LUGAR correcto donde la IA puede ayudar. 🌍 Piensa bien: a veces la IA se equivoca, ¡hay que ser listos! ¿Listo para ser experto en IA? 🧠✨",
+    "welcome2": "Aprende cómo los ayudantes de IA mejoran el mundo y por qué hay que revisar su trabajo. 🧠🌟",
+    "startExploring": "🎮 ¡Empezar a explorar!",
+    "readNeedPickPlace": "¡Lee la necesidad, elige el lugar! 🌍",
+    "taskProgress": "Tarea {done}/{total}",
+    "pickWhereLabel": "🌍 Elige dónde ayuda la IA:",
+    "matchCorrect": "✅ ¡SÍ! La IA ayuda con eso en {place}. 🎉",
+    "matchWrong": "❌ Mmm, no del todo. Piensa dónde ayudaría la IA con eso... ¡Inténtalo otra vez!",
+    "importantQuestion": "¡Pregunta importante!",
+    "canAiBeWrong": "¿La IA a veces puede equivocarse?",
+    "yesButton": "✅ ¡Sí!",
+    "noButton": "❌ No",
+    "qFeedbackCorrect": "✅ ¡Correcto! La IA aprende con ejemplos, así que a veces se equivoca. Por eso SIEMPRE debemos comprobarlo con un adulto. 🧠 ¡Piensas con criterio! 💡",
+    "qFeedbackWrong": "❌ En realidad, la IA a veces puede fallar. Aprende con ejemplos y puede equivocarse. Por eso SIEMPRE comprobamos primero con un adulto. 🧠 ¡Buen momento para aprender! 💡",
+    "completeTitle": "🎉 ¡Eres un ayudante de IA mundial!",
+    "completeBody": "¡Exploraste todos los ayudantes de IA del mundo!",
+    "sparkiComplete": "¡Genial! Emparejaste necesidades reales con los lugares donde la IA puede ayudar. También sabes que la IA no es perfecta: siempre repasa con un adulto. ¡Eres un ayudante de IA mundial! 🌟",
+    "tasks": {
+      "t1": "Necesito ayuda para encontrar un libro 📚",
+      "t2": "Necesito ayuda para conducir con seguridad 🚗",
+      "t3": "Necesito ayuda para encontrar un buen cuento 📖",
+      "t4": "Necesito ayuda para detectar plantas enfermas 🌾",
+      "t5": "Necesito ayuda para doblar la ropa 👕",
+      "t6": "Necesito ayuda para mantener a la gente sana 🏥"
+    },
+    "locations": {
+      "library": "Biblioteca",
+      "car": "Coche",
+      "school": "Escuela",
+      "farm": "Granja",
+      "home": "Casa",
+      "hospital": "Hospital"
+    }
+  },
+  "gameQuiz": {
+    "defaultTitle": "Cuestionario de SpArki",
+    "scoreSummary": "Acertaste {score} de {total}.",
+    "effortLine": "¡Haz lo que puedas! SpArki da brillos por esfuerzo y pensar con cuidado, no por ser perfecto.",
+    "submitted": "Enviado",
+    "checkScore": "Ver mi puntuación",
+    "sparklesAdded": "¡SpArki añadió {count} brillos a tu total!",
+    "alreadyMastered": "Ya dominaste esta unidad. ¡Sigue practicando cuando quieras!",
+    "justMastered": "¡Trabajo increíble! Acabas de dominar esta unidad.",
+    "goToNext": "Ir a {title} →"
+  },
+  "trackPage": {
+    "listenTitleAria": "Escuchar el título del recorrido",
+    "listenDescAria": "Escuchar la descripción del recorrido",
+    "safetyVideoTitle": "Intro de seguridad",
+    "safetyVideoAria": "Video de introducción de seguridad",
+    "codingVideoTitle": "Intro de programación",
+    "codingVideoAria": "Video de introducción de programación",
+    "videoUnsupported": "Lo sentimos, tu navegador no admite la etiqueta de video.",
+    "introPlaceholder": "Imagina a SpArki en el mundo de este recorrido: en IA y programación podría ordenar bloques brillantes; en Seguridad podría sostener un escudo amistoso con un corazón."
+  }
+}

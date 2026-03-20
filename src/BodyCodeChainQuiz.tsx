@@ -1,16 +1,17 @@
 import React, { useState, useCallback, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import type { UnitConfig } from './curriculum'
+import { useTranslation } from './contexts/LocaleContext'
 
-const ACTIONS = [
-  { name: 'jump', emoji: '🚀', label: 'Jump' },
-  { name: 'spin', emoji: '🌀', label: 'Spin' },
-  { name: 'clap', emoji: '👏', label: 'Clap' },
-  { name: 'wave', emoji: '👋', label: 'Wave' },
-  { name: 'sit', emoji: '🪑', label: 'Sit' },
+const ACTION_META = [
+  { name: 'jump' as const, emoji: '🚀' },
+  { name: 'spin' as const, emoji: '🌀' },
+  { name: 'clap' as const, emoji: '👏' },
+  { name: 'wave' as const, emoji: '👋' },
+  { name: 'sit' as const, emoji: '🪑' },
 ] as const
 
-type ActionName = (typeof ACTIONS)[number]['name']
+type ActionName = (typeof ACTION_META)[number]['name']
 
 const ROUNDS: ActionName[][] = [
   ['jump'],
@@ -37,6 +38,7 @@ const BodyCodeChainQuiz: React.FC<BodyCodeChainQuizProps> = ({
   mastered,
   onComplete,
 }) => {
+  const { t } = useTranslation()
   const [step, setStep] = useState<'welcome' | 'game' | 'complete'>('welcome')
   const [currentRound, setCurrentRound] = useState(0)
   const [correctCount, setCorrectCount] = useState(0)
@@ -64,7 +66,8 @@ const BodyCodeChainQuiz: React.FC<BodyCodeChainQuizProps> = ({
 
   const startGame = () => setStep('game')
 
-  const getActionByName = (name: ActionName) => ACTIONS.find((a) => a.name === name)!
+  const getActionByName = (name: ActionName) => ACTION_META.find((a) => a.name === name)!
+  const actionLabel = (name: ActionName) => t(`aiCodingGames.bodyCodeChain.actions.${name}`)
 
   const performSequence = useCallback(() => {
     if (performLockRef.current || currentRound >= TOTAL_ROUNDS) return
@@ -100,7 +103,7 @@ const BodyCodeChainQuiz: React.FC<BodyCodeChainQuizProps> = ({
     const expected = sequence[playerProgress]
     if (expected !== actionName) {
       setButtonStates((s) => ({ ...s, [index]: 'wrong' }))
-      setFeedback("❌ Oops! That's not the right order. Watch Sparki again!")
+      setFeedback(t('aiCodingGames.bodyCodeChain.feedbackWrongOrder'))
       setTimeout(() => {
         setFeedback(null)
         setShowPlayerTurn(false)
@@ -113,7 +116,7 @@ const BodyCodeChainQuiz: React.FC<BodyCodeChainQuizProps> = ({
     setButtonStates((s) => ({ ...s, [index]: 'correct' }))
     setPlayerProgress((p) => p + 1)
     if (playerProgress + 1 === sequence.length) {
-      setFeedback(`✅ Perfect! You copied it exactly! Round ${currentRound + 1} complete!`)
+      setFeedback(t('aiCodingGames.bodyCodeChain.feedbackPerfectRound', { round: currentRound + 1 }))
       setCorrectCount((c) => c + 1)
       setTimeout(() => {
         setFeedback(null)
@@ -147,17 +150,17 @@ const BodyCodeChainQuiz: React.FC<BodyCodeChainQuizProps> = ({
           }}
         >
           <h2 className="text-4xl sm:text-5xl font-black mb-4" style={{ color: '#FF4500' }}>
-            🤖 Sparki&apos;s Body Code Chain
+            {t('aiCodingGames.bodyCodeChain.title')}
           </h2>
           <p className="text-xl sm:text-2xl font-bold mb-6" style={{ color: '#FF6D3D' }}>
-            Mirror Sparki&apos;s movements to learn how code works!
+            {t('aiCodingGames.bodyCodeChain.subtitle')}
           </p>
           <div className="mb-8 p-6 rounded-xl text-left" style={{ background: 'rgba(255,69,0,0.1)', border: '3px solid #FF4500' }}>
             <p className="text-base sm:text-lg font-semibold mb-2 text-white">
-              Hi! I&apos;m Sparki! 🤖 In each round, I&apos;ll do a sequence of body movements. You watch and remember them, then YOU do the exact same movements!
+              {t('aiCodingGames.bodyCodeChain.intro')}
             </p>
             <p className="text-sm sm:text-base" style={{ color: '#FF6D3D' }}>
-              It&apos;s like learning code—follow the instructions step-by-step. Get it right and you level up! 💪
+              {t('aiCodingGames.bodyCodeChain.intro2')}
             </p>
           </div>
           <button
@@ -166,7 +169,7 @@ const BodyCodeChainQuiz: React.FC<BodyCodeChainQuizProps> = ({
             className="px-10 py-4 text-xl sm:text-2xl font-black text-white rounded-lg shadow-lg hover:scale-105 active:scale-95 transition-transform"
             style={{ background: 'linear-gradient(135deg, #FF4500, #FF6D3D)' }}
           >
-            🎮 Let&apos;s Go!
+            {t('aiCodingGames.bodyCodeChain.startGame')}
           </button>
         </div>
       </>
@@ -175,7 +178,9 @@ const BodyCodeChainQuiz: React.FC<BodyCodeChainQuizProps> = ({
 
   if (step === 'game') {
     const sequence = ROUNDS[currentRound]
-    const roundInstruction = showPlayerTurn ? "Your turn! Tap the actions in order." : "Watch Sparki perform..."
+    const roundInstruction = showPlayerTurn
+      ? t('aiCodingGames.bodyCodeChain.yourTurnInstruction')
+      : t('aiCodingGames.bodyCodeChain.watchInstruction')
 
     return (
       <>
@@ -197,7 +202,7 @@ const BodyCodeChainQuiz: React.FC<BodyCodeChainQuizProps> = ({
             className="text-center mb-6 p-6 rounded-xl"
             style={{ background: 'linear-gradient(135deg, #4A5FC1, #5BA3F5)', border: '4px solid #FF4500' }}
           >
-            <p className="text-lg font-bold mb-4 text-white">🎭 SPARKI&apos;S TURN 🎭</p>
+            <p className="text-lg font-bold mb-4 text-white">{t('aiCodingGames.bodyCodeChain.sparkisTurn')}</p>
             <div
               className="text-7xl sm:text-8xl mx-auto my-5"
               style={{
@@ -214,7 +219,7 @@ const BodyCodeChainQuiz: React.FC<BodyCodeChainQuizProps> = ({
             style={{ background: 'rgba(255,69,0,0.15)', border: '2px solid #FF4500' }}
           >
             <p className="text-xl sm:text-2xl font-bold" style={{ color: '#FF4500' }}>
-              Round {currentRound + 1} of {TOTAL_ROUNDS}
+              {t('aiCodingGames.bodyCodeChain.roundOf', { current: currentRound + 1, total: TOTAL_ROUNDS })}
             </p>
             <p className="text-base sm:text-lg font-semibold mt-2" style={{ color: '#FF6D3D' }}>
               {roundInstruction}
@@ -230,7 +235,7 @@ const BodyCodeChainQuiz: React.FC<BodyCodeChainQuizProps> = ({
                 className="px-8 py-4 text-xl font-bold text-white rounded-lg border-2 disabled:opacity-70"
                 style={{ background: 'linear-gradient(135deg, #32CD32, #00FF00)', borderColor: '#228B22' }}
               >
-                ▶️ Watch Sparki Move!
+                {t('aiCodingGames.bodyCodeChain.watchSparkiMove')}
               </button>
             </div>
           )}
@@ -247,7 +252,7 @@ const BodyCodeChainQuiz: React.FC<BodyCodeChainQuizProps> = ({
           {showPlayerTurn && (
             <div className="text-center mb-6">
               <p className="text-xl font-bold mb-4" style={{ color: '#FF4500' }}>
-                🎮 YOUR TURN! Do these movements:
+                {t('aiCodingGames.bodyCodeChain.yourTurnHeading')}
               </p>
               <div className="flex flex-wrap gap-3 justify-center">
                 {sequence.map((actionName, index) => {
@@ -266,7 +271,7 @@ const BodyCodeChainQuiz: React.FC<BodyCodeChainQuizProps> = ({
                       className="px-6 py-3 text-lg font-bold text-white rounded-lg border-0"
                       style={{ background: bg }}
                     >
-                      {index + 1}. {action.emoji} {action.label}
+                      {index + 1}. {action.emoji} {actionLabel(actionName)}
                     </button>
                   )
                 })}
@@ -289,19 +294,19 @@ const BodyCodeChainQuiz: React.FC<BodyCodeChainQuizProps> = ({
         }}
       >
         <h2 className="text-3xl sm:text-4xl font-black mb-4" style={{ color: '#FF4500' }}>
-          🎉 You&apos;re a Code Master!
+          {t('aiCodingGames.bodyCodeChain.completeTitle')}
         </h2>
         <p className="text-xl sm:text-2xl font-bold mb-6" style={{ color: '#FF6D3D' }}>
-          You got {correctCount} out of {TOTAL_ROUNDS} rounds perfect! 🌟
+          {t('aiCodingGames.bodyCodeChain.completeBody', { correct: correctCount, total: TOTAL_ROUNDS })}
         </p>
         <div className="mb-6 p-6 rounded-xl text-left" style={{ background: 'rgba(255,69,0,0.15)', border: '3px solid #FF4500' }}>
-          <p className="font-semibold mb-2 text-white">🤖 Sparki says:</p>
+          <p className="font-semibold mb-2 text-white">{t('aiCodingGames.common.sparkiSays')}</p>
           <p className="text-sm sm:text-base" style={{ color: '#FF6D3D' }}>
-            You followed instructions perfectly! That&apos;s exactly what code is—a set of steps to follow in the right order. Amazing work, Body Coder! 🌟
+            {t('aiCodingGames.bodyCodeChain.sparkiComplete')}
           </p>
         </div>
         <p className="text-lg font-bold text-orange-200 mb-6">
-          You earned <strong>{displaySparkles}</strong> sparkles!
+          {t('aiCodingGames.common.youEarnedSparkles', { count: displaySparkles })}
         </p>
         <div className="flex flex-wrap justify-center gap-3">
           <button
@@ -310,7 +315,7 @@ const BodyCodeChainQuiz: React.FC<BodyCodeChainQuizProps> = ({
             className="px-8 py-3 rounded-lg text-white text-lg font-bold shadow-lg hover:scale-105 active:scale-95 transition-transform"
             style={{ background: 'linear-gradient(135deg, #FF4500, #FF6D3D)' }}
           >
-            🔄 Play Again
+            {t('aiCodingGames.common.playAgain')}
           </button>
           {mastered && nextUnit && (
             <Link
@@ -318,7 +323,7 @@ const BodyCodeChainQuiz: React.FC<BodyCodeChainQuizProps> = ({
               className="inline-block px-8 py-3 rounded-lg text-white text-lg font-bold shadow-lg hover:scale-105 active:scale-95 transition-transform"
               style={{ background: 'linear-gradient(135deg, #FF4500, #FF6D3D)' }}
             >
-              Go to {nextUnit.title} →
+              {t('aiCodingGames.common.goToNextUnit', { title: nextUnit.title })}
             </Link>
           )}
         </div>

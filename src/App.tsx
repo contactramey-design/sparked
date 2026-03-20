@@ -25,6 +25,8 @@ import PrivacyPage from './PrivacyPage'
 import AboutPage from './AboutPage'
 import ContactPage from './ContactPage'
 import CompliancePage from './CompliancePage'
+import ForSchoolsPage from './ForSchoolsPage'
+import SchoolOnePagerPage from './SchoolOnePagerPage'
 import TeacherDashboardPage from './TeacherDashboardPage'
 import TeacherWeeklyGeneratorPage from './TeacherWeeklyGeneratorPage.tsx'
 import SchoolsPage from './SchoolsPage'
@@ -63,6 +65,7 @@ function AppHeader() {
   const { t } = useTranslation()
   const isSchoolRoute =
     location.pathname.startsWith('/schools') ||
+    location.pathname.startsWith('/for-schools') ||
     location.pathname.startsWith('/compliance') ||
     location.pathname.startsWith('/teacher')
   const isHome = location.pathname === '/'
@@ -79,6 +82,7 @@ function AppHeader() {
           <p>{t('header.tagline')}</p>
         </div>
         <nav className="main-nav" aria-label="School navigation">
+          <Link to="/for-schools">{t('header.compliance')}</Link>
           <Link to="/schools">{t('header.schools')}</Link>
           <Link to="/teacher/dashboard">{t('header.teacherDashboard')}</Link>
           <LangSwitcher />
@@ -101,14 +105,14 @@ function AppHeader() {
           {isHome && !isLoggedIn && (
             <>
               <Link to="/login">{t('header.signIn')}</Link>
-              <Link to="/schools">{t('header.forSchools')}</Link>
+              <Link to="/for-schools">{t('header.forSchools')}</Link>
               <LangSwitcher />
             </>
           )}
           {isLogin && (
             <>
               <Link to="/">{t('header.home')}</Link>
-              <Link to="/schools">{t('header.forSchools')}</Link>
+              <Link to="/for-schools">{t('header.forSchools')}</Link>
               <LangSwitcher />
             </>
           )}
@@ -116,7 +120,7 @@ function AppHeader() {
             <>
               <Link to="/">{t('header.home')}</Link>
               {!kidLock && <Link to="/?view=parent">{t('header.parent')}</Link>}
-              <Link to="/schools">{t('header.forSchools')}</Link>
+              <Link to="/for-schools">{t('header.forSchools')}</Link>
               <LangSwitcher />
             </>
           )}
@@ -137,7 +141,7 @@ function AppHeader() {
       <nav className="main-nav" aria-label="Main navigation">
         <Link to="/">{t('header.home')}</Link>
         {isLoggedIn && !kidLock && <Link to="/?view=parent">{t('header.parent')}</Link>}
-        <Link to="/schools">{t('header.forSchools')}</Link>
+        <Link to="/for-schools">{t('header.forSchools')}</Link>
         <LangSwitcher />
       </nav>
     </header>
@@ -151,6 +155,7 @@ function AppFooter() {
   const { schoolMode } = useSchoolMode()
   const isSchoolRoute =
     location.pathname.startsWith('/schools') ||
+    location.pathname.startsWith('/for-schools') ||
     location.pathname.startsWith('/compliance') ||
     location.pathname.startsWith('/teacher')
   return (
@@ -162,7 +167,7 @@ function AppFooter() {
         {!schoolMode && !isSchoolRoute && <Link to="/shop">{t('footer.shop')}</Link>}
         <Link to="/about">{t('footer.about')}</Link>
         <Link to="/privacy">{t('footer.privacy')}</Link>
-        <Link to="/schools">{t('footer.forSchools')}</Link>
+        <Link to="/for-schools">{t('footer.forSchools')}</Link>
         <Link to="/contact">{t('footer.contact')}</Link>
         {isLoggedIn && !kidLock && (
           <button type="button" className="footer-link-button" onClick={() => void signOut()}>
@@ -183,11 +188,12 @@ function AppShell() {
   const location = useLocation()
 
   // Theme rule (strict):
-  // - Orange ONLY on actual school routes (`/schools`, `/teacher/*`, `/compliance`)
+  // - Orange ONLY on actual school routes (`/schools`, `/for-schools`, `/teacher/*`, `/compliance`)
   // - Everything else (home + regular parent customer experience) stays BLUE
   // Note: `schoolMode` toggle is for navigation/UI behavior; it should not recolor Home.
   const useSchoolTheme =
     location.pathname.startsWith('/schools') ||
+    location.pathname.startsWith('/for-schools') ||
     location.pathname.startsWith('/teacher') ||
     location.pathname.startsWith('/compliance')
 
@@ -242,6 +248,8 @@ function AppShell() {
           <Route path="/coming-soon" element={<ComingSoon />} />
           <Route path="/privacy" element={<PrivacyPage />} />
           <Route path="/compliance" element={<CompliancePage />} />
+          <Route path="/for-schools" element={<ForSchoolsPage />} />
+          <Route path="/for-schools/one-pager" element={<SchoolOnePagerPage />} />
           <Route path="/schools" element={<SchoolsPage />} />
           <Route path="/schools/weekly-track" element={<SchoolWeeklyTrackPage />} />
           <Route path="/schools/unit/:unitId" element={<SchoolGeneratedUnitPage />} />

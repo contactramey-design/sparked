@@ -1,3 +1,6 @@
+/** TikTok safety ebook — no PDF shipped yet; reader shows “coming soon” only. */
+export const EBOOK_ID_PENDING_PDF = 'ebook-2'
+
 export interface BookConfig {
   id: string
   titleKey: string
