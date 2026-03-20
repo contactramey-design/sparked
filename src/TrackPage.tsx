@@ -15,7 +15,7 @@ const TrackPage: React.FC = () => {
 
   const track = curriculum.tracks.find((tr) => tr.id === trackId)
   const units = curriculum.units.filter((u) => u.trackId === trackId)
-  const translatedTrack = track ? useTranslatedTrack(track) : null
+  const translatedTrack = useTranslatedTrack(track)
 
   if (!track || !translatedTrack) {
     navigate('/tracks', { replace: true })

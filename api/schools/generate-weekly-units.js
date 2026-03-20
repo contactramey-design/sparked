@@ -447,7 +447,6 @@ export default async function handler(req, res) {
         upsert: true,
       })
     } catch (e) {
-      // eslint-disable-next-line no-console
       console.warn('[generate-weekly-units] PDF upload failed (non-fatal):', e?.message || e)
     }
 

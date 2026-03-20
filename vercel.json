@@ -6,6 +6,9 @@
     }
   ],
   "functions": {
+    "api/tts.js": {
+      "maxDuration": 60
+    },
     "api/generate-adventure-video.js": {
       "maxDuration": 300
     },

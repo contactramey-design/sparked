@@ -27,6 +27,18 @@ const TIKTOK_PAIRS_ES: { action: string; emoji: string }[] = [
 
 const WRONG_EMOJIS = ['🎮', '🍕', '📚']
 
+/** Deterministic option order per question (no Math.random during render). */
+const OPTION_PERMUTATIONS: number[][] = [
+  [0, 1, 2, 3],
+  [1, 0, 3, 2],
+  [2, 3, 0, 1],
+  [3, 2, 1, 0],
+  [0, 3, 1, 2],
+  [1, 2, 0, 3],
+  [2, 0, 3, 1],
+  [3, 1, 2, 0],
+]
+
 export interface TikTokSafetyQuizProps {
   unit: UnitConfig
   nextUnit: UnitConfig | null
@@ -56,8 +68,9 @@ const TikTokSafetyQuiz: React.FC<TikTokSafetyQuizProps> = ({
   const options = useMemo(() => {
     if (!pair) return []
     const opts = [pair.emoji, ...WRONG_EMOJIS]
-    return [...opts].sort(() => Math.random() - 0.5)
-  }, [pair])
+    const perm = OPTION_PERMUTATIONS[currentPair % OPTION_PERMUTATIONS.length]
+    return perm.map((i) => opts[i])
+  }, [pair, currentPair])
 
   const handleStart = () => setStep('quiz')
 

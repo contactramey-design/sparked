@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from './AuthContext'
 import { useTranslation } from './contexts/LocaleContext'
 import { supabase } from './lib/supabaseClient'
+import { isTeacherUser } from './lib/supabaseUserRole'
 import { curriculum } from './curriculum'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -75,17 +76,6 @@ function randomClassCode(): string {
   return out
 }
 
-function isTeacherUser(user: NonNullable<ReturnType<typeof useAuth>['user']>): boolean {
-  const roleAny =
-    (user.app_metadata as any)?.role ??
-    (user.user_metadata as any)?.role ??
-    ((user.app_metadata as any)?.roles?.[0] ?? null)
-  if (roleAny === 'teacher') return true
-  // If you're piloting without custom claims yet, allow any non-anonymous signed-in user.
-  const isAnon = (user as any)?.is_anonymous === true
-  return !isAnon
-}
-
 const TeacherDashboardPage: React.FC = () => {
   const { user, isLoggedIn } = useAuth()
   const { t } = useTranslation()
@@ -135,8 +125,8 @@ const TeacherDashboardPage: React.FC = () => {
       const rows = (data ?? []) as SchoolClassRow[]
       setClasses(rows)
       if (!selectedClassId && rows[0]?.id) setSelectedClassId(rows[0].id)
-    } catch (e: any) {
-      setError(e?.message ?? t('teacherDashboard.errorLoadClasses'))
+    } catch (e: unknown) {
+      setError(e instanceof Error ? e.message : t('teacherDashboard.errorLoadClasses'))
     } finally {
       setLoading(false)
     }
@@ -154,8 +144,8 @@ const TeacherDashboardPage: React.FC = () => {
         .order('updated_at', { ascending: false })
       if (e) throw e
       setStudents((data ?? []) as StudentProgressRow[])
-    } catch (e: any) {
-      setError(e?.message ?? t('teacherDashboard.errorLoadStudents'))
+    } catch (e: unknown) {
+      setError(e instanceof Error ? e.message : t('teacherDashboard.errorLoadStudents'))
     } finally {
       setLoading(false)
     }
@@ -318,7 +308,11 @@ const TeacherDashboardPage: React.FC = () => {
           </CardContent>
         </Card>
 
-        <Tabs defaultValue="classes" value={tab} onValueChange={(v) => setTab(v as any)}>
+        <Tabs
+          defaultValue="classes"
+          value={tab}
+          onValueChange={(v) => setTab(v as 'classes' | 'students' | 'home')}
+        >
           <TabsList>
             <TabsTrigger value="classes">{t('teacherDashboard.tabsClasses')}</TabsTrigger>
             <TabsTrigger value="students">{t('teacherDashboard.tabsStudents')}</TabsTrigger>
@@ -364,8 +358,8 @@ const TeacherDashboardPage: React.FC = () => {
                               if (e) throw e
                               setNewClassName('')
                               await refreshClasses()
-                            } catch (e: any) {
-                              setError(e?.message ?? t('teacherDashboard.errorCreateClass'))
+                            } catch (e: unknown) {
+                              setError(e instanceof Error ? e.message : t('teacherDashboard.errorCreateClass'))
                             } finally {
                               setLoading(false)
                             }

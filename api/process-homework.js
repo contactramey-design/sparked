@@ -1,9 +1,14 @@
 /**
  * Vercel serverless: POST /api/process-homework
  * Body: multipart/form-data with field "image" (file).
+ * Optional fields: checkout_session_id (required in production) — must be a Stripe Checkout session
+ * for the Safety Pass bundle with an active or trialing subscription.
+ * Dev: set ALLOW_UNAUTH_HOMEWORK=true to skip server-side entitlement (local only).
  * Returns: { title, subject, topic, steps } — homework-specific adventure JSON.
- * COPPA: Process image in memory only; do not store or log. Call only after parent consent.
+ * COPPA: Process image in memory only; do not store or log image bytes.
  */
+import { verifyBundleCheckoutSession } from './lib/verifyBundleEntitlement.js'
+
 const MAX_BODY_BYTES = 4.5 * 1024 * 1024 // 4.5 MB (Vercel limit)
 
 export const config = {
@@ -154,6 +159,7 @@ export default async function handler(req, res) {
     let ageHint = ''
     let subjectHint = ''
     let locale = 'en'
+    let checkoutSessionId = ''
 
     try {
       const { fields, files } = await parseMultipart(req)
@@ -171,6 +177,9 @@ export default async function handler(req, res) {
       if (rawLocale === 'es' || rawLocale === 'en') {
         locale = rawLocale
       }
+      checkoutSessionId = (fields?.checkout_session_id?.[0] ?? fields?.checkout_session_id ?? '')
+        .toString()
+        .trim()
     } catch (e) {
       if (e.code === 'LIMIT_FILE_SIZE' || e.message?.includes('maxFileSize')) {
         res.status(413).json({ error: 'Image too large. Please use an image under 4 MB.' })
@@ -178,6 +187,20 @@ export default async function handler(req, res) {
       }
       res.status(400).json({ error: 'Invalid upload. Please send one image as multipart field "image".' })
       return
+    }
+
+    const allowUnauth = process.env.ALLOW_UNAUTH_HOMEWORK === 'true'
+    if (!allowUnauth) {
+      const entitlement = await verifyBundleCheckoutSession(checkoutSessionId)
+      if (!entitlement.ok) {
+        res.status(entitlement.status).json({
+          error:
+            entitlement.status === 403
+              ? 'Parent unlock required. Complete Safety Pass checkout, then try again.'
+              : entitlement.message,
+        })
+        return
+      }
     }
 
   try {

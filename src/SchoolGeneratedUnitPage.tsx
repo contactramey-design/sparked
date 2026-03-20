@@ -191,15 +191,16 @@ const SchoolGeneratedUnitPage: React.FC = () => {
           .eq('student_uid', uid)
           .single()
 
+        type ProgressShape = { units?: Record<string, { mastered?: boolean } | undefined> }
         const masteredFromSupabase =
           !progressErr && progressRow?.progress && typeof progressRow.progress === 'object'
-            ? !!(progressRow.progress as any)?.units?.[unitIdSafe]?.mastered
+            ? !!(progressRow.progress as ProgressShape).units?.[unitIdSafe]?.mastered
             : false
 
         const justExisting = masteredFromSupabase || !!getUnitStatus(unitIdSafe)?.mastered
         setMastered(justExisting)
         setWasAlreadyMastered(justExisting)
-      } catch (e: any) {
+      } catch (e: unknown) {
         if (cancelled) return
 
         // Fallback: if Supabase fetch fails, try CacheStorage.
@@ -212,7 +213,7 @@ const SchoolGeneratedUnitPage: React.FC = () => {
           setMastered(justExisting)
           setWasAlreadyMastered(justExisting)
         } else {
-          setError(e?.message ?? t('schoolGeneratedUnit.loadFailed'))
+          setError(e instanceof Error ? e.message : t('schoolGeneratedUnit.loadFailed'))
         }
       } finally {
         if (!cancelled) setLoading(false)
@@ -222,7 +223,7 @@ const SchoolGeneratedUnitPage: React.FC = () => {
     return () => {
       cancelled = true
     }
-  }, [classId, navigate, unitIdSafe])
+  }, [classId, navigate, t, unitIdSafe])
 
   const parsed = useMemo(() => {
     if (!unitJson?.contentBlocks) return { story: null as string | null, rules: [] as Array<{ label: string | null; text: string }> }

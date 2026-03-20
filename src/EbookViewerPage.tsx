@@ -1,6 +1,7 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useParams, useSearchParams } from 'react-router-dom'
 import * as pdfjsLib from 'pdfjs-dist'
+import type { PDFDocumentProxy } from 'pdfjs-dist'
 import { books } from './books'
 import { getSafetyPassCheckoutSessionId } from './progress'
 import { useTranslation } from './contexts/LocaleContext'
@@ -12,8 +13,6 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = new URL(
   'pdfjs-dist/build/pdf.worker.min.mjs',
   import.meta.url,
 ).toString()
-
-type PdfDoc = any
 
 const EBOOK_CACHE_NAME = 'sparki-ebook-cache-v1'
 function offlineEbookPath(ebookId: string) {
@@ -39,7 +38,7 @@ const EbookViewerPage: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
   const viewportContainerRef = useRef<HTMLDivElement | null>(null)
 
-  const pdfDocRef = useRef<PdfDoc | null>(null)
+  const pdfDocRef = useRef<PDFDocumentProxy | null>(null)
   const renderTokenRef = useRef(0)
 
   const [numPages, setNumPages] = useState<number | null>(null)
@@ -144,7 +143,7 @@ const EbookViewerPage: React.FC = () => {
     return () => {
       cancelled = true
     }
-  }, [ebookId, ebookIdFromQuery, checkoutSessionId])
+  }, [ebookId, ebookIdFromQuery, effectiveEbookId, checkoutSessionId])
 
   const canSaveOffline = typeof window !== 'undefined' && !!effectiveEbookId && window.navigator?.onLine
 
@@ -169,7 +168,7 @@ const EbookViewerPage: React.FC = () => {
     }
   }
 
-  const renderPage = async (n: number) => {
+  const renderPage = useCallback(async (n: number) => {
     const doc = pdfDocRef.current
     const canvas = canvasRef.current
     const container = viewportContainerRef.current
@@ -200,25 +199,24 @@ const EbookViewerPage: React.FC = () => {
       if (!ctx) throw new Error('No canvas context')
 
       // Render the page into the canvas.
-      await page.render({ canvasContext: ctx, viewport }).promise
+      await page.render({ canvasContext: ctx, viewport, canvas }).promise
 
       if (token !== renderTokenRef.current) return
-    } catch (e) {
+    } catch {
       // If rendering fails, show the entitlement error only if we didn't have a doc.
       // Otherwise, keep UI usable.
       setEntitlementErrorKey('ebookViewer.errors.couldNotRender')
     } finally {
       if (token === renderTokenRef.current) setRendering(false)
     }
-  }
+  }, [])
 
   useEffect(() => {
     if (!pdfDocRef.current) return
     if (pageNumber < 1) return
     if (numPages && pageNumber > numPages) return
     void renderPage(pageNumber)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pageNumber, numPages])
+  }, [pageNumber, numPages, renderPage])
 
   const isFreeTestEbook = effectiveEbookId === 'ebook-1'
   const canPrev = pageNumber > 1 && !loadingPdf
@@ -282,7 +280,7 @@ const EbookViewerPage: React.FC = () => {
       }
 
       window.location.assign(data.url)
-    } catch (e) {
+    } catch {
       setEntitlementErrorKey('ebookViewer.errors.checkoutFailed')
       setLoadingPdf(false)
     }
@@ -323,7 +321,7 @@ const EbookViewerPage: React.FC = () => {
                       throw new Error('CHECKOUT_FAILED')
                     }
                     window.location.assign(data.url)
-                  } catch (e) {
+                  } catch {
                     setEntitlementErrorKey('ebookViewer.errors.checkoutFailed')
                     setLoadingPdf(false)
                   }

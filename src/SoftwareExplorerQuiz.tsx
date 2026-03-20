@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect, useCallback } from 'react'
+import React, { useState, useMemo, useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import type { UnitConfig } from './curriculum'
 import { useTranslation } from './contexts/LocaleContext'
@@ -76,16 +76,10 @@ const SoftwareExplorerQuiz: React.FC<SoftwareExplorerQuizProps> = ({
 
   const handleStart = () => setStep('game')
 
-  useEffect(() => {
-    if (step === 'game' && currentTaskIndex >= TOTAL) {
-      onComplete(TOTAL)
-      setStep('complete')
-    }
-  }, [step, currentTaskIndex, onComplete])
-
   const handleToolClick = (selected: ReturnType<typeof toolDef>) => {
     if (!currentTool || showSuccess) return
     if (selected.id === currentTool.id) {
+      const willComplete = currentTaskIndex + 1 >= TOTAL
       setSuccessMessage(
         t('aiCodingGames.softwareExplorer.successPerfect', {
           task: currentTool.task,
@@ -98,6 +92,10 @@ const SoftwareExplorerQuiz: React.FC<SoftwareExplorerQuizProps> = ({
       setTimeout(() => {
         setShowSuccess(false)
         setSparkiEmotion('🤖')
+        if (willComplete) {
+          onComplete(TOTAL)
+          setStep('complete')
+        }
       }, 1500)
     } else {
       setSuccessMessage(t('aiCodingGames.softwareExplorer.tryAgain'))

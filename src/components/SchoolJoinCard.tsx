@@ -123,8 +123,8 @@ export default function SchoolJoinCard() {
                 setSchoolSession(classId, studentCode.trim())
                 setJoined(true)
                 navigate('/schools/weekly-track')
-              } catch (e: any) {
-                setError(e?.message ?? t('schoolJoin.errorGeneric'))
+              } catch (e: unknown) {
+                setError(e instanceof Error ? e.message : t('schoolJoin.errorGeneric'))
               } finally {
                 setLoading(false)
               }

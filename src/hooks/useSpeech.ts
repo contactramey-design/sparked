@@ -6,10 +6,21 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { appConfig } from '../config'
 import { useLocale } from '../contexts/LocaleContext'
+import { primeWebAudioFromUserGesture } from '../lib/audioUnlock'
 
 const DEFAULT_RATE = 0.98
 const DEFAULT_PITCH = 1.08
-const CLOUD_TTS_TIMEOUT_MS = 6500
+/** ElevenLabs + cold serverless can exceed a few seconds; short timeouts cause Siri fallback. */
+const CLOUD_TTS_TIMEOUT_MS = 45_000
+
+function looksLikeMp3OrId3(bytes: Uint8Array): boolean {
+  if (bytes.length < 2) return false
+  // MPEG frame sync 0xFF Ex where E in 0xE0..0xFF (common: 0xFB)
+  if (bytes[0] === 0xff && (bytes[1] & 0xe0) === 0xe0) return true
+  // ID3 tag
+  if (bytes.length >= 3 && bytes[0] === 0x49 && bytes[1] === 0x44 && bytes[2] === 0x33) return true
+  return false
+}
 
 const PREFERRED_VOICE_EN = [
   'Siri', 'Premium', 'Enhanced', 'Google US English', 'Microsoft Zira', 'Samantha', 'Karen', 'Victoria', 'Daniel', 'Alex',
@@ -121,6 +132,8 @@ export function useSpeech() {
       if (!t) return
 
       userInitiatedStopRef.current = false
+      // Second line of defense if anything called speak() without going through ListenButton.
+      primeWebAudioFromUserGesture()
       stopPlaybackOnly()
       setIsSpeaking(false)
 
@@ -134,23 +147,38 @@ export function useSpeech() {
       if (useCloud) {
         const controller = new AbortController()
         globalAbort = controller
+        let timeoutId: number = 0
         try {
-          const timeoutId = window.setTimeout(() => controller.abort(), CLOUD_TTS_TIMEOUT_MS)
+          timeoutId = window.setTimeout(() => controller.abort(), CLOUD_TTS_TIMEOUT_MS)
           const res = await fetch(appConfig.tts!.endpoint!, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+              'Content-Type': 'application/json',
+              // ElevenLabs often responds as application/octet-stream
+              Accept: 'audio/mpeg, application/octet-stream, audio/*, */*;q=0.8',
+            },
             body: JSON.stringify({ text: t, locale }),
             signal: controller.signal,
           })
-          window.clearTimeout(timeoutId)
-          if (!res.ok) throw new Error('TTS request failed')
+          if (!res.ok) {
+            const errBody = await res.text().catch(() => '')
+            console.warn('[TTS] HTTP', res.status, errBody.slice(0, 400))
+            throw new Error(`TTS HTTP ${res.status}`)
+          }
           const contentType = (res.headers.get('content-type') || '').toLowerCase()
           // API errors are often JSON; don't try to decode as audio.
           if (contentType.includes('json')) {
+            const errBody = await res.text().catch(() => '')
+            console.warn('[TTS] JSON body (not audio):', errBody.slice(0, 400))
             throw new Error('TTS API returned JSON (not audio)')
           }
           const blob = await res.blob()
           if (!blob.size) throw new Error('TTS empty response')
+          const head = new Uint8Array(await blob.slice(0, 12).arrayBuffer())
+          if (!looksLikeMp3OrId3(head)) {
+            console.warn('[TTS] Response was not MP3 audio (wrong key, proxy HTML, or error page).')
+            throw new Error('TTS response not valid MP3')
+          }
           const url = URL.createObjectURL(blob)
           const audio = new Audio(url)
           globalAudio = audio
@@ -187,8 +215,8 @@ export function useSpeech() {
             setIsSpeaking(false)
             return
           }
-          if (!aborted && import.meta.env.DEV) {
-            console.warn('TTS cloud failed, using browser voice:', (e as Error).message)
+          if (!aborted) {
+            console.warn('[TTS] Cloud failed, using browser voice:', (e as Error).message)
           }
           // Prefer browser speech when cloud fails, times out, or play() was blocked.
           if (window.speechSynthesis) {
@@ -196,6 +224,8 @@ export function useSpeech() {
           } else {
             setIsSpeaking(false)
           }
+        } finally {
+          window.clearTimeout(timeoutId)
         }
         return
       }

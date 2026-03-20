@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { Link } from 'react-router-dom'
 import { useTranslation } from './contexts/LocaleContext'
 import { useB2CWeeklyEpisode } from './hooks/useB2CWeeklyEpisode'
 import ListenButton from './components/ListenButton'
 import { useTranslatedUnit } from './hooks/useTranslatedCurriculum'
 import { getPlayerStats } from './progress'
-import { resolveB2CWeekIndex } from './weekly/b2cSeasonConfig'
 import { VIDEO_POSTER_DATA_URL } from './videoPoster'
 
 const WeeklyAdventurePage: React.FC = () => {
@@ -15,22 +14,15 @@ const WeeklyAdventurePage: React.FC = () => {
   const translatedAi = useTranslatedUnit(aiUnit)
 
   const wk = String(resolved.weekIndex)
-  const videoResolvedWeek = resolveB2CWeekIndex(Date.now(), 52)
-  const videoWeekIndex = videoResolvedWeek.weekIndex
-  const videoWeekFile = String(videoWeekIndex).padStart(2, '0')
+  const videoWeekFile = String(resolved.weekIndex).padStart(2, '0')
 
   // Video+cover assets are expected under:
   // - `public/weekly/season1/week-01.mp4` ... up to 52 weeks
   const weekVideoSrc = `/weekly/season1/week-${videoWeekFile}.mp4`
   const weeklyBridgeThumbSrc = '/weekly/season1/sparkis-two-world-bridge.png'
-  const [sparkles, setSparkles] = useState(0)
-  const [streakDays, setStreakDays] = useState(0)
-
-  useEffect(() => {
-    const stats = getPlayerStats()
-    setSparkles(stats.totalSparkles)
-    setStreakDays(stats.currentStreakDays || 0)
-  }, [videoWeekIndex])
+  const stats = getPlayerStats()
+  const sparkles = stats.totalSparkles
+  const streakDays = stats.currentStreakDays || 0
 
   const title = t(`weekly.season1.weeks.${wk}.title`)
   const story = t(`weekly.season1.weeks.${wk}.story`)

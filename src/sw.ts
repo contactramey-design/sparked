@@ -1,10 +1,9 @@
 /// <reference lib="webworker" />
-/* eslint-disable no-restricted-globals */
 
 import { clientsClaim } from 'workbox-core'
 import { precacheAndRoute, cleanupOutdatedCaches, createHandlerBoundToURL } from 'workbox-precaching'
 import { registerRoute } from 'workbox-routing'
-import { CacheFirst, NetworkFirst, StaleWhileRevalidate } from 'workbox-strategies'
+import { CacheFirst, NetworkFirst, NetworkOnly, StaleWhileRevalidate } from 'workbox-strategies'
 import { ExpirationPlugin } from 'workbox-expiration'
 import { CacheableResponsePlugin } from 'workbox-cacheable-response'
 import { RangeRequestsPlugin } from 'workbox-range-requests'
@@ -95,7 +94,24 @@ registerRoute(
   }),
 )
 
-// API calls: prefer network but allow short offline fallback for cached responses
+// Never cache sensitive entitlement / payment / homework endpoints (register before generic /api/*).
+const SENSITIVE_API_PREFIXES = [
+  '/api/download-ebook',
+  '/api/create-checkout-session',
+  '/api/create-ebook-checkout-session',
+  '/api/process-homework',
+  '/api/generate-adventure-video',
+  '/api/tts',
+  '/api/schools/',
+]
+registerRoute(
+  ({ url }) =>
+    url.origin === self.location.origin &&
+    SENSITIVE_API_PREFIXES.some((prefix) => url.pathname.startsWith(prefix)),
+  new NetworkOnly(),
+)
+
+// Other API calls: prefer network but allow short offline fallback for cached responses
 registerRoute(
   ({ url }) => url.origin === self.location.origin && url.pathname.startsWith('/api/'),
   new NetworkFirst({

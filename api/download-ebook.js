@@ -1,6 +1,7 @@
 import Stripe from 'stripe'
 import fs from 'node:fs'
 import path from 'node:path'
+import { verifyBundleCheckoutSession } from './lib/verifyBundleEntitlement.js'
 
 const ALLOWED_EBOOK_IDS = new Set([
   'ebook-1',
@@ -17,21 +18,6 @@ const ALLOWED_EBOOK_IDS = new Set([
 //
 // PDFs are stored in `private/ebooks/<ebookId>.pdf` (protected by this endpoint).
 
-async function resolvePriceIdFromEnv(stripe, maybeId) {
-  if (!maybeId || typeof maybeId !== 'string') return null
-  const trimmed = maybeId.trim()
-  if (trimmed.startsWith('price_')) return trimmed
-  if (!trimmed.startsWith('prod_')) return null
-
-  const product = await stripe.products.retrieve(trimmed, { expand: ['default_price'] }).catch(() => null)
-  const defaultPrice = product?.default_price
-  if (typeof defaultPrice === 'string') return defaultPrice
-  if (defaultPrice?.id) return defaultPrice.id
-
-  const prices = await stripe.prices.list({ product: trimmed, active: true, limit: 5 })
-  return prices.data?.[0]?.id ?? null
-}
-
 export default async function handler(req, res) {
   try {
     if (req.method !== 'GET') {
@@ -44,14 +30,15 @@ export default async function handler(req, res) {
     const ebookId = (url.searchParams.get('ebookId') || '').toString().trim()
     const checkoutSessionId = (url.searchParams.get('checkout_session_id') || '').toString().trim()
     const isFreeTestEbook = ebookId === 'ebook-1'
+    const allowFreeTestEbook = process.env.ALLOW_FREE_TEST_EBOOK === 'true'
 
     if (!ebookId || !ALLOWED_EBOOK_IDS.has(ebookId)) {
       res.status(400).json({ error: 'Invalid ebook id.' })
       return
     }
 
-    // Temporary test mode: allow `ebook-1` to download without Stripe.
-    if (isFreeTestEbook) {
+    // Dev-only: allow `ebook-1` without Stripe when ALLOW_FREE_TEST_EBOOK=true
+    if (isFreeTestEbook && allowFreeTestEbook) {
       const pdfPath = path.join(process.cwd(), 'private', 'ebooks', `${ebookId}.pdf`)
       const pdfExists = await fs.promises
         .access(pdfPath)
@@ -98,29 +85,9 @@ export default async function handler(req, res) {
         return
       }
     } else {
-      // Default: bundle subscription entitlement.
-      const subscriptionId = session?.subscription
-      if (!subscriptionId) {
-        res.status(403).json({ error: 'Not entitled to download.' })
-        return
-      }
-
-      const subscription = await stripe.subscriptions.retrieve(subscriptionId)
-      const status = subscription?.status
-
-      const subscriptionPriceId = subscription?.items?.data?.[0]?.price?.id ?? null
-      const expectedPriceIdFromCheckoutMeta = (session?.metadata?.stripePriceId || '').toString().trim()
-
-      let expectedPriceId = expectedPriceIdFromCheckoutMeta || null
-      if (!expectedPriceId) {
-        expectedPriceId = await resolvePriceIdFromEnv(stripe, safetyPassPriceOrProductId)
-      }
-
-      const isEntitled =
-        (status === 'active' || status === 'trialing') && subscriptionPriceId && expectedPriceId && subscriptionPriceId === expectedPriceId
-
-      if (!isEntitled) {
-        res.status(403).json({ error: 'Not entitled to download.' })
+      const bundleCheck = await verifyBundleCheckoutSession(checkoutSessionId)
+      if (!bundleCheck.ok) {
+        res.status(bundleCheck.status).json({ error: 'Not entitled to download.' })
         return
       }
     }

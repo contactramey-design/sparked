@@ -77,7 +77,7 @@ export const ParentViewContent: React.FC = () => {
         throw new Error('Missing checkout URL')
       }
       window.location.assign(data.url)
-    } catch (e) {
+    } catch {
       setUnlockErrorKey('parentDashboard.checkoutFailed')
     } finally {
       setUnlockLoading(false)

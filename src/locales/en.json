@@ -403,6 +403,8 @@
     "hintLabel": "SpArki's hint:",
     "errorFileType": "Please choose a JPG or PNG homework photo.",
     "errorChooseFirst": "Please choose a homework image first.",
+    "errorLockedByPass": "Ask a grown-up to unlock Safety Pass in the Parent dashboard first.",
+    "errorMissingCheckoutSession": "We could not verify your unlock. Ask a grown-up to open Parent dashboard after checkout, or try signing in again.",
     "errorGeneric": "Something went wrong. Ask a grown-up to try again.",
     "errorCreate": "Could not create adventure. Please try another photo.",
     "errorNotConfigured": "Adventure generation is not set up yet. Please add OPENAI_API_KEY in project settings and redeploy.",

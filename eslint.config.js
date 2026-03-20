@@ -19,5 +19,15 @@ export default defineConfig([
       ecmaVersion: 2020,
       globals: globals.browser,
     },
+    rules: {
+      // Many screens sync localStorage / URL → React state on mount; warnings only.
+      'react-hooks/set-state-in-effect': 'warn',
+    },
+  },
+  {
+    files: ['src/AuthContext.tsx', 'src/contexts/LocaleContext.tsx', 'src/components/ui/button.tsx'],
+    rules: {
+      'react-refresh/only-export-components': 'off',
+    },
   },
 ])

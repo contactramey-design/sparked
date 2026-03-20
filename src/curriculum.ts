@@ -323,7 +323,8 @@ export const curriculum: CurriculumConfig = {
           'Draw a pretend profile page that shows fun things (like pets or hobbies) but no private info. Share it with a grown-up.',
       },
       unlocksUnitId: 'safety-tiktok',
-      videoUrl: '/safety-instagram.mp4',
+        // Dedicated file not in repo yet; use safety track intro so production does not 404.
+        videoUrl: '/safety_into.mp4',
       thinkPrompts: [
         { label: 'Think about this!', text: 'Who is one grown-up you could ask before posting a photo? Talk to them about it!' },
         { label: 'Think about this!', text: 'What would you never put in your profile? (Hint: school name, address, phone number)' },

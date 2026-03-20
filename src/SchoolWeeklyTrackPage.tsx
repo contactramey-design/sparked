@@ -14,9 +14,16 @@ type GeneratorRow = {
   expires_at: string
 }
 
+/** Minimal shape read from Supabase `unit_json` JSON column. */
+type GeneratorUnitJson = {
+  title?: string
+  summary?: string
+  quizQuestions?: unknown[]
+}
+
 type GeneratorUnitRow = {
   unit_id: string
-  unit_json: any
+  unit_json: GeneratorUnitJson
 }
 
 type UnitCard = {
@@ -24,7 +31,14 @@ type UnitCard = {
   title: string
   summary?: string
   quizCount?: number
-  unitJson?: any
+  unitJson?: GeneratorUnitJson
+}
+
+function progressUnitsFromRow(progress: unknown): Record<string, { mastered?: boolean }> | null {
+  if (!progress || typeof progress !== 'object') return null
+  const u = (progress as { units?: unknown }).units
+  if (!u || typeof u !== 'object') return null
+  return u as Record<string, { mastered?: boolean }>
 }
 
 const SchoolWeeklyTrackPage: React.FC = () => {
@@ -130,11 +144,11 @@ const SchoolWeeklyTrackPage: React.FC = () => {
           .single()
 
         if (!progressErr && progressRow?.progress && typeof progressRow.progress === 'object') {
-          const unitsObj = (progressRow.progress as any).units
+          const unitsObj = progressUnitsFromRow(progressRow.progress)
           const map: Record<string, boolean> = {}
-          if (unitsObj && typeof unitsObj === 'object') {
-            for (const [k, v] of Object.entries(unitsObj as Record<string, any>)) {
-              map[k] = !!(v as any)?.mastered
+          if (unitsObj) {
+            for (const [k, v] of Object.entries(unitsObj)) {
+              map[k] = !!v?.mastered
             }
           }
           setUnitMasteredMap(map)
@@ -162,7 +176,7 @@ const SchoolWeeklyTrackPage: React.FC = () => {
           setGenerator(genRow)
           setUnits(cards)
         }
-      } catch (e: any) {
+      } catch (e: unknown) {
         if (cancelled) return
         // If we couldn't fetch online, attempt cached content.
         if (classId) {
@@ -189,7 +203,7 @@ const SchoolWeeklyTrackPage: React.FC = () => {
           }
         }
 
-        setError(e?.message ?? t('schools.weeklyTrackLoadError'))
+        setError(e instanceof Error ? e.message : t('schools.weeklyTrackLoadError'))
       } finally {
         if (!cancelled) setLoading(false)
       }
@@ -198,7 +212,7 @@ const SchoolWeeklyTrackPage: React.FC = () => {
     return () => {
       cancelled = true
     }
-  }, [classId])
+  }, [classId, t])
 
   useEffect(() => {
     if (!hasSchoolSession) {

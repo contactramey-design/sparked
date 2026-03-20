@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react'
+import React, { useState, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import type { UnitConfig } from './curriculum'
 import { useTranslation } from './contexts/LocaleContext'
@@ -85,15 +85,12 @@ const WorldAIHelperQuiz: React.FC<WorldAIHelperQuizProps> = ({
 
   const currentTask = step === 'game' && currentTaskIndex < TOTAL ? taskPairs[currentTaskIndex] : null
 
-  const locationButtons = useMemo(() => shuffle(allLocations), [currentTaskIndex, allLocations])
+  const locationButtons = useMemo(() => {
+    void currentTaskIndex
+    return shuffle(allLocations)
+  }, [currentTaskIndex, allLocations])
 
   const handleStart = () => setStep('game')
-
-  useEffect(() => {
-    if (step === 'game' && currentTaskIndex >= TOTAL) {
-      setStep('question')
-    }
-  }, [step, currentTaskIndex])
 
   const handleLocationClick = (locationId: string) => {
     if (!currentTask || showSuccess) return
@@ -108,7 +105,9 @@ const WorldAIHelperQuiz: React.FC<WorldAIHelperQuizProps> = ({
         setShowSuccess(false)
         setSuccessMessage(null)
         setSparkiEmotion('🤖')
+        const isLastTask = currentTaskIndex + 1 >= TOTAL
         setCurrentTaskIndex((i) => i + 1)
+        if (isLastTask) setStep('question')
       }, 1500)
     } else {
       setSuccessMessage(t('aiCodingGames.worldAI.matchWrong'))

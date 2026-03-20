@@ -38,7 +38,7 @@ export function ttsMiddleware() {
         return
       }
 
-      const apiKey = process.env.ELEVENLABS_API_KEY
+      const apiKey = process.env.ELEVENLABS_API_KEY?.trim()
       if (!apiKey) {
         res.statusCode = 503
         res.setHeader('Content-Type', 'application/json')
@@ -46,36 +46,60 @@ export function ttsMiddleware() {
         return
       }
 
+      const defaultVoice = process.env.ELEVENLABS_VOICE_ID || 'EXAVITQu4vr4xnSDxMaL'
       const voiceId =
         locale === 'es'
-          ? process.env.ELEVENLABS_VOICE_ID_ES || process.env.ELEVENLABS_VOICE_ID || 'EXAVITQu4vr4xnSDxMaL'
-          : process.env.ELEVENLABS_VOICE_ID_EN || process.env.ELEVENLABS_VOICE_ID || 'EXAVITQu4vr4xnSDxMaL'
+          ? process.env.ELEVENLABS_VOICE_ID_ES || defaultVoice
+          : process.env.ELEVENLABS_VOICE_ID_EN || defaultVoice
       const truncated = text.length > MAX_TEXT_LENGTH ? text.slice(0, MAX_TEXT_LENGTH) : text
       const stability = Number(process.env.ELEVENLABS_STABILITY) || 0.45
       const similarityBoost = Number(process.env.ELEVENLABS_SIMILARITY_BOOST) || 0.8
+      const modelId = process.env.ELEVENLABS_MODEL_ID || 'eleven_multilingual_v2'
+      const outputFormat = (process.env.ELEVENLABS_OUTPUT_FORMAT || 'mp3_44100_128').trim()
+      const isSpanish = locale === 'es'
 
-      const response = await fetch(`${ELEVENLABS_BASE}/${voiceId}`, {
+      const payload = {
+        text: truncated,
+        model_id: modelId,
+        voice_settings: {
+          stability,
+          similarity_boost: similarityBoost,
+        },
+      }
+      if (modelId.includes('multilingual')) {
+        payload.language_code = isSpanish ? 'es' : 'en'
+      }
+
+      const elevenUrl = `${ELEVENLABS_BASE}/${voiceId}?output_format=${encodeURIComponent(outputFormat)}`
+
+      const response = await fetch(elevenUrl, {
         method: 'POST',
         headers: {
           'xi-api-key': apiKey,
           'Content-Type': 'application/json',
-          Accept: 'audio/mpeg',
+          Accept: 'audio/mpeg, application/octet-stream, */*',
         },
-        body: JSON.stringify({
-          text: truncated,
-          model_id: process.env.ELEVENLABS_MODEL_ID || 'eleven_multilingual_v2',
-          voice_settings: {
-            stability,
-            similarity_boost: similarityBoost,
-          },
-        }),
+        body: JSON.stringify(payload),
       })
 
       if (!response.ok) {
         const errText = await response.text()
-        res.statusCode = response.status
+        const upstream = response.status
+        if (upstream === 401 || upstream === 403) {
+          res.statusCode = 503
+          res.setHeader('Content-Type', 'application/json')
+          res.end(
+            JSON.stringify({
+              error: 'ElevenLabs API key rejected (invalid, expired, or wrong environment).',
+              hint: 'Set ELEVENLABS_API_KEY in .env to your xi-api-key from elevenlabs.io (trimmed, no quotes).',
+              details: errText.slice(0, 500),
+            }),
+          )
+          return
+        }
+        res.statusCode = upstream
         res.setHeader('Content-Type', 'application/json')
-        res.end(JSON.stringify({ error: 'ElevenLabs error', details: errText }))
+        res.end(JSON.stringify({ error: 'ElevenLabs error', details: errText.slice(0, 500) }))
         return
       }
 

@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from './lib/supabaseClient'
+import { isTeacherUser } from './lib/supabaseUserRole'
 import { useAuth } from './AuthContext'
 import { useTranslation, useLocale } from './contexts/LocaleContext'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -12,17 +13,6 @@ type SchoolClassRow = {
   class_code: string
   teacher_id: string
   created_at: string
-}
-
-function isTeacherUser(user: NonNullable<ReturnType<typeof useAuth>['user']>): boolean {
-  const roleAny =
-    (user.app_metadata as any)?.role ??
-    (user.user_metadata as any)?.role ??
-    ((user.app_metadata as any)?.roles?.[0] ?? null)
-  if (roleAny === 'teacher') return true
-  // If you're piloting without custom claims yet, allow any non-anonymous signed-in user.
-  const isAnon = (user as any)?.is_anonymous === true
-  return !isAnon
 }
 
 type GeneratorUnitSummary = {
@@ -64,8 +54,8 @@ const TeacherWeeklyGeneratorPage: React.FC = () => {
       const rows = (data ?? []) as SchoolClassRow[]
       setClasses(rows)
       if (!selectedClassId && rows[0]?.id) setSelectedClassId(rows[0].id)
-    } catch (e: any) {
-      setError(e?.message ?? t('teacherGenerator.errorLoadClasses'))
+    } catch (e: unknown) {
+      setError(e instanceof Error ? e.message : t('teacherGenerator.errorLoadClasses'))
     } finally {
       setLoading(false)
     }
@@ -118,8 +108,8 @@ const TeacherWeeklyGeneratorPage: React.FC = () => {
       const r = data as GeneratorResult
       if (!r?.generatorId || !Array.isArray(r.units)) throw new Error(t('teacherGenerator.errorUnexpectedResponse'))
       setResult(r)
-    } catch (e: any) {
-      setError(e?.message ?? t('teacherGenerator.errorGenerate'))
+    } catch (e: unknown) {
+      setError(e instanceof Error ? e.message : t('teacherGenerator.errorGenerate'))
     } finally {
       setLoading(false)
     }

@@ -403,6 +403,8 @@
     "hintLabel": "Pista de SpArki:",
     "errorFileType": "Elige una foto de tareas JPG o PNG.",
     "errorChooseFirst": "Elige primero una imagen de tareas.",
+    "errorLockedByPass": "Pide a un adulto que desbloquee el Pase de Seguridad en el panel de padres primero.",
+    "errorMissingCheckoutSession": "No pudimos verificar tu desbloqueo. Pide a un adulto que abra el panel de padres después del pago, o vuelve a iniciar sesión.",
     "errorGeneric": "Algo salió mal. Pide a un adulto que lo intente de nuevo.",
     "errorCreate": "No se pudo crear la aventura. Prueba con otra foto.",
     "errorNotConfigured": "La generación de aventuras no está configurada. Añade OPENAI_API_KEY en la configuración del proyecto y vuelve a desplegar.",

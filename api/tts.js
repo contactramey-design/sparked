@@ -2,7 +2,8 @@
  * Vercel serverless: POST /api/tts with body { text, locale? } → ElevenLabs TTS → audio/mpeg.
  * Set ELEVENLABS_API_KEY (and optionally ELEVENLABS_VOICE_ID) in Vercel env vars.
  * For Spanish: pass locale "es" (or lang "es"). Optional ELEVENLABS_VOICE_ID_ES overrides voice for Spanish.
- * Uses eleven_multilingual_v2 by default; sends language_code for clearer ES pronunciation when locale is es.
+ * Uses eleven_multilingual_v2 by default; sends language_code for clearer EN/ES on multilingual models.
+ * Pass output_format as query param (ElevenLabs API); default mp3_44100_128.
  */
 const ELEVENLABS_BASE = 'https://api.elevenlabs.io/v1/text-to-speech'
 const MAX_TEXT_LENGTH = 2500
@@ -37,7 +38,8 @@ export default async function handler(req, res) {
           : ''
     const isSpanish = localeRaw === 'es' || localeRaw.startsWith('es-')
 
-    const apiKey = process.env.ELEVENLABS_API_KEY
+    // Trim — a trailing newline in Vercel env is a common cause of ElevenLabs 401.
+    const apiKey = process.env.ELEVENLABS_API_KEY?.trim()
     if (!apiKey) {
       res.status(503).json({ error: 'TTS not configured. Set ELEVENLABS_API_KEY in project settings.' })
       return
@@ -45,11 +47,13 @@ export default async function handler(req, res) {
 
     const defaultVoice = process.env.ELEVENLABS_VOICE_ID || 'EXAVITQu4vr4xnSDxMaL' // Bella – warm, friendly
     const voiceEs = (process.env.ELEVENLABS_VOICE_ID_ES || '').trim()
-    const voiceId = isSpanish && voiceEs ? voiceEs : defaultVoice
+    // Spanish: prefer dedicated ES voice when set; else same voice + language_code (multilingual).
+    const voiceId = isSpanish ? voiceEs || defaultVoice : defaultVoice
     const truncated = text.length > MAX_TEXT_LENGTH ? text.slice(0, MAX_TEXT_LENGTH) : text
     const stability = Number(process.env.ELEVENLABS_STABILITY) || 0.45
     const similarityBoost = Number(process.env.ELEVENLABS_SIMILARITY_BOOST) || 0.8
     const modelId = process.env.ELEVENLABS_MODEL_ID || 'eleven_multilingual_v2'
+    const outputFormat = (process.env.ELEVENLABS_OUTPUT_FORMAT || 'mp3_44100_128').trim()
 
     const payload = {
       text: truncated,
@@ -59,24 +63,38 @@ export default async function handler(req, res) {
         similarity_boost: similarityBoost,
       },
     }
-    // Hint pronunciation for multilingual models (English vs Spanish).
-    if (modelId.includes('multilingual') && isSpanish) {
-      payload.language_code = 'es'
+    if (modelId.includes('multilingual')) {
+      payload.language_code = isSpanish ? 'es' : 'en'
     }
 
-    const response = await fetch(`${ELEVENLABS_BASE}/${voiceId}`, {
+    const elevenUrl = `${ELEVENLABS_BASE}/${voiceId}?output_format=${encodeURIComponent(outputFormat)}`
+
+    const response = await fetch(elevenUrl, {
       method: 'POST',
       headers: {
         'xi-api-key': apiKey,
         'Content-Type': 'application/json',
-        Accept: 'audio/mpeg',
+        Accept: 'audio/mpeg, application/octet-stream, */*',
       },
       body: JSON.stringify(payload),
     })
 
     if (!response.ok) {
       const errText = await response.text()
-      res.status(response.status).json({ error: 'ElevenLabs error', details: errText })
+      // ElevenLabs returns 401 for bad keys; forwarding 401 confuses browsers ("Unauthorized" on your domain).
+      const upstream = response.status
+      if (upstream === 401 || upstream === 403) {
+        res.status(503).json({
+          error: 'ElevenLabs API key rejected (invalid, expired, or wrong environment).',
+          hint: 'In Vercel → Settings → Environment Variables: set ELEVENLABS_API_KEY to your xi-api-key from elevenlabs.io (no quotes, no spaces). Redeploy.',
+          details: errText.slice(0, 500),
+        })
+        return
+      }
+      res.status(upstream >= 400 && upstream < 600 ? upstream : 502).json({
+        error: 'ElevenLabs error',
+        details: errText.slice(0, 500),
+      })
       return
     }
 

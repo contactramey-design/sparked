@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import { VIDEO_POSTER_DATA_URL } from './videoPoster'
 import { useTranslation } from './contexts/LocaleContext'
-import { getHasSafetyPass } from './progress'
+import { getHasSafetyPass, getSafetyPassCheckoutSessionId } from './progress'
 import {
   Dialog,
   DialogContent,
@@ -104,11 +104,19 @@ const HomeworkAdventurePage: React.FC = () => {
 
   const doGenerate = useCallback(async () => {
     if (!file) return
+    const checkoutSessionId = getSafetyPassCheckoutSessionId()
+    if (!checkoutSessionId && import.meta.env.PROD) {
+      setError(t('homeworkPage.errorMissingCheckoutSession'))
+      return
+    }
     setLoading(true)
     try {
       const formData = new FormData()
       formData.append('image', file)
       formData.append('locale', locale)
+      if (checkoutSessionId) {
+        formData.append('checkout_session_id', checkoutSessionId)
+      }
       const res = await fetch('/api/process-homework', {
         method: 'POST',
         body: formData,

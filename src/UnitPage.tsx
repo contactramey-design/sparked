@@ -54,6 +54,24 @@ function parseContentBlocks(blocks: string[]) {
   return { story, rules }
 }
 
+/** MP4 slot with fallback; remount via `key` when unit/locale changes so failed state resets without an effect. */
+function UnitMp4VideoSlot({ videoSrc, fallbackVideo }: { videoSrc: string; fallbackVideo: string }) {
+  const [videoFailed, setVideoFailed] = useState(false)
+  const effectiveVideoSrc = videoFailed ? fallbackVideo : videoSrc
+  return (
+    <video
+      controls
+      width="100%"
+      poster={VIDEO_POSTER_DATA_URL}
+      preload="metadata"
+      onError={() => setVideoFailed(true)}
+    >
+      <source src={effectiveVideoSrc} type="video/mp4" />
+      Sorry, your browser does not support embedded videos.
+    </video>
+  )
+}
+
 const UnitPage: React.FC = () => {
   const { unitId } = useParams<{ unitId: string }>()
   const navigate = useNavigate()
@@ -79,7 +97,6 @@ const UnitPage: React.FC = () => {
   // Video placeholder fallback:
   // If a unit-specific MP4 isn't available yet in `public/`, the player will error.
   // We swap to a shared placeholder so the video slot always renders and plays.
-  const [videoFailed, setVideoFailed] = useState(false)
   const [showCelebration, setShowCelebration] = useState(false)
 
   const [showEndReward, setShowEndReward] = useState(false)
@@ -131,7 +148,8 @@ const UnitPage: React.FC = () => {
     '/instasafetyillustration3.png',
     '/instasafetyillustration4.png',
     '/instasafetyillustration5.png',
-    '/instasafetyillustration6.jpeg',
+    // Filename in public/ is misspelled: illustartion (matches repo asset).
+    '/instasafetyillustartion6.jpeg',
     '/instasafetyillustration7.png',
   ]
 
@@ -370,12 +388,6 @@ const UnitPage: React.FC = () => {
       : (unit.videoUrl ?? fallbackVideo)
   const showVideo = !!videoSrc
 
-  useEffect(() => {
-    setVideoFailed(false)
-  }, [unit.id, locale])
-
-  const effectiveVideoSrc = videoFailed ? fallbackVideo : videoSrc
-
   return (
     <section className="lesson-page unit-page-single">
       <div className="unit-cyber-layer">
@@ -463,16 +475,11 @@ const UnitPage: React.FC = () => {
                 className="unit-video-iframe"
               />
             ) : (
-              <video
-                controls
-                width="100%"
-                poster={VIDEO_POSTER_DATA_URL}
-                preload="metadata"
-                onError={() => setVideoFailed(true)}
-              >
-                <source src={effectiveVideoSrc} type="video/mp4" />
-                Sorry, your browser does not support embedded videos.
-              </video>
+              <UnitMp4VideoSlot
+                key={`${unit.id}-${locale}`}
+                videoSrc={videoSrc}
+                fallbackVideo={fallbackVideo}
+              />
             )}
           </div>
         )}

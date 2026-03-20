@@ -1,4 +1,5 @@
 import React from 'react'
+import { primeWebAudioFromUserGesture } from '../lib/audioUnlock'
 import { useSpeech } from '../hooks/useSpeech'
 
 export interface ListenButtonProps {
@@ -21,10 +22,12 @@ const ListenButton: React.FC<ListenButtonProps> = ({
   const { speak, stop, isSpeaking } = useSpeech()
 
   const handleClick = () => {
+    // Must run synchronously in the tap/click handler (before any await) for iOS WebKit.
+    primeWebAudioFromUserGesture()
     if (isSpeaking) {
       stop()
     } else {
-      speak(text)
+      void speak(text)
     }
   }
 
