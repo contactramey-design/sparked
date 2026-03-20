@@ -4,35 +4,47 @@ import { useTranslation } from './contexts/LocaleContext'
 import { useB2CWeeklyEpisode } from './hooks/useB2CWeeklyEpisode'
 import ListenButton from './components/ListenButton'
 import { useTranslatedUnit } from './hooks/useTranslatedCurriculum'
+import { getPlayerStats } from './progress'
+import { resolveB2CWeekIndex } from './weekly/b2cSeasonConfig'
 import { VIDEO_POSTER_DATA_URL } from './videoPoster'
 
 const WeeklyAdventurePage: React.FC = () => {
   const { t } = useTranslation()
-  const { resolved, entry, safetyUnit, aiUnit, totalWeeks } = useB2CWeeklyEpisode()
+  const { resolved, entry, safetyUnit, aiUnit } = useB2CWeeklyEpisode()
   const translatedSafety = useTranslatedUnit(safetyUnit)
   const translatedAi = useTranslatedUnit(aiUnit)
 
   const wk = String(resolved.weekIndex)
-  const illustrationWeekFile = String(resolved.weekIndex).padStart(2, '0')
+  const videoResolvedWeek = resolveB2CWeekIndex(Date.now(), 52)
+  const videoWeekIndex = videoResolvedWeek.weekIndex
+  const videoWeekFile = String(videoWeekIndex).padStart(2, '0')
 
-  // Put week illustrations in `public/weekly/season1/`:
-  // - `week-01.png`, `week-02.png`, ... (png/jpg/webp all work as long as you use .png here)
-  // If a file isn't uploaded yet, we fall back to a generic placeholder.
-  const illustrationSrc = `/weekly/season1/week-${illustrationWeekFile}.png`
-  const videoSrc = `/weekly/season1/week-${illustrationWeekFile}.mp4`
+  // Video+cover assets are expected under:
+  // - `public/weekly/season1/week-01.mp4` ... up to 52 weeks
+  // - `public/weekly/season1/week-01.png`  ... up to 52 weeks (optional, used as poster)
+  const weekVideoSrc = `/weekly/season1/week-${videoWeekFile}.mp4`
+  const weekPosterSrc = `/weekly/season1/week-${videoWeekFile}.png`
   const fallbackVideoSrc = '/Unit1b_intro_.mp4'
   const weeklyBridgeThumbSrc = '/weekly/season1/sparkis-two-world-bridge.png'
-  const fallbackIllustrationSrc = '/globalposter.png'
-  const [illustrationFailed, setIllustrationFailed] = useState(false)
   const [videoFailed, setVideoFailed] = useState(false)
+  const [posterFailed, setPosterFailed] = useState(false)
+  const [sparkles, setSparkles] = useState(0)
+  const [streakDays, setStreakDays] = useState(0)
 
   useEffect(() => {
-    setIllustrationFailed(false)
     setVideoFailed(false)
-  }, [resolved.weekIndex])
+    setPosterFailed(false)
+    const stats = getPlayerStats()
+    setSparkles(stats.totalSparkles)
+    setStreakDays(stats.currentStreakDays || 0)
+  }, [videoWeekIndex])
 
-  const effectiveIllustrationSrc = illustrationFailed ? fallbackIllustrationSrc : illustrationSrc
-  const illustrationAlt = t(`weekly.season1.weeks.${wk}.illustrationAlt`)
+  useEffect(() => {
+    const img = new Image()
+    img.src = weekPosterSrc
+    img.onload = () => setPosterFailed(false)
+    img.onerror = () => setPosterFailed(true)
+  }, [weekPosterSrc])
 
   const title = t(`weekly.season1.weeks.${wk}.title`)
   const story = t(`weekly.season1.weeks.${wk}.story`)
@@ -51,50 +63,68 @@ const WeeklyAdventurePage: React.FC = () => {
     )
   }
 
+  const effectivePosterSrc = posterFailed ? weeklyBridgeThumbSrc : weekPosterSrc
+
   return (
     <section className="lesson-page weekly-adventure-page">
       <header className="lesson-header">
         <Link to="/" className="link-back">
           {t('weekly.weeklyPage.backHome')}
         </Link>
-        <p className="weekly-week-badge">
-          {t('weekly.weeklyPage.weekLabel', { week: resolved.weekIndex, total: totalWeeks })}
-        </p>
-        {resolved.isBeforeSeasonStart && (
-          <p className="weekly-banner-note">{t('weekly.weeklyPage.previewBeforeLaunch')}</p>
-        )}
-        {resolved.isCappedAtMax && (
-          <p className="weekly-banner-note">{t('weekly.weeklyPage.cappedNote')}</p>
-        )}
+        {resolved.isBeforeSeasonStart && <p className="weekly-banner-note">{t('weekly.weeklyPage.previewBeforeLaunch')}</p>}
       </header>
 
       <div className="weekly-hero card">
         <h2 className="text-xl font-bold text-slate-800">{title}</h2>
 
-        <div className="weekly-video-wrap">
-          <video
-            controls
-            preload="metadata"
-            poster={weeklyBridgeThumbSrc || VIDEO_POSTER_DATA_URL}
-            onError={() => setVideoFailed(true)}
-            className="weekly-story-video"
-          >
-            <source src={videoFailed ? fallbackVideoSrc : videoSrc} type="video/mp4" />
-            Sorry, your browser does not support embedded videos.
-          </video>
-        </div>
+        <div className="weekly-hero-content-row">
+          <div className="weekly-hero-media">
+            <div className="weekly-video-wrap">
+              <video
+                controls
+                preload="metadata"
+                poster={effectivePosterSrc || VIDEO_POSTER_DATA_URL}
+                onError={() => setVideoFailed(true)}
+                className="weekly-story-video"
+              >
+                <source src={videoFailed ? fallbackVideoSrc : weekVideoSrc} type="video/mp4" />
+                Sorry, your browser does not support embedded videos.
+              </video>
+            </div>
 
-        <div className="weekly-hero-actions">
-          <ListenButton text={storyForListen} ariaLabel={t('weekly.weeklyPage.storyHeading')} size="md" />
-        </div>
+            <div className="weekly-hero-actions">
+              <ListenButton
+                text={storyForListen}
+                ariaLabel={t('weekly.weeklyPage.storyHeading')}
+                size="md"
+              />
+            </div>
+          </div>
 
-        <div className="weekly-story-illustration" aria-label={t('weekly.weeklyPage.storyHeading')}>
-          <img
-            src={effectiveIllustrationSrc}
-            alt={illustrationAlt}
-            onError={() => setIllustrationFailed(true)}
-            loading="lazy"
-          />
+          <aside className="side-bubble-badges" aria-label={t('home.hiSparkles', { name: 'Explorer', count: sparkles })}>
+            <div
+              className="side-bubble-badge side-bubble-badge--sparkles"
+              aria-label={t('home.hiSparkles', { name: 'Explorer', count: sparkles })}
+            >
+              <span className="side-bubble-badge-icon" aria-hidden>
+                ✦
+              </span>
+              <span className="side-bubble-badge-value" aria-hidden>
+                {sparkles}
+              </span>
+            </div>
+            <div
+              className="side-bubble-badge side-bubble-badge--streak"
+              aria-label={t('home.streakLine', { count: streakDays })}
+            >
+              <span className="side-bubble-badge-icon" aria-hidden>
+                🔥
+              </span>
+              <span className="side-bubble-badge-value" aria-hidden>
+                {streakDays}
+              </span>
+            </div>
+          </aside>
         </div>
       </div>
 

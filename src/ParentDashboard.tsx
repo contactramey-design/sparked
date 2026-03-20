@@ -90,9 +90,6 @@ export const ParentViewContent: React.FC = () => {
           <h3>{t('weekly.parentDashboard.weeklyTeaser')}</h3>
           <p className="text-slate-700 mt-2">
             <strong>{weeklyTitleShort}</strong>
-            <span className="text-slate-500 text-sm block mt-1">
-              {t('weekly.weeklyPage.weekLabel', { week: weeklyEpisode.resolved.weekIndex, total: weeklyEpisode.totalWeeks })}
-            </span>
           </p>
           <Link to="/weekly" className="primary-button mt-3 inline-block">
             {t('weekly.parentDashboard.weeklyTeaserLink')}

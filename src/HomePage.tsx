@@ -278,7 +278,7 @@ const HomePage: React.FC = () => {
 
           <div className="home-weekly-adventure-left">
             <div className="home-weekly-kicker text-sm font-semibold text-slate-500 uppercase tracking-wide">
-              {t('weekly.weeklyPage.weekLabel', { week: weeklyEpisode.resolved.weekIndex, total: weeklyEpisode.totalWeeks })}
+              {t('weekly.weeklyPage.learningAdventureLabel')}
             </div>
             <div className="home-weekly-adventure-text text-xl font-bold text-slate-800">
               {t('weekly.weeklyPage.title')}
