@@ -303,38 +303,6 @@ const HomePage: React.FC = () => {
         </div>
       </div>
 
-      <div className="home-weekly-teaser card">
-        <div className="home-weekly-adventure">
-          <img
-            src="/weekly/season1/sparkis-two-world-bridge.png"
-            alt=""
-            className="home-weekly-thumb"
-            onError={(e) => {
-              e.currentTarget.style.display = 'none'
-            }}
-          />
-
-          <div className="home-weekly-adventure-left">
-            <div className="home-weekly-kicker text-sm font-semibold text-slate-500 uppercase tracking-wide">
-              {t('weekly.weeklyPage.learningAdventureLabel')}
-            </div>
-            <div className="home-weekly-adventure-text text-xl font-bold text-slate-800">
-              {t('weekly.weeklyPage.title')}
-            </div>
-          </div>
-
-          <Link to="/weekly" className="home-weekly-adventure-button">
-            <span className="home-weekly-adventure-button-glow" aria-hidden />
-            <span className="home-weekly-adventure-button-inner">
-              <span className="home-weekly-adventure-icon" aria-hidden>
-                🚀
-              </span>
-              <span>{t('weekly.weeklyPage.navLink')}</span>
-            </span>
-          </Link>
-        </div>
-      </div>
-
       <div className="home-footer-actions">
         <Link to={loginPath} className="secondary-button">
           {t('home.grownUpSignIn')}

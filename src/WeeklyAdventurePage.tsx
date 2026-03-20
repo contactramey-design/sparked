@@ -21,27 +21,16 @@ const WeeklyAdventurePage: React.FC = () => {
 
   // Video+cover assets are expected under:
   // - `public/weekly/season1/week-01.mp4` ... up to 52 weeks
-  // - `public/weekly/season1/week-01.png`  ... up to 52 weeks (optional, used as poster)
   const weekVideoSrc = `/weekly/season1/week-${videoWeekFile}.mp4`
-  const weekPosterSrc = `/weekly/season1/week-${videoWeekFile}.png`
   const weeklyBridgeThumbSrc = '/weekly/season1/sparkis-two-world-bridge.png'
-  const [posterFailed, setPosterFailed] = useState(false)
   const [sparkles, setSparkles] = useState(0)
   const [streakDays, setStreakDays] = useState(0)
 
   useEffect(() => {
-    setPosterFailed(false)
     const stats = getPlayerStats()
     setSparkles(stats.totalSparkles)
     setStreakDays(stats.currentStreakDays || 0)
   }, [videoWeekIndex])
-
-  useEffect(() => {
-    const img = new Image()
-    img.src = weekPosterSrc
-    img.onload = () => setPosterFailed(false)
-    img.onerror = () => setPosterFailed(true)
-  }, [weekPosterSrc])
 
   const title = t(`weekly.season1.weeks.${wk}.title`)
   const story = t(`weekly.season1.weeks.${wk}.story`)
@@ -59,8 +48,6 @@ const WeeklyAdventurePage: React.FC = () => {
       </section>
     )
   }
-
-  const effectivePosterSrc = posterFailed ? weeklyBridgeThumbSrc : weekPosterSrc
 
   return (
     <section className="lesson-page weekly-adventure-page">
@@ -80,7 +67,7 @@ const WeeklyAdventurePage: React.FC = () => {
               <video
                 controls
                 preload="none"
-                poster={effectivePosterSrc || VIDEO_POSTER_DATA_URL}
+                poster={weeklyBridgeThumbSrc || VIDEO_POSTER_DATA_URL}
                 className="weekly-story-video"
               >
                 <source src={weekVideoSrc} type="video/mp4" />
