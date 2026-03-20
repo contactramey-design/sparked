@@ -263,6 +263,31 @@ const HomePage: React.FC = () => {
           </button>
         </div>
       )}
+      <div className="home-hero">
+        <div className="home-hero-sparki" aria-hidden>
+          <img
+            src="/sparkiacademylogo.webp"
+            alt=""
+            className="home-hero-character"
+            onError={(e) => {
+              e.currentTarget.style.display = 'none'
+              const next = e.currentTarget.nextElementSibling
+              if (next) (next as HTMLElement).style.display = 'block'
+            }}
+          />
+          <span className="home-hero-character-emoji" aria-hidden>
+            🤖✨
+          </span>
+        </div>
+        <div className="home-hero-content">
+          <h1 className="home-title">{t('header.appName')}</h1>
+          <p className="home-tagline">{t('header.tagline')}</p>
+          <Link to={ctaHref} className="home-hero-cta primary-button">
+            {t('home.joinAdventure')}
+          </Link>
+        </div>
+      </div>
+
       <div className="home-weekly-teaser card">
         <div className="home-weekly-adventure">
           <img
@@ -291,31 +316,6 @@ const HomePage: React.FC = () => {
               </span>
               <span>{t('weekly.weeklyPage.navLink')}</span>
             </span>
-          </Link>
-        </div>
-      </div>
-
-      <div className="home-hero">
-        <div className="home-hero-sparki" aria-hidden>
-          <img
-            src="/sparkiacademylogo.webp"
-            alt=""
-            className="home-hero-character"
-            onError={(e) => {
-              e.currentTarget.style.display = 'none'
-              const next = e.currentTarget.nextElementSibling
-              if (next) (next as HTMLElement).style.display = 'block'
-            }}
-          />
-          <span className="home-hero-character-emoji" aria-hidden>
-            🤖✨
-          </span>
-        </div>
-        <div className="home-hero-content">
-          <h1 className="home-title">{t('header.appName')}</h1>
-          <p className="home-tagline">{t('header.tagline')}</p>
-          <Link to={ctaHref} className="home-hero-cta primary-button">
-            {t('home.joinAdventure')}
           </Link>
         </div>
       </div>
