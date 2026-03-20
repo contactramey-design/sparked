@@ -24,7 +24,6 @@ const WeeklyAdventurePage: React.FC = () => {
   // - `public/weekly/season1/week-01.png`  ... up to 52 weeks (optional, used as poster)
   const weekVideoSrc = `/weekly/season1/week-${videoWeekFile}.mp4`
   const weekPosterSrc = `/weekly/season1/week-${videoWeekFile}.png`
-  const fallbackVideoSrc = '/Unit1b_intro_.mp4'
   const weeklyBridgeThumbSrc = '/weekly/season1/sparkis-two-world-bridge.png'
   const [videoFailed, setVideoFailed] = useState(false)
   const [posterFailed, setPosterFailed] = useState(false)
@@ -81,13 +80,13 @@ const WeeklyAdventurePage: React.FC = () => {
           <div className="weekly-hero-media">
             <div className="weekly-video-wrap">
               <video
-                controls
+                controls={!videoFailed}
                 preload="metadata"
                 poster={effectivePosterSrc || VIDEO_POSTER_DATA_URL}
                 onError={() => setVideoFailed(true)}
                 className="weekly-story-video"
               >
-                <source src={videoFailed ? fallbackVideoSrc : weekVideoSrc} type="video/mp4" />
+                {!videoFailed && <source src={weekVideoSrc} type="video/mp4" />}
                 Sorry, your browser does not support embedded videos.
               </video>
             </div>
@@ -100,31 +99,6 @@ const WeeklyAdventurePage: React.FC = () => {
               />
             </div>
           </div>
-
-          <aside className="side-bubble-badges" aria-label={t('home.hiSparkles', { name: 'Explorer', count: sparkles })}>
-            <div
-              className="side-bubble-badge side-bubble-badge--sparkles"
-              aria-label={t('home.hiSparkles', { name: 'Explorer', count: sparkles })}
-            >
-              <span className="side-bubble-badge-icon" aria-hidden>
-                ✦
-              </span>
-              <span className="side-bubble-badge-value" aria-hidden>
-                {sparkles}
-              </span>
-            </div>
-            <div
-              className="side-bubble-badge side-bubble-badge--streak"
-              aria-label={t('home.streakLine', { count: streakDays })}
-            >
-              <span className="side-bubble-badge-icon" aria-hidden>
-                🔥
-              </span>
-              <span className="side-bubble-badge-value" aria-hidden>
-                {streakDays}
-              </span>
-            </div>
-          </aside>
         </div>
       </div>
 
@@ -161,6 +135,33 @@ const WeeklyAdventurePage: React.FC = () => {
           <summary className="weekly-parent-summary">{t('weekly.weeklyPage.parentHeading')}</summary>
           <p className="text-slate-700 mt-2 leading-relaxed">{parentBlurb}</p>
         </details>
+      </div>
+
+      <div className="lesson-media card weekly-bottom-badges">
+        <aside className="side-bubble-badges side-bubble-badges--bottom" aria-label={t('home.hiSparkles', { name: 'Explorer', count: sparkles })}>
+          <div
+            className="side-bubble-badge side-bubble-badge--sparkles"
+            aria-label={t('home.hiSparkles', { name: 'Explorer', count: sparkles })}
+          >
+            <span className="side-bubble-badge-icon" aria-hidden>
+              ✦
+            </span>
+            <span className="side-bubble-badge-value" aria-hidden>
+              {sparkles}
+            </span>
+          </div>
+          <div
+            className="side-bubble-badge side-bubble-badge--streak"
+            aria-label={t('home.streakLine', { count: streakDays })}
+          >
+            <span className="side-bubble-badge-icon" aria-hidden>
+              🔥
+            </span>
+            <span className="side-bubble-badge-value" aria-hidden>
+              {streakDays}
+            </span>
+          </div>
+        </aside>
       </div>
 
       <div className="weekly-footer-nav">

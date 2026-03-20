@@ -2247,7 +2247,7 @@ h1, h2, h3 {
 .weekly-hero-content-row {
   display: flex;
   align-items: flex-start;
-  justify-content: space-between;
+  justify-content: flex-start;
   gap: 22px;
   margin-top: 12px;
 }
@@ -2264,6 +2264,26 @@ h1, h2, h3 {
   flex-shrink: 0;
   padding-top: 6px;
   align-self: center;
+}
+
+.side-bubble-badges--bottom {
+  flex-direction: row;
+  justify-content: center;
+  gap: 22px;
+  padding-top: 0;
+}
+
+.weekly-bottom-badges {
+  justify-content: center;
+  align-items: center;
+}
+
+.weekly-bottom-badges .side-bubble-badge {
+  animation: homeBubbleFloat 3.2s ease-in-out infinite;
+}
+
+.weekly-bottom-badges .side-bubble-badge:nth-child(2) {
+  animation-delay: -1.35s;
 }
 
 .side-bubble-badge {
@@ -2341,6 +2361,11 @@ h1, h2, h3 {
     width: 100%;
     gap: 18px;
     flex-wrap: nowrap;
+  }
+
+  .side-bubble-badges--bottom {
+    flex-direction: column;
+    gap: 14px;
   }
 }
 
