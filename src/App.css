@@ -1099,6 +1099,29 @@ h1, h2, h3 {
   }
 }
 
+@media (max-width: 520px) {
+  .home-floating-badges {
+    right: 10px;
+    top: 150px;
+    gap: 10px;
+  }
+
+  .home-sparkles-bubble,
+  .home-streak-bubble {
+    width: 62px;
+    height: 62px;
+  }
+
+  .home-badge-icon {
+    top: 10px;
+    font-size: 16px;
+  }
+
+  .home-badge-value {
+    font-size: 20px;
+  }
+}
+
 /* Hub (logged-in home): toggle at top */
 .home-hub {
   gap: 1rem;
