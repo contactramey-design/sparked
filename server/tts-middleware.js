@@ -1,6 +1,8 @@
 /**
- * Vite dev middleware: POST /api/tts with body { text } → ElevenLabs TTS → audio/mpeg.
- * Set ELEVENLABS_API_KEY (and optionally ELEVENLABS_VOICE_ID) in .env.
+ * Vite dev middleware: POST /api/tts with body { text, locale } → ElevenLabs TTS → audio/mpeg.
+ * Set ELEVENLABS_API_KEY in .env and (optionally) separate voices:
+ * - ELEVENLABS_VOICE_ID_EN
+ * - ELEVENLABS_VOICE_ID_ES
  */
 import dotenv from 'dotenv'
 dotenv.config()
@@ -28,6 +30,7 @@ export function ttsMiddleware() {
       const raw = await readBody(req)
       const data = JSON.parse(raw || '{}')
       const text = typeof data.text === 'string' ? data.text.trim() : ''
+      const locale = data.locale === 'es' ? 'es' : 'en'
       if (!text) {
         res.statusCode = 400
         res.setHeader('Content-Type', 'application/json')
@@ -43,7 +46,10 @@ export function ttsMiddleware() {
         return
       }
 
-      const voiceId = process.env.ELEVENLABS_VOICE_ID || 'EXAVITQu4vr4xnSDxMaL' // Bella – warm, friendly; override with ELEVENLABS_VOICE_ID for others
+      const voiceId =
+        locale === 'es'
+          ? process.env.ELEVENLABS_VOICE_ID_ES || process.env.ELEVENLABS_VOICE_ID || 'EXAVITQu4vr4xnSDxMaL'
+          : process.env.ELEVENLABS_VOICE_ID_EN || process.env.ELEVENLABS_VOICE_ID || 'EXAVITQu4vr4xnSDxMaL'
       const truncated = text.length > MAX_TEXT_LENGTH ? text.slice(0, MAX_TEXT_LENGTH) : text
       const stability = Number(process.env.ELEVENLABS_STABILITY) || 0.45
       const similarityBoost = Number(process.env.ELEVENLABS_SIMILARITY_BOOST) || 0.8

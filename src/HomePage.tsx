@@ -97,9 +97,6 @@ const HomePage: React.FC = () => {
 
   const isParentView = viewParam === 'parent'
   const weeklyEpisode = useB2CWeeklyEpisode()
-  const weeklyWk = String(weeklyEpisode.resolved.weekIndex)
-  const weeklyTitleShort = t(`weekly.season1.weeks.${weeklyWk}.title`)
-  const weeklyTaglineShort = t(`weekly.season1.weeks.${weeklyWk}.tagline`)
   const checkoutStatus = useMemo(() => {
     const v = searchParams.get('checkout')
     if (v === 'success' || v === 'cancel') return v
@@ -226,14 +223,23 @@ const HomePage: React.FC = () => {
       </div>
 
       <div className="home-weekly-teaser card">
-        <p className="home-weekly-kicker text-sm font-semibold text-slate-500 uppercase tracking-wide">
-          {t('weekly.weeklyPage.seasonLabel')} · {t('weekly.weeklyPage.weekLabel', { week: weeklyEpisode.resolved.weekIndex, total: weeklyEpisode.totalWeeks })}
-        </p>
-        <h2 className="home-weekly-title text-xl font-bold text-slate-800 mt-1">{weeklyTitleShort}</h2>
-        <p className="home-weekly-desc text-slate-600 mt-2">{weeklyTaglineShort}</p>
-        <div className="home-weekly-actions mt-4">
-          <Link to="/weekly" className="primary-button">
-            {t('weekly.weeklyPage.title')}
+        <div className="home-weekly-adventure">
+          <div className="home-weekly-adventure-left">
+            <div className="home-weekly-kicker text-sm font-semibold text-slate-500 uppercase tracking-wide">
+              {t('weekly.weeklyPage.weekLabel', { week: weeklyEpisode.resolved.weekIndex, total: weeklyEpisode.totalWeeks })}
+            </div>
+            <div className="home-weekly-adventure-text text-xl font-bold text-slate-800">
+              {t('weekly.weeklyPage.title')}
+            </div>
+          </div>
+          <Link to="/weekly" className="home-weekly-adventure-button">
+            <span className="home-weekly-adventure-button-glow" aria-hidden />
+            <span className="home-weekly-adventure-button-inner">
+              <span className="home-weekly-adventure-icon" aria-hidden>
+                🚀
+              </span>
+              <span>{t('weekly.weeklyPage.navLink')}</span>
+            </span>
           </Link>
         </div>
       </div>
