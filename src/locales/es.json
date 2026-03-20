@@ -457,6 +457,7 @@
     "toolbar": {
       "prev": "Anterior",
       "next": "Siguiente",
+      "downloadPdf": "Descargar PDF",
       "pageSolo": "Página {page}",
       "pageOf": "Página {page} de {numPages}"
     },

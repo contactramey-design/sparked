@@ -15,7 +15,7 @@ const ALLOWED_EBOOK_IDS = new Set([
 // PDFs are stored outside `public/` for protection.
 // Expected location: `private/ebooks/<ebookId>.pdf`
 //
-// TikTok safety ebook (ebook-2): no PDF in repo yet — only title that must not download.
+// PDFs are stored in `private/ebooks/<ebookId>.pdf` (protected by this endpoint).
 
 async function resolvePriceIdFromEnv(stripe, maybeId) {
   if (!maybeId || typeof maybeId !== 'string') return null
@@ -47,14 +47,6 @@ export default async function handler(req, res) {
 
     if (!ebookId || !ALLOWED_EBOOK_IDS.has(ebookId)) {
       res.status(400).json({ error: 'Invalid ebook id.' })
-      return
-    }
-
-    if (ebookId === 'ebook-2') {
-      res.status(404).json({
-        error: 'PDF not available for this title yet.',
-        code: 'EBOOK_TIKTOK_PENDING',
-      })
       return
     }
 

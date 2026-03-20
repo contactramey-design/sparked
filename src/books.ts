@@ -1,5 +1,5 @@
-/** TikTok safety ebook — no PDF shipped yet; reader shows “coming soon” only. */
-export const EBOOK_ID_PENDING_PDF = 'ebook-2'
+// Ebook inventory. PDF files are stored in `private/ebooks/<ebookId>.pdf` and served via
+// the protected `/api/download-ebook` endpoint.
 
 export interface BookConfig {
   id: string

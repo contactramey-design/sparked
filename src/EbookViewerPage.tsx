@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useParams, useSearchParams } from 'react-router-dom'
 import * as pdfjsLib from 'pdfjs-dist'
-import { books, EBOOK_ID_PENDING_PDF } from './books'
+import { books } from './books'
 import { getSafetyPassCheckoutSessionId } from './progress'
 import { useTranslation } from './contexts/LocaleContext'
 import { Button } from '@/components/ui/button'
@@ -60,11 +60,6 @@ const EbookViewerPage: React.FC = () => {
 
     if (!effectiveEbookId) {
       setEntitlementErrorKey('ebookViewer.errors.missingEbookId')
-      return
-    }
-
-    if (effectiveEbookId === EBOOK_ID_PENDING_PDF) {
-      setEntitlementErrorKey('ebookViewer.errors.tiktokComingSoon')
       return
     }
 
@@ -225,8 +220,21 @@ const EbookViewerPage: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pageNumber, numPages])
 
+  const isFreeTestEbook = effectiveEbookId === 'ebook-1'
   const canPrev = pageNumber > 1 && !loadingPdf
   const canNext = numPages ? pageNumber < numPages : false
+  const canDownloadPdf = isFreeTestEbook || !!checkoutSessionId
+
+  const handleDownloadPdf = () => {
+    if (!effectiveEbookId) return
+    const downloadUrl = isFreeTestEbook
+      ? `/api/download-ebook?ebookId=${encodeURIComponent(effectiveEbookId)}`
+      : `/api/download-ebook?ebookId=${encodeURIComponent(effectiveEbookId)}&checkout_session_id=${encodeURIComponent(
+          checkoutSessionId as string,
+        )}`
+
+    window.location.assign(downloadUrl)
+  }
 
   const bundle = books.find((b) => b.id === 'bundle') ?? null
   const bundlePrice = bundle?.price ?? '$9.99/mo'
@@ -281,8 +289,6 @@ const EbookViewerPage: React.FC = () => {
   }
 
   if (entitlementErrorKey) {
-    const isTiktokPending = entitlementErrorKey === 'ebookViewer.errors.tiktokComingSoon'
-
     return (
       <section className="lesson-page">
         <header className="lesson-header">
@@ -293,55 +299,51 @@ const EbookViewerPage: React.FC = () => {
         </header>
 
         <div className="lesson-media card" role="alert" aria-live="polite">
-          <h3 style={{ marginTop: 0 }}>
-            {isTiktokPending ? t('ebookViewer.tiktokComingSoonTitle') : t('ebookViewer.unlockToReadTitle')}
-          </h3>
+          <h3 style={{ marginTop: 0 }}>{t('ebookViewer.unlockToReadTitle')}</h3>
           <p>{t(entitlementErrorKey)}</p>
-          {!isTiktokPending && (
-            <>
-              {ebook && ebook.id !== 'bundle' ? (
-                <button
-                  type="button"
-                  className="primary-button"
-                  onClick={async () => {
-                    setEntitlementErrorKey(null)
-                    setLoadingPdf(true)
-                    try {
-                      const res = await fetch('/api/create-ebook-checkout-session', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                          ebookId: ebook.id,
-                          returnTo: `/ebook?ebookId=${encodeURIComponent(ebook.id)}`,
-                        }),
-                      })
-                      const data = await res.json().catch(() => ({}))
-                      if (!res.ok || typeof data?.url !== 'string') {
-                        throw new Error('CHECKOUT_FAILED')
-                      }
-                      window.location.assign(data.url)
-                    } catch (e) {
-                      setEntitlementErrorKey('ebookViewer.errors.checkoutFailed')
-                      setLoadingPdf(false)
+          <>
+            {ebook && ebook.id !== 'bundle' ? (
+              <button
+                type="button"
+                className="primary-button"
+                onClick={async () => {
+                  setEntitlementErrorKey(null)
+                  setLoadingPdf(true)
+                  try {
+                    const res = await fetch('/api/create-ebook-checkout-session', {
+                      method: 'POST',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify({
+                        ebookId: ebook.id,
+                        returnTo: `/ebook?ebookId=${encodeURIComponent(ebook.id)}`,
+                      }),
+                    })
+                    const data = await res.json().catch(() => ({}))
+                    if (!res.ok || typeof data?.url !== 'string') {
+                      throw new Error('CHECKOUT_FAILED')
                     }
-                  }}
-                >
-                  {t('ebookViewer.buyForButton', { price: ebook.price })}
-                </button>
-              ) : (
-                <button type="button" className="primary-button" onClick={() => void startTrial()}>
-                  {t('ebookViewer.startTrialButton')}
-                </button>
-              )}
-
-              <button type="button" className="secondary-button mt-3" onClick={() => void startTrial()}>
-                {t('ebookViewer.bundleUnlockButton', { price: bundlePrice })}
+                    window.location.assign(data.url)
+                  } catch (e) {
+                    setEntitlementErrorKey('ebookViewer.errors.checkoutFailed')
+                    setLoadingPdf(false)
+                  }
+                }}
+              >
+                {t('ebookViewer.buyForButton', { price: ebook.price })}
               </button>
-              <p className="login-coppa-note" style={{ marginTop: '0.75rem' }}>
-                {t('ebookViewer.afterUnlockNote')}
-              </p>
-            </>
-          )}
+            ) : (
+              <button type="button" className="primary-button" onClick={() => void startTrial()}>
+                {t('ebookViewer.startTrialButton')}
+              </button>
+            )}
+
+            <button type="button" className="secondary-button mt-3" onClick={() => void startTrial()}>
+              {t('ebookViewer.bundleUnlockButton', { price: bundlePrice })}
+            </button>
+            <p className="login-coppa-note" style={{ marginTop: '0.75rem' }}>
+              {t('ebookViewer.afterUnlockNote')}
+            </p>
+          </>
         </div>
       </section>
     )
@@ -374,6 +376,14 @@ const EbookViewerPage: React.FC = () => {
             ? t('ebookViewer.toolbar.pageOf', { page: pageNumber, numPages })
             : t('ebookViewer.toolbar.pageSolo', { page: pageNumber })}
         </span>
+        <button
+          type="button"
+          className="secondary-button"
+          onClick={() => handleDownloadPdf()}
+          disabled={!canDownloadPdf}
+        >
+          {t('ebookViewer.toolbar.downloadPdf')}
+        </button>
         <button type="button" className="secondary-button" onClick={handleNext} disabled={!canNext}>
           {t('ebookViewer.toolbar.next')}
         </button>
