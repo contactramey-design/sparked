@@ -157,7 +157,8 @@ h1, h2, h3 {
   flex-shrink: 0;
 }
 
-.main-nav a {
+/* Only header “pill” links — NOT dropdown items (those use .nav-dropdown-link on <a>) */
+.main-nav a:not(.nav-dropdown-link) {
   color: white;
   text-decoration: none;
   padding: 0.5rem 1rem;
@@ -167,12 +168,12 @@ h1, h2, h3 {
   transition: transform 0.15s, background 0.15s;
 }
 
-.main-nav a:hover {
+.main-nav a:not(.nav-dropdown-link):hover {
   background: rgba(255, 255, 255, 0.45);
   transform: scale(1.05);
 }
 
-.main-nav a:focus-visible,
+.main-nav a:not(.nav-dropdown-link):focus-visible,
 .nav-button:focus-visible {
   outline: 2px solid white;
   outline-offset: 2px;
@@ -238,16 +239,17 @@ h1, h2, h3 {
   z-index: 10; /* within .app-header stacking context; header z-index wins vs main */
   top: calc(100% + 6px);
   right: 0;
-  min-width: min(18rem, calc(100vw - 2rem));
+  min-width: min(19rem, calc(100vw - 2rem));
   max-width: min(22rem, 96vw);
-  max-height: min(70vh, 28rem);
+  max-height: min(75vh, 32rem);
   overflow-y: auto;
-  padding: 0.5rem 0.35rem 0.65rem;
+  padding: 0.65rem 0.45rem 0.75rem;
   border-radius: 16px;
-  background: #fff;
+  background: #ffffff;
   color: #0f172a;
-  box-shadow: 0 12px 40px rgba(15, 23, 42, 0.22);
-  border: 2px solid rgba(37, 99, 235, 0.2);
+  box-shadow: 0 16px 48px rgba(15, 23, 42, 0.18), 0 0 0 1px rgba(15, 23, 42, 0.06);
+  border: 2px solid rgba(37, 99, 235, 0.22);
+  -webkit-font-smoothing: antialiased;
 }
 
 .nav-dropdown-panel[hidden] {
@@ -255,83 +257,104 @@ h1, h2, h3 {
 }
 
 .nav-dropdown-section-label {
-  margin: 0.5rem 0.75rem 0.35rem;
-  font-size: 0.7rem;
+  margin: 0.65rem 0.6rem 0.4rem;
+  font-size: 0.8125rem;
   font-weight: 800;
-  letter-spacing: 0.06em;
+  font-family: 'Baloo 2', 'Comic Neue', system-ui, sans-serif;
+  letter-spacing: 0.07em;
   text-transform: uppercase;
-  color: #64748b;
+  color: #334155;
 }
 
-.nav-dropdown-link {
+.nav-dropdown-section-label:first-child {
+  margin-top: 0.15rem;
+}
+
+/* High specificity so .main-nav a never forces white text on panel links */
+.main-nav .nav-dropdown-panel a.nav-dropdown-link {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 0.75rem;
   min-height: 48px;
-  padding: 0.35rem 0.85rem;
-  margin: 0.1rem 0.25rem;
+  padding: 0.5rem 0.9rem;
+  margin: 0.12rem 0.2rem;
   border-radius: 12px;
   text-decoration: none;
-  font-weight: 600;
-  color: #1e40af;
-  transition: background 0.12s;
+  font-weight: 700;
+  font-size: 1.0625rem;
+  line-height: 1.25;
+  color: #1d4ed8;
+  background: transparent;
+  box-shadow: none;
+  transform: none;
+  transition: background 0.12s, color 0.12s;
 }
 
-.nav-dropdown-link:hover {
-  background: rgba(239, 246, 255, 0.95);
+.main-nav .nav-dropdown-panel a.nav-dropdown-link:hover {
+  background: #eff6ff;
+  color: #1e3a8a;
+  transform: none;
 }
 
-.nav-dropdown-link:focus-visible {
-  outline: 3px solid var(--primary-color);
-  outline-offset: 1px;
+.main-nav .nav-dropdown-panel a.nav-dropdown-link:focus-visible {
+  outline: 3px solid #3b82f6;
+  outline-offset: 2px;
 }
 
-.nav-dropdown-link--soon {
-  color: #475569;
+.main-nav .nav-dropdown-panel a.nav-dropdown-link--soon {
+  color: #1e293b;
+}
+
+.main-nav .nav-dropdown-panel a.nav-dropdown-link--soon:hover {
+  background: #f1f5f9;
+  color: #0f172a;
 }
 
 .nav-dropdown-badge {
   flex-shrink: 0;
-  font-size: 0.7rem;
+  font-size: 0.72rem;
   font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
-  padding: 0.2rem 0.45rem;
+  letter-spacing: 0.05em;
+  padding: 0.28rem 0.5rem;
   border-radius: 999px;
-  background: rgba(251, 191, 36, 0.35);
-  color: #7c2d12;
+  background: linear-gradient(180deg, #fde68a 0%, #fbbf24 100%);
+  color: #78350f;
+  border: 1px solid rgba(180, 83, 9, 0.35);
 }
 
 .nav-dropdown-band-row {
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.4rem;
-  padding: 0 0.5rem 0.35rem;
+  flex-direction: column;
+  gap: 0.45rem;
+  padding: 0 0.35rem 0.5rem;
 }
 
 .nav-dropdown-band-btn {
-  flex: 1 1 140px;
-  min-height: 48px;
-  padding: 0.35rem 0.5rem;
+  flex: 1 1 auto;
+  width: 100%;
+  min-height: 52px;
+  padding: 0.45rem 0.65rem;
   border-radius: 12px;
-  border: 2px solid rgba(37, 99, 235, 0.35);
-  background: #f8fafc;
+  border: 2px solid rgba(37, 99, 235, 0.45);
+  background: #ffffff;
   cursor: pointer;
   font: inherit;
   text-align: center;
-  transition: border-color 0.12s, background 0.12s;
+  transition: border-color 0.12s, background 0.12s, box-shadow 0.12s;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.06);
 }
 
 .nav-dropdown-band-btn:hover {
-  border-color: var(--primary-color);
+  border-color: #2563eb;
   background: #eff6ff;
 }
 
 .nav-dropdown-band-btn--active {
-  border-color: var(--primary-color);
-  background: rgba(239, 246, 255, 0.95);
-  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+  border-color: #2563eb;
+  background: linear-gradient(180deg, #eff6ff 0%, #dbeafe 100%);
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.25);
 }
 
 .nav-dropdown-band-btn:focus-visible {
@@ -342,27 +365,30 @@ h1, h2, h3 {
 .nav-dropdown-band-name {
   display: block;
   font-weight: 800;
-  font-size: 0.95rem;
+  font-size: 1.05rem;
   color: #0f172a;
+  font-family: 'Baloo 2', 'Comic Neue', system-ui, sans-serif;
 }
 
 .nav-dropdown-band-ages {
   display: block;
-  margin-top: 0.1rem;
-  font-size: 0.8rem;
-  color: #64748b;
+  margin-top: 0.15rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #475569;
 }
 
 .app[data-school-theme='true'] .nav-dropdown-panel {
   border-color: rgba(234, 88, 12, 0.35);
 }
 
-.app[data-school-theme='true'] .nav-dropdown-link {
-  color: #7c2d12;
+.app[data-school-theme='true'] .main-nav .nav-dropdown-panel a.nav-dropdown-link {
+  color: #c2410c;
 }
 
-.app[data-school-theme='true'] .nav-dropdown-link:hover {
-  background: rgba(255, 247, 237, 0.95);
+.app[data-school-theme='true'] .main-nav .nav-dropdown-panel a.nav-dropdown-link:hover {
+  background: rgba(255, 247, 237, 0.98);
+  color: #9a3412;
 }
 
 .home-grownups-footer {
@@ -450,7 +476,7 @@ h1, h2, h3 {
   .app-titles p {
     font-size: 0.75rem;
   }
-  .main-nav a,
+  .main-nav a:not(.nav-dropdown-link),
   .nav-button,
   .lang-switcher {
     padding: 0.45rem 0.85rem;
@@ -474,7 +500,7 @@ h1, h2, h3 {
   .app-titles p {
     font-size: 0.7rem;
   }
-  .main-nav a,
+  .main-nav a:not(.nav-dropdown-link),
   .nav-button,
   .lang-switcher {
     padding: 0.4rem 0.75rem;
