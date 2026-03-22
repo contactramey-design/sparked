@@ -7,7 +7,6 @@ import { useAgeBand } from './contexts/AgeBandContext'
 import AgeBandSelector from './components/AgeBandSelector'
 import { awardDailyLoginBonus, getPlayerStats } from './progress'
 import { ParentViewContent } from './ParentDashboard'
-import { useSchoolMode } from './hooks/useSchoolMode'
 
 const TIERS = [
   {
@@ -88,7 +87,6 @@ function TierCard({
 const HomePage: React.FC = () => {
   const { isLoggedIn } = useAuth()
   const { t, locale } = useTranslation()
-  const { schoolMode } = useSchoolMode()
   const { ageBand, ageBandDisplayName } = useAgeBand()
   const [searchParams] = useSearchParams()
   const viewParam = searchParams.get('view')
@@ -176,18 +174,10 @@ const HomePage: React.FC = () => {
   const ctaHref = '/tracks'
 
   // Checkout success returns to /?view=parent&checkout=success.
-  const shopBadge = (
-    <div className="home-shop-badge-row" aria-hidden={false}>
-      <Link to="/shop" className="home-shop-badge-link">
-        <span className="home-shop-badge-text">{t('footer.shop')}</span>
-      </Link>
-    </div>
-  )
 
   if (isParentView && !isLoggedIn && !checkoutStatus) {
     return (
       <section className="home-page home-hub">
-        {shopBadge}
         <div className="home-footer-actions">
           <Link to="/login?redirect=%2F%3Fview%3Dparent" className="secondary-button">
             {t('login.title')}
@@ -206,7 +196,6 @@ const HomePage: React.FC = () => {
   if (isParentView) {
     return (
       <section className="home-page home-hub">
-        {shopBadge}
         <div className="home-footer-actions">
           <Link to="/" className="secondary-button">
             {t('common.backToHome')}
@@ -229,7 +218,6 @@ const HomePage: React.FC = () => {
 
   return (
     <section className="home-page">
-      {!schoolMode && shopBadge}
       {isLoggedIn && (
         <div className="home-floating-badges" aria-label={t('home.hiSparkles', { name: username || 'Explorer', count: displaySparkles })}>
           <button
@@ -285,17 +273,18 @@ const HomePage: React.FC = () => {
         <div className="home-hero-content">
           <h1 className="home-title">{t('header.appName')}</h1>
           <p className="home-tagline">{t('header.tagline')}</p>
-          <p className="home-age-band-current muted text-sm">{t('ageBand.currentLabel', { name: ageBandDisplayName })}</p>
+          <div className="home-hero-age-wrap">
+            <h2 className="home-hero-age-label">{t('ageBand.homeSectionTitle')}</h2>
+            <p className="home-hero-age-sub muted text-sm">{t('ageBand.homeSectionSubtitle')}</p>
+            <p className="home-hero-age-current sr-only">
+              {t('ageBand.currentLabel', { name: ageBandDisplayName })}
+            </p>
+            <AgeBandSelector variant="compact" idPrefix="home-hero-age" />
+          </div>
           <Link to={ctaHref} className="home-hero-cta primary-button">
             {t('home.joinAdventure')}
           </Link>
         </div>
-      </div>
-
-      <div className="home-age-band-section">
-        <h2 className="home-age-band-title">{t('ageBand.homeSectionTitle')}</h2>
-        <p className="home-age-band-sub muted">{t('ageBand.homeSectionSubtitle')}</p>
-        <AgeBandSelector variant="default" />
       </div>
 
       <div className="home-tiers">
@@ -313,18 +302,18 @@ const HomePage: React.FC = () => {
         </div>
       </div>
 
-      <div className="home-footer-actions">
-        <Link to={loginPath} className="secondary-button">
+      <div className="home-grownups-footer muted text-center">
+        <Link to={loginPath} className="home-grownups-footer-link">
           {t('home.grownUpSignIn')}
         </Link>
-        <Link to="/tracks" className="secondary-button">
-          {t('header.courses')}
-        </Link>
+        <span className="home-grownups-footer-sep" aria-hidden>
+          {' · '}
+        </span>
         <a
           href={appConfig.parentResources.handbookPdfUrl}
           target="_blank"
           rel="noreferrer"
-          className="link-muted"
+          className="home-grownups-footer-link"
         >
           {t('home.parentGuide')}
         </a>

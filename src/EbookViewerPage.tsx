@@ -62,6 +62,11 @@ const EbookViewerPage: React.FC = () => {
       return
     }
 
+    // Subscription bundle is not a PDF in the reader — Parent view handles checkout.
+    if (books.find((b) => b.id === effectiveEbookId)?.kind === 'subscription_bundle') {
+      return
+    }
+
     const isFreeTestEbook = effectiveEbookId === 'ebook-1'
 
     if (!checkoutSessionId && !isFreeTestEbook) {
@@ -284,6 +289,34 @@ const EbookViewerPage: React.FC = () => {
       setEntitlementErrorKey('ebookViewer.errors.checkoutFailed')
       setLoadingPdf(false)
     }
+  }
+
+  const subscriptionCatalog = effectiveEbookId
+    ? books.find((b) => b.id === effectiveEbookId && b.kind === 'subscription_bundle')
+    : null
+
+  if (subscriptionCatalog) {
+    return (
+      <section className="lesson-page">
+        <header className="lesson-header">
+          <h2>{ebookTitle}</h2>
+          <Link to="/shop" className="link-back">
+            {t('ebookViewer.backToShop')}
+          </Link>
+        </header>
+        <div className="lesson-media card ebook-subscription-card">
+          <p className="leading-relaxed">{t('ebookViewer.subscriptionCatalogBody')}</p>
+          <div className="mt-4 flex flex-wrap gap-3">
+            <Link to="/?view=parent" className="primary-button">
+              {t('ebookViewer.openParentToSubscribe')}
+            </Link>
+            <button type="button" className="secondary-button" onClick={() => void startTrial()}>
+              {t('ebookViewer.bundleUnlockButton', { price: bundlePrice })}
+            </button>
+          </div>
+        </div>
+      </section>
+    )
   }
 
   if (entitlementErrorKey) {

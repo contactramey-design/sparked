@@ -1,6 +1,9 @@
 // Ebook inventory. PDF files are stored in `private/ebooks/<ebookId>.pdf` and served via
 // the protected `/api/download-ebook` endpoint.
 
+/** PDF ebooks open in the in-app reader; subscription opens Parent / checkout flow. */
+export type BookCatalogKind = 'pdf_ebook' | 'subscription_bundle'
+
 export interface BookConfig {
   id: string
   titleKey: string
@@ -9,6 +12,7 @@ export interface BookConfig {
   storeLabelKey: string
   url: string
   coverSrc: string
+  kind?: BookCatalogKind
 }
 
 /**
@@ -20,6 +24,7 @@ export interface BookConfig {
 export const books: BookConfig[] = [
   {
     id: 'ebook-1',
+    kind: 'pdf_ebook',
     titleKey: 'books.ebook-1.title',
     blurbKey: 'books.ebook-1.blurb',
     price: '$4.99',
@@ -29,6 +34,7 @@ export const books: BookConfig[] = [
   },
   {
     id: 'ebook-2',
+    kind: 'pdf_ebook',
     titleKey: 'books.ebook-2.title',
     blurbKey: 'books.ebook-2.blurb',
     price: '$4.99',
@@ -38,6 +44,7 @@ export const books: BookConfig[] = [
   },
   {
     id: 'ebook-3',
+    kind: 'pdf_ebook',
     titleKey: 'books.ebook-3.title',
     blurbKey: 'books.ebook-3.blurb',
     price: '$4.99',
@@ -47,6 +54,7 @@ export const books: BookConfig[] = [
   },
   {
     id: 'ebook-4',
+    kind: 'pdf_ebook',
     titleKey: 'books.ebook-4.title',
     blurbKey: 'books.ebook-4.blurb',
     price: '$4.99',
@@ -56,6 +64,7 @@ export const books: BookConfig[] = [
   },
   {
     id: 'ebook-5',
+    kind: 'pdf_ebook',
     titleKey: 'books.ebook-5.title',
     blurbKey: 'books.ebook-5.blurb',
     price: '$4.99',
@@ -65,6 +74,7 @@ export const books: BookConfig[] = [
   },
   {
     id: 'ebook-6',
+    kind: 'pdf_ebook',
     titleKey: 'books.ebook-6.title',
     blurbKey: 'books.ebook-6.blurb',
     price: '$4.99',
@@ -74,6 +84,7 @@ export const books: BookConfig[] = [
   },
   {
     id: 'bundle',
+    kind: 'subscription_bundle',
     titleKey: 'books.bundle.title',
     blurbKey: 'books.bundle.blurb',
     price: '$9.99/mo',

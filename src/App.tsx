@@ -10,7 +10,7 @@ import {
 import { appConfig } from './config'
 import { AuthProvider, useAuth } from './AuthContext'
 import { LocaleProvider, useTranslation } from './contexts/LocaleContext'
-import { AgeBandProvider, useAgeBand } from './contexts/AgeBandContext'
+import { AgeBandProvider } from './contexts/AgeBandContext'
 import ProtectedRoute from './ProtectedRoute'
 import HomePage from './HomePage'
 import LoginPage from './LoginPage'
@@ -32,6 +32,7 @@ import TeacherDashboardPage from './TeacherDashboardPage'
 import TeacherWeeklyGeneratorPage from './TeacherWeeklyGeneratorPage.tsx'
 import SchoolsPage from './SchoolsPage'
 import SparkiAvatar from './components/SparkiAvatar'
+import MainNav from './components/MainNav'
 import InstallOnIpadBanner from './components/InstallOnIpadBanner'
 import OfflineBanner from './components/OfflineBanner'
 import { useSchoolMode } from './hooks/useSchoolMode'
@@ -43,16 +44,6 @@ import './App.css'
 function SkipToMainLabel() {
   const { t } = useTranslation()
   return <>{t('header.skipToMain')}</>
-}
-
-function AgeBandHeaderHint() {
-  const { ageBandDisplayName } = useAgeBand()
-  const { t } = useTranslation()
-  return (
-    <Link to="/" className="header-age-band-hint" title={t('ageBand.changeOnHome')}>
-      {ageBandDisplayName}
-    </Link>
-  )
 }
 
 function LangSwitcher() {
@@ -73,97 +64,26 @@ function LangSwitcher() {
 
 function AppHeader() {
   const location = useLocation()
-  const { isLoggedIn, kidLock } = useAuth()
   const { t } = useTranslation()
   const isSchoolRoute =
     location.pathname.startsWith('/schools') ||
     location.pathname.startsWith('/for-schools') ||
     location.pathname.startsWith('/compliance') ||
     location.pathname.startsWith('/teacher')
-  const isHome = location.pathname === '/'
-  const isLogin = location.pathname === '/login'
-
-  if (isSchoolRoute) {
-    return (
-      <header className="app-header">
-        <Link to="/" className="logo-placeholder flex items-center gap-2" aria-label="SpArki home">
-          <SparkiAvatar size="sm" />
-        </Link>
-        <div className="app-titles">
-          <h1>{t('header.appName')}</h1>
-          <p>{t('header.tagline')}</p>
-        </div>
-        <nav className="main-nav" aria-label="School navigation">
-          <Link to="/for-schools">{t('header.compliance')}</Link>
-          <Link to="/schools">{t('header.schools')}</Link>
-          <Link to="/teacher/dashboard">{t('header.teacherDashboard')}</Link>
-          <LangSwitcher />
-        </nav>
-      </header>
-    )
-  }
-
-  if (isHome || isLogin) {
-    return (
-      <header className="app-header">
-        <div className="logo-placeholder flex items-center gap-2" aria-hidden>
-          <SparkiAvatar size="sm" />
-        </div>
-        <div className="app-titles">
-          <h1>{t('header.appName')}</h1>
-          <p>{t('header.tagline')}</p>
-        </div>
-        <nav className="main-nav" aria-label="Main navigation">
-          {isHome && !isLoggedIn && (
-            <>
-              <AgeBandHeaderHint />
-              <Link to="/weekly">{t('weekly.weeklyPage.navLink')}</Link>
-              <Link to="/login">{t('header.signIn')}</Link>
-              <Link to="/for-schools">{t('header.forSchools')}</Link>
-              <LangSwitcher />
-            </>
-          )}
-          {isLogin && (
-            <>
-              <AgeBandHeaderHint />
-              <Link to="/">{t('header.home')}</Link>
-              <Link to="/weekly">{t('weekly.weeklyPage.navLink')}</Link>
-              <Link to="/for-schools">{t('header.forSchools')}</Link>
-              <LangSwitcher />
-            </>
-          )}
-          {isHome && isLoggedIn && (
-            <>
-              <AgeBandHeaderHint />
-              <Link to="/">{t('header.home')}</Link>
-              <Link to="/weekly">{t('weekly.weeklyPage.navLink')}</Link>
-              {!kidLock && <Link to="/?view=parent">{t('header.parent')}</Link>}
-              <Link to="/for-schools">{t('header.forSchools')}</Link>
-              <LangSwitcher />
-            </>
-          )}
-        </nav>
-      </header>
-    )
-  }
 
   return (
     <header className="app-header">
-      <Link to="/" className="logo-placeholder flex items-center gap-2" aria-label="SpArki home">
+      <Link to="/" className="logo-placeholder flex items-center gap-2" aria-label={t('header.home')}>
         <SparkiAvatar size="sm" />
       </Link>
       <div className="app-titles">
         <h1>{t('header.appName')}</h1>
-        <p>{t('header.tagline')}</p>
+        <p className="app-header-tagline">{t('header.tagline')}</p>
       </div>
-      <nav className="main-nav" aria-label="Main navigation">
-        <AgeBandHeaderHint />
-        <Link to="/">{t('header.home')}</Link>
-        <Link to="/weekly">{t('weekly.weeklyPage.navLink')}</Link>
-        {isLoggedIn && !kidLock && <Link to="/?view=parent">{t('header.parent')}</Link>}
-        <Link to="/for-schools">{t('header.forSchools')}</Link>
+      <div className="header-nav-cluster">
+        <MainNav variant={isSchoolRoute ? 'school' : 'consumer'} />
         <LangSwitcher />
-      </nav>
+      </div>
     </header>
   )
 }

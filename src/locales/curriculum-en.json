@@ -51,7 +51,53 @@
       "thinkPrompts": [
         { "label": "Think about this!", "text": "Look around the room. Can you find 3 things you could sort into groups? (e.g. toys, books, crayons)" },
         { "label": "Think about this!", "text": "SpArki learns from examples, not magic. What is one example you could show a friend so they learn something new?" }
-      ]
+      ],
+      "bands": {
+        "tots": {
+          "title": "What Is AI? (Little Spark)",
+          "summary": "SpArki sorts toys like a helper—computers learn from the pictures and labels you show, not from magic.",
+          "contentBlocks": [
+            "Story: Red toys here, blue toys there—SpArki copies your examples.",
+            "Idea: Show the computer lots of examples and it learns the pattern.",
+            "Pause: Point to two things in the room that are the same color."
+          ],
+          "activity": {
+            "title": "Draw a Helper Robot",
+            "description": "Draw a robot friend and circle what it helps you sort (blocks, animals, or snacks)."
+          },
+          "quizQuestions": [
+            { "prompt": "AI learns from…", "options": ["Magic", "Examples you show", "Sleeping"] },
+            { "prompt": "SpArki helps…", "options": ["Sort toys", "Eat lunch", "Hide crayons"] },
+            { "prompt": "A pattern is…", "options": ["One time only", "Something that repeats", "Always random"] }
+          ],
+          "thinkPrompts": [
+            { "label": "Think!", "text": "Find two things in the room that match." },
+            { "label": "Think!", "text": "Show a grown-up one example of how you sorted something." }
+          ]
+        },
+        "crew": {
+          "title": "What Is AI?",
+          "summary": "SpArki introduces machine learning: models find patterns in labeled examples (training data) to sort or predict new items—not random magic.",
+          "contentBlocks": [
+            "Story: Labeled examples teach the model; it generalizes to items it has not seen yet.",
+            "Idea: Learning updates internal weights from data—still not magic or pure guessing.",
+            "Pause: Name one classroom pattern you could teach a computer to recognize."
+          ],
+          "activity": {
+            "title": "Design Your Own AI Helper",
+            "description": "Sketch an AI helper, list what data it would need, and what it would output (sorted groups, labels, or suggestions)."
+          },
+          "quizQuestions": [
+            { "prompt": "AI learns primarily from…", "options": ["Random luck", "Patterns in examples", "Never changing rules"] },
+            { "prompt": "SpArki’s sorting story is closest to…", "options": ["Supervised learning from labels", "Sleep mode", "Guessing passwords"] },
+            { "prompt": "A repeating signal in data is often called a…", "options": ["One-off event", "Pattern", "Broken wire"] }
+          ],
+          "thinkPrompts": [
+            { "label": "Think about this!", "text": "What is one kind of labeled data you could collect to teach a model (with a grown-up’s help)?" },
+            { "label": "Think about this!", "text": "Why is it important that AI learns from examples instead of “magic”?" }
+          ]
+        }
+      }
     },
     "ai-2-coding-games": {
       "title": "Coding as Games",
