@@ -1,10 +1,19 @@
-import React, { useEffect, useMemo } from 'react'
+import React, { useEffect, useMemo, useState, useCallback } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { useTranslation } from './contexts/LocaleContext'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import SparkiAvatar from './components/SparkiAvatar'
 import ComplianceContent from './components/ComplianceContent'
+
+const PILOT_CODE_STORAGE = 'sparki_for_schools_pilot_class_code'
+
+function generateDemoClassCode(): string {
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'
+  let out = ''
+  for (let i = 0; i < 6; i += 1) out += chars[Math.floor(Math.random() * chars.length)]!
+  return out
+}
 
 function schoolDemoVideoUrl(): string {
   return (import.meta.env.VITE_SCHOOL_DEMO_VIDEO_URL as string | undefined)?.trim() ?? ''
@@ -36,8 +45,40 @@ function embedDemoSrc(raw: string): { type: 'iframe'; src: string } | { type: 'v
 const ForSchoolsPage: React.FC = () => {
   const { t } = useTranslation()
   const location = useLocation()
-  const demoRaw = schoolDemoVideoUrl()
+  const demoRaw = schoolDemoVideoUrl() || '/Unit1b_intro_.mp4'
   const demoEmbed = useMemo(() => embedDemoSrc(demoRaw), [demoRaw])
+
+  const [pilotCode, setPilotCode] = useState<string | null>(() => {
+    if (typeof window === 'undefined') return null
+    try {
+      return window.localStorage.getItem(PILOT_CODE_STORAGE)
+    } catch {
+      return null
+    }
+  })
+  const [pilotCopied, setPilotCopied] = useState(false)
+
+  const startFreePilot = useCallback(() => {
+    const code = generateDemoClassCode()
+    try {
+      window.localStorage.setItem(PILOT_CODE_STORAGE, code)
+    } catch {
+      /* ignore */
+    }
+    setPilotCode(code)
+    setPilotCopied(false)
+  }, [])
+
+  const copyPilotCode = useCallback(async () => {
+    if (!pilotCode || typeof navigator === 'undefined' || !navigator.clipboard) return
+    try {
+      await navigator.clipboard.writeText(pilotCode)
+      setPilotCopied(true)
+      window.setTimeout(() => setPilotCopied(false), 2000)
+    } catch {
+      /* ignore */
+    }
+  }, [pilotCode])
 
   useEffect(() => {
     if (location.hash === '#school-compliance') {
@@ -65,6 +106,93 @@ const ForSchoolsPage: React.FC = () => {
       </header>
 
       <div className="stack-lg no-print">
+        <Card className="border-2 border-amber-300 bg-gradient-to-br from-amber-50 to-orange-50 shadow-md">
+          <CardHeader>
+            <CardTitle>{t('forSchoolsHub.pilotStartTitle')}</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <p className="muted">{t('forSchoolsHub.pilotStartBody')}</p>
+            <div className="flex flex-wrap gap-3">
+              <Button type="button" size="lg" onClick={startFreePilot}>
+                {t('forSchoolsHub.pilotStartButton')}
+              </Button>
+              {pilotCode && (
+                <Button type="button" variant="secondary" onClick={() => void copyPilotCode()}>
+                  {pilotCopied ? t('forSchoolsHub.pilotCopied') : t('forSchoolsHub.pilotCopy')}
+                </Button>
+              )}
+            </div>
+            {pilotCode ? (
+              <div className="rounded-xl border border-amber-200 bg-white p-4">
+                <p className="text-sm font-semibold text-amber-900">{t('forSchoolsHub.pilotCodeLabel')}</p>
+                <p className="mt-1 font-mono text-2xl font-black tracking-widest text-slate-900">{pilotCode}</p>
+                <p className="muted mt-2 text-sm">{t('forSchoolsHub.pilotCodeHint')}</p>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  <Button variant="outline" size="sm" asChild>
+                    <Link to="/schools">{t('forSchoolsHub.openSchoolHub')}</Link>
+                  </Button>
+                  <Button variant="outline" size="sm" asChild>
+                    <Link to="/teacher/dashboard">{t('forSchoolsHub.openTeacherDashboard')}</Link>
+                  </Button>
+                </div>
+              </div>
+            ) : null}
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>{t('forSchoolsHub.resourcesPdfTitle')}</CardTitle>
+          </CardHeader>
+          <CardContent className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+            <p className="muted flex-1 min-w-[200px]">{t('forSchoolsHub.resourcesPdfBody')}</p>
+            <Button variant="secondary" asChild>
+              <Link to="/for-schools/resources/teacher-guide">{t('forSchoolsHub.openTeacherGuide')}</Link>
+            </Button>
+            <Button variant="secondary" asChild>
+              <Link to="/for-schools/resources/parent-letter">{t('forSchoolsHub.openParentLetter')}</Link>
+            </Button>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>{t('forSchoolsHub.pricingTitle')}</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="muted mb-4">{t('forSchoolsHub.pricingIntro')}</p>
+            <div className="overflow-x-auto rounded-xl border border-slate-200">
+              <table className="w-full min-w-[280px] text-left text-sm">
+                <thead className="bg-slate-100">
+                  <tr>
+                    <th className="p-3 font-semibold">{t('forSchoolsHub.pricingColTier')}</th>
+                    <th className="p-3 font-semibold">{t('forSchoolsHub.pricingColPrice')}</th>
+                    <th className="p-3 font-semibold">{t('forSchoolsHub.pricingColIncludes')}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr className="border-t border-slate-200">
+                    <td className="p-3 font-medium">{t('forSchoolsHub.pricingPilot')}</td>
+                    <td className="p-3">{t('forSchoolsHub.pricingPilotPrice')}</td>
+                    <td className="p-3 muted">{t('forSchoolsHub.pricingPilotNotes')}</td>
+                  </tr>
+                  <tr className="border-t border-slate-200 bg-slate-50/80">
+                    <td className="p-3 font-medium">{t('forSchoolsHub.pricingStandard')}</td>
+                    <td className="p-3">{t('forSchoolsHub.pricingStandardPrice')}</td>
+                    <td className="p-3 muted">{t('forSchoolsHub.pricingStandardNotes')}</td>
+                  </tr>
+                  <tr className="border-t border-slate-200">
+                    <td className="p-3 font-medium">{t('forSchoolsHub.pricingDistrict')}</td>
+                    <td className="p-3">{t('forSchoolsHub.pricingDistrictPrice')}</td>
+                    <td className="p-3 muted">{t('forSchoolsHub.pricingDistrictNotes')}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p className="muted mt-3 text-xs">{t('forSchoolsHub.pricingFootnote')}</p>
+          </CardContent>
+        </Card>
+
         <Card>
           <CardHeader>
             <CardTitle>{t('forSchoolsHub.coursesTitle')}</CardTitle>
@@ -175,9 +303,14 @@ const ForSchoolsPage: React.FC = () => {
           </CardHeader>
           <CardContent className="space-y-3">
             <p className="muted">{t('forSchoolsHub.pilotCtaBody')}</p>
-            <Button asChild>
-              <Link to="/contact">{t('forSchoolsHub.openContactForPilot')}</Link>
-            </Button>
+            <div className="flex flex-wrap gap-2">
+              <Button asChild>
+                <Link to="/contact">{t('forSchoolsHub.openContactForPilot')}</Link>
+              </Button>
+              <Button variant="outline" asChild>
+                <Link to="/teacher/dashboard">{t('forSchoolsHub.openTeacherDashboard')}</Link>
+              </Button>
+            </div>
             <p className="muted text-sm">{t('forSchoolsHub.pilotDocNote')}</p>
           </CardContent>
         </Card>

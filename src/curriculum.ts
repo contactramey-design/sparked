@@ -84,9 +84,9 @@ export const curriculum: CurriculumConfig = {
     },
     {
       id: 'early-foundations',
-      title: 'Sparki Tots — Foundational Learning',
+      title: 'Sparki — Foundational Learning',
       description:
-        'Ages 3–5: colors, shapes, counting, letters, and patterns through play — built for real developmental growth (no social apps).',
+        'Tots (3–5) and Crew: colors, shapes, counting, letters, and patterns — Tots get gentle play; Crew gets extra challenge (no social apps).',
       order: 2,
       introVideoUrl: '/coding_intro.mp4',
     },
@@ -291,7 +291,7 @@ export const curriculum: CurriculumConfig = {
         'Sparki plays with red, blue, yellow, and green — sorting colors makes our brains super smart!',
       estMinutes: 15,
       ageGroup: 'age2',
-      ageBands: ['tots'],
+      ageBands: ['tots', 'crew'],
       isFree: true,
       sparklesReward: 10,
       contentBlocks: [
@@ -340,7 +340,7 @@ export const curriculum: CurriculumConfig = {
         'Circle, square, triangle — shapes are everywhere! Match each shape to its outline with Sparki.',
       estMinutes: 15,
       ageGroup: 'age2',
-      ageBands: ['tots'],
+      ageBands: ['tots', 'crew'],
       isFree: true,
       sparklesReward: 10,
       contentBlocks: [
@@ -388,7 +388,7 @@ export const curriculum: CurriculumConfig = {
         'Count 1, 2, 3, 4, 5 with Sparki — numbers tell us how many!',
       estMinutes: 15,
       ageGroup: 'age2',
-      ageBands: ['tots'],
+      ageBands: ['tots', 'crew'],
       isFree: true,
       sparklesReward: 10,
       contentBlocks: [
@@ -436,7 +436,7 @@ export const curriculum: CurriculumConfig = {
         'A says “ah”, B says “buh” — letters make words someday. Find letters A, B, and C with Sparki!',
       estMinutes: 15,
       ageGroup: 'age2',
-      ageBands: ['tots'],
+      ageBands: ['tots', 'crew'],
       isFree: true,
       sparklesReward: 10,
       contentBlocks: [
@@ -484,7 +484,7 @@ export const curriculum: CurriculumConfig = {
         'Red-blue-red-blue — that’s a pattern! Finish what comes next with Sparki.',
       estMinutes: 15,
       ageGroup: 'age2',
-      ageBands: ['tots'],
+      ageBands: ['tots', 'crew'],
       isFree: true,
       sparklesReward: 10,
       contentBlocks: [

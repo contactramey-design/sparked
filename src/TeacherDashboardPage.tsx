@@ -391,6 +391,7 @@ const TeacherDashboardPage: React.FC = () => {
                     </label>
                   </div>
 
+                  <div className="w-full overflow-x-auto -mx-1 px-1 touch-pan-x">
                   <Table>
                     <TableHeader>
                       <TableRow>
@@ -441,6 +442,7 @@ const TeacherDashboardPage: React.FC = () => {
                       )}
                     </TableBody>
                   </Table>
+                  </div>
                 </div>
               </CardContent>
             </Card>
@@ -504,6 +506,7 @@ const TeacherDashboardPage: React.FC = () => {
                     </Button>
                   </div>
 
+                  <div className="w-full overflow-x-auto -mx-1 px-1 touch-pan-x">
                   <Table>
                     <TableHeader>
                       <TableRow>
@@ -564,13 +567,14 @@ const TeacherDashboardPage: React.FC = () => {
                       })}
                       {students.length === 0 && (
                         <TableRow>
-                          <TableCell colSpan={4}>
+                          <TableCell colSpan={5}>
                             <span className="muted">{t('teacherDashboard.noStudents')}</span>
                           </TableCell>
                         </TableRow>
                       )}
                     </TableBody>
                   </Table>
+                  </div>
 
                   <div className="muted">{t('teacherDashboard.schemaNote')}</div>
                 </div>

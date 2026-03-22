@@ -27,6 +27,7 @@ import AboutPage from './AboutPage'
 import ContactPage from './ContactPage'
 import CompliancePage from './CompliancePage'
 import ForSchoolsPage from './ForSchoolsPage'
+import SchoolPrintResourcePage from './SchoolPrintResourcePage'
 import SchoolOnePagerPage from './SchoolOnePagerPage'
 import TeacherDashboardPage from './TeacherDashboardPage'
 import TeacherWeeklyGeneratorPage from './TeacherWeeklyGeneratorPage.tsx'
@@ -190,6 +191,7 @@ function AppShell() {
           <Route path="/privacy" element={<PrivacyPage />} />
           <Route path="/compliance" element={<CompliancePage />} />
           <Route path="/for-schools" element={<ForSchoolsPage />} />
+          <Route path="/for-schools/resources/:slug" element={<SchoolPrintResourcePage />} />
           <Route path="/for-schools/one-pager" element={<SchoolOnePagerPage />} />
           <Route path="/schools" element={<SchoolsPage />} />
           <Route path="/schools/weekly-track" element={<SchoolWeeklyTrackPage />} />

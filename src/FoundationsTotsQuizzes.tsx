@@ -7,12 +7,16 @@ import type { UnitConfig } from './curriculum'
 import { useTranslation } from './contexts/LocaleContext'
 import { playBeep, speakPdfLine } from './utils/pdfGameFx'
 
+export type FoundationVariant = 'tots' | 'crew'
+
 type FoundationQuizProps = {
   unit: UnitConfig
   nextUnit: UnitConfig | null
   earnedSparkles: number | null
   mastered: boolean
   onComplete: (correctCount: number) => void
+  /** Crew gets more blocks / rounds / harder rules. */
+  variant?: FoundationVariant
 }
 
 function WinShell({
@@ -66,12 +70,13 @@ const COLOR_STYLES: Record<SortColor, { bg: string; border: string; emoji: strin
 
 type ColorBlock = { id: number; color: SortColor; sorted: boolean }
 
-function genColorBlocks(): ColorBlock[] {
+function genColorBlocks(perColor: number): ColorBlock[] {
   const list: ColorBlock[] = []
   let id = 0
   for (const c of FOUR_COLORS) {
-    list.push({ id: id++, color: c, sorted: false })
-    list.push({ id: id++, color: c, sorted: false })
+    for (let i = 0; i < perColor; i++) {
+      list.push({ id: id++, color: c, sorted: false })
+    }
   }
   const shuffled = [...list]
   for (let i = shuffled.length - 1; i > 0; i--) {
@@ -86,14 +91,17 @@ function genColorBlocks(): ColorBlock[] {
 
 export const FoundationsColorSortQuiz: React.FC<FoundationQuizProps> = (props) => {
   const { t } = useTranslation()
-  const [blocks, setBlocks] = useState<ColorBlock[]>(() => genColorBlocks())
+  const perColor = props.variant === 'crew' ? 3 : 2
+  const total = FOUR_COLORS.length * perColor
+  const [blocks, setBlocks] = useState<ColorBlock[]>(() => genColorBlocks(perColor))
   const [sortedCount, setSortedCount] = useState(0)
   const [won, setWon] = useState(false)
   const [hover, setHover] = useState<SortColor | null>(null)
   const blocksRef = useRef(blocks)
   blocksRef.current = blocks
   const dragRef = useRef<{ id: number; ox: number; oy: number; el: HTMLElement; clone: HTMLElement } | null>(null)
-  const total = 8
+  const blockSize = props.variant === 'crew' ? 'h-14 w-14 text-2xl' : 'h-[72px] w-[72px] text-3xl'
+  const basketW = props.variant === 'crew' ? 72 : 88
 
   const endDrag = () => {
     document.removeEventListener('pointermove', onMove)
@@ -175,8 +183,7 @@ export const FoundationsColorSortQuiz: React.FC<FoundationQuizProps> = (props) =
     const ox = e.clientX - rect.left
     const oy = e.clientY - rect.top
     const clone = el.cloneNode(true) as HTMLElement
-    clone.className =
-      'fixed z-[1000] flex h-[72px] w-[72px] touch-none items-center justify-center rounded-2xl text-3xl shadow-xl'
+    clone.className = `fixed z-[1000] flex touch-none items-center justify-center rounded-2xl shadow-xl ${blockSize}`
     clone.style.left = `${e.clientX - ox}px`
     clone.style.top = `${e.clientY - oy}px`
     const st = COLOR_STYLES[block.color]
@@ -192,7 +199,7 @@ export const FoundationsColorSortQuiz: React.FC<FoundationQuizProps> = (props) =
   }
 
   const reset = () => {
-    setBlocks(genColorBlocks())
+    setBlocks(genColorBlocks(perColor))
     setSortedCount(0)
     setWon(false)
   }
@@ -230,7 +237,7 @@ export const FoundationsColorSortQuiz: React.FC<FoundationQuizProps> = (props) =
               role="button"
               tabIndex={0}
               onPointerDown={(e) => onDown(e, b)}
-              className="flex h-[72px] w-[72px] cursor-grab touch-none items-center justify-center rounded-2xl text-3xl active:cursor-grabbing"
+              className={`flex cursor-grab touch-none items-center justify-center rounded-2xl active:cursor-grabbing ${blockSize}`}
               style={{
                 background: st.bg,
                 border: `4px solid ${st.border}`,
@@ -247,7 +254,7 @@ export const FoundationsColorSortQuiz: React.FC<FoundationQuizProps> = (props) =
           const st = COLOR_STYLES[c]
           return (
             <div key={c} id={`found-basket-${c}`} className={`flex flex-col items-center transition-transform ${hover === c ? 'scale-110' : ''}`}>
-              <svg viewBox="0 0 120 100" width={88} height={72} aria-hidden>
+              <svg viewBox="0 0 120 100" width={basketW} height={Math.round(basketW * 0.82)} aria-hidden>
                 <path d="M 10 20 L 20 90 Q 60 100 100 90 L 110 20 Z" fill={st.bg} stroke={st.border} strokeWidth="3" />
                 <ellipse cx="60" cy="20" rx="50" ry="10" fill="none" stroke={st.border} strokeWidth="2" />
               </svg>
@@ -267,7 +274,15 @@ const SHAPES: ShapeId[] = ['circle', 'square', 'triangle']
 
 export const FoundationsShapeMatchQuiz: React.FC<FoundationQuizProps> = (props) => {
   const { t } = useTranslation()
+  const roundTotal = props.variant === 'crew' ? 5 : 3
   const [order] = useState(() => {
+    if (props.variant === 'crew') {
+      const o: ShapeId[] = []
+      for (let i = 0; i < roundTotal; i++) {
+        o.push(SHAPES[Math.floor(Math.random() * SHAPES.length)]!)
+      }
+      return o
+    }
     const o = [...SHAPES]
     for (let i = o.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1))
@@ -294,7 +309,7 @@ export const FoundationsShapeMatchQuiz: React.FC<FoundationQuizProps> = (props) 
     speakPdfLine(t('foundations.shape.great'), 0.85, 1.1)
     if (idx + 1 >= order.length) {
       setWon(true)
-      props.onComplete(3)
+      props.onComplete(roundTotal)
       playBeep(1500, 0.35)
       speakPdfLine(t('foundations.shape.winSpeech'), 0.85, 1.1)
     } else {
@@ -326,7 +341,10 @@ export const FoundationsShapeMatchQuiz: React.FC<FoundationQuizProps> = (props) 
     <div className="font-pdf-fredoka rounded-3xl border-4 border-sky-300 bg-gradient-to-b from-sky-500 to-indigo-700 p-6 shadow-xl">
       <h2 className="text-center text-2xl font-bold text-white">{t('foundations.shape.title')}</h2>
       <p className="mt-2 text-center text-lg text-sky-100">{t('foundations.shape.subtitle')}</p>
-      <p className="mt-2 text-center text-amber-200 font-bold">{t('foundations.shape.round', { current: idx + 1, total: 3 })}</p>
+      <p className="mt-2 text-center text-amber-200 font-bold">{t('foundations.shape.round', { current: idx + 1, total: roundTotal })}</p>
+      {props.variant === 'crew' && (
+        <p className="mt-1 text-center text-sm font-semibold text-amber-200/90">{t('foundations.shape.crewHint')}</p>
+      )}
       <div className="mx-auto mt-6 max-w-xs rounded-2xl border-4 border-dashed border-amber-200 bg-white/15 p-8 text-center">
         <p className="text-sm font-bold uppercase tracking-wide text-amber-100">{t('foundations.shape.findThis')}</p>
         <div className="mt-2 text-7xl">{shapeEmoji(target)}</div>
@@ -353,6 +371,9 @@ export const FoundationsShapeMatchQuiz: React.FC<FoundationQuizProps> = (props) 
 // ——— Unit 3: Counting ———
 export const FoundationsCountQuiz: React.FC<FoundationQuizProps> = (props) => {
   const { t } = useTranslation()
+  const maxTap = props.variant === 'crew' ? 8 : 5
+  const blueAnswer = props.variant === 'crew' ? 6 : 3
+  const quizTotal = maxTap + 1
   const [phase, setPhase] = useState<'tap' | 'quiz'>('tap')
   const [nextTap, setNextTap] = useState(1)
   const [won, setWon] = useState(false)
@@ -365,7 +386,7 @@ export const FoundationsCountQuiz: React.FC<FoundationQuizProps> = (props) => {
     }
     playBeep(700 + n * 80, 0.12)
     speakPdfLine(String(n), 0.9, 1)
-    if (n === 5) {
+    if (n === maxTap) {
       setPhase('quiz')
       speakPdfLine(t('foundations.count.nowQuiz'), 0.85, 1.05)
     } else {
@@ -375,13 +396,13 @@ export const FoundationsCountQuiz: React.FC<FoundationQuizProps> = (props) => {
 
   const answerQuiz = (choice: number) => {
     if (won || phase !== 'quiz') return
-    if (choice !== 3) {
+    if (choice !== blueAnswer) {
       playBeep(400, 0.15)
       speakPdfLine(t('foundations.count.countBlues'), 0.85, 1)
       return
     }
     setWon(true)
-    props.onComplete(6)
+    props.onComplete(quizTotal)
     playBeep(1500, 0.35)
     speakPdfLine(t('foundations.count.winSpeech'), 0.85, 1.1)
   }
@@ -391,6 +412,8 @@ export const FoundationsCountQuiz: React.FC<FoundationQuizProps> = (props) => {
     setNextTap(1)
     setWon(false)
   }
+
+  const tapNumbers = Array.from({ length: maxTap }, (_, i) => i + 1)
 
   if (won) {
     return (
@@ -412,14 +435,16 @@ export const FoundationsCountQuiz: React.FC<FoundationQuizProps> = (props) => {
       <h2 className="text-center text-2xl font-bold text-white">{t('foundations.count.title')}</h2>
       {phase === 'tap' ? (
         <>
-          <p className="mt-3 text-center text-lg text-emerald-100">{t('foundations.count.tapInOrder')}</p>
+          <p className="mt-3 text-center text-lg text-emerald-100">
+            {t('foundations.count.tapInOrder', { max: maxTap })}
+          </p>
           <p className="text-center font-bold text-amber-200">{t('foundations.count.nextIs', { n: nextTap })}</p>
-          <div className="mt-6 flex flex-wrap justify-center gap-3">
-            {[1, 2, 3, 4, 5].map((n) => (
+          <div className="mt-6 flex max-w-md flex-wrap justify-center gap-2 sm:gap-3 mx-auto">
+            {tapNumbers.map((n) => (
               <button
                 key={n}
                 type="button"
-                className="flex h-16 w-16 items-center justify-center rounded-2xl border-4 border-white bg-white/90 text-3xl font-black text-emerald-800 shadow-lg"
+                className={`flex items-center justify-center rounded-2xl border-4 border-white bg-white/90 font-black text-emerald-800 shadow-lg ${props.variant === 'crew' ? 'h-14 w-14 text-2xl' : 'h-16 w-16 text-3xl'}`}
                 onClick={() => onTapNum(n)}
               >
                 {n}
@@ -430,15 +455,28 @@ export const FoundationsCountQuiz: React.FC<FoundationQuizProps> = (props) => {
       ) : (
         <>
           <p className="mt-4 text-center text-xl font-bold text-white">{t('foundations.count.howManyBlue')}</p>
-          <div className="mt-4 flex justify-center gap-2 text-4xl" aria-hidden>
-            <span>🔵</span>
-            <span>🔵</span>
-            <span>🔵</span>
-            <span>🔴</span>
-            <span>🔴</span>
+          <div className="mt-4 flex max-w-sm flex-wrap justify-center gap-1 text-3xl sm:text-4xl" aria-hidden>
+            {props.variant === 'crew' ? (
+              <>
+                {Array.from({ length: 6 }).map((_, i) => (
+                  <span key={`b${i}`}>🔵</span>
+                ))}
+                {Array.from({ length: 3 }).map((_, i) => (
+                  <span key={`r${i}`}>🔴</span>
+                ))}
+              </>
+            ) : (
+              <>
+                <span>🔵</span>
+                <span>🔵</span>
+                <span>🔵</span>
+                <span>🔴</span>
+                <span>🔴</span>
+              </>
+            )}
           </div>
-          <div className="mt-6 flex justify-center gap-3">
-            {[2, 3, 4].map((n) => (
+          <div className="mt-6 flex flex-wrap justify-center gap-3">
+            {(props.variant === 'crew' ? [5, 6, 7] : [2, 3, 4]).map((n) => (
               <button
                 key={n}
                 type="button"
@@ -455,13 +493,22 @@ export const FoundationsCountQuiz: React.FC<FoundationQuizProps> = (props) => {
   )
 }
 
-// ——— Unit 4: Letters A B C ———
-const LETTERS = ['A', 'B', 'C'] as const
+// ——— Unit 4: Letters ———
+const LETTERS_TOTS = ['A', 'B', 'C'] as const
+const LETTERS_CREW = ['A', 'B', 'C', 'D', 'E', 'F', 'G'] as const
+
+function letterPrompt(t: (k: string, v?: Record<string, string | number>) => string, letter: string): string {
+  const key = `foundations.letters.prompt_${letter}`
+  const msg = t(key)
+  if (msg !== key) return msg
+  return t('foundations.letters.prompt_fallback', { letter })
+}
 
 export const FoundationsLetterQuiz: React.FC<FoundationQuizProps> = (props) => {
   const { t } = useTranslation()
+  const pool = props.variant === 'crew' ? [...LETTERS_CREW] : [...LETTERS_TOTS]
   const [rounds] = useState(() => {
-    const r = [...LETTERS]
+    const r = [...pool]
     for (let i = r.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1))
       const a = r[i]!
@@ -477,8 +524,7 @@ export const FoundationsLetterQuiz: React.FC<FoundationQuizProps> = (props) => {
 
   useEffect(() => {
     if (won) return
-    const key = `foundations.letters.prompt_${letter}` as const
-    const tid = window.setTimeout(() => speakPdfLine(t(key), 0.85, 1.05), 400)
+    const tid = window.setTimeout(() => speakPdfLine(letterPrompt(t, letter), 0.85, 1.05), 400)
     return () => window.clearTimeout(tid)
   }, [letter, t, won])
 
@@ -493,7 +539,7 @@ export const FoundationsLetterQuiz: React.FC<FoundationQuizProps> = (props) => {
     speakPdfLine(t('foundations.letters.yes'), 0.85, 1.1)
     if (idx + 1 >= rounds.length) {
       setWon(true)
-      props.onComplete(3)
+      props.onComplete(rounds.length)
       playBeep(1500, 0.35)
       speakPdfLine(t('foundations.letters.winSpeech'), 0.85, 1.1)
     } else {
@@ -523,14 +569,20 @@ export const FoundationsLetterQuiz: React.FC<FoundationQuizProps> = (props) => {
     <div className="font-pdf-fredoka rounded-3xl border-4 border-amber-300 bg-gradient-to-b from-amber-400 to-orange-600 p-6 shadow-xl">
       <h2 className="text-center text-2xl font-bold text-white drop-shadow">{t('foundations.letters.title')}</h2>
       <p className="mt-2 text-center text-lg text-amber-950/90">{t('foundations.letters.subtitle')}</p>
-      <p className="mt-2 text-center font-bold text-white">{t('foundations.letters.round', { current: idx + 1, total: 3 })}</p>
-      <p className="mt-6 text-center text-2xl font-black text-white drop-shadow">{t(`foundations.letters.ask_${letter}`)}</p>
-      <div className="mt-8 flex justify-center gap-4">
-        {LETTERS.map((L) => (
+      <p className="mt-2 text-center font-bold text-white">{t('foundations.letters.round', { current: idx + 1, total: rounds.length })}</p>
+      <p className="mt-6 text-center text-2xl font-black text-white drop-shadow">
+        {(() => {
+          const k = `foundations.letters.ask_${letter}`
+          const v = t(k)
+          return v !== k ? v : t('foundations.letters.ask_fallback', { letter })
+        })()}
+      </p>
+      <div className="mt-8 flex max-w-lg flex-wrap justify-center gap-2 sm:gap-3">
+        {pool.map((L) => (
           <button
             key={L}
             type="button"
-            className="flex h-24 w-20 items-center justify-center rounded-2xl border-4 border-white bg-white/95 text-5xl font-black text-orange-700 shadow-xl"
+            className={`flex items-center justify-center rounded-2xl border-4 border-white bg-white/95 font-black text-orange-700 shadow-xl ${props.variant === 'crew' ? 'h-16 w-14 text-3xl' : 'h-24 w-20 text-5xl'}`}
             onClick={() => pick(L)}
           >
             {L}
@@ -546,10 +598,16 @@ type Pat = { seq: ('r' | 'b')[]; options: ('r' | 'b')[]; correct: 'r' | 'b' }
 
 export const FoundationsPatternQuiz: React.FC<FoundationQuizProps> = (props) => {
   const { t } = useTranslation()
-  const [rounds] = useState<Pat[]>(() => [
-    { seq: ['r', 'b', 'r', 'b'], options: ['r', 'b', 'r'], correct: 'r' },
-    { seq: ['b', 'b', 'r', 'b', 'b', 'r'], options: ['r', 'b', 'b'], correct: 'r' },
-  ])
+  const [rounds] = useState<Pat[]>(() => {
+    const base: Pat[] = [
+      { seq: ['r', 'b', 'r', 'b'], options: ['r', 'b', 'r'], correct: 'r' },
+      { seq: ['b', 'b', 'r', 'b', 'b', 'r'], options: ['r', 'b', 'b'], correct: 'r' },
+    ]
+    if (props.variant === 'crew') {
+      base.push({ seq: ['r', 'r', 'b', 'r', 'r', 'b'], options: ['b', 'r', 'r'], correct: 'r' })
+    }
+    return base
+  })
   const [idx, setIdx] = useState(0)
   const [won, setWon] = useState(false)
   const cur = rounds[idx]!
@@ -571,7 +629,7 @@ export const FoundationsPatternQuiz: React.FC<FoundationQuizProps> = (props) => 
     playBeep(1100, 0.15)
     if (idx + 1 >= rounds.length) {
       setWon(true)
-      props.onComplete(2)
+      props.onComplete(rounds.length)
       playBeep(1500, 0.35)
       speakPdfLine(t('foundations.pattern.winSpeech'), 0.85, 1.1)
     } else {

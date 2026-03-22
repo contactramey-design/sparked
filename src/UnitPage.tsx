@@ -6,6 +6,7 @@ import { useTranslation, useLocale } from './contexts/LocaleContext'
 import { useAgeBand } from './contexts/AgeBandContext'
 import { useTranslatedUnit, useTranslatedTrack } from './hooks/useTranslatedCurriculum'
 import CompletionCelebration from './CompletionCelebration'
+import QuizPassSparkleBurst from './components/QuizPassSparkleBurst'
 import GameQuiz from './GameQuiz'
 import InstagramSafetyQuiz from './InstagramSafetyQuiz'
 import TikTokSafetyQuiz from './TikTokSafetyQuiz'
@@ -118,6 +119,8 @@ const UnitPage: React.FC = () => {
   // If a unit-specific MP4 isn't available yet in `public/`, the player will error.
   // We swap to a shared placeholder so the video slot always renders and plays.
   const [showCelebration, setShowCelebration] = useState(false)
+  const [showQuizPassSparkle, setShowQuizPassSparkle] = useState(false)
+  const [showLessonBadgeOnReward, setShowLessonBadgeOnReward] = useState(false)
 
   const [showEndReward, setShowEndReward] = useState(false)
   const [endRewardSparkles, setEndRewardSparkles] = useState(0)
@@ -255,202 +258,34 @@ const UnitPage: React.FC = () => {
     })
     setScore(correct)
 
-    const result = updateUnitAfterQuiz(unit, correct, unit.quizQuestions.length, ageBand)
-    setEarnedSparkles(result.earnedThisAttempt)
-    triggerEndReward(result.earnedThisAttempt)
-
-    const updatedStatus = result.progress.units[unit.id]
-    const justMastered = !!updatedStatus?.mastered
-    setMastered(justMastered)
-
-    if (justMastered) {
-      setShowCelebration(true)
+    const totalQ = unit.quizQuestions.length
+    if (totalQ > 0 && correct / totalQ >= 0.8) {
+      setShowQuizPassSparkle(true)
+      setShowLessonBadgeOnReward(true)
+    } else {
+      setShowLessonBadgeOnReward(false)
     }
-  }
 
-  const handleDigitalFootprintComplete = (correctCount: number) => {
-    const total = 10
-    const result = updateUnitAfterQuiz(unit, correctCount, total, ageBand)
+    const result = updateUnitAfterQuiz(unit, correct, totalQ, ageBand)
     setEarnedSparkles(result.earnedThisAttempt)
     triggerEndReward(result.earnedThisAttempt)
+
     const updatedStatus = result.progress.units[unit.id]
     const justMastered = !!updatedStatus?.mastered
     setMastered(justMastered)
-    if (justMastered) {
-      setShowCelebration(true)
-    }
-  }
 
-  const handleSafeAppComplete = (correctCount: number) => {
-    const total = 8
-    const result = updateUnitAfterQuiz(unit, correctCount, total, ageBand)
-    setEarnedSparkles(result.earnedThisAttempt)
-    triggerEndReward(result.earnedThisAttempt)
-    const updatedStatus = result.progress.units[unit.id]
-    const justMastered = !!updatedStatus?.mastered
-    setMastered(justMastered)
-    if (justMastered) {
-      setShowCelebration(true)
-    }
-  }
-
-  const handleTikTokComplete = (correctCount: number) => {
-    const total = 8
-    const result = updateUnitAfterQuiz(unit, correctCount, total, ageBand)
-    setEarnedSparkles(result.earnedThisAttempt)
-    triggerEndReward(result.earnedThisAttempt)
-    const updatedStatus = result.progress.units[unit.id]
-    const justMastered = !!updatedStatus?.mastered
-    setMastered(justMastered)
-    if (justMastered) {
-      setShowCelebration(true)
-    }
-  }
-
-  const handleSnapchatComplete = (correctCount: number) => {
-    const total = 8
-    const result = updateUnitAfterQuiz(unit, correctCount, total, ageBand)
-    setEarnedSparkles(result.earnedThisAttempt)
-    triggerEndReward(result.earnedThisAttempt)
-    const updatedStatus = result.progress.units[unit.id]
-    const justMastered = !!updatedStatus?.mastered
-    setMastered(justMastered)
-    if (justMastered) {
-      setShowCelebration(true)
-    }
-  }
-
-  const handleRobloxComplete = (correctCount: number) => {
-    const total = 8
-    const result = updateUnitAfterQuiz(unit, correctCount, total, ageBand)
-    setEarnedSparkles(result.earnedThisAttempt)
-    triggerEndReward(result.earnedThisAttempt)
-    const updatedStatus = result.progress.units[unit.id]
-    const justMastered = !!updatedStatus?.mastered
-    setMastered(justMastered)
-    if (justMastered) {
-      setShowCelebration(true)
-    }
-  }
-
-  const handleFortniteComplete = (correctCount: number) => {
-    const total = 6
-    const result = updateUnitAfterQuiz(unit, correctCount, total, ageBand)
-    setEarnedSparkles(result.earnedThisAttempt)
-    triggerEndReward(result.earnedThisAttempt)
-    const updatedStatus = result.progress.units[unit.id]
-    const justMastered = !!updatedStatus?.mastered
-    setMastered(justMastered)
-    if (justMastered) {
-      setShowCelebration(true)
-    }
-  }
-
-  const handleRedditComplete = (correctCount: number) => {
-    const total = 8
-    const result = updateUnitAfterQuiz(unit, correctCount, total, ageBand)
-    setEarnedSparkles(result.earnedThisAttempt)
-    triggerEndReward(result.earnedThisAttempt)
-    const updatedStatus = result.progress.units[unit.id]
-    const justMastered = !!updatedStatus?.mastered
-    setMastered(justMastered)
-    if (justMastered) {
-      setShowCelebration(true)
-    }
-  }
-
-  const handleAiSortCheerComplete = (correctCount: number) => {
-    const total = 6
-    const result = updateUnitAfterQuiz(unit, correctCount, total, ageBand)
-    setEarnedSparkles(result.earnedThisAttempt)
-    triggerEndReward(result.earnedThisAttempt)
-    const updatedStatus = result.progress.units[unit.id]
-    const justMastered = !!updatedStatus?.mastered
-    setMastered(justMastered)
-    if (justMastered) {
-      setShowCelebration(true)
-    }
-  }
-
-  const handleAI1Complete = (correctCount: number) => {
-    const total = 10
-    const result = updateUnitAfterQuiz(unit, correctCount, total, ageBand)
-    setEarnedSparkles(result.earnedThisAttempt)
-    triggerEndReward(result.earnedThisAttempt)
-    const updatedStatus = result.progress.units[unit.id]
-    const justMastered = !!updatedStatus?.mastered
-    setMastered(justMastered)
-    if (justMastered) {
-      setShowCelebration(true)
-    }
-  }
-
-  const handleAI2Complete = (correctCount: number) => {
-    const total = 5
-    const result = updateUnitAfterQuiz(unit, correctCount, total, ageBand)
-    setEarnedSparkles(result.earnedThisAttempt)
-    triggerEndReward(result.earnedThisAttempt)
-    const updatedStatus = result.progress.units[unit.id]
-    const justMastered = !!updatedStatus?.mastered
-    setMastered(justMastered)
-    if (justMastered) {
-      setShowCelebration(true)
-    }
-  }
-
-  const handleAI3Complete = (correctCount: number) => {
-    const total = 6
-    const result = updateUnitAfterQuiz(unit, correctCount, total, ageBand)
-    setEarnedSparkles(result.earnedThisAttempt)
-    triggerEndReward(result.earnedThisAttempt)
-    const updatedStatus = result.progress.units[unit.id]
-    const justMastered = !!updatedStatus?.mastered
-    setMastered(justMastered)
-    if (justMastered) {
-      setShowCelebration(true)
-    }
-  }
-
-  const handleAI4Complete = (correctCount: number) => {
-    const total = 6
-    const result = updateUnitAfterQuiz(unit, correctCount, total, ageBand)
-    setEarnedSparkles(result.earnedThisAttempt)
-    triggerEndReward(result.earnedThisAttempt)
-    const updatedStatus = result.progress.units[unit.id]
-    const justMastered = !!updatedStatus?.mastered
-    setMastered(justMastered)
-    if (justMastered) {
-      setShowCelebration(true)
-    }
-  }
-
-  const handleFairBuilderComplete = (correctCount: number) => {
-    const total = 5
-    const result = updateUnitAfterQuiz(unit, correctCount, total, ageBand)
-    setEarnedSparkles(result.earnedThisAttempt)
-    triggerEndReward(result.earnedThisAttempt)
-    const updatedStatus = result.progress.units[unit.id]
-    const justMastered = !!updatedStatus?.mastered
-    setMastered(justMastered)
-    if (justMastered) {
-      setShowCelebration(true)
-    }
-  }
-
-  const handleAI5Complete = (correctCount: number) => {
-    const total = 6
-    const result = updateUnitAfterQuiz(unit, correctCount, total, ageBand)
-    setEarnedSparkles(result.earnedThisAttempt)
-    triggerEndReward(result.earnedThisAttempt)
-    const updatedStatus = result.progress.units[unit.id]
-    const justMastered = !!updatedStatus?.mastered
-    setMastered(justMastered)
     if (justMastered) {
       setShowCelebration(true)
     }
   }
 
   const recordQuizResult = (correctCount: number, totalQuestions: number) => {
+    if (totalQuestions > 0 && correctCount / totalQuestions >= 0.8) {
+      setShowQuizPassSparkle(true)
+      setShowLessonBadgeOnReward(true)
+    } else {
+      setShowLessonBadgeOnReward(false)
+    }
     const result = updateUnitAfterQuiz(unit, correctCount, totalQuestions, ageBand)
     setEarnedSparkles(result.earnedThisAttempt)
     triggerEndReward(result.earnedThisAttempt)
@@ -461,6 +296,34 @@ const UnitPage: React.FC = () => {
       setShowCelebration(true)
     }
   }
+
+  const handleDigitalFootprintComplete = (correctCount: number) => recordQuizResult(correctCount, 10)
+
+  const handleSafeAppComplete = (correctCount: number) => recordQuizResult(correctCount, 8)
+
+  const handleTikTokComplete = (correctCount: number) => recordQuizResult(correctCount, 8)
+
+  const handleSnapchatComplete = (correctCount: number) => recordQuizResult(correctCount, 8)
+
+  const handleRobloxComplete = (correctCount: number) => recordQuizResult(correctCount, 8)
+
+  const handleFortniteComplete = (correctCount: number) => recordQuizResult(correctCount, 6)
+
+  const handleRedditComplete = (correctCount: number) => recordQuizResult(correctCount, 8)
+
+  const handleAiSortCheerComplete = (correctCount: number) => recordQuizResult(correctCount, 6)
+
+  const handleAI1Complete = (correctCount: number) => recordQuizResult(correctCount, 10)
+
+  const handleAI2Complete = (correctCount: number) => recordQuizResult(correctCount, 5)
+
+  const handleAI3Complete = (correctCount: number) => recordQuizResult(correctCount, 6)
+
+  const handleAI4Complete = (correctCount: number) => recordQuizResult(correctCount, 6)
+
+  const handleFairBuilderComplete = (correctCount: number) => recordQuizResult(correctCount, 5)
+
+  const handleAI5Complete = (correctCount: number) => recordQuizResult(correctCount, 6)
 
   const correctCountText =
     score !== null
@@ -475,6 +338,9 @@ const UnitPage: React.FC = () => {
       ? unit.videoUrlEs
       : (unit.videoUrl ?? fallbackVideo)
   const showVideo = !!videoSrc
+
+  const foundationVariant = ageBand === 'crew' ? 'crew' : 'tots'
+  const showFoundationsQuiz = ageBand === 'tots' || ageBand === 'crew'
 
   return (
     <section className="lesson-page unit-page-single">
@@ -497,6 +363,8 @@ const UnitPage: React.FC = () => {
         />
       )}
 
+      <QuizPassSparkleBurst active={showQuizPassSparkle} onDone={() => setShowQuizPassSparkle(false)} />
+
       {showEndReward && (
         <div className="end-reward-overlay" role="status" aria-live="polite">
           <div className="end-reward-modal card">
@@ -509,6 +377,9 @@ const UnitPage: React.FC = () => {
               ×
             </button>
             <h3 className="end-reward-title">{t('unitReward.youEarned', { count: endRewardSparkles })}</h3>
+            {showLessonBadgeOnReward && (
+              <p className="end-reward-badge font-semibold text-amber-700">{t('unitReward.lessonBadge')}</p>
+            )}
             <p className="end-reward-sub">{t('unitReward.comeBackTomorrow')}</p>
             <p className="end-reward-streak">{t('unitReward.currentStreak', { days: endRewardStreakDays })}</p>
           </div>
@@ -554,7 +425,7 @@ const UnitPage: React.FC = () => {
         </Link>
       </header>
 
-      <div className="unit-material-section rounded-2xl border border-slate-200 bg-white/95 p-6 shadow-lg md:p-8">
+      <div className="unit-material-section rounded-2xl border border-slate-200 bg-white/95 p-4 shadow-lg sm:p-6 md:p-8">
         {showVideo && (
           <div className="video-wrapper mb-8">
             {videoSrc && isYouTubeEmbedUrl(videoSrc) ? (
@@ -876,58 +747,63 @@ const UnitPage: React.FC = () => {
           />
         </div>
       )}
-      {materialFinished && unit.id === 'found-1-colors-sorting' && ageBand === 'tots' && (
+      {materialFinished && showFoundationsQuiz && unit.id === 'found-1-colors-sorting' && (
         <div className="unit-quiz-section mt-6">
           <FoundationsColorSortQuiz
+            variant={foundationVariant}
             unit={displayUnit}
             nextUnit={nextUnit ?? null}
             earnedSparkles={earnedSparkles}
             mastered={mastered}
-            onComplete={(c) => recordQuizResult(c, 8)}
+            onComplete={(c) => recordQuizResult(c, foundationVariant === 'crew' ? 12 : 8)}
           />
         </div>
       )}
-      {materialFinished && unit.id === 'found-2-shapes-matching' && ageBand === 'tots' && (
+      {materialFinished && showFoundationsQuiz && unit.id === 'found-2-shapes-matching' && (
         <div className="unit-quiz-section mt-6">
           <FoundationsShapeMatchQuiz
+            variant={foundationVariant}
             unit={displayUnit}
             nextUnit={nextUnit ?? null}
             earnedSparkles={earnedSparkles}
             mastered={mastered}
-            onComplete={(c) => recordQuizResult(c, 3)}
+            onComplete={(c) => recordQuizResult(c, foundationVariant === 'crew' ? 5 : 3)}
           />
         </div>
       )}
-      {materialFinished && unit.id === 'found-3-numbers-counting' && ageBand === 'tots' && (
+      {materialFinished && showFoundationsQuiz && unit.id === 'found-3-numbers-counting' && (
         <div className="unit-quiz-section mt-6">
           <FoundationsCountQuiz
+            variant={foundationVariant}
             unit={displayUnit}
             nextUnit={nextUnit ?? null}
             earnedSparkles={earnedSparkles}
             mastered={mastered}
-            onComplete={(c) => recordQuizResult(c, 6)}
+            onComplete={(c) => recordQuizResult(c, foundationVariant === 'crew' ? 9 : 6)}
           />
         </div>
       )}
-      {materialFinished && unit.id === 'found-4-letters-sounds' && ageBand === 'tots' && (
+      {materialFinished && showFoundationsQuiz && unit.id === 'found-4-letters-sounds' && (
         <div className="unit-quiz-section mt-6">
           <FoundationsLetterQuiz
+            variant={foundationVariant}
             unit={displayUnit}
             nextUnit={nextUnit ?? null}
             earnedSparkles={earnedSparkles}
             mastered={mastered}
-            onComplete={(c) => recordQuizResult(c, 3)}
+            onComplete={(c) => recordQuizResult(c, foundationVariant === 'crew' ? 7 : 3)}
           />
         </div>
       )}
-      {materialFinished && unit.id === 'found-5-patterns-sequences' && ageBand === 'tots' && (
+      {materialFinished && showFoundationsQuiz && unit.id === 'found-5-patterns-sequences' && (
         <div className="unit-quiz-section mt-6">
           <FoundationsPatternQuiz
+            variant={foundationVariant}
             unit={displayUnit}
             nextUnit={nextUnit ?? null}
             earnedSparkles={earnedSparkles}
             mastered={mastered}
-            onComplete={(c) => recordQuizResult(c, 2)}
+            onComplete={(c) => recordQuizResult(c, foundationVariant === 'crew' ? 3 : 2)}
           />
         </div>
       )}

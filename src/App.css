@@ -526,6 +526,9 @@ h1, h2, h3 {
   max-width: 1120px;
   margin: 0 auto 1.5rem;
   padding: 1.25rem;
+  padding-left: max(1.25rem, env(safe-area-inset-left, 0px));
+  padding-right: max(1.25rem, env(safe-area-inset-right, 0px));
+  padding-bottom: max(1.25rem, env(safe-area-inset-bottom, 0px));
   background: #fff;
   animation: page-fade-in 0.35s ease-out;
   overflow: visible; /* never clip unit/quiz; page scrolls instead */
@@ -934,6 +937,11 @@ h1, h2, h3 {
   color: #7f1d1d;
 }
 
+.end-reward-badge {
+  margin: 0.35rem 0 0.15rem;
+  font-size: 0.95rem;
+}
+
 .end-reward-sub {
   margin: 0;
   font-weight: 700;
@@ -1194,6 +1202,15 @@ h1, h2, h3 {
   border-radius: 18px;
   overflow: hidden;
   box-shadow: 0 8px 24px rgba(15, 23, 42, 0.15);
+  width: 100%;
+  max-width: 100%;
+}
+
+.video-wrapper video {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  display: block;
 }
 
 .video-caption {
@@ -1900,10 +1917,13 @@ h1, h2, h3 {
 
 /* Unit page – single column, material first then quiz at end; no overflow so only window scrolls */
 .unit-page-single {
-  max-width: 720px;
+  max-width: min(720px, 100%);
   margin: 0 auto;
   position: relative;
+  padding-left: clamp(0.25rem, 2vw, 0.5rem);
+  padding-right: clamp(0.25rem, 2vw, 0.5rem);
   padding-bottom: 2rem; /* room to scroll past quiz when loaded */
+  box-sizing: border-box;
 }
 
 .unit-page-single .lesson-header {
@@ -2853,4 +2873,95 @@ h1, h2, h3 {
 
 .weekly-parent-teaser .primary-button {
   text-decoration: none;
+}
+
+/* Quiz pass — full-screen sparkle burst (pointer-events none) */
+.quiz-sparkle-burst-root {
+  position: fixed;
+  inset: 0;
+  z-index: 55;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.quiz-sparkle-burst-glow {
+  position: absolute;
+  left: 50%;
+  bottom: 12%;
+  width: min(420px, 90vw);
+  height: min(420px, 50vh);
+  transform: translateX(-50%);
+  background: radial-gradient(circle, rgba(253, 224, 71, 0.45) 0%, transparent 70%);
+  animation: quizSparkleGlow 2.2s ease-out forwards;
+}
+
+@keyframes quizSparkleGlow {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) scale(0.6);
+  }
+  20% {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-50%) scale(1.15);
+  }
+}
+
+.quiz-sparkle-burst-particle {
+  position: absolute;
+  font-size: clamp(1.1rem, 3.5vw, 1.75rem);
+  animation: quizSparkleParticle var(--d, 1.2s) ease-out forwards;
+  opacity: 0;
+}
+
+@keyframes quizSparkleParticle {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) rotate(0deg) scale(0.5);
+  }
+  15% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--x, 0), var(--y, -120px)) rotate(var(--rot, 0deg)) scale(1.1);
+  }
+}
+
+/* For Schools — print-friendly teacher / parent sheets */
+.school-print-resource {
+  max-width: 820px;
+  margin: 0 auto;
+  padding: 1rem 1.25rem 2rem;
+  padding-left: max(1rem, env(safe-area-inset-left, 0px));
+  padding-right: max(1rem, env(safe-area-inset-right, 0px));
+}
+
+@media print {
+  .school-print-resource .no-print {
+    display: none !important;
+  }
+  .school-print-resource {
+    padding: 0;
+    max-width: none;
+  }
+  .school-print-sheet {
+    font-size: 11pt;
+    line-height: 1.45;
+  }
+}
+
+/* iPad / narrow tablet: avoid horizontal bleed on lesson + main */
+@media (max-width: 900px) {
+  .unit-page-single .lesson-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .unit-page-single .lesson-header .link-back {
+    align-self: flex-start;
+  }
 }
