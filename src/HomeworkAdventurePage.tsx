@@ -172,11 +172,11 @@ const HomeworkAdventurePage: React.FC = () => {
     setConsentError(null)
     const email = consentEmail.trim()
     if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      setConsentError('Please enter a valid email address.')
+      setConsentError(t('homeworkPage.consentInvalidEmail'))
       return
     }
     if (!consentCheckbox) {
-      setConsentError('Please confirm you have permission to share this homework.')
+      setConsentError(t('homeworkPage.consentPermissionRequired'))
       return
     }
     try {
@@ -266,13 +266,13 @@ const HomeworkAdventurePage: React.FC = () => {
               preload="metadata"
               poster={VIDEO_POSTER_DATA_URL}
               style={{ width: '100%', borderRadius: 'var(--radius-md)' }}
-              aria-label="SpArki Homework Adventure intro video"
+              aria-label={t('homeworkPage.introVideoAria')}
             >
               <source
                 src={locale === 'es' ? '/sparkiadventureintro-es.mp4' : '/sparkiadventureintro.mp4'}
                 type="video/mp4"
               />
-              Sorry, your browser doesn’t support the video tag.
+              {t('homeworkPage.videoNotSupported')}
             </video>
           </div>
 
@@ -281,7 +281,7 @@ const HomeworkAdventurePage: React.FC = () => {
             <p>{t('homeworkPage.grownUpUploadDesc')}</p>
             {!hasSafetyPass && (
               <p className="quiz-error" role="alert">
-                {t('homeworkPage.lockedByPass')}
+                {t('homeworkPage.errorLockedByPass')}
               </p>
             )}
             <form className="homework-upload-form" onSubmit={handleGenerate}>
@@ -291,14 +291,14 @@ const HomeworkAdventurePage: React.FC = () => {
                   type="file"
                   accept="image/*"
                   onChange={handleFileChange}
-                  aria-label="Upload homework image"
+                  aria-label={t('homeworkPage.uploadImageAria')}
                 />
               </label>
               {previewUrl && (
                 <div className="homework-preview">
                   <img
                     src={previewUrl}
-                    alt="Selected homework preview"
+                    alt={t('homeworkPage.previewAlt')}
                     className="homework-preview-image"
                   />
                 </div>
@@ -338,7 +338,12 @@ const HomeworkAdventurePage: React.FC = () => {
                 {adventure.subject} · {adventure.topic}
                 {adventure.steps.length > 1 && (
                   <span className="homework-step-indicator" style={{ marginLeft: '0.5rem' }}>
-                    (Step {currentStepIndex + 1} of {adventure.steps.length})
+                    (
+                    {t('homeworkPage.stepIndicator', {
+                      current: currentStepIndex + 1,
+                      total: adventure.steps.length,
+                    })}
+                    )
                   </span>
                 )}
               </p>

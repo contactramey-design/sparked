@@ -3,6 +3,10 @@ import en from '../locales/en.json'
 import es from '../locales/es.json'
 import curriculumEn from '../locales/curriculum-en.json'
 import curriculumEs from '../locales/curriculum-es.json'
+import curriculumBandPluginEn from '../locales/curriculum-band-plugin-en.json'
+import curriculumBandPluginEs from '../locales/curriculum-band-plugin-es.json'
+import { mergeCurriculumBands } from '../locales/mergeCurriculumBands'
+import { mergeLocaleWithFallback } from '../locales/mergeMessages'
 import aiCodingGamesEn from '../locales/aiCodingGames-en.json'
 import aiCodingGamesEs from '../locales/aiCodingGames-es.json'
 import weeklyEn from '../locales/weekly-en.json'
@@ -14,17 +18,25 @@ export type Locale = 'en' | 'es'
 
 const enFull = {
   ...en,
-  curriculum: curriculumEn as Record<string, unknown>,
+  curriculum: mergeCurriculumBands(
+    curriculumEn as Record<string, unknown>,
+    curriculumBandPluginEn as { units?: Record<string, Record<string, unknown>> },
+  ),
   aiCodingGames: aiCodingGamesEn as Record<string, unknown>,
   weekly: weeklyEn as Record<string, unknown>,
 } as Record<string, unknown>
 const esFull = {
   ...es,
-  curriculum: curriculumEs as Record<string, unknown>,
+  curriculum: mergeCurriculumBands(
+    curriculumEs as Record<string, unknown>,
+    curriculumBandPluginEs as { units?: Record<string, Record<string, unknown>> },
+  ),
   aiCodingGames: aiCodingGamesEs as Record<string, unknown>,
   weekly: weeklyEs as Record<string, unknown>,
 } as Record<string, unknown>
-const messages: Record<Locale, Record<string, unknown>> = { en: enFull, es: esFull }
+/** Spanish inherits English for any missing key (nested). */
+const esFullMerged = mergeLocaleWithFallback(enFull, esFull) as Record<string, unknown>
+const messages: Record<Locale, Record<string, unknown>> = { en: enFull, es: esFullMerged }
 
 function getByPath(obj: unknown, path: string): unknown {
   const keys = path.split('.')
@@ -79,7 +91,10 @@ export function LocaleProvider({ children }: { children: React.ReactNode }) {
 
   const t = useCallback(
     (key: string, vars?: Record<string, string | number>): string => {
-      const raw = getByPath(messages[locale], key)
+      let raw = getByPath(messages[locale], key)
+      if (typeof raw !== 'string' && locale !== 'en') {
+        raw = getByPath(messages.en, key)
+      }
       const str = typeof raw === 'string' ? raw : key
       return vars ? interpolate(str, vars) : str
     },
@@ -87,7 +102,13 @@ export function LocaleProvider({ children }: { children: React.ReactNode }) {
   )
 
   const get = useCallback(
-    (key: string): unknown => getByPath(messages[locale], key),
+    (key: string): unknown => {
+      let v = getByPath(messages[locale], key)
+      if (v === undefined && locale !== 'en') {
+        v = getByPath(messages.en, key)
+      }
+      return v
+    },
     [locale],
   )
 

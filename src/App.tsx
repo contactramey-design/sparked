@@ -47,14 +47,14 @@ function SkipToMainLabel() {
 }
 
 function LangSwitcher() {
-  const { locale, setLocale } = useTranslation()
+  const { locale, setLocale, t } = useTranslation()
   return (
     <button
       type="button"
       onClick={() => setLocale((prev) => (prev === 'en' ? 'es' : 'en'))}
       className="lang-switcher"
-      aria-label={locale === 'en' ? 'Switch to Spanish' : 'Cambiar a inglés'}
-      title={locale === 'en' ? 'Español' : 'English'}
+      aria-label={locale === 'en' ? t('header.langSwitchAriaEn') : t('header.langSwitchAriaEs')}
+      title={locale === 'en' ? t('header.langSwitchTitleEn') : t('header.langSwitchTitleEs')}
     >
       <span className="lang-switcher-icon" aria-hidden>🌐</span>
       <span className="lang-switcher-text">{locale === 'en' ? 'EN' : 'ES'}</span>

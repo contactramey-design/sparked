@@ -51,53 +51,7 @@
       "thinkPrompts": [
         { "label": "¡Piensa en esto!", "text": "Mira a tu alrededor. ¿Puedes encontrar 3 cosas que podrías ordenar en grupos? (por ejemplo: juguetes, libros, crayones)" },
         { "label": "¡Piensa en esto!", "text": "SpArki aprende de ejemplos, no de magia. ¿Cuál es un ejemplo que podrías mostrarle a un amigo para que aprenda algo nuevo?" }
-      ],
-      "bands": {
-        "tots": {
-          "title": "¿Qué es la IA? (Pequeña chispa)",
-          "summary": "SpArki ordena juguetes como un ayudante: la computadora aprende de lo que le enseñas, no de magia.",
-          "contentBlocks": [
-            "Historia: Juguetes rojos aquí, azules allá—SpArki copia tus ejemplos.",
-            "Idea: Muéstrale muchos ejemplos y aprende el patrón.",
-            "Pausa: Señala dos cosas del mismo color."
-          ],
-          "activity": {
-            "title": "Dibuja un robot ayudante",
-            "description": "Dibuja un robot amigo y rodea qué le ayuda a ordenar (bloques, animales o snacks)."
-          },
-          "quizQuestions": [
-            { "prompt": "La IA aprende de…", "options": ["Magia", "Ejemplos que muestras", "Dormir"] },
-            { "prompt": "SpArki ayuda a…", "options": ["Ordenar juguetes", "Comer", "Esconder crayones"] },
-            { "prompt": "Un patrón es…", "options": ["Una sola vez", "Algo que se repite", "Siempre al azar"] }
-          ],
-          "thinkPrompts": [
-            { "label": "¡Piensa!", "text": "Encuentra dos cosas en la sala que coincidan." },
-            { "label": "¡Piensa!", "text": "Muéstrale a un adulto un ejemplo de cómo ordenaste algo." }
-          ]
-        },
-        "crew": {
-          "title": "¿Qué es la IA?",
-          "summary": "SpArki presenta el aprendizaje automático: los modelos encuentran patrones en ejemplos etiquetados para ordenar o predecir—no es magia al azar.",
-          "contentBlocks": [
-            "Historia: Los ejemplos con etiqueta enseñan al modelo; generaliza a cosas nuevas.",
-            "Idea: El aprendizaje ajusta “pesos” con datos—sigue sin ser magia ni adivinanza pura.",
-            "Pausa: Nombra un patrón del aula que podrías enseñar a una computadora."
-          ],
-          "activity": {
-            "title": "Diseña tu propio ayudante de IA",
-            "description": "Dibuja un ayudante de IA, lista qué datos necesitaría y qué resultado daría (grupos, etiquetas o sugerencias)."
-          },
-          "quizQuestions": [
-            { "prompt": "La IA aprende principalmente de…", "options": ["Suerte", "Patrones en ejemplos", "Reglas que nunca cambian"] },
-            { "prompt": "La historia de ordenar de SpArki se parece a…", "options": ["Aprendizaje con etiquetas", "Modo reposo", "Adivinar contraseñas"] },
-            { "prompt": "Una señal que se repite en los datos suele llamarse…", "options": ["Evento único", "Patrón", "Cable roto"] }
-          ],
-          "thinkPrompts": [
-            { "label": "¡Piensa en esto!", "text": "¿Qué tipo de datos etiquetados podrías recopilar para enseñar a un modelo (con ayuda de un adulto)?" },
-            { "label": "¡Piensa en esto!", "text": "¿Por qué importa que la IA aprenda de ejemplos y no de “magia”?" }
-          ]
-        }
-      }
+      ]
     },
     "ai-2-coding-games": {
       "title": "Programar como juegos",

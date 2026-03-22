@@ -4,6 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "generate:curriculum-bands": "node scripts/generate-curriculum-band-plugins.mjs",
     "dev": "vite",
     "dev:api": "node server/local-api.js",
     "dev:local": "node server/run-dev-with-api.js",

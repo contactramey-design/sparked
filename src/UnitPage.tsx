@@ -455,7 +455,7 @@ const UnitPage: React.FC = () => {
                   <DialogTitle>{displayUnit.thinkPrompts[thinkPromptOpen].label}</DialogTitle>
                   <ListenButton
                     text={`${displayUnit.thinkPrompts[thinkPromptOpen].label}. ${displayUnit.thinkPrompts[thinkPromptOpen].text}`}
-                    ariaLabel="Listen to this question"
+                    ariaLabel={t('listenButton.question')}
                     size="sm"
                   />
                 </div>
@@ -534,13 +534,13 @@ const UnitPage: React.FC = () => {
             <h2 className="text-3xl font-bold text-center text-blue-600 md:text-4xl" style={{ fontSize: 'min(1.75rem, 5vw)' }}>
               {t('curriculum.learnWithSparkiHeading')}
             </h2>
-            <ListenButton text={t('curriculum.learnWithSparkiHeading')} ariaLabel="Listen to heading" size="sm" />
+            <ListenButton text={t('curriculum.learnWithSparkiHeading')} ariaLabel={t('listenButton.heading')} size="sm" />
           </div>
           <div className="flex flex-wrap items-center justify-center gap-2">
             <p className="text-center text-lg text-slate-700 md:text-xl" style={{ minHeight: '1.25rem' }}>
               {displayUnit.summary}
             </p>
-            <ListenButton text={displayUnit.summary} ariaLabel="Listen to summary" size="sm" />
+            <ListenButton text={displayUnit.summary} ariaLabel={t('listenButton.summary')} size="sm" />
           </div>
 
           {(() => {
@@ -562,7 +562,12 @@ const UnitPage: React.FC = () => {
                                   {rule.text}
                                 </span>
                               </CardTitle>
-                              <ListenButton text={ruleText} ariaLabel={`Listen to rule ${index + 1}`} size="sm" className="flex-shrink-0" />
+                              <ListenButton
+                                text={ruleText}
+                                ariaLabel={t('listenButton.rule', { n: index + 1 })}
+                                size="sm"
+                                className="flex-shrink-0"
+                              />
                             </div>
                           </CardHeader>
                         </Card>
@@ -584,7 +589,7 @@ const UnitPage: React.FC = () => {
                               ? `${t('curriculum.storyTimeWithSparki')}. ${story} ${currentInstaCaption}`
                               : `${t('curriculum.storyTimeWithSparki')}. ${story}`
                           }
-                          ariaLabel="Listen to story"
+                          ariaLabel={t('listenButton.story')}
                           size="sm"
                         />
                       </div>
@@ -696,7 +701,11 @@ const UnitPage: React.FC = () => {
             <CardHeader>
               <div className="flex items-center gap-2">
                 <CardTitle className="text-xl text-yellow-900 md:text-2xl">{t('curriculum.unitActivity')}</CardTitle>
-                <ListenButton text={`${t('curriculum.unitActivity')}. ${displayUnit.activity.description}`} ariaLabel="Listen to activity" size="sm" />
+                <ListenButton
+                  text={`${t('curriculum.unitActivity')}. ${displayUnit.activity.description}`}
+                  ariaLabel={t('listenButton.activity')}
+                  size="sm"
+                />
               </div>
             </CardHeader>
             <CardContent>

@@ -15,7 +15,19 @@
     "exitSchoolMode": "Exit school mode",
     "signIn": "Sign in",
     "signOut": "Sign out",
-    "skipToMain": "Skip to main content"
+    "skipToMain": "Skip to main content",
+    "langSwitchAriaEn": "Switch to Spanish",
+    "langSwitchAriaEs": "Switch to English",
+    "langSwitchTitleEn": "Español",
+    "langSwitchTitleEs": "English"
+  },
+  "listenButton": {
+    "heading": "Listen to heading",
+    "summary": "Listen to summary",
+    "story": "Listen to story",
+    "activity": "Listen to activity",
+    "question": "Listen to this question",
+    "rule": "Listen to rule {n}"
   },
   "nav": {
     "mainAriaLabel": "Main menu",
@@ -496,7 +508,14 @@
     "consentAgree": "I agree",
     "consentCancel": "Cancel",
     "prevStep": "Previous step",
-    "nextStep": "Next step"
+    "nextStep": "Next step",
+    "consentInvalidEmail": "Please enter a valid email address.",
+    "consentPermissionRequired": "Please confirm you have permission to share this homework.",
+    "introVideoAria": "SpArki Homework Adventure intro video",
+    "videoNotSupported": "Sorry, your browser doesn’t support the video tag.",
+    "uploadImageAria": "Upload homework image",
+    "previewAlt": "Selected homework preview",
+    "stepIndicator": "Step {current} of {total}"
   },
   "unit": {
     "answerAllFirst": "Please answer all questions before checking your score.",

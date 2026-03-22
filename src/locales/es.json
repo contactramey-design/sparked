@@ -15,7 +15,19 @@
     "exitSchoolMode": "Salir del modo escuela",
     "signIn": "Entrar",
     "signOut": "Salir",
-    "skipToMain": "Saltar al contenido principal"
+    "skipToMain": "Saltar al contenido principal",
+    "langSwitchAriaEn": "Cambiar a español",
+    "langSwitchAriaEs": "Cambiar a inglés",
+    "langSwitchTitleEn": "Español",
+    "langSwitchTitleEs": "English"
+  },
+  "listenButton": {
+    "heading": "Escuchar el encabezado",
+    "summary": "Escuchar el resumen",
+    "story": "Escuchar la historia",
+    "activity": "Escuchar la actividad",
+    "question": "Escuchar esta pregunta",
+    "rule": "Escuchar la regla {n}"
   },
   "nav": {
     "mainAriaLabel": "Menú principal",
@@ -496,7 +508,14 @@
     "consentAgree": "Acepto",
     "consentCancel": "Cancelar",
     "prevStep": "Paso anterior",
-    "nextStep": "Siguiente paso"
+    "nextStep": "Siguiente paso",
+    "consentInvalidEmail": "Introduce un correo electrónico válido.",
+    "consentPermissionRequired": "Confirma que tienes permiso para compartir esta tarea.",
+    "introVideoAria": "Video introductorio de la Aventura de Tareas de SpArki",
+    "videoNotSupported": "Lo sentimos: tu navegador no admite la etiqueta de video.",
+    "uploadImageAria": "Subir imagen de tareas",
+    "previewAlt": "Vista previa de la tarea seleccionada",
+    "stepIndicator": "Paso {current} de {total}"
   },
   "unit": {
     "answerAllFirst": "Responde todas las preguntas antes de ver tu puntuación.",

@@ -337,11 +337,11 @@ const SchoolGeneratedUnitPage: React.FC = () => {
           <div className="space-y-3">
             <div className="flex flex-wrap items-center justify-center gap-2">
               <h2 className="text-2xl font-bold text-center">{t('curriculum.learnWithSparkiHeading')}</h2>
-              <ListenButton text={t('curriculum.learnWithSparkiHeading')} ariaLabel="Listen to heading" size="sm" />
+              <ListenButton text={t('curriculum.learnWithSparkiHeading')} ariaLabel={t('listenButton.heading')} size="sm" />
             </div>
             <div className="flex flex-wrap items-center justify-center gap-2">
               <p className="text-center text-lg text-slate-700">{unitJson.summary}</p>
-              <ListenButton text={unitJson.summary} ariaLabel="Listen to summary" size="sm" />
+              <ListenButton text={unitJson.summary} ariaLabel={t('listenButton.summary')} size="sm" />
             </div>
           </div>
 
@@ -350,7 +350,7 @@ const SchoolGeneratedUnitPage: React.FC = () => {
               <CardHeader>
                 <div className="flex items-center gap-2">
                   <CardTitle className="text-lg md:text-xl">{t('curriculum.storyTimeWithSparki')}</CardTitle>
-                  <ListenButton text={parsed.story} ariaLabel="Listen to story" size="sm" />
+                  <ListenButton text={parsed.story} ariaLabel={t('listenButton.story')} size="sm" />
                 </div>
               </CardHeader>
               <CardContent>
@@ -373,7 +373,12 @@ const SchoolGeneratedUnitPage: React.FC = () => {
                           {rule.label ? <span className="font-extrabold">{rule.label}: </span> : null}
                           {rule.text}
                         </CardTitle>
-                        <ListenButton text={ruleText} ariaLabel={`Listen to rule ${idx + 1}`} size="sm" className="flex-shrink-0" />
+                        <ListenButton
+                          text={ruleText}
+                          ariaLabel={t('listenButton.rule', { n: idx + 1 })}
+                          size="sm"
+                          className="flex-shrink-0"
+                        />
                       </div>
                     </CardHeader>
                   </Card>

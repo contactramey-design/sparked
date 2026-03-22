@@ -1,0 +1,1142 @@
+{
+  "units": {
+    "ai-1-what-is-ai": {
+      "tots": {
+        "title": "What Is AI?",
+        "summary": "Learning goals: AI is a helpful friend that learns by looking at pictures.",
+        "contentBlocks": [
+          "Story: Hi little friends! I’m Sparki! AI is like a smart puppy. It looks at lots of pictures and learns. Watch me sort the red blocks! AI helps us, but we always ask a grown-up first.",
+          "Idea: AI learns by looking. We always ask a grown-up.",
+          "Pause: Sort 5 colored blocks. Sparki cheers when you get it right.",
+          "Rule: Parent guide: Play with blocks together and say “AI helps us sort colors too!”"
+        ],
+        "activity": {
+          "title": "Sort colors with Sparki",
+          "description": "Sort 5 colored blocks. Cheer each time you match the right pile."
+        },
+        "quizQuestions": [
+          {
+            "prompt": "AI learns from…",
+            "options": [
+              "Magic",
+              "Pictures you show",
+              "Sleeping"
+            ]
+          },
+          {
+            "prompt": "Sparki helps us…",
+            "options": [
+              "Sort toys",
+              "Eat lunch",
+              "Hide crayons"
+            ]
+          },
+          {
+            "prompt": "A pattern is…",
+            "options": [
+              "One time only",
+              "Something that repeats",
+              "Always random"
+            ]
+          }
+        ],
+        "thinkPrompts": [
+          {
+            "label": "Think!",
+            "text": "Point to the red block. Point to two blocks that match."
+          },
+          {
+            "label": "Think!",
+            "text": "Tell a grown-up: “AI helps us sort!”"
+          }
+        ]
+      },
+      "crew": {
+        "title": "What Is AI?",
+        "summary": "Learning goals: AI learns from data and can make mistakes.",
+        "contentBlocks": [
+          "Story: AI isn’t magic — it studies millions of examples. But it can still get things wrong. That’s why we always double-check with a grown-up or our own brain.",
+          "Idea: AI learns from data. Humans are the final boss.",
+          "Pause: Debate: “Can AI ever be 100% right?” List reasons on both sides.",
+          "Rule: Parent guide: Discuss real AI mistakes you’ve seen together."
+        ],
+        "activity": {
+          "title": "Debate: Can AI be 100% right?",
+          "description": "In pairs: argue for and against. End with why humans double-check AI in real life."
+        },
+        "quizQuestions": [
+          {
+            "prompt": "AI learns primarily from…",
+            "options": [
+              "Random luck",
+              "Patterns in examples",
+              "Never changing rules"
+            ]
+          },
+          {
+            "prompt": "SpArki’s sorting story is closest to…",
+            "options": [
+              "Learning from labeled examples",
+              "Sleep mode",
+              "Guessing passwords"
+            ]
+          },
+          {
+            "prompt": "Who should make the final call on important AI answers?",
+            "options": [
+              "Only the app",
+              "Humans — us and trusted adults",
+              "Nobody"
+            ]
+          }
+        ],
+        "thinkPrompts": [
+          {
+            "label": "Think about this!",
+            "text": "Name one AI mistake you’ve heard about. What went wrong?"
+          },
+          {
+            "label": "Think about this!",
+            "text": "Why is “human in the loop” a good rule?"
+          }
+        ]
+      }
+    },
+    "ai-2-coding-games": {
+      "tots": {
+        "title": "Coding as Games",
+        "summary": "Learning goals: Coding is fun “if this, then that” rules.",
+        "contentBlocks": [
+          "Story: Coding is silly games! If you clap, I jump. If I jump, you clap! Let’s use our bodies!",
+          "Idea: Coding is giving happy instructions.",
+          "Pause: Play “if you clap, then hop” with blocks or stuffed animals.",
+          "Rule: Parent guide: Play if-then games at snack time or bath time."
+        ],
+        "activity": {
+          "title": "If you clap, then hop",
+          "description": "Take turns being the “coder.” Say the rule and act it out together."
+        },
+        "quizQuestions": [
+          {
+            "prompt": "Code is like…",
+            "options": [
+              "Random scribbles",
+              "A recipe or set of rules",
+              "Only for grown-ups"
+            ]
+          },
+          {
+            "prompt": "If the light is green, we…",
+            "options": [
+              "Sleep",
+              "Go when it is safe",
+              "Hide"
+            ]
+          }
+        ],
+        "thinkPrompts": [
+          {
+            "label": "Think!",
+            "text": "Make one new if-then rule with your family."
+          }
+        ]
+      },
+      "crew": {
+        "title": "Coding as Games",
+        "summary": "Learning goals: Coding is logic and problem-solving.",
+        "contentBlocks": [
+          "Story: Coding is powerful. One small change in code can fix a big problem or create one. Let’s build a simple game and see how logic works.",
+          "Idea: Code is powerful — think before you code.",
+          "Pause: Debug a broken “if-then” game: what happens when the condition is wrong?",
+          "Rule: Parent guide: Talk about how code affects real apps you use."
+        ],
+        "activity": {
+          "title": "Debug an if-then game",
+          "description": "Change one rule on purpose — predict what breaks. Fix it together."
+        },
+        "quizQuestions": [
+          {
+            "prompt": "Code is like…",
+            "options": [
+              "Random scribbles",
+              "A recipe or set of rules",
+              "A secret only robots know"
+            ]
+          },
+          {
+            "prompt": "What happens if the condition in your code is wrong?",
+            "options": [
+              "Nothing changes",
+              "The wrong action can run",
+              "The computer turns off"
+            ]
+          }
+        ],
+        "thinkPrompts": [
+          {
+            "label": "Think about this!",
+            "text": "Name one real app that depends on an if-then rule."
+          }
+        ]
+      }
+    },
+    "ai-3-software-explorers": {
+      "tots": {
+        "title": "Software Explorers",
+        "summary": "Learning goals: Software is the happy instructions inside apps.",
+        "contentBlocks": [
+          "Story: Software is like the recipe for cookies! It tells the app how to show pictures and make sounds.",
+          "Idea: Every app has software inside.",
+          "Pause: Point to buttons on a simple app and say “Software helps this work!”",
+          "Rule: Parent guide: Point out software in your favorite apps together."
+        ],
+        "activity": {
+          "title": "Button hunt",
+          "description": "Open one kid-safe app. Tap three buttons and name what each makes happen."
+        },
+        "quizQuestions": [
+          {
+            "prompt": "Which is software?",
+            "options": [
+              "A math game app",
+              "A wooden block",
+              "A snack"
+            ]
+          },
+          {
+            "prompt": "Software lives inside…",
+            "options": [
+              "Only books",
+              "Devices and computers",
+              "Only outside"
+            ]
+          }
+        ],
+        "thinkPrompts": [
+          {
+            "label": "Think!",
+            "text": "What sound or picture did software make happen today?"
+          }
+        ]
+      },
+      "crew": {
+        "title": "Software Explorers",
+        "summary": "Learning goals: Software controls everything we use.",
+        "contentBlocks": [
+          "Story: Software is the brain behind every app. Let’s explore how it makes decisions and why we need to understand it.",
+          "Idea: Software makes decisions for us — so we should know what it’s doing.",
+          "Pause: Map the software in 3 favorite apps: what inputs and outputs do you see?",
+          "Rule: Parent guide: Explore app settings together — what can you turn on or off?"
+        ],
+        "activity": {
+          "title": "Software map",
+          "description": "Sketch 3 apps. For each, write what data goes in and what the app shows or does."
+        },
+        "quizQuestions": [
+          {
+            "prompt": "Which is software?",
+            "options": [
+              "A math game app",
+              "A wooden block",
+              "A snack"
+            ]
+          },
+          {
+            "prompt": "Software “lives” in…",
+            "options": [
+              "Stories only",
+              "Devices and computers",
+              "Shoes"
+            ]
+          }
+        ],
+        "thinkPrompts": [
+          {
+            "label": "Think about this!",
+            "text": "What is one decision an app made for you today?"
+          }
+        ]
+      }
+    },
+    "ai-4-ai-in-the-world": {
+      "tots": {
+        "title": "AI in Our World",
+        "summary": "Learning goals: AI helps people in nice ways.",
+        "contentBlocks": [
+          "Story: AI helps doctors and farmers! It’s a helpful tool, but we always check with a grown-up.",
+          "Idea: AI is a helper. Grown-ups check it.",
+          "Pause: Match pictures (hospital, farm) to “AI helps here.”",
+          "Rule: Parent guide: Talk about helpful AI at home (like voice helpers)."
+        ],
+        "activity": {
+          "title": "Picture match",
+          "description": "Use picture cards: point to places AI can help and name the grown-up who checks."
+        },
+        "quizQuestions": [
+          {
+            "prompt": "AI can help people by…",
+            "options": [
+              "Doing every job alone",
+              "Helping with patterns and guesses",
+              "Deciding everything for humans"
+            ]
+          }
+        ],
+        "thinkPrompts": [
+          {
+            "label": "Think!",
+            "text": "Who checks if AI is right at our house?"
+          }
+        ]
+      },
+      "crew": {
+        "title": "AI in Our World",
+        "summary": "Learning goals: AI helps but needs human oversight.",
+        "contentBlocks": [
+          "Story: AI is in hospitals, farms, and schools. It’s powerful, but humans decide when it’s right or wrong.",
+          "Idea: AI is a tool — humans are the boss.",
+          "Pause: Research one real-world AI and list one pro and one con.",
+          "Rule: Parent guide: Discuss AI in a news story together."
+        ],
+        "activity": {
+          "title": "Real-world AI pros and cons",
+          "description": "Pick one AI tool you know. Write one benefit and one risk, then share with an adult."
+        },
+        "quizQuestions": [
+          {
+            "prompt": "AI can help people by…",
+            "options": [
+              "Doing every job alone",
+              "Helping with patterns and guesses",
+              "Deciding everything for humans"
+            ]
+          }
+        ],
+        "thinkPrompts": [
+          {
+            "label": "Think about this!",
+            "text": "Who makes the final decision when AI is wrong?"
+          }
+        ]
+      }
+    },
+    "ai-5-ethical-coding": {
+      "tots": {
+        "title": "Kind & Fair Coding",
+        "summary": "Learning goals: We use code and AI with kindness.",
+        "contentBlocks": [
+          "Story: We always choose kind! AI is only as kind as we make it.",
+          "Idea: Be kind with AI.",
+          "Pause: Choose kind picture cards vs mean ones.",
+          "Rule: Parent guide: Say kind words when using apps together."
+        ],
+        "activity": {
+          "title": "Kind or mean?",
+          "description": "Sort face or picture cards into “kind” and “mean.” Talk about how each feels."
+        },
+        "quizQuestions": [
+          {
+            "prompt": "Who is responsible for how AI behaves?",
+            "options": [
+              "Only the robot",
+              "The people who design and use it",
+              "Nobody"
+            ]
+          }
+        ],
+        "thinkPrompts": [
+          {
+            "label": "Think!",
+            "text": "Show a kind face to Sparki. What kind word can you say?"
+          }
+        ]
+      },
+      "crew": {
+        "title": "Kind & Fair Coding",
+        "summary": "Learning goals: Code can be biased or unfair if humans aren’t careful.",
+        "contentBlocks": [
+          "Story: Code is only as fair as the people who write it. We must choose kindness and fairness every time.",
+          "Idea: Humans control fairness.",
+          "Pause: Design one fair rule and one unfair rule for the same game.",
+          "Rule: Parent guide: Discuss bias in apps and social media at a kid-safe level."
+        ],
+        "activity": {
+          "title": "Fair vs unfair rules",
+          "description": "Write two game rules: one fair, one unfair. Explain who gets left out."
+        },
+        "quizQuestions": [
+          {
+            "prompt": "Who is responsible for how AI behaves?",
+            "options": [
+              "Only the robot",
+              "The people who design and use it",
+              "Nobody"
+            ]
+          }
+        ],
+        "thinkPrompts": [
+          {
+            "label": "Think about this!",
+            "text": "What is one way an app could be unfair to some kids?"
+          }
+        ]
+      }
+    },
+    "safety-instagram": {
+      "tots": {
+        "title": "Privacy & Sharing Safely",
+        "summary": "Learning goals: Only share with family.",
+        "contentBlocks": [
+          "Story: We keep our name and home private. Only show to family!",
+          "Idea: Private = for family only.",
+          "Pause: Sort pictures: “family okay” vs “stranger no.”",
+          "Rule: Parent guide: Practice “this stays in our house.”"
+        ],
+        "activity": {
+          "title": "Family vs stranger sort",
+          "description": "Use drawings: smile for “share with family,” stop hand for “not for strangers.”"
+        },
+        "quizQuestions": [
+          {
+            "prompt": "Who should you ask before posting a picture online?",
+            "options": [
+              "No one",
+              "A trusted grown-up",
+              "A stranger"
+            ]
+          },
+          {
+            "prompt": "What should your account settings be?",
+            "options": [
+              "Public to everyone",
+              "Private to people you and a grown-up know",
+              "Shared with all strangers"
+            ]
+          },
+          {
+            "prompt": "Which information should you keep off your profile?",
+            "options": [
+              "Your favorite color",
+              "Your school and address",
+              "Your favorite animal"
+            ]
+          },
+          {
+            "prompt": "If a stranger sends you a message, what do you do?",
+            "options": [
+              "Reply and make a new friend",
+              "Ignore, block, and tell a grown-up",
+              "Send them your name"
+            ]
+          },
+          {
+            "prompt": "Who decides what you can post?",
+            "options": [
+              "Only you",
+              "You and a trusted grown-up together",
+              "Whoever comments first"
+            ]
+          }
+        ],
+        "thinkPrompts": [
+          {
+            "label": "Think!",
+            "text": "Name one thing we only share at home."
+          }
+        ]
+      },
+      "crew": {
+        "title": "Privacy & Sharing (Instagram-style)",
+        "summary": "Learning goals: Digital footprint lasts forever.",
+        "contentBlocks": [
+          "Story: Everything you post creates a digital footprint. Think before you share — would you want this forever?",
+          "Idea: Privacy is your power.",
+          "Pause: “Forever or delete?” card sort — what should never be public?",
+          "Rule: Parent guide: Review privacy settings together."
+        ],
+        "activity": {
+          "title": "Forever or delete?",
+          "description": "List 5 post ideas. Mark each: OK forever, or never post."
+        },
+        "quizQuestions": [
+          {
+            "prompt": "Who should you ask before posting a picture online?",
+            "options": [
+              "No one",
+              "A trusted grown-up",
+              "A stranger"
+            ]
+          },
+          {
+            "prompt": "What should your account settings be?",
+            "options": [
+              "Public to everyone",
+              "Private to people you and a grown-up know",
+              "Shared with all strangers"
+            ]
+          },
+          {
+            "prompt": "Which information should you keep off your profile?",
+            "options": [
+              "Your favorite color",
+              "Your school and address",
+              "Your favorite animal"
+            ]
+          },
+          {
+            "prompt": "If a stranger sends you a message, what do you do?",
+            "options": [
+              "Reply and make a new friend",
+              "Ignore, block, and tell a grown-up",
+              "Send them your name"
+            ]
+          },
+          {
+            "prompt": "Who decides what you can post?",
+            "options": [
+              "Only you",
+              "You and a trusted grown-up together",
+              "Whoever comments first"
+            ]
+          }
+        ],
+        "thinkPrompts": [
+          {
+            "label": "Think about this!",
+            "text": "What is one post you would not want colleges or bosses to see someday?"
+          }
+        ]
+      }
+    },
+    "safety-tiktok": {
+      "tots": {
+        "title": "Kind Words Online",
+        "summary": "Learning goals: Kind words make everyone happy.",
+        "contentBlocks": [
+          "Story: Mean words hurt. Kind words make friends!",
+          "Idea: Use kind words.",
+          "Pause: Say kind words to a Sparki plushie or stuffed friend.",
+          "Rule: Parent guide: Role-play kind comments together."
+        ],
+        "activity": {
+          "title": "Kind words to Sparki",
+          "description": "Take turns saying one kind sentence. Clap after each kind word."
+        },
+        "quizQuestions": [
+          {
+            "prompt": "Before posting a video, you should…",
+            "options": [
+              "Ask a trusted grown-up",
+              "Post it fast",
+              "Show it to strangers"
+            ]
+          },
+          {
+            "prompt": "Who should be able to see your videos?",
+            "options": [
+              "Everyone in the world",
+              "Only people you and a grown-up know",
+              "Only strangers"
+            ]
+          },
+          {
+            "prompt": "If someone leaves a mean comment, you can…",
+            "options": [
+              "Be mean back",
+              "Block, report, and tell a grown-up",
+              "Share it with more people"
+            ]
+          },
+          {
+            "prompt": "What information should stay private?",
+            "options": [
+              "Dance moves",
+              "School name and address",
+              "Pet's nickname"
+            ]
+          },
+          {
+            "prompt": "When something online feels wrong, you should…",
+            "options": [
+              "Keep it secret",
+              "Tell a trusted grown-up right away",
+              "Try to fix it alone"
+            ]
+          }
+        ],
+        "thinkPrompts": [
+          {
+            "label": "Think!",
+            "text": "Which word is kind: “great job” or “you’re dumb”?"
+          }
+        ]
+      },
+      "crew": {
+        "title": "Kindness & Bystanders (short video apps)",
+        "summary": "Learning goals: Bystander intervention and upstanding.",
+        "contentBlocks": [
+          "Story: Being kind online is an active choice. If you see bullying, you can block, report, or speak up kindly.",
+          "Idea: Kindness is a skill.",
+          "Pause: Role-play bystander scenarios with a partner.",
+          "Rule: Parent guide: Discuss real examples from social media at a kid-safe level."
+        ],
+        "activity": {
+          "title": "Bystander role-play",
+          "description": "Three scenarios: mean comment, pile-on, fake rumor. Practice block, report, and kind words."
+        },
+        "quizQuestions": [
+          {
+            "prompt": "Before posting a video, you should…",
+            "options": [
+              "Ask a trusted grown-up",
+              "Post it fast",
+              "Show it to strangers"
+            ]
+          },
+          {
+            "prompt": "Who should be able to see your videos?",
+            "options": [
+              "Everyone in the world",
+              "Only people you and a grown-up know",
+              "Only strangers"
+            ]
+          },
+          {
+            "prompt": "If someone leaves a mean comment, you can…",
+            "options": [
+              "Be mean back",
+              "Block, report, and tell a grown-up",
+              "Share it with more people"
+            ]
+          },
+          {
+            "prompt": "What information should stay private?",
+            "options": [
+              "Dance moves",
+              "School name and address",
+              "Pet's nickname"
+            ]
+          },
+          {
+            "prompt": "When something online feels wrong, you should…",
+            "options": [
+              "Keep it secret",
+              "Tell a trusted grown-up right away",
+              "Try to fix it alone"
+            ]
+          }
+        ],
+        "thinkPrompts": [
+          {
+            "label": "Think about this!",
+            "text": "What would a Safety Hero do in the comments section?"
+          }
+        ]
+      }
+    },
+    "safety-roblox": {
+      "tots": {
+        "title": "Strangers in Games",
+        "summary": "Learning goals: Only talk to people we know.",
+        "contentBlocks": [
+          "Story: If someone says hi and you don’t know them, tell a grown-up!",
+          "Idea: Strangers online = tell a grown-up.",
+          "Pause: Practice saying “I’ll ask my grown-up!”",
+          "Rule: Parent guide: Review “stranger = grown-up help.”"
+        ],
+        "activity": {
+          "title": "I’ll ask my grown-up",
+          "description": "Practice the phrase loud and proud. High-five after each practice."
+        },
+        "quizQuestions": [
+          {
+            "prompt": "What is okay to share in game chat?",
+            "options": [
+              "Your full name",
+              "Your address",
+              "A nickname that does not reveal private info"
+            ]
+          },
+          {
+            "prompt": "If a stranger invites you to a private game, you should…",
+            "options": [
+              "Join right away",
+              "Say no, leave, and tell a grown-up",
+              "Give them your phone number"
+            ]
+          },
+          {
+            "prompt": "Who should help set your safety settings?",
+            "options": [
+              "No one",
+              "A trusted grown-up",
+              "A random player"
+            ]
+          },
+          {
+            "prompt": "If someone is mean in chat, you can…",
+            "options": [
+              "Be mean back",
+              "Block, report, and take a break",
+              "Tell no one"
+            ]
+          },
+          {
+            "prompt": "Games should make you feel…",
+            "options": [
+              "Scared and pressured",
+              "Safe and mostly happy",
+              "Forced to keep playing"
+            ]
+          }
+        ],
+        "thinkPrompts": [
+          {
+            "label": "Think!",
+            "text": "What do you say if a stranger asks to be your friend in-game?"
+          }
+        ]
+      },
+      "crew": {
+        "title": "Strangers, Grooming & Red Flags (games)",
+        "summary": "Learning goals: Grooming signs and reporting.",
+        "contentBlocks": [
+          "Story: Strangers online may pretend to be kids. Red flags: asking for photos, secrets, or meetings. Always tell a grown-up immediately.",
+          "Idea: Trust your gut and tell an adult.",
+          "Pause: Spot the red-flag conversation — what would you do?",
+          "Rule: Parent guide: Practice the “tell a trusted adult” script."
+        ],
+        "activity": {
+          "title": "Red-flag spotter",
+          "description": "Read short chat examples. Circle red flags and write who you tell."
+        },
+        "quizQuestions": [
+          {
+            "prompt": "What is okay to share in game chat?",
+            "options": [
+              "Your full name",
+              "Your address",
+              "A nickname that does not reveal private info"
+            ]
+          },
+          {
+            "prompt": "If a stranger invites you to a private game, you should…",
+            "options": [
+              "Join right away",
+              "Say no, leave, and tell a grown-up",
+              "Give them your phone number"
+            ]
+          },
+          {
+            "prompt": "Who should help set your safety settings?",
+            "options": [
+              "No one",
+              "A trusted grown-up",
+              "A random player"
+            ]
+          },
+          {
+            "prompt": "If someone is mean in chat, you can…",
+            "options": [
+              "Be mean back",
+              "Block, report, and take a break",
+              "Tell no one"
+            ]
+          },
+          {
+            "prompt": "Games should make you feel…",
+            "options": [
+              "Scared and pressured",
+              "Safe and mostly happy",
+              "Forced to keep playing"
+            ]
+          }
+        ],
+        "thinkPrompts": [
+          {
+            "label": "Think about this!",
+            "text": "Name two red-flag questions a stranger might ask."
+          }
+        ]
+      }
+    },
+    "safety-snapchat": {
+      "tots": {
+        "title": "Screen Time & Healthy Habits",
+        "summary": "Learning goals: Play outside too!",
+        "contentBlocks": [
+          "Story: We play with screens a little, then run and play outside!",
+          "Idea: Balance screens and real play.",
+          "Pause: Timer game: screen time then jump time.",
+          "Rule: Parent guide: Set simple screen rules together."
+        ],
+        "activity": {
+          "title": "Timer then jump",
+          "description": "Short screen time, then 2 minutes of jumping or dancing. Repeat once."
+        },
+        "quizQuestions": [
+          {
+            "prompt": "Do snaps always disappear forever?",
+            "options": [
+              "Yes, always",
+              "No, they can be saved or screenshotted",
+              "Only if you are careful"
+            ]
+          },
+          {
+            "prompt": "What is a safe kind of picture to send?",
+            "options": [
+              "Your address",
+              "Your school ID",
+              "Your pet wearing a silly hat"
+            ]
+          },
+          {
+            "prompt": "If someone asks for a picture that feels wrong, you should…",
+            "options": [
+              "Send it quickly",
+              "Say no and tell a grown-up",
+              "Hide your feelings"
+            ]
+          },
+          {
+            "prompt": "Streaks are…",
+            "options": [
+              "More important than safety",
+              "Fun, but never more important than feelings or safety",
+              "Required homework"
+            ]
+          },
+          {
+            "prompt": "Who can help you decide what is okay to send?",
+            "options": [
+              "A trusted grown-up",
+              "A stranger online",
+              "No one"
+            ]
+          }
+        ],
+        "thinkPrompts": [
+          {
+            "label": "Think!",
+            "text": "After screen time, we move our bodies — jump like a frog!"
+          }
+        ]
+      },
+      "crew": {
+        "title": "Digital Wellness & Balance",
+        "summary": "Learning goals: Digital wellness and balance.",
+        "contentBlocks": [
+          "Story: Screen time is fun, but our brains need movement, sleep, and real friends too. Let’s make a healthy screen plan.",
+          "Idea: Balance is key.",
+          "Pause: Create a personal screen-time schedule for school nights and weekends.",
+          "Rule: Parent guide: Co-create family media rules."
+        ],
+        "activity": {
+          "title": "My screen plan",
+          "description": "Block out homework, sleep, outside play, and screen time. Post it on the fridge."
+        },
+        "quizQuestions": [
+          {
+            "prompt": "Do snaps always disappear forever?",
+            "options": [
+              "Yes, always",
+              "No, they can be saved or screenshotted",
+              "Only if you are careful"
+            ]
+          },
+          {
+            "prompt": "What is a safe kind of picture to send?",
+            "options": [
+              "Your address",
+              "Your school ID",
+              "Your pet wearing a silly hat"
+            ]
+          },
+          {
+            "prompt": "If someone asks for a picture that feels wrong, you should…",
+            "options": [
+              "Send it quickly",
+              "Say no and tell a grown-up",
+              "Hide your feelings"
+            ]
+          },
+          {
+            "prompt": "Streaks are…",
+            "options": [
+              "More important than safety",
+              "Fun, but never more important than feelings or safety",
+              "Required homework"
+            ]
+          },
+          {
+            "prompt": "Who can help you decide what is okay to send?",
+            "options": [
+              "A trusted grown-up",
+              "A stranger online",
+              "No one"
+            ]
+          }
+        ],
+        "thinkPrompts": [
+          {
+            "label": "Think about this!",
+            "text": "What helps your brain after screens — sleep, food, or movement?"
+          }
+        ]
+      }
+    },
+    "safety-fortnite": {
+      "tots": {
+        "title": "Loud Games & Grown-ups",
+        "summary": "Learning goals: Tell a grown-up if voices feel scary or mean.",
+        "contentBlocks": [
+          "Story: In fast games, voices can get loud. If it feels yucky, pause and get a grown-up.",
+          "Idea: You never have to stay in a chat that feels bad.",
+          "Pause: Practice: “Grown-up, this voice feels mean.”",
+          "Rule: Parent guide: Sit together for the first voice-chat sessions."
+        ],
+        "activity": {
+          "title": "Grown-up helper phrase",
+          "description": "Say the helper phrase three times. Draw a picture of your grown-up next to you."
+        },
+        "quizQuestions": [
+          {
+            "prompt": "Who is it safest to talk with in voice chat?",
+            "options": [
+              "People you and a grown-up know",
+              "Any player",
+              "Strangers who play well"
+            ]
+          },
+          {
+            "prompt": "If someone is yelling or being mean, you can…",
+            "options": [
+              "Mute or leave and tell a grown-up",
+              "Stay and listen",
+              "Yell back"
+            ]
+          },
+          {
+            "prompt": "Is it okay to tease if someone is upset?",
+            "options": [
+              "Yes, it is funny",
+              "No, we should be kind even in games",
+              "Only if they lose"
+            ]
+          },
+          {
+            "prompt": "Private info you should never share in voice chat includes…",
+            "options": [
+              "Your favorite snack",
+              "Your full name and address",
+              "Your favorite emote"
+            ]
+          },
+          {
+            "prompt": "Who can you talk to if a game makes you feel upset?",
+            "options": [
+              "A trusted grown-up",
+              "No one",
+              "Only other players"
+            ]
+          }
+        ],
+        "thinkPrompts": [
+          {
+            "label": "Think!",
+            "text": "Show a thumbs up or thumbs down: did the voice chat feel safe?"
+          }
+        ]
+      },
+      "crew": {
+        "title": "Voice Chat & Team Games",
+        "summary": "Learning goals: Boundaries, muting, and speaking up.",
+        "contentBlocks": [
+          "Story: Fast games + voice chat need clear rules: who can talk, when to mute, and when to leave.",
+          "Idea: You control your mic and your peace.",
+          "Pause: Write your “mute and leave” plan before you queue up.",
+          "Rule: Parent guide: Co-create voice-chat rules for school nights."
+        ],
+        "activity": {
+          "title": "Voice chat plan",
+          "description": "List: mute triggers, break times, and who you tell if someone crosses a line."
+        },
+        "quizQuestions": [
+          {
+            "prompt": "Who is it safest to talk with in voice chat?",
+            "options": [
+              "People you and a grown-up know",
+              "Any player",
+              "Strangers who play well"
+            ]
+          },
+          {
+            "prompt": "If someone is yelling or being mean, you can…",
+            "options": [
+              "Mute or leave and tell a grown-up",
+              "Stay and listen",
+              "Yell back"
+            ]
+          },
+          {
+            "prompt": "Is it okay to tease if someone is upset?",
+            "options": [
+              "Yes, it is funny",
+              "No, we should be kind even in games",
+              "Only if they lose"
+            ]
+          },
+          {
+            "prompt": "Private info you should never share in voice chat includes…",
+            "options": [
+              "Your favorite snack",
+              "Your full name and address",
+              "Your favorite emote"
+            ]
+          },
+          {
+            "prompt": "Who can you talk to if a game makes you feel upset?",
+            "options": [
+              "A trusted grown-up",
+              "No one",
+              "Only other players"
+            ]
+          }
+        ],
+        "thinkPrompts": [
+          {
+            "label": "Think about this!",
+            "text": "When is muting braver than arguing?"
+          }
+        ]
+      }
+    },
+    "safety-reddit": {
+      "tots": {
+        "title": "You Are a Safety Hero",
+        "summary": "Learning goals: You can keep yourself safe!",
+        "contentBlocks": [
+          "Story: You are a Safety Hero! You know the rules and help others.",
+          "Idea: You are in charge of staying safe.",
+          "Pause: Make a “Hero Cape” with paper and cheer for one safe choice you made today.",
+          "Rule: Parent guide: Celebrate small safe choices daily."
+        ],
+        "activity": {
+          "title": "Hero cape cheer",
+          "description": "Decorate a paper cape. Name one safety rule you followed today."
+        },
+        "quizQuestions": [
+          {
+            "prompt": "Are all posts and comments on the internet true?",
+            "options": [
+              "Yes, always",
+              "No, anyone can post anything",
+              "Only if they have many likes"
+            ]
+          },
+          {
+            "prompt": "Where should you spend time online?",
+            "options": [
+              "Kid-friendly spaces a grown-up has checked",
+              "Any forum you find",
+              "Secret chats"
+            ]
+          },
+          {
+            "prompt": "If you see a scary or confusing post, you should…",
+            "options": [
+              "Keep reading alone",
+              "Show a trusted grown-up and talk about it",
+              "Click every link"
+            ]
+          },
+          {
+            "prompt": "Links that promise prizes or money are often…",
+            "options": [
+              "Safe and real",
+              "Tricks or scams",
+              "Only for adults"
+            ]
+          },
+          {
+            "prompt": "When something online feels “off”, a good first step is to…",
+            "options": [
+              "Hide it",
+              "Talk to a trusted grown-up",
+              "Pretend it did not happen"
+            ]
+          }
+        ],
+        "thinkPrompts": [
+          {
+            "label": "Think!",
+            "text": "What does a Safety Hero do? Roar like a hero!"
+          }
+        ]
+      },
+      "crew": {
+        "title": "Leadership & Digital Safety Hero",
+        "summary": "Learning goals: Leadership and advocacy.",
+        "contentBlocks": [
+          "Story: You now know enough to protect yourself and help others. Being a Safety Hero means speaking up and teaching kindness.",
+          "Idea: You are powerful and responsible.",
+          "Pause: Design a “Safety Hero” poster or short video plan — what will you teach?",
+          "Rule: Parent guide: Celebrate and encourage leadership moments."
+        ],
+        "activity": {
+          "title": "Safety Hero poster or video",
+          "description": "Pick one rule (privacy, kindness, strangers, balance). Teach it to a friend or sibling."
+        },
+        "quizQuestions": [
+          {
+            "prompt": "Are all posts and comments on the internet true?",
+            "options": [
+              "Yes, always",
+              "No, anyone can post anything",
+              "Only if they have many likes"
+            ]
+          },
+          {
+            "prompt": "Where should you spend time online?",
+            "options": [
+              "Kid-friendly spaces a grown-up has checked",
+              "Any forum you find",
+              "Secret chats"
+            ]
+          },
+          {
+            "prompt": "If you see a scary or confusing post, you should…",
+            "options": [
+              "Keep reading alone",
+              "Show a trusted grown-up and talk about it",
+              "Click every link"
+            ]
+          },
+          {
+            "prompt": "Links that promise prizes or money are often…",
+            "options": [
+              "Safe and real",
+              "Tricks or scams",
+              "Only for adults"
+            ]
+          },
+          {
+            "prompt": "When something online feels “off”, a good first step is to…",
+            "options": [
+              "Hide it",
+              "Talk to a trusted grown-up",
+              "Pretend it did not happen"
+            ]
+          }
+        ],
+        "thinkPrompts": [
+          {
+            "label": "Think about this!",
+            "text": "How will you help a friend make a safer choice online this week?"
+          }
+        ]
+      }
+    }
+  }
+}
