@@ -18,6 +18,17 @@ import BodyCodeChainQuiz from './BodyCodeChainQuiz'
 import SoftwareExplorerQuiz from './SoftwareExplorerQuiz'
 import WorldAIHelperQuiz from './WorldAIHelperQuiz'
 import FairCodeAdventureQuiz from './FairCodeAdventureQuiz'
+import DigitalFootprintQuiz from './DigitalFootprintQuiz'
+import FairCodeBuilderQuiz from './FairCodeBuilderQuiz'
+import AiSortCheerQuiz from './AiSortCheerQuiz'
+import ClapHopQuiz from './ClapHopQuiz'
+import TotsSoftwareButtonHuntQuiz from './TotsSoftwareButtonHuntQuiz'
+import TotsAiHelperMatchQuiz from './TotsAiHelperMatchQuiz'
+import KindOrNotKindQuiz from './KindOrNotKindQuiz'
+import CrewAiFactOrMistakeQuiz from './CrewAiFactOrMistakeQuiz'
+import CrewCodeLogicQuiz from './CrewCodeLogicQuiz'
+import CrewSoftwareDetectiveQuiz from './CrewSoftwareDetectiveQuiz'
+import CrewAiHumanHelperQuiz from './CrewAiHumanHelperQuiz'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import {
@@ -250,6 +261,19 @@ const UnitPage: React.FC = () => {
     }
   }
 
+  const handleDigitalFootprintComplete = (correctCount: number) => {
+    const total = 10
+    const result = updateUnitAfterQuiz(unit, correctCount, total, ageBand)
+    setEarnedSparkles(result.earnedThisAttempt)
+    triggerEndReward(result.earnedThisAttempt)
+    const updatedStatus = result.progress.units[unit.id]
+    const justMastered = !!updatedStatus?.mastered
+    setMastered(justMastered)
+    if (justMastered) {
+      setShowCelebration(true)
+    }
+  }
+
   const handleSafeAppComplete = (correctCount: number) => {
     const total = 8
     const result = updateUnitAfterQuiz(unit, correctCount, total, ageBand)
@@ -328,6 +352,19 @@ const UnitPage: React.FC = () => {
     }
   }
 
+  const handleAiSortCheerComplete = (correctCount: number) => {
+    const total = 6
+    const result = updateUnitAfterQuiz(unit, correctCount, total, ageBand)
+    setEarnedSparkles(result.earnedThisAttempt)
+    triggerEndReward(result.earnedThisAttempt)
+    const updatedStatus = result.progress.units[unit.id]
+    const justMastered = !!updatedStatus?.mastered
+    setMastered(justMastered)
+    if (justMastered) {
+      setShowCelebration(true)
+    }
+  }
+
   const handleAI1Complete = (correctCount: number) => {
     const total = 10
     const result = updateUnitAfterQuiz(unit, correctCount, total, ageBand)
@@ -380,9 +417,34 @@ const UnitPage: React.FC = () => {
     }
   }
 
+  const handleFairBuilderComplete = (correctCount: number) => {
+    const total = 5
+    const result = updateUnitAfterQuiz(unit, correctCount, total, ageBand)
+    setEarnedSparkles(result.earnedThisAttempt)
+    triggerEndReward(result.earnedThisAttempt)
+    const updatedStatus = result.progress.units[unit.id]
+    const justMastered = !!updatedStatus?.mastered
+    setMastered(justMastered)
+    if (justMastered) {
+      setShowCelebration(true)
+    }
+  }
+
   const handleAI5Complete = (correctCount: number) => {
     const total = 6
     const result = updateUnitAfterQuiz(unit, correctCount, total, ageBand)
+    setEarnedSparkles(result.earnedThisAttempt)
+    triggerEndReward(result.earnedThisAttempt)
+    const updatedStatus = result.progress.units[unit.id]
+    const justMastered = !!updatedStatus?.mastered
+    setMastered(justMastered)
+    if (justMastered) {
+      setShowCelebration(true)
+    }
+  }
+
+  const recordQuizResult = (correctCount: number, totalQuestions: number) => {
+    const result = updateUnitAfterQuiz(unit, correctCount, totalQuestions, ageBand)
     setEarnedSparkles(result.earnedThisAttempt)
     triggerEndReward(result.earnedThisAttempt)
     const updatedStatus = result.progress.units[unit.id]
@@ -730,7 +792,18 @@ const UnitPage: React.FC = () => {
 
       {materialFinished && (
         <div ref={quizSectionRef} className="unit-quiz-section mt-6" style={{ scrollMarginTop: '1.5rem', scrollMarginBottom: '1.5rem' }}>
-      {unit.id === 'safety-instagram' && (
+      {unit.id === 'safety-instagram' && ageBand === 'crew' && (
+        <div className="unit-quiz-section mt-6">
+          <DigitalFootprintQuiz
+            unit={displayUnit}
+            nextUnit={nextUnit ?? null}
+            earnedSparkles={earnedSparkles}
+            mastered={mastered}
+            onComplete={handleDigitalFootprintComplete}
+          />
+        </div>
+      )}
+      {unit.id === 'safety-instagram' && ageBand !== 'crew' && (
         <div className="unit-quiz-section mt-6">
           <InstagramSafetyQuiz
             unit={displayUnit}
@@ -796,7 +869,29 @@ const UnitPage: React.FC = () => {
           />
         </div>
       )}
-      {materialFinished && unit.id === 'ai-1-what-is-ai' && (
+      {materialFinished && unit.id === 'ai-1-what-is-ai' && ageBand === 'tots' && (
+        <div className="unit-quiz-section mt-6">
+          <AiSortCheerQuiz
+            unit={displayUnit}
+            nextUnit={nextUnit ?? null}
+            earnedSparkles={earnedSparkles}
+            mastered={mastered}
+            onComplete={handleAiSortCheerComplete}
+          />
+        </div>
+      )}
+      {materialFinished && unit.id === 'ai-1-what-is-ai' && ageBand === 'crew' && (
+        <div className="unit-quiz-section mt-6">
+          <CrewAiFactOrMistakeQuiz
+            unit={displayUnit}
+            nextUnit={nextUnit ?? null}
+            earnedSparkles={earnedSparkles}
+            mastered={mastered}
+            onComplete={(c) => recordQuizResult(c, 6)}
+          />
+        </div>
+      )}
+      {materialFinished && unit.id === 'ai-1-what-is-ai' && ageBand === 'kids' && (
         <div className="unit-quiz-section mt-6">
           <ExampleCollectorQuiz
             unit={displayUnit}
@@ -807,7 +902,29 @@ const UnitPage: React.FC = () => {
           />
         </div>
       )}
-      {materialFinished && unit.id === 'ai-2-coding-games' && (
+      {materialFinished && unit.id === 'ai-2-coding-games' && ageBand === 'tots' && (
+        <div className="unit-quiz-section mt-6">
+          <ClapHopQuiz
+            unit={displayUnit}
+            nextUnit={nextUnit ?? null}
+            earnedSparkles={earnedSparkles}
+            mastered={mastered}
+            onComplete={(c) => recordQuizResult(c, 5)}
+          />
+        </div>
+      )}
+      {materialFinished && unit.id === 'ai-2-coding-games' && ageBand === 'crew' && (
+        <div className="unit-quiz-section mt-6">
+          <CrewCodeLogicQuiz
+            unit={displayUnit}
+            nextUnit={nextUnit ?? null}
+            earnedSparkles={earnedSparkles}
+            mastered={mastered}
+            onComplete={(c) => recordQuizResult(c, 4)}
+          />
+        </div>
+      )}
+      {materialFinished && unit.id === 'ai-2-coding-games' && ageBand === 'kids' && (
         <div className="unit-quiz-section mt-6">
           <BodyCodeChainQuiz
             unit={displayUnit}
@@ -818,7 +935,29 @@ const UnitPage: React.FC = () => {
           />
         </div>
       )}
-      {materialFinished && unit.id === 'ai-3-software-explorers' && (
+      {materialFinished && unit.id === 'ai-3-software-explorers' && ageBand === 'tots' && (
+        <div className="unit-quiz-section mt-6">
+          <TotsSoftwareButtonHuntQuiz
+            unit={displayUnit}
+            nextUnit={nextUnit ?? null}
+            earnedSparkles={earnedSparkles}
+            mastered={mastered}
+            onComplete={(c) => recordQuizResult(c, 4)}
+          />
+        </div>
+      )}
+      {materialFinished && unit.id === 'ai-3-software-explorers' && ageBand === 'crew' && (
+        <div className="unit-quiz-section mt-6">
+          <CrewSoftwareDetectiveQuiz
+            unit={displayUnit}
+            nextUnit={nextUnit ?? null}
+            earnedSparkles={earnedSparkles}
+            mastered={mastered}
+            onComplete={(c) => recordQuizResult(c, 5)}
+          />
+        </div>
+      )}
+      {materialFinished && unit.id === 'ai-3-software-explorers' && ageBand === 'kids' && (
         <div className="unit-quiz-section mt-6">
           <SoftwareExplorerQuiz
             unit={displayUnit}
@@ -829,7 +968,29 @@ const UnitPage: React.FC = () => {
           />
         </div>
       )}
-      {materialFinished && unit.id === 'ai-4-ai-in-the-world' && (
+      {materialFinished && unit.id === 'ai-4-ai-in-the-world' && ageBand === 'tots' && (
+        <div className="unit-quiz-section mt-6">
+          <TotsAiHelperMatchQuiz
+            unit={displayUnit}
+            nextUnit={nextUnit ?? null}
+            earnedSparkles={earnedSparkles}
+            mastered={mastered}
+            onComplete={(c) => recordQuizResult(c, 3)}
+          />
+        </div>
+      )}
+      {materialFinished && unit.id === 'ai-4-ai-in-the-world' && ageBand === 'crew' && (
+        <div className="unit-quiz-section mt-6">
+          <CrewAiHumanHelperQuiz
+            unit={displayUnit}
+            nextUnit={nextUnit ?? null}
+            earnedSparkles={earnedSparkles}
+            mastered={mastered}
+            onComplete={(c) => recordQuizResult(c, 8)}
+          />
+        </div>
+      )}
+      {materialFinished && unit.id === 'ai-4-ai-in-the-world' && ageBand === 'kids' && (
         <div className="unit-quiz-section mt-6">
           <WorldAIHelperQuiz
             unit={displayUnit}
@@ -840,7 +1001,29 @@ const UnitPage: React.FC = () => {
           />
         </div>
       )}
-      {materialFinished && unit.id === 'ai-5-ethical-coding' && (
+      {materialFinished && unit.id === 'ai-5-ethical-coding' && ageBand === 'crew' && (
+        <div className="unit-quiz-section mt-6">
+          <FairCodeBuilderQuiz
+            unit={displayUnit}
+            nextUnit={nextUnit ?? null}
+            earnedSparkles={earnedSparkles}
+            mastered={mastered}
+            onComplete={handleFairBuilderComplete}
+          />
+        </div>
+      )}
+      {materialFinished && unit.id === 'ai-5-ethical-coding' && ageBand === 'tots' && (
+        <div className="unit-quiz-section mt-6">
+          <KindOrNotKindQuiz
+            unit={displayUnit}
+            nextUnit={nextUnit ?? null}
+            earnedSparkles={earnedSparkles}
+            mastered={mastered}
+            onComplete={(c) => recordQuizResult(c, 4)}
+          />
+        </div>
+      )}
+      {materialFinished && unit.id === 'ai-5-ethical-coding' && ageBand === 'kids' && (
         <div className="unit-quiz-section mt-6">
           <FairCodeAdventureQuiz
             unit={displayUnit}

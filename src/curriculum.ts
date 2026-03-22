@@ -9,7 +9,7 @@ import { ALL_AGE_BANDS } from './ageBand'
 
 export type AgeGroupId = 'age2'
 
-export type TrackId = 'ai-coding' | 'social-safety'
+export type TrackId = 'ai-coding' | 'early-foundations' | 'social-safety'
 
 export interface QuizQuestion {
   id: string
@@ -83,11 +83,19 @@ export const curriculum: CurriculumConfig = {
       introVideoUrl: '/coding_intro.mp4',
     },
     {
+      id: 'early-foundations',
+      title: 'Foundations for Little Sparki',
+      description:
+        'Snack-sized life skills: feelings, listening, sharing, and asking for help—built for ages 3–5 (no social apps).',
+      order: 2,
+      introVideoUrl: '/coding_intro.mp4',
+    },
+    {
       id: 'social-safety',
       title: 'Social Media Safety & Kindness',
       description:
         'SpArki helps you practice safe watching, kind comments, and healthy screen time.',
-      order: 2,
+      order: 3,
       introVideoUrl: '/safety_into.mp4',
     },
   ],
@@ -283,6 +291,7 @@ export const curriculum: CurriculumConfig = {
         'SpArki shows how to share photos safely, keep your account private, and always ask a grown-up first.',
       estMinutes: 20,
       ageGroup: 'age2',
+      ageBands: ['kids', 'crew'],
       isFree: true,
       sparklesReward: 10,
       contentBlocks: [
@@ -345,6 +354,7 @@ export const curriculum: CurriculumConfig = {
         'SpArki explains how to keep videos private, turn off strangers, and handle mean comments kindly and safely.',
       estMinutes: 20,
       ageGroup: 'age2',
+      ageBands: ['kids', 'crew'],
       isFree: true,
       sparklesReward: 10,
       contentBlocks: [
@@ -402,6 +412,7 @@ export const curriculum: CurriculumConfig = {
         'SpArki teaches that snaps do not really “disappear” and that streaks are never more important than feelings or safety.',
       estMinutes: 20,
       ageGroup: 'age2',
+      ageBands: ['kids', 'crew'],
       isFree: true,
       sparklesReward: 10,
       contentBlocks: [
@@ -459,6 +470,7 @@ export const curriculum: CurriculumConfig = {
         'SpArki shows how to use chat filters, block strangers, and never share private info while playing games.',
       estMinutes: 20,
       ageGroup: 'age2',
+      ageBands: ['kids', 'crew'],
       isFree: true,
       sparklesReward: 10,
       contentBlocks: [
@@ -516,6 +528,7 @@ export const curriculum: CurriculumConfig = {
         'SpArki explains how to mute, block, and set kind rules for talking to others in fast-paced games.',
       estMinutes: 20,
       ageGroup: 'age2',
+      ageBands: ['kids', 'crew'],
       isFree: true,
       sparklesReward: 10,
       contentBlocks: [
@@ -573,6 +586,7 @@ export const curriculum: CurriculumConfig = {
         'SpArki talks about how posts and comments are not always true, and how to avoid grown-up spaces and scary content.',
       estMinutes: 20,
       ageGroup: 'age2',
+      ageBands: ['kids', 'crew'],
       isFree: true,
       sparklesReward: 10,
       contentBlocks: [
