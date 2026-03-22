@@ -1,6 +1,6 @@
 {
   "chooseAdventure": "Elige tu aventura con SpArki",
-  "chooseAdventureSubtitle": "SpArki, el profesor teddy-bear robot azul, tiene dos caminos para exploradores de 5 a 11 años. Elige uno para empezar.",
+  "chooseAdventureSubtitle": "SpArki tiene aventuras para cada edad: IA y programación, aprendizaje temprano (3–5 años) y seguridad en redes (5–11). Elige un curso para empezar.",
   "learnWithSparki": "Aprender con SpArki",
   "backToTracks": "← Volver a los cursos",
   "backToTrack": "← Volver al curso",
@@ -28,6 +28,10 @@
     "social-safety": {
       "title": "Seguridad en redes sociales y amabilidad",
       "description": "SpArki te ayuda a practicar el uso seguro de pantallas, comentarios amables y un tiempo de pantalla saludable."
+    },
+    "early-foundations": {
+      "title": "Sparki Tots — Aprendizaje fundamental",
+      "description": "Edades 3–5: colores, formas, contar, letras y patrones jugando — crecimiento real (sin redes sociales)."
     }
   },
   "units": {
@@ -113,6 +117,116 @@
       },
       "quizQuestions": [
         { "prompt": "¿Quién es responsable de cómo se comporta la IA?", "options": ["Solo el robot", "Las personas que la diseñan y la usan", "Nadie"] }
+      ]
+    },
+    "found-1-colors-sorting": {
+      "title": "Colores y clasificación",
+      "summary": "¡Sparki juega con rojo, azul, amarillo y verde — clasificar colores hace nuestro cerebro más fuerte!",
+      "contentBlocks": [
+        "Historia: ¡Hola amiguitos! ¡Soy Sparki! ¡Hoy jugamos con colores! Rojo, azul, amarillo, verde — ¡qué bonitos! Mira cómo pongo los bloques rojos en la canasta roja. ¡Ahora tú!",
+        "Idea: Podemos ordenar cosas por color. Ordenar hace nuestro cerebro más fuerte.",
+        "Regla: Guía para adultos: ordena juguetes por color en casa. Di “¡Clasificaste los azules muy bien!” para dar confianza."
+      ],
+      "activity": {
+        "title": "Clasificar colores en casa",
+        "description": "Con un adulto, ordena juguetes o calcetines por color. ¡Celebra cada acierto!"
+      },
+      "quizQuestions": [
+        { "prompt": "¿Qué canasta es para bloques ROJOS?", "options": ["La canasta roja", "El tazón de snacks", "La caja de zapatos"] },
+        { "prompt": "Ordenar por color ayuda a…", "options": ["Que nuestro cerebro crezca", "Que desaparezcan los bloques", "Que los colores se vuelvan invisibles"] },
+        { "prompt": "Después de ordenar, Sparki…", "options": ["¡Te aplaude!", "Se duerme", "Esconde los bloques"] }
+      ],
+      "thinkPrompts": [
+        { "label": "¡Pruébalo!", "text": "Señala algo rojo en la habitación. Señala algo azul." },
+        { "label": "¡Pruébalo!", "text": "Dile a un adulto: “¡Ordenar hace mi cerebro fuerte!”" }
+      ]
+    },
+    "found-2-shapes-matching": {
+      "title": "Formas y parejas",
+      "summary": "Círculo, cuadrado, triángulo — ¡las formas están por todas partes! Empareja cada forma con Sparki.",
+      "contentBlocks": [
+        "Historia: ¡Hola! ¡Sparki aquí! ¡Hoy aprendemos formas! Círculo, cuadrado, triángulo — ¡están en todas partes! Mira cómo encuentro los círculos. ¡Ahora tú busca los cuadrados!",
+        "Idea: Podemos encontrar y emparejar formas. Las formas nos rodean.",
+        "Regla: Guía para adultos: señala formas en casa (platos redondos, puertas rectangulares). Hazlo un juego."
+      ],
+      "activity": {
+        "title": "Búsqueda de formas",
+        "description": "Encuentra un círculo, un cuadrado y un triángulo en casa con un adulto."
+      },
+      "quizQuestions": [
+        { "prompt": "¿Cuál suele ser redondo como un plato?", "options": ["Círculo", "Triángulo", "Cuadrado"] },
+        { "prompt": "Emparejar formas nos ayuda a…", "options": ["Ver el mundo mejor", "Perder juguetes", "Saltarnos la hora de dormir"] },
+        { "prompt": "Una puerta a menudo tiene forma de…", "options": ["Rectángulo", "Solo círculo", "Solo estrella"] }
+      ],
+      "thinkPrompts": [
+        { "label": "¡Pruébalo!", "text": "Dibuja un círculo en el aire con el dedo." },
+        { "label": "¡Pruébalo!", "text": "Encuentra una forma cuadrada cerca de ti ahora." }
+      ]
+    },
+    "found-3-numbers-counting": {
+      "title": "Números y contar",
+      "summary": "Cuenta 1, 2, 3, 4, 5 con Sparki — ¡los números dicen cuántos hay!",
+      "contentBlocks": [
+        "Historia: ¡Vas muy bien! ¡Hoy aprendemos números! Uno, dos, tres — ¡contemos juntos! Mira cómo cuento los bloques. Uno… dos… tres. ¡Ahora tú!",
+        "Idea: Podemos contar cosas. Los números dicen cuántos.",
+        "Regla: Guía para adultos: cuenta escalones, snacks o juguetes cada día. Hazlo divertido."
+      ],
+      "activity": {
+        "title": "Contar todo",
+        "description": "Cuenta 5 cosas en fila con un adulto (juguetes, galletas, escalones)."
+      },
+      "quizQuestions": [
+        { "prompt": "¿Cuántos dedos en una mano? (¡Cuenta!)", "options": ["5", "2", "10"] },
+        { "prompt": "Los números nos ayudan a saber…", "options": ["Cuántos hay", "De qué color es el cielo", "Solo nombres de adultos"] },
+        { "prompt": "Después de contar, Sparki…", "options": ["¡Celebra contigo!", "Olvida los números", "Esconde los juguetes"] }
+      ],
+      "thinkPrompts": [
+        { "label": "¡Pruébalo!", "text": "¡Un aplauso por 1, dos por 2, tres por 3!" },
+        { "label": "¡Pruébalo!", "text": "¿Cuántas personas hay en la habitación? Cuenten juntos." }
+      ]
+    },
+    "found-4-letters-sounds": {
+      "title": "Letras y sonidos",
+      "summary": "A dice “ah”, B dice “be” — las letras algún día forman palabras. ¡Encuentra A, B y C con Sparki!",
+      "contentBlocks": [
+        "Historia: ¡Hola amigos! ¡Hoy aprendemos letras! A dice “ah”, B dice “be” — ¡las letras hacen palabras! Mira cómo encuentro la A. ¡Ahora tú la B!",
+        "Idea: Las letras hacen sonidos. Las letras nos ayudan a leer algún día.",
+        "Regla: Guía para adultos: señala letras en carteles y juguetes. Canten el abecedario juntos."
+      ],
+      "activity": {
+        "title": "Caza de letras",
+        "description": "Busca las letras de tu nombre en un papel con un adulto y trázalas."
+      },
+      "quizQuestions": [
+        { "prompt": "¿Qué letra hace el sonido “ah” como manzana?", "options": ["A", "B", "C"] },
+        { "prompt": "Las letras nos ayudan a…", "options": ["Leer cuentos algún día", "Solo comer snacks", "Dejar de hablar"] },
+        { "prompt": "B dice…", "options": ["be", "ah", "ce"] }
+      ],
+      "thinkPrompts": [
+        { "label": "¡Pruébalo!", "text": "Di el sonido “ah” y piensa en algo que empiece con A." },
+        { "label": "¡Pruébalo!", "text": "Canta las primeras tres letras del abecedario con un adulto." }
+      ]
+    },
+    "found-5-patterns-sequences": {
+      "title": "Patrones y secuencias",
+      "summary": "Rojo-azul-rojo-azul — ¡eso es un patrón! Termina qué sigue con Sparki.",
+      "contentBlocks": [
+        "Historia: ¡Te estás volviendo muy listo! ¡Hoy aprendemos patrones! Rojo-azul-rojo-azul — ¡es un patrón! Mira cómo hago un patrón con bloques. ¡Ahora tú termínalo!",
+        "Idea: Los patrones son cosas que se repiten. Los patrones ayudan a pensar.",
+        "Regla: Guía para adultos: haz patrones con snacks, calcetines o bloques. Felicita cuando note un patrón."
+      ],
+      "activity": {
+        "title": "Patrón con snacks",
+        "description": "Pon en fila: galleta, fruta, galleta, fruta — ¿qué sigue?"
+      },
+      "quizQuestions": [
+        { "prompt": "Un patrón es algo que…", "options": ["Se repite", "Pasa solo una vez", "No tiene colores"] },
+        { "prompt": "Los patrones ayudan al cerebro a…", "options": ["Pensar y resolver", "Apagarse", "Olvidar colores"] },
+        { "prompt": "En rojo-azul-rojo-azul, ¿qué podría seguir?", "options": ["Rojo (sigue repitiéndose)", "Solo verde para siempre", "Nada"] }
+      ],
+      "thinkPrompts": [
+        { "label": "¡Pruébalo!", "text": "Aplaude-suave-aplaude-suave — ¡sigue el patrón dos veces más!" },
+        { "label": "¡Pruébalo!", "text": "Haz un patrón de colores con dos crayolas y muéstraselo a un adulto." }
       ]
     },
     "safety-instagram": {

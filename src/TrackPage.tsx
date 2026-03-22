@@ -25,6 +25,11 @@ const TrackPage: React.FC = () => {
     return null
   }
 
+  if (units.length === 0) {
+    navigate('/tracks', { replace: true })
+    return null
+  }
+
   const introVideoSrc =
     locale === 'es' && track.introVideoUrlEs
       ? track.introVideoUrlEs
@@ -68,14 +73,14 @@ const TrackPage: React.FC = () => {
             title={
               track.id === 'social-safety'
                 ? t('aiCodingGames.trackPage.safetyVideoTitle')
-                : track.id === 'ai-coding'
+                : track.id === 'ai-coding' || track.id === 'early-foundations'
                   ? t('aiCodingGames.trackPage.codingVideoTitle')
                   : undefined
             }
             aria-label={
               track.id === 'social-safety'
                 ? t('aiCodingGames.trackPage.safetyVideoAria')
-                : track.id === 'ai-coding'
+                : track.id === 'ai-coding' || track.id === 'early-foundations'
                   ? t('aiCodingGames.trackPage.codingVideoAria')
                   : undefined
             }

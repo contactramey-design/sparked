@@ -29,6 +29,13 @@ import CrewAiFactOrMistakeQuiz from './CrewAiFactOrMistakeQuiz'
 import CrewCodeLogicQuiz from './CrewCodeLogicQuiz'
 import CrewSoftwareDetectiveQuiz from './CrewSoftwareDetectiveQuiz'
 import CrewAiHumanHelperQuiz from './CrewAiHumanHelperQuiz'
+import {
+  FoundationsColorSortQuiz,
+  FoundationsCountQuiz,
+  FoundationsLetterQuiz,
+  FoundationsPatternQuiz,
+  FoundationsShapeMatchQuiz,
+} from './FoundationsTotsQuizzes'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import {
@@ -869,6 +876,61 @@ const UnitPage: React.FC = () => {
           />
         </div>
       )}
+      {materialFinished && unit.id === 'found-1-colors-sorting' && ageBand === 'tots' && (
+        <div className="unit-quiz-section mt-6">
+          <FoundationsColorSortQuiz
+            unit={displayUnit}
+            nextUnit={nextUnit ?? null}
+            earnedSparkles={earnedSparkles}
+            mastered={mastered}
+            onComplete={(c) => recordQuizResult(c, 8)}
+          />
+        </div>
+      )}
+      {materialFinished && unit.id === 'found-2-shapes-matching' && ageBand === 'tots' && (
+        <div className="unit-quiz-section mt-6">
+          <FoundationsShapeMatchQuiz
+            unit={displayUnit}
+            nextUnit={nextUnit ?? null}
+            earnedSparkles={earnedSparkles}
+            mastered={mastered}
+            onComplete={(c) => recordQuizResult(c, 3)}
+          />
+        </div>
+      )}
+      {materialFinished && unit.id === 'found-3-numbers-counting' && ageBand === 'tots' && (
+        <div className="unit-quiz-section mt-6">
+          <FoundationsCountQuiz
+            unit={displayUnit}
+            nextUnit={nextUnit ?? null}
+            earnedSparkles={earnedSparkles}
+            mastered={mastered}
+            onComplete={(c) => recordQuizResult(c, 6)}
+          />
+        </div>
+      )}
+      {materialFinished && unit.id === 'found-4-letters-sounds' && ageBand === 'tots' && (
+        <div className="unit-quiz-section mt-6">
+          <FoundationsLetterQuiz
+            unit={displayUnit}
+            nextUnit={nextUnit ?? null}
+            earnedSparkles={earnedSparkles}
+            mastered={mastered}
+            onComplete={(c) => recordQuizResult(c, 3)}
+          />
+        </div>
+      )}
+      {materialFinished && unit.id === 'found-5-patterns-sequences' && ageBand === 'tots' && (
+        <div className="unit-quiz-section mt-6">
+          <FoundationsPatternQuiz
+            unit={displayUnit}
+            nextUnit={nextUnit ?? null}
+            earnedSparkles={earnedSparkles}
+            mastered={mastered}
+            onComplete={(c) => recordQuizResult(c, 2)}
+          />
+        </div>
+      )}
       {materialFinished && unit.id === 'ai-1-what-is-ai' && ageBand === 'tots' && (
         <div className="unit-quiz-section mt-6">
           <AiSortCheerQuiz
@@ -1034,7 +1096,7 @@ const UnitPage: React.FC = () => {
           />
         </div>
       )}
-      {unit.id !== 'safety-instagram' && unit.id !== 'safety-tiktok' && unit.id !== 'safety-snapchat' && unit.id !== 'safety-roblox' && unit.id !== 'safety-fortnite' && unit.id !== 'safety-reddit' && unit.id !== 'ai-1-what-is-ai' && unit.id !== 'ai-2-coding-games' && unit.id !== 'ai-3-software-explorers' && unit.id !== 'ai-4-ai-in-the-world' && unit.id !== 'ai-5-ethical-coding' && (
+      {unit.id !== 'safety-instagram' && unit.id !== 'safety-tiktok' && unit.id !== 'safety-snapchat' && unit.id !== 'safety-roblox' && unit.id !== 'safety-fortnite' && unit.id !== 'safety-reddit' && unit.id !== 'ai-1-what-is-ai' && unit.id !== 'ai-2-coding-games' && unit.id !== 'ai-3-software-explorers' && unit.id !== 'ai-4-ai-in-the-world' && unit.id !== 'ai-5-ethical-coding' && !unit.id.startsWith('found-') && (
         <div className="unit-quiz-section mt-6">
           <GameQuiz
             unit={displayUnit}

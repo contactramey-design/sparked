@@ -84,9 +84,9 @@ export const curriculum: CurriculumConfig = {
     },
     {
       id: 'early-foundations',
-      title: 'Foundations for Little Sparki',
+      title: 'Sparki Tots — Foundational Learning',
       description:
-        'Snack-sized life skills: feelings, listening, sharing, and asking for help—built for ages 3–5 (no social apps).',
+        'Ages 3–5: colors, shapes, counting, letters, and patterns through play — built for real developmental growth (no social apps).',
       order: 2,
       introVideoUrl: '/coding_intro.mp4',
     },
@@ -282,6 +282,246 @@ export const curriculum: CurriculumConfig = {
           'Work with a grown-up to change a short “unfair” story into a kinder, more fair version.',
       },
       videoUrl: '/coding_intro.mp4',
+    },
+    {
+      id: 'found-1-colors-sorting',
+      trackId: 'early-foundations',
+      title: 'Colors & Sorting',
+      summary:
+        'Sparki plays with red, blue, yellow, and green — sorting colors makes our brains super smart!',
+      estMinutes: 15,
+      ageGroup: 'age2',
+      ageBands: ['tots'],
+      isFree: true,
+      sparklesReward: 10,
+      contentBlocks: [
+        'Story: Hey little friends! I’m Sparki! Today we’re playing with colors! Red, blue, yellow, green — so many beautiful colors! Watch me sort the red blocks into the red basket. Now you try!',
+        'Idea: We can sort things by color. Sorting makes our brain stronger.',
+        'Rule: Parent guide: Play color sorting with toys at home. Say “You sorted the blue ones so well!” to build confidence.',
+      ],
+      quizQuestions: [
+        {
+          id: 'found-1-q1',
+          prompt: 'Which basket is for RED blocks?',
+          options: ['The red basket', 'The snack bowl', 'The shoe box'],
+          correctIndex: 0,
+        },
+        {
+          id: 'found-1-q2',
+          prompt: 'Sorting by color helps…',
+          options: ['Our brain grow stronger', 'Blocks disappear', 'Colors become invisible'],
+          correctIndex: 0,
+        },
+        {
+          id: 'found-1-q3',
+          prompt: 'After you sort, Sparki…',
+          options: ['Cheers for you!', 'Takes a nap', 'Hides the blocks'],
+          correctIndex: 0,
+        },
+      ],
+      activity: {
+        id: 'found-1-act',
+        title: 'Color sort at home',
+        description:
+          'With a grown-up, sort toys or socks by color into piles. Cheer each time you match!',
+      },
+      unlocksUnitId: 'found-2-shapes-matching',
+      videoUrl: '/coding_intro.mp4',
+      thinkPrompts: [
+        { label: 'Try it!', text: 'Point to something red in the room. Point to something blue.' },
+        { label: 'Try it!', text: 'Tell a grown-up: “Sorting makes my brain strong!”' },
+      ],
+    },
+    {
+      id: 'found-2-shapes-matching',
+      trackId: 'early-foundations',
+      title: 'Shapes & Matching',
+      summary:
+        'Circle, square, triangle — shapes are everywhere! Match each shape to its outline with Sparki.',
+      estMinutes: 15,
+      ageGroup: 'age2',
+      ageBands: ['tots'],
+      isFree: true,
+      sparklesReward: 10,
+      contentBlocks: [
+        'Story: Hi little friends! Sparki here! Today we’re learning shapes! Circle, square, triangle — they are everywhere! Watch me find all the circles. Now you find the squares!',
+        'Idea: We can find and match shapes. Shapes are all around us.',
+        'Rule: Parent guide: Point out shapes at home (plates are circles, doors are rectangles). Make it a game.',
+      ],
+      quizQuestions: [
+        {
+          id: 'found-2-q1',
+          prompt: 'Which one is usually round like a plate?',
+          options: ['Circle', 'Triangle', 'Square'],
+          correctIndex: 0,
+        },
+        {
+          id: 'found-2-q2',
+          prompt: 'Matching shapes helps us…',
+          options: ['See the world better', 'Lose our toys', 'Skip bedtime'],
+          correctIndex: 0,
+        },
+        {
+          id: 'found-2-q3',
+          prompt: 'A door is often shaped like a…',
+          options: ['Rectangle', 'Circle only', 'Star only'],
+          correctIndex: 0,
+        },
+      ],
+      activity: {
+        id: 'found-2-act',
+        title: 'Shape scavenger hunt',
+        description: 'Find a circle, a square, and a triangle in your home with a grown-up.',
+      },
+      unlocksUnitId: 'found-3-numbers-counting',
+      videoUrl: '/coding_intro.mp4',
+      thinkPrompts: [
+        { label: 'Try it!', text: 'Trace a circle in the air with your finger.' },
+        { label: 'Try it!', text: 'Find one square shape near you right now.' },
+      ],
+    },
+    {
+      id: 'found-3-numbers-counting',
+      trackId: 'early-foundations',
+      title: 'Numbers & Counting',
+      summary:
+        'Count 1, 2, 3, 4, 5 with Sparki — numbers tell us how many!',
+      estMinutes: 15,
+      ageGroup: 'age2',
+      ageBands: ['tots'],
+      isFree: true,
+      sparklesReward: 10,
+      contentBlocks: [
+        'Story: Wow, you’re doing so good! Today we’re learning numbers! One, two, three — let’s count together! Watch me count the blocks. One… two… three! Now you count with me.',
+        'Idea: We can count things. Numbers tell us how many.',
+        'Rule: Parent guide: Count steps, snacks, or toys together every day. Make counting fun and silly.',
+      ],
+      quizQuestions: [
+        {
+          id: 'found-3-q1',
+          prompt: 'How many fingers on one hand? (Count!)',
+          options: ['5', '2', '10'],
+          correctIndex: 0,
+        },
+        {
+          id: 'found-3-q2',
+          prompt: 'Numbers help us know…',
+          options: ['How many', 'What color the sky is', 'Only grown-up names'],
+          correctIndex: 0,
+        },
+        {
+          id: 'found-3-q3',
+          prompt: 'After counting, Sparki…',
+          options: ['Cheers with you!', 'Forgets numbers', 'Hides the toys'],
+          correctIndex: 0,
+        },
+      ],
+      activity: {
+        id: 'found-3-act',
+        title: 'Count everything',
+        description: 'Count 5 things in a row with a grown-up (toys, crackers, stairs).',
+      },
+      unlocksUnitId: 'found-4-letters-sounds',
+      videoUrl: '/coding_intro.mp4',
+      thinkPrompts: [
+        { label: 'Try it!', text: 'Clap once for 1, twice for 2, three times for 3!' },
+        { label: 'Try it!', text: 'How many people are in the room right now? Count together.' },
+      ],
+    },
+    {
+      id: 'found-4-letters-sounds',
+      trackId: 'early-foundations',
+      title: 'Letters & Sounds',
+      summary:
+        'A says “ah”, B says “buh” — letters make words someday. Find letters A, B, and C with Sparki!',
+      estMinutes: 15,
+      ageGroup: 'age2',
+      ageBands: ['tots'],
+      isFree: true,
+      sparklesReward: 10,
+      contentBlocks: [
+        'Story: Hi friends! Today we’re learning letters! A says “ah”, B says “buh” — letters make words! Watch me find the letter A. Now you find the letter B!',
+        'Idea: Letters make sounds. Letters help us read someday.',
+        'Rule: Parent guide: Point out letters on signs and toys. Sing the alphabet song together.',
+      ],
+      quizQuestions: [
+        {
+          id: 'found-4-q1',
+          prompt: 'Which letter makes the “ah” sound like apple?',
+          options: ['A', 'B', 'C'],
+          correctIndex: 0,
+        },
+        {
+          id: 'found-4-q2',
+          prompt: 'Letters help us…',
+          options: ['Read stories someday', 'Only eat snacks', 'Skip talking'],
+          correctIndex: 0,
+        },
+        {
+          id: 'found-4-q3',
+          prompt: 'B says…',
+          options: ['buh', 'ah', 'kuh'],
+          correctIndex: 0,
+        },
+      ],
+      activity: {
+        id: 'found-4-act',
+        title: 'Letter hunt',
+        description: 'Find the letters in your name on a paper with a grown-up and trace them.',
+      },
+      unlocksUnitId: 'found-5-patterns-sequences',
+      videoUrl: '/coding_intro.mp4',
+      thinkPrompts: [
+        { label: 'Try it!', text: 'Say the “ah” sound and think of something that starts with A.' },
+        { label: 'Try it!', text: 'Sing the ABC song’s first three letters with a grown-up.' },
+      ],
+    },
+    {
+      id: 'found-5-patterns-sequences',
+      trackId: 'early-foundations',
+      title: 'Patterns & Sequences',
+      summary:
+        'Red-blue-red-blue — that’s a pattern! Finish what comes next with Sparki.',
+      estMinutes: 15,
+      ageGroup: 'age2',
+      ageBands: ['tots'],
+      isFree: true,
+      sparklesReward: 10,
+      contentBlocks: [
+        'Story: You are getting so smart! Today we’re learning patterns! Red-blue-red-blue — that’s a pattern! Watch me make a pattern with blocks. Now you finish the pattern!',
+        'Idea: Patterns are repeating things. Patterns help us think.',
+        'Rule: Parent guide: Make patterns with snacks, socks, or blocks. Praise your child for noticing patterns.',
+      ],
+      quizQuestions: [
+        {
+          id: 'found-5-q1',
+          prompt: 'A pattern is something that…',
+          options: ['Repeats', 'Happens only once', 'Has no colors'],
+          correctIndex: 0,
+        },
+        {
+          id: 'found-5-q2',
+          prompt: 'Patterns help our brain…',
+          options: ['Think and solve problems', 'Turn off', 'Forget colors'],
+          correctIndex: 0,
+        },
+        {
+          id: 'found-5-q3',
+          prompt: 'In red-blue-red-blue, what might come next?',
+          options: ['Red (it keeps repeating)', 'Only green forever', 'Nothing'],
+          correctIndex: 0,
+        },
+      ],
+      activity: {
+        id: 'found-5-act',
+        title: 'Pattern snack line',
+        description: 'Line up snack pieces: cracker, berry, cracker, berry — what comes next?',
+      },
+      videoUrl: '/coding_intro.mp4',
+      thinkPrompts: [
+        { label: 'Try it!', text: 'Clap-soft-clap-soft — keep the pattern two more times!' },
+        { label: 'Try it!', text: 'Make a color pattern with two crayons and show a grown-up.' },
+      ],
     },
     {
       id: 'safety-instagram',

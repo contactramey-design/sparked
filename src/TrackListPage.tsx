@@ -1,12 +1,16 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { curriculum } from './curriculum'
+import { curriculum, getUnitsInTrackForBand, type TrackId } from './curriculum'
 import { useTranslation } from './contexts/LocaleContext'
+import { useAgeBand } from './contexts/AgeBandContext'
 import AgeBandSelector from './components/AgeBandSelector'
 
 const TrackListPage: React.FC = () => {
   const { t } = useTranslation()
-  const tracks = [...curriculum.tracks].sort((a, b) => a.order - b.order)
+  const { ageBand } = useAgeBand()
+  const tracks = [...curriculum.tracks]
+    .sort((a, b) => a.order - b.order)
+    .filter((track) => getUnitsInTrackForBand(track.id as TrackId, ageBand).length > 0)
 
   return (
     <section className="dashboard">
