@@ -82,7 +82,12 @@ export default function MainNav({ variant }: Props) {
       <ItemLink to="/track/ai-coding">{t('nav.academyAiCoding')}</ItemLink>
       <ItemLink to="/weekly">{t('nav.academyWeekly')}</ItemLink>
       <ItemLink to="/homework">{t('nav.academyHomework')}</ItemLink>
-      <ItemLink to="/for-schools">{t('nav.academySchools')}</ItemLink>
+      <SectionLabel>{t('nav.sectionForSchools')}</SectionLabel>
+      <ItemLink to="/for-schools">{t('nav.academyForSchoolsOverview')}</ItemLink>
+      <ItemLink to="/schools">{t('nav.schoolSchoolHub')}</ItemLink>
+      <ItemLink to="/teacher/dashboard">{t('nav.schoolTeacher')}</ItemLink>
+      <ItemLink to="/teacher/generator">{t('nav.schoolGenerator')}</ItemLink>
+      <ItemLink to="/compliance">{t('nav.schoolCompliance')}</ItemLink>
       <SectionLabel>{t('nav.sectionGrownups')}</SectionLabel>
       {!isLoggedIn && <ItemLink to="/login">{t('nav.academySignIn')}</ItemLink>}
       {isLoggedIn && !kidLock && <ItemLink to="/?view=parent">{t('nav.academyParent')}</ItemLink>}
