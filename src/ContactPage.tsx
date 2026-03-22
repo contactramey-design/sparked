@@ -18,11 +18,11 @@ const ContactPage: React.FC = () => {
         <p>{t('contact.pilotLead')}</p>
         <p>
           <a
-            href="mailto:hello@sparkiedu.com"
+            href={`mailto:${t('contact.email')}`}
             className="link-muted"
             rel="noopener noreferrer"
           >
-            hello@sparkiedu.com
+            {t('contact.email')}
           </a>
         </p>
         <p>{t('contact.respondNote')}</p>

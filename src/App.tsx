@@ -82,6 +82,13 @@ function AppHeader() {
         <p className="app-header-tagline">{t('header.tagline')}</p>
       </div>
       <div className="header-nav-cluster">
+        <Link
+          to="/for-schools"
+          className="header-for-schools-badge"
+          aria-label={t('header.forSchools')}
+        >
+          {t('header.forSchools')}
+        </Link>
         <MainNav variant={isSchoolRoute ? 'school' : 'consumer'} />
         <LangSwitcher />
       </div>

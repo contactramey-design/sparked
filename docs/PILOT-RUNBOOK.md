@@ -52,7 +52,7 @@ Check only what you have verified end-to-end:
 
 ## If something breaks
 
-1. **Support:** [Contact](../src/ContactPage.tsx) — **hello@sparkiedu.com** (change in code if needed).
+1. **Support:** [Contact](../src/ContactPage.tsx) — **sydney@sparkiedu.com** (change in code if needed).
 2. **Listen / TTS:** Check `setup-status` → `tts.keyAcceptedByElevenLabs` and ElevenLabs quota.
 3. **Homework:** Check `homeworkAdventure.configured` and OpenAI billing.
 4. **Video:** Cold worker — retry after 60s; check `VIDEO_WORKER_URL` and worker logs.
