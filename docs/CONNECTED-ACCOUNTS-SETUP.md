@@ -1,7 +1,10 @@
 # Connected Accounts & APIs – Full Checklist
 
 Use this to verify **every** connection for Homework Adventure and video generation.  
-**Quick check:** Open `https://YOUR_APP.vercel.app/api/setup-status` (or `http://localhost:3001/api/setup-status` when running `npm run dev:api`). It returns what is configured (no secrets).
+**Quick check:** Open `https://YOUR_APP.vercel.app/api/setup-status` (or `http://localhost:3001/api/setup-status` when running `npm run dev:api`). Expect **`schemaVersion`: `3`** and optional **`deployment.gitCommitSha`** (Vercel) so you know Production matches Git.
+
+**School pilots:** [SUPABASE-PILOT-SETUP.md](./SUPABASE-PILOT-SETUP.md), [PILOT-RUNBOOK.md](./PILOT-RUNBOOK.md), [PILOT-INFRA-CHECKLIST.md](./PILOT-INFRA-CHECKLIST.md).  
+**Spend / quotas:** [BILLING-AND-QUOTAS.md](./BILLING-AND-QUOTAS.md).
 
 ---
 

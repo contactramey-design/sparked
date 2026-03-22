@@ -1293,6 +1293,121 @@ h1, h2, h3 {
   font-size: 1rem;
 }
 
+.home-age-band-current {
+  margin: 0.35rem 0 0;
+}
+
+.home-age-band-section {
+  margin: 1.25rem auto 0;
+  max-width: 56rem;
+  padding: 1rem 1rem 1.25rem;
+  border-radius: 16px;
+  border: 1px solid rgba(37, 99, 235, 0.2);
+  background: rgba(239, 246, 255, 0.6);
+}
+
+.home-age-band-title {
+  margin: 0 0 0.25rem;
+  font-size: 1.25rem;
+  text-align: center;
+}
+
+.home-age-band-sub {
+  margin: 0 0 1rem;
+  text-align: center;
+  font-size: 0.95rem;
+}
+
+.age-band-selector {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: center;
+}
+
+.age-band-option {
+  flex: 1 1 160px;
+  max-width: 220px;
+  min-height: 4.5rem;
+  padding: 0.65rem 0.85rem;
+  border-radius: 14px;
+  border: 2px solid rgba(37, 99, 235, 0.35);
+  background: #fff;
+  cursor: pointer;
+  text-align: center;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease,
+    background 0.15s ease;
+}
+
+.age-band-option:hover {
+  border-color: var(--primary-color);
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.15);
+}
+
+.age-band-option--active {
+  border-color: var(--primary-color);
+  background: rgba(239, 246, 255, 0.95);
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.25);
+}
+
+.age-band-option-title {
+  display: block;
+  font-weight: 800;
+  font-size: 1rem;
+  color: var(--text-color, #0f172a);
+}
+
+.age-band-option-ages {
+  display: block;
+  margin-top: 0.2rem;
+  font-size: 0.85rem;
+  color: #64748b;
+}
+
+.age-band-selector--compact .age-band-option {
+  min-height: 3rem;
+  flex: 1 1 120px;
+  max-width: 180px;
+  padding: 0.45rem 0.5rem;
+}
+
+.age-band-selector--compact .age-band-option-title {
+  font-size: 0.9rem;
+}
+
+.age-band-selector--compact .age-band-option-ages {
+  font-size: 0.75rem;
+}
+
+.track-age-band-toolbar {
+  margin-bottom: 1rem;
+}
+
+.track-list-age-band {
+  margin-top: 0.5rem;
+}
+
+.header-age-band-hint {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--primary-color);
+  text-decoration: none;
+  padding: 0.2rem 0.45rem;
+  border-radius: 8px;
+  border: 1px solid rgba(37, 99, 235, 0.25);
+  white-space: nowrap;
+}
+
+.header-age-band-hint:hover {
+  text-decoration: underline;
+}
+
+.unit-age-disclaimer {
+  margin: 0.25rem 0 0;
+}
+
 .home-tiers {
   margin-top: 0.5rem;
 }

@@ -10,6 +10,7 @@ import {
 import { appConfig } from './config'
 import { AuthProvider, useAuth } from './AuthContext'
 import { LocaleProvider, useTranslation } from './contexts/LocaleContext'
+import { AgeBandProvider, useAgeBand } from './contexts/AgeBandContext'
 import ProtectedRoute from './ProtectedRoute'
 import HomePage from './HomePage'
 import LoginPage from './LoginPage'
@@ -42,6 +43,16 @@ import './App.css'
 function SkipToMainLabel() {
   const { t } = useTranslation()
   return <>{t('header.skipToMain')}</>
+}
+
+function AgeBandHeaderHint() {
+  const { ageBandDisplayName } = useAgeBand()
+  const { t } = useTranslation()
+  return (
+    <Link to="/" className="header-age-band-hint" title={t('ageBand.changeOnHome')}>
+      {ageBandDisplayName}
+    </Link>
+  )
 }
 
 function LangSwitcher() {
@@ -105,6 +116,7 @@ function AppHeader() {
         <nav className="main-nav" aria-label="Main navigation">
           {isHome && !isLoggedIn && (
             <>
+              <AgeBandHeaderHint />
               <Link to="/weekly">{t('weekly.weeklyPage.navLink')}</Link>
               <Link to="/login">{t('header.signIn')}</Link>
               <Link to="/for-schools">{t('header.forSchools')}</Link>
@@ -113,6 +125,7 @@ function AppHeader() {
           )}
           {isLogin && (
             <>
+              <AgeBandHeaderHint />
               <Link to="/">{t('header.home')}</Link>
               <Link to="/weekly">{t('weekly.weeklyPage.navLink')}</Link>
               <Link to="/for-schools">{t('header.forSchools')}</Link>
@@ -121,6 +134,7 @@ function AppHeader() {
           )}
           {isHome && isLoggedIn && (
             <>
+              <AgeBandHeaderHint />
               <Link to="/">{t('header.home')}</Link>
               <Link to="/weekly">{t('weekly.weeklyPage.navLink')}</Link>
               {!kidLock && <Link to="/?view=parent">{t('header.parent')}</Link>}
@@ -143,6 +157,7 @@ function AppHeader() {
         <p>{t('header.tagline')}</p>
       </div>
       <nav className="main-nav" aria-label="Main navigation">
+        <AgeBandHeaderHint />
         <Link to="/">{t('header.home')}</Link>
         <Link to="/weekly">{t('weekly.weeklyPage.navLink')}</Link>
         {isLoggedIn && !kidLock && <Link to="/?view=parent">{t('header.parent')}</Link>}
@@ -276,8 +291,10 @@ const App: React.FC = () => {
     <BrowserRouter>
       <AuthProvider>
         <LocaleProvider>
+        <AgeBandProvider>
           <AppShell />
-        </LocaleProvider>
+        </AgeBandProvider>
+      </LocaleProvider>
       </AuthProvider>
     </BrowserRouter>
   )

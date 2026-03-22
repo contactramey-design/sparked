@@ -2,6 +2,8 @@
 
 All course and track videos are configured in one place: **`src/curriculum.ts`**. Put video files in the **`public/`** folder so they are served from the site root.
 
+**Pilot / MVP:** Until each unit has its own file, AI units may share **`/coding_intro.mp4`** and social-safety units **`/safety_into.mp4`** (see comments in `curriculum.ts`). Replace with unit-specific MP4s when ready.
+
 ## Unit videos (lesson intros)
 
 - In **`src/curriculum.ts`**, each object in the **`units`** array can have a **`videoUrl`** property.

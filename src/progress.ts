@@ -1,8 +1,15 @@
-import { curriculum, type UnitConfig } from './curriculum'
+import { curriculum, getUnitsForBand, type UnitConfig } from './curriculum'
+import type { AgeBandId } from './ageBand'
 import { ensureAnonymousSchoolAuth, getSchoolSession } from '@/school/schoolSession'
 import { supabase } from '@/lib/supabaseClient'
 
-const STORAGE_KEY = 'sparki_age2_progress'
+/** Legacy single-key storage before per–age-band progress. */
+const LEGACY_STORAGE_KEY = 'sparki_age2_progress'
+
+function progressStorageKey(ageBand: AgeBandId): string {
+  return `sparki_progress_${ageBand}_v1`
+}
+
 const SAFETY_PASS_KEY = 'sparki_safety_pass_v1'
 const SAFETY_PASS_CHECKOUT_SESSION_KEY = 'sparki_safety_pass_checkout_session_v1'
 const DAILY_LOGIN_BONUS_LAST_DATE_KEY = 'sparki_daily_login_bonus_last_date_v1'
@@ -49,11 +56,28 @@ function getDefaultProgress(): ChildProgress {
   }
 }
 
-export function loadProgress(): ChildProgress {
+/** One-time: copy legacy progress into the Kids band key so existing users keep sparkles. */
+function migrateLegacyProgressIfNeeded(ageBand: AgeBandId): void {
+  if (typeof window === 'undefined') return
+  if (ageBand !== 'kids') return
+  try {
+    const kidsKey = progressStorageKey('kids')
+    if (window.localStorage.getItem(kidsKey)) return
+    const legacy = window.localStorage.getItem(LEGACY_STORAGE_KEY)
+    if (!legacy) return
+    window.localStorage.setItem(kidsKey, legacy)
+  } catch {
+    // ignore
+  }
+}
+
+export function loadProgress(ageBand: AgeBandId): ChildProgress {
   if (typeof window === 'undefined') return getDefaultProgress()
 
+  migrateLegacyProgressIfNeeded(ageBand)
+
   try {
-    const raw = window.localStorage.getItem(STORAGE_KEY)
+    const raw = window.localStorage.getItem(progressStorageKey(ageBand))
     if (!raw) return getDefaultProgress()
     const parsed = JSON.parse(raw) as ChildProgress
     if (!parsed.units || typeof parsed.totalSparkles !== 'number') {
@@ -65,22 +89,22 @@ export function loadProgress(): ChildProgress {
   }
 }
 
-export function saveProgress(progress: ChildProgress): void {
+export function saveProgress(ageBand: AgeBandId, progress: ChildProgress): void {
   if (typeof window === 'undefined') return
   try {
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(progress))
+    window.localStorage.setItem(progressStorageKey(ageBand), JSON.stringify(progress))
   } catch {
     // ignore storage issues
   }
 }
 
-export function getUnitStatus(unitId: string): UnitProgress | null {
-  const progress = loadProgress()
+export function getUnitStatus(unitId: string, ageBand: AgeBandId): UnitProgress | null {
+  const progress = loadProgress(ageBand)
   return progress.units[unitId] ?? null
 }
 
-export function getTotalSparkles(): number {
-  const progress = loadProgress()
+export function getTotalSparkles(ageBand: AgeBandId): number {
+  const progress = loadProgress(ageBand)
   return progress.totalSparkles
 }
 
@@ -168,22 +192,25 @@ function updateGamification(progress: ChildProgress): void {
   progress.lastPlayDate = today
 }
 
-/** Award a once-per-day sparkle bonus and update streak/lastPlayDate locally. */
-export function awardDailyLoginBonus(bonusSparkles = 10): { awarded: number; streakDays: number } {
+/** Award a once-per-day sparkle bonus (global calendar day) and update streak for this age band. */
+export function awardDailyLoginBonus(
+  ageBand: AgeBandId,
+  bonusSparkles = 10,
+): { awarded: number; streakDays: number } {
   if (typeof window === 'undefined') return { awarded: 0, streakDays: 0 }
 
   try {
     const today = new Date().toISOString().slice(0, 10)
     const lastAwarded = window.localStorage.getItem(DAILY_LOGIN_BONUS_LAST_DATE_KEY)
     if (lastAwarded === today) {
-      const stats = getPlayerStats()
+      const stats = getPlayerStats(ageBand)
       return { awarded: 0, streakDays: stats.currentStreakDays }
     }
 
-    const progress = loadProgress()
+    const progress = loadProgress(ageBand)
     progress.totalSparkles += Math.max(0, bonusSparkles)
     updateGamification(progress)
-    saveProgress(progress)
+    saveProgress(ageBand, progress)
 
     window.localStorage.setItem(DAILY_LOGIN_BONUS_LAST_DATE_KEY, today)
 
@@ -193,14 +220,14 @@ export function awardDailyLoginBonus(bonusSparkles = 10): { awarded: number; str
   }
 }
 
-export function getPlayerStats(): PlayerStats {
-  const progress = loadProgress()
+export function getPlayerStats(ageBand: AgeBandId): PlayerStats {
+  const progress = loadProgress(ageBand)
   const totalSparkles = progress.totalSparkles
   const level = Math.max(1, Math.floor(totalSparkles / 10) + 1)
   const nextLevelAt = level * 10
   const nextLevelSparklesRemaining = Math.max(0, nextLevelAt - totalSparkles)
 
-  const totalUnits = curriculum.units.length
+  const totalUnits = getUnitsForBand(ageBand).length
 
   return {
     totalSparkles,
@@ -223,9 +250,10 @@ export function updateUnitAfterQuiz(
   unit: UnitConfig,
   correctCount: number,
   totalQuestions: number,
+  ageBand: AgeBandId,
 ): UpdateResult {
   const now = new Date().toISOString()
-  const progress = loadProgress()
+  const progress = loadProgress(ageBand)
   const existing = progress.units[unit.id]
 
   const ratio = totalQuestions > 0 ? correctCount / totalQuestions : 0
@@ -266,7 +294,7 @@ export function updateUnitAfterQuiz(
   }
 
   updateGamification(progress)
-  saveProgress(progress)
+  saveProgress(ageBand, progress)
 
   // School Mode (optional): sync anonymous progress to Supabase for teacher dashboard.
   if (typeof window !== 'undefined') {
@@ -292,15 +320,15 @@ export function updateUnitAfterQuiz(
   return { progress, earnedThisAttempt }
 }
 
-export function isUnitLockedForTrack(unitId: string): boolean {
+export function isUnitLockedForTrack(unitId: string, ageBand: AgeBandId): boolean {
   const unit = curriculum.units.find((u) => u.id === unitId)
   if (!unit) return false
 
-  const unitsInTrack = curriculum.units.filter((u) => u.trackId === unit.trackId)
+  const unitsInTrack = getUnitsForBand(ageBand).filter((u) => u.trackId === unit.trackId)
   const index = unitsInTrack.findIndex((u) => u.id === unitId)
   if (index <= 0) return false
 
   const previousUnit = unitsInTrack[index - 1]
-  const prevStatus = getUnitStatus(previousUnit.id)
+  const prevStatus = getUnitStatus(previousUnit.id, ageBand)
   return !prevStatus?.mastered
 }

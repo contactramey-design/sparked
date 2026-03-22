@@ -2,6 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { curriculum } from './curriculum'
 import { useTranslation } from './contexts/LocaleContext'
+import AgeBandSelector from './components/AgeBandSelector'
 
 const TrackListPage: React.FC = () => {
   const { t } = useTranslation()
@@ -15,6 +16,10 @@ const TrackListPage: React.FC = () => {
           <p className="welcome-subtitle">
             {t('curriculum.chooseAdventureSubtitle')}
           </p>
+          <div className="track-list-age-band mt-4">
+            <p className="muted text-sm mb-2">{t('ageBand.forThisSession')}</p>
+            <AgeBandSelector variant="compact" />
+          </div>
         </div>
       </div>
 

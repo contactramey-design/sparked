@@ -19,6 +19,7 @@
   "lockedByProgress": "Termina la unidad anterior para desbloquear esta.",
   "startUnit": "Empezar unidad",
   "sparklesEarnedSoFar": "{count} chispas ganadas hasta ahora",
+  "ageDisclaimer": "Recomendado para edades {ages}. Se sugiere supervisión de un adulto o maestro.",
   "tracks": {
     "ai-coding": {
       "title": "IA, programación y aventuras con software",

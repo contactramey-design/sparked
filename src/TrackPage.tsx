@@ -1,8 +1,10 @@
 import React from 'react'
 import { Link, useParams, useNavigate } from 'react-router-dom'
-import { curriculum } from './curriculum'
+import { curriculum, getUnitsInTrackForBand, type TrackId } from './curriculum'
 import { getUnitStatus, isUnitLockedForTrack } from './progress'
 import { useTranslation, useLocale } from './contexts/LocaleContext'
+import { useAgeBand } from './contexts/AgeBandContext'
+import AgeBandSelector from './components/AgeBandSelector'
 import { useTranslatedTrack } from './hooks/useTranslatedCurriculum'
 import ListenButton from './components/ListenButton'
 import { VIDEO_POSTER_DATA_URL } from './videoPoster'
@@ -12,9 +14,10 @@ const TrackPage: React.FC = () => {
   const { locale } = useLocale()
   const { trackId } = useParams<{ trackId: string }>()
   const navigate = useNavigate()
+  const { ageBand } = useAgeBand()
 
   const track = curriculum.tracks.find((tr) => tr.id === trackId)
-  const units = curriculum.units.filter((u) => u.trackId === trackId)
+  const units = trackId ? getUnitsInTrackForBand(trackId as TrackId, ageBand) : []
   const translatedTrack = useTranslatedTrack(track)
 
   if (!track || !translatedTrack) {
@@ -30,6 +33,9 @@ const TrackPage: React.FC = () => {
 
   return (
     <section className="lesson-page track-overview-page">
+      <div className="track-age-band-toolbar">
+        <AgeBandSelector variant="compact" />
+      </div>
       <header className="track-overview-header">
         <Link to="/tracks" className="link-back">
           {t('curriculum.backToTracks')}
@@ -88,8 +94,8 @@ const TrackPage: React.FC = () => {
         <h2 className="track-units-title">{t('curriculum.unitsInTrack')}</h2>
         <ul className="track-unit-cards">
           {sortedUnits.map((unit, index) => {
-            const lockedByProgress = isUnitLockedForTrack(unit.id)
-            const status = getUnitStatus(unit.id)
+            const lockedByProgress = isUnitLockedForTrack(unit.id, ageBand)
+            const status = getUnitStatus(unit.id, ageBand)
             const mastered = !!status?.mastered
             const earnedSparkles = status?.earnedSparkles ?? 0
             const isLocked = lockedByProgress

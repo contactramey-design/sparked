@@ -1,8 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import { curriculum } from './curriculum'
+import { curriculum, unitAgeBands } from './curriculum'
 import { getPlayerStats, updateUnitAfterQuiz, getUnitStatus } from './progress'
 import { useTranslation, useLocale } from './contexts/LocaleContext'
+import { useAgeBand } from './contexts/AgeBandContext'
 import { useTranslatedUnit, useTranslatedTrack } from './hooks/useTranslatedCurriculum'
 import CompletionCelebration from './CompletionCelebration'
 import GameQuiz from './GameQuiz'
@@ -77,6 +78,7 @@ const UnitPage: React.FC = () => {
   const navigate = useNavigate()
   const { t } = useTranslation()
   const { locale } = useLocale()
+  const { ageBand, recommendedAgesShort } = useAgeBand()
   const unit = curriculum.units.find((u) => u.id === unitId) ?? null
   const translatedUnit = useTranslatedUnit(unit)
   const track = unit ? curriculum.tracks.find((tr) => tr.id === unit.trackId) ?? null : null
@@ -90,7 +92,7 @@ const UnitPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null)
   const [earnedSparkles, setEarnedSparkles] = useState<number | null>(null)
 
-  const existingStatus = unit ? getUnitStatus(unit.id) : null
+  const existingStatus = unit ? getUnitStatus(unit.id, ageBand) : null
   const wasAlreadyMastered = !!existingStatus?.mastered
   const [mastered, setMastered] = useState<boolean>(wasAlreadyMastered)
 
@@ -106,7 +108,7 @@ const UnitPage: React.FC = () => {
 
   const triggerEndReward = (sparkles: number) => {
     if (typeof window === 'undefined') return
-    const stats = getPlayerStats()
+    const stats = getPlayerStats(ageBand)
     setEndRewardSparkles(sparkles)
     setEndRewardStreakDays(stats.currentStreakDays)
     setShowEndReward(true)
@@ -137,6 +139,23 @@ const UnitPage: React.FC = () => {
   if (!unit) {
     navigate('/tracks', { replace: true })
     return null
+  }
+
+  if (!unitAgeBands(unit).includes(ageBand)) {
+    return (
+      <section className="lesson-page">
+        <header className="lesson-header">
+          <Link to="/tracks" className="link-back">
+            {t('curriculum.backToTracks')}
+          </Link>
+          <h2>{t('ageBand.unitNotInBandTitle')}</h2>
+        </header>
+        <p className="muted">{t('ageBand.unitNotInBandBody')}</p>
+        <Link to="/" className="primary-button">
+          {t('ageBand.pickBandOnHome')}
+        </Link>
+      </section>
+    )
   }
 
   const displayUnit = translatedUnit ?? unit
@@ -218,7 +237,7 @@ const UnitPage: React.FC = () => {
     })
     setScore(correct)
 
-    const result = updateUnitAfterQuiz(unit, correct, unit.quizQuestions.length)
+    const result = updateUnitAfterQuiz(unit, correct, unit.quizQuestions.length, ageBand)
     setEarnedSparkles(result.earnedThisAttempt)
     triggerEndReward(result.earnedThisAttempt)
 
@@ -233,7 +252,7 @@ const UnitPage: React.FC = () => {
 
   const handleSafeAppComplete = (correctCount: number) => {
     const total = 8
-    const result = updateUnitAfterQuiz(unit, correctCount, total)
+    const result = updateUnitAfterQuiz(unit, correctCount, total, ageBand)
     setEarnedSparkles(result.earnedThisAttempt)
     triggerEndReward(result.earnedThisAttempt)
     const updatedStatus = result.progress.units[unit.id]
@@ -246,7 +265,7 @@ const UnitPage: React.FC = () => {
 
   const handleTikTokComplete = (correctCount: number) => {
     const total = 8
-    const result = updateUnitAfterQuiz(unit, correctCount, total)
+    const result = updateUnitAfterQuiz(unit, correctCount, total, ageBand)
     setEarnedSparkles(result.earnedThisAttempt)
     triggerEndReward(result.earnedThisAttempt)
     const updatedStatus = result.progress.units[unit.id]
@@ -259,7 +278,7 @@ const UnitPage: React.FC = () => {
 
   const handleSnapchatComplete = (correctCount: number) => {
     const total = 8
-    const result = updateUnitAfterQuiz(unit, correctCount, total)
+    const result = updateUnitAfterQuiz(unit, correctCount, total, ageBand)
     setEarnedSparkles(result.earnedThisAttempt)
     triggerEndReward(result.earnedThisAttempt)
     const updatedStatus = result.progress.units[unit.id]
@@ -272,7 +291,7 @@ const UnitPage: React.FC = () => {
 
   const handleRobloxComplete = (correctCount: number) => {
     const total = 8
-    const result = updateUnitAfterQuiz(unit, correctCount, total)
+    const result = updateUnitAfterQuiz(unit, correctCount, total, ageBand)
     setEarnedSparkles(result.earnedThisAttempt)
     triggerEndReward(result.earnedThisAttempt)
     const updatedStatus = result.progress.units[unit.id]
@@ -285,7 +304,7 @@ const UnitPage: React.FC = () => {
 
   const handleFortniteComplete = (correctCount: number) => {
     const total = 6
-    const result = updateUnitAfterQuiz(unit, correctCount, total)
+    const result = updateUnitAfterQuiz(unit, correctCount, total, ageBand)
     setEarnedSparkles(result.earnedThisAttempt)
     triggerEndReward(result.earnedThisAttempt)
     const updatedStatus = result.progress.units[unit.id]
@@ -298,7 +317,7 @@ const UnitPage: React.FC = () => {
 
   const handleRedditComplete = (correctCount: number) => {
     const total = 8
-    const result = updateUnitAfterQuiz(unit, correctCount, total)
+    const result = updateUnitAfterQuiz(unit, correctCount, total, ageBand)
     setEarnedSparkles(result.earnedThisAttempt)
     triggerEndReward(result.earnedThisAttempt)
     const updatedStatus = result.progress.units[unit.id]
@@ -311,7 +330,7 @@ const UnitPage: React.FC = () => {
 
   const handleAI1Complete = (correctCount: number) => {
     const total = 10
-    const result = updateUnitAfterQuiz(unit, correctCount, total)
+    const result = updateUnitAfterQuiz(unit, correctCount, total, ageBand)
     setEarnedSparkles(result.earnedThisAttempt)
     triggerEndReward(result.earnedThisAttempt)
     const updatedStatus = result.progress.units[unit.id]
@@ -324,7 +343,7 @@ const UnitPage: React.FC = () => {
 
   const handleAI2Complete = (correctCount: number) => {
     const total = 5
-    const result = updateUnitAfterQuiz(unit, correctCount, total)
+    const result = updateUnitAfterQuiz(unit, correctCount, total, ageBand)
     setEarnedSparkles(result.earnedThisAttempt)
     triggerEndReward(result.earnedThisAttempt)
     const updatedStatus = result.progress.units[unit.id]
@@ -337,7 +356,7 @@ const UnitPage: React.FC = () => {
 
   const handleAI3Complete = (correctCount: number) => {
     const total = 6
-    const result = updateUnitAfterQuiz(unit, correctCount, total)
+    const result = updateUnitAfterQuiz(unit, correctCount, total, ageBand)
     setEarnedSparkles(result.earnedThisAttempt)
     triggerEndReward(result.earnedThisAttempt)
     const updatedStatus = result.progress.units[unit.id]
@@ -350,7 +369,7 @@ const UnitPage: React.FC = () => {
 
   const handleAI4Complete = (correctCount: number) => {
     const total = 6
-    const result = updateUnitAfterQuiz(unit, correctCount, total)
+    const result = updateUnitAfterQuiz(unit, correctCount, total, ageBand)
     setEarnedSparkles(result.earnedThisAttempt)
     triggerEndReward(result.earnedThisAttempt)
     const updatedStatus = result.progress.units[unit.id]
@@ -363,7 +382,7 @@ const UnitPage: React.FC = () => {
 
   const handleAI5Complete = (correctCount: number) => {
     const total = 6
-    const result = updateUnitAfterQuiz(unit, correctCount, total)
+    const result = updateUnitAfterQuiz(unit, correctCount, total, ageBand)
     setEarnedSparkles(result.earnedThisAttempt)
     triggerEndReward(result.earnedThisAttempt)
     const updatedStatus = result.progress.units[unit.id]
@@ -456,6 +475,9 @@ const UnitPage: React.FC = () => {
           <div>
             <h2>{displayUnit.title}</h2>
             {displayTrack && <p className="welcome-subtitle">{displayTrack.title}</p>}
+            <p className="unit-age-disclaimer muted text-sm mt-2">
+              {t('curriculum.ageDisclaimer', { ages: recommendedAgesShort })}
+            </p>
           </div>
         </div>
         <Link to={`/track/${unit.trackId}`} className="link-back">
@@ -642,11 +664,7 @@ const UnitPage: React.FC = () => {
                             ))}
                           </div>
                         </div>
-                      ) : (
-                        <div className="h-24 rounded-lg border-2 border-dashed border-pink-200 bg-pink-100/50 flex items-center justify-center text-pink-600 text-sm font-medium" aria-hidden>
-                          Illustration placeholder
-                        </div>
-                      )}
+                      ) : null}
                     </CardContent>
                   </Card>
                 )}

@@ -35,6 +35,39 @@
     "bannerTitle": "Modo sin internet",
     "bannerBody": "Las lecciones principales siguen funcionando. Los videos y ebooks funcionan después de abrirlos una vez."
   },
+  "ageBand": {
+    "selectorAria": "Elige la franja de edad del estudiante",
+    "changeOnHome": "Cambia la franja de edad en la página de inicio",
+    "homeSectionTitle": "¿Quién aprende hoy?",
+    "homeSectionSubtitle": "Elige una franja para que las lecciones y la dificultad coincidan con tu hijo o clase. Puedes cambiarla cuando quieras.",
+    "currentLabel": "Actual: {name}",
+    "forThisSession": "Franja de edad para esta sesión",
+    "pickBandOnHome": "Ir al inicio para elegir la franja de edad",
+    "unitNotInBandTitle": "Esta lección no está en tu franja de edad actual",
+    "unitNotInBandBody": "Cambia la franja en la página de inicio u otra unidad de tus cursos.",
+    "names": {
+      "tots": {
+        "short": "Sparki Peques",
+        "full": "Sparki Peques (3–5)",
+        "ages": "3–5"
+      },
+      "kids": {
+        "short": "Sparki Kids",
+        "full": "Sparki Kids (6–8)",
+        "ages": "6–8"
+      },
+      "crew": {
+        "short": "Sparki Crew",
+        "full": "Sparki Crew (9–11)",
+        "ages": "9–11"
+      }
+    },
+    "modeBadge": {
+      "tots": "Modo Peques (3–5)",
+      "kids": "Modo Kids (6–8)",
+      "crew": "Modo Crew (9–11)"
+    }
+  },
   "schools": {
     "title": "Escuelas",
     "subtitle": "Configuración para iPads, privacidad y progreso para profesores.",
@@ -197,7 +230,11 @@
     "openOnePager": "Abrir una pagina",
     "schoolOpsTitle": "Unirse a clase y modo escuela",
     "schoolOpsBody": "Los estudiantes usan codigos anonimos — sin nombres. Activa Modo escuela y unete desde el hub Escuelas.",
-    "openSchoolHub": "Abrir hub Escuelas"
+    "openSchoolHub": "Abrir hub Escuelas",
+    "pilotCtaTitle": "Pilotos escolares o distritales",
+    "pilotCtaBody": "Te ayudamos con cuentas de profesor, codigos de clase y una lista clara de lo que incluye el piloto v1 (curriculo, tarea/video opcional y costes).",
+    "openContactForPilot": "Contactar para un piloto",
+    "pilotDocNote": "Operadores: listas de despliegue y piloto en el repositorio (carpeta docs/)."
   },
   "onePager": {
     "printButton": "Imprimir / Guardar PDF",
@@ -242,7 +279,9 @@
     "addClassLabel": "Añadir una clase",
     "addClassPlaceholder": "Clase 3A",
     "addClassButton": "Añadir clase",
+    "ageBandLabel": "Franja de edad de esta clase",
     "tableClass": "Clase",
+    "tableAgeBand": "Franja de edad",
     "tableCode": "Código",
     "tableAssigned": "Curso asignado",
     "tableActions": "Acciones",
@@ -364,6 +403,10 @@
     "dataMinBody": "Cuando se procesan tareas o contenido similar, solo lo usamos para generar una aventura de aprendizaje. No guardamos imágenes ni documentos después del procesamiento. Solo resultados anonimizados (p. ej. \"problema de suma\") pueden conservarse en una sesión. No usamos datos de niños para publicidad conductual ni perfiles.",
     "progressTitle": "Progreso y datos de sesión",
     "progressBody": "El progreso (p. ej. puntuaciones, chispas) puede guardarse localmente en el dispositivo. No usamos cookies ni seguimiento en sesiones para niños de forma que permita publicidad conductual.",
+    "schoolPilotsTitle": "Pilotos escolares y uso en clase",
+    "schoolPilotsBody": "En un piloto escolar, los profesores pueden iniciar sesión; los estudiantes se unen con un código de clase usando un identificador mínimo (p. ej. sesión anónima o código de nombre, según la configuración). El progreso puede guardarse con nuestro proveedor de base de datos para que el profesor vea resultados agregados. Funciones opcionales (tarea con imagen, lectura en voz o video) pueden enviar texto o contenido a proveedores de IA o voz solo según el acuerdo del piloto y esta política. Las escuelas pueden solicitar lista de subprocesadores y términos del piloto antes de empezar.",
+    "ageBandTitle": "Franja de edad (local y de clase)",
+    "ageBandBody": "Para familias, la app guarda la franja elegida (Sparki Peques, Kids o Crew) en el navegador para adaptar lecciones y el progreso guardado por franja. Para escuelas, el profesor puede definir una franja por clase para que el contenido semanal generado coincida. No se usa para publicidad.",
     "rightsTitle": "Tus derechos y contacto",
     "rightsBody": "Los padres pueden revisar, solicitar eliminación o revocar el acceso a los datos asociados al uso del servicio. Para dudas sobre esta política o ejercer tus derechos, usa nuestra página de Contacto."
   },
@@ -380,6 +423,7 @@
   "contact": {
     "title": "Contacto",
     "intro": "Para preguntas sobre la Academia de Aventuras SpArki, privacidad o controles parentales, escríbenos:",
+    "pilotLead": "¿Piloto escolar o distrital? Escríbenos con el nombre del programa y el número aproximado de aulas — te enviamos los pasos (panel del profesor, códigos de clase, tarea/video opcional).",
     "respondNote": "Intentamos responder a consultas de familias y privacidad con prontitud."
   },
   "comingSoon": {
@@ -614,6 +658,7 @@
     "subtitle": "Sube un PDF y genera un track semanal temporal + 3 unidades.",
     "generateTitle": "Generar",
     "classLabel": "Clase",
+    "classAgeBandNote": "El contenido semanal coincidirá con la franja de esta clase: {mode}.",
     "pdfLabel": "PDF",
     "videoToggle": "Generar video de tarea por unidad (puede tardar mas)",
     "buttonIdle": "Generar track semanal",

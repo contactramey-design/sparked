@@ -91,6 +91,26 @@ export default async function handler(req, res) {
         })
         return
       }
+      // Quota / billing — not a code bug; user needs credits or shorter text.
+      let quotaDetail = null
+      try {
+        const parsed = JSON.parse(errText)
+        const st = parsed?.detail?.status
+        if (st === 'quota_exceeded' || st === 'insufficient_credits') {
+          quotaDetail = parsed?.detail?.message || errText
+        }
+      } catch {
+        /* not JSON */
+      }
+      if (quotaDetail) {
+        res.status(503).json({
+          error: 'ElevenLabs quota exceeded',
+          code: 'quota_exceeded',
+          hint: 'Add credits or upgrade your ElevenLabs plan at elevenlabs.io → Subscription. The app will use device read-aloud (Siri) until quota is available.',
+          details: String(quotaDetail).slice(0, 500),
+        })
+        return
+      }
       res.status(upstream >= 400 && upstream < 600 ? upstream : 502).json({
         error: 'ElevenLabs error',
         details: errText.slice(0, 500),

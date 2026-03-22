@@ -168,6 +168,19 @@ const ForSchoolsPage: React.FC = () => {
             </Button>
           </CardContent>
         </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>{t('forSchoolsHub.pilotCtaTitle')}</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            <p className="muted">{t('forSchoolsHub.pilotCtaBody')}</p>
+            <Button asChild>
+              <Link to="/contact">{t('forSchoolsHub.openContactForPilot')}</Link>
+            </Button>
+            <p className="muted text-sm">{t('forSchoolsHub.pilotDocNote')}</p>
+          </CardContent>
+        </Card>
       </div>
 
       <div id="school-compliance" className="stack-lg scroll-mt-24">

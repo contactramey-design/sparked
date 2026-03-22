@@ -1,5 +1,23 @@
 # SpArki's Adventures Academy (SparkiEdU)
 
+React + TypeScript + Vite — kids’ curriculum, school pilot tools (Supabase), homework adventure, and optional video worker.
+
+## Pilot programs (schools / districts)
+
+Operator docs in **`docs/`**:
+
+| Doc | Purpose |
+|-----|---------|
+| [docs/PILOT-RUNBOOK.md](docs/PILOT-RUNBOOK.md) | Teacher/student scripts, URLs, scope |
+| [docs/PILOT-INFRA-CHECKLIST.md](docs/PILOT-INFRA-CHECKLIST.md) | Vercel deploy + `/api/setup-status` (`schemaVersion: 3`) |
+| [docs/SUPABASE-PILOT-SETUP.md](docs/SUPABASE-PILOT-SETUP.md) | DB, RLS, anon auth, storage |
+| [docs/BILLING-AND-QUOTAS.md](docs/BILLING-AND-QUOTAS.md) | ElevenLabs, OpenAI, Stripe |
+| [docs/PILOT-SUBPROCESSORS-AND-DPA.md](docs/PILOT-SUBPROCESSORS-AND-DPA.md) | Subprocessors + DPA outline |
+
+API wiring checklist: [docs/CONNECTED-ACCOUNTS-SETUP.md](docs/CONNECTED-ACCOUNTS-SETUP.md).
+
+---
+
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.

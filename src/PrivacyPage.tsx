@@ -34,6 +34,12 @@ const PrivacyPage: React.FC = () => {
         <h3>{t('privacy.progressTitle')}</h3>
         <p>{t('privacy.progressBody')}</p>
 
+        <h3>{t('privacy.schoolPilotsTitle')}</h3>
+        <p>{t('privacy.schoolPilotsBody')}</p>
+
+        <h3>{t('privacy.ageBandTitle')}</h3>
+        <p>{t('privacy.ageBandBody')}</p>
+
         <h3>{t('privacy.rightsTitle')}</h3>
         <p>{t('privacy.rightsBody')}</p>
 

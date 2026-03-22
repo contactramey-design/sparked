@@ -97,6 +97,29 @@ export function ttsMiddleware() {
           )
           return
         }
+        let quotaDetail = null
+        try {
+          const parsed = JSON.parse(errText)
+          const st = parsed?.detail?.status
+          if (st === 'quota_exceeded' || st === 'insufficient_credits') {
+            quotaDetail = parsed?.detail?.message || errText
+          }
+        } catch {
+          /* not JSON */
+        }
+        if (quotaDetail) {
+          res.statusCode = 503
+          res.setHeader('Content-Type', 'application/json')
+          res.end(
+            JSON.stringify({
+              error: 'ElevenLabs quota exceeded',
+              code: 'quota_exceeded',
+              hint: 'Add credits or upgrade at elevenlabs.io. Device read-aloud works as fallback.',
+              details: String(quotaDetail).slice(0, 500),
+            }),
+          )
+          return
+        }
         res.statusCode = upstream
         res.setHeader('Content-Type', 'application/json')
         res.end(JSON.stringify({ error: 'ElevenLabs error', details: errText.slice(0, 500) }))

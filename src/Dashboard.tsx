@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { appConfig } from './config'
-import { curriculum } from './curriculum'
+import { curriculum, getUnitsForBand } from './curriculum'
 import { getPlayerStats } from './progress'
 import { useTranslation } from './contexts/LocaleContext'
+import { useAgeBand } from './contexts/AgeBandContext'
 
 const Dashboard: React.FC = () => {
   const { t } = useTranslation()
+  const { ageBand } = useAgeBand()
   const [username, setUsername] = useState('')
-  const [stats, setStats] = useState(getPlayerStats())
+  const [stats, setStats] = useState(() => getPlayerStats(ageBand))
 
   useEffect(() => {
     if (typeof window === 'undefined') return
@@ -17,11 +19,11 @@ const Dashboard: React.FC = () => {
         appConfig.progress.usernameStorageKey,
       )
       if (storedName) setUsername(storedName)
-      setStats(getPlayerStats())
+      setStats(getPlayerStats(ageBand))
     } catch {
       // ignore
     }
-  }, [])
+  }, [ageBand])
 
   const handleNameChange = (value: string) => {
     setUsername(value)
@@ -33,7 +35,7 @@ const Dashboard: React.FC = () => {
     }
   }
 
-  const maxSparks = curriculum.units.reduce(
+  const maxSparks = getUnitsForBand(ageBand).reduce(
     (sum, unit) => sum + unit.sparklesReward,
     0,
   )

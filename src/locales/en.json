@@ -35,6 +35,39 @@
     "bannerTitle": "Offline mode",
     "bannerBody": "Core lessons still work. Videos and ebooks work after they’ve been opened once."
   },
+  "ageBand": {
+    "selectorAria": "Choose learner age band",
+    "changeOnHome": "Change age band on the home page",
+    "homeSectionTitle": "Who is learning today?",
+    "homeSectionSubtitle": "Pick a band so lessons and difficulty match your child or class. You can change this anytime.",
+    "currentLabel": "Current: {name}",
+    "forThisSession": "Age band for this session",
+    "pickBandOnHome": "Go to home to choose age band",
+    "unitNotInBandTitle": "This lesson isn’t in your current age band",
+    "unitNotInBandBody": "Switch age band on the home page or pick another unit from your courses.",
+    "names": {
+      "tots": {
+        "short": "Sparki Tots",
+        "full": "Sparki Tots (3–5)",
+        "ages": "3–5"
+      },
+      "kids": {
+        "short": "Sparki Kids",
+        "full": "Sparki Kids (6–8)",
+        "ages": "6–8"
+      },
+      "crew": {
+        "short": "Sparki Crew",
+        "full": "Sparki Crew (9–11)",
+        "ages": "9–11"
+      }
+    },
+    "modeBadge": {
+      "tots": "Tots mode (3–5)",
+      "kids": "Kids mode (6–8)",
+      "crew": "Crew mode (9–11)"
+    }
+  },
   "schools": {
     "title": "Schools",
     "subtitle": "School-ready setup for iPads, privacy, and teacher progress.",
@@ -197,7 +230,11 @@
     "openOnePager": "Open one-pager",
     "schoolOpsTitle": "Class join & school mode",
     "schoolOpsBody": "Students use anonymous codes — no names required. Turn on School Mode and join from the Schools hub.",
-    "openSchoolHub": "Open Schools hub"
+    "openSchoolHub": "Open Schools hub",
+    "pilotCtaTitle": "School or district pilots",
+    "pilotCtaBody": "We’ll help with teacher accounts, class codes, and a clear list of what’s in pilot v1 (curriculum, optional homework/video, and billing expectations).",
+    "openContactForPilot": "Contact us about a pilot",
+    "pilotDocNote": "Operators: deployment and pilot checklists live in the repo under docs/ (PILOT-RUNBOOK.md, PILOT-INFRA-CHECKLIST.md, SUPABASE-PILOT-SETUP.md)."
   },
   "onePager": {
     "printButton": "Print / Save as PDF",
@@ -242,7 +279,9 @@
     "addClassLabel": "Add a class",
     "addClassPlaceholder": "Class 3A",
     "addClassButton": "Add class",
+    "ageBandLabel": "Age band for this class",
     "tableClass": "Class",
+    "tableAgeBand": "Age band",
     "tableCode": "Join code",
     "tableAssigned": "Assigned course",
     "tableActions": "Actions",
@@ -364,6 +403,10 @@
     "dataMinBody": "When homework or similar content is processed, we use it only to generate a learning adventure. We do not store uploaded images or documents after processing. Only anonymized results (e.g., \"math addition problem\") may be kept in a session. We do not use child data for behavioral advertising or profiling.",
     "progressTitle": "Progress and Session Data",
     "progressBody": "Progress (e.g., quiz scores, sparkles) may be stored locally on the device for the child's experience. We do not use cookies or tracking for child-directed sessions in a way that would support behavioral targeting.",
+    "schoolPilotsTitle": "School pilots and classroom use",
+    "schoolPilotsBody": "When a school runs a pilot, teachers may sign in with an account; students may join with a class code using a minimal identifier (e.g., anonymous session or first-name code, depending on setup). Progress for school pilots may be stored with our database provider so teachers can view aggregated results. Optional features (e.g., homework image upload, read-aloud, or generated video) may send content or text to AI or voice providers only as described in your pilot agreement and this policy. Schools may request a subprocessor list and pilot terms before starting.",
+    "ageBandTitle": "Age band (local and class settings)",
+    "ageBandBody": "For families, the app stores your selected age band (Sparki Tots, Kids, or Crew) in the browser to tailor lessons and saved progress per band. For schools, teachers may set an age band per class so generated weekly content matches that group. This is not used for advertising.",
     "rightsTitle": "Your Rights and Contact",
     "rightsBody": "Parents can review, request deletion of, or revoke access to any data associated with their use of the service. For questions about this policy or to exercise your rights, please use our Contact page."
   },
@@ -380,6 +423,7 @@
   "contact": {
     "title": "Contact Us",
     "intro": "For questions about SpArki's Adventures Academy, privacy, or parent controls, please reach out:",
+    "pilotLead": "School or district pilot? Email us with your program name and approximate number of classrooms — we’ll send onboarding steps (teacher dashboard, class codes, optional homework/video).",
     "respondNote": "We aim to respond to family and privacy inquiries in a timely manner."
   },
   "comingSoon": {
@@ -614,6 +658,7 @@
     "subtitle": "Upload a PDF and generate a temporary weekly track + 3 units.",
     "generateTitle": "Generate",
     "classLabel": "Class",
+    "classAgeBandNote": "Weekly content will match this class’s band: {mode}.",
     "pdfLabel": "PDF",
     "videoToggle": "Generate homework video per unit (may take longer)",
     "buttonIdle": "Generate Weekly Track",

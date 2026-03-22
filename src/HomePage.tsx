@@ -3,6 +3,8 @@ import { Link, useSearchParams } from 'react-router-dom'
 import { appConfig } from './config'
 import { useAuth } from './AuthContext'
 import { useTranslation } from './contexts/LocaleContext'
+import { useAgeBand } from './contexts/AgeBandContext'
+import AgeBandSelector from './components/AgeBandSelector'
 import { awardDailyLoginBonus, getPlayerStats } from './progress'
 import { ParentViewContent } from './ParentDashboard'
 import { useSchoolMode } from './hooks/useSchoolMode'
@@ -87,6 +89,7 @@ const HomePage: React.FC = () => {
   const { isLoggedIn } = useAuth()
   const { t, locale } = useTranslation()
   const { schoolMode } = useSchoolMode()
+  const { ageBand, ageBandDisplayName } = useAgeBand()
   const [searchParams] = useSearchParams()
   const viewParam = searchParams.get('view')
   const [username, setUsername] = useState('')
@@ -117,18 +120,18 @@ const HomePage: React.FC = () => {
 
   useEffect(() => {
     // Local habit loop: show streak + award one daily bonus once per day.
-    const stats = getPlayerStats()
+    const stats = getPlayerStats(ageBand)
     setSparkles(stats.totalSparkles)
     setStreakDays(stats.currentStreakDays)
 
-    const bonus = awardDailyLoginBonus(10)
+    const bonus = awardDailyLoginBonus(ageBand, 10)
     if (bonus.awarded > 0) {
       setDailyBonusAwarded(bonus.awarded)
-      const updated = getPlayerStats()
+      const updated = getPlayerStats(ageBand)
       setSparkles(updated.totalSparkles)
       setStreakDays(updated.currentStreakDays)
     }
-  }, [])
+  }, [ageBand])
 
   useEffect(() => {
     // Animate the sparkles count so it feels alive as your progress grows.
@@ -282,10 +285,17 @@ const HomePage: React.FC = () => {
         <div className="home-hero-content">
           <h1 className="home-title">{t('header.appName')}</h1>
           <p className="home-tagline">{t('header.tagline')}</p>
+          <p className="home-age-band-current muted text-sm">{t('ageBand.currentLabel', { name: ageBandDisplayName })}</p>
           <Link to={ctaHref} className="home-hero-cta primary-button">
             {t('home.joinAdventure')}
           </Link>
         </div>
+      </div>
+
+      <div className="home-age-band-section">
+        <h2 className="home-age-band-title">{t('ageBand.homeSectionTitle')}</h2>
+        <p className="home-age-band-sub muted">{t('ageBand.homeSectionSubtitle')}</p>
+        <AgeBandSelector variant="default" />
       </div>
 
       <div className="home-tiers">

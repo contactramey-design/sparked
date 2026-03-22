@@ -2,6 +2,8 @@ import React, { useState, useEffect, useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import { VIDEO_POSTER_DATA_URL } from './videoPoster'
 import { useTranslation } from './contexts/LocaleContext'
+import { useAgeBand } from './contexts/AgeBandContext'
+import { homeworkAgeHintForBand } from './ageBand'
 import { getHasSafetyPass, getSafetyPassCheckoutSessionId } from './progress'
 import {
   Dialog,
@@ -30,6 +32,7 @@ interface HomeworkAdventure {
 
 const HomeworkAdventurePage: React.FC = () => {
   const { t, locale } = useTranslation()
+  const { ageBand } = useAgeBand()
   const [file, setFile] = useState<File | null>(null)
   const [previewUrl, setPreviewUrl] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
@@ -114,6 +117,7 @@ const HomeworkAdventurePage: React.FC = () => {
       const formData = new FormData()
       formData.append('image', file)
       formData.append('locale', locale)
+      formData.append('age', homeworkAgeHintForBand(ageBand))
       if (checkoutSessionId) {
         formData.append('checkout_session_id', checkoutSessionId)
       }
@@ -138,7 +142,7 @@ const HomeworkAdventurePage: React.FC = () => {
     } finally {
       setLoading(false)
     }
-  }, [file, t, locale])
+  }, [file, t, locale, ageBand])
 
   const handleGenerate: React.FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault()

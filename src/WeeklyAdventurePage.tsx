@@ -5,10 +5,12 @@ import { useB2CWeeklyEpisode } from './hooks/useB2CWeeklyEpisode'
 import ListenButton from './components/ListenButton'
 import { useTranslatedUnit } from './hooks/useTranslatedCurriculum'
 import { getPlayerStats } from './progress'
+import { useAgeBand } from './contexts/AgeBandContext'
 import { VIDEO_POSTER_DATA_URL } from './videoPoster'
 
 const WeeklyAdventurePage: React.FC = () => {
   const { t } = useTranslation()
+  const { ageBand, recommendedAgesShort } = useAgeBand()
   const { resolved, entry, safetyUnit, aiUnit } = useB2CWeeklyEpisode()
   const translatedSafety = useTranslatedUnit(safetyUnit)
   const translatedAi = useTranslatedUnit(aiUnit)
@@ -20,7 +22,7 @@ const WeeklyAdventurePage: React.FC = () => {
   // - `public/weekly/season1/week-01.mp4` ... up to 52 weeks
   const weekVideoSrc = `/weekly/season1/week-${videoWeekFile}.mp4`
   const weeklyBridgeThumbSrc = '/weekly/season1/sparkis-two-world-bridge.png'
-  const stats = getPlayerStats()
+  const stats = getPlayerStats(ageBand)
   const sparkles = stats.totalSparkles
   const streakDays = stats.currentStreakDays || 0
 
@@ -52,6 +54,7 @@ const WeeklyAdventurePage: React.FC = () => {
 
       <div className="weekly-hero card">
         <h2 className="text-xl font-bold text-slate-800">{title}</h2>
+        <p className="text-sm text-slate-600 mt-2">{t('curriculum.ageDisclaimer', { ages: recommendedAgesShort })}</p>
 
         <div className="weekly-hero-content-row">
           <div className="weekly-hero-media">

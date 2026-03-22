@@ -5,6 +5,7 @@ import { useTranslation } from './contexts/LocaleContext'
 import { supabase } from './lib/supabaseClient'
 import { isTeacherUser } from './lib/supabaseUserRole'
 import { curriculum } from './curriculum'
+import type { AgeBandId } from './ageBand'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Progress } from '@/components/ui/progress'
@@ -17,6 +18,7 @@ type SchoolClassRow = {
   class_code: string
   teacher_id: string
   created_at: string
+  age_band?: AgeBandId | string
 }
 
 type StudentProgressRow = {
@@ -88,6 +90,7 @@ const TeacherDashboardPage: React.FC = () => {
   const [classes, setClasses] = useState<SchoolClassRow[]>([])
   const [selectedClassId, setSelectedClassId] = useState<string>('')
   const [newClassName, setNewClassName] = useState('')
+  const [newClassAgeBand, setNewClassAgeBand] = useState<AgeBandId>('kids')
 
   const [students, setStudents] = useState<StudentProgressRow[]>([])
   const [homeworkGeneratedUnitIds, setHomeworkGeneratedUnitIds] = useState<string[]>([])
@@ -342,6 +345,22 @@ const TeacherDashboardPage: React.FC = () => {
                             flex: '1 1 260px',
                           }}
                         />
+                        <select
+                          aria-label={t('teacherDashboard.ageBandLabel')}
+                          value={newClassAgeBand}
+                          onChange={(e) => setNewClassAgeBand(e.target.value as AgeBandId)}
+                          style={{
+                            minHeight: 44,
+                            padding: '10px 12px',
+                            borderRadius: 12,
+                            border: '1px solid rgba(0,0,0,0.15)',
+                            minWidth: 200,
+                          }}
+                        >
+                          <option value="tots">{t('ageBand.names.tots.full')}</option>
+                          <option value="kids">{t('ageBand.names.kids.full')}</option>
+                          <option value="crew">{t('ageBand.names.crew.full')}</option>
+                        </select>
                         <Button
                           disabled={loading || !newClassName.trim()}
                           onClick={async () => {
@@ -353,6 +372,7 @@ const TeacherDashboardPage: React.FC = () => {
                                 teacher_id: user.id,
                                 name: newClassName.trim(),
                                 class_code: randomClassCode(),
+                                age_band: newClassAgeBand,
                               }
                               const { error: e } = await supabase.from('school_classes').insert(payload)
                               if (e) throw e
@@ -375,6 +395,7 @@ const TeacherDashboardPage: React.FC = () => {
                     <TableHeader>
                       <TableRow>
                         <TableHead>{t('teacherDashboard.tableClass')}</TableHead>
+                        <TableHead>{t('teacherDashboard.tableAgeBand')}</TableHead>
                         <TableHead>{t('teacherDashboard.tableCode')}</TableHead>
                         <TableHead>{t('teacherDashboard.tableAssigned')}</TableHead>
                         <TableHead>{t('teacherDashboard.tableActions')}</TableHead>
@@ -385,6 +406,13 @@ const TeacherDashboardPage: React.FC = () => {
                         <TableRow key={c.id}>
                           <TableCell>
                             <strong>{c.name}</strong>
+                          </TableCell>
+                          <TableCell>
+                            <span className="muted">
+                              {c.age_band === 'tots' || c.age_band === 'kids' || c.age_band === 'crew'
+                                ? t(`ageBand.modeBadge.${c.age_band}`)
+                                : t('ageBand.modeBadge.kids')}
+                            </span>
                           </TableCell>
                           <TableCell>
                             <code>{c.class_code}</code>
@@ -406,7 +434,7 @@ const TeacherDashboardPage: React.FC = () => {
                       ))}
                       {classes.length === 0 && (
                         <TableRow>
-                          <TableCell colSpan={4}>
+                          <TableCell colSpan={5}>
                             <span className="muted">{t('teacherDashboard.noClasses')}</span>
                           </TableCell>
                         </TableRow>

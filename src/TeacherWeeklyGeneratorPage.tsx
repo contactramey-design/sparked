@@ -6,6 +6,7 @@ import { useAuth } from './AuthContext'
 import { useTranslation, useLocale } from './contexts/LocaleContext'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
+import type { AgeBandId } from './ageBand'
 
 type SchoolClassRow = {
   id: string
@@ -13,6 +14,7 @@ type SchoolClassRow = {
   class_code: string
   teacher_id: string
   created_at: string
+  age_band?: AgeBandId | string
 }
 
 type GeneratorUnitSummary = {
@@ -73,6 +75,10 @@ const TeacherWeeklyGeneratorPage: React.FC = () => {
   }, [teacherOk])
 
   const classOptions = useMemo(() => classes, [classes])
+  const selectedClass = useMemo(
+    () => classes.find((c) => c.id === selectedClassId) ?? null,
+    [classes, selectedClassId],
+  )
 
   const submit = async () => {
     if (!supabase || !user) return
@@ -182,6 +188,19 @@ const TeacherWeeklyGeneratorPage: React.FC = () => {
                   ))}
                 </select>
               </label>
+
+              {selectedClass && (
+                <p className="muted" role="status">
+                  {t('teacherGenerator.classAgeBandNote', {
+                    mode:
+                      selectedClass.age_band === 'tots' ||
+                      selectedClass.age_band === 'kids' ||
+                      selectedClass.age_band === 'crew'
+                        ? t(`ageBand.modeBadge.${selectedClass.age_band}`)
+                        : t('ageBand.modeBadge.kids'),
+                  })}
+                </p>
+              )}
 
               <label className="muted">
                 {t('teacherGenerator.pdfLabel')}

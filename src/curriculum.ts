@@ -1,7 +1,12 @@
 /**
  * Curriculum: tracks and units. Unit video: add videoUrl to a unit (file in public/).
  * Track intro video: add introVideoUrl to a track. See VIDEOS.md.
+ *
+ * Pilot note: several units share `/coding_intro.mp4` or `/safety_into.mp4` until per-unit MP4s exist in `public/`.
  */
+import type { AgeBandId } from './ageBand'
+import { ALL_AGE_BANDS } from './ageBand'
+
 export type AgeGroupId = 'age2'
 
 export type TrackId = 'ai-coding' | 'social-safety'
@@ -45,6 +50,8 @@ export interface UnitConfig {
   videoUrlEs?: string
   /** Optional "Think about this!" prompts shown during material */
   thinkPrompts?: ThinkPrompt[]
+  /** Which age bands see this unit (default: all). Omit to include every band. */
+  ageBands?: AgeBandId[]
 }
 
 export interface TrackConfig {
@@ -127,7 +134,7 @@ export const curriculum: CurriculumConfig = {
           'Draw your own AI helper and label what it sorts for you (toys, snacks, books, or something else).',
       },
       unlocksUnitId: 'ai-2-coding-games',
-      videoUrl: '/ai-1-what-is-ai.mp4',
+      videoUrl: '/coding_intro.mp4',
       thinkPrompts: [
         { label: 'Think about this!', text: 'Look around the room. Can you find 3 things you could sort into groups? (e.g. toys, books, crayons)' },
         { label: 'Think about this!', text: 'SpArki learns from examples, not magic. What is one example you could show a friend so they learn something new?' },
@@ -168,7 +175,7 @@ export const curriculum: CurriculumConfig = {
           'Create a short “algorithm” for a classmate to follow (like getting from the door to a chair).',
       },
       unlocksUnitId: 'ai-3-software-explorers',
-      videoUrl: '/ai-2-coding-games.mp4',
+      videoUrl: '/coding_intro.mp4',
     },
     {
       id: 'ai-3-software-explorers',
@@ -205,7 +212,7 @@ export const curriculum: CurriculumConfig = {
           'With a grown-up, find 3 examples of helpful software at home or at school and draw them.',
       },
       unlocksUnitId: 'ai-4-ai-in-the-world',
-      videoUrl: '/ai-3-software-explorers.mp4',
+      videoUrl: '/coding_intro.mp4',
     },
     {
       id: 'ai-4-ai-in-the-world',
@@ -236,7 +243,7 @@ export const curriculum: CurriculumConfig = {
           'Make a simple “AI map” of your school or home—mark where AI might live (like in tablets, speakers, or cars).',
       },
       unlocksUnitId: 'ai-5-ethical-coding',
-      videoUrl: '/ai-4-ai-in-the-world.mp4',
+      videoUrl: '/coding_intro.mp4',
     },
     {
       id: 'ai-5-ethical-coding',
@@ -266,7 +273,7 @@ export const curriculum: CurriculumConfig = {
         description:
           'Work with a grown-up to change a short “unfair” story into a kinder, more fair version.',
       },
-      videoUrl: '/ai-5-ethical-coding.mp4',
+      videoUrl: '/coding_intro.mp4',
     },
     {
       id: 'safety-instagram',
@@ -385,7 +392,7 @@ export const curriculum: CurriculumConfig = {
           'With a grown-up, write 3 kind comments you could leave on someone’s video that are safe and encouraging.',
       },
       unlocksUnitId: 'safety-snapchat',
-      videoUrl: '/safety-tiktok.mp4',
+      videoUrl: '/safety_into.mp4',
     },
     {
       id: 'safety-snapchat',
@@ -442,7 +449,7 @@ export const curriculum: CurriculumConfig = {
           'Draw or list 5 silly but safe snap ideas you could share with friends, then check them with a grown-up.',
       },
       unlocksUnitId: 'safety-roblox',
-      videoUrl: '/safety-snapchat.mp4',
+      videoUrl: '/safety_into.mp4',
     },
     {
       id: 'safety-roblox',
@@ -499,7 +506,7 @@ export const curriculum: CurriculumConfig = {
           'With your grown-up, write 3 simple family rules for playing games safely online.',
       },
       unlocksUnitId: 'safety-fortnite',
-      videoUrl: '/safety-roblox.mp4',
+      videoUrl: '/safety_into.mp4',
     },
     {
       id: 'safety-fortnite',
@@ -556,7 +563,7 @@ export const curriculum: CurriculumConfig = {
           'With a grown-up, create a short plan for when you will mute, leave, or take a break from voice chat.',
       },
       unlocksUnitId: 'safety-reddit',
-      videoUrl: '/safety-fortnite.mp4',
+      videoUrl: '/safety_into.mp4',
     },
     {
       id: 'safety-reddit',
@@ -612,7 +619,20 @@ export const curriculum: CurriculumConfig = {
         description:
           'Together with a grown-up, make a list of websites and apps that are “green light” safe for you right now.',
       },
-      videoUrl: '/safety-reddit.mp4',
+      videoUrl: '/safety_into.mp4',
     },
   ],
+}
+
+/** Bands a unit is shown for (defaults to all). */
+export function unitAgeBands(unit: UnitConfig): AgeBandId[] {
+  return unit.ageBands?.length ? unit.ageBands : ALL_AGE_BANDS
+}
+
+export function getUnitsForBand(band: AgeBandId): UnitConfig[] {
+  return curriculum.units.filter((u) => unitAgeBands(u).includes(band))
+}
+
+export function getUnitsInTrackForBand(trackId: TrackId, band: AgeBandId): UnitConfig[] {
+  return curriculum.units.filter((u) => u.trackId === trackId && unitAgeBands(u).includes(band))
 }

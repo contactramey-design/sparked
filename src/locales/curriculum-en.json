@@ -19,6 +19,7 @@
   "lockedByProgress": "Finish the previous unit to unlock.",
   "startUnit": "Start unit",
   "sparklesEarnedSoFar": "{count} sparkles earned so far",
+  "ageDisclaimer": "Recommended for ages {ages}. Parent or teacher supervision suggested.",
   "tracks": {
     "ai-coding": {
       "title": "AI, Coding & Software Adventures",

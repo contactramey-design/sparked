@@ -4,6 +4,7 @@ import { supabase } from './lib/supabaseClient'
 import { ensureAnonymousSchoolAuth, getSchoolSession } from '@/school/schoolSession'
 import { getUnitStatus } from './progress'
 import { useTranslation } from './contexts/LocaleContext'
+import { useAgeBand } from './contexts/AgeBandContext'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { readJsonFromCache, unitJsonPath, weeklyActiveGeneratorPath, writeJsonToCache } from './lib/schoolGeneratorCache'
@@ -44,6 +45,7 @@ function progressUnitsFromRow(progress: unknown): Record<string, { mastered?: bo
 const SchoolWeeklyTrackPage: React.FC = () => {
   const navigate = useNavigate()
   const { t } = useTranslation()
+  const { ageBand } = useAgeBand()
 
   const { classId } = getSchoolSession()
   const [generator, setGenerator] = useState<GeneratorRow | null>(null)
@@ -89,7 +91,7 @@ const SchoolWeeklyTrackPage: React.FC = () => {
 
             // Offline mastery: fall back to local progress.
             const map: Record<string, boolean> = {}
-            for (const u of offlineUnits) map[u.unitId] = !!getUnitStatus(u.unitId)?.mastered
+            for (const u of offlineUnits) map[u.unitId] = !!getUnitStatus(u.unitId, ageBand)?.mastered
             setUnitMasteredMap(map)
           }
           return

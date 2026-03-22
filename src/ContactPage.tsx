@@ -15,6 +15,7 @@ const ContactPage: React.FC = () => {
       </header>
       <div className="legal-content card">
         <p>{t('contact.intro')}</p>
+        <p>{t('contact.pilotLead')}</p>
         <p>
           <a
             href="mailto:hello@sparkiedu.com"

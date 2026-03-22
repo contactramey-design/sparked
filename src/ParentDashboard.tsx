@@ -1,18 +1,20 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { curriculum } from './curriculum'
+import { curriculum, getUnitsForBand } from './curriculum'
 import { loadProgress, getHasSafetyPass, setHasSafetyPass, setSafetyPassCheckoutSessionId } from './progress'
 import { useAuth } from './AuthContext'
 import { useTranslation } from './contexts/LocaleContext'
+import { useAgeBand } from './contexts/AgeBandContext'
 import { useB2CWeeklyEpisode } from './hooks/useB2CWeeklyEpisode'
 
 /** Parent view content only (used in merged Dashboard page and standalone /parent redirect) */
 export const ParentViewContent: React.FC = () => {
   const { t } = useTranslation()
+  const { ageBand } = useAgeBand()
   const weeklyEpisode = useB2CWeeklyEpisode()
   const weeklyWk = String(weeklyEpisode.resolved.weekIndex)
   const weeklyTitleShort = t(`weekly.season1.weeks.${weeklyWk}.title`)
-  const progress = loadProgress()
+  const progress = loadProgress(ageBand)
   const { kidLock, setKidLock } = useAuth()
   const hasSafetyPass = getHasSafetyPass()
   const [unlockLoading, setUnlockLoading] = useState(false)
@@ -170,7 +172,7 @@ export const ParentViewContent: React.FC = () => {
               </tr>
             </thead>
             <tbody>
-              {curriculum.units.map((unit) => {
+              {getUnitsForBand(ageBand).map((unit) => {
                 const status = progress.units[unit.id]
                 const track = curriculum.tracks.find((tr) => tr.id === unit.trackId)
 

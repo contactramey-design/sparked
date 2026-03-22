@@ -47,6 +47,32 @@ function normalizeBool(v) {
   return false
 }
 
+function normalizeAgeBand(v) {
+  if (v === 'tots' || v === 'kids' || v === 'crew') return v
+  return 'kids'
+}
+
+/** Target age for weekly PDF generator prompts (matches app age bands). */
+function ageBandInstruction(band, lang) {
+  const b = normalizeAgeBand(band)
+  if (lang === 'es') {
+    if (b === 'tots') {
+      return 'Mantén todo el texto en español sencillo para niños de 3 a 5 años (frases muy cortas, vocabulario básico).'
+    }
+    if (b === 'crew') {
+      return 'Mantén todo el texto en español claro para niños de 9 a 11 años (un poco más de detalle, aún amigable).'
+    }
+    return 'Mantén todo el texto en español sencillo y amigable para niños de 6 a 8 años.'
+  }
+  if (b === 'tots') {
+    return 'Keep all text in simple English for children ages 3–5 (preschool-style, very short sentences).'
+  }
+  if (b === 'crew') {
+    return 'Keep all text in clear English for children ages 9–11 (slightly richer detail, still kid-friendly).'
+  }
+  return 'Keep all text in simple, kid-friendly English for children ages 6–8.'
+}
+
 function safeJsonParse(raw) {
   if (!raw || typeof raw !== 'string') return null
   const trimmed = raw.trim()
@@ -83,8 +109,9 @@ async function extractPdfText(pdfBuffer) {
   return out.replace(/\s+/g, ' ').trim()
 }
 
-function buildSystemPrompt(locale) {
+function buildSystemPrompt(locale, ageBand = 'kids') {
   const isEs = locale === 'es'
+  const ageLine = ageBandInstruction(ageBand, isEs ? 'es' : 'en')
   if (isEs) {
     return `Eres un asistente educativo. Vas a crear material para K–2 basandote en el contenido de un PDF de un profesor.
 
@@ -102,7 +129,7 @@ Reglas:
     - title, subject, topic
     - steps: EXACTAMENTE 5 pasos
       cada step tiene: id (string), story (2-3 frases), prompt (frase corta) y hint (pista suave sin dar la respuesta).
-- Mantén todo el texto en español sencillo y amigable para niños de 5–8 años.
+- ${ageLine}
 - No incluyas markdown ni texto extra.
 - Responde SOLO con un JSON valido con esta forma:
 {
@@ -140,7 +167,7 @@ Rules:
     - title, subject, topic
     - steps: EXACTLY 5 steps
       each step has: id (string), story (2-3 sentences), prompt (short phrase), and hint (gentle Socratic hint without giving the answer).
-- Keep all text in simple, kid-friendly English for children ages 5–8.
+- ${ageLine}
 - Do not include markdown or any extra text.
 - Respond ONLY with valid JSON with this shape:
 {
@@ -162,14 +189,14 @@ Rules:
 }`
 }
 
-async function generateWeeklyUnits({ pdfText, locale }) {
+async function generateWeeklyUnits({ pdfText, locale, ageBand = 'kids' }) {
   const apiKey = process.env.OPENAI_API_KEY
   if (!apiKey) throw new Error('OPENAI_API_KEY is not set')
 
   const maxPdfLen = 6000
   const trimmed = pdfText.slice(0, maxPdfLen)
 
-  const systemPrompt = buildSystemPrompt(locale)
+  const systemPrompt = buildSystemPrompt(locale, normalizeAgeBand(ageBand))
   const userPrompt = `Here is the teacher PDF content (possibly extracted text). Use it as source material.\n\nPDF_TEXT:\n${trimmed}\n\nNow generate the requested weekly label and 3 units JSON.`
 
   const res = await fetch('https://api.openai.com/v1/chat/completions', {
@@ -350,6 +377,19 @@ export default async function handler(req, res) {
       return
     }
 
+    const { data: classRow, error: classErr } = await supabase
+      .from('school_classes')
+      .select('id, teacher_id, age_band')
+      .eq('id', classId)
+      .maybeSingle()
+
+    if (classErr || !classRow || classRow.teacher_id !== teacherId) {
+      res.status(403).json({ error: 'Class not found or access denied.' })
+      return
+    }
+
+    const ageBand = normalizeAgeBand(classRow.age_band)
+
     const fs = await import('node:fs')
     const pdfBuffer = await fs.promises.readFile(pdfFile.filepath)
 
@@ -362,6 +402,7 @@ export default async function handler(req, res) {
     const { weekly_track_label: weeklyTrackLabel, units } = await generateWeeklyUnits({
       pdfText,
       locale: locale === 'es' ? 'es' : 'en',
+      ageBand,
     })
 
     // Validate the model output shape enough to prevent broken downstream UI.
@@ -465,6 +506,7 @@ export default async function handler(req, res) {
           summary: u.summary,
           estMinutes: 20,
           ageGroup: 'age2',
+          ageBand,
           isFree: true,
           sparklesReward: 10,
           contentBlocks: u.contentBlocks,

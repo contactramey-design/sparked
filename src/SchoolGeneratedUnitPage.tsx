@@ -6,6 +6,7 @@ import { curriculum, type QuizQuestion, type UnitConfig } from './curriculum'
 import GameQuiz from './GameQuiz'
 import { updateUnitAfterQuiz, getUnitStatus } from './progress'
 import { useTranslation } from './contexts/LocaleContext'
+import { useAgeBand } from './contexts/AgeBandContext'
 import ListenButton from './components/ListenButton'
 import SparkiAvatar from './components/SparkiAvatar'
 import { VIDEO_POSTER_DATA_URL } from './videoPoster'
@@ -99,6 +100,7 @@ const SchoolGeneratedUnitPage: React.FC = () => {
   const unitIdSafe = (unitId ?? '').toString()
 
   const { t } = useTranslation()
+  const { ageBand, recommendedAgesShort } = useAgeBand()
   const navigate = useNavigate()
 
   const { classId } = getSchoolSession()
@@ -143,7 +145,7 @@ const SchoolGeneratedUnitPage: React.FC = () => {
           const quizLen = cached.quizQuestions?.length ?? 0
           setSelected(Array(quizLen).fill(-1))
           // Offline mastery: fall back to local progress.
-          const justExisting = !!getUnitStatus(unitIdSafe)?.mastered
+          const justExisting = !!getUnitStatus(unitIdSafe, ageBand)?.mastered
           setMastered(justExisting)
           setWasAlreadyMastered(justExisting)
           return
@@ -197,7 +199,7 @@ const SchoolGeneratedUnitPage: React.FC = () => {
             ? !!(progressRow.progress as ProgressShape).units?.[unitIdSafe]?.mastered
             : false
 
-        const justExisting = masteredFromSupabase || !!getUnitStatus(unitIdSafe)?.mastered
+        const justExisting = masteredFromSupabase || !!getUnitStatus(unitIdSafe, ageBand)?.mastered
         setMastered(justExisting)
         setWasAlreadyMastered(justExisting)
       } catch (e: unknown) {
@@ -209,7 +211,7 @@ const SchoolGeneratedUnitPage: React.FC = () => {
           setUnitJson(cached)
           const quizLen = cached.quizQuestions?.length ?? 0
           setSelected(Array(quizLen).fill(-1))
-          const justExisting = !!getUnitStatus(unitIdSafe)?.mastered
+          const justExisting = !!getUnitStatus(unitIdSafe, ageBand)?.mastered
           setMastered(justExisting)
           setWasAlreadyMastered(justExisting)
         } else {
@@ -223,7 +225,7 @@ const SchoolGeneratedUnitPage: React.FC = () => {
     return () => {
       cancelled = true
     }
-  }, [classId, navigate, t, unitIdSafe])
+  }, [ageBand, classId, navigate, t, unitIdSafe])
 
   const parsed = useMemo(() => {
     if (!unitJson?.contentBlocks) return { story: null as string | null, rules: [] as Array<{ label: string | null; text: string }> }
@@ -298,7 +300,7 @@ const SchoolGeneratedUnitPage: React.FC = () => {
 
     setScore(correct)
 
-    const result = updateUnitAfterQuiz(unitConfig, correct, unitConfig.quizQuestions.length)
+    const result = updateUnitAfterQuiz(unitConfig, correct, unitConfig.quizQuestions.length, ageBand)
     setEarnedSparkles(result.earnedThisAttempt)
     const updatedStatus = result.progress.units[unitConfig.id]
     const justMastered = !!updatedStatus?.mastered
@@ -319,6 +321,9 @@ const SchoolGeneratedUnitPage: React.FC = () => {
             <h2>{unitJson.title}</h2>
             <p className="welcome-subtitle muted">
               {parsed.story ? t('schoolGeneratedUnit.lessonQuizHomework') : t('schoolGeneratedUnit.generatedLesson')}
+            </p>
+            <p className="unit-age-disclaimer muted text-sm mt-2">
+              {t('curriculum.ageDisclaimer', { ages: recommendedAgesShort })}
             </p>
           </div>
         </div>
