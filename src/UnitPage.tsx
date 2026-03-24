@@ -75,14 +75,22 @@ function parseContentBlocks(blocks: string[]) {
 }
 
 /** MP4 slot with fallback; remount via `key` when unit/locale changes so failed state resets without an effect. */
-function UnitMp4VideoSlot({ videoSrc, fallbackVideo }: { videoSrc: string; fallbackVideo: string }) {
+function UnitMp4VideoSlot({
+  videoSrc,
+  fallbackVideo,
+  posterUrl,
+}: {
+  videoSrc: string
+  fallbackVideo: string
+  posterUrl?: string
+}) {
   const [videoFailed, setVideoFailed] = useState(false)
   const effectiveVideoSrc = videoFailed ? fallbackVideo : videoSrc
   return (
     <video
       controls
       width="100%"
-      poster={VIDEO_POSTER_DATA_URL}
+      poster={posterUrl?.trim() ? posterUrl : VIDEO_POSTER_DATA_URL}
       preload="metadata"
       onError={() => setVideoFailed(true)}
     >
@@ -441,6 +449,7 @@ const UnitPage: React.FC = () => {
                 key={`${unit.id}-${locale}`}
                 videoSrc={videoSrc}
                 fallbackVideo={fallbackVideo}
+                posterUrl={unit.videoPosterUrl}
               />
             )}
           </div>

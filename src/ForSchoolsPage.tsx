@@ -1,19 +1,17 @@
 import React, { useEffect, useMemo, useState, useCallback } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { useTranslation } from './contexts/LocaleContext'
+import { useAuth } from './AuthContext'
+import { supabase } from './lib/supabaseClient'
+import { isTeacherUser } from './lib/supabaseUserRole'
+import { randomSchoolClassCode } from './lib/schoolClassCode'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import SparkiAvatar from './components/SparkiAvatar'
 import ComplianceContent from './components/ComplianceContent'
 
-const PILOT_CODE_STORAGE = 'sparki_for_schools_pilot_class_code'
-
-function generateDemoClassCode(): string {
-  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'
-  let out = ''
-  for (let i = 0; i < 6; i += 1) out += chars[Math.floor(Math.random() * chars.length)]!
-  return out
-}
+/** Last live class code this browser created (real row in Supabase). */
+const LIVE_PILOT_CLASS_CODE_KEY = 'sparki_for_schools_live_class_code'
 
 function schoolDemoVideoUrl(): string {
   return (import.meta.env.VITE_SCHOOL_DEMO_VIDEO_URL as string | undefined)?.trim() ?? ''
@@ -44,30 +42,87 @@ function embedDemoSrc(raw: string): { type: 'iframe'; src: string } | { type: 'v
 
 const ForSchoolsPage: React.FC = () => {
   const { t } = useTranslation()
+  const { user, isLoggedIn } = useAuth()
   const location = useLocation()
   const demoRaw = schoolDemoVideoUrl() || '/Unit1b_intro_.mp4'
   const demoEmbed = useMemo(() => embedDemoSrc(demoRaw), [demoRaw])
 
+  const canUseSupabase = !!supabase
+  const teacherOk = !!user && isTeacherUser(user)
+
   const [pilotCode, setPilotCode] = useState<string | null>(() => {
     if (typeof window === 'undefined') return null
     try {
-      return window.localStorage.getItem(PILOT_CODE_STORAGE)
+      return window.localStorage.getItem(LIVE_PILOT_CLASS_CODE_KEY)
     } catch {
       return null
     }
   })
   const [pilotCopied, setPilotCopied] = useState(false)
+  const [pilotLoading, setPilotLoading] = useState(false)
+  const [pilotError, setPilotError] = useState<string | null>(null)
 
-  const startFreePilot = useCallback(() => {
-    const code = generateDemoClassCode()
-    try {
-      window.localStorage.setItem(PILOT_CODE_STORAGE, code)
-    } catch {
-      /* ignore */
-    }
-    setPilotCode(code)
+  const loginRedirectPath = `/login?redirect=${encodeURIComponent('/for-schools')}`
+
+  const startFreePilot = useCallback(async () => {
+    setPilotError(null)
     setPilotCopied(false)
-  }, [])
+    if (!supabase) {
+      setPilotError(t('forSchoolsHub.pilotSupabaseMissing'))
+      return
+    }
+    if (!isLoggedIn || !user) {
+      setPilotError(t('forSchoolsHub.pilotSignInRequired'))
+      return
+    }
+    if (!isTeacherUser(user)) {
+      setPilotError(t('forSchoolsHub.pilotNeedFullAccount'))
+      return
+    }
+
+    setPilotLoading(true)
+    try {
+      let lastError: Error | null = null
+      for (let attempt = 0; attempt < 12; attempt += 1) {
+        const class_code = randomSchoolClassCode()
+        const { data, error: insertError } = await supabase
+          .from('school_classes')
+          .insert({
+            teacher_id: user.id,
+            name: t('forSchoolsHub.pilotClassDefaultName'),
+            class_code,
+            age_band: 'kids',
+          })
+          .select('class_code')
+          .single()
+
+        if (!insertError && data?.class_code) {
+          const code = String(data.class_code)
+          try {
+            window.localStorage.setItem(LIVE_PILOT_CLASS_CODE_KEY, code)
+          } catch {
+            /* ignore */
+          }
+          setPilotCode(code)
+          setPilotLoading(false)
+          return
+        }
+
+        const msg = insertError?.message ?? ''
+        const code = (insertError as { code?: string })?.code
+        if (code === '23505' || /duplicate|unique/i.test(msg)) {
+          lastError = insertError instanceof Error ? insertError : new Error(msg)
+          continue
+        }
+        throw insertError ?? new Error(t('forSchoolsHub.pilotCreateError'))
+      }
+      throw lastError ?? new Error(t('forSchoolsHub.pilotCreateError'))
+    } catch (e: unknown) {
+      setPilotError(e instanceof Error ? e.message : t('forSchoolsHub.pilotCreateError'))
+    } finally {
+      setPilotLoading(false)
+    }
+  }, [isLoggedIn, supabase, t, user])
 
   const copyPilotCode = useCallback(async () => {
     if (!pilotCode || typeof navigator === 'undefined' || !navigator.clipboard) return
@@ -111,17 +166,36 @@ const ForSchoolsPage: React.FC = () => {
             <CardTitle>{t('forSchoolsHub.pilotStartTitle')}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <p className="muted">{t('forSchoolsHub.pilotStartBody')}</p>
-            <div className="flex flex-wrap gap-3">
-              <Button type="button" size="lg" onClick={startFreePilot}>
-                {t('forSchoolsHub.pilotStartButton')}
-              </Button>
-              {pilotCode && (
-                <Button type="button" variant="secondary" onClick={() => void copyPilotCode()}>
-                  {pilotCopied ? t('forSchoolsHub.pilotCopied') : t('forSchoolsHub.pilotCopy')}
+            {!canUseSupabase ? (
+              <p className="muted">{t('forSchoolsHub.pilotSupabaseMissing')}</p>
+            ) : !isLoggedIn ? (
+              <>
+                <p className="muted">{t('forSchoolsHub.pilotStartBodySignedOut')}</p>
+                <Button size="lg" asChild>
+                  <Link to={loginRedirectPath}>{t('forSchoolsHub.pilotSignInButton')}</Link>
                 </Button>
-              )}
-            </div>
+              </>
+            ) : !teacherOk ? (
+              <p className="muted">{t('forSchoolsHub.pilotNeedFullAccount')}</p>
+            ) : (
+              <p className="muted">{t('forSchoolsHub.pilotStartBody')}</p>
+            )}
+
+            {canUseSupabase && isLoggedIn && teacherOk ? (
+              <div className="flex flex-wrap gap-3">
+                <Button type="button" size="lg" disabled={pilotLoading} onClick={() => void startFreePilot()}>
+                  {pilotLoading ? t('forSchoolsHub.pilotCreating') : t('forSchoolsHub.pilotStartButton')}
+                </Button>
+                {pilotCode ? (
+                  <Button type="button" variant="secondary" disabled={pilotLoading} onClick={() => void copyPilotCode()}>
+                    {pilotCopied ? t('forSchoolsHub.pilotCopied') : t('forSchoolsHub.pilotCopy')}
+                  </Button>
+                ) : null}
+              </div>
+            ) : null}
+
+            {!!pilotError && <p className="text-sm text-red-700">{pilotError}</p>}
+
             {pilotCode ? (
               <div className="rounded-xl border border-amber-200 bg-white p-4">
                 <p className="text-sm font-semibold text-amber-900">{t('forSchoolsHub.pilotCodeLabel')}</p>

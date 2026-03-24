@@ -48,6 +48,8 @@ export interface UnitConfig {
   videoUrl?: string
   /** Optional Spanish video: same as videoUrl but for locale es */
   videoUrlEs?: string
+  /** Optional <video poster> image (path under public/, e.g. '/tots-video-thumbnails/found-1-colors.png'). */
+  videoPosterUrl?: string
   /** Optional "Think about this!" prompts shown during material */
   thinkPrompts?: ThinkPrompt[]
   /** Which age bands see this unit (default: all). Omit to include every band. */
@@ -63,6 +65,8 @@ export interface TrackConfig {
   introVideoUrl?: string
   /** Optional Spanish intro video for locale es */
   introVideoUrlEs?: string
+  /** Optional <video poster> for the track intro clip (path under public/). */
+  introVideoPosterUrl?: string
 }
 
 export interface CurriculumConfig {
@@ -89,6 +93,7 @@ export const curriculum: CurriculumConfig = {
         'Tots (3–5) and Crew: colors, shapes, counting, letters, and patterns — Tots get gentle play; Crew gets extra challenge (no social apps).',
       order: 2,
       introVideoUrl: '/coding_intro.mp4',
+      introVideoPosterUrl: '/tots-video-thumbnails/found-1-colors.png',
     },
     {
       id: 'social-safety',
@@ -327,6 +332,7 @@ export const curriculum: CurriculumConfig = {
       },
       unlocksUnitId: 'found-2-shapes-matching',
       videoUrl: '/coding_intro.mp4',
+      videoPosterUrl: '/tots-video-thumbnails/found-1-colors.png',
       thinkPrompts: [
         { label: 'Try it!', text: 'Point to something red in the room. Point to something blue.' },
         { label: 'Try it!', text: 'Tell a grown-up: “Sorting makes my brain strong!”' },
@@ -375,6 +381,7 @@ export const curriculum: CurriculumConfig = {
       },
       unlocksUnitId: 'found-3-numbers-counting',
       videoUrl: '/coding_intro.mp4',
+      videoPosterUrl: '/tots-video-thumbnails/found-2-shapes.png',
       thinkPrompts: [
         { label: 'Try it!', text: 'Trace a circle in the air with your finger.' },
         { label: 'Try it!', text: 'Find one square shape near you right now.' },
@@ -423,6 +430,7 @@ export const curriculum: CurriculumConfig = {
       },
       unlocksUnitId: 'found-4-letters-sounds',
       videoUrl: '/coding_intro.mp4',
+      videoPosterUrl: '/tots-video-thumbnails/found-3-numbers.png',
       thinkPrompts: [
         { label: 'Try it!', text: 'Clap once for 1, twice for 2, three times for 3!' },
         { label: 'Try it!', text: 'How many people are in the room right now? Count together.' },
@@ -471,6 +479,7 @@ export const curriculum: CurriculumConfig = {
       },
       unlocksUnitId: 'found-5-patterns-sequences',
       videoUrl: '/coding_intro.mp4',
+      videoPosterUrl: '/tots-video-thumbnails/found-4-letters.png',
       thinkPrompts: [
         { label: 'Try it!', text: 'Say the “ah” sound and think of something that starts with A.' },
         { label: 'Try it!', text: 'Sing the ABC song’s first three letters with a grown-up.' },
@@ -518,6 +527,7 @@ export const curriculum: CurriculumConfig = {
         description: 'Line up snack pieces: cracker, berry, cracker, berry — what comes next?',
       },
       videoUrl: '/coding_intro.mp4',
+      videoPosterUrl: '/tots-video-thumbnails/found-5-patterns.png',
       thinkPrompts: [
         { label: 'Try it!', text: 'Clap-soft-clap-soft — keep the pattern two more times!' },
         { label: 'Try it!', text: 'Make a color pattern with two crayons and show a grown-up.' },

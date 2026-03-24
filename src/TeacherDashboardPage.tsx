@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from './AuthContext'
 import { useTranslation } from './contexts/LocaleContext'
 import { supabase } from './lib/supabaseClient'
+import { randomSchoolClassCode } from './lib/schoolClassCode'
 import { isTeacherUser } from './lib/supabaseUserRole'
 import { curriculum } from './curriculum'
 import type { AgeBandId } from './ageBand'
@@ -69,13 +70,6 @@ function computeTrackCompletion(trackId: string, progress: unknown): number {
   const p = safeProgressObject(progress)
   const masteredCount = unitIds.filter((id) => p.units?.[id]?.mastered).length
   return percent(masteredCount, unitIds.length)
-}
-
-function randomClassCode(): string {
-  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'
-  let out = ''
-  for (let i = 0; i < 6; i += 1) out += chars[Math.floor(Math.random() * chars.length)]
-  return out
 }
 
 const TeacherDashboardPage: React.FC = () => {
@@ -371,7 +365,7 @@ const TeacherDashboardPage: React.FC = () => {
                               const payload = {
                                 teacher_id: user.id,
                                 name: newClassName.trim(),
-                                class_code: randomClassCode(),
+                                class_code: randomSchoolClassCode(),
                                 age_band: newClassAgeBand,
                               }
                               const { error: e } = await supabase.from('school_classes').insert(payload)
