@@ -381,7 +381,7 @@ export const curriculum: CurriculumConfig = {
         description: 'Find a circle, a square, and a triangle in your home with a grown-up.',
       },
       unlocksUnitId: 'found-3-numbers-counting',
-      videoUrl: '/coding_intro.mp4',
+      videoUrl: '/Sparkitotsunit2educational.mp4',
       videoPosterUrl: '/tots-video-thumbnails/found-2-shapes.png',
       thinkPrompts: [
         { label: 'Try it!', text: 'Trace a circle in the air with your finger.' },
