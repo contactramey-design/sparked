@@ -15,8 +15,8 @@ All course and track videos are configured in one place: **`src/curriculum.ts`**
 
 - Optional **`videoPosterUrl`**: path to a still image (e.g. PNG in **`public/`**). Used as the HTML **`<video poster>`** so learners see a screenshot until the real MP4 is finished or while a placeholder clip plays.
 - **Sparki Tots (foundations)** thumbnails live in **`public/tots-video-thumbnails/`** (`found-1-colors.png` … `found-5-patterns.png`), wired on units `found-1`–`found-5` in `curriculum.ts`. Source art can stay in **`Sparki Tots vid thumbnails/`** at repo root — copy into `public/` when updating.
-- **Colors & Sorting** (`found-1-colors-sorting`) uses **`/Sparkiunit1colors.mp4`** in `public/` for the unit lesson video (poster: `found-1-colors.png`).
-- **Shapes & Matching** (`found-2-shapes-matching`) uses **`/Sparkitotsunit2educational.mp4`** in `public/` (poster: `found-2-shapes.png`). Source file at repo root may be named `Sparkitotsunit2educational (1).mp4` — copy to `public/Sparkitotsunit2educational.mp4` when updating.
+- **Colors & Sorting** (`found-1-colors-sorting`) uses **`/tots-video-thumbnails/Sparkiunit1colors.mp4`** (file: `public/tots-video-thumbnails/Sparkiunit1colors.mp4`; poster: `found-1-colors.png` in the same folder).
+- **Shapes & Matching** (`found-2-shapes-matching`) uses **`/tots-video-thumbnails/Sparkitotsunit2educational.mp4`** (poster: `found-2-shapes.png`). Keep MP4s next to the Tots poster PNGs so paths stay in sync.
 - **Social media safety** unit posters use the matching **ebook covers** in **`public/social-safety-covers/`** (`instagram.png`, `tiktok.png`, `snapchat.png`, `roblox.png`, `fortnite.png`, `reddit.png`), wired on `safety-instagram` through `safety-reddit`. The track intro uses the Instagram cover as its poster until you add a dedicated track still. Original cover assets remain in **`public/`** with their long filenames; the `social-safety-covers/` copies keep URL-safe names.
 
 Example in `curriculum.ts`:
