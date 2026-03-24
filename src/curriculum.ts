@@ -102,6 +102,7 @@ export const curriculum: CurriculumConfig = {
         'SpArki helps you practice safe watching, kind comments, and healthy screen time.',
       order: 3,
       introVideoUrl: '/safety_into.mp4',
+      introVideoPosterUrl: '/social-safety-covers/instagram.png',
     },
   ],
   units: [
@@ -589,8 +590,9 @@ export const curriculum: CurriculumConfig = {
           'Draw a pretend profile page that shows fun things (like pets or hobbies) but no private info. Share it with a grown-up.',
       },
       unlocksUnitId: 'safety-tiktok',
-        // Dedicated file not in repo yet; use safety track intro so production does not 404.
-        videoUrl: '/safety_into.mp4',
+      // Dedicated unit MP4 not in repo yet; use safety track intro so production does not 404.
+      videoUrl: '/safety_into.mp4',
+      videoPosterUrl: '/social-safety-covers/instagram.png',
       thinkPrompts: [
         { label: 'Think about this!', text: 'Who is one grown-up you could ask before posting a photo? Talk to them about it!' },
         { label: 'Think about this!', text: 'What would you never put in your profile? (Hint: school name, address, phone number)' },
@@ -653,6 +655,7 @@ export const curriculum: CurriculumConfig = {
       },
       unlocksUnitId: 'safety-snapchat',
       videoUrl: '/safety_into.mp4',
+      videoPosterUrl: '/social-safety-covers/tiktok.png',
     },
     {
       id: 'safety-snapchat',
@@ -711,6 +714,7 @@ export const curriculum: CurriculumConfig = {
       },
       unlocksUnitId: 'safety-roblox',
       videoUrl: '/safety_into.mp4',
+      videoPosterUrl: '/social-safety-covers/snapchat.png',
     },
     {
       id: 'safety-roblox',
@@ -769,6 +773,7 @@ export const curriculum: CurriculumConfig = {
       },
       unlocksUnitId: 'safety-fortnite',
       videoUrl: '/safety_into.mp4',
+      videoPosterUrl: '/social-safety-covers/roblox.png',
     },
     {
       id: 'safety-fortnite',
@@ -827,6 +832,7 @@ export const curriculum: CurriculumConfig = {
       },
       unlocksUnitId: 'safety-reddit',
       videoUrl: '/safety_into.mp4',
+      videoPosterUrl: '/social-safety-covers/fortnite.png',
     },
     {
       id: 'safety-reddit',
@@ -884,6 +890,7 @@ export const curriculum: CurriculumConfig = {
           'Together with a grown-up, make a list of websites and apps that are “green light” safe for you right now.',
       },
       videoUrl: '/safety_into.mp4',
+      videoPosterUrl: '/social-safety-covers/reddit.png',
     },
   ],
 }
