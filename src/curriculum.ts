@@ -332,7 +332,7 @@ export const curriculum: CurriculumConfig = {
           'With a grown-up, sort toys or socks by color into piles. Cheer each time you match!',
       },
       unlocksUnitId: 'found-2-shapes-matching',
-      videoUrl: '/coding_intro.mp4',
+      videoUrl: '/Sparkiunit1colors.mp4',
       videoPosterUrl: '/tots-video-thumbnails/found-1-colors.png',
       thinkPrompts: [
         { label: 'Try it!', text: 'Point to something red in the room. Point to something blue.' },
