@@ -49,7 +49,7 @@
     "academySignIn": "Sign in",
     "shopEbooks": "Ebooks & bundles",
     "shopSubscription": "Academy subscription",
-    "shopMerch": "Merch & kits",
+    "shopMerch": "Merch & kits (coming soon)",
     "shopSensory": "Sensory learning kits",
     "comingSoonBadge": "Soon",
     "schoolFamilyHome": "Family site home",
@@ -542,6 +542,8 @@
     "grownUpUpload": "Grown-Up Upload",
     "grownUpUploadDesc": "This tool is designed for grown-ups. Please make sure you have permission to share the homework page and avoid including full names, addresses, or school details in the photo.",
     "fileLabel": "Homework image (JPG/PNG)",
+    "subjectHintLabel": "Optional: subject or topic (e.g. subtraction within 10)",
+    "subjectHintPlaceholder": "Helps SpArki tailor the adventure",
     "createButton": "Create adventure",
     "creatingButton": "Creating adventure…",
     "sparkiAdventureTitle": "SpArki's Homework Adventure",
@@ -631,13 +633,44 @@
   },
   "booksPage": {
     "title": "SpArki's Digital Bookcase",
-    "subtitle": "Family-friendly ebooks and bundles. Start the Safety Pass trial to download the PDFs.",
+    "subtitle": "Ebooks and Safety Pass bundles. (Merch is paused while we focus on learning features.)",
+    "ebooksSectionTitle": "Ebooks & bundles",
     "deliveryNote": "PDFs are delivered from Sparki through a protected download link. (Kids never get access directly — only parents who unlock the Safety Pass.)",
     "readEbook": "Read ebook",
     "unlockSubscription": "Unlock Safety Pass & ebooks",
     "subscriptionHint": "Opens Parent view — complete checkout there to access PDFs and Homework Adventure trial.",
     "tiktokPdfSoon": "PDF coming soon — this is the only title still being finalized.",
     "tiktokReadStatus": "View status"
+  },
+  "merch": {
+    "lockedTitle": "Merch & sensory kits — coming soon",
+    "lockedBody": "We’re pausing the store for now to focus on Homework Adventure, lessons, and parent tools. Check back later for Sparki kits and plush.",
+    "sectionTitle": "Merch & sensory kits",
+    "sectionSubtitle": "Hands-on Sparki tools for play and learning. Secure checkout with Stripe is on the way — check back soon.",
+    "priceTbd": "Pricing at checkout",
+    "checkoutSoon": "Stripe checkout coming soon",
+    "items": {
+      "sensory-book": {
+        "title": "Sparki Sensory Book",
+        "blurb": "A friendly story-and-activity book to explore senses and calm moments together."
+      },
+      "sensory-building-block": {
+        "title": "Sparki Sensory Building Block",
+        "blurb": "Tactile building play that supports fine motor skills and imaginative stacking."
+      },
+      "sensory-activity-cards": {
+        "title": "Sparki Sensory Activity Cards",
+        "blurb": "Quick, guided activities you can pull out anytime — perfect for routines and transitions."
+      },
+      "sensory-pack": {
+        "title": "Sparki Sensory Pack",
+        "blurb": "A curated bundle of sensory favorites from Sparki — great as a starter set or gift."
+      },
+      "teddy-plush": {
+        "title": "Sparki Teddy Plush",
+        "blurb": "A soft Sparki friend for comfort, story time, and brave little learners."
+      }
+    }
   },
   "books": {
     "ebook-1": {

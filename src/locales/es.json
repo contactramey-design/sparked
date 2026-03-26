@@ -49,7 +49,7 @@
     "academySignIn": "Entrar",
     "shopEbooks": "Ebooks y paquetes",
     "shopSubscription": "Suscripción a la academia",
-    "shopMerch": "Productos y kits",
+    "shopMerch": "Productos y kits (pronto)",
     "shopSensory": "Kits sensoriales",
     "comingSoonBadge": "Pronto",
     "schoolFamilyHome": "Inicio (familias)",
@@ -542,6 +542,8 @@
     "grownUpUpload": "Subida por adultos",
     "grownUpUploadDesc": "Esta herramienta es para adultos. Asegúrate de tener permiso para compartir la página de tareas y evita incluir nombres completos, direcciones o datos del colegio en la foto.",
     "fileLabel": "Imagen de tareas (JPG/PNG)",
+    "subjectHintLabel": "Opcional: asignatura o tema (p. ej. restas hasta 10)",
+    "subjectHintPlaceholder": "Ayuda a SpArki a adaptar la aventura",
     "createButton": "Crear aventura",
     "creatingButton": "Creando aventura…",
     "sparkiAdventureTitle": "Aventura de Tareas de SpArki",
@@ -631,13 +633,44 @@
   },
   "booksPage": {
     "title": "Estantería digital de SpArki",
-    "subtitle": "Ebooks y paquetes aptos para familias. Inicia la prueba del Pase de Seguridad para descargar los PDF.",
+    "subtitle": "Ebooks y paquetes del Pase de Seguridad. (La tienda de productos está en pausa mientras priorizamos el aprendizaje.)",
+    "ebooksSectionTitle": "Ebooks y paquetes",
     "deliveryNote": "Los PDF se entregan desde Sparki mediante un enlace de descarga protegido. (Los niños nunca acceden directamente: solo los padres que desbloquean el Pase de Seguridad.)",
     "readEbook": "Leer ebook",
     "unlockSubscription": "Desbloquear Pase de Seguridad y ebooks",
     "subscriptionHint": "Abre la vista para adultos — el pago se completa allí para acceder a los PDF y la prueba de Aventura de tareas.",
     "tiktokPdfSoon": "PDF en camino — es el único título que aún estamos terminando.",
     "tiktokReadStatus": "Ver estado"
+  },
+  "merch": {
+    "lockedTitle": "Productos y kits sensoriales — pronto",
+    "lockedBody": "Por ahora pausamos la tienda para centrarnos en Aventura de Tareas, lecciones y herramientas para adultos. Vuelve más adelante.",
+    "sectionTitle": "Productos y kits sensoriales",
+    "sectionSubtitle": "Materiales SpArki para jugar y aprender. El pago seguro con Stripe llegará pronto.",
+    "priceTbd": "Precio al pagar",
+    "checkoutSoon": "Pago con Stripe — pronto",
+    "items": {
+      "sensory-book": {
+        "title": "Libro sensorial SpArki",
+        "blurb": "Un libro de historias y actividades para explorar los sentidos y momentos de calma en familia."
+      },
+      "sensory-building-block": {
+        "title": "Bloque sensorial de construcción SpArki",
+        "blurb": "Juego táctil de construcción que apoya la motricidad fina y la imaginación."
+      },
+      "sensory-activity-cards": {
+        "title": "Tarjetas de actividades sensoriales SpArki",
+        "blurb": "Actividades guiadas y rápidas para rutinas y transiciones del día a día."
+      },
+      "sensory-pack": {
+        "title": "Pack sensorial SpArki",
+        "blurb": "Un conjunto favorito de Sparki para empezar o regalar."
+      },
+      "teddy-plush": {
+        "title": "Peluche Sparki",
+        "blurb": "Un amigo suave para consuelo, cuentos y pequeños valientes."
+      }
+    }
   },
   "books": {
     "ebook-1": {

@@ -98,15 +98,8 @@ export default function MainNav({ variant }: Props) {
     <>
       <SectionLabel>{t('nav.sectionShop')}</SectionLabel>
       <ItemLink to="/shop">{t('nav.shopEbooks')}</ItemLink>
+      <ItemLink to="/shop#merch-coming-soon">{t('nav.shopMerch')}</ItemLink>
       <ItemLink to="/?view=parent">{t('nav.shopSubscription')}</ItemLink>
-      <Link to="/coming-soon" className="nav-dropdown-link nav-dropdown-link--soon" onClick={() => setOpen(null)}>
-        <span>{t('nav.shopMerch')}</span>
-        <span className="nav-dropdown-badge">{t('nav.comingSoonBadge')}</span>
-      </Link>
-      <Link to="/coming-soon" className="nav-dropdown-link nav-dropdown-link--soon" onClick={() => setOpen(null)}>
-        <span>{t('nav.shopSensory')}</span>
-        <span className="nav-dropdown-badge">{t('nav.comingSoonBadge')}</span>
-      </Link>
     </>
   )
 

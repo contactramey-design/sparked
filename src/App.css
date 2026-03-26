@@ -929,6 +929,42 @@ h1, h2, h3 {
   margin-top: auto;
 }
 
+.shop-section-heading {
+  margin: 0;
+  font-size: 1.35rem;
+  color: #0f172a;
+  font-weight: 700;
+}
+
+.merch-kits-anchor {
+  scroll-margin-top: 5.5rem;
+}
+
+.merch-section-subtitle {
+  margin-top: 0.35rem;
+  margin-bottom: 0;
+}
+
+.merch-cover-wrap {
+  aspect-ratio: 1;
+}
+
+.merch-cover {
+  object-fit: contain;
+  padding: 0.35rem;
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.merch-price-placeholder {
+  color: #64748b;
+  font-size: 0.9rem;
+}
+
+.merch-soon-btn:disabled {
+  opacity: 0.85;
+  cursor: not-allowed;
+}
+
 /* Ebook viewer */
 .ebook-viewer-wrap {
   width: 100%;

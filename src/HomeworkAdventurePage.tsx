@@ -33,6 +33,7 @@ interface HomeworkAdventure {
 const HomeworkAdventurePage: React.FC = () => {
   const { t, locale } = useTranslation()
   const { ageBand } = useAgeBand()
+  const [subjectHint, setSubjectHint] = useState('')
   const [file, setFile] = useState<File | null>(null)
   const [previewUrl, setPreviewUrl] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
@@ -118,6 +119,8 @@ const HomeworkAdventurePage: React.FC = () => {
       formData.append('image', file)
       formData.append('locale', locale)
       formData.append('age', homeworkAgeHintForBand(ageBand))
+      const hint = subjectHint.trim()
+      if (hint) formData.append('subjectHint', hint)
       if (checkoutSessionId) {
         formData.append('checkout_session_id', checkoutSessionId)
       }
@@ -142,7 +145,7 @@ const HomeworkAdventurePage: React.FC = () => {
     } finally {
       setLoading(false)
     }
-  }, [file, t, locale, ageBand])
+  }, [file, t, locale, ageBand, subjectHint])
 
   const handleGenerate: React.FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault()
@@ -292,6 +295,17 @@ const HomeworkAdventurePage: React.FC = () => {
                   accept="image/*"
                   onChange={handleFileChange}
                   aria-label={t('homeworkPage.uploadImageAria')}
+                />
+              </label>
+              <label className="file-input-label mt-3 block">
+                {t('homeworkPage.subjectHintLabel')}
+                <input
+                  type="text"
+                  className="mt-1 w-full max-w-md rounded-lg border border-blue-200 px-3 py-2 text-sm"
+                  value={subjectHint}
+                  onChange={(e) => setSubjectHint(e.target.value)}
+                  placeholder={t('homeworkPage.subjectHintPlaceholder')}
+                  autoComplete="off"
                 />
               </label>
               {previewUrl && (
