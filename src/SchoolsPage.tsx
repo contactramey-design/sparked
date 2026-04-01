@@ -48,6 +48,24 @@ const SchoolsPage: React.FC = () => {
         {schoolMode && <SchoolJoinCard />}
 
         <div className="schools-grid">
+          <Card>
+            <CardHeader>
+              <CardTitle>{t('schools.mathCardTitle')}</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="muted">{t('schools.mathCardDesc')}</p>
+              <div className="schools-actions">
+                <Button
+                  onClick={() => {
+                    navigate('/schools/math')
+                  }}
+                >
+                  {t('schools.openMathTrack')}
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+
           {classId && (
             <Card>
               <CardHeader>

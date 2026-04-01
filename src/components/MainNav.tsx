@@ -85,6 +85,7 @@ export default function MainNav({ variant }: Props) {
       <SectionLabel>{t('nav.sectionForSchools')}</SectionLabel>
       <ItemLink to="/for-schools">{t('nav.academyForSchoolsOverview')}</ItemLink>
       <ItemLink to="/schools">{t('nav.schoolSchoolHub')}</ItemLink>
+      <ItemLink to="/schools/math">{t('nav.schoolMathTrack')}</ItemLink>
       <ItemLink to="/teacher/dashboard">{t('nav.schoolTeacher')}</ItemLink>
       <ItemLink to="/teacher/generator">{t('nav.schoolGenerator')}</ItemLink>
       <ItemLink to="/compliance">{t('nav.schoolCompliance')}</ItemLink>
@@ -108,6 +109,7 @@ export default function MainNav({ variant }: Props) {
       <ItemLink to="/for-schools">{t('nav.schoolForSchoolsHub')}</ItemLink>
       <ItemLink to="/compliance">{t('nav.schoolCompliance')}</ItemLink>
       <ItemLink to="/schools">{t('nav.schoolSchoolHub')}</ItemLink>
+      <ItemLink to="/schools/math">{t('nav.schoolMathTrack')}</ItemLink>
       <ItemLink to="/teacher/dashboard">{t('nav.schoolTeacher')}</ItemLink>
       <ItemLink to="/teacher/generator">{t('nav.schoolGenerator')}</ItemLink>
     </>

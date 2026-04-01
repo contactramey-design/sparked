@@ -43,6 +43,8 @@ import OfflineBanner from './components/OfflineBanner'
 import { useSchoolMode } from './hooks/useSchoolMode'
 import SchoolWeeklyTrackPage from './SchoolWeeklyTrackPage.tsx'
 import SchoolGeneratedUnitPage from './SchoolGeneratedUnitPage.tsx'
+import SchoolMathTrackPage from './school/math/SchoolMathTrackPage'
+import SchoolMathLessonPage from './school/math/SchoolMathLessonPage'
 import WeeklyAdventurePage from './WeeklyAdventurePage'
 import './App.css'
 
@@ -211,6 +213,8 @@ function AppShell() {
           <Route path="/for-schools/resources/:slug" element={<SchoolPrintResourcePage />} />
           <Route path="/for-schools/one-pager" element={<SchoolOnePagerPage />} />
           <Route path="/schools" element={<SchoolsPage />} />
+          <Route path="/schools/math" element={<SchoolMathTrackPage />} />
+          <Route path="/schools/math/:lessonId" element={<SchoolMathLessonPage />} />
           <Route path="/schools/weekly-track" element={<SchoolWeeklyTrackPage />} />
           <Route path="/schools/unit/:unitId" element={<SchoolGeneratedUnitPage />} />
           <Route path="/teacher/dashboard" element={<TeacherDashboardPage />} />
