@@ -837,4 +837,438 @@ export const ENGLISH_LESSONS: SchoolSubjectLesson[] = [
       realWorldTip: 'Cuadro: palabra, suposición, frase de evidencia, significado final.',
     },
   },
+  {
+    id: 'eng-tots-story-three-pictures',
+    order: 3,
+    ageBands: ['tots'],
+    estMinutes: 14,
+    caStandards: {
+      framework: 'PTKLF',
+      codes: ['Language & Literacy: retell events in sequence from pictures'],
+      gradeSpan: 'PK/TK',
+      cdeSearchQuery: 'California preschool learning foundations listening comprehension sequence',
+    },
+    standardsNote: 'CA PTKLF ELA — listen & retell; beginning, middle, end (PK/TK)',
+    cardEmoji: '🖼️',
+    en: {
+      title: 'Picture Story Order',
+      summary: 'Put three pictures in order and tell what happens first, next, last.',
+      objectives: ['Sequence three familiar events', 'Use words: first, next, last'],
+      teachSections: [
+        {
+          heading: 'Story time',
+          body: 'Stories have a beginning, middle, and end. Show three pictures out of order—invite children to arrange them so the story makes sense.',
+        },
+        {
+          heading: 'Clue words',
+          body: 'Model: “First we wash hands. Next we get snack. Last we sit down.” Point to each picture as you say the word.',
+        },
+        {
+          heading: 'Sparki mix-up',
+          body: 'Sparki puts “sleep” before “brush teeth”—laugh gently and fix the order together. Logic matters more than perfect grammar.',
+        },
+        {
+          heading: 'Oral only',
+          body: 'At this age, focus on listening and speaking; writing comes later.',
+        },
+      ],
+      quiz: [
+        {
+          id: 'eng-tots-seq-q1',
+          prompt: 'A story usually has…',
+          options: ['A beginning, middle, and end', 'Only one picture', 'No order'],
+          correctIndex: 0,
+        },
+        {
+          id: 'eng-tots-seq-q2',
+          prompt: '“First” tells us…',
+          options: ['What happens at the start', 'What happens last only', 'A color'],
+          correctIndex: 0,
+        },
+        {
+          id: 'eng-tots-seq-q3',
+          prompt: 'If picture 2 shows eating and picture 1 shows cooking, which usually comes first?',
+          options: ['Cooking', 'Eating', 'They are the same moment'],
+          correctIndex: 0,
+        },
+        {
+          id: 'eng-tots-seq-q4',
+          prompt: '“Last” means…',
+          options: ['The final step', 'The first step', 'The middle only'],
+          correctIndex: 0,
+        },
+        {
+          id: 'eng-tots-seq-q5',
+          prompt: 'Putting pictures in story order helps us…',
+          options: ['Understand what happened and when', 'Skip listening', 'Remove all words'],
+          correctIndex: 0,
+        },
+      ],
+      realWorldTip: 'Bedtime: three photos on phone—child narrates first, next, last.',
+    },
+    es: {
+      title: 'Orden de cuento con imágenes',
+      summary: 'Ordena tres dibujos y cuenta primero, luego, al final.',
+      objectives: ['Secuenciar tres eventos conocidos', 'Usar: primero, luego, al final'],
+      teachSections: [
+        {
+          heading: 'Hora del cuento',
+          body: 'Los cuentos tienen inicio, medio y final. Muestra tres imágenes desordenadas — ordénenlas para que tengan sentido.',
+        },
+        {
+          heading: 'Palabras pista',
+          body: '“Primero nos lavamos las manos. Luego tomamos merienda. Al final nos sentamos.” Señala cada imagen.',
+        },
+        {
+          heading: 'Sparki se equivoca',
+          body: 'Sparki pone dormir antes de cepillar — corrijan con risa. La lógica importa más que la gramática perfecta.',
+        },
+        {
+          heading: 'Solo oral',
+          body: 'A esta edad: escuchar y hablar; escribir después.',
+        },
+      ],
+      quiz: [
+        {
+          id: 'eng-tots-seq-q1',
+          prompt: 'Un cuento suele tener…',
+          options: ['Inicio, medio y final', 'Solo una imagen', 'Sin orden'],
+          correctIndex: 0,
+        },
+        {
+          id: 'eng-tots-seq-q2',
+          prompt: '“Primero” nos dice…',
+          options: ['Lo que pasa al comienzo', 'Solo lo último', 'Un color'],
+          correctIndex: 0,
+        },
+        {
+          id: 'eng-tots-seq-q3',
+          prompt: 'Si 2 es comer y 1 es cocinar, ¿qué suele ir primero?',
+          options: ['Cocinar', 'Comer', 'Es el mismo momento'],
+          correctIndex: 0,
+        },
+        {
+          id: 'eng-tots-seq-q4',
+          prompt: '“Al final” significa…',
+          options: ['El último paso', 'El primero', 'Solo el medio'],
+          correctIndex: 0,
+        },
+        {
+          id: 'eng-tots-seq-q5',
+          prompt: 'Ordenar imágenes ayuda a…',
+          options: ['Entender qué pasó y cuándo', 'No escuchar', 'Quitar las palabras'],
+          correctIndex: 0,
+        },
+      ],
+      realWorldTip: 'Antes de dormir: tres fotos — narra primero, luego, al final.',
+    },
+  },
+  {
+    id: 'eng-kids-blend-sounds-cvc',
+    order: 3,
+    ageBands: ['kids'],
+    estMinutes: 16,
+    caStandards: {
+      framework: 'CCSS_ELA',
+      codes: ['1.RF.B.4', '1.RF.C.3'],
+      gradeSpan: '1',
+      cdeSearchQuery: 'California Common Core ELA grade 1 phonics blending',
+    },
+    standardsNote: 'CA CCSS ELA Gr.1; blend sounds; decode one-syllable words',
+    cardEmoji: '🔡',
+    en: {
+      title: 'Blend Sounds into Words',
+      summary: 'Stretch sounds together to read CVC words (consonant-vowel-consonant).',
+      objectives: ['Blend three phonemes orally', 'Read simple CVC words with familiar patterns'],
+      teachSections: [
+        {
+          heading: 'What is blending?',
+          body: '/c/ /a/ /t/ said smoothly becomes “cat.” Start by stretching, then speed up until it sounds like a word.',
+        },
+        {
+          heading: 'Tap and blend',
+          body: 'Tap shoulder–elbow–wrist for each sound, then sweep your hand to blend. Sparki uses robot voice then smooth voice.',
+        },
+        {
+          heading: 'Change one sound',
+          body: 'Change cat → mat → map to show how one sound swap changes the whole word.',
+        },
+        {
+          heading: 'Meaning check',
+          body: 'After blending, ask: is that a real word? If not, re-blend or check the vowel.',
+        },
+      ],
+      quiz: [
+        {
+          id: 'eng-kids-blend-q1',
+          prompt: 'Blend /s/ /i/ /t/ — what word?',
+          options: ['Sit', 'Set', 'Sat'],
+          correctIndex: 0,
+        },
+        {
+          id: 'eng-kids-blend-q2',
+          prompt: 'Blending means…',
+          options: [
+            'Putting sounds together smoothly to hear a word',
+            'Saying only letter names',
+            'Skipping the middle sound always',
+          ],
+          correctIndex: 0,
+        },
+        {
+          id: 'eng-kids-blend-q3',
+          prompt: 'Which word is CVC?',
+          options: ['Dog', 'Play', 'Train'],
+          correctIndex: 0,
+        },
+        {
+          id: 'eng-kids-blend-q4',
+          prompt: 'If you have /h/ /o/ /p/, you get…',
+          options: ['Hop', 'Hope', 'Hoop'],
+          correctIndex: 0,
+        },
+        {
+          id: 'eng-kids-blend-q5',
+          prompt: 'After you blend, a good reader…',
+          options: [
+            'Checks if it sounds like a real word they know',
+            'Stops without thinking',
+            'Ignores vowels',
+          ],
+          correctIndex: 0,
+        },
+      ],
+      realWorldTip: 'Label toy bins with CVC words—blend aloud before opening.',
+    },
+    es: {
+      title: 'Juntar sonidos en palabras',
+      summary: 'Estira y une sonidos para leer palabras CVC.',
+      objectives: ['Unir tres fonemas en oral', 'Leer CVC con patrones conocidos'],
+      teachSections: [
+        {
+          heading: '¿Qué es fusionar?',
+          body: '/m/ /a/ /n/ dicho fluido se vuelve “man.” Empieza estirando y acelera hasta oír palabra.',
+        },
+        {
+          heading: 'Toca y fusiona',
+          body: 'Toca hombro–codo–muñeca por cada sonido, luego barre la mano para fusionar. Sparki: voz de robot y luego voz suave.',
+        },
+        {
+          heading: 'Cambia un sonido',
+          body: 'Casa → masa → mesa: un cambio de sonido cambia la palabra entera.',
+        },
+        {
+          heading: 'Chequeo de sentido',
+          body: 'Después de fusionar: ¿es palabra real? Si no, vuelve a fusionar o revisa la vocal.',
+        },
+      ],
+      quiz: [
+        {
+          id: 'eng-kids-blend-q1',
+          prompt: 'Fusiona /s/ /o/ /l/ — ¿qué palabra?',
+          options: ['Sol', 'Sal', 'Sil'],
+          correctIndex: 0,
+        },
+        {
+          id: 'eng-kids-blend-q2',
+          prompt: 'Fusionar significa…',
+          options: [
+            'Juntar sonidos con fluidez para oír una palabra',
+            'Solo decir nombres de letras',
+            'Saltarse siempre el sonido del medio',
+          ],
+          correctIndex: 0,
+        },
+        {
+          id: 'eng-kids-blend-q3',
+          prompt: '¿Qué palabra es tipo CVC?',
+          options: ['Pan', 'Clase', 'Brillo'],
+          correctIndex: 0,
+        },
+        {
+          id: 'eng-kids-blend-q4',
+          prompt: 'Fusiona /s/ /a/ /l/ — ¿qué palabra?',
+          options: ['Sal', 'Sol', 'Sil'],
+          correctIndex: 0,
+        },
+        {
+          id: 'eng-kids-blend-q5',
+          prompt: 'Tras fusionar, un buen lector…',
+          options: [
+            'Comprueba si suena como palabra que conoce',
+            'Se detiene sin pensar',
+            'Ignora las vocales',
+          ],
+          correctIndex: 0,
+        },
+      ],
+      realWorldTip: 'Etiquetas CVC en cajas de juguetes — fusiona en voz alta antes de abrir.',
+    },
+  },
+  {
+    id: 'eng-crew-summary-paragraph',
+    order: 3,
+    ageBands: ['crew'],
+    estMinutes: 18,
+    caStandards: {
+      framework: 'CCSS_ELA',
+      codes: ['4.RI.2', '4.RL.2'],
+      gradeSpan: '4',
+      cdeSearchQuery: 'California Common Core ELA 4.RI.2 summary',
+    },
+    standardsNote: 'CA CCSS ELA Gr.4; summarize in a paragraph',
+    cardEmoji: '📄',
+    en: {
+      title: 'Summarize in Your Own Words',
+      summary: 'Turn a short passage into one tight paragraph—main ideas only.',
+      objectives: ['Leave out minor details', 'Use a topic sentence + supporting sentence(s)'],
+      teachSections: [
+        {
+          heading: 'Summary vs retell',
+          body: 'A retell can include many details; a summary is shorter and stresses the most important ideas the author wants remembered.',
+        },
+        {
+          heading: 'Ban copy-paste',
+          body: 'Change wording and sentence structure—summaries are paraphrases, not lifted phrases (except short quotes when assigned).',
+        },
+        {
+          heading: 'Shrink steps',
+          body: 'List 3–5 key ideas, combine related ones, then write one topic sentence that names the focus.',
+        },
+        {
+          heading: 'Length target',
+          body: 'Aim for 3–5 sentences for a page of text; adjust for longer passages by scaling.',
+        },
+      ],
+      quiz: [
+        {
+          id: 'eng-crew-sum-q1',
+          prompt: 'A summary should mainly…',
+          options: [
+            'Capture the most important ideas in fewer words',
+            'Repeat every detail in the same order',
+            'Add new facts the author did not say',
+          ],
+          correctIndex: 0,
+        },
+        {
+          id: 'eng-crew-sum-q2',
+          prompt: 'Which belongs in a summary least?',
+          options: [
+            'A tiny side joke that does not change the main point',
+            'The central problem the text explains',
+            'The author’s main claim in informational text',
+          ],
+          correctIndex: 0,
+        },
+        {
+          id: 'eng-crew-sum-q3',
+          prompt: 'Good summaries usually…',
+          options: [
+            'Use your own words with new sentence shapes',
+            'Copy the whole first paragraph only',
+            'Ignore the title',
+          ],
+          correctIndex: 0,
+        },
+        {
+          id: 'eng-crew-sum-q4',
+          prompt: 'A strong topic sentence for a summary…',
+          options: [
+            'Names what the whole passage is mostly about',
+            'Lists only the last detail',
+            'Says “Once upon a time” always',
+          ],
+          correctIndex: 0,
+        },
+        {
+          id: 'eng-crew-sum-q5',
+          prompt: 'If your summary is as long as the original, you probably…',
+          options: [
+            'Need to cut details and merge ideas',
+            'Are finished',
+            'Should add more jokes',
+          ],
+          correctIndex: 0,
+        },
+      ],
+      realWorldTip: 'News article: challenge students to headline + 3-sentence summary.',
+    },
+    es: {
+      title: 'Resumir con tus palabras',
+      summary: 'Convierte un texto corto en un párrafo breve — solo ideas principales.',
+      objectives: ['Dejar fuera detalles menores', 'Usar tema + apoyo en oraciones propias'],
+      teachSections: [
+        {
+          heading: 'Resumen vs relato',
+          body: 'El relato puede traer muchos detalles; el resumen es más corto y enfatiza lo que el autor quiere que recuerdes.',
+        },
+        {
+          heading: 'Sin copiar',
+          body: 'Cambia palabras y estructura — el resumen parafrasea, no copia frases largas.',
+        },
+        {
+          heading: 'Encoger',
+          body: 'Lista 3–5 ideas clave, combina las relacionadas, escribe una oración tópico.',
+        },
+        {
+          heading: 'Extensión',
+          body: 'Apunta a 3–5 oraciones por página de texto; ajusta si el pasaje es más largo.',
+        },
+      ],
+      quiz: [
+        {
+          id: 'eng-crew-sum-q1',
+          prompt: 'Un resumen debe sobre todo…',
+          options: [
+            'Captar las ideas más importantes con menos palabras',
+            'Repetir cada detalle en el mismo orden',
+            'Añadir datos que el autor no dijo',
+          ],
+          correctIndex: 0,
+        },
+        {
+          id: 'eng-crew-sum-q2',
+          prompt: '¿Qué encaja menos en un resumen?',
+          options: [
+            'Un chiste menor que no cambia el punto central',
+            'El problema central que explica el texto',
+            'La afirmación principal en texto informativo',
+          ],
+          correctIndex: 0,
+        },
+        {
+          id: 'eng-crew-sum-q3',
+          prompt: 'Los buenos resúmenes suelen…',
+          options: [
+            'Usar tus palabras con estructuras nuevas',
+            'Copiar solo el primer párrafo entero',
+            'Ignorar el título',
+          ],
+          correctIndex: 0,
+        },
+        {
+          id: 'eng-crew-sum-q4',
+          prompt: 'Una buena oración tópico de resumen…',
+          options: [
+            'Nombra de qué trata el pasaje en conjunto',
+            'Lista solo el último detalle',
+            'Dice “Érase una vez” siempre',
+          ],
+          correctIndex: 0,
+        },
+        {
+          id: 'eng-crew-sum-q5',
+          prompt: 'Si tu resumen es tan largo como el original, probablemente…',
+          options: [
+            'Debes cortar detalles y fusionar ideas',
+            'Ya terminaste',
+            'Debes añadir más chistes',
+          ],
+          correctIndex: 0,
+        },
+      ],
+      realWorldTip: 'Noticia: titular + resumen de 3 oraciones.',
+    },
+  },
 ]

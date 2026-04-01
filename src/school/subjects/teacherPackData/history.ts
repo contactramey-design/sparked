@@ -385,4 +385,196 @@ export const HISTORY_TEACHER_PACKS: Record<string, BilingualTeacherPack> = {
       ],
     },
   },
+  'hist-tots-fairness-rules': {
+    en: {
+      conceptualDeepDive:
+        'At PK/TK, civic readiness begins with belonging and procedural fairness. Rules are prosocial scaffolds, not arbitrary power. “Fair ≠ identical” prevents resentment when accommodations differ. Pair with restorative language: mistake → repair → retry.',
+      vocabularyTerms: [
+        { term: 'Rule', definition: 'Shared agreement that protects learning and safety.' },
+        { term: 'Fair', definition: 'Giving people what they need to participate; not always the same object.' },
+        { term: 'Turn', definition: 'A time slice so multiple voices or players get access.' },
+        { term: 'Citizen (classroom)', definition: 'Someone who helps the group thrive with care and responsibility.' },
+      ],
+      sayThisAloud:
+        'Our rules are promises: we walk in the hall so bodies stay safe. Fair means everyone gets a chance—not always the same sticker, but what helps each person join in. If we forget, we can apologize and try the kind choice next time.',
+      misconceptions: [
+        {
+          myth: 'Fair means exactly equal items every time.',
+          correction: 'Equity adjusts support; identical treats can be unfair if needs differ.',
+        },
+        {
+          myth: 'Rules are only for “bad kids.”',
+          correction: 'Rules protect everyone, including adults modeling them.',
+        },
+      ],
+      supportEmergingLearners:
+        'Visual schedule of turns; photo cards for two safe choices after conflict.',
+      extendForDepth:
+        'Co-create one new rule with “why it helps us” sentence.',
+      extraPracticeIdeas: [
+        'Puppet shows: break/repair a rule kindly.',
+        'Circle: one way a rule helped today.',
+        'Draw a “fair” scene vs “unfair” scene and discuss.',
+      ],
+    },
+    es: {
+      conceptualDeepDive:
+        'En PK/TK la ciudadanía empieza con pertenencia y equidad procedural. Las reglas son andamiaje prosocial. “Justo ≠ idéntico” evita resentimiento con adaptaciones. Lenguaje restaurador: error → reparar → reintentar.',
+      vocabularyTerms: [
+        { term: 'Regla', definition: 'Acuerdo compartido que protege aprendizaje y seguridad.' },
+        { term: 'Justo', definition: 'Dar lo que cada quien necesita para participar.' },
+        { term: 'Turno', definition: 'Momento para que varias voces o jugadores accedan.' },
+        { term: 'Ciudadano (del salón)', definition: 'Quien ayuda al grupo con cuidado y responsabilidad.' },
+      ],
+      sayThisAloud:
+        'Las reglas son promesas: caminamos en el pasillo para cuidar cuerpos. Justo es que todos tengan oportunidad — no siempre la misma calcomanía, sino lo que ayude a entrar. Si olvidamos, pedimos perdón y probamos la opción amable.',
+      misconceptions: [
+        {
+          myth: 'Justo es siempre lo mismo para todos.',
+          correction: 'La equidad ajusta apoyo; lo idéntico puede ser injusto.',
+        },
+        {
+          myth: 'Las reglas son solo para “niños malos”.',
+          correction: 'Protegen a todos; los adultos también las modelan.',
+        },
+      ],
+      supportEmergingLearners:
+        'Horario visual de turnos; fotos de dos opciones seguras tras conflicto.',
+      extendForDepth:
+        'Co-crear una regla nueva con frase “nos ayuda porque…”.',
+      extraPracticeIdeas: [
+        'Títeres: romper/reparar regla con amabilidad.',
+        'Círculo: una forma en que una regla ayudó hoy.',
+        'Dibujo justo vs injusto y conversación.',
+      ],
+    },
+  },
+  'hist-kids-goods-services': {
+    en: {
+      conceptualDeepDive:
+        'Economic literacy in early grades distinguishes tangible goods from intangible services. Gray zones (buying a meal) can be unpacked: the sandwich is a good; the waiter’s help is service. Connect to community helpers and maps so geography + economy intertwine.',
+      vocabularyTerms: [
+        { term: 'Good', definition: 'A tangible item you can buy, trade, or hold.' },
+        { term: 'Service', definition: 'Work someone does to help you; often paid for the help itself.' },
+        { term: 'Community', definition: 'People in a place who share resources and needs.' },
+        { term: 'Choice', definition: 'Picking among goods and services with limited time or money.' },
+      ],
+      sayThisAloud:
+        'A toy car is a good—I can hold it. A doctor’s check-up is a service—the doctor uses skill and time to help me stay healthy. Towns need both: things to use and people who help.',
+      misconceptions: [
+        {
+          myth: 'If I pay money, it must be a good.',
+          correction: 'Money pays for services too—haircuts, rides, lessons.',
+        },
+        {
+          myth: 'Digital items are not goods.',
+          correction: 'They are still economic products even if intangible—keep examples age-simple.',
+        },
+      ],
+      supportEmergingLearners:
+        'Two hula hoops on floor: jump in “goods” or “services” for picture cards.',
+      extendForDepth:
+        'Debate one hybrid example as a class: pizza delivery.',
+      extraPracticeIdeas: [
+        'Scavenger hunt flier: circle three goods and star two services.',
+        'Interview a family member about their job: good, service, or both?',
+        'Build a mini town map labeling bakery, bus, school.',
+      ],
+    },
+    es: {
+      conceptualDeepDive:
+        'Alfabetización económica distingue bienes tangibles de servicios intangibles. Zonas grises (comida con mesero): el sándwich es bien; la ayuda es servicio. Enlaza con ayudantes comunitarios y mapas.',
+      vocabularyTerms: [
+        { term: 'Bien', definition: 'Objeto tangible que compras o intercambias.' },
+        { term: 'Servicio', definition: 'Trabajo que alguien hace para ayudarte; a menudo pagas por la ayuda.' },
+        { term: 'Comunidad', definition: 'Personas en un lugar que comparten recursos y necesidades.' },
+        { term: 'Elección', definition: 'Elegir entre bienes y servicios con tiempo o dinero limitado.' },
+      ],
+      sayThisAloud:
+        'Un juguete es bien — lo sostengo. Una revisión médica es servicio — el doctor usa tiempo y habilidad. Los pueblos necesitan cosas y personas que ayuden.',
+      misconceptions: [
+        {
+          myth: 'Si pago, siempre es bien.',
+          correction: 'También pagamos servicios: pelo, viaje, clase.',
+        },
+        {
+          myth: 'Lo digital no es bien.',
+          correction: 'Sigue siendo producto económico — ejemplos simples a su edad.',
+        },
+      ],
+      supportEmergingLearners:
+        'Dos aros en el suelo: saltar a “bienes” o “servicios” con tarjetas.',
+      extendForDepth:
+        'Debate híbrido: pizza a domicilio.',
+      extraPracticeIdeas: [
+        'Folleto: circula tres bienes y marca dos servicios.',
+        'Entrevista en casa sobre el trabajo.',
+        'Mapa mini pueblo: panadería, bus, escuela.',
+      ],
+    },
+  },
+  'hist-crew-ca-symbols-regions': {
+    en: {
+      conceptualDeepDive:
+        'California’s fourth-grade history-geography blend invites identity and place-based reasoning. Symbols encode contested stories (e.g., grizzly extinction)—teach respectfully. Regions are simplifications; edges blend. Sacramento as capital is a factual anchor; large cities are not capitals.',
+      vocabularyTerms: [
+        { term: 'State symbol', definition: 'Official emblem representing heritage or nature.' },
+        { term: 'Capital', definition: 'Seat of state government—Sacramento for California.' },
+        { term: 'Region', definition: 'Area sharing landforms, climate, or human patterns.' },
+        { term: 'Pacific coast', definition: 'Western edge touching the Pacific Ocean.' },
+      ],
+      sayThisAloud:
+        'California stretches from foggy coast to hot desert. Sacramento is where our state government meets. Symbols like the golden poppy and redwood remind us of living things that define this place—maps help us see how regions differ.',
+      misconceptions: [
+        {
+          myth: 'Los Angeles is the capital because it is biggest.',
+          correction: 'Population size does not choose the capital; civics facts do.',
+        },
+        {
+          myth: 'State symbols are just decoration.',
+          correction: 'They carry history and identity—ask “who chose this and why?”',
+        },
+      ],
+      supportEmergingLearners:
+        'Labeled wall map + mnemonic: “Sacramento starts with S like State seat.”',
+      extendForDepth:
+        'Compare two counties’ economies tied to geography (ag vs tech vs tourism).',
+      extraPracticeIdeas: [
+        'Design a respectful new class “symbol” for your county.',
+        'Trace a road trip: coast → Central Valley → mountains on map.',
+        'Primary photo pack: Golden Gate, valley fields, Sierra snow.',
+      ],
+    },
+    es: {
+      conceptualDeepDive:
+        'Historia-geografía de California en 4.º invita identidad y razonamiento territorial. Los símbolos encajan historias complejas — con respeto. Las regiones son simplificaciones. Sacramento es capital; las ciudades grandes no lo son por tamaño.',
+      vocabularyTerms: [
+        { term: 'Símbolo estatal', definition: 'Emblema oficial de patrimonio o naturaleza.' },
+        { term: 'Capital', definition: 'Sede del gobierno estatal — Sacramento.' },
+        { term: 'Región', definition: 'Zona con relieve, clima o patrones humanos parecidos.' },
+        { term: 'Costa del Pacífico', definition: 'Borde oeste tocando el océano Pacífico.' },
+      ],
+      sayThisAloud:
+        'California va de costa brumosa a desierto caliente. Sacramento reúne al gobierno estatal. Amapola y secuoya nos recuerdan vida de este lugar — el mapa muestra regiones distintas.',
+      misconceptions: [
+        {
+          myth: 'Los Ángeles es capital por ser grande.',
+          correction: 'La población no elige la capital; los hechos cívicos sí.',
+        },
+        {
+          myth: 'Los símbolos son solo adorno.',
+          correction: 'Llevan historia e identidad — preguntar quién y por qué.',
+        },
+      ],
+      supportEmergingLearners:
+        'Mapa mural etiquetado; mnemotecnia “Sacramento con S de sede estatal”.',
+      extendForDepth:
+        'Comparar economías de dos condados ligadas al territorio.',
+      extraPracticeIdeas: [
+        'Diseñar símbolo de clase para el condado.',
+        'Ruta: costa → valle → montaña.',
+        'Fotos: Golden Gate, campos, nieve en Sierra.',
+      ],
+    },
+  },
 }

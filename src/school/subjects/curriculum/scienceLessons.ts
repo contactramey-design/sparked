@@ -840,4 +840,422 @@ export const SCIENCE_LESSONS: SchoolSubjectLesson[] = [
       realWorldTip: 'Comparen sombra vs sol una semana — ¿qué se seca más rápido tras la lluvia?',
     },
   },
+  {
+    id: 'sci-tots-weather-sun-cloud',
+    order: 3,
+    ageBands: ['tots'],
+    estMinutes: 12,
+    caStandards: {
+      framework: 'PTKLF',
+      codes: ['Physical Sciences: observe daily weather patterns; sun, clouds, rain'],
+      gradeSpan: 'PK/TK',
+      cdeSearchQuery: 'California preschool learning foundations science weather observe',
+    },
+    standardsNote: 'CA PTKLF Science — observe weather; sun, clouds, rain (PK/TK)',
+    cardEmoji: '🌤️',
+    en: {
+      title: 'Sun, Clouds, and Rain',
+      summary: 'Notice today’s weather and name sun, cloudy, and rainy days.',
+      objectives: ['Describe weather in simple words', 'Connect clothing or activities to weather'],
+      teachSections: [
+        {
+          heading: 'Look outside',
+          body: 'Weather is what the sky and air are doing today. Is the sun bright? Are there gray clouds? Is water falling as rain?',
+        },
+        {
+          heading: 'Safe observation',
+          body: 'Never look straight at the sun. We notice sunlight on the ground and warmth on our skin.',
+        },
+        {
+          heading: 'Words we use',
+          body: 'Sunny, cloudy, rainy, windy—practice with a week-of-weather chart with stickers.',
+        },
+        {
+          heading: 'Plans change',
+          body: 'Rain might cancel outdoor recess; sun might mean hats. Weather affects choices.',
+        },
+      ],
+      quiz: [
+        {
+          id: 'sci-tots-wx-q1',
+          prompt: 'Dark clouds often mean…',
+          options: ['It might rain or storm', 'It is always night', 'There is no sky'],
+          correctIndex: 0,
+        },
+        {
+          id: 'sci-tots-wx-q2',
+          prompt: 'The Sun gives Earth…',
+          options: ['Light and warmth', 'Only shadows with no heat', 'Snow inside the classroom'],
+          correctIndex: 0,
+        },
+        {
+          id: 'sci-tots-wx-q3',
+          prompt: 'A rainy day is usually…',
+          options: ['Wet outside', 'Always dangerous to name', 'The same as a sunny day always'],
+          correctIndex: 0,
+        },
+        {
+          id: 'sci-tots-wx-q4',
+          prompt: 'We describe weather by…',
+          options: ['Observing sky, air, and what falls', 'Only guessing without looking', 'Closing the windows forever'],
+          correctIndex: 0,
+        },
+        {
+          id: 'sci-tots-wx-q5',
+          prompt: 'Which is safe at school?',
+          options: [
+            'Look at the sky with your teacher—never stare at the sun',
+            'Stare at the sun to see spots',
+            'Run outside in lightning',
+          ],
+          correctIndex: 0,
+        },
+      ],
+      realWorldTip: 'Morning circle: weather helper reports and picks a symbol card.',
+    },
+    es: {
+      title: 'Sol, nubes y lluvia',
+      summary: 'Observa el clima de hoy y nombra sol, nublado y lluvia.',
+      objectives: ['Describir el clima con palabras simples', 'Relacionar ropa o actividades con el tiempo'],
+      teachSections: [
+        {
+          heading: 'Mira afuera',
+          body: 'El clima es lo que hacen el cielo y el aire hoy. ¿Brilla el sol? ¿Hay nubes grises? ¿Cae agua?',
+        },
+        {
+          heading: 'Observar con seguridad',
+          body: 'No mires directo al sol. Notamos la luz en el suelo y el calor en la piel.',
+        },
+        {
+          heading: 'Palabras',
+          body: 'Soleado, nublado, lluvioso, ventoso — cartel de la semana con calcomanías.',
+        },
+        {
+          heading: 'Cambia planes',
+          body: 'La lluvia puede cambiar el recreo; el sol puede pedir gorra.',
+        },
+      ],
+      quiz: [
+        {
+          id: 'sci-tots-wx-q1',
+          prompt: 'Nubes oscuras a menudo significan…',
+          options: ['Puede llover o tormenta', 'Siempre es de noche', 'No hay cielo'],
+          correctIndex: 0,
+        },
+        {
+          id: 'sci-tots-wx-q2',
+          prompt: 'El Sol da a la Tierra…',
+          options: ['Luz y calor', 'Solo sombra sin calor', 'Nieve en el salón'],
+          correctIndex: 0,
+        },
+        {
+          id: 'sci-tots-wx-q3',
+          prompt: 'Un día lluvioso suele ser…',
+          options: ['Mojado afuera', 'Peligroso nombrar', 'Igual que soleado siempre'],
+          correctIndex: 0,
+        },
+        {
+          id: 'sci-tots-wx-q4',
+          prompt: 'Describimos el clima…',
+          options: ['Observando cielo, aire y lo que cae', 'Solo adivinando', 'Cerrando ventanas para siempre'],
+          correctIndex: 0,
+        },
+        {
+          id: 'sci-tots-wx-q5',
+          prompt: '¿Qué es seguro en el cole?',
+          options: [
+            'Mirar el cielo con el docente — nunca fijarse en el sol',
+            'Fijarse en el sol para ver manchas',
+            'Salir con rayos',
+          ],
+          correctIndex: 0,
+        },
+      ],
+      realWorldTip: 'Círculo matutino: ayudante del clima elige símbolo.',
+    },
+  },
+  {
+    id: 'sci-kids-pushes-pulls',
+    order: 3,
+    ageBands: ['kids'],
+    estMinutes: 16,
+    caStandards: {
+      framework: 'CA_NGSS',
+      codes: ['K-PS2-1'],
+      gradeSpan: 'K–1',
+      cdeSearchQuery: 'California NGSS K-PS2-1 push pull motion',
+    },
+    standardsNote: 'CA NGSS; plan and investigate pushes and pulls',
+    cardEmoji: '🛝',
+    en: {
+      title: 'Pushes, Pulls, and Motion',
+      summary: 'Explore how pushes and pulls change how things move or stop.',
+      objectives: ['Compare stronger vs weaker pushes', 'Predict how a kick or pull changes speed or direction'],
+      teachSections: [
+        {
+          heading: 'Forces as actions',
+          body: 'A push moves something away from you; a pull brings it closer. Both can start, stop, or change motion.',
+        },
+        {
+          heading: 'Strength matters',
+          body: 'A gentle push might not move a heavy box; a stronger push might. Test with toy cars on the floor.',
+        },
+        {
+          heading: 'Direction',
+          body: 'Same strength, different angle—motion changes direction. Use arrows on a drawing to plan predictions.',
+        },
+        {
+          heading: 'Fair tests',
+          body: 'Change one thing at a time: same ramp, different push strength, to see a clear pattern.',
+        },
+      ],
+      quiz: [
+        {
+          id: 'sci-kids-push-q1',
+          prompt: 'A pull is a force that…',
+          options: ['Brings something closer to you', 'Only works on the Moon', 'Means no motion'],
+          correctIndex: 0,
+        },
+        {
+          id: 'sci-kids-push-q2',
+          prompt: 'A harder push on the same toy car often…',
+          options: ['Makes it speed up more', 'Always makes it stop instantly', 'Removes all friction'],
+          correctIndex: 0,
+        },
+        {
+          id: 'sci-kids-push-q3',
+          prompt: 'Which is a push?',
+          options: ['Kicking a ball away from your foot', 'Dragging a wagon toward you', 'Holding still with two hands'],
+          correctIndex: 0,
+        },
+        {
+          id: 'sci-kids-push-q4',
+          prompt: 'In a fair test, we try to…',
+          options: [
+            'Change one variable at a time',
+            'Change everything at once always',
+            'Never write down results',
+          ],
+          correctIndex: 0,
+        },
+        {
+          id: 'sci-kids-push-q5',
+          prompt: 'Forces can…',
+          options: [
+            'Start motion, stop motion, or change direction',
+            'Only work on living things',
+            'Never be measured',
+          ],
+          correctIndex: 0,
+        },
+      ],
+      realWorldTip: 'Playground: compare push on swing vs push on merry-go-round.',
+    },
+    es: {
+      title: 'Empujes, tirones y movimiento',
+      summary: 'Explora cómo empujar y tirar cambia el movimiento.',
+      objectives: ['Comparar empujes fuertes y débiles', 'Predecir cómo cambia velocidad o dirección'],
+      teachSections: [
+        {
+          heading: 'Fuerzas como acciones',
+          body: 'Empujar aleja; tirar acerca. Ambas pueden iniciar, frenar o cambiar movimiento.',
+        },
+        {
+          heading: 'La fuerza importa',
+          body: 'Un empuje suave puede no mover una caja pesada; uno fuerte sí. Prueba con carritos.',
+        },
+        {
+          heading: 'Dirección',
+          body: 'Misma fuerza, distinto ángulo — cambia la dirección. Flechas en el dibujo.',
+        },
+        {
+          heading: 'Pruebas justas',
+          body: 'Cambia una cosa a la vez: misma rampa, distinta fuerza.',
+        },
+      ],
+      quiz: [
+        {
+          id: 'sci-kids-push-q1',
+          prompt: 'Un tirón es una fuerza que…',
+          options: ['Acerca algo hacia ti', 'Solo funciona en la Luna', 'Significa cero movimiento'],
+          correctIndex: 0,
+        },
+        {
+          id: 'sci-kids-push-q2',
+          prompt: 'Un empujón más fuerte al mismo carrito suele…',
+          options: ['Acelerarlo más', 'Pararlo siempre al instante', 'Quitar toda fricción'],
+          correctIndex: 0,
+        },
+        {
+          id: 'sci-kids-push-q3',
+          prompt: '¿Qué es un empuje?',
+          options: ['Patear un balón lejos del pie', 'Arrastrar un carrito hacia ti', 'Quedarse quieto con dos manos'],
+          correctIndex: 0,
+        },
+        {
+          id: 'sci-kids-push-q4',
+          prompt: 'En prueba justa intentamos…',
+          options: [
+            'Cambiar una variable a la vez',
+            'Cambiar todo a la vez siempre',
+            'Nunca anotar',
+          ],
+          correctIndex: 0,
+        },
+        {
+          id: 'sci-kids-push-q5',
+          prompt: 'Las fuerzas pueden…',
+          options: [
+            'Iniciar, detener o cambiar dirección',
+            'Solo actuar en seres vivos',
+            'Nunca medirse',
+          ],
+          correctIndex: 0,
+        },
+      ],
+      realWorldTip: 'Patio: empuje en columpio vs en carrusel.',
+    },
+  },
+  {
+    id: 'sci-crew-human-body-systems',
+    order: 3,
+    ageBands: ['crew'],
+    estMinutes: 18,
+    caStandards: {
+      framework: 'CA_NGSS',
+      codes: ['4-LS1-1'],
+      gradeSpan: '4',
+      cdeSearchQuery: 'California NGSS 4-LS1-1 animal structures',
+    },
+    standardsNote: 'CA NGSS Gr.4; structures support survival, growth, behavior',
+    cardEmoji: '🫀',
+    en: {
+      title: 'Body Systems Team Up',
+      summary: 'See how digestive, respiratory, circulatory, and skeletal systems work together.',
+      objectives: ['Name major systems and one job each', 'Explain why we need food, air, and water together'],
+      teachSections: [
+        {
+          heading: 'Big idea',
+          body: 'Organs are grouped into systems; systems interact. Your brain needs oxygen and sugar—respiratory and digestive systems supply them via blood.',
+        },
+        {
+          heading: 'Digestive',
+          body: 'Breaks food into nutrients your cells can use; waste leaves the body.',
+        },
+        {
+          heading: 'Respiratory & circulatory',
+          body: 'Lungs swap gases; heart and blood move oxygen and nutrients to cells and carry away wastes.',
+        },
+        {
+          heading: 'Skeletal & muscular',
+          body: 'Bones support and protect; muscles move bones so you can learn, play, and eat.',
+        },
+      ],
+      quiz: [
+        {
+          id: 'sci-crew-body-q1',
+          prompt: 'Which system mainly brings oxygen from air into blood?',
+          options: ['Respiratory', 'Digestive only', 'Skeletal only'],
+          correctIndex: 0,
+        },
+        {
+          id: 'sci-crew-body-q2',
+          prompt: 'The digestive system helps the body…',
+          options: [
+            'Break down food into usable nutrients',
+            'Pump blood only',
+            'Produce sunlight',
+          ],
+          correctIndex: 0,
+        },
+        {
+          id: 'sci-crew-body-q3',
+          prompt: 'The heart is part of…',
+          options: ['The circulatory system', 'The skeletal system only', 'The weather system'],
+          correctIndex: 0,
+        },
+        {
+          id: 'sci-crew-body-q4',
+          prompt: 'Bones work with muscles to…',
+          options: ['Create movement and support the body', 'Digest sugar instantly', 'Make oxygen from food'],
+          correctIndex: 0,
+        },
+        {
+          id: 'sci-crew-body-q5',
+          prompt: 'Systems in the body…',
+          options: [
+            'Interact; one system affects others',
+            'Never connect',
+            'Only exist in plants',
+          ],
+          correctIndex: 0,
+        },
+      ],
+      realWorldTip: 'After recess: heart rate and breathing—feel circulatory + respiratory teamwork.',
+    },
+    es: {
+      title: 'Los sistemas del cuerpo en equipo',
+      summary: 'Cómo digestivo, respiratorio, circulatorio y esquelético colaboran.',
+      objectives: ['Nombrar sistemas y una función', 'Explicar comida, aire y agua juntos'],
+      teachSections: [
+        {
+          heading: 'Idea central',
+          body: 'Los órganos forman sistemas que interactúan. El cerebro necesita oxígeno y glucosa — respiración y digestión aportan vía sangre.',
+        },
+        {
+          heading: 'Digestivo',
+          body: 'Descompone alimento en nutrientes; los desechos salen.',
+        },
+        {
+          heading: 'Respiratorio y circulatorio',
+          body: 'Pulmones intercambian gases; corazón y sangre mueven oxígeno y nutrientes.',
+        },
+        {
+          heading: 'Esquelético y muscular',
+          body: 'Huesos sostienen y protegen; músculos mueven huesos.',
+        },
+      ],
+      quiz: [
+        {
+          id: 'sci-crew-body-q1',
+          prompt: '¿Qué sistema lleva oxígeno del aire a la sangre sobre todo?',
+          options: ['Respiratorio', 'Solo digestivo', 'Solo esquelético'],
+          correctIndex: 0,
+        },
+        {
+          id: 'sci-crew-body-q2',
+          prompt: 'El digestivo ayuda a…',
+          options: [
+            'Descomponer alimento en nutrientes útiles',
+            'Solo bombear sangre',
+            'Producir luz solar',
+          ],
+          correctIndex: 0,
+        },
+        {
+          id: 'sci-crew-body-q3',
+          prompt: 'El corazón es parte de…',
+          options: ['El sistema circulatorio', 'Solo el esquelético', 'El clima'],
+          correctIndex: 0,
+        },
+        {
+          id: 'sci-crew-body-q4',
+          prompt: 'Huesos y músculos juntos…',
+          options: ['Permiten movimiento y sostienen el cuerpo', 'Digerir azúcar al instante', 'Hacer oxígeno del alimento'],
+          correctIndex: 0,
+        },
+        {
+          id: 'sci-crew-body-q5',
+          prompt: 'Los sistemas del cuerpo…',
+          options: [
+            'Interactúan; uno afecta a otros',
+            'Nunca se conectan',
+            'Solo existen en plantas',
+          ],
+          correctIndex: 0,
+        },
+      ],
+      realWorldTip: 'Tras el recreo: pulso y respiración — equipo circulatorio + respiratorio.',
+    },
+  },
 ]

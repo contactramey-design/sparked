@@ -1,6 +1,8 @@
 import React from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { useTranslation } from '@/contexts/LocaleContext'
+import { useSchoolAudience } from '@/hooks/useSchoolAudience'
+import SchoolAudienceToggle from './SchoolAudienceToggle'
 import type { AgeBandId } from '@/ageBand'
 import { SCHOOL_SUBJECT_IDS, isSchoolSubjectId, lessonLocale, type SchoolSubjectId } from './types'
 import { getAllLessonsForSubjectOrdered } from './registry'
@@ -19,11 +21,38 @@ function formatBandsLabel(bands: AgeBandId[], t: (k: string) => string): string 
 
 export const SchoolAlignmentHubPage: React.FC = () => {
   const { t } = useTranslation()
+  const { schoolAudience } = useSchoolAudience()
+
+  if (schoolAudience === 'student') {
+    return (
+      <section className="lesson-page school-subj-page">
+        <Link to="/schools/subjects" className="link-back">
+          {t('schoolSubject.backToSubjectList')}
+        </Link>
+        <div className="school-subj-alignment-student-gate card p-4 space-y-3 no-print">
+          <h1 className="text-lg font-semibold" style={{ color: 'var(--text-color)' }}>
+            {t('schoolSubjects.alignmentStudentTitle')}
+          </h1>
+          <p className="muted">{t('schoolSubjects.alignmentStudentBody')}</p>
+          <SchoolAudienceToggle />
+          <p>
+            <Link to="/schools/subjects" className="primary-button">
+              {t('schoolSubject.backToSubjectList')}
+            </Link>
+          </p>
+        </div>
+      </section>
+    )
+  }
+
   return (
     <section className="lesson-page school-subj-page school-subj-alignment-print">
-      <Link to="/schools/subjects" className="link-back">
-        {t('schoolSubject.backToSubjectList')}
-      </Link>
+      <div className="school-subj-alignment-teacher-bar no-print">
+        <Link to="/schools/subjects" className="link-back">
+          {t('schoolSubject.backToSubjectList')}
+        </Link>
+        <SchoolAudienceToggle compact className="school-subj-alignment-audience" />
+      </div>
       <header className="school-subj-alignment-header">
         <h1>{t('schoolSubjects.alignmentHubTitle')}</h1>
         <p className="muted">{t('schoolSubjects.alignmentHubIntro')}</p>
@@ -46,6 +75,7 @@ export const SchoolAlignmentSubjectPage: React.FC = () => {
   const { subjectId: raw } = useParams<{ subjectId: string }>()
   const subjectId = raw as SchoolSubjectId | undefined
   const { t, locale } = useTranslation()
+  const { schoolAudience } = useSchoolAudience()
 
   if (!subjectId || !isSchoolSubjectId(subjectId)) {
     return (
@@ -58,17 +88,42 @@ export const SchoolAlignmentSubjectPage: React.FC = () => {
     )
   }
 
+  if (schoolAudience === 'student') {
+    return (
+      <section className="lesson-page school-subj-page">
+        <div className="no-print school-subj-alignment-nav">
+          <Link to="/schools/subjects" className="link-back">
+            {t('schoolSubject.backToSubjectList')}
+          </Link>
+        </div>
+        <div className="school-subj-alignment-student-gate card p-4 space-y-3 no-print">
+          <h1 className="text-lg font-semibold" style={{ color: 'var(--text-color)' }}>
+            {t('schoolSubjects.alignmentStudentTitle')}
+          </h1>
+          <p className="muted">{t('schoolSubjects.alignmentStudentBody')}</p>
+          <SchoolAudienceToggle />
+          <p>
+            <Link to={`/schools/subjects/${subjectId}`} className="primary-button">
+              {t('schoolSubjects.alignmentBackTrack')}
+            </Link>
+          </p>
+        </div>
+      </section>
+    )
+  }
+
   const lessons = getAllLessonsForSubjectOrdered(subjectId)
 
   return (
     <section className="lesson-page school-subj-page school-subj-alignment-print">
-      <div className="no-print school-subj-alignment-nav">
+      <div className="no-print school-subj-alignment-nav school-subj-alignment-nav--with-toggle">
         <Link to="/schools/alignment" className="link-back">
           {t('schoolSubjects.alignmentBackSubjects')}
         </Link>
         <Link to={`/schools/subjects/${subjectId}`} className="link-back" style={{ marginLeft: '0.75rem' }}>
           {t('schoolSubjects.alignmentBackTrack')}
         </Link>
+        <SchoolAudienceToggle compact className="school-subj-alignment-audience" />
       </div>
       <header className="school-subj-alignment-header">
         <h1>{t(`schoolSubjects.tracks.${subjectId}.title`)}</h1>

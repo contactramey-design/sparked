@@ -13,6 +13,8 @@ import {
   formatCaStandardsBadge,
   caStandardsReferenceUrl,
 } from './caStandardsDisplay'
+import { useSchoolAudience } from '@/hooks/useSchoolAudience'
+import SchoolAudienceToggle from './SchoolAudienceToggle'
 import { isLessonInBand, isSchoolSubjectId, lessonLocale, type SchoolSubjectId } from './types'
 import './school-subject.css'
 
@@ -25,6 +27,7 @@ const SchoolSubjectLessonPage: React.FC = () => {
   const navigate = useNavigate()
   const { t, locale } = useTranslation()
   const { ageBand } = useAgeBand()
+  const { isTeacherView } = useSchoolAudience()
 
   const validSubject = subjectId && isSchoolSubjectId(subjectId)
 
@@ -85,12 +88,15 @@ const SchoolSubjectLessonPage: React.FC = () => {
 
   const quizTeachingNote = useMemo(() => {
     if (!currentQ) return ''
+    if (!isTeacherView) {
+      return currentQ.feedback?.trim() || ''
+    }
     return (
       currentQ.feedback?.trim() ||
       getSchoolSubjectQuizFeedback(currentQ.id, locale)?.trim() ||
       ''
     )
-  }, [currentQ?.id, currentQ?.feedback, locale])
+  }, [currentQ?.id, currentQ?.feedback, locale, isTeacherView])
 
   const pickOption = (idx: number) => {
     if (revealed || !currentQ) return
@@ -119,15 +125,19 @@ const SchoolSubjectLessonPage: React.FC = () => {
         {t('schoolSubject.backToSubjectTrack')}
       </Link>
 
+      <div className="school-subj-lesson-audience-row no-print">
+        <SchoolAudienceToggle compact />
+      </div>
+
       <header style={{ marginTop: '0.75rem' }}>
         <h1 className="text-xl font-semibold" style={{ color: 'var(--text-color)' }}>
           {loc.title}
         </h1>
         <p className="muted text-sm" style={{ marginTop: '0.25rem' }}>
           {t('schoolSubject.durationLine', { minutes: lesson.estMinutes })}
-          {lesson.standardsNote ? ` · ${lesson.standardsNote}` : ''}
+          {isTeacherView && lesson.standardsNote ? ` · ${lesson.standardsNote}` : ''}
         </p>
-        {lesson.caStandards ? (
+        {isTeacherView && lesson.caStandards ? (
           <div className="school-subj-lesson-ca">
             <h2 className="school-subj-lesson-ca__title">{t('schoolSubjects.caStandardsHeading')}</h2>
             <p className="school-subj-lesson-ca__framework">
@@ -171,16 +181,18 @@ const SchoolSubjectLessonPage: React.FC = () => {
 
       {step === 'learn' && (
         <div className="school-subj-learn">
-          <div className="school-subj-supplemental-callout" role="note">
-            <p>{t('schoolSubject.lessonSupplementalNote')}</p>
-          </div>
+          {isTeacherView ? (
+            <div className="school-subj-supplemental-callout" role="note">
+              <p>{t('schoolSubject.lessonSupplementalNote')}</p>
+            </div>
+          ) : null}
 
           <div className="school-subj-summary-box">
             <h2 className="school-subj-summary-box__title">{t('schoolSubject.summaryHeading')}</h2>
             <p className="school-subj-summary-box__body">{loc.summary}</p>
           </div>
 
-          {teacherPack ? (
+          {isTeacherView && teacherPack ? (
             <div className="school-subj-teacher-toolkit">
               <h2 className="school-subj-teacher-toolkit__title">{t('schoolSubject.teacherToolkitTitle')}</h2>
               <p className="school-subj-teacher-toolkit__sub muted text-sm">{t('schoolSubject.teacherToolkitSub')}</p>
@@ -350,14 +362,21 @@ const SchoolSubjectLessonPage: React.FC = () => {
               <h3 className="school-subj-quiz-feedback__why">{t('schoolSubject.quizWhyHeading')}</h3>
               <p className="school-subj-quiz-feedback__explain">
                 {quizTeachingNote ||
-                  t('schoolSubject.quizExplainFallback', {
-                    answer: currentQ.options[currentQ.correctIndex],
-                  })}
+                  t(
+                    isTeacherView ? 'schoolSubject.quizExplainFallback' : 'schoolSubject.quizExplainFallbackStudent',
+                    {
+                      answer: currentQ.options[currentQ.correctIndex],
+                    },
+                  )}
               </p>
               {selected !== currentQ.correctIndex ? (
-                <p className="school-subj-quiz-feedback__coach">{t('schoolSubject.quizWrongCoach')}</p>
+                <p className="school-subj-quiz-feedback__coach">
+                  {t(isTeacherView ? 'schoolSubject.quizWrongCoach' : 'schoolSubject.quizWrongCoachStudent')}
+                </p>
               ) : null}
-              <p className="school-subj-quiz-feedback__hint muted text-sm">{t('schoolSubject.quizReviewLearn')}</p>
+              <p className="school-subj-quiz-feedback__hint muted text-sm">
+                {t(isTeacherView ? 'schoolSubject.quizReviewLearn' : 'schoolSubject.quizReviewLearnStudent')}
+              </p>
             </div>
           ) : null}
 

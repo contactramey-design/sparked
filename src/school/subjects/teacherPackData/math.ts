@@ -385,4 +385,196 @@ export const MATH_TEACHER_PACKS: Record<string, BilingualTeacherPack> = {
       ],
     },
   },
+  'math-tots-more-less-same': {
+    en: {
+      conceptualDeepDive:
+        'Comparison builds on counting: children must coordinate cardinality with relational language. Matching one-to-one reveals equality; leftovers reveal “more.” Spreading objects out challenges naive “longer line = more” ideas—re-count to anchor truth.',
+      vocabularyTerms: [
+        { term: 'More / fewer / same', definition: 'Relational words comparing two quantities.' },
+        { term: 'Match', definition: 'Pair items across groups to test equality.' },
+        { term: 'Conservation (preview)', definition: 'Amount stays the same when layout changes if nothing is added or removed.' },
+        { term: 'Compare', definition: 'Decide which set has greater cardinality or if they match.' },
+      ],
+      sayThisAloud:
+        'Let’s line up bears and cups—one bear, one cup. Everyone has a partner, so the number is the same. If one bear has no cup, that group has more bears than cups.',
+      misconceptions: [
+        {
+          myth: 'A longer spread-out row always means more.',
+          correction: 'Count or match; length without count is misleading.',
+        },
+        {
+          myth: '“Bigger object” means more in the set.',
+          correction: 'We compare how many, not object size, unless the task says so.',
+        },
+      ],
+      supportEmergingLearners:
+        'Use five or fewer per set; use matching mats with dots. Color-code each pair.',
+      extendForDepth:
+        'Introduce “How many more?” with a matched core plus extras only on one side.',
+      extraPracticeIdeas: [
+        'Snack compare with consent.',
+        'Build two towers; predict then verify by counting.',
+        'Story: “Same birthday cupcakes for each friend.”',
+      ],
+    },
+    es: {
+      conceptualDeepDive:
+        'Comparar se apoya en contar: coordinar cardinalidad con lenguaje relacional. El emparejamiento uno a uno muestra igualdad; lo que sobra muestra “más.” Esparcir objetos desafía la idea de “fila más larga = más” — recontar ancla la verdad.',
+      vocabularyTerms: [
+        { term: 'Más / menos / igual', definition: 'Palabras que comparan dos cantidades.' },
+        { term: 'Emparejar', definition: 'Unir elementos de dos grupos para probar igualdad.' },
+        { term: 'Conservación (avance)', definition: 'La cantidad se mantiene si no se añade ni quita.' },
+        { term: 'Comparar', definition: 'Decidir cuál conjunto tiene más o si coinciden.' },
+      ],
+      sayThisAloud:
+        'Alineemos osos y vasos — un oso, un vaso. Todos tienen pareja: la cantidad es igual. Si sobra un oso, hay más osos que vasos.',
+      misconceptions: [
+        {
+          myth: 'Fila más larga siempre es más.',
+          correction: 'Cuenta o empareja; la longitud sin conteo engaña.',
+        },
+        {
+          myth: 'Objeto más grande = más en el conjunto.',
+          correction: 'Comparamos cuántos hay, no el tamaño del objeto.',
+        },
+      ],
+      supportEmergingLearners:
+        'Cinco o menos por conjunto; tapete con puntos; color por pareja.',
+      extendForDepth:
+        '“¿Cuántos más?” con núcleo emparejado y extras a un lado.',
+      extraPracticeIdeas: [
+        'Merienda con permiso.',
+        'Torres; predecir y contar.',
+        'Cuento: mismos cupcakes para cada amigo.',
+      ],
+    },
+  },
+  'math-kids-subtract-within-10': {
+    en: {
+      conceptualDeepDive:
+        'Subtraction is take-away, compare, and missing-addend situations—all within the same fact family as addition. Represent with objects crossed out, number lines, and equations. Fluency grows from understanding, not only speed drills.',
+      vocabularyTerms: [
+        { term: 'Difference', definition: 'The result of subtraction; gap between quantities.' },
+        { term: 'Take away', definition: 'Remove a part from a whole set.' },
+        { term: 'Fact family', definition: 'Related + and − facts using the same three numbers.' },
+        { term: 'Inverse', definition: 'Subtraction undoes addition when the whole is known.' },
+      ],
+      sayThisAloud:
+        'I had 9 stickers. I gave 4 away. I cross out four circles from my drawing—what’s left is the difference, 5. I check: 5 + 4 = 9.',
+      misconceptions: [
+        {
+          myth: 'Subtraction always makes a smaller number in every context forever.',
+          correction: 'Later contexts vary; within K–2 whole numbers, taking away reduces the minuend’s visible amount.',
+        },
+        {
+          myth: 'The bigger number must always be second.',
+          correction: 'Standard form puts the whole first: 9 − 4, not 4 − 9 for this story.',
+        },
+      ],
+      supportEmergingLearners:
+        'Start with totals ≤ 8; use two-color counters flipped to show take-away.',
+      extendForDepth:
+        'Pose compare problems with bar diagrams; link to “how many more” language.',
+      extraPracticeIdeas: [
+        'Number line hop games backward.',
+        'Write two stories for the same expression.',
+        'Fluency check with known doubles facts.',
+      ],
+    },
+    es: {
+      conceptualDeepDive:
+        'La resta es quitar, comparar y hallar lo que falta — en la misma familia de operaciones que la suma. Representa tachando, recta numérica y ecuación. La fluidez nace del sentido, no solo de la velocidad.',
+      vocabularyTerms: [
+        { term: 'Diferencia', definition: 'Resultado de restar; brecha entre cantidades.' },
+        { term: 'Quitar', definition: 'Sacar una parte de un todo.' },
+        { term: 'Familia de operaciones', definition: 'Sumas y restas relacionadas con los mismos tres números.' },
+        { term: 'Inversa', definition: 'La resta deshace la suma cuando conoces el todo.' },
+      ],
+      sayThisAloud:
+        'Tenía 9 calcomanías. Regalé 4. Tacho cuatro círculos — lo que queda es la diferencia, 5. Compruebo: 5 + 4 = 9.',
+      misconceptions: [
+        {
+          myth: 'Restar siempre deja menor en todo contexto para siempre.',
+          correction: 'Más adelante varía; en enteros pequeños, quitar reduce lo visible.',
+        },
+        {
+          myth: 'El número mayor va segundo.',
+          correction: 'Forma estándar: todo primero: 9 − 4, no 4 − 9 para este cuento.',
+        },
+      ],
+      supportEmergingLearners:
+        'Totales ≤ 8; fichas bicolor volteadas para quitar.',
+      extendForDepth:
+        'Problemas de comparación con diagramas de barras; “cuántos más”.',
+      extraPracticeIdeas: [
+        'Saltos hacia atrás en recta numérica.',
+        'Dos cuentos para la misma expresión.',
+        'Fluidez con dobles conocidos.',
+      ],
+    },
+  },
+  'math-crew-area-tiles': {
+    en: {
+      conceptualDeepDive:
+        'Area is a covering measure; perimeter is a boundary length. Arrays connect multiplication to area. Emphasize square units and alignment—gaps and overlaps break the count. Relate to real flooring and screens only after the unit-square concept is firm.',
+      vocabularyTerms: [
+        { term: 'Square unit', definition: 'A tile with equal sides used to measure area.' },
+        { term: 'Area', definition: 'Number of unit squares covering a region without gaps or overlap.' },
+        { term: 'Perimeter', definition: 'Distance around a figure—different from area.' },
+        { term: 'Composite shape', definition: 'A shape made by joining simpler shapes; area adds if no overlap.' },
+      ],
+      sayThisAloud:
+        'Watch me cover this rectangle with blue tiles—no holes, no stacking. I count 12 tiles: 12 square units. Walking around the edge would be perimeter, not area.',
+      misconceptions: [
+        {
+          myth: 'Area and perimeter are interchangeable words.',
+          correction: 'Always pair correct units: square units vs linear units.',
+        },
+        {
+          myth: 'Tilted squares are not square units.',
+          correction: 'Same-size squares can be rotated; alignment on a grid helps beginners.',
+        },
+      ],
+      supportEmergingLearners:
+        'Use inch or centimeter grid paper with pre-drawn rectangles first.',
+      extendForDepth:
+        'Decompose an L-shape into two rectangles; sum areas. Compare to counting every tile.',
+      extraPracticeIdeas: [
+        'Design a “dream desk” on grid paper—compute area.',
+        'Which rectangle has larger area with same perimeter? (exploration)',
+        'Measure a book cover with sticky-note squares.',
+      ],
+    },
+    es: {
+      conceptualDeepDive:
+        'El área mide cubrimiento; el perímetro, longitud del borde. Las matrices conectan multiplicación y área. Enfatiza unidades cuadradas y alineación — huecos y traslapes rompen el conteo.',
+      vocabularyTerms: [
+        { term: 'Unidad cuadrada', definition: 'Ficha con lados iguales para medir área.' },
+        { term: 'Área', definition: 'Cantidad de cuadrados que cubren una región sin huecos ni solape.' },
+        { term: 'Perímetro', definition: 'Distancia alrededor — distinto del área.' },
+        { term: 'Figura compuesta', definition: 'Varias figuras juntas; el área suma si no hay solape.' },
+      ],
+      sayThisAloud:
+        'Cubro este rectángulo con fichas azules — sin huecos ni montones. Cuento 12: 12 unidades cuadradas. Caminar el borde sería perímetro, no área.',
+      misconceptions: [
+        {
+          myth: 'Área y perímetro son lo mismo.',
+          correction: 'Unidades distintas: cuadradas vs lineales.',
+        },
+        {
+          myth: 'Cuadrados inclinados no cuentan.',
+          correction: 'Cuadrados del mismo tamaño rotan; la cuadrícula ayuda al inicio.',
+        },
+      ],
+      supportEmergingLearners:
+        'Papel cuadriculado con rectángulos dibujados primero.',
+      extendForDepth:
+        'Forma en L en dos rectángulos; sumar áreas.',
+      extraPracticeIdeas: [
+        '“Escritorio soñado” en cuadrícula.',
+        'Mismo perímetro, distinto área (exploración).',
+        'Portada de libro con notas adhesivas cuadradas.',
+      ],
+    },
+  },
 }

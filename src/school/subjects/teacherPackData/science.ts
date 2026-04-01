@@ -385,4 +385,196 @@ export const SCIENCE_TEACHER_PACKS: Record<string, BilingualTeacherPack> = {
       ],
     },
   },
+  'sci-tots-weather-sun-cloud': {
+    en: {
+      conceptualDeepDive:
+        'Weather is observable patterns of atmosphere near the ground—cloud type, precipitation, wind, temperature. Distinguish weather (today) from climate (long-term averages). Sun drives heating and evaporation; never stare at the Sun—model safe indirect observation.',
+      vocabularyTerms: [
+        { term: 'Weather', definition: 'What the sky and air are doing over a short time.' },
+        { term: 'Sunny / cloudy / rainy', definition: 'Common child-friendly descriptors tied to observation.' },
+        { term: 'Precipitation', definition: 'Water falling from clouds (rain, snow, hail).' },
+        { term: 'Observe', definition: 'Use senses and tools safely to gather information.' },
+      ],
+      sayThisAloud:
+        'We look at the sky and feel the air—sunny means bright light and warmth we notice on skin; dark clouds can mean rain might come. We never stare at the Sun; we notice its light on the ground instead.',
+      misconceptions: [
+        {
+          myth: 'Clouds are made of cotton or smoke.',
+          correction: 'They are tiny water droplets or ice crystals—too small to hold.',
+        },
+        {
+          myth: 'Thunder causes lightning.',
+          correction: 'Lightning happens first; thunder is the sound that follows.',
+        },
+      ],
+      supportEmergingLearners:
+        'Weather wheel with icons; one child reports daily from the window.',
+      extendForDepth:
+        'Simple thermometer read with adult; compare two days on a chart.',
+      extraPracticeIdeas: [
+        'Dress-for-weather game with paper dolls.',
+        'Shadow length at morning vs noon (indirect sun discussion).',
+        'Class weather journal for one week.',
+      ],
+    },
+    es: {
+      conceptualDeepDive:
+        'El clima son patrones observables del aire cerca del suelo. Diferencia clima del día vs clima a largo plazo. El Sol impulsa calor y evaporación; jamás mirar directo — observación indirecta segura.',
+      vocabularyTerms: [
+        { term: 'Clima (del día)', definition: 'Lo que hace el cielo y el aire en poco tiempo.' },
+        { term: 'Soleado / nublado / lluvioso', definition: 'Palabras ligadas a lo que vemos y sentimos.' },
+        { term: 'Precipitación', definition: 'Agua que cae de las nubes.' },
+        { term: 'Observar', definition: 'Usar sentidos y herramientas con seguridad.' },
+      ],
+      sayThisAloud:
+        'Miramos el cielo y el aire — soleado es luz y calor en la piel; nubes oscuras pueden anunciar lluvia. No miramos al Sol; vemos su luz en el suelo.',
+      misconceptions: [
+        {
+          myth: 'Las nubes son algodón.',
+          correction: 'Son gotitas o cristales de hielo muy pequeños.',
+        },
+        {
+          myth: 'El trueno causa el rayo.',
+          correction: 'El rayo ocurre primero; el trueno es el sonido que sigue.',
+        },
+      ],
+      supportEmergingLearners:
+        'Rueda del tiempo con íconos; un ayudante reporta desde la ventana.',
+      extendForDepth:
+        'Termómetro con adulto; comparar dos días en tabla.',
+      extraPracticeIdeas: [
+        'Juego de vestir según el tiempo.',
+        'Sombra mañana vs mediodía.',
+        'Diario del clima una semana.',
+      ],
+    },
+  },
+  'sci-kids-pushes-pulls': {
+    en: {
+      conceptualDeepDive:
+        'Forces are interactions that change motion (speed, direction, start, stop). NGSS K-PS2 emphasizes planning investigations: same object, varied push strength, fair comparison. Friction is a real complication—acknowledge it without overloading vocabulary.',
+      vocabularyTerms: [
+        { term: 'Push', definition: 'Force that moves something away from the applier.' },
+        { term: 'Pull', definition: 'Force that draws something closer.' },
+        { term: 'Motion', definition: 'Change of position over time.' },
+        { term: 'Fair test', definition: 'Change one factor at a time so results are interpretable.' },
+      ],
+      sayThisAloud:
+        'When I push the car away from my hand, that is a push. When I drag the wagon toward me, that is a pull. If I push harder on the same surface, the car usually speeds up more—unless something else changed.',
+      misconceptions: [
+        {
+          myth: 'Bigger always means faster forever.',
+          correction: 'Surface, friction, and obstacles limit motion—patterns have conditions.',
+        },
+        {
+          myth: 'Forces only exist when something moves.',
+          correction: 'Balanced forces can hold still; net force is what changes motion.',
+        },
+      ],
+      supportEmergingLearners:
+        'Body pushes/pulls with a partner at safe distance; then translate to toys.',
+      extendForDepth:
+        'Ramp angle as second variable after strength is understood.',
+      extraPracticeIdeas: [
+        'Predict-then-test with toy cars and masking-tape start lines.',
+        'Draw arrows on photos of playground equipment.',
+        'Sort classroom scenarios: push, pull, or both.',
+      ],
+    },
+    es: {
+      conceptualDeepDive:
+        'Las fuerzas son interacciones que cambian el movimiento. K-PS2 pide planear pruebas: mismo objeto, distinta fuerza, comparación justa. La fricción complica — nombrarla sin saturar.',
+      vocabularyTerms: [
+        { term: 'Empuje', definition: 'Fuerza que aleja del que empuja.' },
+        { term: 'Tirón', definition: 'Fuerza que acerca.' },
+        { term: 'Movimiento', definition: 'Cambio de posición en el tiempo.' },
+        { term: 'Prueba justa', definition: 'Cambiar un factor a la vez.' },
+      ],
+      sayThisAloud:
+        'Empujo el carrito lejos de mi mano — empuje. Arrastro el carrito hacia mí — tirón. Si empujo más fuerte en la misma superficie, suele ir más rápido.',
+      misconceptions: [
+        {
+          myth: 'Más grande siempre más rápido para siempre.',
+          correction: 'Superficie y fricción limitan — hay condiciones.',
+        },
+        {
+          myth: 'Solo hay fuerza si hay movimiento.',
+          correction: 'Fuerzas equilibradas pueden mantener quieto; la neta cambia el movimiento.',
+        },
+      ],
+      supportEmergingLearners:
+        'Empujes y tirones corporales seguros; luego juguetes.',
+      extendForDepth:
+        'Ángulo de rampa como segunda variable.',
+      extraPracticeIdeas: [
+        'Predecir y probar con carritos.',
+        'Flechas en fotos del patio.',
+        'Clasificar escenarios del salón.',
+      ],
+    },
+  },
+  'sci-crew-human-body-systems': {
+    en: {
+      conceptualDeepDive:
+        '4-LS1-1 focuses on structures and functions supporting survival, growth, behavior, and reproduction. Systems are conceptual groupings—stress interaction: respiratory supplies O₂, circulatory distributes, digestive provides fuel, musculoskeletal enables action. Avoid overclaiming “the X system does only Y.”',
+      vocabularyTerms: [
+        { term: 'Organ system', definition: 'Group of organs working together toward related functions.' },
+        { term: 'Digestive', definition: 'Breaks down food so nutrients enter the blood.' },
+        { term: 'Respiratory', definition: 'Gas exchange between air and blood.' },
+        { term: 'Circulatory', definition: 'Heart and blood vessels transport materials.' },
+      ],
+      sayThisAloud:
+        'My brain needs oxygen and sugar—lungs swap gases, heart moves blood, stomach and intestines pull nutrients into that blood, bones and muscles let me go get more food and air. If one part struggles, others feel it.',
+      misconceptions: [
+        {
+          myth: 'Food goes straight into muscles for energy.',
+          correction: 'Digestion breaks food into molecules that enter blood for cells.',
+        },
+        {
+          myth: 'Heart makes blood from nothing.',
+          correction: 'Heart pumps blood; marrow makes blood cells—different jobs.',
+        },
+      ],
+      supportEmergingLearners:
+        'Life-size outline poster; place sticky notes for one job per system.',
+      extendForDepth:
+        'Compare plant structures to animal systems without forcing one-to-one mapping.',
+      extraPracticeIdeas: [
+        'Pulse and breathing before/after jumping jacks.',
+        'Label a diagram from memory, then self-check.',
+        'Jigsaw: each expert group teaches one system.',
+      ],
+    },
+    es: {
+      conceptualDeepDive:
+        '4-LS1-1: estructuras y funciones para sobrevivir, crecer, comportarse. Los sistemas son agrupaciones conceptuales — enfatiza interacción. Evita “el sistema X solo hace Y”.',
+      vocabularyTerms: [
+        { term: 'Sistema de órganos', definition: 'Órganos que colaboran en funciones relacionadas.' },
+        { term: 'Digestivo', definition: 'Descompone alimento para nutrientes en sangre.' },
+        { term: 'Respiratorio', definition: 'Intercambio de gases aire-sangre.' },
+        { term: 'Circulatorio', definition: 'Corazón y vasos transportan materiales.' },
+      ],
+      sayThisAloud:
+        'El cerebro necesita oxígeno y glucosa — pulmones, corazón, digestión y músculos/huesos trabajan en red. Si una parte falla, las demás lo notan.',
+      misconceptions: [
+        {
+          myth: 'La comida va directo al músculo.',
+          correction: 'Se descompone y entra a la sangre para las células.',
+        },
+        {
+          myth: 'El corazón inventa sangre.',
+          correction: 'Bombea; la médula hace células — trabajos distintos.',
+        },
+      ],
+      supportEmergingLearners:
+        'Silueta tamaño real; notas adhesivas con una función por sistema.',
+      extendForDepth:
+        'Comparar plantas y animales sin forzar mapa uno a uno.',
+      extraPracticeIdeas: [
+        'Pulso y respiración antes/después de saltar.',
+        'Diagrama de memoria y autocorrección.',
+        'Rompecabezas: cada grupo enseña un sistema.',
+      ],
+    },
+  },
 }

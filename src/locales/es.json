@@ -205,7 +205,15 @@
     "quizYourAnswer": "Tu respuesta",
     "quizReviewLearn": "Consejo: abre Aprender y usa el kit para el docente (vocabulario + guión) si una respuesta incorrecta sorprende.",
     "quizWrongCoach": "Comparen las opciones incorrectas con el vocabulario y el guión de modelado — luego repitan la pregunta mentalmente antes de seguir.",
-    "quizExplainFallback": "La opción que mejor encaja es: {answer}. Compara cada opción con lo que leíste en Aprender — la correcta usa la misma lógica y vocabulario."
+    "quizExplainFallback": "La opción que mejor encaja es: {answer}. Compara cada opción con lo que leíste en Aprender — la correcta usa la misma lógica y vocabulario.",
+    "quizReviewLearnStudent": "Consejo: abre Aprender si quieres releer la lección antes de la siguiente pregunta.",
+    "quizWrongCoachStudent": "Vuelve a Aprender si no estás seguro de por qué esta respuesta encaja mejor.",
+    "quizExplainFallbackStudent": "La mejor opción aquí es: {answer}. Relee Aprender si quieres más detalle.",
+    "audienceLabel": "Vista",
+    "audienceStudent": "Estudiante",
+    "audienceTeacher": "Docente",
+    "audienceToggleAria": "Elegir vista de estudiante o docente",
+    "audienceStudentHubHint": "Elige una materia para empezar una lección. Pide a un docente el mapa de estándares si lo necesitas."
   },
   "schoolSubjects": {
     "alignmentBadge": "Alineado a estándares de California (CDE)",
@@ -230,6 +238,8 @@
     "viewCdeSearch": "Buscar en el CDE este estándar",
     "caStandardsHeading": "Alineación en California",
     "alignmentHubTitle": "Mapas de alineación por materia",
+    "alignmentStudentTitle": "Esta página es para docentes",
+    "alignmentStudentBody": "Los mapas de alineación listan códigos de estándares de California y enlaces de documentación. Cambia a vista Docente si enseñas, o vuelve a tus lecciones.",
     "alignmentHubIntro": "Cada tabla lista las lecciones escolares de Sparki con códigos del marco de California. Muchos estados usan expectativas parecidas al CCSS y NGSS de California.",
     "alignmentBackSubjects": "Todos los mapas",
     "alignmentBackTrack": "Volver a la materia",

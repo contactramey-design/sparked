@@ -385,4 +385,196 @@ export const ENGLISH_TEACHER_PACKS: Record<string, BilingualTeacherPack> = {
       ],
     },
   },
+  'eng-tots-story-three-pictures': {
+    en: {
+      conceptualDeepDive:
+        'Sequencing is a foundation for narrative comprehension and later history timelines. Pictures reduce memory load while training temporal language. Accept reasonable alternative orders if justified—then discuss evidence in the pictures.',
+      vocabularyTerms: [
+        { term: 'Beginning / middle / end', definition: 'Stages of a simple plot or routine.' },
+        { term: 'Sequence', definition: 'Order events happen in time.' },
+        { term: 'First / next / last', definition: 'Temporal transition words for oral retell.' },
+        { term: 'Retell', definition: 'Say the story again in order using your own words.' },
+      ],
+      sayThisAloud:
+        'First I see seeds in soil. Next I see a sprout. Last I see a tall plant with leaves. That order tells how a plant grows.',
+      misconceptions: [
+        {
+          myth: 'Any order is fine if pictures look pretty.',
+          correction: 'Order must match real-world logic or story cause-effect.',
+        },
+        {
+          myth: 'Only one word order is allowed.',
+          correction: 'Accept “then/after that” synonyms while holding sequence steady.',
+        },
+      ],
+      supportEmergingLearners:
+        'Three large cards on a pocket chart; move together while chanting.',
+      extendForDepth:
+        'Add a fourth “problem” picture in the middle for prediction.',
+      extraPracticeIdeas: [
+        'Felt-board story reorder.',
+        'Act out three-step routine.',
+        'Draw your own three-frame comic.',
+      ],
+    },
+    es: {
+      conceptualDeepDive:
+        'Secuenciar es base para comprensión narrativa y líneas del tiempo. Las imágenes reducen carga mientras entrenan lenguaje temporal. Acepta orden alternativo razonable y debate evidencia en el dibujo.',
+      vocabularyTerms: [
+        { term: 'Inicio / medio / final', definition: 'Etapas de un cuento o rutina.' },
+        { term: 'Secuencia', definition: 'Orden en el tiempo.' },
+        { term: 'Primero / luego / al final', definition: 'Conectores temporales orales.' },
+        { term: 'Recontar', definition: 'Decir el cuento en orden con tus palabras.' },
+      ],
+      sayThisAloud:
+        'Primero veo semillas en tierra. Luego un brote. Al final una planta alta con hojas. Ese orden cuenta cómo crece.',
+      misconceptions: [
+        {
+          myth: 'Cualquier orden vale si se ve bonito.',
+          correction: 'El orden debe cuadrar con la lógica real o causa-efecto.',
+        },
+        {
+          myth: 'Solo se puede decir de una forma.',
+          correction: 'Acepta sinónimos (“después”) manteniendo el orden.',
+        },
+      ],
+      supportEmergingLearners:
+        'Tres tarjetas grandes en el tablero; muevan juntos cantando.',
+      extendForDepth:
+        'Añade cuarto dibujo “problema” al medio para predecir.',
+      extraPracticeIdeas: [
+        'Fieltro: reordenar cuento.',
+        'Teatro de rutina de tres pasos.',
+        'Cómic de tres viñetas propio.',
+      ],
+    },
+  },
+  'eng-kids-blend-sounds-cvc': {
+    en: {
+      conceptualDeepDive:
+        'Blending is the gateway to decoding; segmenting is the reverse skill. Keep continuous consonants smooth (/m/, /s/) before stops (/t/, /p/). Always loop back to meaning—nonsense words can be practice items but balance with real vocabulary.',
+      vocabularyTerms: [
+        { term: 'Blend', definition: 'Smoothly join phonemes into a spoken word.' },
+        { term: 'CVC', definition: 'Consonant-vowel-consonant pattern in many early words.' },
+        { term: 'Phoneme', definition: 'Smallest sound unit; three in cat /k/-/a/-/t/.' },
+        { term: 'Decode', definition: 'Turn letters into sounds and merge to read a word.' },
+      ],
+      sayThisAloud:
+        'Watch my mouth: /s/-/i/-/t/. Now faster: sssit… sit. Your turn—tap each sound, then run them together like a train.',
+      misconceptions: [
+        {
+          myth: 'Say letter names while blending.',
+          correction: 'Use sounds for blending; letter names are separate knowledge.',
+        },
+        {
+          myth: 'Skip the vowel if it is soft.',
+          correction: 'Vowels anchor the syllable; model clear short vowels first.',
+        },
+      ],
+      supportEmergingLearners:
+        'Use continuous initial consonants; mirror mouth positions.',
+      extendForDepth:
+        'Introduce digraphs at end of lesson only if group is ready (ship, chin).',
+      extraPracticeIdeas: [
+        'Elkonin boxes with counters.',
+        'Change-a-sound chains at carpet.',
+        'Decodable mini-book hunt for CVC.',
+      ],
+    },
+    es: {
+      conceptualDeepDive:
+        'Fusionar abre la puerta a descifrar; segmentar es el camino inverso. Consonantes continuas ayudan antes de oclusivas. Vuelve al significado — equilibra palabras reales con práctica aislada.',
+      vocabularyTerms: [
+        { term: 'Fusionar', definition: 'Unir fonemas en una palabra oral fluida.' },
+        { term: 'CVC', definition: 'Patrón consonante-vocal-consonante frecuente.' },
+        { term: 'Fonema', definition: 'Unidad mínima de sonido.' },
+        { term: 'Descifrar', definition: 'Convertir letras en sonidos y leer la palabra.' },
+      ],
+      sayThisAloud:
+        'Miren mi boca: /s/-/o/-/l/. Más rápido: sol. Toquen cada sonido y luego unan como un tren.',
+      misconceptions: [
+        {
+          myth: 'Decir nombres de letra al fusionar.',
+          correction: 'Suenan fonemas; los nombres son otro conocimiento.',
+        },
+        {
+          myth: 'Saltar la vocal.',
+          correction: 'La vocal ancla la sílaba; modela vocales cortas claras.',
+        },
+      ],
+      supportEmergingLearners:
+        'Consonantes continuas primero; espejo para la boca.',
+      extendForDepth:
+        'Dígrafos al final solo si el grupo está listo.',
+      extraPracticeIdeas: [
+        'Casillas Elkonin con fichas.',
+        'Cadena cambia-un-sonido.',
+        'Minilibro decodificable.',
+      ],
+    },
+  },
+  'eng-crew-summary-paragraph': {
+    en: {
+      conceptualDeepDive:
+        'Summarizing builds compression and main-idea discrimination—critical for tests and research. Teach students to delete examples, repeated facts, and flashy but irrelevant details. Academic integrity means paraphrase, not patchwriting.',
+      vocabularyTerms: [
+        { term: 'Paraphrase', definition: 'Restate meaning in new words and sentence shapes.' },
+        { term: 'Main idea', definition: 'Author’s central point for the whole passage.' },
+        { term: 'Detail', definition: 'Specific fact or example supporting the main idea.' },
+        { term: 'Objective summary', definition: 'Sticks to the text without personal opinion unless prompted.' },
+      ],
+      sayThisAloud:
+        'I read once for gist, list big ideas, cross out repeated fluff, then write one sentence that names the topic and the author’s point. I check: did I leave out my own new claims?',
+      misconceptions: [
+        {
+          myth: 'Shorter always equals summary.',
+          correction: 'A bullet list without synthesis is not yet a summary paragraph.',
+        },
+        {
+          myth: 'Copying topic sentences is enough.',
+          correction: 'Model weaving ideas across paragraphs when the point spans the text.',
+        },
+      ],
+      supportEmergingLearners:
+        'Provide a bank of allowed synonyms and a graphic organizer with 3 boxes → 1 sentence.',
+      extendForDepth:
+        'Two-column notes: left quote, right “in my words” before composing.',
+      extraPracticeIdeas: [
+        'Summary word budget (≤70 words).',
+        'Peer swap: highlight any copied phrase longer than five words.',
+        'Science passage summary cross-curricular.',
+      ],
+    },
+    es: {
+      conceptualDeepDive:
+        'Resumir entrena compresión y discriminación de idea principal — clave en exámenes e investigación. Elimina ejemplos repetidos y detalles llamativos pero irrelevantes. Parafrasear evita el “patchwriting”.',
+      vocabularyTerms: [
+        { term: 'Parafrasear', definition: 'Decir el sentido con palabras y estructuras nuevas.' },
+        { term: 'Idea principal', definition: 'Punto central del autor en todo el texto.' },
+        { term: 'Detalle', definition: 'Dato o ejemplo que apoya la idea principal.' },
+        { term: 'Resumen objetivo', definition: 'Se apega al texto sin opiniones propias salvo que se pida.' },
+      ],
+      sayThisAloud:
+        'Leo una vez, listo ideas grandes, tacho relleno repetido, escribo una oración que nombre tema y punto del autor. ¿Metí afirmaciones nuevas mías?',
+      misconceptions: [
+        {
+          myth: 'Más corto siempre es resumen.',
+          correction: 'Viñetas sin síntesis aún no son párrafo resumen.',
+        },
+        {
+          myth: 'Copiar la primera oración basta.',
+          correction: 'A veces la idea cruza párrafos — tejer con cuidado.',
+        },
+      ],
+      supportEmergingLearners:
+        'Banco de sinónimos permitidos y organizador 3 cajas → 1 oración.',
+      extendForDepth:
+        'Dos columnas: cita | “con mis palabras” antes de redactar.',
+      extraPracticeIdeas: [
+        'Límite de palabras (≤70).',
+        'Intercambio: subrayar frases copiadas >5 palabras.',
+        'Texto de ciencias.',
+      ],
+    },
+  },
 }

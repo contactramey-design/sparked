@@ -394,6 +394,10 @@
 }
 
 .school-subj-track-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1rem;
   margin-bottom: 0.75rem;
 }
 
@@ -1226,4 +1230,125 @@
   line-height: 1.45;
   font-weight: 600;
   color: #1e40af;
+}
+
+/* Student / teacher audience toggle */
+.school-audience-toggle {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+  padding: 0.5rem 0.65rem;
+  border-radius: 10px;
+  border: 1px solid rgba(234, 88, 12, 0.22);
+  background: rgba(255, 247, 237, 0.65);
+}
+
+.school-audience-toggle--compact {
+  padding: 0.35rem 0.5rem;
+  gap: 0.35rem 0.5rem;
+}
+
+.school-audience-toggle__label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #9a3412;
+}
+
+.school-audience-toggle--compact .school-audience-toggle__label {
+  font-size: 0.68rem;
+}
+
+.school-audience-toggle__buttons {
+  display: inline-flex;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid rgba(124, 45, 18, 0.2);
+}
+
+.school-audience-toggle__btn {
+  margin: 0;
+  padding: 0.35rem 0.75rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  border: none;
+  background: #fff;
+  color: #7c2d12;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.school-audience-toggle__btn:hover {
+  background: rgba(255, 237, 213, 0.9);
+}
+
+.school-audience-toggle__btn--active {
+  background: linear-gradient(135deg, #fb923c, #ea580c);
+  color: #fff;
+}
+
+.school-audience-toggle__btn--active:hover {
+  color: #fff;
+}
+
+.school-subj-lesson-audience-row {
+  margin-top: 0.5rem;
+}
+
+.school-subj-hub-audience {
+  margin: 0.5rem 0 1rem;
+}
+
+.school-subj-track-audience {
+  flex: 1 1 auto;
+  display: flex;
+  justify-content: flex-end;
+}
+
+@media (min-width: 640px) {
+  .school-subj-track-audience {
+    flex: 0 0 auto;
+    margin-left: auto;
+  }
+}
+
+.school-subj-alignment-teacher-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.school-subj-alignment-nav--with-toggle {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+}
+
+.school-subj-alignment-audience {
+  flex: 1 1 auto;
+  justify-content: flex-end;
+}
+
+@media (min-width: 720px) {
+  .school-subj-alignment-audience {
+    flex: 0 0 auto;
+    margin-left: auto;
+  }
+}
+
+.school-subj-alignment-student-gate {
+  margin-top: 1rem;
+  border-radius: 12px;
+  border: 1px solid rgba(234, 88, 12, 0.2);
+  max-width: 36rem;
+}
+
+.school-subj-hub-student-hint {
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
 }

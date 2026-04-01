@@ -205,7 +205,15 @@
     "quizYourAnswer": "Your answer",
     "quizReviewLearn": "Tip: open the Learn tab and use the Teacher toolkit (vocabulary + modeling script) if a wrong answer surprised you.",
     "quizWrongCoach": "Have the group compare wrong options to the vocabulary terms and the modeling script—then retry the question mentally before moving on.",
-    "quizExplainFallback": "The choice that best fits this question is: {answer}. Compare each option to what you read in Learn — the correct one uses the same vocabulary and logic."
+    "quizExplainFallback": "The choice that best fits this question is: {answer}. Compare each option to what you read in Learn — the correct one uses the same vocabulary and logic.",
+    "quizReviewLearnStudent": "Tip: open the Learn tab if you want to reread the lesson before the next question.",
+    "quizWrongCoachStudent": "Look back at the lesson in Learn if you are not sure why this answer fits best.",
+    "quizExplainFallbackStudent": "The best choice here is: {answer}. Reread the Learn section if you want more detail.",
+    "audienceLabel": "View",
+    "audienceStudent": "Student",
+    "audienceTeacher": "Teacher",
+    "audienceToggleAria": "Choose student or teacher view",
+    "audienceStudentHubHint": "Pick a subject to start a lesson. Ask a teacher if you need the standards map."
   },
   "schoolSubjects": {
     "alignmentBadge": "Aligned to California standards (CDE)",
@@ -230,6 +238,8 @@
     "viewCdeSearch": "Search CDE for this standard",
     "caStandardsHeading": "California alignment",
     "alignmentHubTitle": "Subject alignment maps",
+    "alignmentStudentTitle": "This page is for teachers",
+    "alignmentStudentBody": "Alignment maps list California standard codes and documentation links. Switch to Teacher view if you are an educator, or go back to your lessons.",
     "alignmentHubIntro": "Each table lists Sparki school lessons with California framework codes. Many states use similar expectations to CA CCSS and NGSS.",
     "alignmentBackSubjects": "All subject maps",
     "alignmentBackTrack": "Back to subject",

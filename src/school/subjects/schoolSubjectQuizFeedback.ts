@@ -487,5 +487,245 @@ const SCHOOL_SUBJECT_QUIZ_FEEDBACK: Record<string, { en: string; es: string }> =
   "hist-crew-src-q5": {
     "en": "Museum labels interpret objects—secondary text about primary things.",
     "es": "Las etiquetas interpretan — texto secundario sobre objetos primarios."
+  },
+  "math-tots-more-q1": {
+    "en": "Same count on both sides means the same amount—three and three match one-to-one.",
+    "es": "La misma cuenta en ambos lados es cantidad igual — tres y tres emparejan uno a uno."
+  },
+  "math-tots-more-q2": {
+    "en": "Five is greater than two, so “more” fits the larger group.",
+    "es": "Cinco es mayor que dos, así que encaja “más” en el grupo mayor."
+  },
+  "math-tots-more-q3": {
+    "en": "Pairing items one-to-one shows leftovers—same means no extras in either line.",
+    "es": "Emparejar uno a uno muestra sobras — igual es que no sobre en ninguna fila."
+  },
+  "math-tots-more-q4": {
+    "en": "“Fewer than 6” means less than six—4 works; 7 and 10 are too big.",
+    "es": "“Menos de 6” es menor que seis — 4 sirve; 7 y 10 son demasiado grandes."
+  },
+  "math-tots-more-q5": {
+    "en": "Spreading does not add or remove objects—conservation of number.",
+    "es": "Esparcir no quita ni pone objetos — se conserva la cantidad."
+  },
+  "math-kids-sub-q1": {
+    "en": "9 − 4: count back four from 9 or think what plus 4 makes 9 → 5.",
+    "es": "9 − 4: cuenta cuatro hacia atrás desde 9 o piensa qué más 4 da 9 → 5."
+  },
+  "math-kids-sub-q2": {
+    "en": "Taking apples away matches subtraction; joining birds would be addition.",
+    "es": "Quitar manzanas es resta; juntar pájaros sería suma."
+  },
+  "math-kids-sub-q3": {
+    "en": "Subtraction removes from a total or compares to find a gap—both are take-apart ideas.",
+    "es": "La resta quita de un total o compara para hallar la diferencia."
+  },
+  "math-kids-sub-q4": {
+    "en": "Fact family: if 6 + 4 = 10, subtracting 4 leaves the other part, 6.",
+    "es": "Familia de operaciones: si 6 + 4 = 10, al quitar 4 queda 6."
+  },
+  "math-kids-sub-q5": {
+    "en": "Crossing out the part taken away shows what remains—8 − 3 → 5 left.",
+    "es": "Tachar lo que se quita muestra lo que queda — 8 − 3 → 5."
+  },
+  "math-crew-area-q1": {
+    "en": "Area measures flat space covered inside a shape, not edge length alone.",
+    "es": "El área mide superficie cubierta dentro de la figura, no solo el borde."
+  },
+  "math-crew-area-q2": {
+    "en": "5 rows × 2 unit squares per row = 10 square units.",
+    "es": "5 filas × 2 cuadrados por fila = 10 unidades cuadradas."
+  },
+  "math-crew-area-q3": {
+    "en": "Covering with same-size squares models area; a ruler on one side is length.",
+    "es": "Cubrir con cuadrados iguales modela el área; la regla en un lado es longitud."
+  },
+  "math-crew-area-q4": {
+    "en": "Each unit square counts once—12 tiles means 12 square units of area.",
+    "es": "Cada cuadrado cuenta una vez — 12 fichas son 12 unidades cuadradas de área."
+  },
+  "math-crew-area-q5": {
+    "en": "Perimeter is the distance around the outside; area is what’s inside.",
+    "es": "El perímetro es la vuelta alrededor; el área es lo de adentro."
+  },
+  "eng-tots-seq-q1": {
+    "en": "Stories unfold in time: beginning, middle, and end.",
+    "es": "Los cuentos avanzan en el tiempo: inicio, medio y final."
+  },
+  "eng-tots-seq-q2": {
+    "en": "“First” marks what happens at the start of the sequence.",
+    "es": "“Primero” marca lo que pasa al comienzo de la secuencia."
+  },
+  "eng-tots-seq-q3": {
+    "en": "Cooking happens before eating in a typical snack story.",
+    "es": "En una rutina de merienda, cocinar suele ir antes que comer."
+  },
+  "eng-tots-seq-q4": {
+    "en": "“Last” points to the final step, not the first.",
+    "es": "“Al final” señala el último paso, no el primero."
+  },
+  "eng-tots-seq-q5": {
+    "en": "Ordering pictures builds understanding of events and time.",
+    "es": "Ordenar imágenes ayuda a entender eventos y el tiempo."
+  },
+  "eng-kids-blend-q1": {
+    "en": "/s/ /i/ /t/ blended smoothly sounds like “sit.”",
+    "es": "/s/ /i/ /t/ en inglés suena “sit”; en español revisa los sonidos del ítem."
+  },
+  "eng-kids-blend-q2": {
+    "en": "Blending merges phonemes into a spoken word—not letter names only.",
+    "es": "Fusionar une fonemas en palabra oral — no solo nombres de letra."
+  },
+  "eng-kids-blend-q3": {
+    "en": "CVC = consonant-vowel-consonant; “dog” fits; “play” and “train” do not.",
+    "es": "CVC es consonante-vocal-consonante; “pan” encaja; “clase” y “brillo” no."
+  },
+  "eng-kids-blend-q4": {
+    "en": "/h/ /o/ /p/ with short o gives “hop,” not the long-vowel spellings.",
+    "es": "En la versión en inglés, /h/ /o/ /p/ con o corta da “hop”."
+  },
+  "eng-kids-blend-q5": {
+    "en": "Meaning check catches mis-reads—real words should sound familiar.",
+    "es": "Comprobar sentido detecta errores — las palabras reales suenan familiares."
+  },
+  "eng-crew-sum-q1": {
+    "en": "Summaries compress to main ideas; they skip minor repetition.",
+    "es": "El resumen comprime a ideas principales; omite repetición menor."
+  },
+  "eng-crew-sum-q2": {
+    "en": "Tiny jokes that do not change the point are cut first.",
+    "es": "Los chistes que no cambian el punto central suelen cortarse primero."
+  },
+  "eng-crew-sum-q3": {
+    "en": "Paraphrase uses new wording and shapes while staying faithful to the text.",
+    "es": "Parafrasear usa palabras y estructuras nuevas sin traicionar el texto."
+  },
+  "eng-crew-sum-q4": {
+    "en": "The topic sentence states what the whole passage is mostly about.",
+    "es": "La oración tópico dice de qué trata el pasaje en conjunto."
+  },
+  "eng-crew-sum-q5": {
+    "en": "If length matches the original, merge ideas and delete optional detail.",
+    "es": "Si mide como el original, fusiona ideas y elimina detalle opcional."
+  },
+  "sci-tots-wx-q1": {
+    "en": "Dark clouds often carry more moisture—rain or storms become likely.",
+    "es": "Las nubes oscuras suelen traer más humedad — lluvia o tormenta son probables."
+  },
+  "sci-tots-wx-q2": {
+    "en": "Sunlight warms Earth and lets us see—light and heat reach the surface.",
+    "es": "La luz solar calienta la Tierra y nos deja ver — luz y calor llegan a la superficie."
+  },
+  "sci-tots-wx-q3": {
+    "en": "Rain wets outdoor surfaces; that is the usual meaning of a rainy day.",
+    "es": "La lluvia moja afuera — así suele ser un día lluvioso."
+  },
+  "sci-tots-wx-q4": {
+    "en": "We ground weather talk in observation—sky, air, and what falls.",
+    "es": "Hablamos del clima con observación: cielo, aire y lo que cae."
+  },
+  "sci-tots-wx-q5": {
+    "en": "Never stare at the Sun; watch weather safely with an adult.",
+    "es": "Nunca fijarse en el Sol; observar el clima con un adulto con seguridad."
+  },
+  "sci-kids-push-q1": {
+    "en": "A pull draws the object toward the person applying the force.",
+    "es": "Un tirón acerca el objeto hacia quien aplica la fuerza."
+  },
+  "sci-kids-push-q2": {
+    "en": "Stronger push on the same toy and surface usually increases speed more.",
+    "es": "Empuje más fuerte en el mismo juguete y superficie suele acelerar más."
+  },
+  "sci-kids-push-q3": {
+    "en": "Kicking away from the foot is a push; dragging toward you is a pull.",
+    "es": "Patear lejos del pie es empuje; arrastrar hacia ti es tirón."
+  },
+  "sci-kids-push-q4": {
+    "en": "Fair tests change one variable at a time so you know what caused the change.",
+    "es": "En prueba justa cambias una variable a la vez para saber la causa."
+  },
+  "sci-kids-push-q5": {
+    "en": "Forces start, stop, or redirect motion—they are not limited to living things.",
+    "es": "Las fuerzas inician, frenan o redirigen el movimiento — no solo en seres vivos."
+  },
+  "sci-crew-body-q1": {
+    "en": "Lungs and airways exchange gases—respiratory system brings oxygen into blood.",
+    "es": "Pulmones y vías aéreas intercambian gases — el respiratorio mete oxígeno a la sangre."
+  },
+  "sci-crew-body-q2": {
+    "en": "Digestion breaks food into nutrients the body can absorb and use.",
+    "es": "La digestión descompone el alimento en nutrientes absorbibles."
+  },
+  "sci-crew-body-q3": {
+    "en": "The heart pumps blood through vessels—core of the circulatory system.",
+    "es": "El corazón bombea sangre por vasos — núcleo del sistema circulatorio."
+  },
+  "sci-crew-body-q4": {
+    "en": "Muscles pull on bones to create movement; bones support the frame.",
+    "es": "Los músculos tiran de los huesos para mover; los huesos sostienen."
+  },
+  "sci-crew-body-q5": {
+    "en": "Body systems interact—breathing spikes affect heart rate, digestion supplies fuel, and so on.",
+    "es": "Los sistemas interactúan — respiración y pulso, digestión y energía, etc."
+  },
+  "hist-tots-fair-q1": {
+    "en": "Rules protect learning and safety for the whole class community.",
+    "es": "Las reglas protegen aprendizaje y seguridad de toda la comunidad del salón."
+  },
+  "hist-tots-fair-q2": {
+    "en": "Turn-taking shares limited time so everyone can join.",
+    "es": "Los turnos reparten el tiempo para que todos participen."
+  },
+  "hist-tots-fair-q3": {
+    "en": "Fair can mean matching support to need—not always identical items.",
+    "es": "Justo puede ser ajustar apoyo a la necesidad — no siempre lo mismo."
+  },
+  "hist-tots-fair-q4": {
+    "en": "Repair after a mistake—apologize and try the rule again—builds trust.",
+    "es": "Reparar tras un error — disculpa y reintentar la regla — genera confianza."
+  },
+  "hist-tots-fair-q5": {
+    "en": "Following rules shows care for classmates and shared spaces.",
+    "es": "Seguir reglas muestra cuidado por compañeros y espacios comunes."
+  },
+  "hist-kids-gs-q1": {
+    "en": "A haircut is a service—you pay for skilled help, not a product to keep.",
+    "es": "El corte de pelo es servicio — pagas por la ayuda experta, no un producto para guardar."
+  },
+  "hist-kids-gs-q2": {
+    "en": "Bread is a tangible good you take home from the store.",
+    "es": "El pan es un bien tangible que llevas de la tienda."
+  },
+  "hist-kids-gs-q3": {
+    "en": "Teaching is a service: educators provide expertise and time.",
+    "es": "Enseñar es servicio: los educadores dan expertise y tiempo."
+  },
+  "hist-kids-gs-q4": {
+    "en": "Toy = good; doctor visit = service—pair mixes both categories.",
+    "es": "Juguete = bien; consulta médica = servicio — el par mezcla ambas."
+  },
+  "hist-kids-gs-q5": {
+    "en": "Communities need objects and helpers—goods and services together.",
+    "es": "Las comunidades necesitan cosas y personas que ayuden — bienes y servicios juntos."
+  },
+  "hist-crew-ca-q1": {
+    "en": "Sacramento is California’s state capital, not the largest city.",
+    "es": "Sacramento es la capital de California, no la ciudad más grande."
+  },
+  "hist-crew-ca-q2": {
+    "en": "California’s ocean coast lies to the west on standard maps.",
+    "es": "La costa oceánica de California queda al oeste en mapas habituales."
+  },
+  "hist-crew-ca-q3": {
+    "en": "The golden poppy is a well-known California state symbol.",
+    "es": "La amapola dorada es un símbolo estatal muy conocido."
+  },
+  "hist-crew-ca-q4": {
+    "en": "The Sierra Nevada is a major mountain range along eastern California.",
+    "es": "La Sierra Nevada es una cordillera importante al este de California."
+  },
+  "hist-crew-ca-q5": {
+    "en": "Regions differ in land, climate, and resources—why geographers split the state.",
+    "es": "Las regiones difieren en tierra, clima y recursos — por eso se divide el estado."
   }
 }

@@ -831,4 +831,406 @@ export const MATH_LESSONS: SchoolSubjectLesson[] = [
       realWorldTip: 'En la cocina: “Llena la taza hasta la mitad” conecta con 1/2 en la vida real.',
     },
   },
+  {
+    id: 'math-tots-more-less-same',
+    order: 3,
+    ageBands: ['tots'],
+    estMinutes: 14,
+    caStandards: {
+      framework: 'PTKLF',
+      codes: ['Number Sense: compare small sets; more, less, same'],
+      gradeSpan: 'PK/TK',
+      cdeSearchQuery: 'California preschool learning foundations mathematics compare sets',
+    },
+    standardsNote: 'CA PTKLF Math — compare quantities; more/less/same (PK/TK)',
+    cardEmoji: '⚖️',
+    en: {
+      title: 'More, Less, or the Same?',
+      summary: 'Compare two small groups and use “more,” “less,” and “the same.”',
+      objectives: ['Match groups that show the same amount', 'Tell which group has more or fewer'],
+      teachSections: [
+        {
+          heading: 'Line them up',
+          body: 'Put two groups in two lines, one-to-one. If every bear has a friend across, the groups are the same. If one line has an extra, that line has more.',
+        },
+        {
+          heading: 'Words we use',
+          body: 'More means a bigger amount. Less (or fewer) means a smaller amount. The same means equal amounts—same last count.',
+        },
+        {
+          heading: 'Sparki match',
+          body: 'Sparki holds 4 blocks; you hold 4 blocks. Same! Sparki adds one—now Sparki has more.',
+        },
+        {
+          heading: 'Avoid tricks',
+          body: 'Spreading blocks out does not change how many—preview conservation by re-counting after spreading.',
+        },
+      ],
+      quiz: [
+        {
+          id: 'math-tots-more-q1',
+          prompt: 'You have 3 stickers. Your friend has 3 stickers. The amounts are…',
+          options: ['The same', 'You have more', 'Your friend has more'],
+          correctIndex: 0,
+        },
+        {
+          id: 'math-tots-more-q2',
+          prompt: 'Which word fits: “I have 5 crackers and you have 2. I have ___.”',
+          options: ['More', 'Less', 'Zero'],
+          correctIndex: 0,
+        },
+        {
+          id: 'math-tots-more-q3',
+          prompt: 'To check if two groups are the same, a good way is…',
+          options: ['Match one-to-one and see if any are left over', 'Only look at color', 'Close your eyes'],
+          correctIndex: 0,
+        },
+        {
+          id: 'math-tots-more-q4',
+          prompt: 'You have fewer than 6 cubes. Which could be your number?',
+          options: ['4', '7', '10'],
+          correctIndex: 0,
+        },
+        {
+          id: 'math-tots-more-q5',
+          prompt: 'After you spread your blocks in a long line, the number of blocks…',
+          options: ['Stays the same if you did not add or remove', 'Always becomes zero', 'Always doubles'],
+          correctIndex: 0,
+        },
+      ],
+      realWorldTip: 'Snack plates: “Who has more carrots?” Match one-to-one to prove it.',
+    },
+    es: {
+      title: '¿Más, menos o igual?',
+      summary: 'Compara dos grupos pequeños y usa “más,” “menos” e “igual.”',
+      objectives: ['Emparejar grupos con la misma cantidad', 'Decir cuál grupo tiene más o menos'],
+      teachSections: [
+        {
+          heading: 'Alinea',
+          body: 'Dos filas, uno a uno. Si cada oso tiene amigo enfrente, las cantidades son iguales. Si sobra uno, esa fila tiene más.',
+        },
+        {
+          heading: 'Palabras',
+          body: 'Más = cantidad mayor. Menos = cantidad menor. Igual = misma cantidad — mismo último número al contar.',
+        },
+        {
+          heading: 'Sparki',
+          body: 'Sparki tiene 4 bloques; tú 4. ¡Iguales! Sparki agrega uno — ahora Sparki tiene más.',
+        },
+        {
+          heading: 'Sin trampas',
+          body: 'Esparcir bloques no cambia cuántos hay — vuelve a contar tras esparcir.',
+        },
+      ],
+      quiz: [
+        {
+          id: 'math-tots-more-q1',
+          prompt: 'Tienes 3 calcomanías. Tu amigo tiene 3. Las cantidades son…',
+          options: ['Iguales', 'Tú tienes más', 'Tu amigo tiene más'],
+          correctIndex: 0,
+        },
+        {
+          id: 'math-tots-more-q2',
+          prompt: '“Tengo 5 galletas y tú 2. Yo tengo ___.”',
+          options: ['Más', 'Menos', 'Cero'],
+          correctIndex: 0,
+        },
+        {
+          id: 'math-tots-more-q3',
+          prompt: 'Para ver si dos grupos son iguales, conviene…',
+          options: ['Emparejar uno a uno y ver si sobra', 'Solo mirar el color', 'Cerrar los ojos'],
+          correctIndex: 0,
+        },
+        {
+          id: 'math-tots-more-q4',
+          prompt: 'Tienes menos de 6 cubos. ¿Cuál podría ser tu número?',
+          options: ['4', '7', '10'],
+          correctIndex: 0,
+        },
+        {
+          id: 'math-tots-more-q5',
+          prompt: 'Si esparces los bloques en una fila larga, la cantidad…',
+          options: ['Se mantiene si no quitas ni pones', 'Siempre es cero', 'Siempre se duplica'],
+          correctIndex: 0,
+        },
+      ],
+      realWorldTip: 'Platos: “¿Quién tiene más zanahorias?” Empareja uno a uno.',
+    },
+  },
+  {
+    id: 'math-kids-subtract-within-10',
+    order: 3,
+    ageBands: ['kids'],
+    estMinutes: 16,
+    caStandards: {
+      framework: 'CCSS_MATH',
+      codes: ['1.OA.A.1', '1.OA.C.6'],
+      gradeSpan: '1',
+      cdeSearchQuery: 'California Common Core 1.OA.A.1 subtraction',
+    },
+    standardsNote: 'CA CCSS Math Gr.1; take-apart and compare; subtraction within 10',
+    cardEmoji: '➖',
+    en: {
+      title: 'Take-Away Stories Within 10',
+      summary: 'Model subtraction as separating or finding how many more/less.',
+      objectives: ['Represent subtraction with objects and drawings', 'Relate “take away” and “difference” to −'],
+      teachSections: [
+        {
+          heading: 'Two meanings',
+          body: 'Take away: start with 8 cubes, remove 3, how many left? Compare: Maya has 7 stickers, Jon has 4—how many more does Maya have? Both can use subtraction.',
+        },
+        {
+          heading: 'Count back',
+          body: 'For take-away, count backward from the start: 8…7,6,5 (three steps) → 5 left.',
+        },
+        {
+          heading: 'Relate to addition',
+          body: 'If 5 + 3 = 8, then 8 − 3 = 5. Fact families help check your work.',
+        },
+        {
+          heading: 'Draw a story',
+          body: 'Sparki crosses out circles for items taken away—leftovers show the answer clearly.',
+        },
+      ],
+      quiz: [
+        {
+          id: 'math-kids-sub-q1',
+          prompt: '9 − 4 equals…',
+          options: ['4', '5', '6'],
+          correctIndex: 1,
+        },
+        {
+          id: 'math-kids-sub-q2',
+          prompt: 'Which story fits 7 − 2?',
+          options: [
+            '7 birds join 2 more birds',
+            '7 apples, 2 are eaten—how many left?',
+            'Double 7',
+          ],
+          correctIndex: 1,
+        },
+        {
+          id: 'math-kids-sub-q3',
+          prompt: 'Subtraction can mean…',
+          options: ['Take away from a group', 'Always make a bigger number', 'Only count by tens'],
+          correctIndex: 0,
+        },
+        {
+          id: 'math-kids-sub-q4',
+          prompt: 'If 6 + 4 = 10, then 10 − 4 =',
+          options: ['4', '6', '14'],
+          correctIndex: 1,
+        },
+        {
+          id: 'math-kids-sub-q5',
+          prompt: 'A good drawing for 8 − 3 might show…',
+          options: ['8 circles with 3 crossed out', 'Only the number 8', 'Three empty boxes only'],
+          correctIndex: 0,
+        },
+      ],
+      realWorldTip: 'Lunch: “We had 10 napkins; we used 3. How many left?”',
+    },
+    es: {
+      title: 'Historias de quitar hasta 10',
+      summary: 'Modela la resta como separar o hallar cuántos más o menos.',
+      objectives: ['Representar resta con objetos y dibujos', 'Relacionar “quitar” y “diferencia” con −'],
+      teachSections: [
+        {
+          heading: 'Dos significados',
+          body: 'Quitar: empiezas con 8 cubos, quitas 3, ¿cuántos quedan? Comparar: Maya tiene 7 calcomanías, Jon 4 — ¿cuántas más Maya? Ambas pueden usar resta.',
+        },
+        {
+          heading: 'Contar hacia atrás',
+          body: 'Para quitar, cuenta desde el inicio: 8…7,6,5 (tres pasos) → quedan 5.',
+        },
+        {
+          heading: 'Relación con la suma',
+          body: 'Si 5 + 3 = 8, entonces 8 − 3 = 5. Las familias de operaciones ayudan a comprobar.',
+        },
+        {
+          heading: 'Dibuja el cuento',
+          body: 'Sparki tacha círculos de lo que se fue — lo que queda muestra la respuesta.',
+        },
+      ],
+      quiz: [
+        {
+          id: 'math-kids-sub-q1',
+          prompt: '9 − 4 es igual a…',
+          options: ['4', '5', '6'],
+          correctIndex: 1,
+        },
+        {
+          id: 'math-kids-sub-q2',
+          prompt: '¿Qué historia va con 7 − 2?',
+          options: [
+            '7 pájaros se unen a 2 más',
+            '7 manzanas, 2 se comen — ¿cuántas quedan?',
+            'El doble de 7',
+          ],
+          correctIndex: 1,
+        },
+        {
+          id: 'math-kids-sub-q3',
+          prompt: 'Restar puede significar…',
+          options: ['Quitar de un grupo', 'Siempre agrandar el número', 'Solo contar de 10 en 10'],
+          correctIndex: 0,
+        },
+        {
+          id: 'math-kids-sub-q4',
+          prompt: 'Si 6 + 4 = 10, entonces 10 − 4 =',
+          options: ['4', '6', '14'],
+          correctIndex: 1,
+        },
+        {
+          id: 'math-kids-sub-q5',
+          prompt: 'Un buen dibujo para 8 − 3 muestra…',
+          options: ['8 círculos con 3 tachados', 'Solo el número 8', 'Solo tres cajas vacías'],
+          correctIndex: 0,
+        },
+      ],
+      realWorldTip: 'Almuerzo: “Había 10 servilletas; usamos 3. ¿Cuántas quedan?”',
+    },
+  },
+  {
+    id: 'math-crew-area-tiles',
+    order: 3,
+    ageBands: ['crew'],
+    estMinutes: 18,
+    caStandards: {
+      framework: 'CCSS_MATH',
+      codes: ['3.MD.C.5', '3.MD.C.6'],
+      gradeSpan: '3',
+      cdeSearchQuery: 'California Common Core 3.MD.C.5 area unit squares',
+    },
+    standardsNote: 'CA CCSS Math Gr.3; area as covering with unit squares',
+    cardEmoji: '▦',
+    en: {
+      title: 'Area with Unit Squares',
+      summary: 'Cover a rectangle with tiles and count square units.',
+      objectives: ['Explain area as the number of unit squares that cover a flat shape', 'Count or multiply rows × columns in a grid'],
+      teachSections: [
+        {
+          heading: 'Cover, don’t guess',
+          body: 'Area measures how much flat space is covered. We use square tiles that do not overlap or leave holes—each tile is one square unit.',
+        },
+        {
+          heading: 'Rows and columns',
+          body: 'A 4-by-3 grid has 4 rows of 3 squares: 4 × 3 = 12 square units. Trace a row with your finger, then count how many rows.',
+        },
+        {
+          heading: 'Label units',
+          body: 'Always say “square units” or “square centimeters” so area is not confused with length around the edge (perimeter).',
+        },
+        {
+          heading: 'Compare areas',
+          body: 'Two shapes can look different but have the same area if they use the same number of unit squares—rearranging does not change the count.',
+        },
+      ],
+      quiz: [
+        {
+          id: 'math-crew-area-q1',
+          prompt: 'Area tells us…',
+          options: [
+            'How much surface is covered inside a shape',
+            'How long the boundary is only',
+            'How heavy an object is',
+          ],
+          correctIndex: 0,
+        },
+        {
+          id: 'math-crew-area-q2',
+          prompt: 'A rectangle is covered by 5 rows of 2 unit squares. The area is…',
+          options: ['10 square units', '7 square units', '5 square units'],
+          correctIndex: 0,
+        },
+        {
+          id: 'math-crew-area-q3',
+          prompt: 'Which tool idea matches area best?',
+          options: ['Square tiles that cover a region', 'A ruler only along one side', 'A stopwatch'],
+          correctIndex: 0,
+        },
+        {
+          id: 'math-crew-area-q4',
+          prompt: 'If you count 12 unit squares inside a shape, its area is…',
+          options: ['12 square units', '12 inches only', '12 cubes of volume'],
+          correctIndex: 0,
+        },
+        {
+          id: 'math-crew-area-q5',
+          prompt: 'Perimeter is…',
+          options: [
+            'Distance around the outside of a shape',
+            'The same word as area',
+            'Only used for circles',
+          ],
+          correctIndex: 0,
+        },
+      ],
+      realWorldTip: 'Floor tiles in the classroom—count how many in one row and one column to estimate area.',
+    },
+    es: {
+      title: 'Área con cuadrados unitarios',
+      summary: 'Cubre un rectángulo con fichas y cuenta unidades cuadradas.',
+      objectives: ['Explicar el área como cantidad de cuadrados que cubren una figura', 'Contar o multiplicar filas × columnas'],
+      teachSections: [
+        {
+          heading: 'Cubrir, no adivinar',
+          body: 'El área mide cuánta superficie plana se cubre. Usamos fichas cuadradas sin solapar ni dejar huecos — cada una es una unidad cuadrada.',
+        },
+        {
+          heading: 'Filas y columnas',
+          body: 'Una cuadrícula 4 por 3 tiene 4 filas de 3 cuadrados: 4 × 3 = 12 unidades cuadradas.',
+        },
+        {
+          heading: 'Etiqueta unidades',
+          body: 'Di “unidades cuadradas” o “centímetros cuadrados” para no confundir con el perímetro.',
+        },
+        {
+          heading: 'Comparar áreas',
+          body: 'Dos figuras pueden verse distintas y tener la misma área si usan el mismo número de cuadrados.',
+        },
+      ],
+      quiz: [
+        {
+          id: 'math-crew-area-q1',
+          prompt: 'El área nos dice…',
+          options: [
+            'Cuánta superficie cubre el interior de una figura',
+            'Solo cuán largo es el borde',
+            'Qué tan pesado es un objeto',
+          ],
+          correctIndex: 0,
+        },
+        {
+          id: 'math-crew-area-q2',
+          prompt: 'Un rectángulo tiene 5 filas de 2 cuadrados unitarios. El área es…',
+          options: ['10 unidades cuadradas', '7 unidades cuadradas', '5 unidades cuadradas'],
+          correctIndex: 0,
+        },
+        {
+          id: 'math-crew-area-q3',
+          prompt: '¿Qué encaja mejor con área?',
+          options: ['Fichas cuadradas que cubren una región', 'Solo regla en un lado', 'Cronómetro'],
+          correctIndex: 0,
+        },
+        {
+          id: 'math-crew-area-q4',
+          prompt: 'Si cuentas 12 cuadrados unitarios dentro de una figura, el área es…',
+          options: ['12 unidades cuadradas', 'Solo 12 pulgadas', '12 cubos de volumen'],
+          correctIndex: 0,
+        },
+        {
+          id: 'math-crew-area-q5',
+          prompt: 'El perímetro es…',
+          options: [
+            'La distancia alrededor de una figura',
+            'Lo mismo que área',
+            'Solo para círculos',
+          ],
+          correctIndex: 0,
+        },
+      ],
+      realWorldTip: 'Baldosas del salón: cuenta cuántas en una fila y una columna.',
+    },
+  },
 ]

@@ -1,11 +1,14 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { useTranslation } from '@/contexts/LocaleContext'
+import { useSchoolAudience } from '@/hooks/useSchoolAudience'
+import SchoolAudienceToggle from './SchoolAudienceToggle'
 import { SCHOOL_SUBJECT_IDS, type SchoolSubjectId } from './types'
 import './school-subject.css'
 
 const SchoolSubjectsHubPage: React.FC = () => {
   const { t } = useTranslation()
+  const { isTeacherView } = useSchoolAudience()
 
   return (
     <section className="lesson-page school-subj-page">
@@ -13,11 +16,21 @@ const SchoolSubjectsHubPage: React.FC = () => {
         {t('schoolSubject.backToSchools')}
       </Link>
 
+      <div className="school-subj-hub-audience no-print">
+        <SchoolAudienceToggle />
+      </div>
+
       <header className="school-subj-hero">
         <h1>{t('schools.subjectHubTitle')}</h1>
         <p>{t('schools.subjectHubDesc')}</p>
-        <p className="school-subj-hub-supplemental muted">{t('schools.subjectHubSupplemental')}</p>
-        <p className="school-subj-hub-alignment">{t('schoolSubjects.alignmentBadge')}</p>
+        {isTeacherView ? (
+          <>
+            <p className="school-subj-hub-supplemental muted">{t('schools.subjectHubSupplemental')}</p>
+            <p className="school-subj-hub-alignment">{t('schoolSubjects.alignmentBadge')}</p>
+          </>
+        ) : (
+          <p className="school-subj-hub-student-hint muted">{t('schoolSubject.audienceStudentHubHint')}</p>
+        )}
       </header>
 
       <ul className="school-subj-hub-grid">

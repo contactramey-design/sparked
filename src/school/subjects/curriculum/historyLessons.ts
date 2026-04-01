@@ -813,4 +813,430 @@ export const HISTORY_LESSONS: SchoolSubjectLesson[] = [
       realWorldTip: 'Foto familiar vs historia sobre la foto — comparen tipos de fuente.',
     },
   },
+  {
+    id: 'hist-tots-fairness-rules',
+    order: 3,
+    ageBands: ['tots'],
+    estMinutes: 12,
+    caStandards: {
+      framework: 'PTKLF',
+      codes: ['History–Social Science: fairness, classroom rules, taking turns'],
+      gradeSpan: 'PK/TK',
+      cdeSearchQuery: 'California preschool learning foundations social studies fairness',
+    },
+    standardsNote: 'CA PTKLF HSS — fairness, rules, classroom community (PK/TK)',
+    cardEmoji: '🤝',
+    en: {
+      title: 'Fair and Kind in Our Class',
+      summary: 'Why we have rules: safety, fairness, and taking turns.',
+      objectives: ['Name one classroom rule and why it helps', 'Practice taking turns with a game'],
+      teachSections: [
+        {
+          heading: 'Rules help everyone',
+          body: 'Rules are not punishments—they are promises so everyone can learn and play safely. “Walking feet in the hall” keeps bodies safe.',
+        },
+        {
+          heading: 'Fair vs same',
+          body: 'Fair sometimes means everyone gets what they need, not always identical treats. Sparki needs headphones; you might not—that can still be fair.',
+        },
+        {
+          heading: 'Turns',
+          body: 'A timer or teacher signal can mark turns so every voice gets a chance.',
+        },
+        {
+          heading: 'Repair',
+          body: 'When we forget a rule, we can say sorry and try again—communities grow that way.',
+        },
+      ],
+      quiz: [
+        {
+          id: 'hist-tots-fair-q1',
+          prompt: 'A classroom rule is meant to…',
+          options: ['Help everyone learn and stay safe', 'Trick students only', 'Remove all fun'],
+          correctIndex: 0,
+        },
+        {
+          id: 'hist-tots-fair-q2',
+          prompt: 'Taking turns is important because…',
+          options: [
+            'Everyone gets a chance to participate',
+            'Only one person should ever talk',
+            'Turns mean we never share',
+          ],
+          correctIndex: 0,
+        },
+        {
+          id: 'hist-tots-fair-q3',
+          prompt: 'Fair can mean…',
+          options: [
+            'People get what they need, which may look different',
+            'Everyone always gets the exact same item in every case',
+            'Ignoring feelings',
+          ],
+          correctIndex: 0,
+        },
+        {
+          id: 'hist-tots-fair-q4',
+          prompt: 'If someone breaks a rule on accident, a kind next step is…',
+          options: [
+            'Say sorry and try the rule again',
+            'Never speak to them',
+            'Hide forever',
+          ],
+          correctIndex: 0,
+        },
+        {
+          id: 'hist-tots-fair-q5',
+          prompt: 'Rules connect to being a good citizen in class because…',
+          options: [
+            'They show care for the group',
+            'They mean we ignore friends',
+            'They only matter at home',
+          ],
+          correctIndex: 0,
+        },
+      ],
+      realWorldTip: 'Home: one family rule and how it keeps everyone safe.',
+    },
+    es: {
+      title: 'Justos y amables en clase',
+      summary: 'Para qué sirven las reglas: seguridad, equidad y turnos.',
+      objectives: ['Nombrar una regla del salón y por qué ayuda', 'Practicar turnos con un juego'],
+      teachSections: [
+        {
+          heading: 'Reglas para todos',
+          body: 'No son castigo — son acuerdos para aprender y jugar seguros. “Caminar en el pasillo” cuida cuerpos.',
+        },
+        {
+          heading: 'Justo vs igual',
+          body: 'Justo a veces es que cada quien reciba lo que necesita, no lo mismo siempre. Sparki usa audífonos; tú quizá no — puede ser justo igual.',
+        },
+        {
+          heading: 'Turnos',
+          body: 'Temporizador o señal del docente marcan turnos para que cada voz tenga espacio.',
+        },
+        {
+          heading: 'Reparar',
+          body: 'Si olvidamos una regla, podemos disculpar e intentar de nuevo.',
+        },
+      ],
+      quiz: [
+        {
+          id: 'hist-tots-fair-q1',
+          prompt: 'Una regla del salón sirve para…',
+          options: ['Ayudar a todos a aprender y estar seguros', 'Solo engañar', 'Quitar toda diversión'],
+          correctIndex: 0,
+        },
+        {
+          id: 'hist-tots-fair-q2',
+          prompt: 'Los turnos importan porque…',
+          options: [
+            'Todos pueden participar',
+            'Solo una persona habla siempre',
+            'Turnos = nunca compartir',
+          ],
+          correctIndex: 0,
+        },
+        {
+          id: 'hist-tots-fair-q3',
+          prompt: 'Justo puede significar…',
+          options: [
+            'Cada quien recibe lo que necesita (puede verse distinto)',
+            'Siempre lo mismo exacto en todo',
+            'Ignorar sentimientos',
+          ],
+          correctIndex: 0,
+        },
+        {
+          id: 'hist-tots-fair-q4',
+          prompt: 'Si alguien rompe una regla sin querer, un paso amable es…',
+          options: [
+            'Disculparse e intentar otra vez',
+            'No hablarle nunca',
+            'Esconderse siempre',
+          ],
+          correctIndex: 0,
+        },
+        {
+          id: 'hist-tots-fair-q5',
+          prompt: 'Las reglas conectan con ser buen ciudadano en clase porque…',
+          options: [
+            'Muestran cuidado por el grupo',
+            'Significan ignorar amigos',
+            'Solo valen en casa',
+          ],
+          correctIndex: 0,
+        },
+      ],
+      realWorldTip: 'En casa: una regla familiar y cómo protege a todos.',
+    },
+  },
+  {
+    id: 'hist-kids-goods-services',
+    order: 3,
+    ageBands: ['kids'],
+    estMinutes: 14,
+    caStandards: {
+      framework: 'CA_HSS',
+      codes: ['1.2'],
+      gradeSpan: '1',
+      cdeSearchQuery: 'California HSS grade 1 goods services economics',
+    },
+    standardsNote: 'CA HSS Gr.1; goods, services, economic choices',
+    cardEmoji: '🏪',
+    en: {
+      title: 'Goods and Services',
+      summary: 'Things we touch (goods) vs help people do (services).',
+      objectives: ['Sort examples into goods and services', 'Explain one job that provides a service in town'],
+      teachSections: [
+        {
+          heading: 'Goods',
+          body: 'Goods are things you can buy or trade—apple, book, bicycle. You can often hold them.',
+        },
+        {
+          heading: 'Services',
+          body: 'Services are jobs people do to help—haircut, bus ride, teaching, firefighting. You pay for the help, not a thing to keep forever.',
+        },
+        {
+          heading: 'Choices',
+          body: 'Families choose how to spend time and money; communities provide mix of goods and services.',
+        },
+        {
+          heading: 'Map it',
+          body: 'Walk a mental map: bakery = good bread; librarian = service of finding books.',
+        },
+      ],
+      quiz: [
+        {
+          id: 'hist-kids-gs-q1',
+          prompt: 'A haircut is mainly…',
+          options: ['A service', 'A good you take home in a box always', 'Only a plant'],
+          correctIndex: 0,
+        },
+        {
+          id: 'hist-kids-gs-q2',
+          prompt: 'A loaf of bread at the store is…',
+          options: ['A good', 'A service', 'Only weather'],
+          correctIndex: 0,
+        },
+        {
+          id: 'hist-kids-gs-q3',
+          prompt: 'Teaching in a school is…',
+          options: ['A service', 'A good like a shoe', 'Not part of community'],
+          correctIndex: 0,
+        },
+        {
+          id: 'hist-kids-gs-q4',
+          prompt: 'Which pair is good + service?',
+          options: ['Toy + doctor check-up', 'Two different toys only', 'Rain + snow'],
+          correctIndex: 0,
+        },
+        {
+          id: 'hist-kids-gs-q5',
+          prompt: 'Communities need both goods and services because…',
+          options: [
+            'People need things to use and people to help',
+            'Only goods matter',
+            'Services never help learning',
+          ],
+          correctIndex: 0,
+        },
+      ],
+      realWorldTip: 'Grocery trip: name three goods and one service you see.',
+    },
+    es: {
+      title: 'Bienes y servicios',
+      summary: 'Cosas que tocamos vs ayuda que recibimos.',
+      objectives: ['Clasificar ejemplos en bienes y servicios', 'Explicar un oficio de servicio en el pueblo'],
+      teachSections: [
+        {
+          heading: 'Bienes',
+          body: 'Cosas que compras o cambias — manzana, libro, bicicleta. A menudo las puedes sostener.',
+        },
+        {
+          heading: 'Servicios',
+          body: 'Trabajos que hacen personas para ayudar — corte de pelo, autobús, enseñar, bomberos. Pagas por la ayuda.',
+        },
+        {
+          heading: 'Decisiones',
+          body: 'Las familias eligen tiempo y dinero; la comunidad ofrece bienes y servicios.',
+        },
+        {
+          heading: 'Mapa mental',
+          body: 'Panadería = bien pan; bibliotecario = servicio de hallar libros.',
+        },
+      ],
+      quiz: [
+        {
+          id: 'hist-kids-gs-q1',
+          prompt: 'Un corte de pelo es sobre todo…',
+          options: ['Un servicio', 'Un bien en caja siempre', 'Solo una planta'],
+          correctIndex: 0,
+        },
+        {
+          id: 'hist-kids-gs-q2',
+          prompt: 'Un pan en la tienda es…',
+          options: ['Un bien', 'Un servicio', 'Solo clima'],
+          correctIndex: 0,
+        },
+        {
+          id: 'hist-kids-gs-q3',
+          prompt: 'Enseñar en la escuela es…',
+          options: ['Un servicio', 'Un bien como un zapato', 'No parte de la comunidad'],
+          correctIndex: 0,
+        },
+        {
+          id: 'hist-kids-gs-q4',
+          prompt: '¿Qué par es bien + servicio?',
+          options: ['Juguete + revisión médica', 'Solo dos juguetes', 'Lluvia + nieve'],
+          correctIndex: 0,
+        },
+        {
+          id: 'hist-kids-gs-q5',
+          prompt: 'La comunidad necesita bienes y servicios porque…',
+          options: [
+            'La gente necesita cosas y personas que ayuden',
+            'Solo importan bienes',
+            'Los servicios no ayudan al aprendizaje',
+          ],
+          correctIndex: 0,
+        },
+      ],
+      realWorldTip: 'Super: nombra tres bienes y un servicio.',
+    },
+  },
+  {
+    id: 'hist-crew-ca-symbols-regions',
+    order: 3,
+    ageBands: ['crew'],
+    estMinutes: 18,
+    caStandards: {
+      framework: 'CA_HSS',
+      codes: ['4.1', '4.4'],
+      gradeSpan: '4',
+      cdeSearchQuery: 'California HSS grade 4 state symbols geography',
+    },
+    standardsNote: 'CA HSS Gr.4; California geography & identity',
+    cardEmoji: '🐻',
+    en: {
+      title: 'California: Symbols and Regions',
+      summary: 'State symbols, a huge diverse geography, and why place matters.',
+      objectives: ['Name the state capital and one official symbol', 'Describe coast, valley, mountain, desert in simple terms'],
+      teachSections: [
+        {
+          heading: 'Golden State',
+          body: 'California is a U.S. state with many environments. Geography affects how people live, farm, and travel.',
+        },
+        {
+          heading: 'Symbols',
+          body: 'Flags, seals, and emblems tell stories—grizzly bear (historic population), golden poppy, redwood trees. Sacramento is the state capital.',
+        },
+        {
+          heading: 'Regions preview',
+          body: 'Coast with ocean and fog; Central Valley farms; Sierra mountains and snow; southeastern deserts hot and dry.',
+        },
+        {
+          heading: 'Maps again',
+          body: 'Use a California wall map: find your county, trace a route from coast to mountains.',
+        },
+      ],
+      quiz: [
+        {
+          id: 'hist-crew-ca-q1',
+          prompt: 'The capital of California is…',
+          options: ['Sacramento', 'Los Angeles', 'San Francisco'],
+          correctIndex: 0,
+        },
+        {
+          id: 'hist-crew-ca-q2',
+          prompt: 'The Pacific Ocean borders California on the…',
+          options: ['West', 'East', 'North only always'],
+          correctIndex: 0,
+        },
+        {
+          id: 'hist-crew-ca-q3',
+          prompt: 'Which is a California state symbol students often learn?',
+          options: ['Golden poppy', 'Palm tree only in Florida', 'Liberty Bell'],
+          correctIndex: 0,
+        },
+        {
+          id: 'hist-crew-ca-q4',
+          prompt: 'The Sierra Nevada are mainly…',
+          options: ['A mountain range in eastern California', 'An ocean', 'A desert in Europe'],
+          correctIndex: 0,
+        },
+        {
+          id: 'hist-crew-ca-q5',
+          prompt: 'Why study regions within one state?',
+          options: [
+            'Different places have different resources and challenges',
+            'Every place is identical',
+            'Maps are decorative only',
+          ],
+          correctIndex: 0,
+        },
+      ],
+      realWorldTip: 'License plates, state parks, and county fair—spot California identity.',
+    },
+    es: {
+      title: 'California: símbolos y regiones',
+      summary: 'Símbolos del estado, geografía diversa y por qué importa el lugar.',
+      objectives: ['Nombrar la capital y un símbolo oficial', 'Describir costa, valle, montaña y desierto'],
+      teachSections: [
+        {
+          heading: 'Estado dorado',
+          body: 'California es un estado de EE.UU. con muchos ambientes. La geografía afecta cómo vive la gente.',
+        },
+        {
+          heading: 'Símbolos',
+          body: 'Banderas y emblemas cuentan historias — oso grizzly, amapola dorada, secuoyas. Sacramento es la capital.',
+        },
+        {
+          heading: 'Regiones',
+          body: 'Costa con océano; Valle Central agrícola; Sierra con nieve; desiertos al sureste.',
+        },
+        {
+          heading: 'Mapas',
+          body: 'Mapa mural: encuentra tu condado, ruta costa a montaña.',
+        },
+      ],
+      quiz: [
+        {
+          id: 'hist-crew-ca-q1',
+          prompt: 'La capital de California es…',
+          options: ['Sacramento', 'Los Ángeles', 'San Francisco'],
+          correctIndex: 0,
+        },
+        {
+          id: 'hist-crew-ca-q2',
+          prompt: 'El océano Pacífico limita California al…',
+          options: ['Oeste', 'Este', 'Solo norte siempre'],
+          correctIndex: 0,
+        },
+        {
+          id: 'hist-crew-ca-q3',
+          prompt: '¿Qué símbolo del estado estudian mucho?',
+          options: ['Amapola dorada', 'Solo palmera de Florida', 'Campana de la Libertad'],
+          correctIndex: 0,
+        },
+        {
+          id: 'hist-crew-ca-q4',
+          prompt: 'La Sierra Nevada es sobre todo…',
+          options: ['Una cordillera al este de California', 'Un océano', 'Un desierto en Europa'],
+          correctIndex: 0,
+        },
+        {
+          id: 'hist-crew-ca-q5',
+          prompt: '¿Por qué estudiar regiones dentro de un estado?',
+          options: [
+            'Distintos lugares tienen distintos recursos y retos',
+            'Todo es idéntico',
+            'Los mapas son solo decoración',
+          ],
+          correctIndex: 0,
+        },
+      ],
+      realWorldTip: 'Placas, parques estatales y feria del condado — identidad californiana.',
+    },
+  },
 ]
