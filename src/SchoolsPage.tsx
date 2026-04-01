@@ -50,17 +50,17 @@ const SchoolsPage: React.FC = () => {
         <div className="schools-grid">
           <Card>
             <CardHeader>
-              <CardTitle>{t('schools.mathCardTitle')}</CardTitle>
+              <CardTitle>{t('schools.subjectHubTitle')}</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="muted">{t('schools.mathCardDesc')}</p>
+              <p className="muted">{t('schools.subjectHubDesc')}</p>
               <div className="schools-actions">
                 <Button
                   onClick={() => {
-                    navigate('/schools/math')
+                    navigate('/schools/subjects')
                   }}
                 >
-                  {t('schools.openMathTrack')}
+                  {t('schools.openSubjectHub')}
                 </Button>
               </div>
             </CardContent>

@@ -1,53 +1,9 @@
 /**
- * School Math — pluggable curriculum
- * ---------------------------------
- * Add lessons by appending to `SCHOOL_MATH_LESSONS`. Each lesson needs:
- * - `id` (stable slug for URLs)
- * - `order` (sort order within a band)
- * - `ageBands` (who sees it)
- * - `en` / `es` content blocks (title, teach sections, quiz, tip)
- *
- * Optional: `standardsNote`, `estMinutes`, `cardImageUrl` (public path), `cardEmoji`
+ * School Math — append to `MATH_LESSONS`. See `../types.ts`.
  */
-import type { AgeBandId } from '@/ageBand'
+import type { SchoolSubjectLesson } from '../types'
 
-export type SchoolMathTeachSection = {
-  heading: string
-  body: string
-}
-
-export type SchoolMathQuizItem = {
-  id: string
-  prompt: string
-  options: [string, string, string]
-  correctIndex: 0 | 1 | 2
-}
-
-export type SchoolMathLessonLocale = {
-  title: string
-  summary: string
-  objectives: string[]
-  teachSections: SchoolMathTeachSection[]
-  quiz: SchoolMathQuizItem[]
-  realWorldTip: string
-}
-
-export type SchoolMathLesson = {
-  id: string
-  order: number
-  ageBands: AgeBandId[]
-  estMinutes: number
-  /** e.g. "TEKS K.2.B" — display-only for educators */
-  standardsNote?: string
-  cardEmoji?: string
-  cardImageUrl?: string
-  en: SchoolMathLessonLocale
-  es: SchoolMathLessonLocale
-}
-
-export const SCHOOL_MATH_TRACK_ID = 'school-math' as const
-
-export const SCHOOL_MATH_LESSONS: SchoolMathLesson[] = [
+export const MATH_LESSONS: SchoolSubjectLesson[] = [
   {
     id: 'math-tots-count-1-5',
     order: 1,
@@ -545,19 +501,3 @@ export const SCHOOL_MATH_LESSONS: SchoolMathLesson[] = [
     },
   },
 ]
-
-export function getSchoolMathLessonsForBand(band: AgeBandId): SchoolMathLesson[] {
-  return SCHOOL_MATH_LESSONS.filter((l) => l.ageBands.includes(band)).sort((a, b) => a.order - b.order)
-}
-
-export function getSchoolMathLessonById(id: string): SchoolMathLesson | undefined {
-  return SCHOOL_MATH_LESSONS.find((l) => l.id === id)
-}
-
-export function lessonLocale(lesson: SchoolMathLesson, locale: 'en' | 'es'): SchoolMathLessonLocale {
-  return locale === 'es' ? lesson.es : lesson.en
-}
-
-export function isLessonInBand(lesson: SchoolMathLesson, band: AgeBandId): boolean {
-  return lesson.ageBands.includes(band)
-}

@@ -56,7 +56,7 @@
     "schoolSchoolHub": "Hub escolar y códigos de clase",
     "schoolTeacher": "Panel del profesor",
     "schoolGenerator": "Generador de lecciones semanales",
-    "schoolMathTrack": "Matemáticas (ruta escuela)",
+    "schoolSubjectsHub": "Rutas por materia",
     "schoolShopMaterials": "Ebooks",
     "schoolContact": "Contacto y pilotos"
   },
@@ -144,17 +144,18 @@
     "complianceTitle": "Cumplimiento y privacidad",
     "complianceDesc": "Resumen de COPPA / FERPA / CIPA y notas para escuelas.",
     "openCompliance": "Abrir página de cumplimiento",
-    "mathCardTitle": "Matemáticas con Sparki",
-    "mathCardDesc": "Mini lecciones alineadas al aula: aprender, quiz y un tip del mundo real. Las lecciones siguen la banda de edad que eliges en Escuelas.",
-    "openMathTrack": "Abrir ruta de matemáticas"
+    "subjectHubTitle": "Rutas por materia",
+    "subjectHubDesc": "Matemáticas, inglés, ciencias e historia — lecciones cortas para tu banda de edad (aprender, quiz, tip del mundo real). Añade o edita en `src/school/subjects/curriculum/`.",
+    "openSubjectHub": "Ver rutas por materia",
+    "openSubjectTrack": "Abrir {subject}"
   },
-  "schoolMath": {
+  "schoolSubject": {
     "backToSchools": "Volver a Escuelas",
-    "backToMath": "Volver a Matemáticas",
-    "trackTitle": "Matemáticas con Sparki (Escuela)",
-    "trackSubtitle": "Lecciones cortas para clase o grupos pequeños. El contenido está en el archivo de currículo para que puedas añadir más cuando quieras.",
+    "backToSubjectList": "Todas las materias",
+    "backToSubjectTrack": "Volver a esta materia",
+    "unknownSubject": "No se encontró esa materia.",
     "bandLabel": "Lecciones para: {band}",
-    "emptyBand": "Todavía no hay lecciones de matemáticas para esta banda de edad.",
+    "emptyBand": "Todavía no hay lecciones para esta banda de edad.",
     "lessonsHeading": "Lecciones",
     "lessonMeta": "Lección {num} · {minutes} min",
     "durationLine": "Unos {minutes} min",
@@ -163,7 +164,7 @@
     "openLesson": "Abrir lección",
     "lessonNotFound": "No se encontró esa lección.",
     "wrongBand": "Esta lección no está en tu banda de edad actual. Cambia la banda en esta página u otra lección.",
-    "chooseBand": "Volver a Matemáticas",
+    "chooseBand": "Volver a la ruta de la materia",
     "stepsAria": "Pasos de la lección",
     "stepLearn": "Aprender",
     "stepQuiz": "Quiz",
@@ -179,6 +180,38 @@
     "retryQuiz": "Repetir quiz",
     "goToTip": "Tip del mundo real",
     "tipHeading": "Tip del mundo real"
+  },
+  "schoolSubjects": {
+    "tracks": {
+      "math": {
+        "hubEmoji": "🔢",
+        "cardTitle": "Matemáticas",
+        "cardDesc": "Números, operaciones, geometría y fracciones — listo para clase o grupos pequeños.",
+        "title": "Matemáticas con Sparki (Escuela)",
+        "subtitle": "Lecciones cortas estructuradas. Añade más en `mathLessons.ts`."
+      },
+      "english": {
+        "hubEmoji": "📚",
+        "cardTitle": "Inglés / Lengua",
+        "cardDesc": "Fonología, comprensión, oraciones y lectura con evidencia.",
+        "title": "Inglés y lengua (Escuela)",
+        "subtitle": "Mini lecciones de lectura y lenguaje. Amplía en `englishLessons.ts`."
+      },
+      "science": {
+        "hubEmoji": "🔬",
+        "cardTitle": "Ciencias",
+        "cardDesc": "Observación, seres vivos, materia, energía y ecosistemas — con enfoque práctico.",
+        "title": "Ciencias con Sparki (Escuela)",
+        "subtitle": "Lecciones tipo indagación. Amplía en `scienceLessons.ts`."
+      },
+      "history": {
+        "hubEmoji": "🌍",
+        "cardTitle": "Historia y estudios sociales",
+        "cardDesc": "Tiempo, comunidad, mapas, líneas de tiempo y fuentes — pensamiento cívico e histórico.",
+        "title": "Historia y estudios sociales (Escuela)",
+        "subtitle": "Mini lecciones sociales. Amplía en `historyLessons.ts`."
+      }
+    }
   },
   "compliance": {
     "title": "Para escuelas: Seguridad y cumplimiento",

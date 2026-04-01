@@ -56,7 +56,7 @@
     "schoolSchoolHub": "School hub & class codes",
     "schoolTeacher": "Teacher dashboard",
     "schoolGenerator": "Weekly lesson generator",
-    "schoolMathTrack": "Math (school track)",
+    "schoolSubjectsHub": "Subject tracks",
     "schoolShopMaterials": "Ebooks",
     "schoolContact": "Contact & pilots"
   },
@@ -144,17 +144,18 @@
     "complianceTitle": "Compliance & privacy",
     "complianceDesc": "COPPA / FERPA / CIPA overview and school-use notes.",
     "openCompliance": "Open compliance page",
-    "mathCardTitle": "Math with Sparki",
-    "mathCardDesc": "Standards-style mini-lessons: learn, quiz, and a real-world tip. Picks lessons for the age band you set on Schools.",
-    "openMathTrack": "Open Math track"
+    "subjectHubTitle": "Subject tracks",
+    "subjectHubDesc": "Math, English, science, and history — short lessons for your age band (learn, quiz, real-world tip). Add or edit content in `src/school/subjects/curriculum/`.",
+    "openSubjectHub": "Browse subject tracks",
+    "openSubjectTrack": "Open {subject}"
   },
-  "schoolMath": {
+  "schoolSubject": {
     "backToSchools": "Back to Schools",
-    "backToMath": "Back to Math track",
-    "trackTitle": "Math with Sparki (School)",
-    "trackSubtitle": "Short structured lessons for class or small groups. Content lives in the curriculum file so you can add more anytime.",
+    "backToSubjectList": "All subject tracks",
+    "backToSubjectTrack": "Back to this subject",
+    "unknownSubject": "That subject was not found.",
     "bandLabel": "Lessons for: {band}",
-    "emptyBand": "No math lessons are configured for this age band yet.",
+    "emptyBand": "No lessons are configured for this age band yet.",
     "lessonsHeading": "Lessons",
     "lessonMeta": "Lesson {num} · {minutes} min",
     "durationLine": "About {minutes} min",
@@ -163,7 +164,7 @@
     "openLesson": "Open lesson",
     "lessonNotFound": "That lesson could not be found.",
     "wrongBand": "This lesson is not part of your current age band. Switch age band on this page or pick another lesson.",
-    "chooseBand": "Back to Math track",
+    "chooseBand": "Back to subject track",
     "stepsAria": "Lesson steps",
     "stepLearn": "Learn",
     "stepQuiz": "Quiz",
@@ -179,6 +180,38 @@
     "retryQuiz": "Retry quiz",
     "goToTip": "Real-world tip",
     "tipHeading": "Real-world tip"
+  },
+  "schoolSubjects": {
+    "tracks": {
+      "math": {
+        "hubEmoji": "🔢",
+        "cardTitle": "Math",
+        "cardDesc": "Number sense, operations, geometry, and fractions — structured for class or small groups.",
+        "title": "Math with Sparki (School)",
+        "subtitle": "Short structured lessons. Add more anytime in `mathLessons.ts`."
+      },
+      "english": {
+        "hubEmoji": "📚",
+        "cardTitle": "English / Language Arts",
+        "cardDesc": "Phonics awareness, comprehension, sentences, and evidence-based reading.",
+        "title": "English & Language Arts (School)",
+        "subtitle": "Reading and language mini-lessons. Extend in `englishLessons.ts`."
+      },
+      "science": {
+        "hubEmoji": "🔬",
+        "cardTitle": "Science",
+        "cardDesc": "Observation, living things, matter, energy, and ecosystems — hands-on friendly.",
+        "title": "Science with Sparki (School)",
+        "subtitle": "Inquiry-style lessons. Extend in `scienceLessons.ts`."
+      },
+      "history": {
+        "hubEmoji": "🌍",
+        "cardTitle": "History & Social Studies",
+        "cardDesc": "Time, community, maps, timelines, and sources — civic and historical thinking.",
+        "title": "History & Social Studies (School)",
+        "subtitle": "Social studies mini-lessons. Extend in `historyLessons.ts`."
+      }
+    }
   },
   "compliance": {
     "title": "For Schools: Safety & Compliance",

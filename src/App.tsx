@@ -43,8 +43,10 @@ import OfflineBanner from './components/OfflineBanner'
 import { useSchoolMode } from './hooks/useSchoolMode'
 import SchoolWeeklyTrackPage from './SchoolWeeklyTrackPage.tsx'
 import SchoolGeneratedUnitPage from './SchoolGeneratedUnitPage.tsx'
-import SchoolMathTrackPage from './school/math/SchoolMathTrackPage'
-import SchoolMathLessonPage from './school/math/SchoolMathLessonPage'
+import SchoolSubjectsHubPage from './school/subjects/SchoolSubjectsHubPage'
+import SchoolSubjectTrackPage from './school/subjects/SchoolSubjectTrackPage'
+import SchoolSubjectLessonPage from './school/subjects/SchoolSubjectLessonPage'
+import SchoolMathLegacyRedirect from './school/subjects/SchoolMathLegacyRedirect'
 import WeeklyAdventurePage from './WeeklyAdventurePage'
 import './App.css'
 
@@ -213,8 +215,11 @@ function AppShell() {
           <Route path="/for-schools/resources/:slug" element={<SchoolPrintResourcePage />} />
           <Route path="/for-schools/one-pager" element={<SchoolOnePagerPage />} />
           <Route path="/schools" element={<SchoolsPage />} />
-          <Route path="/schools/math" element={<SchoolMathTrackPage />} />
-          <Route path="/schools/math/:lessonId" element={<SchoolMathLessonPage />} />
+          <Route path="/schools/subjects" element={<SchoolSubjectsHubPage />} />
+          <Route path="/schools/subjects/:subjectId/:lessonId" element={<SchoolSubjectLessonPage />} />
+          <Route path="/schools/subjects/:subjectId" element={<SchoolSubjectTrackPage />} />
+          <Route path="/schools/math" element={<SchoolMathLegacyRedirect />} />
+          <Route path="/schools/math/:lessonId" element={<SchoolMathLegacyRedirect />} />
           <Route path="/schools/weekly-track" element={<SchoolWeeklyTrackPage />} />
           <Route path="/schools/unit/:unitId" element={<SchoolGeneratedUnitPage />} />
           <Route path="/teacher/dashboard" element={<TeacherDashboardPage />} />
