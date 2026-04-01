@@ -8,8 +8,8 @@ export const MATH_LESSONS: SchoolSubjectLesson[] = [
     id: 'math-tots-count-1-5',
     order: 1,
     ageBands: ['tots'],
-    estMinutes: 10,
-    standardsNote: 'Counting & cardinality (pre-K)',
+    estMinutes: 14,
+    standardsNote: 'Counting & cardinality (pre-K); K.CC',
     cardEmoji: '🔢',
     en: {
       title: 'Counting 1 to 5 with Sparki',
@@ -28,6 +28,10 @@ export const MATH_LESSONS: SchoolSubjectLesson[] = [
           heading: 'Teacher tip',
           body: 'Use classroom objects (crayons, counters). Slow counting beats fast guessing.',
         },
+        {
+          heading: 'Formative check',
+          body: 'Ask: “Show me 4 cubes—touch and count aloud.” If a child skips or double-touches, model finger-tracking slowly.',
+        },
       ],
       quiz: [
         {
@@ -41,6 +45,28 @@ export const MATH_LESSONS: SchoolSubjectLesson[] = [
           prompt: 'If you count 3 bears, the last number you say is…',
           options: ['Two', 'Three', 'Five'],
           correctIndex: 1,
+        },
+        {
+          id: 'math-tots-count-1-5-q3',
+          prompt: 'The last number you say when you count tells…',
+          options: ['How many are in the set', 'Only the biggest object', 'What time lunch is'],
+          correctIndex: 0,
+        },
+        {
+          id: 'math-tots-count-1-5-q4',
+          prompt: 'Sparki counts: 1, 2, 3, 4, 5. How many objects did Sparki count?',
+          options: ['5', '4', '3'],
+          correctIndex: 0,
+        },
+        {
+          id: 'math-tots-count-1-5-q5',
+          prompt: 'Which choice shows one-to-one counting?',
+          options: [
+            'Touch each block once while saying the next number',
+            'Say numbers fast without touching',
+            'Skip every other object',
+          ],
+          correctIndex: 0,
         },
       ],
       realWorldTip: 'At snack time, count crackers on the plate together: one touch, one number.',
@@ -62,6 +88,10 @@ export const MATH_LESSONS: SchoolSubjectLesson[] = [
           heading: 'Tip para el maestro',
           body: 'Usa objetos del salón (crayones, fichas). Contar despacio es mejor que adivinar rápido.',
         },
+        {
+          heading: 'Comprobación formativa',
+          body: 'Pide: “Muéstrame 4 cubos—toca y cuenta en voz alta.” Si saltan o tocan dos veces, modela lento con el dedo.',
+        },
       ],
       quiz: [
         {
@@ -76,6 +106,28 @@ export const MATH_LESSONS: SchoolSubjectLesson[] = [
           options: ['Dos', 'Tres', 'Cinco'],
           correctIndex: 1,
         },
+        {
+          id: 'math-tots-count-1-5-q3',
+          prompt: 'El último número que dices al contar dice…',
+          options: ['Cuántos hay en total', 'Solo el objeto más grande', 'La hora del recreo'],
+          correctIndex: 0,
+        },
+        {
+          id: 'math-tots-count-1-5-q4',
+          prompt: 'Sparki cuenta: 1, 2, 3, 4, 5. ¿Cuántos objetos contó?',
+          options: ['5', '4', '3'],
+          correctIndex: 0,
+        },
+        {
+          id: 'math-tots-count-1-5-q5',
+          prompt: '¿Qué es contar uno a uno?',
+          options: [
+            'Tocar cada bloque una vez mientras dices el siguiente número',
+            'Decir números rápido sin tocar',
+            'Saltarse cada dos objetos',
+          ],
+          correctIndex: 0,
+        },
       ],
       realWorldTip: 'En la merienda, cuenten juntos las galletas en el plato: un toque, un número.',
     },
@@ -84,8 +136,8 @@ export const MATH_LESSONS: SchoolSubjectLesson[] = [
     id: 'math-tots-patterns',
     order: 2,
     ageBands: ['tots'],
-    estMinutes: 10,
-    standardsNote: 'Repeating patterns (pre-K)',
+    estMinutes: 14,
+    standardsNote: 'Repeating patterns (pre-K); algebraic thinking foundations',
     cardEmoji: '🎨',
     en: {
       title: 'Color Patterns',
@@ -104,6 +156,10 @@ export const MATH_LESSONS: SchoolSubjectLesson[] = [
           heading: 'Extend',
           body: 'Clap patterns: clap, tap, clap, tap. Patterns are everywhere: music, art, and movement.',
         },
+        {
+          heading: 'Differentiation',
+          body: 'Start with AB; invite ready learners to try AAB or ABC. Keep patterns visible on a sentence strip for reference.',
+        },
       ],
       quiz: [
         {
@@ -117,6 +173,24 @@ export const MATH_LESSONS: SchoolSubjectLesson[] = [
           prompt: 'A pattern is something that…',
           options: ['Never repeats', 'Repeats in the same order', 'Only works with numbers'],
           correctIndex: 1,
+        },
+        {
+          id: 'math-tots-patterns-q3',
+          prompt: 'In yellow, yellow, green, yellow, yellow, green, what comes next?',
+          options: ['Yellow', 'Purple', 'Orange'],
+          correctIndex: 0,
+        },
+        {
+          id: 'math-tots-patterns-q4',
+          prompt: 'The “unit” in an AB pattern is…',
+          options: ['The part that repeats (A then B)', 'Only the first color', 'The longest word'],
+          correctIndex: 0,
+        },
+        {
+          id: 'math-tots-patterns-q5',
+          prompt: 'Which shows a repeating pattern?',
+          options: ['Circle, square, circle, square', 'Random stickers mixed up', 'One color only'],
+          correctIndex: 0,
         },
       ],
       realWorldTip: 'Line up shoes in a pattern by color for a quick math walk.',
@@ -138,6 +212,10 @@ export const MATH_LESSONS: SchoolSubjectLesson[] = [
           heading: 'Alargar',
           body: 'Patrones con palmas: palma, dedos, palma, dedos. Los patrones están en música, arte y movimiento.',
         },
+        {
+          heading: 'Diferenciación',
+          body: 'Empieza con AB; los que avanzan prueban AAB o ABC. Deja el patrón visible en una tira.',
+        },
       ],
       quiz: [
         {
@@ -152,6 +230,24 @@ export const MATH_LESSONS: SchoolSubjectLesson[] = [
           options: ['Nunca se repite', 'Se repite en el mismo orden', 'Solo funciona con números'],
           correctIndex: 1,
         },
+        {
+          id: 'math-tots-patterns-q3',
+          prompt: 'En amarillo, amarillo, verde, amarillo, amarillo, verde, ¿qué sigue?',
+          options: ['Amarillo', 'Morado', 'Naranja'],
+          correctIndex: 0,
+        },
+        {
+          id: 'math-tots-patterns-q4',
+          prompt: 'La “unidad” en un patrón AB es…',
+          options: ['La parte que se repite (A y luego B)', 'Solo el primer color', 'La palabra más larga'],
+          correctIndex: 0,
+        },
+        {
+          id: 'math-tots-patterns-q5',
+          prompt: '¿Cuál muestra un patrón que se repite?',
+          options: ['Círculo, cuadrado, círculo, cuadrado', 'Calcomanías mezcladas al azar', 'Un solo color'],
+          correctIndex: 0,
+        },
       ],
       realWorldTip: 'Ordena zapatos por color en un patrón para un paseo matemático rápido.',
     },
@@ -160,8 +256,8 @@ export const MATH_LESSONS: SchoolSubjectLesson[] = [
     id: 'math-kids-add-within-10',
     order: 1,
     ageBands: ['kids'],
-    estMinutes: 12,
-    standardsNote: 'Addition within 10 (Grades 1–2)',
+    estMinutes: 16,
+    standardsNote: 'Addition within 10 (Grades 1–2); 1.OA',
     cardEmoji: '➕',
     en: {
       title: 'Addition Stories Within 10',
@@ -179,6 +275,10 @@ export const MATH_LESSONS: SchoolSubjectLesson[] = [
         {
           heading: 'Check',
           body: 'Sparki draws circles for each part, then counts all. Drawing helps catch mistakes.',
+        },
+        {
+          heading: 'Academic language',
+          body: 'Model words: “part,” “whole,” “in all,” “altogether.” They appear in story problems on assessments.',
         },
       ],
       quiz: [
@@ -204,6 +304,22 @@ export const MATH_LESSONS: SchoolSubjectLesson[] = [
           options: ['Put groups together', 'Remove objects', 'Skip counting by 10 only'],
           correctIndex: 0,
         },
+        {
+          id: 'math-kids-add-q4',
+          prompt: 'Maya has 6 pencils. Her teacher gives 2 more. Which expression fits?',
+          options: ['6 + 2', '6 − 2', '2 + 2 + 2'],
+          correctIndex: 0,
+        },
+        {
+          id: 'math-kids-add-q5',
+          prompt: 'Which strategy matches “count on”?',
+          options: [
+            'Start at the bigger number and count up',
+            'Always start at zero only',
+            'Guess without counting',
+          ],
+          correctIndex: 0,
+        },
       ],
       realWorldTip: 'At line-up: “3 girls were here, 4 more arrived. How many now?”',
     },
@@ -223,6 +339,10 @@ export const MATH_LESSONS: SchoolSubjectLesson[] = [
         {
           heading: 'Comprobar',
           body: 'Sparki dibuja círculos para cada parte y luego cuenta todos. Dibujar ayuda a ver errores.',
+        },
+        {
+          heading: 'Lenguaje académico',
+          body: 'Modela: “parte,” “todo,” “en total,” “juntos.” Aparecen en problemas verbales.',
         },
       ],
       quiz: [
@@ -248,6 +368,22 @@ export const MATH_LESSONS: SchoolSubjectLesson[] = [
           options: ['Juntamos grupos', 'Quitamos objetos', 'Solo contamos de 10 en 10'],
           correctIndex: 0,
         },
+        {
+          id: 'math-kids-add-q4',
+          prompt: 'Maya tiene 6 lápices. La maestra da 2 más. ¿Qué expresión encaja?',
+          options: ['6 + 2', '6 − 2', '2 + 2 + 2'],
+          correctIndex: 0,
+        },
+        {
+          id: 'math-kids-add-q5',
+          prompt: '¿Qué es “contar desde”?',
+          options: [
+            'Empezar en el número mayor y seguir contando',
+            'Siempre empezar solo en cero',
+            'Adivinar sin contar',
+          ],
+          correctIndex: 0,
+        },
       ],
       realWorldTip: 'En la fila: “había 3 niñas, llegaron 4 más. ¿Cuántas hay ahora?”',
     },
@@ -256,8 +392,8 @@ export const MATH_LESSONS: SchoolSubjectLesson[] = [
     id: 'math-kids-shapes',
     order: 2,
     ageBands: ['kids'],
-    estMinutes: 12,
-    standardsNote: '2D shapes & attributes (Grades 1–2)',
+    estMinutes: 16,
+    standardsNote: '2D shapes & attributes (Grades 1–2); 1.G',
     cardEmoji: '🔷',
     en: {
       title: 'Shapes and Attributes',
@@ -276,6 +412,10 @@ export const MATH_LESSONS: SchoolSubjectLesson[] = [
           heading: 'Draw in the air',
           body: 'Trace a square with your finger, then a triangle. Feel the difference in corners.',
         },
+        {
+          heading: 'Attributes over color',
+          body: 'Sort by defining attributes (sides, vertices) rather than color so students generalize shape ideas.',
+        },
       ],
       quiz: [
         {
@@ -289,6 +429,28 @@ export const MATH_LESSONS: SchoolSubjectLesson[] = [
           prompt: 'A square has…',
           options: ['3 equal sides', '4 equal sides', '0 sides'],
           correctIndex: 1,
+        },
+        {
+          id: 'math-kids-shapes-q3',
+          prompt: 'A rectangle has how many corners (vertices)?',
+          options: ['4', '3', '0'],
+          correctIndex: 0,
+        },
+        {
+          id: 'math-kids-shapes-q4',
+          prompt: 'Which shape has no straight sides?',
+          options: ['Circle', 'Triangle', 'Square'],
+          correctIndex: 0,
+        },
+        {
+          id: 'math-kids-shapes-q5',
+          prompt: 'Why might two triangles look different but still both be triangles?',
+          options: [
+            'They still have 3 straight sides',
+            'They must be the same color',
+            'They must be huge',
+          ],
+          correctIndex: 0,
         },
       ],
       realWorldTip: 'Shape hunt: find rectangles (doors) and circles (clocks) in the classroom.',
@@ -310,6 +472,10 @@ export const MATH_LESSONS: SchoolSubjectLesson[] = [
           heading: 'Dibujar en el aire',
           body: 'Traza un cuadrado con el dedo, luego un triángulo. Siente la diferencia en las esquinas.',
         },
+        {
+          heading: 'Atributos, no solo color',
+          body: 'Clasifica por lados y vértices, no solo por color, para generalizar la idea de figura.',
+        },
       ],
       quiz: [
         {
@@ -324,6 +490,28 @@ export const MATH_LESSONS: SchoolSubjectLesson[] = [
           options: ['3 lados iguales', '4 lados iguales', '0 lados'],
           correctIndex: 1,
         },
+        {
+          id: 'math-kids-shapes-q3',
+          prompt: '¿Cuántas esquinas (vértices) tiene un rectángulo?',
+          options: ['4', '3', '0'],
+          correctIndex: 0,
+        },
+        {
+          id: 'math-kids-shapes-q4',
+          prompt: '¿Qué figura no tiene lados rectos?',
+          options: ['Círculo', 'Triángulo', 'Cuadrado'],
+          correctIndex: 0,
+        },
+        {
+          id: 'math-kids-shapes-q5',
+          prompt: '¿Por qué dos triángulos pueden verse distintos y ser triángulos?',
+          options: [
+            'Porque ambos tienen 3 lados rectos',
+            'Porque deben ser del mismo color',
+            'Porque deben ser enormes',
+          ],
+          correctIndex: 0,
+        },
       ],
       realWorldTip: 'Caza de figuras: busca rectángulos (puertas) y círculos (relojes) en el salón.',
     },
@@ -332,8 +520,8 @@ export const MATH_LESSONS: SchoolSubjectLesson[] = [
     id: 'math-crew-multiply-thinking',
     order: 1,
     ageBands: ['crew'],
-    estMinutes: 14,
-    standardsNote: 'Multiplication as equal groups (Grades 3–5)',
+    estMinutes: 18,
+    standardsNote: 'Multiplication as equal groups (Grades 3–5); 3.OA',
     cardEmoji: '✖️',
     en: {
       title: 'Equal Groups & Multiplication',
@@ -374,6 +562,18 @@ export const MATH_LESSONS: SchoolSubjectLesson[] = [
             'Each group is a different size',
             'There is only one group',
           ],
+          correctIndex: 0,
+        },
+        {
+          id: 'math-crew-mult-q4',
+          prompt: 'Which matches 3 × 2?',
+          options: ['3 + 3', '2 + 2 + 2 + 2', '3 + 2'],
+          correctIndex: 0,
+        },
+        {
+          id: 'math-crew-mult-q5',
+          prompt: 'An array with 4 rows and 3 in each row shows…',
+          options: ['4 × 3 = 12', '4 + 3 = 7', '4 − 3 = 1'],
           correctIndex: 0,
         },
       ],
@@ -420,6 +620,18 @@ export const MATH_LESSONS: SchoolSubjectLesson[] = [
           ],
           correctIndex: 0,
         },
+        {
+          id: 'math-crew-mult-q4',
+          prompt: '¿Qué va con 3 × 2?',
+          options: ['3 + 3', '2 + 2 + 2 + 2', '3 + 2'],
+          correctIndex: 0,
+        },
+        {
+          id: 'math-crew-mult-q5',
+          prompt: 'Un arreglo con 4 filas y 3 en cada fila muestra…',
+          options: ['4 × 3 = 12', '4 + 3 = 7', '4 − 3 = 1'],
+          correctIndex: 0,
+        },
       ],
       realWorldTip: 'Barras de granola: “4 paquetes, 2 barras cada uno — ¿cuántas barras?” Dibuja grupos primero.',
     },
@@ -448,6 +660,10 @@ export const MATH_LESSONS: SchoolSubjectLesson[] = [
           heading: 'Sparki model',
           body: 'Fold a paper strip in half, then in half again. Open it: four equal parts — fourths.',
         },
+        {
+          heading: 'Number line preview',
+          body: 'Place 0, 1/2, and 1 on a line from 0 to 1. Fractions are numbers with places between wholes.',
+        },
       ],
       quiz: [
         {
@@ -460,6 +676,24 @@ export const MATH_LESSONS: SchoolSubjectLesson[] = [
           id: 'math-crew-frac-q2',
           prompt: 'For fractions to make sense, parts should be…',
           options: ['Equal', 'Different sizes', 'Only triangles'],
+          correctIndex: 0,
+        },
+        {
+          id: 'math-crew-frac-q3',
+          prompt: 'In 3/4, the 4 tells us…',
+          options: ['The whole is split into 4 equal parts', 'We skip 4 numbers', 'The answer is 4 wholes'],
+          correctIndex: 0,
+        },
+        {
+          id: 'math-crew-frac-q4',
+          prompt: 'Which fraction is larger if the wholes are the same size?',
+          options: ['3/4', '1/4', 'They are always equal'],
+          correctIndex: 0,
+        },
+        {
+          id: 'math-crew-frac-q5',
+          prompt: 'A fair share of one brownie for two friends is…',
+          options: ['Two equal halves', 'One friend gets the whole', 'Ignore fairness'],
           correctIndex: 0,
         },
       ],
@@ -482,6 +716,10 @@ export const MATH_LESSONS: SchoolSubjectLesson[] = [
           heading: 'Modelo Sparki',
           body: 'Dobla una tira de papel por la mitad, y otra vez. Al abrir: cuatro partes iguales — cuartos.',
         },
+        {
+          heading: 'Recta numérica',
+          body: 'Ubica 0, 1/2 y 1 entre 0 y 1. Las fracciones son números con lugares entre enteros.',
+        },
       ],
       quiz: [
         {
@@ -494,6 +732,28 @@ export const MATH_LESSONS: SchoolSubjectLesson[] = [
           id: 'math-crew-frac-q2',
           prompt: 'Para que las fracciones tengan sentido, las partes deben ser…',
           options: ['Iguales', 'De distinto tamaño', 'Solo triángulos'],
+          correctIndex: 0,
+        },
+        {
+          id: 'math-crew-frac-q3',
+          prompt: 'En 3/4, el 4 nos dice…',
+          options: [
+            'El entero se parte en 4 partes iguales',
+            'Saltamos 4 números',
+            'La respuesta son 4 enteros',
+          ],
+          correctIndex: 0,
+        },
+        {
+          id: 'math-crew-frac-q4',
+          prompt: 'Si los enteros son del mismo tamaño, ¿qué fracción es mayor?',
+          options: ['3/4', '1/4', 'Siempre son iguales'],
+          correctIndex: 0,
+        },
+        {
+          id: 'math-crew-frac-q5',
+          prompt: 'Un reparto justo de un brownie para dos amigos es…',
+          options: ['Dos mitades iguales', 'Un amigo se come todo', 'Ignorar lo justo'],
           correctIndex: 0,
         },
       ],

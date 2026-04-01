@@ -4,13 +4,24 @@
  * For Spanish: pass locale "es" (or lang "es"). Optional ELEVENLABS_VOICE_ID_ES overrides voice for Spanish.
  * Uses eleven_multilingual_v2 by default; sends language_code for clearer EN/ES on multilingual models.
  * Pass output_format as query param (ElevenLabs API); default mp3_44100_128.
+ *
+ * Abuse control: set SPARKI_SERVICE_SECRET (worker sends Bearer) and TTS_ALLOW_ORIGINS (browser Listen).
+ * If both unset, endpoint is open (legacy).
  */
+import { authorizeTtsRequest } from './lib/serviceAuth.js'
+
 const ELEVENLABS_BASE = 'https://api.elevenlabs.io/v1/text-to-speech'
 const MAX_TEXT_LENGTH = 2500
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     res.status(405).json({ error: 'Method not allowed' })
+    return
+  }
+
+  const gate = authorizeTtsRequest(req)
+  if (!gate.ok) {
+    res.status(gate.status).json({ error: gate.message })
     return
   }
 

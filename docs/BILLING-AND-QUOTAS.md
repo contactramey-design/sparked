@@ -9,6 +9,12 @@ Third-party APIs bill **your** accounts. The app does not enforce spend caps ser
 - **Controls:** [elevenlabs.io](https://elevenlabs.io) → Subscription / usage. Upgrade plan or add credits before large pilots.
 - **Tip:** Shorter text = fewer characters = lower cost per tap. Very long passages are truncated server-side (`MAX_TEXT_LENGTH` in [api/tts.js](../api/tts.js)).
 
+## fal.ai (Flux — optional scene art)
+
+- **Used for:** Homework story mode — still images per scene ([api/generate-visuals.js](../api/generate-visuals.js), [api/homework/lib/visualProvider.js](../api/homework/lib/visualProvider.js)).
+- **Env:** `FAL_KEY` on Vercel.
+- **Controls:** [fal.ai](https://fal.ai) dashboard — usage and credits; model is `fal-ai/flux-pro/v1.1`.
+
 ## OpenAI
 
 - **Used for:** Homework Adventure — vision + structured story ([api/process-homework.js](../api/process-homework.js)).

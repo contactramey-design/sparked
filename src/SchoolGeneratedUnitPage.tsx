@@ -72,7 +72,7 @@ function parseContentBlocks(blocks: string[]) {
   const rules = ruleBlocks.map((block) => {
     // Support both English and Spanish labels.
     const match = block.match(
-      /^(Rule|Safety|Kindness|Myth-buster|Idea|Feelings|Pause|Scenario|Examples|Game|Regla|Seguridad|Amabilidad|Idea|Sentimientos|Pausa|Escenario|Ejemplos|Juego):\s*(.*)$/i,
+      /^(Rule|Safety|Kindness|Myth-buster|Idea|Feelings|Pause|Scenario|Examples|Game|Vocabulary|Key idea|Main idea|Worked example|Check|Connection|Discussion|Extension|Misconception|Try it|Reflect|Summary|Regla|Seguridad|Amabilidad|Sentimientos|Pausa|Escenario|Ejemplos|Juego|Vocabulario|Idea clave|Idea principal|Ejemplo|Comprueba|Conexi[oó]n|Discusi[oó]n|Ampliaci[oó]n|Idea err[oó]nea|Intenta|Reflexiona|Resumen):\s*(.*)$/i,
     )
     const label = match ? match[1] : null
     const text = match ? match[2].trim() : block

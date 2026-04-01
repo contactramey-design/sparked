@@ -16,6 +16,15 @@ export default async function handler(req, res) {
     return
   }
 
+  const cronSecret = process.env.CRON_SECRET?.trim()
+  if (cronSecret) {
+    const auth = typeof req.headers.authorization === 'string' ? req.headers.authorization : ''
+    if (auth !== `Bearer ${cronSecret}`) {
+      res.status(401).json({ error: 'Unauthorized' })
+      return
+    }
+  }
+
   const token = process.env.BLOB_READ_WRITE_TOKEN
   if (!token) {
     res.status(503).json({ error: 'BLOB_READ_WRITE_TOKEN not set' })

@@ -9,7 +9,8 @@ Operator docs in **`docs/`**:
 | Doc | Purpose |
 |-----|---------|
 | [docs/PILOT-RUNBOOK.md](docs/PILOT-RUNBOOK.md) | Teacher/student scripts, URLs, scope |
-| [docs/PILOT-INFRA-CHECKLIST.md](docs/PILOT-INFRA-CHECKLIST.md) | Vercel deploy + `/api/setup-status` (`schemaVersion: 3`) |
+| [docs/PILOT-INFRA-CHECKLIST.md](docs/PILOT-INFRA-CHECKLIST.md) | Vercel deploy + `/api/setup-status` (`schemaVersion: 5`) |
+| [docs/SECURITY.md](docs/SECURITY.md) | Threat model, service auth (`SPARKI_SERVICE_SECRET`), production checklist |
 | [docs/SUPABASE-PILOT-SETUP.md](docs/SUPABASE-PILOT-SETUP.md) | DB, RLS, anon auth, storage |
 | [docs/BILLING-AND-QUOTAS.md](docs/BILLING-AND-QUOTAS.md) | ElevenLabs, OpenAI, Stripe |
 | [docs/PILOT-SUBPROCESSORS-AND-DPA.md](docs/PILOT-SUBPROCESSORS-AND-DPA.md) | Subprocessors + DPA outline |

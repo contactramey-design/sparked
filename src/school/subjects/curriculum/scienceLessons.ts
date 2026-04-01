@@ -5,8 +5,8 @@ export const SCIENCE_LESSONS: SchoolSubjectLesson[] = [
     id: 'sci-tots-five-senses',
     order: 1,
     ageBands: ['tots'],
-    estMinutes: 10,
-    standardsNote: 'Observe with senses (pre-K)',
+    estMinutes: 14,
+    standardsNote: 'Observe with senses (pre-K); practices of science',
     cardEmoji: '👁️',
     en: {
       title: 'Five Senses Explore',
@@ -25,6 +25,10 @@ export const SCIENCE_LESSONS: SchoolSubjectLesson[] = [
           heading: 'Walk',
           body: 'Find something smooth, something loud, something bright. Which sense?',
         },
+        {
+          heading: 'Science practice',
+          body: 'Observations can change when we get closer or add light. Scientists record what they notice, not what they wish.',
+        },
       ],
       quiz: [
         {
@@ -37,6 +41,32 @@ export const SCIENCE_LESSONS: SchoolSubjectLesson[] = [
           id: 'sci-tots-sens-q2',
           prompt: 'Which sense helps you notice if soup is hot before you sip?',
           options: ['Touch (and careful sight)', 'Only hearing', 'Only taste with a big gulp'],
+          correctIndex: 0,
+        },
+        {
+          id: 'sci-tots-sens-q3',
+          prompt: 'We use our eyes mainly to…',
+          options: ['See', 'Taste', 'Hear'],
+          correctIndex: 0,
+        },
+        {
+          id: 'sci-tots-sens-q4',
+          prompt: 'A safe science habit is…',
+          options: [
+            'Ask a grown-up before tasting unknown things',
+            'Taste every plant outside',
+            'Touch very hot pans to learn',
+          ],
+          correctIndex: 0,
+        },
+        {
+          id: 'sci-tots-sens-q5',
+          prompt: 'Two students describe the same leaf differently. That can happen because…',
+          options: [
+            'They notice different attributes',
+            'Science is only opinions with no facts',
+            'Leaves have no real features',
+          ],
           correctIndex: 0,
         },
       ],
@@ -59,6 +89,10 @@ export const SCIENCE_LESSONS: SchoolSubjectLesson[] = [
           heading: 'Paseo',
           body: 'Busquen algo liso, algo ruidoso, algo brillante. ¿Qué sentido usaron?',
         },
+        {
+          heading: 'Práctica científica',
+          body: 'Las observaciones pueden cambiar si nos acercamos o hay más luz. Anotamos lo que notamos, no lo que deseamos.',
+        },
       ],
       quiz: [
         {
@@ -71,6 +105,32 @@ export const SCIENCE_LESSONS: SchoolSubjectLesson[] = [
           id: 'sci-tots-sens-q2',
           prompt: '¿Qué sentido ayuda a notar si la sopa está caliente antes de probar?',
           options: ['Tacto (y vista con cuidado)', 'Solo oír', 'Solo gustar de golpe'],
+          correctIndex: 0,
+        },
+        {
+          id: 'sci-tots-sens-q3',
+          prompt: 'Usamos los ojos principalmente para…',
+          options: ['Ver', 'Gustar', 'Oír'],
+          correctIndex: 0,
+        },
+        {
+          id: 'sci-tots-sens-q4',
+          prompt: 'Un hábito seguro es…',
+          options: [
+            'Preguntar a un adulto antes de probar cosas desconocidas',
+            'Probar cada planta del patio',
+            'Tocar ollas muy calientes para aprender',
+          ],
+          correctIndex: 0,
+        },
+        {
+          id: 'sci-tots-sens-q5',
+          prompt: 'Dos niños describen distinto la misma hoja. Puede ser porque…',
+          options: [
+            'Notan atributos distintos',
+            'La ciencia es solo opiniones',
+            'Las hojas no tienen rasgos reales',
+          ],
           correctIndex: 0,
         },
       ],
@@ -101,6 +161,10 @@ export const SCIENCE_LESSONS: SchoolSubjectLesson[] = [
           heading: 'Gray zones',
           body: 'Young kids: keep categories simple. Older grades will refine “what is alive.”',
         },
+        {
+          heading: 'Engineering connection',
+          body: 'Toys and tools are designed by people; they do not eat and grow like animals or plants.',
+        },
       ],
       quiz: [
         {
@@ -113,6 +177,28 @@ export const SCIENCE_LESSONS: SchoolSubjectLesson[] = [
           id: 'sci-tots-liv-q2',
           prompt: 'A cat is…',
           options: ['Living', 'Nonliving', 'Neither'],
+          correctIndex: 0,
+        },
+        {
+          id: 'sci-tots-liv-q3',
+          prompt: 'A seed in soil that is starting to sprout is…',
+          options: ['Living', 'Nonliving', 'Not real'],
+          correctIndex: 0,
+        },
+        {
+          id: 'sci-tots-liv-q4',
+          prompt: 'Water in a bottle is best called…',
+          options: ['Nonliving material humans use', 'A plant', 'An animal'],
+          correctIndex: 0,
+        },
+        {
+          id: 'sci-tots-liv-q5',
+          prompt: 'Why is a stuffed bear nonliving?',
+          options: [
+            'It does not grow, eat, or breathe like a real bear',
+            'It is too soft',
+            'It has no color',
+          ],
           correctIndex: 0,
         },
       ],
@@ -135,6 +221,10 @@ export const SCIENCE_LESSONS: SchoolSubjectLesson[] = [
           heading: 'Zonas grises',
           body: 'En edad pequeña, categorías simples. Más adelante afinan “qué está vivo.”',
         },
+        {
+          heading: 'Ingeniería',
+          body: 'Juguetes y herramientas los diseñan personas; no comen ni crecen como plantas o animales.',
+        },
       ],
       quiz: [
         {
@@ -149,6 +239,28 @@ export const SCIENCE_LESSONS: SchoolSubjectLesson[] = [
           options: ['Vivo', 'No vivo', 'Ninguno'],
           correctIndex: 0,
         },
+        {
+          id: 'sci-tots-liv-q3',
+          prompt: 'Una semilla en tierra que empieza a brotar es…',
+          options: ['Viva', 'No viva', 'Irreal'],
+          correctIndex: 0,
+        },
+        {
+          id: 'sci-tots-liv-q4',
+          prompt: 'El agua en una botella es mejor decir que es…',
+          options: ['Material no vivo que usamos', 'Una planta', 'Un animal'],
+          correctIndex: 0,
+        },
+        {
+          id: 'sci-tots-liv-q5',
+          prompt: '¿Por qué un oso de peluche no está vivo?',
+          options: [
+            'No crece, come ni respira como un oso real',
+            'Es muy suave',
+            'No tiene color',
+          ],
+          correctIndex: 0,
+        },
       ],
       realWorldTip: 'Caja de juguetes: “¿Vivo en la vida real?” — las figuras no están vivas aunque parezcan animales.',
     },
@@ -157,8 +269,8 @@ export const SCIENCE_LESSONS: SchoolSubjectLesson[] = [
     id: 'sci-kids-states-matter',
     order: 1,
     ageBands: ['kids'],
-    estMinutes: 12,
-    standardsNote: 'Properties of matter (Grades 1–2)',
+    estMinutes: 16,
+    standardsNote: 'Properties of matter (Grades 1–2); PS1',
     cardEmoji: '💧',
     en: {
       title: 'Solids, Liquids, and Gases',
@@ -177,6 +289,10 @@ export const SCIENCE_LESSONS: SchoolSubjectLesson[] = [
           heading: 'Gases',
           body: 'A gas spreads out to fill space. Air is a gas we cannot see but can feel when the wind blows.',
         },
+        {
+          heading: 'Changes with temperature',
+          body: 'Heating or cooling can change state: ice melts to liquid water; water can evaporate to invisible vapor.',
+        },
       ],
       quiz: [
         {
@@ -189,6 +305,28 @@ export const SCIENCE_LESSONS: SchoolSubjectLesson[] = [
           id: 'sci-kids-mat-q2',
           prompt: 'Ice cubes are usually…',
           options: ['Solid water', 'Liquid water', 'Water vapor only'],
+          correctIndex: 0,
+        },
+        {
+          id: 'sci-kids-mat-q3',
+          prompt: 'Steam above hot cocoa is mostly…',
+          options: ['Water as a gas', 'Solid ice', 'A new element that is not water'],
+          correctIndex: 0,
+        },
+        {
+          id: 'sci-kids-mat-q4',
+          prompt: 'A book keeps its shape easily because it is a…',
+          options: ['Solid', 'Gas', 'Only a liquid'],
+          correctIndex: 0,
+        },
+        {
+          id: 'sci-kids-mat-q5',
+          prompt: 'Pouring juice from a pitcher shows a liquid…',
+          options: [
+            'Takes the shape of its container',
+            'Always stays in a cube',
+            'Cannot move',
+          ],
           correctIndex: 0,
         },
       ],
@@ -211,6 +349,10 @@ export const SCIENCE_LESSONS: SchoolSubjectLesson[] = [
           heading: 'Gases',
           body: 'Un gas se expande para llenar espacio. El aire es un gas que no vemos pero sentimos en el viento.',
         },
+        {
+          heading: 'Cambios con temperatura',
+          body: 'Calentar o enfriar puede cambiar el estado: el hielo se derrite; el agua puede evaporarse a vapor.',
+        },
       ],
       quiz: [
         {
@@ -225,6 +367,28 @@ export const SCIENCE_LESSONS: SchoolSubjectLesson[] = [
           options: ['Agua sólida', 'Agua líquida', 'Solo vapor'],
           correctIndex: 0,
         },
+        {
+          id: 'sci-kids-mat-q3',
+          prompt: 'El vapor sobre chocolate caliente es en gran parte…',
+          options: ['Agua como gas', 'Hielo sólido', 'Un elemento que no es agua'],
+          correctIndex: 0,
+        },
+        {
+          id: 'sci-kids-mat-q4',
+          prompt: 'Un libro mantiene su forma con facilidad porque es un…',
+          options: ['Sólido', 'Gas', 'Solo líquido'],
+          correctIndex: 0,
+        },
+        {
+          id: 'sci-kids-mat-q5',
+          prompt: 'Servir jugo desde una jarra muestra que un líquido…',
+          options: [
+            'Toma la forma de su recipiente',
+            'Siempre queda en cubo',
+            'No puede moverse',
+          ],
+          correctIndex: 0,
+        },
       ],
       realWorldTip: 'Congelen agua — observen sólido vs líquido en la “laboratorio cocina.”',
     },
@@ -233,8 +397,8 @@ export const SCIENCE_LESSONS: SchoolSubjectLesson[] = [
     id: 'sci-kids-plants-need',
     order: 2,
     ageBands: ['kids'],
-    estMinutes: 12,
-    standardsNote: 'Plant needs (Grades 1–2)',
+    estMinutes: 16,
+    standardsNote: 'Plant needs (Grades 1–2); LS1',
     cardEmoji: '🌻',
     en: {
       title: 'What Plants Need',
@@ -253,6 +417,10 @@ export const SCIENCE_LESSONS: SchoolSubjectLesson[] = [
           heading: 'Space',
           body: 'Crowded plants compete. A little space helps each plant get light and water.',
         },
+        {
+          heading: 'Soil role',
+          body: 'Soil anchors roots and holds water and nutrients — a reason classroom plants need the right pot size.',
+        },
       ],
       quiz: [
         {
@@ -265,6 +433,36 @@ export const SCIENCE_LESSONS: SchoolSubjectLesson[] = [
           id: 'sci-kids-pla-q2',
           prompt: 'If a plant gets no water for a long time, it will likely…',
           options: ['Struggle or wilt', 'Grow extra fast', 'Turn into an animal'],
+          correctIndex: 0,
+        },
+        {
+          id: 'sci-kids-pla-q3',
+          prompt: 'Leaves are important partly because they…',
+          options: [
+            'Interact with light and air for the plant',
+            'Store all the water forever',
+            'Replace the need for roots',
+          ],
+          correctIndex: 0,
+        },
+        {
+          id: 'sci-kids-pla-q4',
+          prompt: 'A plant on a dark shelf for weeks might…',
+          options: [
+            'Grow weak or pale without enough light',
+            'Grow best in total dark',
+            'Become a mineral',
+          ],
+          correctIndex: 0,
+        },
+        {
+          id: 'sci-kids-pla-q5',
+          prompt: 'Healthy plant systems depend on…',
+          options: [
+            'Several needs working together',
+            'Only loud music',
+            'Only paint color of the pot',
+          ],
           correctIndex: 0,
         },
       ],
@@ -287,6 +485,10 @@ export const SCIENCE_LESSONS: SchoolSubjectLesson[] = [
           heading: 'Espacio',
           body: 'Plantas apiñadas compiten. Un poco de espacio ayuda a cada una.',
         },
+        {
+          heading: 'Suelo',
+          body: 'El suelo ancla raíces y guarda agua y nutrientes — por eso importa el tamaño de la maceta.',
+        },
       ],
       quiz: [
         {
@@ -301,6 +503,36 @@ export const SCIENCE_LESSONS: SchoolSubjectLesson[] = [
           options: ['Se debilita o se marchita', 'Crece más rápido', 'Se convierte en animal'],
           correctIndex: 0,
         },
+        {
+          id: 'sci-kids-pla-q3',
+          prompt: 'Las hojas importan en parte porque…',
+          options: [
+            'Interactúan con luz y aire para la planta',
+            'Guardan toda el agua para siempre',
+            'Reemplazan la necesidad de raíces',
+          ],
+          correctIndex: 0,
+        },
+        {
+          id: 'sci-kids-pla-q4',
+          prompt: 'Una planta en un estante oscuro por semanas podría…',
+          options: [
+            'Crecer débil o pálida sin suficiente luz',
+            'Crecer mejor en oscuridad total',
+            'Volverse un mineral',
+          ],
+          correctIndex: 0,
+        },
+        {
+          id: 'sci-kids-pla-q5',
+          prompt: 'Una planta sana depende de…',
+          options: [
+            'Varias necesidades a la vez',
+            'Solo música fuerte',
+            'Solo el color de la maceta',
+          ],
+          correctIndex: 0,
+        },
       ],
       realWorldTip: 'Cartel de cuidado: agua, revisar luz, limpiar polvo de las hojas.',
     },
@@ -309,8 +541,8 @@ export const SCIENCE_LESSONS: SchoolSubjectLesson[] = [
     id: 'sci-crew-food-web',
     order: 1,
     ageBands: ['crew'],
-    estMinutes: 14,
-    standardsNote: 'Energy in ecosystems (Grades 3–5)',
+    estMinutes: 18,
+    standardsNote: 'Energy in ecosystems (Grades 3–5); LS2',
     cardEmoji: '🦊',
     en: {
       title: 'Food Chains & Webs',
@@ -341,6 +573,28 @@ export const SCIENCE_LESSONS: SchoolSubjectLesson[] = [
           id: 'sci-crew-web-q2',
           prompt: 'In “leaf → caterpillar → bird,” the bird is…',
           options: ['A consumer', 'A producer', 'The Sun'],
+          correctIndex: 0,
+        },
+        {
+          id: 'sci-crew-web-q3',
+          prompt: 'Energy entering most land food webs starts with…',
+          options: ['The Sun', 'Rocks only', 'Plastic bottles'],
+          correctIndex: 0,
+        },
+        {
+          id: 'sci-crew-web-q4',
+          prompt: 'An herbivore eats…',
+          options: ['Mostly plants', 'Only lions', 'Only gases'],
+          correctIndex: 0,
+        },
+        {
+          id: 'sci-crew-web-q5',
+          prompt: 'A food web is more realistic than a single chain because…',
+          options: [
+            'Animals often eat more than one thing',
+            'There is only one animal on Earth',
+            'Producers never use sunlight',
+          ],
           correctIndex: 0,
         },
       ],
@@ -377,6 +631,28 @@ export const SCIENCE_LESSONS: SchoolSubjectLesson[] = [
           options: ['Un consumidor', 'Un productor', 'El Sol'],
           correctIndex: 0,
         },
+        {
+          id: 'sci-crew-web-q3',
+          prompt: 'La energía que entra a muchas redes terrestres empieza con…',
+          options: ['El Sol', 'Solo rocas', 'Botellas de plástico'],
+          correctIndex: 0,
+        },
+        {
+          id: 'sci-crew-web-q4',
+          prompt: 'Un herbívoro come…',
+          options: ['Sobre todo plantas', 'Solo leones', 'Solo gases'],
+          correctIndex: 0,
+        },
+        {
+          id: 'sci-crew-web-q5',
+          prompt: 'Una red es más realista que una sola cadena porque…',
+          options: [
+            'Los animales suelen comer más de una cosa',
+            'Solo hay un animal en la Tierra',
+            'Los productores nunca usan luz solar',
+          ],
+          correctIndex: 0,
+        },
       ],
       realWorldTip: 'Parque local: encuentren un productor y un animal que podría comerlo.',
     },
@@ -385,8 +661,8 @@ export const SCIENCE_LESSONS: SchoolSubjectLesson[] = [
     id: 'sci-crew-sun-energy',
     order: 2,
     ageBands: ['crew'],
-    estMinutes: 14,
-    standardsNote: 'Earth & human activity (Grades 3–5)',
+    estMinutes: 18,
+    standardsNote: 'Earth & human activity (Grades 3–5); ESS3',
     cardEmoji: '☀️',
     en: {
       title: 'Energy from the Sun',
@@ -405,6 +681,10 @@ export const SCIENCE_LESSONS: SchoolSubjectLesson[] = [
           heading: 'Care',
           body: 'Sparki reminds: save energy, use power wisely, and learn how your community makes electricity.',
         },
+        {
+          heading: 'Heat and daily life',
+          body: 'Sunlight warms air, water, and soil — that is why sunny spots dry faster and why seasons feel different.',
+        },
       ],
       quiz: [
         {
@@ -417,6 +697,36 @@ export const SCIENCE_LESSONS: SchoolSubjectLesson[] = [
           id: 'sci-crew-sun-q2',
           prompt: 'Solar panels help people…',
           options: ['Turn sunlight into useful electricity', 'Remove gravity', 'Create new moons'],
+          correctIndex: 0,
+        },
+        {
+          id: 'sci-crew-sun-q3',
+          prompt: 'Wind patterns are strongly tied to…',
+          options: [
+            'Uneven heating of Earth by the Sun',
+            'Only the Moon’s color',
+            'Plants stopping all air movement',
+          ],
+          correctIndex: 0,
+        },
+        {
+          id: 'sci-crew-sun-q4',
+          prompt: 'Fossil fuels store energy that originally came from…',
+          options: [
+            'Ancient plants and other organisms powered by sunlight long ago',
+            'Lightning only from last Tuesday',
+            'Rocks that never had living matter',
+          ],
+          correctIndex: 0,
+        },
+        {
+          id: 'sci-crew-sun-q5',
+          prompt: 'A community reason to care about energy use is…',
+          options: [
+            'It connects to cost, pollution, and resource choices',
+            'Energy is never important',
+            'The Sun stops existing at night',
+          ],
           correctIndex: 0,
         },
       ],
@@ -442,6 +752,10 @@ export const SCIENCE_LESSONS: SchoolSubjectLesson[] = [
           heading: 'Cuidado',
           body: 'Sparki recuerda: ahorrar energía y aprender cómo tu comunidad produce electricidad.',
         },
+        {
+          heading: 'Calor y vida diaria',
+          body: 'La luz solar calienta aire, agua y suelo — por eso el sol seca más rápido y las estaciones se sienten distintas.',
+        },
       ],
       quiz: [
         {
@@ -454,6 +768,36 @@ export const SCIENCE_LESSONS: SchoolSubjectLesson[] = [
           id: 'sci-crew-sun-q2',
           prompt: 'Los paneles solares ayudan a…',
           options: ['Convertir luz solar en electricidad útil', 'Quitar la gravedad', 'Crear lunas nuevas'],
+          correctIndex: 0,
+        },
+        {
+          id: 'sci-crew-sun-q3',
+          prompt: 'Los vientos se relacionan mucho con…',
+          options: [
+            'El calentamiento desigual del Sol sobre la Tierra',
+            'Solo el color de la Luna',
+            'Las plantas deteniendo todo el aire',
+          ],
+          correctIndex: 0,
+        },
+        {
+          id: 'sci-crew-sun-q4',
+          prompt: 'Los combustibles fósiles guardan energía que en origen vino de…',
+          options: [
+            'Plantas y organismos antiguos impulsados por luz solar',
+            'Solo un rayo del martes pasado',
+            'Rocas que nunca tuvieron materia viva',
+          ],
+          correctIndex: 0,
+        },
+        {
+          id: 'sci-crew-sun-q5',
+          prompt: 'Una razón comunitaria para cuidar el uso de energía es…',
+          options: [
+            'Conecta con costo, contaminación y decisiones de recursos',
+            'La energía nunca importa',
+            'El Sol deja de existir de noche',
+          ],
           correctIndex: 0,
         },
       ],

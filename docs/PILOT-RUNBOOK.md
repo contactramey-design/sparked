@@ -16,7 +16,7 @@ Short operational guide for **you** and **pilot schools**. Keep this aligned wit
 
 ## Pre-flight (same day as pilot)
 
-1. Complete [PILOT-INFRA-CHECKLIST.md](./PILOT-INFRA-CHECKLIST.md) (`schemaVersion: 3`, TTS key accepted if using Listen).
+1. Complete [PILOT-INFRA-CHECKLIST.md](./PILOT-INFRA-CHECKLIST.md) (`schemaVersion: 5`, TTS key accepted if using Listen).
 2. If using **school features:** [SUPABASE-PILOT-SETUP.md](./SUPABASE-PILOT-SETUP.md) (anon auth on, SQL applied).
 3. Review [BILLING-AND-QUOTAS.md](./BILLING-AND-QUOTAS.md) — ElevenLabs + OpenAI have budget.
 

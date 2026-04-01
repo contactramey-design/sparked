@@ -13,6 +13,7 @@
 import { createClient } from '@supabase/supabase-js'
 import { randomUUID } from 'node:crypto'
 import * as pdfjsLib from 'pdfjs-dist/legacy/build/pdf.js'
+import { bearerAuthHeaders } from '../lib/serviceAuth.js'
 
 export const config = {
   api: { bodyParser: false, responseLimit: false },
@@ -109,28 +110,44 @@ async function extractPdfText(pdfBuffer) {
   return out.replace(/\s+/g, ' ').trim()
 }
 
+function bandAudienceLabel(band, lang) {
+  const b = normalizeAgeBand(band)
+  if (lang === 'es') {
+    if (b === 'tots') return 'educación infantil (3–5 años): frases muy cortas, vocabulario concreto, mucha repetición amable'
+    if (b === 'crew') return 'primaria superior (9–11 años): más detalle, conexiones entre ideas, vocabulario académico accesible'
+    return 'primaria temprana (6–8 años): claridad, apoyo visual en el texto, preguntas guiadas'
+  }
+  if (b === 'tots') return 'early childhood (ages 3–5): very short sentences, concrete vocabulary, gentle repetition'
+  if (b === 'crew') return 'upper elementary (ages 9–11): richer explanations, connect ideas, age-appropriate academic language'
+  return 'early elementary (ages 6–8): clear explanations, scaffolded questions, kid-friendly but precise'
+}
+
 function buildSystemPrompt(locale, ageBand = 'kids') {
   const isEs = locale === 'es'
   const ageLine = ageBandInstruction(ageBand, isEs ? 'es' : 'en')
+  const audience = bandAudienceLabel(ageBand, isEs ? 'es' : 'en')
   if (isEs) {
-    return `Eres un asistente educativo. Vas a crear material para K–2 basandote en el contenido de un PDF de un profesor.
+    return `Eres un equipo curricular (dirección académica): diseñas unidades semanales alineadas al PDF del docente y a estándares habituales de EE.UU. (CCSS / NGSS / C3 donde aplique, sin citar códigos).
+
+Audiencia: ${audience}
 
 Reglas:
 - Ignora cualquier nombre de persona, escuela, dirección, correos o datos identificables.
-- Crea un nombre corto de “semana” y 3 unidades.
+- Crea un nombre corto de “semana” y exactamente 3 unidades.
 - Para cada unidad:
-  - Produce un titulo y un resumen para niños.
-  - Produce contentBlocks como un array de strings:
-    - incluye exactamente 1 linea de historia que empiece con "Historia:"
-    - incluye 3 a 6 lineas adicionales que empiecen con etiquetas como "Regla:", "Pausa:" o "Idea:" (pueden variar), sin comillas adicionales.
-  - Produce quizQuestions como array con 3 a 5 preguntas:
-    - cada pregunta tiene: id (string), prompt (string), options (array de 3 strings) y correctIndex (numero 0-2).
-  - Produce homeworkAdventure con:
-    - title, subject, topic
-    - steps: EXACTAMENTE 5 pasos
-      cada step tiene: id (string), story (2-3 frases), prompt (frase corta) y hint (pista suave sin dar la respuesta).
+  - Titulo y resumen claros; el resumen debe decir qué aprenderá el estudiante (objetivo de aprendizaje en lenguaje sencillo).
+  - contentBlocks: array de strings (8 a 12 lineas en total):
+    - exactamente 1 linea "Historia:" (ancla narrativa breve ligada al tema del PDF).
+    - incluye variedad pedagogica con etiquetas claras al inicio (usa varias de estas en español): "Vocabulario:", "Idea clave:", "Ejemplo:", "Pausa:", "Comprueba:", "Conexion:", "Discusion:", "Idea erronea:", "Extension:", "Regla:", "Juego:", "Escenario:".
+    - al menos una linea debe ser un error comun suave ("Idea errónea:") y su correccion en la misma linea o la siguiente.
+    - al menos una "Comprueba:" con una pregunta breve de comprension.
+  - quizQuestions: entre 8 y 10 preguntas de opcion multiple (3 opciones cada una):
+    - mezcla: recordar vocabulario, idea principal, aplicacion corta, y un mini escenario de 1-2 frases.
+    - cada pregunta: id (string unico), prompt (string), options (3 strings), correctIndex (0-2).
+    - evita respuestas obvias por longitud; distractores plausibles.
+  - homeworkAdventure: title, subject, topic; steps: EXACTAMENTE 5 pasos (id, story 2-3 frases, prompt, hint sin dar la respuesta).
 - ${ageLine}
-- No incluyas markdown ni texto extra.
+- No incluyas markdown ni texto fuera del JSON.
 - Responde SOLO con un JSON valido con esta forma:
 {
   "weekly_track_label": string,
@@ -151,24 +168,27 @@ Reglas:
 }`
   }
 
-  return `You are an educational assistant. You will create K–2 material based on a teacher PDF.
+  return `You are a curriculum director and instructional designer. Build weekly units grounded in the teacher’s PDF and typical U.S. standards (CCSS / NGSS / C3 as appropriate—do not quote standard codes).
+
+Audience: ${audience}
 
 Rules:
 - Ignore any personal names, school names, addresses, emails, or other identifying details.
-- Create a short weekly track label and 3 units.
+- Create a short weekly track label and exactly 3 units.
 - For each unit:
-  - Provide a kid-friendly title and summary.
-  - Provide contentBlocks as an array of strings:
-    - include exactly 1 story line that starts with "Story:"
-    - include 3 to 6 additional lines starting with labels like "Rule:", "Pause:", "Idea:" or similar (labels can vary).
-  - Provide quizQuestions as an array of 3 to 5 questions:
-    - each question has: id (string), prompt (string), options (array of 3 strings), and correctIndex (number 0-2).
-  - Provide homeworkAdventure with:
-    - title, subject, topic
-    - steps: EXACTLY 5 steps
-      each step has: id (string), story (2-3 sentences), prompt (short phrase), and hint (gentle Socratic hint without giving the answer).
+  - Kid-friendly title and summary; the summary must state a clear learning goal in plain language.
+  - contentBlocks: array of strings (8–12 lines total):
+    - exactly one line starting with "Story:" (short narrative hook tied to the PDF theme).
+    - include a rich mix of instructional labels such as: "Vocabulary:", "Key idea:", "Worked example:", "Rule:", "Pause:", "Check:", "Connection:", "Discussion:", "Misconception:", "Extension:", "Scenario:", "Game:".
+    - include at least one "Misconception:" line (gentle correction of a common mistake).
+    - include at least one "Check:" line with a quick comprehension question in text.
+  - quizQuestions: 8–10 multiple-choice items (3 options each):
+    - mix recall, main idea, short application, and one brief scenario (1–2 sentences) per unit.
+    - each item: id (unique string), prompt, options (3 strings), correctIndex (0–2).
+    - use plausible distractors; avoid “longest answer is correct.”
+  - homeworkAdventure: title, subject, topic; steps: EXACTLY 5 steps (id, story 2–3 sentences, prompt, Socratic hint without the final answer).
 - ${ageLine}
-- Do not include markdown or any extra text.
+- No markdown or text outside JSON.
 - Respond ONLY with valid JSON with this shape:
 {
   "weekly_track_label": string,
@@ -208,8 +228,8 @@ async function generateWeeklyUnits({ pdfText, locale, ageBand = 'kids' }) {
         { role: 'system', content: systemPrompt },
         { role: 'user', content: userPrompt },
       ],
-      max_tokens: 1700,
-      temperature: 0.7,
+      max_tokens: 4500,
+      temperature: 0.55,
     }),
   })
 
@@ -228,7 +248,7 @@ async function generateWeeklyUnits({ pdfText, locale, ageBand = 'kids' }) {
 }
 
 function validateQuizQuestions(quizQuestions) {
-  if (!Array.isArray(quizQuestions) || quizQuestions.length < 3) return false
+  if (!Array.isArray(quizQuestions) || quizQuestions.length < 7 || quizQuestions.length > 12) return false
   return quizQuestions.every((q) => {
     const ok =
       q &&
@@ -295,7 +315,7 @@ async function generateHomeworkVideoForUnit({ homeworkAdventure, locale }) {
     try {
       response = await fetch(generateUrl, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', ...bearerAuthHeaders() },
         body: JSON.stringify(payload),
         signal: controller.signal,
       })
@@ -410,7 +430,8 @@ export default async function handler(req, res) {
       const title = typeof u?.title === 'string' ? u.title.trim() : `Generated Unit ${idx + 1}`
       const summary = typeof u?.summary === 'string' ? u.summary.trim() : ''
       const contentBlocks = Array.isArray(u?.contentBlocks) ? u.contentBlocks.filter((x) => typeof x === 'string') : []
-      const quizQuestions = Array.isArray(u?.quizQuestions) ? u.quizQuestions : []
+      let quizQuestions = Array.isArray(u?.quizQuestions) ? u.quizQuestions : []
+      if (quizQuestions.length > 12) quizQuestions = quizQuestions.slice(0, 12)
       const homeworkAdventure = u?.homeworkAdventure
 
       return { title, summary, contentBlocks, quizQuestions, homeworkAdventure }
@@ -421,7 +442,7 @@ export default async function handler(req, res) {
         res.status(500).json({ error: `Model returned an invalid summary for unit ${i + 1}.` })
         return
       }
-      if (!Array.isArray(u.contentBlocks) || u.contentBlocks.length < 3) {
+      if (!Array.isArray(u.contentBlocks) || u.contentBlocks.length < 6) {
         res.status(500).json({ error: `Model returned invalid contentBlocks for unit ${i + 1}.` })
         return
       }

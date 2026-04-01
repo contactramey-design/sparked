@@ -19,7 +19,7 @@ export default async function handler(req, res) {
       ok: false,
       workerReachable: false,
       error: 'VIDEO_WORKER_URL is not set',
-      url: null,
+      host: null,
     })
   }
 
@@ -43,26 +43,37 @@ export default async function handler(req, res) {
       body = raw?.slice(0, 500) ?? null
     }
     const workerReachable = response.ok && body?.ok === true
+    let host = null
+    try {
+      host = new URL(healthUrl).host
+    } catch {
+      /* ignore */
+    }
     return res.status(200).json({
       ok: workerReachable,
       workerReachable,
       status: response.status,
-      body,
-      url: healthUrl,
+      host,
     })
   } catch (e) {
     clearTimeout(timeoutId)
     const code = e.code ?? e.cause?.code
     const message = e.message ?? String(e)
     const causeMessage = e.cause?.message
-    console.error('[video-worker-health]', { code, message, cause: causeMessage, url: healthUrl })
+    console.error('[video-worker-health]', { code, message, cause: causeMessage })
+    let host = null
+    try {
+      host = new URL(healthUrl).host
+    } catch {
+      /* ignore */
+    }
     return res.status(200).json({
       ok: false,
       workerReachable: false,
       error: message,
       code: code || (e.name === 'AbortError' ? 'TIMEOUT' : undefined),
       cause: causeMessage || undefined,
-      url: healthUrl,
+      host,
     })
   }
 }

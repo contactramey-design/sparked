@@ -11,7 +11,7 @@ Use this before demos or school pilot kickoff. Full program context: [PILOT-RUNB
    `https://YOUR_DOMAIN/api/setup-status`
 
 4. Verify:
-   - **`schemaVersion` is `3`** (if lower, Production is on an old serverless bundle — redeploy).
+   - **`schemaVersion` is `5`** (if lower, Production is on an old serverless bundle — redeploy).
    - **`deployment.environment`** is `"production"` when testing prod.
    - **`deployment.gitCommitSha`** matches your latest commit on GitHub (full SHA from Vercel build logs if needed).
 
@@ -22,10 +22,14 @@ Copy from [.env.example](../.env.example) and [CONNECTED-ACCOUNTS-SETUP.md](./CO
 | Variable | Purpose |
 |----------|---------|
 | `OPENAI_API_KEY` | Homework Adventure (`/api/process-homework`) |
+| `FAL_KEY` | Optional scene art (`/api/generate-visuals`, Flux via fal.ai) |
 | `ELEVENLABS_API_KEY` | Listen buttons + worker TTS (`/api/tts`) |
 | `BLOB_READ_WRITE_TOKEN` | Blob uploads / cron |
 | `VIDEO_FEATURE_ENABLED` | `true` to show Create video |
 | `VIDEO_WORKER_URL` | Public worker URL |
+| `CRON_SECRET` | Optional: lock `/api/cron/cleanup-adventure-videos` (match Vercel Cron job secret) |
+| `SPARKI_SERVICE_SECRET` | Recommended: lock video worker `/generate` and authenticate worker → `/api/tts` |
+| `TTS_ALLOW_ORIGINS` | With secret set: comma-separated `https://` origins for Listen buttons |
 | Stripe vars | Only if pilots use paid bundle / ebooks / homework entitlement |
 
 Set for **Production** (and **Preview** if you test preview URLs). **Redeploy** after any change.
@@ -35,6 +39,7 @@ Set for **Production** (and **Preview** if you test preview URLs). **Redeploy** 
 | Field | Meaning |
 |-------|---------|
 | `homeworkAdventure.configured` | `OPENAI_API_KEY` non-empty |
+| `sceneArt.configured` | `FAL_KEY` non-empty |
 | `video.featureEnabled` | `VIDEO_FEATURE_ENABLED === 'true'` |
 | `video.workerConfigured` | `VIDEO_WORKER_URL` set |
 | `tts.configured` | `ELEVENLABS_API_KEY` non-empty |

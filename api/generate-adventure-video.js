@@ -1,9 +1,12 @@
 /**
  * POST /api/generate-adventure-video
- * Body: { adventure: { title, subject, topic, steps }, locale? }
+ * Body: { adventure: { title, subject, topic, steps }, locale?, checkout_session_id? }
  * Returns: { videoUrl } or 403 if VIDEO_FEATURE_ENABLED !== 'true'.
- * Calls external video worker; parent-authorized context only (enforce via consent/session in app).
+ * Requires homework entitlement (same as /api/homework/*) unless ALLOW_UNAUTH_HOMEWORK=true.
+ * Calls video worker with optional SPARKI_SERVICE_SECRET (Bearer) when set.
  */
+import { requireHomeworkEntitlement } from './homework/lib/multipart.js'
+import { bearerAuthHeaders } from './lib/serviceAuth.js'
 export const config = {
   api: { responseLimit: false },
 }
@@ -41,6 +44,14 @@ export default async function handler(req, res) {
     return
   }
 
+  const checkoutSessionId =
+    typeof body.checkout_session_id === 'string' ? body.checkout_session_id.trim() : ''
+  const ent = await requireHomeworkEntitlement(checkoutSessionId)
+  if (!ent.ok) {
+    res.status(ent.status).json({ error: ent.message })
+    return
+  }
+
   const adventure = body.adventure
   if (!adventure || !Array.isArray(adventure.steps) || adventure.steps.length === 0) {
     res.status(400).json({ error: 'Missing adventure.steps' })
@@ -72,7 +83,7 @@ export default async function handler(req, res) {
     try {
       response = await fetch(generateUrl, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', ...bearerAuthHeaders() },
         body: JSON.stringify(payload),
         signal: controller.signal,
       })

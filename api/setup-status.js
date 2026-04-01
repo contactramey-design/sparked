@@ -3,6 +3,7 @@
  * Returns which services are configured (no secrets). Use to verify Vercel/Railway/API setup.
  */
 import { checkElevenLabsApiKey } from './lib/checkElevenLabsKey.js'
+import { getSparkiServiceSecret, parseTtsAllowOrigins } from './lib/serviceAuth.js'
 
 export default async function handler(req, res) {
   if (req.method !== 'GET') {
@@ -25,7 +26,7 @@ export default async function handler(req, res) {
   res.setHeader('Cache-Control', 'no-store, max-age=0')
   res.status(200).json({
     // Bump when setup-status shape changes — if missing in production, you are NOT on this deploy.
-    schemaVersion: 3,
+    schemaVersion: 5,
     /** Vercel injects these on deploy; use to confirm Production matches your latest Git push. */
     deployment: {
       environment: process.env.VERCEL_ENV ?? null,
@@ -38,6 +39,13 @@ export default async function handler(req, res) {
         ? 'OpenAI key set — Create adventure will work.'
         : 'Add OPENAI_API_KEY in Vercel (and .env locally), then redeploy.',
     },
+    // Story scene stills (Flux via fal.ai) — POST /api/generate-visuals
+    sceneArt: {
+      configured: Boolean(process.env.FAL_KEY?.trim()),
+      message: process.env.FAL_KEY?.trim()
+        ? 'FAL_KEY set — homework story scene art can call fal Flux.'
+        : 'Add FAL_KEY (fal.ai) in Vercel to enable optional Pixar-style scene images on homework results.',
+    },
     // Video generation: Create video button and worker
     video: {
       featureEnabled: process.env.VIDEO_FEATURE_ENABLED === 'true',
@@ -46,6 +54,15 @@ export default async function handler(req, res) {
         process.env.VIDEO_FEATURE_ENABLED === 'true' && process.env.VIDEO_WORKER_URL
           ? 'Video feature on — worker URL set. Ensure worker (Railway/Render/etc.) is deployed with TTS_URL, BLOB_READ_WRITE_TOKEN, ASSET_BASE_URL. Check GET /api/video-worker-health to test connectivity.'
           : 'Set VIDEO_FEATURE_ENABLED=true and VIDEO_WORKER_URL=<public worker URL> in Vercel, then redeploy.',
+    },
+    serviceAuth: {
+      sparkiServiceSecretSet: Boolean(getSparkiServiceSecret()),
+      ttsAllowOriginsConfigured: parseTtsAllowOrigins().length > 0,
+      message: getSparkiServiceSecret()
+        ? parseTtsAllowOrigins().length > 0
+          ? 'SPARKI_SERVICE_SECRET set and TTS_ALLOW_ORIGINS set — worker + browser TTS should work.'
+          : 'SPARKI_SERVICE_SECRET set but TTS_ALLOW_ORIGINS empty — video worker can call TTS; browser Listen needs TTS_ALLOW_ORIGINS (comma-separated https:// origins).'
+        : 'SPARKI_SERVICE_SECRET unset — video worker /generate is not bearer-locked; TTS is open unless you set secret + TTS_ALLOW_ORIGINS. Recommended for production.',
     },
     // TTS: used by worker for video narration (and Listen buttons)
     tts: {
@@ -78,6 +95,13 @@ export default async function handler(req, res) {
       message: process.env.BLOB_READ_WRITE_TOKEN
         ? 'Blob token set on this app (cron cleanup). Same token must be on Railway for worker uploads.'
         : 'Add BLOB_READ_WRITE_TOKEN from Vercel Storage → Blob → Create token.',
+    },
+    // Vercel Cron: optional CRON_SECRET locks /api/cron/* to Bearer token (set in Vercel env + Cron job secret).
+    cron: {
+      secretConfigured: Boolean(process.env.CRON_SECRET?.trim()),
+      message: process.env.CRON_SECRET?.trim()
+        ? 'CRON_SECRET set — scheduled cleanup calls must include Authorization: Bearer (Vercel Cron does this when the secret matches).'
+        : 'Optional: set CRON_SECRET in Vercel and attach the same value to the Cron job secret so cleanup is not publicly callable.',
     },
   })
 }

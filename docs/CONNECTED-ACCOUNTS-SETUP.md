@@ -1,7 +1,7 @@
 # Connected Accounts & APIs – Full Checklist
 
 Use this to verify **every** connection for Homework Adventure and video generation.  
-**Quick check:** Open `https://YOUR_APP.vercel.app/api/setup-status` (or `http://localhost:3001/api/setup-status` when running `npm run dev:api`). Expect **`schemaVersion`: `3`** and optional **`deployment.gitCommitSha`** (Vercel) so you know Production matches Git.
+**Quick check:** Open `https://YOUR_APP.vercel.app/api/setup-status` (or `http://localhost:3001/api/setup-status` when running `npm run dev:api`). Expect **`schemaVersion`: `5`** and optional **`deployment.gitCommitSha`** (Vercel) so you know Production matches Git.
 
 **School pilots:** [SUPABASE-PILOT-SETUP.md](./SUPABASE-PILOT-SETUP.md), [PILOT-RUNBOOK.md](./PILOT-RUNBOOK.md), [PILOT-INFRA-CHECKLIST.md](./PILOT-INFRA-CHECKLIST.md).  
 **Spend / quotas:** [BILLING-AND-QUOTAS.md](./BILLING-AND-QUOTAS.md).
@@ -28,6 +28,8 @@ Use this to verify **every** connection for Homework Adventure and video generat
 | `VIDEO_FEATURE_ENABLED` | Create video button | `true` | Exact string. |
 | `VIDEO_WORKER_URL` | Video generation | `https://YOUR-RAILWAY-SERVICE.up.railway.app` | No trailing slash. From Railway → Settings → Networking → Public domain. |
 | `BLOB_READ_WRITE_TOKEN` | Cron cleanup + worker | `vercel_blob_rw_...` | From Vercel Storage → Blob store → Tokens → Create (Read-Write). Same token also goes on Railway. |
+| `SPARKI_SERVICE_SECRET` | Worker auth + TTS from worker | Same on Vercel + worker | Recommended production; see [SECURITY.md](./SECURITY.md). |
+| `TTS_ALLOW_ORIGINS` | Browser Listen (`/api/tts`) | `https://your-domain.com,...` | Required when `SPARKI_SERVICE_SECRET` is set so the app origin can call TTS. |
 
 - [ ] All of the above set for **Production** (and Preview if you use preview URLs).
 - [ ] **Redeploy** after any change (Deployments → ⋮ → Redeploy).
@@ -69,6 +71,7 @@ Use this to verify **every** connection for Homework Adventure and video generat
 | `TTS_URL` | `https://YOUR_VERCEL_APP.vercel.app/api/tts` |
 | `BLOB_READ_WRITE_TOKEN` | Same token as Vercel Blob |
 | `ASSET_BASE_URL` | `https://YOUR_VERCEL_APP.vercel.app` (no trailing slash) |
+| `SPARKI_SERVICE_SECRET` | Same long random string as Vercel (locks `POST /generate` and signs worker → TTS) |
 
 - [ ] **Networking:** Public domain generated; copy the URL (e.g. `https://xxx.up.railway.app`).
 - [ ] Paste that URL into **Vercel** as `VIDEO_WORKER_URL`.

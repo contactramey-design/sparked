@@ -21,9 +21,14 @@ const PORT = process.env.PORT || 3333
 async function fetchTTS(text, ttsUrl) {
   const url = ttsUrl || process.env.TTS_URL
   if (!url) throw new Error('TTS_URL not set')
+  const headers = { 'Content-Type': 'application/json' }
+  const secret = (process.env.SPARKI_SERVICE_SECRET || '').trim()
+  if (secret) {
+    headers.Authorization = `Bearer ${secret}`
+  }
   const res = await fetch(url, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers,
     body: JSON.stringify({ text }),
   })
   if (!res.ok) {
@@ -123,6 +128,14 @@ async function compositeVideo(adventure, audioBuffer, imageUrls) {
 }
 
 app.post('/generate', async (req, res) => {
+  const expectedSecret = (process.env.SPARKI_SERVICE_SECRET || '').trim()
+  if (expectedSecret) {
+    const auth = typeof req.headers.authorization === 'string' ? req.headers.authorization.trim() : ''
+    if (auth !== `Bearer ${expectedSecret}`) {
+      return res.status(401).json({ error: 'Unauthorized' })
+    }
+  }
+
   const adventure = req.body?.adventure
   if (!adventure?.steps?.length) {
     return res.status(400).json({ error: 'Missing adventure.steps' })
@@ -173,4 +186,11 @@ app.post('/generate', async (req, res) => {
 
 app.get('/health', (_, res) => res.json({ ok: true }))
 
-app.listen(PORT, () => console.log(`Worker listening on ${PORT}`))
+app.listen(PORT, () => {
+  console.log(`Worker listening on ${PORT}`)
+  if (!(process.env.SPARKI_SERVICE_SECRET || '').trim()) {
+    console.warn(
+      '[worker] SPARKI_SERVICE_SECRET is unset — POST /generate is public. Set the same secret on Vercel and Railway.',
+    )
+  }
+})
