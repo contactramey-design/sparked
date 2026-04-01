@@ -526,6 +526,7 @@ export default async function handler(req, res) {
     res.status(200).json({
       generatorId,
       weeklyTrackLabel: weeklyTrackLabel.trim(),
+      classAgeBand: ageBand,
       units: rows.map((r) => ({ unitId: r.unit_id, title: r.unit_json.title })),
     })
   } catch (e) {

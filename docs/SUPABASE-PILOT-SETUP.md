@@ -24,9 +24,10 @@ If these are missing, `supabase` is `null` and teacher/school features will not 
 
 In Supabase → **SQL Editor**, run:
 
-1. **[school_mode.sql](../supabase/school_mode.sql)** first — `school_classes`, `school_student_progress`, RLS for teachers and anonymous students.
-2. **[age_band_school_classes.sql](../supabase/age_band_school_classes.sql)** — adds `age_band` (`tots` | `kids` | `crew`) on `school_classes` for teacher class setup and weekly PDF prompt targeting.
-3. **[school_weekly_generators.sql](../supabase/school_weekly_generators.sql)** — weekly generators, generated units, storage bucket + policies for `school-generated-curriculum`.
+1. **[school_mode.sql](../supabase/school_mode.sql)** first — `school_classes`, `school_student_progress`, RLS for teachers and anonymous students. Includes **`student_join_class`** returning JSON with `class_id` and **`age_band`** (re-run or apply **[student_join_returns_meta.sql](../supabase/student_join_returns_meta.sql)** if you already had an older UUID-only join RPC).
+2. **[student_class_age_band_rpc.sql](../supabase/student_class_age_band_rpc.sql)** — **`student_my_class_age_band()`** for students who joined before the join RPC returned `age_band` (backfills app band from `school_classes`).
+3. **[age_band_school_classes.sql](../supabase/age_band_school_classes.sql)** — adds `age_band` (`tots` | `kids` | `crew`) on `school_classes` for teacher class setup and weekly PDF prompt targeting.
+4. **[school_weekly_generators.sql](../supabase/school_weekly_generators.sql)** — weekly generators, generated units, storage bucket + policies for `school-generated-curriculum`.
 
 (Optional) [licensing_curriculum_uploads.sql](../supabase/licensing_curriculum_uploads.sql) only if you use that licensing flow.
 

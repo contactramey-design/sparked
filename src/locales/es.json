@@ -128,6 +128,8 @@
     "openTeacherDashboard": "Abrir panel del profesor",
     "weeklyTrackTitle": "Ruta semanal",
     "weeklyTrackDesc": "Tu profe generó unidades para esta semana. Abre la ruta para empezar.",
+    "weeklyTrackSupplementNote": "Estas unidades vienen del PDF de tu docente. Las rutas por materia de Sparki (matemáticas, inglés, ciencias, historia) son práctica extra que puedes abrir cuando quieras: no sustituyen el material asignado esta semana.",
+    "weeklyVsSubjectsNote": "La ruta semanal sigue el PDF del docente. Las materias son práctica opcional de Sparki para la misma franja de edad.",
     "openWeeklyTrack": "Abrir la ruta semanal",
     "weeklyTrackUnitsTitle": "Unidades",
     "weeklyTrackBackToSchools": "Volver a Escuelas",
@@ -145,7 +147,7 @@
     "complianceDesc": "Resumen de COPPA / FERPA / CIPA y notas para escuelas.",
     "openCompliance": "Abrir página de cumplimiento",
     "subjectHubTitle": "Rutas por materia",
-    "subjectHubDesc": "Matemáticas, inglés, ciencias e historia — lecciones cortas para tu banda de edad (aprender, quiz, tip del mundo real). Añade o edita en `src/school/subjects/curriculum/`.",
+    "subjectHubDesc": "Matemáticas, inglés, ciencias e historia — lecciones cortas de Sparki para tu franja de edad. Complementan el PDF semanal del docente; no lo reemplazan.",
     "openSubjectHub": "Ver rutas por materia",
     "openSubjectTrack": "Abrir {subject}"
   },
@@ -543,6 +545,9 @@
     "modeStory": "Modo historia — también historia de SpArki",
     "gradeOptional": "Grado (opcional)",
     "gradePlaceholder": "Elegir…",
+    "gradeBandTots": "Sparki Tots — preescolar / 3–5 años",
+    "gradeBandKids": "Sparki Kids — 1.º–2.º grado / 6–8 años",
+    "gradeBandCrew": "Sparki Crew — 3.º–5.º grado / 9–11 años",
     "permissionCheckbox": "Tengo permiso para subir esta tarea y no hay caras ni datos privados que deba ocultar.",
     "generate": "Generar",
     "phaseAnalyze": "Analizando la tarea…",
@@ -964,7 +969,15 @@
     "errorPdfType": "Sube un archivo PDF.",
     "errorMissingSession": "Falta el token de sesion del docente.",
     "errorGenerate": "No se pudieron generar las unidades semanales.",
-    "errorUnexpectedResponse": "Respuesta inesperada del servidor."
+    "errorUnexpectedResponse": "Respuesta inesperada del servidor.",
+    "subjectTagsTitle": "Etiquetas de materias (práctica Sparki)",
+    "subjectTagsHelp": "Elige qué materias Sparki aparecen en “Práctica Sparki sugerida” en cada unidad del estudiante. Desmarca todas y guarda para volver a las sugerencias automáticas.",
+    "subjectTagsLoading": "Cargando unidades…",
+    "subjectTagsSave": "Guardar materias",
+    "subjectTagsSaving": "Guardando…",
+    "subjectTagsSaved": "Guardado.",
+    "subjectTagsLoadError": "No se pudieron cargar las unidades para etiquetar.",
+    "subjectTagsSaveError": "No se pudieron guardar las materias."
   },
   "schoolGeneratedUnit": {
     "lessonQuizHomework": "Leccion + Quiz + Tarea",
@@ -986,7 +999,9 @@
     "next": "Siguiente",
     "homeActivityFallbackTitle": "Actividad en casa",
     "homeActivityFallbackDesc": "Una actividad de tarea familiar y segura.",
-    "homeworkTopic": "Tema de tarea: {topic}"
+    "homeworkTopic": "Tema de tarea: {topic}",
+    "sparkiPracticeTitle": "Práctica Sparki sugerida",
+    "sparkiPracticeDesc": "Lecciones cortas que encajan con los temas de esta unidad. Tu docente puede limitar qué materias aparecen."
   },
   "digitalFootprint": {
     "title": "Desafío de huella digital",

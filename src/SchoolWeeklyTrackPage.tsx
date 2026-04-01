@@ -1,7 +1,12 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { supabase } from './lib/supabaseClient'
-import { ensureAnonymousSchoolAuth, getSchoolSession } from '@/school/schoolSession'
+import {
+  ensureAnonymousSchoolAuth,
+  getSchoolSession,
+  setSchoolClassAgeBand,
+} from '@/school/schoolSession'
+import { isAgeBandId } from '@/ageBand'
 import { getUnitStatus } from './progress'
 import { useTranslation } from './contexts/LocaleContext'
 import { useAgeBand } from './contexts/AgeBandContext'
@@ -45,9 +50,9 @@ function progressUnitsFromRow(progress: unknown): Record<string, { mastered?: bo
 const SchoolWeeklyTrackPage: React.FC = () => {
   const navigate = useNavigate()
   const { t } = useTranslation()
-  const { ageBand } = useAgeBand()
+  const { ageBand, setAgeBand } = useAgeBand()
 
-  const { classId } = getSchoolSession()
+  const { classId, classAgeBand } = getSchoolSession()
   const [generator, setGenerator] = useState<GeneratorRow | null>(null)
   const [units, setUnits] = useState<UnitCard[]>([])
   const [unitMasteredMap, setUnitMasteredMap] = useState<Record<string, boolean>>({})
@@ -55,6 +60,32 @@ const SchoolWeeklyTrackPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null)
 
   const hasSchoolSession = useMemo(() => !!classId, [classId])
+
+  // Match app age band to class (from join) or fetch via RPC if missing (older sessions).
+  useEffect(() => {
+    if (!classId) return
+    if (classAgeBand && isAgeBandId(classAgeBand) && ageBand !== classAgeBand) {
+      setAgeBand(classAgeBand)
+      return
+    }
+    if (classAgeBand || !supabase) return
+    let cancelled = false
+    void (async () => {
+      try {
+        const { data, error } = await supabase.rpc('student_my_class_age_band')
+        if (cancelled || error || data == null || typeof data !== 'string') return
+        const b = data.trim()
+        if (!isAgeBandId(b)) return
+        setSchoolClassAgeBand(b)
+        setAgeBand(b)
+      } catch {
+        // RPC may not exist until migration is applied
+      }
+    })()
+    return () => {
+      cancelled = true
+    }
+  }, [classId, classAgeBand, ageBand, setAgeBand, supabase])
 
   useEffect(() => {
     if (!supabase) return
@@ -229,6 +260,7 @@ const SchoolWeeklyTrackPage: React.FC = () => {
           <div>
             <h2>{t('schools.weeklyTrackTitle')}</h2>
             {generator ? <p className="welcome-subtitle">{generator.weekly_track_label}</p> : <p className="welcome-subtitle muted">{t('schools.weeklyTrackWaiting')}</p>}
+            <p className="muted text-sm mt-2 max-w-prose">{t('schools.weeklyTrackSupplementNote')}</p>
           </div>
         </div>
         <Link to="/schools" className="link-back">

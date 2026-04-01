@@ -2,10 +2,17 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { supabase } from './lib/supabaseClient'
 import { ensureAnonymousSchoolAuth, getSchoolSession } from '@/school/schoolSession'
+import { isAgeBandId } from '@/ageBand'
+import {
+  mergeSuggestionsWithTeacherOverrides,
+  suggestSparkiLessonsFromGeneratedUnit,
+} from '@/school/subjects/suggestSparkiLessons'
+import { getSubjectLessonById } from '@/school/subjects/registry'
+import { isSchoolSubjectId, lessonLocale, type SchoolSubjectId } from '@/school/subjects/types'
 import { curriculum, type QuizQuestion, type UnitConfig } from './curriculum'
 import GameQuiz from './GameQuiz'
 import { updateUnitAfterQuiz, getUnitStatus } from './progress'
-import { useTranslation } from './contexts/LocaleContext'
+import { useLocale, useTranslation } from './contexts/LocaleContext'
 import { useAgeBand } from './contexts/AgeBandContext'
 import ListenButton from './components/ListenButton'
 import SparkiAvatar from './components/SparkiAvatar'
@@ -34,12 +41,18 @@ type GeneratedUnitJson = {
   summary: string
   estMinutes?: number
   ageGroup?: string
+  /** Class / generator band (tots | kids | crew) when present. */
+  ageBand?: string
   isFree?: boolean
   sparklesReward?: number
   contentBlocks: string[]
   quizQuestions: QuizQuestion[]
   homeworkAdventure: GeneratedHomeworkAdventure
   homeworkAdventureVideoUrl?: string
+  /** Teacher-selected Sparki subject tracks to surface in auto suggestions. */
+  sparkiSubjectTags?: string[]
+  /** Optional per-subject pinned lesson ids (teacher override). */
+  sparkiPinnedLessons?: Record<string, string>
 }
 
 type GeneratorUnitRow = {
@@ -66,6 +79,23 @@ function parseContentBlocks(blocks: string[]) {
     return { label, text }
   })
   return { story, rules }
+}
+
+function readSparkiPinned(j: GeneratedUnitJson): Partial<Record<SchoolSubjectId, string>> | undefined {
+  const raw = j.sparkiPinnedLessons
+  if (!raw || typeof raw !== 'object') return undefined
+  const out: Partial<Record<SchoolSubjectId, string>> = {}
+  for (const [k, v] of Object.entries(raw)) {
+    if (isSchoolSubjectId(k) && typeof v === 'string' && v.trim()) out[k] = v.trim()
+  }
+  return Object.keys(out).length ? out : undefined
+}
+
+function readSparkiTeacherTags(j: GeneratedUnitJson): SchoolSubjectId[] | undefined {
+  const raw = j.sparkiSubjectTags
+  if (!Array.isArray(raw)) return undefined
+  const tags = raw.filter((x): x is SchoolSubjectId => typeof x === 'string' && isSchoolSubjectId(x))
+  return tags.length ? tags : undefined
 }
 
 function makeUnitConfigFromGenerated(
@@ -100,6 +130,7 @@ const SchoolGeneratedUnitPage: React.FC = () => {
   const unitIdSafe = (unitId ?? '').toString()
 
   const { t } = useTranslation()
+  const { locale } = useLocale()
   const { ageBand, recommendedAgesShort } = useAgeBand()
   const navigate = useNavigate()
 
@@ -231,6 +262,31 @@ const SchoolGeneratedUnitPage: React.FC = () => {
     if (!unitJson?.contentBlocks) return { story: null as string | null, rules: [] as Array<{ label: string | null; text: string }> }
     return parseContentBlocks(unitJson.contentBlocks)
   }, [unitJson])
+
+  const sparkiPracticeLinks = useMemo(() => {
+    if (!unitJson) return []
+    const band = unitJson.ageBand && isAgeBandId(unitJson.ageBand) ? unitJson.ageBand : ageBand
+    const auto = suggestSparkiLessonsFromGeneratedUnit({
+      title: unitJson.title,
+      summary: unitJson.summary,
+      subject: unitJson.homeworkAdventure?.subject,
+      topic: unitJson.homeworkAdventure?.topic,
+      ageBand: band,
+    })
+    const teacherTags = readSparkiTeacherTags(unitJson)
+    const pinned = readSparkiPinned(unitJson)
+    const merged = mergeSuggestionsWithTeacherOverrides(auto, teacherTags, pinned, band)
+    const loc = locale === 'es' ? 'es' : 'en'
+    return merged.map((s) => {
+      const lesson = getSubjectLessonById(s.subjectId, s.lessonId)
+      const locContent = lesson ? lessonLocale(lesson, loc) : null
+      return {
+        href: `/schools/subjects/${s.subjectId}/${encodeURIComponent(s.lessonId)}`,
+        title: locContent?.title ?? s.lessonId,
+        subjectId: s.subjectId,
+      }
+    })
+  }, [unitJson, ageBand, locale])
 
   const unitConfig = useMemo(() => {
     if (!unitJson) return null
@@ -385,6 +441,27 @@ const SchoolGeneratedUnitPage: React.FC = () => {
                 )
               })}
             </div>
+          )}
+
+          {sparkiPracticeLinks.length > 0 && (
+            <Card className="border-2 border-violet-200 bg-violet-50/50 shadow-sm rounded-2xl">
+              <CardHeader>
+                <CardTitle className="text-lg md:text-xl">{t('schoolGeneratedUnit.sparkiPracticeTitle')}</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-slate-700 mb-4">{t('schoolGeneratedUnit.sparkiPracticeDesc')}</p>
+                <ul className="space-y-2">
+                  {sparkiPracticeLinks.map((item) => (
+                    <li key={`${item.subjectId}:${item.href}`}>
+                      <Link to={item.href} className="text-violet-800 font-medium underline-offset-2 hover:underline">
+                        {item.title}
+                      </Link>
+                      <span className="text-slate-500 text-sm"> · {t(`schoolSubjects.tracks.${item.subjectId}.cardTitle`)}</span>
+                    </li>
+                  ))}
+                </ul>
+              </CardContent>
+            </Card>
           )}
 
           {!materialFinished && (

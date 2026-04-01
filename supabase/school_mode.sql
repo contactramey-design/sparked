@@ -92,7 +92,7 @@ create or replace function public.student_join_class(
   p_class_code text,
   p_student_code text
 )
-returns uuid
+returns jsonb
 language plpgsql
 security definer
 set search_path = public
@@ -101,6 +101,7 @@ declare
   v_class_id uuid;
   v_code text;
   v_student_code text;
+  v_age text;
 begin
   v_code := btrim(p_class_code);
   v_student_code := btrim(p_student_code);
@@ -112,13 +113,18 @@ begin
     raise exception 'STUDENT_CODE_REQUIRED';
   end if;
 
-  select c.id into v_class_id
+  select c.id, lower(coalesce(c.age_band::text, 'kids'))
+  into v_class_id, v_age
   from public.school_classes c
   where c.class_code = v_code
   limit 1;
 
   if v_class_id is null then
     raise exception 'CLASS_CODE_NOT_FOUND';
+  end if;
+
+  if v_age not in ('tots', 'kids', 'crew') then
+    v_age := 'kids';
   end if;
 
   insert into public.school_student_progress (class_id, student_uid, student_code, progress)
@@ -128,7 +134,10 @@ begin
     student_code = excluded.student_code,
     updated_at = now();
 
-  return v_class_id;
+  return jsonb_build_object(
+    'class_id', v_class_id::text,
+    'age_band', v_age
+  );
 end;
 $$;
 

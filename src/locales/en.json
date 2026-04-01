@@ -128,6 +128,8 @@
     "openTeacherDashboard": "Open teacher dashboard",
     "weeklyTrackTitle": "Weekly Track",
     "weeklyTrackDesc": "Your teacher generated units for this week. Open the track to start.",
+    "weeklyTrackSupplementNote": "These units come from your teacher’s PDF. Sparki subject tracks (math, English, science, history) are extra practice you can open anytime—they are not a replacement for this week’s assigned material.",
+    "weeklyVsSubjectsNote": "Weekly units follow your teacher’s PDF. Subject tracks are optional Sparki practice for the same age band.",
     "openWeeklyTrack": "Open weekly track",
     "weeklyTrackUnitsTitle": "Units",
     "weeklyTrackBackToSchools": "Back to Schools",
@@ -145,7 +147,7 @@
     "complianceDesc": "COPPA / FERPA / CIPA overview and school-use notes.",
     "openCompliance": "Open compliance page",
     "subjectHubTitle": "Subject tracks",
-    "subjectHubDesc": "Math, English, science, and history — short lessons for your age band (learn, quiz, real-world tip). Add or edit content in `src/school/subjects/curriculum/`.",
+    "subjectHubDesc": "Math, English, science, and history — short Sparki lessons matched to your age band. They supplement your teacher’s weekly PDF units, not replace them.",
     "openSubjectHub": "Browse subject tracks",
     "openSubjectTrack": "Open {subject}"
   },
@@ -543,6 +545,9 @@
     "modeStory": "Story mode — SpArki story too",
     "gradeOptional": "Grade (optional)",
     "gradePlaceholder": "Select…",
+    "gradeBandTots": "Sparki Tots — Pre-K / ages 3–5",
+    "gradeBandKids": "Sparki Kids — grades 1–2 / ages 6–8",
+    "gradeBandCrew": "Sparki Crew — grades 3–5 / ages 9–11",
     "permissionCheckbox": "I have permission to upload this worksheet and there are no faces or private details I should hide.",
     "generate": "Generate",
     "phaseAnalyze": "Analyzing worksheet…",
@@ -964,7 +969,15 @@
     "errorPdfType": "Please upload a PDF file.",
     "errorMissingSession": "Missing teacher session token.",
     "errorGenerate": "Failed to generate weekly units.",
-    "errorUnexpectedResponse": "Unexpected server response."
+    "errorUnexpectedResponse": "Unexpected server response.",
+    "subjectTagsTitle": "Subject tags (Sparki practice)",
+    "subjectTagsHelp": "Choose which Sparki subject tracks appear in “Suggested Sparki practice” on each student unit page. Uncheck all and save to use Sparki’s automatic suggestions again.",
+    "subjectTagsLoading": "Loading units…",
+    "subjectTagsSave": "Save subject tags",
+    "subjectTagsSaving": "Saving…",
+    "subjectTagsSaved": "Saved.",
+    "subjectTagsLoadError": "Could not load units for tagging.",
+    "subjectTagsSaveError": "Could not save subject tags."
   },
   "schoolGeneratedUnit": {
     "lessonQuizHomework": "Lesson + Quiz + Homework",
@@ -986,7 +999,9 @@
     "next": "Next",
     "homeActivityFallbackTitle": "Home activity",
     "homeActivityFallbackDesc": "A family-friendly homework activity.",
-    "homeworkTopic": "Homework topic: {topic}"
+    "homeworkTopic": "Homework topic: {topic}",
+    "sparkiPracticeTitle": "Suggested Sparki practice",
+    "sparkiPracticeDesc": "Short subject lessons that match this unit’s themes. Your teacher may limit which subjects appear."
   },
   "digitalFootprint": {
     "title": "Digital Footprint Challenge",

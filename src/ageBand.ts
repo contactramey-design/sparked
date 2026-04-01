@@ -14,8 +14,23 @@ export function isAgeBandId(s: string | null | undefined): s is AgeBandId {
   return s === 'tots' || s === 'kids' || s === 'crew'
 }
 
-/** Multipart `age` field for /api/process-homework (ageHint). */
-export function homeworkAgeHintForBand(band: AgeBandId): string {
+/**
+ * Free-text grade hint for homework analyze API (`gradeBand` field).
+ * Keep wording aligned with Sparki age bands (tots / kids / crew).
+ */
+export function homeworkAgeHintForBand(band: AgeBandId, locale: 'en' | 'es' = 'en'): string {
+  if (locale === 'es') {
+    switch (band) {
+      case 'tots':
+        return 'Preescolar / edades 3–5'
+      case 'kids':
+        return '1.º–2.º grado / edades 6–8'
+      case 'crew':
+        return '3.º–5.º grado / edades 9–11'
+      default:
+        return homeworkAgeHintForBand('kids', 'es')
+    }
+  }
   switch (band) {
     case 'tots':
       return 'Pre-K / ages 3–5'
@@ -24,7 +39,7 @@ export function homeworkAgeHintForBand(band: AgeBandId): string {
     case 'crew':
       return 'Grades 3–5 / ages 9–11'
     default:
-      return homeworkAgeHintForBand('kids')
+      return homeworkAgeHintForBand('kids', 'en')
   }
 }
 

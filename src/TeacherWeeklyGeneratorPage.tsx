@@ -6,6 +6,7 @@ import { useAuth } from './AuthContext'
 import { useTranslation, useLocale } from './contexts/LocaleContext'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
+import TeacherWeeklyGeneratorSubjectTags from '@/components/TeacherWeeklyGeneratorSubjectTags'
 import type { AgeBandId } from './ageBand'
 
 type SchoolClassRow = {
@@ -25,6 +26,7 @@ type GeneratorUnitSummary = {
 type GeneratorResult = {
   generatorId: string
   weeklyTrackLabel: string
+  classAgeBand?: AgeBandId
   units: GeneratorUnitSummary[]
 }
 
@@ -79,6 +81,11 @@ const TeacherWeeklyGeneratorPage: React.FC = () => {
     () => classes.find((c) => c.id === selectedClassId) ?? null,
     [classes, selectedClassId],
   )
+
+  const selectedClassAgeBand: AgeBandId = useMemo(() => {
+    const b = selectedClass?.age_band
+    return b === 'tots' || b === 'kids' || b === 'crew' ? b : 'kids'
+  }, [selectedClass?.age_band])
 
   const submit = async () => {
     if (!supabase || !user) return
@@ -297,6 +304,16 @@ const TeacherWeeklyGeneratorPage: React.FC = () => {
                 <div className="muted">
                   {t('teacherGenerator.studentsAccessNote')}
                 </div>
+
+                <TeacherWeeklyGeneratorSubjectTags
+                  generatorId={result.generatorId}
+                  classAgeBand={
+                    result.classAgeBand === 'tots' || result.classAgeBand === 'kids' || result.classAgeBand === 'crew'
+                      ? result.classAgeBand
+                      : selectedClassAgeBand
+                  }
+                  unitSummaries={result.units}
+                />
               </div>
             </CardContent>
           </Card>

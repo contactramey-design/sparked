@@ -1,6 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from '@/contexts/LocaleContext'
+import { useAgeBand } from '@/contexts/AgeBandContext'
+import type { AgeBandId } from '@/ageBand'
+import { homeworkAgeHintForBand, isAgeBandId } from '@/ageBand'
+import { getSchoolSession } from '@/school/schoolSession'
 import { getSafetyPassCheckoutSessionId } from '@/progress'
 import { analyzeWorksheet, explainWorksheet, storyFromLesson } from '../api/homeworkApi'
 import { useHomeworkUpload } from '../hooks/useHomeworkUpload'
@@ -28,16 +32,27 @@ function fileToDataUrl(file: File, maxBytes = 350_000): Promise<string | undefin
 export default function HomeworkUpload() {
   const { t } = useTranslation()
   const navigate = useNavigate()
+  const { ageBand } = useAgeBand()
   const { file, previewUrl, error, setError, onFileChange, reset } = useHomeworkUpload()
 
   const [genLanguage, setGenLanguage] = useState<HomeworkLanguage>('en')
   const [mode, setMode] = useState<HomeworkMode>('explain')
-  const [gradeBand, setGradeBand] = useState('')
+  /** Sparki band sent to the API as a localized grade hint; empty = omit hint. */
+  const [gradeBandId, setGradeBandId] = useState<'' | AgeBandId>('')
+  const gradeBandSynced = useRef(false)
   const [subjectHint, setSubjectHint] = useState('')
   const [allowed, setAllowed] = useState(false)
   const [loading, setLoading] = useState(false)
   const [phase, setPhase] = useState('')
   const [homeworkAllowUnauth, setHomeworkAllowUnauth] = useState(false)
+
+  useEffect(() => {
+    if (gradeBandSynced.current) return
+    gradeBandSynced.current = true
+    const session = getSchoolSession()
+    const band = isAgeBandId(session.classAgeBand) ? session.classAgeBand : ageBand
+    setGradeBandId(band)
+  }, [ageBand])
 
   useEffect(() => {
     let cancelled = false
@@ -76,9 +91,13 @@ export default function HomeworkUpload() {
     setLoading(true)
     try {
       setPhase(t('homeworkFeature.phaseAnalyze'))
+      const gradeBand =
+        gradeBandId && isAgeBandId(gradeBandId)
+          ? homeworkAgeHintForBand(gradeBandId, genLanguage === 'es' ? 'es' : 'en')
+          : undefined
       const analysis = await analyzeWorksheet(file, {
         language: genLanguage,
-        gradeBand: gradeBand.trim() || undefined,
+        gradeBand,
         subjectHint: subjectHint.trim() || undefined,
         checkoutSessionId,
       })
@@ -98,7 +117,7 @@ export default function HomeworkUpload() {
         createdAt: Date.now(),
         mode,
         language: genLanguage,
-        gradeBand: gradeBand.trim() || undefined,
+        gradeBand,
         analysis,
         explanation,
         story,
@@ -148,13 +167,16 @@ export default function HomeworkUpload() {
         <span className="font-semibold text-blue-900">{t('homeworkFeature.gradeOptional')}</span>
         <select
           className="mt-1 w-full max-w-md rounded-lg border border-blue-200 px-3 py-2"
-          value={gradeBand}
-          onChange={(e) => setGradeBand(e.target.value)}
+          value={gradeBandId}
+          onChange={(e) => {
+            const v = e.target.value
+            setGradeBandId(v === '' ? '' : (v as AgeBandId))
+          }}
         >
           <option value="">{t('homeworkFeature.gradePlaceholder')}</option>
-          <option value="K–2">K–2</option>
-          <option value="3–5">3–5</option>
-          <option value="6–8">6–8</option>
+          <option value="tots">{t('homeworkFeature.gradeBandTots')}</option>
+          <option value="kids">{t('homeworkFeature.gradeBandKids')}</option>
+          <option value="crew">{t('homeworkFeature.gradeBandCrew')}</option>
         </select>
       </label>
 

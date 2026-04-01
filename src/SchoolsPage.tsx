@@ -18,6 +18,7 @@ const SchoolsPage: React.FC = () => {
       <header className="page-header">
         <h2>{t('schools.title')}</h2>
         <p className="muted">{t('schools.subtitle')}</p>
+        <p className="muted text-sm mt-2 max-w-prose">{t('schools.weeklyVsSubjectsNote')}</p>
       </header>
 
       <div className="stack-lg">

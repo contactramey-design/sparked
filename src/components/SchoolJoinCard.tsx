@@ -4,7 +4,13 @@ import { supabase } from '@/lib/supabaseClient'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { useTranslation } from '@/contexts/LocaleContext'
-import { ensureAnonymousSchoolAuth, getSchoolSession, setSchoolSession } from '@/school/schoolSession'
+import { useAgeBand } from '@/contexts/AgeBandContext'
+import {
+  ensureAnonymousSchoolAuth,
+  getSchoolSession,
+  parseStudentJoinRpcResult,
+  setSchoolSession,
+} from '@/school/schoolSession'
 
 function makeStudentCode(): string {
   const n = Math.floor(10 + Math.random() * 90)
@@ -13,6 +19,7 @@ function makeStudentCode(): string {
 
 export default function SchoolJoinCard() {
   const { t } = useTranslation()
+  const { setAgeBand } = useAgeBand()
   const existing = useMemo(() => getSchoolSession(), [])
   const navigate = useNavigate()
   const [classCode, setClassCode] = useState('')
@@ -117,10 +124,11 @@ export default function SchoolJoinCard() {
                   throw rpcError
                 }
 
-                const classId = data as string | null | undefined
-                if (!classId) throw new Error(t('schoolJoin.codeNotFound'))
+                const parsed = parseStudentJoinRpcResult(data)
+                if (!parsed) throw new Error(t('schoolJoin.codeNotFound'))
 
-                setSchoolSession(classId, studentCode.trim())
+                setSchoolSession(parsed.classId, studentCode.trim(), { classAgeBand: parsed.ageBand })
+                setAgeBand(parsed.ageBand)
                 setJoined(true)
                 navigate('/schools/weekly-track')
               } catch (e: unknown) {
