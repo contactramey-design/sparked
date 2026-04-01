@@ -5,12 +5,16 @@
 import { parseMultipart, requireHomeworkEntitlement } from './lib/multipart.js'
 import { openaiChatJson } from './lib/openai.js'
 import { analyzeSystemPrompt, analyzeUserContent } from './lib/prompts.js'
+import { assertHomeworkContract, homeworkAnalysisOutputSchema } from './lib/homeworkSchemas.js'
 
 export const config = {
   api: { bodyParser: false },
 }
 
 function safeError(e) {
+  if (e && e.code === 'HOMEWORK_CONTRACT' && e.statusCode === 502) {
+    return 'The AI returned something we could not use. Try another photo or again in a moment.'
+  }
   const message = e.message || 'Something went wrong.'
   if (message.includes('OPENAI_API_KEY')) return 'Service not configured. Please try again later.'
   if (message.includes('429') || message.includes('Rate limit')) return 'Too many requests. Please try again in a moment.'
@@ -103,13 +107,20 @@ export default async function handler(req, res) {
     })
 
     const analysis = normalizeAnalysis(parsed, language)
-    if (!analysis.subject && !analysis.topic && !analysis.extractedText) {
-      throw new Error('Invalid analysis shape from model')
-    }
+    const validated = assertHomeworkContract(
+      homeworkAnalysisOutputSchema,
+      analysis,
+      'model',
+      'analyze',
+    )
 
-    res.status(200).json(analysis)
+    res.status(200).json(validated)
   } catch (e) {
     console.error('[homework/analyze]', e.message || e)
+    if (e && e.code === 'HOMEWORK_CONTRACT' && e.statusCode) {
+      res.status(e.statusCode).json({ error: safeError(e) })
+      return
+    }
     res.status(500).json({ error: safeError(e) })
   }
 }

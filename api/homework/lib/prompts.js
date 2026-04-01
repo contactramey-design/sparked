@@ -102,14 +102,14 @@ export function storySystemPrompt(language, squadNames) {
 ${CHILD_SAFETY_RULES}
 ${squad}
 
-Genera una historia corta de 3 a 5 escenas que enseñe el mismo concepto que la tarea.
+Genera una historia corta de 4 a 6 escenas que enseñe el mismo concepto que la tarea.
 Responde SOLO JSON: title (string), scenes (array de objetos con sceneNumber número, summary string, narration string, teachingPoint string), recap (string, cierre que refuerza la idea).`
   }
   return `You are SpArki, a teddy-bear tutor who teaches through short, warm stories.
 ${CHILD_SAFETY_RULES}
 ${squad}
 
-Create a short story of 3 to 5 scenes that teaches the same concept as the homework.
+Create a short story of 4 to 6 scenes that teaches the same concept as the homework.
 Respond ONLY JSON: title (string), scenes (array of objects with sceneNumber number, summary string, narration string, teachingPoint string), recap (string).`
 }
 

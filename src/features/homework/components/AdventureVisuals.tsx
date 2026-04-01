@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslation } from '@/contexts/LocaleContext'
 import type { HomeworkLanguage, HomeworkStory } from '../types/homework'
 import { requestHomeworkVisuals } from '../lib/visualGenerator'
@@ -30,6 +30,12 @@ export function AdventureVisuals({
   const { t } = useTranslation()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const hasStrip = Boolean(storyVisuals && storyVisuals.length > 0)
+  const [detailsOpen, setDetailsOpen] = useState(hasStrip)
+
+  useEffect(() => {
+    if (hasStrip) setDetailsOpen(true)
+  }, [hasStrip])
 
   const onPresetChange = (next: AvatarPreset) => {
     onUpdateJob({ avatarPresetId: next.id })
@@ -54,11 +60,18 @@ export function AdventureVisuals({
   }
 
   return (
-    <section className="card homework-adventure-visuals mt-6" aria-labelledby="homework-visuals-heading">
-      <h3 id="homework-visuals-heading" className="text-lg font-bold text-blue-900 mb-2">
-        {t('homeworkFeature.visualsHeading')}
-      </h3>
-      <p className="book-blurb text-sm mb-4">{t('homeworkFeature.visualsBlurb')}</p>
+    <details
+      className="card homework-adventure-visuals homework-visuals-extra mt-6"
+      open={detailsOpen}
+      onToggle={(e) => setDetailsOpen((e.target as HTMLDetailsElement).open)}
+    >
+      <summary className="cursor-pointer text-lg font-bold text-blue-900 list-none flex items-center gap-2">
+        <span aria-hidden className="homework-visuals-chevron select-none">
+          ▸
+        </span>
+        <span id="homework-visuals-heading">{t('homeworkFeature.visualsExtraSummary')}</span>
+      </summary>
+      <p className="book-blurb text-sm mb-4 mt-3">{t('homeworkFeature.visualsBlurb')}</p>
 
       <PresetAvatarPicker valueId={avatarPresetId} onChange={onPresetChange} disabled={loading} />
 
@@ -99,6 +112,6 @@ export function AdventureVisuals({
           </div>
         </div>
       ) : null}
-    </section>
+    </details>
   )
 }

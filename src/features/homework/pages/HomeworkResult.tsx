@@ -12,12 +12,13 @@ import { PracticeCard } from '../components/PracticeCard'
 import { StoryCard } from '../components/StoryCard'
 import { GenerateButton } from '../components/GenerateButton'
 import { AdventureVisuals } from '../components/AdventureVisuals'
+import { HomeworkQualityPanel } from '../components/HomeworkQualityPanel'
 
 export default function HomeworkResult() {
   const { jobId } = useParams<{ jobId: string }>()
   const { t } = useTranslation()
   const [job, setJob] = useState<HomeworkJob | null>(null)
-  const [loading, setLoading] = useState<'explain' | 'story' | null>(null)
+  const [loading, setLoading] = useState<'explain' | 'story' | 'fix' | null>(null)
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
@@ -42,6 +43,38 @@ export default function HomeworkResult() {
     try {
       const explanation = await explainWorksheet(job.analysis, session)
       persist({ ...job, explanation })
+    } catch (e) {
+      setError(e instanceof Error ? e.message : t('homeworkPage.errorGeneric'))
+    } finally {
+      setLoading(null)
+    }
+  }
+
+  const applyTopicCorrection = async ({ subject, topic }: { subject: string; topic: string }) => {
+    if (!job) return
+    setError(null)
+    setLoading('fix')
+    try {
+      const nextAnalysis = {
+        ...job.analysis,
+        subject: subject.trim() || job.analysis.subject,
+        topic: topic.trim() || job.analysis.topic,
+        needsReview: false,
+      }
+      setLoading('explain')
+      const explanation = await explainWorksheet(nextAnalysis, session)
+      let nextStory: typeof job.story = job.mode === 'story' ? job.story : undefined
+      if (job.mode === 'story') {
+        setLoading('story')
+        nextStory = await storyFromLesson(nextAnalysis, explanation, session)
+      }
+      persist({
+        ...job,
+        analysis: nextAnalysis,
+        explanation,
+        story: nextStory,
+        storyVisuals: undefined,
+      })
     } catch (e) {
       setError(e instanceof Error ? e.message : t('homeworkPage.errorGeneric'))
     } finally {
@@ -89,6 +122,13 @@ export default function HomeworkResult() {
           <HomeworkPreview src={job.previewDataUrl} alt={t('homeworkPage.previewAlt')} />
         </div>
       ) : null}
+
+      <HomeworkQualityPanel
+        analysis={job.analysis}
+        allowFix={!job.isDemo}
+        busy={loading === 'fix' || loading === 'explain' || loading === 'story'}
+        onApplyCorrection={applyTopicCorrection}
+      />
 
       <div>
         <h3 className="text-lg font-bold text-blue-900 mb-2">{t('homeworkFeature.summaryHeading')}</h3>
@@ -144,11 +184,19 @@ export default function HomeworkResult() {
 
       {!job.isDemo ? (
         <div className="flex flex-wrap gap-3">
-          <GenerateButton onClick={regenerateExplain} loading={loading === 'explain'}>
+          <GenerateButton
+            onClick={regenerateExplain}
+            loading={loading === 'explain'}
+            disabled={loading === 'story' || loading === 'fix'}
+          >
             {t('homeworkFeature.regenerateExplain')}
           </GenerateButton>
           {job.explanation ? (
-            <GenerateButton onClick={regenerateStory} loading={loading === 'story'}>
+            <GenerateButton
+              onClick={regenerateStory}
+              loading={loading === 'story'}
+              disabled={loading === 'explain' || loading === 'fix'}
+            >
               {t('homeworkFeature.regenerateStory')}
             </GenerateButton>
           ) : null}

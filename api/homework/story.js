@@ -9,8 +9,20 @@ import {
   storySystemPrompt,
   storyUserPayload,
 } from './lib/prompts.js'
+import {
+  assertHomeworkContract,
+  homeworkAnalysisInputSchema,
+  homeworkExplanationInputSchema,
+  homeworkStorySchema,
+} from './lib/homeworkSchemas.js'
 
 function safeError(e) {
+  if (e && e.code === 'HOMEWORK_CONTRACT' && e.statusCode === 502) {
+    return 'The AI returned something we could not use. Try again.'
+  }
+  if (e && e.code === 'HOMEWORK_CONTRACT' && e.statusCode === 400) {
+    return 'Explanation or summary data is incomplete. Regenerate explanation first.'
+  }
   const message = e.message || 'Something went wrong.'
   if (message.includes('OPENAI_API_KEY')) return 'Service not configured. Please try again later.'
   if (message.includes('429') || message.includes('Rate limit')) return 'Too many requests. Please try again in a moment.'
@@ -56,15 +68,28 @@ export default async function handler(req, res) {
       return
     }
 
+    const analysisValid = assertHomeworkContract(
+      homeworkAnalysisInputSchema,
+      analysis,
+      'client',
+      'story_analysis',
+    )
+    const explanationValid = assertHomeworkContract(
+      homeworkExplanationInputSchema,
+      explanation,
+      'client',
+      'story_explanation',
+    )
+
     const ent = await requireHomeworkEntitlement(checkoutSessionId)
     if (!ent.ok) {
       res.status(ent.status).json({ error: ent.message })
       return
     }
 
-    const language = analysis.language === 'es' ? 'es' : 'en'
+    const language = analysisValid.language === 'es' ? 'es' : 'en'
     const squadNames = await loadSquadNames()
-    const userText = storyUserPayload(analysis, explanation)
+    const userText = storyUserPayload(analysisValid, explanationValid)
 
     const parsed = await openaiChatJson({
       messages: [
@@ -74,14 +99,19 @@ export default async function handler(req, res) {
       max_tokens: 2500,
     })
 
-    const story = normalizeStory(parsed)
-    if (story.scenes.length === 0) {
+    const storyRaw = normalizeStory(parsed)
+    if (storyRaw.scenes.length === 0) {
       throw new Error('Story had no valid scenes')
     }
+    const story = assertHomeworkContract(homeworkStorySchema, storyRaw, 'model', 'story')
 
     res.status(200).json(story)
   } catch (e) {
     console.error('[homework/story]', e.message || e)
+    if (e && e.code === 'HOMEWORK_CONTRACT' && e.statusCode) {
+      res.status(e.statusCode).json({ error: safeError(e) })
+      return
+    }
     res.status(500).json({ error: safeError(e) })
   }
 }

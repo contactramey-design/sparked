@@ -5,8 +5,19 @@
 import { requireHomeworkEntitlement } from './lib/multipart.js'
 import { openaiChatJson } from './lib/openai.js'
 import { explainSystemPrompt, explainUserPayload } from './lib/prompts.js'
+import {
+  assertHomeworkContract,
+  homeworkAnalysisInputSchema,
+  homeworkExplanationSchema,
+} from './lib/homeworkSchemas.js'
 
 function safeError(e) {
+  if (e && e.code === 'HOMEWORK_CONTRACT' && e.statusCode === 502) {
+    return 'The AI returned something we could not use. Try again.'
+  }
+  if (e && e.code === 'HOMEWORK_CONTRACT' && e.statusCode === 400) {
+    return 'That worksheet summary is incomplete or out of date. Run analyze again or fix the fields.'
+  }
   const message = e.message || 'Something went wrong.'
   if (message.includes('OPENAI_API_KEY')) return 'Service not configured. Please try again later.'
   if (message.includes('429') || message.includes('Rate limit')) return 'Too many requests. Please try again in a moment.'
@@ -42,15 +53,22 @@ export default async function handler(req, res) {
       return
     }
 
+    const analysisValid = assertHomeworkContract(
+      homeworkAnalysisInputSchema,
+      analysis,
+      'client',
+      'explain_input',
+    )
+
     const ent = await requireHomeworkEntitlement(checkoutSessionId)
     if (!ent.ok) {
       res.status(ent.status).json({ error: ent.message })
       return
     }
 
-    const language = analysis.language === 'es' ? 'es' : 'en'
+    const language = analysisValid.language === 'es' ? 'es' : 'en'
     const userText = explainUserPayload({
-      ...analysis,
+      ...analysisValid,
       language,
     })
 
@@ -62,10 +80,21 @@ export default async function handler(req, res) {
       max_tokens: 2000,
     })
 
-    const explanation = normalizeExplanation(parsed)
+    const explanationRaw = normalizeExplanation(parsed)
+    const explanation = assertHomeworkContract(
+      homeworkExplanationSchema,
+      explanationRaw,
+      'model',
+      'explain',
+    )
+
     res.status(200).json(explanation)
   } catch (e) {
     console.error('[homework/explain]', e.message || e)
+    if (e && e.code === 'HOMEWORK_CONTRACT' && e.statusCode) {
+      res.status(e.statusCode).json({ error: safeError(e) })
+      return
+    }
     res.status(500).json({ error: safeError(e) })
   }
 }

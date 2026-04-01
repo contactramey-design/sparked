@@ -508,6 +508,7 @@
     "newUpload": "Upload another",
     "backHub": "Homework home",
     "visualsHeading": "Story scene art",
+    "visualsExtraSummary": "Extra: picture the story scenes (optional)",
     "visualsBlurb": "Optional: create Pixar-style pictures for each story scene. A grown-up can add FAL_KEY on the server to turn this on. Images are not stored on our servers.",
     "visualsCta": "Illustrate my story",
     "visualsGenerating": "Creating scene art…",
@@ -518,7 +519,18 @@
     "avatarPresetPonytail": "Ponytail & teal",
     "avatarPresetShortBlonde": "Blonde & green",
     "avatarPresetPuffs": "Puffs & purple",
-    "avatarPresetCap": "Cap & orange"
+    "avatarPresetCap": "Cap & orange",
+    "qualityPanelAria": "Worksheet check from a grown-up",
+    "reviewBannerTitle": "A grown-up should double-check SpArki's read.",
+    "reviewBannerBody": "The photo might be blurry or the worksheet was hard to read. Read the summary below with your child, or fix the subject and topic and tap refresh.",
+    "lowConfidenceBanner": "SpArki is not fully sure about this worksheet. A grown-up should skim the summary and steps before your child uses them.",
+    "fixTopicShow": "Fix subject or topic",
+    "fixTopicHide": "Hide fix form",
+    "fixTopicHeading": "Correct what SpArki guessed",
+    "subjectEditLabel": "Subject",
+    "topicEditLabel": "Topic",
+    "applyTopicFix": "Save and refresh help",
+    "applyTopicFixBusy": "Refreshing…"
   },
   "login": {
     "title": "Grown-up Sign In",

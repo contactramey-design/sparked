@@ -105,3 +105,21 @@
 .homework-visuals-scroll {
   -webkit-overflow-scrolling: touch;
 }
+
+.homework-visuals-extra summary::-webkit-details-marker {
+  display: none;
+}
+
+.homework-visuals-extra summary::marker {
+  content: '';
+}
+
+.homework-visuals-extra[open] .homework-visuals-chevron {
+  transform: rotate(90deg);
+  display: inline-block;
+  transition: transform 0.15s ease;
+}
+
+.homework-visuals-extra .homework-visuals-chevron {
+  transition: transform 0.15s ease;
+}

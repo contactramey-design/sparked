@@ -508,6 +508,7 @@
     "newUpload": "Subir otra",
     "backHub": "Inicio de tareas",
     "visualsHeading": "Arte de las escenas",
+    "visualsExtraSummary": "Extra: ilustrar las escenas (opcional)",
     "visualsBlurb": "Opcional: crea imágenes estilo Pixar para cada escena. Un adulto puede añadir FAL_KEY en el servidor para activarlo. Las imágenes no se guardan en nuestros servidores.",
     "visualsCta": "Ilustrar mi historia",
     "visualsGenerating": "Creando imágenes…",
@@ -518,7 +519,18 @@
     "avatarPresetPonytail": "Coleta y turquesa",
     "avatarPresetShortBlonde": "Rubio y verde",
     "avatarPresetPuffs": "Chongos y morado",
-    "avatarPresetCap": "Gorra y naranja"
+    "avatarPresetCap": "Gorra y naranja",
+    "qualityPanelAria": "Revisión para adultos de la tarea",
+    "reviewBannerTitle": "Un adulto debería revisar lo que SpArki entendió.",
+    "reviewBannerBody": "La foto puede estar borrosa o la hoja era difícil de leer. Lean juntos el resumen de abajo, o corrijan la asignatura y el tema y toquen actualizar.",
+    "lowConfidenceBanner": "SpArki no está del todo seguro sobre esta tarea. Un adulto debería leer el resumen y los pasos antes de que el niño los use.",
+    "fixTopicShow": "Corregir asignatura o tema",
+    "fixTopicHide": "Ocultar formulario",
+    "fixTopicHeading": "Corrige lo que SpArki adivinó",
+    "subjectEditLabel": "Asignatura",
+    "topicEditLabel": "Tema",
+    "applyTopicFix": "Guardar y actualizar ayuda",
+    "applyTopicFixBusy": "Actualizando…"
   },
   "login": {
     "title": "Inicio de sesión para adultos",
