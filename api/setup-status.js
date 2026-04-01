@@ -26,7 +26,7 @@ export default async function handler(req, res) {
   res.setHeader('Cache-Control', 'no-store, max-age=0')
   res.status(200).json({
     // Bump when setup-status shape changes — if missing in production, you are NOT on this deploy.
-    schemaVersion: 5,
+    schemaVersion: 6,
     /** Vercel injects these on deploy; use to confirm Production matches your latest Git push. */
     deployment: {
       environment: process.env.VERCEL_ENV ?? null,
@@ -102,6 +102,11 @@ export default async function handler(req, res) {
       message: process.env.CRON_SECRET?.trim()
         ? 'CRON_SECRET set — scheduled cleanup calls must include Authorization: Bearer (Vercel Cron does this when the secret matches).'
         : 'Optional: set CRON_SECRET in Vercel and attach the same value to the Cron job secret so cleanup is not publicly callable.',
+    },
+    // VITE_* vars are build-time on Vercel — not visible here. See docs/DEPLOY-CHECKLIST.md (Supabase, demo video).
+    schoolFrontend: {
+      supabaseAndViteNote:
+        'Teacher dashboard / weekly track need VITE_SUPABASE_URL + VITE_SUPABASE_ANON_KEY on Vercel (Production). Redeploy after changing. Optional: VITE_SCHOOL_DEMO_VIDEO_URL.',
     },
   })
 }

@@ -119,6 +119,12 @@ const SchoolSubjectLessonPage: React.FC = () => {
     }
   }
 
+  const quizProgressPct = useMemo(() => {
+    if (questions.length === 0) return 0
+    const stepped = qIndex + (revealed ? 1 : 0)
+    return Math.min(100, Math.round((stepped / questions.length) * 100))
+  }, [qIndex, revealed, questions.length])
+
   return (
     <section className="school-subj-lesson">
       <Link to={trackPath} className="link-back">
@@ -129,11 +135,9 @@ const SchoolSubjectLessonPage: React.FC = () => {
         <SchoolAudienceToggle compact />
       </div>
 
-      <header style={{ marginTop: '0.75rem' }}>
-        <h1 className="text-xl font-semibold" style={{ color: 'var(--text-color)' }}>
-          {loc.title}
-        </h1>
-        <p className="muted text-sm" style={{ marginTop: '0.25rem' }}>
+      <header className="school-subj-lesson__header">
+        <h1 className="school-subj-lesson__title">{loc.title}</h1>
+        <p className="school-subj-lesson__meta muted text-sm">
           {t('schoolSubject.durationLine', { minutes: lesson.estMinutes })}
           {isTeacherView && lesson.standardsNote ? ` · ${lesson.standardsNote}` : ''}
         </p>
@@ -264,9 +268,7 @@ const SchoolSubjectLessonPage: React.FC = () => {
             </div>
           ) : null}
 
-          <h2 className="text-base font-semibold mb-2 mt-4" style={{ color: 'var(--text-color)' }}>
-            {t('schoolSubject.objectivesHeading')}
-          </h2>
+          <h2 className="school-subj-lesson__section-title">{t('schoolSubject.objectivesHeading')}</h2>
           <ul className="school-subj-objectives">
             {loc.objectives.map((o, i) => (
               <li key={i}>{o}</li>
@@ -306,8 +308,21 @@ const SchoolSubjectLessonPage: React.FC = () => {
       )}
 
       {step === 'quiz' && !quizFinished && currentQ && (
-        <div>
-          <p className="text-sm muted mb-2">
+        <div className="school-subj-quiz-panel">
+          <div
+            className="school-subj-quiz-progress"
+            role="progressbar"
+            aria-valuemin={0}
+            aria-valuemax={100}
+            aria-valuenow={quizProgressPct}
+            aria-label={t('schoolSubject.quizProgressAria', {
+              current: qIndex + 1,
+              total: questions.length,
+            })}
+          >
+            <div className="school-subj-quiz-progress__fill" style={{ width: `${quizProgressPct}%` }} />
+          </div>
+          <p className="school-subj-quiz-progress-label text-sm muted">
             {t('schoolSubject.questionProgress', {
               current: qIndex + 1,
               total: questions.length,
@@ -329,6 +344,7 @@ const SchoolSubjectLessonPage: React.FC = () => {
                   type="button"
                   className={cls}
                   disabled={revealed}
+                  aria-pressed={revealed ? isSel : undefined}
                   onClick={() => pickOption(idx)}
                 >
                   {opt}
@@ -389,16 +405,16 @@ const SchoolSubjectLessonPage: React.FC = () => {
       )}
 
       {step === 'quiz' && quizFinished && (
-        <div className="space-y-3">
-          <p className="font-semibold" style={{ color: 'var(--text-color)' }}>
+        <div className="school-subj-quiz-results space-y-3">
+          <p className="school-subj-quiz-results__score font-semibold">
             {t('schoolSubject.quizDone', { score: quizCorrect, total: questions.length })}
           </p>
           {quizCorrect >= questions.length ? (
-            <p>{t('schoolSubject.quizPerfect')}</p>
+            <p className="school-subj-quiz-results__perfect">{t('schoolSubject.quizPerfect')}</p>
           ) : (
-            <p className="muted">{t('schoolSubject.quizRetry')}</p>
+            <p className="school-subj-quiz-results__retry muted">{t('schoolSubject.quizRetry')}</p>
           )}
-          <div className="flex flex-wrap gap-2">
+          <div className="school-subj-quiz-results__actions flex flex-wrap gap-2">
             <Button type="button" variant="secondary" onClick={() => { resetQuiz(); setStep('quiz') }}>
               {t('schoolSubject.retryQuiz')}
             </Button>
@@ -410,10 +426,8 @@ const SchoolSubjectLessonPage: React.FC = () => {
       )}
 
       {step === 'tip' && (
-        <div>
-          <h2 className="text-base font-semibold mb-2" style={{ color: 'var(--text-color)' }}>
-            {t('schoolSubject.tipHeading')}
-          </h2>
+        <div className="school-subj-tip-panel">
+          <h2 className="school-subj-lesson__section-title">{t('schoolSubject.tipHeading')}</h2>
           <div className="school-subj-tip-box">{loc.realWorldTip}</div>
           <div className="mt-4">
             <Link to={trackPath} className="primary-button">

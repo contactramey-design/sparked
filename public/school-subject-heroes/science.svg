@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1792 640" width="1792" height="640" role="img" aria-labelledby="t">
+  <title id="t">Science subject banner</title>
+  <defs>
+    <linearGradient id="sbg" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#ecfdf5"/>
+      <stop offset="50%" stop-color="#d1fae5"/>
+      <stop offset="100%" stop-color="#6ee7b7"/>
+    </linearGradient>
+    <linearGradient id="sac" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#059669"/>
+      <stop offset="100%" stop-color="#047857"/>
+    </linearGradient>
+  </defs>
+  <rect width="1792" height="640" fill="url(#sbg)"/>
+  <circle cx="200" cy="160" r="90" fill="#a7f3d0" opacity="0.5"/>
+  <circle cx="1480" cy="400" r="140" fill="#6ee7b7" opacity="0.3"/>
+  <g transform="translate(796 160)" fill="none" stroke="url(#sac)" stroke-width="12" stroke-linecap="round">
+    <ellipse cx="100" cy="160" rx="88" ry="120"/>
+    <ellipse cx="100" cy="160" rx="40" ry="120"/>
+    <path d="M12 160h176M100 40v240"/>
+  </g>
+  <text x="896" y="560" text-anchor="middle" font-family="ui-sans-serif,system-ui,sans-serif" font-size="42" font-weight="700" fill="#065f46" letter-spacing="0.04em">SCIENCE</text>
+</svg>

@@ -120,7 +120,7 @@ export const SchoolAlignmentSubjectPage: React.FC = () => {
         <Link to="/schools/alignment" className="link-back">
           {t('schoolSubjects.alignmentBackSubjects')}
         </Link>
-        <Link to={`/schools/subjects/${subjectId}`} className="link-back" style={{ marginLeft: '0.75rem' }}>
+        <Link to={`/schools/subjects/${subjectId}`} className="link-back school-subj-alignment-nav__after">
           {t('schoolSubjects.alignmentBackTrack')}
         </Link>
         <SchoolAudienceToggle compact className="school-subj-alignment-audience" />

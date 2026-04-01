@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1792 640" width="1792" height="640" role="img" aria-labelledby="t">
+  <title id="t">English subject banner</title>
+  <defs>
+    <linearGradient id="ebg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#eff6ff"/>
+      <stop offset="50%" stop-color="#dbeafe"/>
+      <stop offset="100%" stop-color="#93c5fd"/>
+    </linearGradient>
+    <linearGradient id="eac" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#2563eb"/>
+      <stop offset="100%" stop-color="#1d4ed8"/>
+    </linearGradient>
+  </defs>
+  <rect width="1792" height="640" fill="url(#ebg)"/>
+  <ellipse cx="260" cy="420" rx="200" ry="120" fill="#bfdbfe" opacity="0.45"/>
+  <ellipse cx="1550" cy="180" rx="160" ry="100" fill="#93c5fd" opacity="0.35"/>
+  <g transform="translate(720 140)" fill="url(#eac)">
+    <path d="M96 48h256c26.5 0 48 21.5 48 48v304c0 26.5-21.5 48-48 48H96c-26.5 0-48-21.5-48-48V96c0-26.5 21.5-48 48-48z" opacity="0.15"/>
+    <path d="M128 112h192v32H128zm0 72h192v24H128zm0 64h144v24H128z"/>
+    <path d="M176 400h96v32h-96z"/>
+  </g>
+  <text x="896" y="560" text-anchor="middle" font-family="ui-sans-serif,system-ui,sans-serif" font-size="42" font-weight="700" fill="#1e3a8a" letter-spacing="0.04em">READING &amp; WRITING</text>
+</svg>

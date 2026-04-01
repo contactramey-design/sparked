@@ -190,6 +190,7 @@
     "deepDiveSub": "How this idea fits developmentally and how to stress the big idea.",
     "goToQuiz": "Go to quiz",
     "questionProgress": "Question {current} of {total}",
+    "quizProgressAria": "Quiz progress: question {current} of {total}",
     "nextQuestion": "Next question",
     "seeResults": "See results",
     "quizDone": "You got {score} out of {total} correct.",

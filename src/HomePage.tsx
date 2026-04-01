@@ -200,14 +200,16 @@ const HomePage: React.FC = () => {
           <Link to="/" className="secondary-button">
             {t('common.backToHome')}
           </Link>
-          <a
-            href={appConfig.parentResources.handbookPdfUrl}
-            target="_blank"
-            rel="noreferrer"
-            className="link-muted"
-          >
-            {t('home.parentGuide')}
-          </a>
+          {appConfig.parentResources.handbookPdfUrl ? (
+            <a
+              href={appConfig.parentResources.handbookPdfUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="link-muted"
+            >
+              {t('home.parentGuide')}
+            </a>
+          ) : null}
         </div>
         <div className="hub-parent-wrap" key={locale}>
           <ParentViewContent />
@@ -306,17 +308,21 @@ const HomePage: React.FC = () => {
         <Link to={loginPath} className="home-grownups-footer-link">
           {t('home.grownUpSignIn')}
         </Link>
-        <span className="home-grownups-footer-sep" aria-hidden>
-          {' · '}
-        </span>
-        <a
-          href={appConfig.parentResources.handbookPdfUrl}
-          target="_blank"
-          rel="noreferrer"
-          className="home-grownups-footer-link"
-        >
-          {t('home.parentGuide')}
-        </a>
+        {appConfig.parentResources.handbookPdfUrl ? (
+          <>
+            <span className="home-grownups-footer-sep" aria-hidden>
+              {' · '}
+            </span>
+            <a
+              href={appConfig.parentResources.handbookPdfUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="home-grownups-footer-link"
+            >
+              {t('home.parentGuide')}
+            </a>
+          </>
+        ) : null}
       </div>
     </section>
   )

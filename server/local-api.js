@@ -1,7 +1,7 @@
 /**
  * Local API server for testing Homework Adventure without Vercel.
  * Run with: node server/local-api.js
- * Serves /api/config, /api/process-homework, /api/generate-visuals, /api/generate-adventure-video, /api/schools/generate-weekly-units so Vite proxy can hit them.
+ * Serves /api/config, /api/setup-status, /api/tts, /api/process-homework, homework/*, generate-visuals, video, checkout, schools, etc., so Vite proxy matches Vercel.
  */
 import http from 'node:http'
 import { fileURLToPath } from 'node:url'
@@ -70,6 +70,12 @@ const server = http.createServer(async (req, res) => {
     }
     if (url === '/api/video-worker-health' && req.method === 'GET') {
       const m = await import('../api/video-worker-health.js')
+      await m.default(req, wrapped)
+      return
+    }
+    if (url === '/api/tts' && req.method === 'POST') {
+      await readJsonBody(req)
+      const m = await import('../api/tts.js')
       await m.default(req, wrapped)
       return
     }
@@ -153,7 +159,9 @@ const server = http.createServer(async (req, res) => {
 })
 
 server.listen(PORT, () => {
-  console.log(`Local API: http://localhost:${PORT} (config, setup-status, video-worker-health, process-homework, homework/*, generate-visuals, generate-adventure-video, schools-generate-weekly-units, checkout, download-ebook)`)
+  console.log(
+    `Local API: http://localhost:${PORT} (config, setup-status, video-worker-health, tts, process-homework, homework/*, generate-visuals, generate-adventure-video, schools-generate-weekly-units, checkout, download-ebook)`,
+  )
 }).on('error', (err) => {
   if (err.code === 'EADDRINUSE') {
     console.error(`Port ${PORT} is in use. Stop the other process (e.g. lsof -ti:${PORT} | xargs kill) and run npm run dev:local again.`)

@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1792 640" width="1792" height="640" role="img" aria-labelledby="t">
+  <title id="t">History subject banner</title>
+  <defs>
+    <linearGradient id="hbg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#faf5ff"/>
+      <stop offset="50%" stop-color="#f3e8ff"/>
+      <stop offset="100%" stop-color="#d8b4fe"/>
+    </linearGradient>
+    <linearGradient id="hac" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#7c3aed"/>
+      <stop offset="100%" stop-color="#5b21b6"/>
+    </linearGradient>
+  </defs>
+  <rect width="1792" height="640" fill="url(#hbg)"/>
+  <rect x="180" y="120" width="280" height="200" rx="16" fill="#e9d5ff" opacity="0.45" transform="rotate(-8 320 220)"/>
+  <rect x="1380" y="280" width="320" height="220" rx="20" fill="#ddd6fe" opacity="0.4" transform="rotate(6 1540 390)"/>
+  <g transform="translate(736 200)" fill="none" stroke="url(#hac)" stroke-width="14" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M48 280V80h256v200"/>
+    <path d="M48 200h256"/>
+    <circle cx="176" cy="140" r="36"/>
+    <path d="M80 280l48-56 56 72 72-96 80 80"/>
+  </g>
+  <text x="896" y="560" text-anchor="middle" font-family="ui-sans-serif,system-ui,sans-serif" font-size="42" font-weight="700" fill="#5b21b6" letter-spacing="0.04em">HISTORY &amp; SOCIAL STUDIES</text>
+</svg>

@@ -1,6 +1,6 @@
 /**
- * Hero art for each subject track. Drop WebP/PNG into `public/school-subject-heroes/`
- * (see that folder’s README). If the file is missing, the UI uses a colorful CSS fallback.
+ * Hero art for each subject track. Add `*.svg` or `*.webp` under `public/school-subject-heroes/`
+ * (see that folder’s README). If the file fails to load, the UI uses a colorful CSS fallback.
  *
  * When generating images, keep a consistent look: warm, Pixar-style 3D, school-safe,
  * Sparki-friendly colors — match your brand prompts.
@@ -16,19 +16,19 @@ export type SubjectTrackVisual = {
 
 export const SUBJECT_TRACK_VISUAL: Record<SchoolSubjectId, SubjectTrackVisual> = {
   math: {
-    heroImage: '/school-subject-heroes/math.webp',
+    heroImage: '/school-subject-heroes/math.svg',
     fallbackModifier: 'math',
   },
   english: {
-    heroImage: '/school-subject-heroes/english.webp',
+    heroImage: '/school-subject-heroes/english.svg',
     fallbackModifier: 'english',
   },
   science: {
-    heroImage: '/school-subject-heroes/science.webp',
+    heroImage: '/school-subject-heroes/science.svg',
     fallbackModifier: 'science',
   },
   history: {
-    heroImage: '/school-subject-heroes/history.webp',
+    heroImage: '/school-subject-heroes/history.svg',
     fallbackModifier: 'history',
   },
 }

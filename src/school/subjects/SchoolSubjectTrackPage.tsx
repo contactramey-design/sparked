@@ -20,6 +20,14 @@ const HERO_ALT_KEYS: Record<SchoolSubjectId, string> = {
   history: 'schoolSubjects.heroAlt.history',
 }
 
+/** Default track-card thumbnails when `lesson.cardImageUrl` is unset */
+const SUBJECT_CARD_THUMB: Record<SchoolSubjectId, string> = {
+  math: '/tots-video-thumbnails/found-3-numbers.png',
+  english: '/tots-video-thumbnails/found-4-letters.png',
+  science: '/tots-video-thumbnails/found-2-shapes.png',
+  history: '/weekly/season1/sparkis-two-world-bridge.png',
+}
+
 const SchoolSubjectTrackPage: React.FC = () => {
   const { subjectId: rawSubject } = useParams<{ subjectId: string }>()
   const subjectId = rawSubject as SchoolSubjectId | undefined
@@ -117,6 +125,7 @@ const SchoolSubjectTrackPage: React.FC = () => {
                 const primaryObjective = loc.objectives[0] ?? loc.summary
                 const showGame = lesson.includesGameQuiz !== false
                 const toLesson = `/schools/subjects/${subjectId}/${encodeURIComponent(lesson.id)}`
+                const cardThumb = lesson.cardImageUrl ?? SUBJECT_CARD_THUMB[subjectId]
 
                 return (
                   <li key={lesson.id}>
@@ -126,8 +135,8 @@ const SchoolSubjectTrackPage: React.FC = () => {
                           {index + 1}
                         </span>
                         <div className="school-subj-track-card__emoji" aria-hidden>
-                          {lesson.cardImageUrl ? (
-                            <img src={lesson.cardImageUrl} alt="" className="school-subj-track-card__emoji-img" />
+                          {cardThumb ? (
+                            <img src={cardThumb} alt="" className="school-subj-track-card__emoji-img" />
                           ) : (
                             <span>{lesson.cardEmoji ?? t(`schoolSubjects.tracks.${subjectId}.hubEmoji`)}</span>
                           )}

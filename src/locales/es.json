@@ -190,6 +190,7 @@
     "deepDiveSub": "Cómo encaja la idea en el desarrollo y qué idea grande recalcar.",
     "goToQuiz": "Ir al quiz",
     "questionProgress": "Pregunta {current} de {total}",
+    "quizProgressAria": "Progreso del quiz: pregunta {current} de {total}",
     "nextQuestion": "Siguiente pregunta",
     "seeResults": "Ver resultados",
     "quizDone": "Acertaste {score} de {total}.",
