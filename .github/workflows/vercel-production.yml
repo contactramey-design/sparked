@@ -1,0 +1,29 @@
+# Deploys to Vercel from GitHub's servers — no local `vercel login` required.
+# Setup (once): Repo → Settings → Secrets and variables → Actions → New repository secret:
+#   Name: VERCEL_TOKEN
+#   Value: create at https://vercel.com/account/tokens (Full Account scope is fine)
+#
+# Org/project IDs match .vercel/project.json (already in repo).
+name: Vercel Production
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: vercel-prod-${{ github.repository }}
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      VERCEL_ORG_ID: team_wxKy7kl2V9WgbXPgqLBpkOzf
+      VERCEL_PROJECT_ID: prj_1W7vXsWJMEO5Yy8LrqNQZAA3j4KR
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Deploy to Vercel (token auth, no OpenID)
+        run: npx vercel@latest deploy --prod --yes --token "${{ secrets.VERCEL_TOKEN }}"

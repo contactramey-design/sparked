@@ -9,6 +9,8 @@
     "dev:api": "node server/local-api.js",
     "dev:local": "node server/run-dev-with-api.js",
     "dev:vercel": "vercel dev",
+    "deploy:vercel": "vercel deploy --prod --yes",
+    "deploy:vercel:token": "bash scripts/vercel-deploy-token.sh",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview"
