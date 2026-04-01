@@ -1,5 +1,6 @@
 /**
- * Vercel serverless: POST /api/process-homework
+ * Vercel serverless: POST /api/process-homework (legacy one-shot adventure).
+ * Prefer the split pipeline: /api/homework/analyze → explain → story (see HOMEWORK-GENERATOR.md).
  * Body: multipart/form-data with field "image" (file).
  * Optional fields: checkout_session_id (required in production) — must be a Stripe Checkout session
  * for the Safety Pass bundle with an active or trialing subscription.

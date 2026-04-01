@@ -14,6 +14,18 @@
     },
     "api/schools/generate-weekly-units.js": {
       "maxDuration": 300
+    },
+    "api/homework/analyze.js": {
+      "maxDuration": 60
+    },
+    "api/homework/explain.js": {
+      "maxDuration": 60
+    },
+    "api/homework/story.js": {
+      "maxDuration": 60
+    },
+    "api/generate-visuals.js": {
+      "maxDuration": 120
     }
   }
 }

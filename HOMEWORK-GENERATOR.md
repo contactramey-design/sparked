@@ -1,48 +1,57 @@
-# Homework generator — how it works & what to build next
+# Homework generator — architecture
 
-## Current flow (production-shaped)
+## Frontend (PWA)
 
-1. **Browser** (`HomeworkAdventurePage.tsx`)
-   - Grown-up uploads a homework **image** (JPG/PNG).
-   - Sends `multipart/form-data`: `image`, optional `checkout_session_id` (Stripe), `locale` (`en` | `es`), `age` (age-band hint).
-   - In production, checkout session is required unless you explicitly allow unauthenticated homework on the server.
+Feature lives under [`src/features/homework/`](src/features/homework/):
 
-2. **API** (`api/process-homework.js`)
-   - Parses multipart with `formidable`; max ~4.5 MB.
-   - **Entitlement**: `verifyBundleCheckoutSession` unless `ALLOW_UNAUTH_HOMEWORK=true` (dev/local).
-   - **Vision + JSON**: Reads image as base64 data URL, calls OpenAI `gpt-4o` chat completions with `image_url` + text instructions.
-   - **Prompting**: System rules enforce COPPA-friendly behavior (no PII extraction, exactly 5 Socratic steps, kid-safe language). Optional `public/adventure-assets/squad.json` names get woven into the story.
-   - **Response**: `{ title, subject, topic, steps: [{ id, story, prompt, hint }] }` — normalized server-side.
+| Path | Screen |
+|------|--------|
+| `/homework` | Hub: Upload / Demo / History |
+| `/homework/upload` | Image + language + mode + optional grade → pipeline |
+| `/homework/result/:jobId` | Analysis, explanation, practice, optional story |
+| `/homework/history` | List of jobs from **localStorage** only |
+| `/home` | Redirects to `/` |
 
-3. **Feature flag** (`api/config.js`)
-   - `homeworkAdventureConfigured`: `true` when `OPENAI_API_KEY` is set (UI can show “ready” vs misconfiguration).
+**Client API:** [`homeworkApi.ts`](src/features/homework/api/homeworkApi.ts) — `analyzeWorksheet`, `explainWorksheet`, `storyFromLesson`.
 
-## Env vars that matter
+**Persistence:** `sparki_homework_jobs_v1` in localStorage (max 20 jobs). No worksheet images on the server; optional small `previewDataUrl` on device only.
+
+**Types:** [`types/homework.ts`](src/features/homework/types/homework.ts) — `HomeworkAnalysis`, `HomeworkExplanation`, `HomeworkStory`, `HomeworkJob`.
+
+**Demo:** [`demo/demoJob.ts`](src/features/homework/demo/demoJob.ts) — static job, no API calls.
+
+## Backend (Vercel serverless + local-api)
+
+| Method | Path | Role |
+|--------|------|------|
+| POST | `/api/homework/analyze` | Vision → structured `HomeworkAnalysis` JSON |
+| POST | `/api/homework/explain` | Text-only → `HomeworkExplanation` |
+| POST | `/api/homework/story` | Analysis + explanation → `HomeworkStory` (3–5 scenes + recap) |
+| POST | `/api/homework/images` | **501** — not implemented (v2) |
+| POST | `/api/homework/video` | **501** — not implemented (v2) |
+
+Shared code: [`api/homework/lib/multipart.js`](api/homework/lib/multipart.js) (multipart + Stripe entitlement), [`openai.js`](api/homework/lib/openai.js), [`prompts.js`](api/homework/lib/prompts.js) (child-safety rules).
+
+**Entitlement:** Same as legacy homework: `verifyBundleCheckoutSession` unless `ALLOW_UNAUTH_HOMEWORK=true`. Multipart handlers accept `checkout_session_id`; JSON handlers accept `checkout_session_id` in body.
+
+**Legacy:** [`api/process-homework.js`](api/process-homework.js) remains for older clients/scripts (single-shot vision + 5-step adventure). New UI uses the split pipeline above.
+
+**Local dev:** [`server/local-api.js`](server/local-api.js) proxies the new `/api/homework/*` routes.
+
+## Env vars
 
 | Variable | Role |
 |----------|------|
-| `OPENAI_API_KEY` | Required for generation |
+| `OPENAI_API_KEY` | Required for analyze / explain / story |
 | `ALLOW_UNAUTH_HOMEWORK` | `true` = skip Stripe check (local only) |
-| Stripe-related vars | Used by `verifyBundleCheckoutSession` for paid bundle |
 
-## Suggested next builds (functionality first)
+## Flow
 
-1. **Quality & resilience**
-   - Structured output / JSON schema (or `response_format` where supported) to cut parse failures.
-   - Retry once on empty or malformed JSON; log correlation id only (never image bytes).
+1. **Analyze** — image in; JSON: subject, topic, gradeBand?, language, extractedText, learningObjective, confidence, needsReview.
+2. **Explain** — uses analysis only; JSON: childExplanation, steps[], practiceQuestions[], parentNotes?.
+3. **Story** (optional mode) — uses analysis + explanation; JSON: title, scenes[], recap.
 
-2. **Teacher / school path**
-   - Reuse the same `analyzeAndGenerateAdventure` with a school API key or org-based auth instead of consumer checkout.
-   - `teacher/generator` can POST the same shape; share types between FE and API.
+## Later (not in MVP)
 
-3. **Input UX**
-   - Optional subject hint field (API already accepts `subjectHint` in multipart — wire it in the form).
-   - Client-side image resize before upload to reduce failures and cost.
-
-4. **Observability**
-   - Metrics: success rate, step count distribution, latency (no PII).
-
-5. **Merch**
-   - Intentionally **not** tied to homework; shop merch is paused in the UI until you reopen the store.
-
-See also `SETUP-HOMEWORK-ADVENTURE.md` for deployment checklist.
+- `GET /api/homework/:jobId` when server-side job store exists (Supabase/KV).
+- Image and video pipelines; richer tutor / voice.

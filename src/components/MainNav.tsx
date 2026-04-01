@@ -98,7 +98,6 @@ export default function MainNav({ variant }: Props) {
     <>
       <SectionLabel>{t('nav.sectionShop')}</SectionLabel>
       <ItemLink to="/shop">{t('nav.shopEbooks')}</ItemLink>
-      <ItemLink to="/shop#merch-coming-soon">{t('nav.shopMerch')}</ItemLink>
       <ItemLink to="/?view=parent">{t('nav.shopSubscription')}</ItemLink>
     </>
   )

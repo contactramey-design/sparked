@@ -100,6 +100,8 @@ const SENSITIVE_API_PREFIXES = [
   '/api/create-checkout-session',
   '/api/create-ebook-checkout-session',
   '/api/process-homework',
+  '/api/homework/',
+  '/api/generate-visuals',
   '/api/generate-adventure-video',
   '/api/tts',
   '/api/schools/',

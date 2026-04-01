@@ -10,5 +10,7 @@ export default async function handler(req, res) {
   res.status(200).json({
     videoFeatureEnabled: process.env.VIDEO_FEATURE_ENABLED === 'true',
     homeworkAdventureConfigured: Boolean(process.env.OPENAI_API_KEY),
+    /** When true, homework APIs skip Stripe checkout; upload UI allows generate without Safety Pass (dev / OpenAI-only deploys). */
+    homeworkAllowUnauth: process.env.ALLOW_UNAUTH_HOMEWORK === 'true',
   })
 }

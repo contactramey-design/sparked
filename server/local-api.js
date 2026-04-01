@@ -1,7 +1,7 @@
 /**
  * Local API server for testing Homework Adventure without Vercel.
  * Run with: node server/local-api.js
- * Serves /api/config, /api/process-homework, /api/generate-adventure-video, /api/schools/generate-weekly-units so Vite proxy can hit them.
+ * Serves /api/config, /api/process-homework, /api/generate-visuals, /api/generate-adventure-video, /api/schools/generate-weekly-units so Vite proxy can hit them.
  */
 import http from 'node:http'
 import { fileURLToPath } from 'node:url'
@@ -78,6 +78,41 @@ const server = http.createServer(async (req, res) => {
       await m.default(req, wrapped)
       return
     }
+    if (url === '/api/homework/analyze' && req.method === 'POST') {
+      const m = await import('../api/homework/analyze.js')
+      await m.default(req, wrapped)
+      return
+    }
+    if (url === '/api/homework/explain' && req.method === 'POST') {
+      await readJsonBody(req)
+      const m = await import('../api/homework/explain.js')
+      await m.default(req, wrapped)
+      return
+    }
+    if (url === '/api/homework/story' && req.method === 'POST') {
+      await readJsonBody(req)
+      const m = await import('../api/homework/story.js')
+      await m.default(req, wrapped)
+      return
+    }
+    if (url === '/api/homework/images' && req.method === 'POST') {
+      await readJsonBody(req)
+      const m = await import('../api/homework/images.js')
+      await m.default(req, wrapped)
+      return
+    }
+    if (url === '/api/homework/video' && req.method === 'POST') {
+      await readJsonBody(req)
+      const m = await import('../api/homework/video.js')
+      await m.default(req, wrapped)
+      return
+    }
+    if (url === '/api/generate-visuals' && req.method === 'POST') {
+      await readJsonBody(req)
+      const m = await import('../api/generate-visuals.js')
+      await m.default(req, wrapped)
+      return
+    }
     if (url === '/api/generate-adventure-video' && req.method === 'POST') {
       await readJsonBody(req)
       const m = await import('../api/generate-adventure-video.js')
@@ -118,7 +153,7 @@ const server = http.createServer(async (req, res) => {
 })
 
 server.listen(PORT, () => {
-  console.log(`Local API: http://localhost:${PORT} (config, setup-status, video-worker-health, process-homework, generate-adventure-video, schools-generate-weekly-units, create-checkout-session, create-ebook-checkout-session, download-ebook)`)
+  console.log(`Local API: http://localhost:${PORT} (config, setup-status, video-worker-health, process-homework, homework/*, generate-visuals, generate-adventure-video, schools-generate-weekly-units, checkout, download-ebook)`)
 }).on('error', (err) => {
   if (err.code === 'EADDRINUSE') {
     console.error(`Port ${PORT} is in use. Stop the other process (e.g. lsof -ti:${PORT} | xargs kill) and run npm run dev:local again.`)

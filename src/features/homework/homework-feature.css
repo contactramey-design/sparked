@@ -1,0 +1,107 @@
+/* Homework generator feature — warm, simple, mobile-first */
+.homework-feature {
+  max-width: 42rem;
+  margin: 0 auto;
+}
+
+.homework-feature-header {
+  margin-bottom: 1.25rem;
+}
+
+.homework-lang-toggle--active,
+.homework-mode--active {
+  background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);
+  color: #fff;
+  border-color: transparent;
+}
+
+.homework-gen-btn:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.homework-cta-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+@media (min-width: 480px) {
+  .homework-cta-grid {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  .homework-cta-grid > * {
+    flex: 1;
+    min-width: 10rem;
+  }
+}
+
+/* Story scene art: preset avatars + horizontal image strip (iPad-friendly scroll) */
+.homework-avatar-preset {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  min-width: 4.75rem;
+  padding: 0.5rem 0.4rem 0.4rem;
+  border-radius: 0.75rem;
+  border: 2px solid #bfdbfe;
+  background: #f8fafc;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #1e3a8a;
+  cursor: pointer;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.homework-avatar-preset:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.homework-avatar-preset--active {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+  background: #eff6ff;
+}
+
+.homework-avatar-preset__face {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 9999px;
+  border: 2px solid #93c5fd;
+}
+
+.homework-avatar-preset__face[data-preset='curly-hoodie'] {
+  background: linear-gradient(145deg, #fcd34d 30%, #d97706 100%);
+}
+.homework-avatar-preset__face[data-preset='ponytail-teal'] {
+  background: linear-gradient(145deg, #5eead4 25%, #0f766e 100%);
+}
+.homework-avatar-preset__face[data-preset='short-blonde'] {
+  background: linear-gradient(145deg, #fde68a 35%, #ca8a04 100%);
+}
+.homework-avatar-preset__face[data-preset='puffs-purple'] {
+  background: linear-gradient(145deg, #c4b5fd 30%, #6d28d9 100%);
+}
+.homework-avatar-preset__face[data-preset='wavy-cap'] {
+  background: linear-gradient(145deg, #93c5fd 35%, #1d4ed8 100%);
+}
+
+.homework-avatar-preset__label {
+  max-width: 5rem;
+  line-height: 1.15;
+  text-align: center;
+}
+
+.homework-visuals-img {
+  width: min(100vw - 3rem, 20rem);
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
+
+.homework-visuals-scroll {
+  -webkit-overflow-scrolling: touch;
+}

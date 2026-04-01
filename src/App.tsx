@@ -19,7 +19,11 @@ import TrackListPage from './TrackListPage'
 import TrackPage from './TrackPage'
 import UnitPage from './UnitPage'
 import ComingSoon from './ComingSoon'
-import HomeworkAdventurePage from './HomeworkAdventurePage'
+import HomeworkFeatureLayout from './features/homework/pages/HomeworkFeatureLayout'
+import HomeworkHome from './features/homework/pages/HomeworkHome'
+import HomeworkUpload from './features/homework/pages/HomeworkUpload'
+import HomeworkResult from './features/homework/pages/HomeworkResult'
+import HomeworkHistory from './features/homework/pages/HomeworkHistory'
 import BooksPage from './BooksPage'
 import EbookViewerPage from './EbookViewerPage'
 import PrivacyPage from './PrivacyPage'
@@ -174,6 +178,7 @@ function AppShell() {
       <main id="app-main" className="app-main">
         <Routes>
           <Route path="/" element={<HomePage />} />
+          <Route path="/home" element={<Navigate to="/" replace />} />
           <Route path="/login" element={<LoginPage />} />
           <Route
             path="/dashboard"
@@ -188,7 +193,12 @@ function AppShell() {
           <Route path="/track/:trackId" element={<TrackPage />} />
           <Route path="/unit/:unitId" element={<UnitPage />} />
           <Route path="/lesson/:id" element={<LessonPage />} />
-          <Route path="/homework" element={<HomeworkAdventurePage />} />
+          <Route path="/homework" element={<HomeworkFeatureLayout />}>
+            <Route index element={<HomeworkHome />} />
+            <Route path="upload" element={<HomeworkUpload />} />
+            <Route path="result/:jobId" element={<HomeworkResult />} />
+            <Route path="history" element={<HomeworkHistory />} />
+          </Route>
           <Route path="/books" element={<BooksPage />} />
           <Route path="/shop" element={<BooksPage />} />
           <Route path="/ebook/:ebookId" element={<EbookViewerPage />} />
