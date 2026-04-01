@@ -1008,3 +1008,222 @@
   letter-spacing: 0.05em;
   color: #c2410c;
 }
+
+.school-subj-hub-supplemental {
+  margin: 0.65rem 0 0;
+  font-size: 0.92rem;
+  line-height: 1.55;
+  max-width: 42rem;
+}
+
+/* Subject track: supplemental scope */
+.school-subj-supplemental-banner {
+  margin: 1rem 0 1.25rem;
+  padding: 1rem 1.15rem;
+  border-radius: 14px;
+  border: 1px solid rgba(59, 130, 246, 0.28);
+  background: linear-gradient(135deg, rgba(239, 246, 255, 0.95), rgba(255, 247, 237, 0.75));
+}
+
+.school-subj-supplemental-banner__title {
+  margin: 0 0 0.4rem;
+  font-size: 1rem;
+  font-weight: 800;
+  color: #1e3a8a;
+}
+
+.school-subj-supplemental-banner__body {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.55;
+  color: #334155;
+}
+
+/* Lesson: scope callout + teacher toolkit */
+.school-subj-supplemental-callout {
+  margin: 0 0 1rem;
+  padding: 0.75rem 0.95rem;
+  border-radius: 12px;
+  border: 1px solid rgba(100, 116, 139, 0.35);
+  background: rgba(248, 250, 252, 0.95);
+  font-size: 0.88rem;
+  line-height: 1.5;
+  color: #475569;
+}
+
+.school-subj-supplemental-callout p {
+  margin: 0;
+}
+
+.school-subj-teacher-toolkit {
+  margin: 1.25rem 0 1.5rem;
+  padding: 1.1rem 1.15rem 1.2rem;
+  border-radius: 16px;
+  border: 2px solid rgba(139, 92, 246, 0.25);
+  background: linear-gradient(180deg, rgba(250, 245, 255, 0.98), rgba(255, 255, 255, 0.96));
+  box-shadow: 0 8px 28px rgba(15, 23, 42, 0.06);
+}
+
+.school-subj-teacher-toolkit__title {
+  margin: 0 0 0.35rem;
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #5b21b6;
+}
+
+.school-subj-teacher-toolkit__sub {
+  margin: 0 0 1rem;
+}
+
+.school-subj-toolkit-section-title {
+  margin: 0 0 0.5rem;
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #4c1d95;
+}
+
+.school-subj-deep-dive--in-toolkit {
+  margin-bottom: 1.1rem;
+  padding: 0.85rem 0.95rem;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(167, 139, 250, 0.35);
+}
+
+.school-subj-deep-dive--in-toolkit .school-subj-deep-dive__title {
+  font-size: 1rem;
+}
+
+.school-subj-vocab-block {
+  margin-bottom: 1.1rem;
+}
+
+.school-subj-vocab-list {
+  margin: 0;
+  padding: 0;
+}
+
+.school-subj-vocab-row {
+  display: grid;
+  grid-template-columns: minmax(7rem, 32%) 1fr;
+  gap: 0.5rem 1rem;
+  padding: 0.55rem 0;
+  border-bottom: 1px solid rgba(226, 232, 240, 0.95);
+  font-size: 0.88rem;
+}
+
+.school-subj-vocab-row:last-child {
+  border-bottom: none;
+}
+
+.school-subj-vocab-row dt {
+  margin: 0;
+  font-weight: 800;
+  color: #3730a3;
+}
+
+.school-subj-vocab-row dd {
+  margin: 0;
+  color: #334155;
+  line-height: 1.45;
+}
+
+@media (max-width: 520px) {
+  .school-subj-vocab-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+.school-subj-modeling-block {
+  margin-bottom: 1.1rem;
+}
+
+.school-subj-modeling-quote {
+  margin: 0;
+  padding: 0.85rem 1rem;
+  border-left: 4px solid #7c3aed;
+  border-radius: 0 10px 10px 0;
+  background: rgba(237, 233, 254, 0.65);
+  font-size: 0.92rem;
+  line-height: 1.55;
+  color: #1e1b4b;
+  font-style: normal;
+}
+
+.school-subj-myth-block {
+  margin-bottom: 1.1rem;
+}
+
+.school-subj-myth-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.school-subj-myth-item {
+  margin: 0;
+  padding: 0.75rem 0.85rem;
+  border-radius: 12px;
+  border: 1px solid rgba(251, 146, 60, 0.35);
+  background: rgba(255, 247, 237, 0.75);
+  font-size: 0.88rem;
+  line-height: 1.45;
+}
+
+.school-subj-myth-item__label {
+  margin: 0 0 0.2rem;
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #9a3412;
+}
+
+.school-subj-myth-item__myth {
+  margin: 0 0 0.5rem;
+  font-weight: 600;
+  color: #7c2d12;
+}
+
+.school-subj-diff-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  margin-bottom: 1.1rem;
+}
+
+@media (max-width: 640px) {
+  .school-subj-diff-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.school-subj-diff-card {
+  padding: 0.75rem 0.85rem;
+  border-radius: 12px;
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  background: rgba(240, 253, 244, 0.75);
+  font-size: 0.88rem;
+  line-height: 1.45;
+  color: #334155;
+}
+
+.school-subj-diff-card--extend {
+  border-color: rgba(59, 130, 246, 0.35);
+  background: rgba(239, 246, 255, 0.85);
+}
+
+.school-subj-extra-practice {
+  margin-bottom: 0.25rem;
+}
+
+.school-subj-quiz-feedback__coach {
+  margin: 0.65rem 0 0;
+  font-size: 0.88rem;
+  line-height: 1.45;
+  font-weight: 600;
+  color: #1e40af;
+}

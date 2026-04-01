@@ -16,6 +16,7 @@ const SchoolSubjectsHubPage: React.FC = () => {
       <header className="school-subj-hero">
         <h1>{t('schools.subjectHubTitle')}</h1>
         <p>{t('schools.subjectHubDesc')}</p>
+        <p className="school-subj-hub-supplemental muted">{t('schools.subjectHubSupplemental')}</p>
         <p className="school-subj-hub-alignment">{t('schoolSubjects.alignmentBadge')}</p>
       </header>
 

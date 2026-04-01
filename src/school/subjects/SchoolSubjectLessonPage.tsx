@@ -5,7 +5,7 @@ import { useAgeBand } from '@/contexts/AgeBandContext'
 import { Button } from '@/components/ui/button'
 import { getSubjectLessonById } from './registry'
 import { recordSchoolSubjectQuizResult } from './schoolSubjectProgress'
-import { getSchoolSubjectDeepDive } from './schoolSubjectDeepDives'
+import { getSchoolSubjectTeacherPack } from './schoolSubjectTeacherPack'
 import { getSchoolSubjectQuizFeedback } from './schoolSubjectQuizFeedback'
 import {
   caFrameworkLabel,
@@ -81,7 +81,7 @@ const SchoolSubjectLessonPage: React.FC = () => {
   const questions = loc.quiz
   const currentQ = questions[qIndex]
   const isLastQ = qIndex >= questions.length - 1
-  const deepDive = getSchoolSubjectDeepDive(lesson.id, locale)
+  const teacherPack = useMemo(() => getSchoolSubjectTeacherPack(lesson.id, locale), [lesson.id, locale])
 
   const quizTeachingNote = useMemo(() => {
     if (!currentQ) return ''
@@ -171,16 +171,84 @@ const SchoolSubjectLessonPage: React.FC = () => {
 
       {step === 'learn' && (
         <div className="school-subj-learn">
+          <div className="school-subj-supplemental-callout" role="note">
+            <p>{t('schoolSubject.lessonSupplementalNote')}</p>
+          </div>
+
           <div className="school-subj-summary-box">
             <h2 className="school-subj-summary-box__title">{t('schoolSubject.summaryHeading')}</h2>
             <p className="school-subj-summary-box__body">{loc.summary}</p>
           </div>
 
-          {deepDive ? (
-            <div className="school-subj-deep-dive">
-              <h2 className="school-subj-deep-dive__title">{t('schoolSubject.deepDiveHeading')}</h2>
-              <p className="school-subj-deep-dive__sub muted text-sm">{t('schoolSubject.deepDiveSub')}</p>
-              <p className="school-subj-deep-dive__body">{deepDive}</p>
+          {teacherPack ? (
+            <div className="school-subj-teacher-toolkit">
+              <h2 className="school-subj-teacher-toolkit__title">{t('schoolSubject.teacherToolkitTitle')}</h2>
+              <p className="school-subj-teacher-toolkit__sub muted text-sm">{t('schoolSubject.teacherToolkitSub')}</p>
+
+              <div className="school-subj-deep-dive school-subj-deep-dive--in-toolkit">
+                <h3 className="school-subj-deep-dive__title">{t('schoolSubject.deepDiveHeading')}</h3>
+                <p className="school-subj-deep-dive__sub muted text-sm">{t('schoolSubject.deepDiveSub')}</p>
+                <p className="school-subj-deep-dive__body">{teacherPack.conceptualDeepDive}</p>
+              </div>
+
+              {teacherPack.vocabularyTerms.length > 0 ? (
+                <div className="school-subj-vocab-block">
+                  <h3 className="school-subj-toolkit-section-title">{t('schoolSubject.vocabularyHeading')}</h3>
+                  <dl className="school-subj-vocab-list">
+                    {teacherPack.vocabularyTerms.map((row) => (
+                      <div key={row.term} className="school-subj-vocab-row">
+                        <dt>{row.term}</dt>
+                        <dd>{row.definition}</dd>
+                      </div>
+                    ))}
+                  </dl>
+                </div>
+              ) : null}
+
+              {teacherPack.sayThisAloud ? (
+                <div className="school-subj-modeling-block">
+                  <h3 className="school-subj-toolkit-section-title">{t('schoolSubject.modelingHeading')}</h3>
+                  <blockquote className="school-subj-modeling-quote">{teacherPack.sayThisAloud}</blockquote>
+                </div>
+              ) : null}
+
+              {teacherPack.misconceptions.length > 0 ? (
+                <div className="school-subj-myth-block">
+                  <h3 className="school-subj-toolkit-section-title">{t('schoolSubject.misconceptionsHeading')}</h3>
+                  <ul className="school-subj-myth-list">
+                    {teacherPack.misconceptions.map((m, i) => (
+                      <li key={i} className="school-subj-myth-item">
+                        <p className="school-subj-myth-item__label">{t('schoolSubject.misconceptionMyth')}</p>
+                        <p className="school-subj-myth-item__myth">{m.myth}</p>
+                        <p className="school-subj-myth-item__label">{t('schoolSubject.misconceptionFix')}</p>
+                        <p>{m.correction}</p>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ) : null}
+
+              <div className="school-subj-diff-grid">
+                <div className="school-subj-diff-card">
+                  <h3 className="school-subj-toolkit-section-title">{t('schoolSubject.supportEmergingLabel')}</h3>
+                  <p>{teacherPack.supportEmergingLearners}</p>
+                </div>
+                <div className="school-subj-diff-card school-subj-diff-card--extend">
+                  <h3 className="school-subj-toolkit-section-title">{t('schoolSubject.extendDepthLabel')}</h3>
+                  <p>{teacherPack.extendForDepth}</p>
+                </div>
+              </div>
+
+              {teacherPack.extraPracticeIdeas.length > 0 ? (
+                <div className="school-subj-extra-practice">
+                  <h3 className="school-subj-toolkit-section-title">{t('schoolSubject.extraPracticeHeading')}</h3>
+                  <ul className="school-subj-teach-bullets">
+                    {teacherPack.extraPracticeIdeas.map((idea, i) => (
+                      <li key={i}>{idea}</li>
+                    ))}
+                  </ul>
+                </div>
+              ) : null}
             </div>
           ) : null}
 
@@ -286,6 +354,9 @@ const SchoolSubjectLessonPage: React.FC = () => {
                     answer: currentQ.options[currentQ.correctIndex],
                   })}
               </p>
+              {selected !== currentQ.correctIndex ? (
+                <p className="school-subj-quiz-feedback__coach">{t('schoolSubject.quizWrongCoach')}</p>
+              ) : null}
               <p className="school-subj-quiz-feedback__hint muted text-sm">{t('schoolSubject.quizReviewLearn')}</p>
             </div>
           ) : null}

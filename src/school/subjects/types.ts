@@ -28,6 +28,23 @@ export type SchoolSubjectQuizItem = {
   feedback?: string
 }
 
+/** Rich teacher-only pedagogy (see `schoolSubjectTeacherPack.ts`); not shown to students as separate quiz copy. */
+export type SchoolSubjectVocabularyTerm = { term: string; definition: string }
+export type SchoolSubjectMisconception = { myth: string; correction: string }
+
+export type SchoolSubjectTeacherPackLocale = {
+  conceptualDeepDive: string
+  vocabularyTerms: SchoolSubjectVocabularyTerm[]
+  /** Short script the teacher can read or adapt while modeling. */
+  sayThisAloud: string
+  misconceptions: SchoolSubjectMisconception[]
+  supportEmergingLearners: string
+  extendForDepth: string
+  extraPracticeIdeas: string[]
+}
+
+export type BilingualTeacherPack = { en: SchoolSubjectTeacherPackLocale; es: SchoolSubjectTeacherPackLocale }
+
 export type SchoolSubjectLessonLocale = {
   title: string
   summary: string

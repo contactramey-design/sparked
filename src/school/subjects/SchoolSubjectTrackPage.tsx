@@ -80,6 +80,11 @@ const SchoolSubjectTrackPage: React.FC = () => {
         </div>
       </header>
 
+      <div className="school-subj-supplemental-banner" role="region" aria-label={t('schoolSubjects.supplementalScopeTitle')}>
+        <h2 className="school-subj-supplemental-banner__title">{t('schoolSubjects.supplementalScopeTitle')}</h2>
+        <p className="school-subj-supplemental-banner__body">{t('schoolSubjects.supplementalScopeBody')}</p>
+      </div>
+
       {lessons.length === 0 ? (
         <div className="school-subj-track-empty card p-4">
           <p className="muted">{t('schoolSubject.emptyBand')}</p>
