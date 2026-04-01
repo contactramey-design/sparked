@@ -39,6 +39,8 @@ type GeneratedUnitJson = {
   id?: string
   title: string
   summary: string
+  /** Teacher-facing California-aligned codes from weekly generator (optional). */
+  standardCodes?: string[]
   estMinutes?: number
   ageGroup?: string
   /** Class / generator band (tots | kids | crew) when present. */
@@ -399,6 +401,27 @@ const SchoolGeneratedUnitPage: React.FC = () => {
               <p className="text-center text-lg text-slate-700">{unitJson.summary}</p>
               <ListenButton text={unitJson.summary} ariaLabel={t('listenButton.summary')} size="sm" />
             </div>
+            {unitJson.standardCodes && unitJson.standardCodes.length > 0 && (
+              <div
+                className="mx-auto max-w-2xl rounded-xl border border-amber-200/90 bg-amber-50/90 px-4 py-3 text-left"
+                aria-label={t('schoolGeneratedUnit.standardCodesTitle')}
+              >
+                <p className="text-xs font-semibold uppercase tracking-wide text-amber-950/90">
+                  {t('schoolGeneratedUnit.standardCodesTitle')}
+                </p>
+                <p className="mt-1 text-xs text-amber-950/75">{t('schoolGeneratedUnit.standardCodesHint')}</p>
+                <ul className="mt-2 flex flex-wrap gap-2">
+                  {unitJson.standardCodes.map((code, idx) => (
+                    <li
+                      key={`${idx}-${code}`}
+                      className="rounded-full border border-amber-300/80 bg-white px-2.5 py-0.5 font-mono text-xs text-slate-800"
+                    >
+                      {code}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </div>
 
           {parsed.story && (

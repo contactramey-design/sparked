@@ -46,6 +46,7 @@ import SchoolGeneratedUnitPage from './SchoolGeneratedUnitPage.tsx'
 import SchoolSubjectsHubPage from './school/subjects/SchoolSubjectsHubPage'
 import SchoolSubjectTrackPage from './school/subjects/SchoolSubjectTrackPage'
 import SchoolSubjectLessonPage from './school/subjects/SchoolSubjectLessonPage'
+import { SchoolAlignmentHubPage, SchoolAlignmentSubjectPage } from './school/subjects/SchoolAlignmentPages'
 import SchoolMathLegacyRedirect from './school/subjects/SchoolMathLegacyRedirect'
 import WeeklyAdventurePage from './WeeklyAdventurePage'
 import './App.css'
@@ -216,6 +217,8 @@ function AppShell() {
           <Route path="/for-schools/one-pager" element={<SchoolOnePagerPage />} />
           <Route path="/schools" element={<SchoolsPage />} />
           <Route path="/schools/subjects" element={<SchoolSubjectsHubPage />} />
+          <Route path="/schools/alignment/:subjectId" element={<SchoolAlignmentSubjectPage />} />
+          <Route path="/schools/alignment" element={<SchoolAlignmentHubPage />} />
           <Route path="/schools/subjects/:subjectId/:lessonId" element={<SchoolSubjectLessonPage />} />
           <Route path="/schools/subjects/:subjectId" element={<SchoolSubjectTrackPage />} />
           <Route path="/schools/math" element={<SchoolMathLegacyRedirect />} />

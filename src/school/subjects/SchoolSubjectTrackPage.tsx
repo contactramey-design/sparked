@@ -5,6 +5,7 @@ import { useAgeBand } from '@/contexts/AgeBandContext'
 import AgeBandSelector from '@/components/AgeBandSelector'
 import { getLessonsForSubjectAndBand } from './registry'
 import { isSchoolSubjectLessonMastered } from './schoolSubjectProgress'
+import { formatCaStandardsBadge, caStandardsReferenceUrl } from './caStandardsDisplay'
 import { parseStandardsNote } from './subjectStandards'
 import { SUBJECT_TRACK_VISUAL } from './subjectTrackVisuals'
 import { isSchoolSubjectId, lessonLocale, type SchoolSubjectId } from './types'
@@ -98,6 +99,7 @@ const SchoolSubjectTrackPage: React.FC = () => {
               {lessons.map((lesson, index) => {
                 const loc = lessonLocale(lesson, locale)
                 const mastered = isSchoolSubjectLessonMastered(subjectId, lesson.id)
+                const ca = lesson.caStandards
                 const { scopeLine, codeBadge } = parseStandardsNote(lesson.standardsNote)
                 const primaryObjective = loc.objectives[0] ?? loc.summary
                 const showGame = lesson.includesGameQuiz !== false
@@ -133,7 +135,18 @@ const SchoolSubjectTrackPage: React.FC = () => {
                       {scopeLine ? <p className="school-subj-track-card__scope muted">{scopeLine}</p> : null}
 
                       <div className="school-subj-track-card__badges" aria-label={t('schoolSubjects.cardStandardsLabel')}>
-                        {codeBadge ? (
+                        {ca ? (
+                          <a
+                            href={caStandardsReferenceUrl(ca)}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="school-subj-ca-pill"
+                            title={formatCaStandardsBadge(ca)}
+                          >
+                            {ca.codes.slice(0, 2).join(' · ')}
+                            {ca.codes.length > 2 ? '…' : ''}
+                          </a>
+                        ) : codeBadge ? (
                           <span className="school-subj-tek-pill" title={lesson.standardsNote}>
                             {codeBadge}
                           </span>
@@ -168,9 +181,9 @@ const SchoolSubjectTrackPage: React.FC = () => {
             <footer className="school-subj-track-planner-footer">
               <h3 className="school-subj-track-planner-footer__title">{t('schoolSubjects.plannerTitle')}</h3>
               <p className="school-subj-track-planner-footer__body muted">{t('schoolSubjects.plannerBody')}</p>
-              <span className="school-subj-planner-soon" role="note">
-                {t('schoolSubjects.plannerCtaSoon')}
-              </span>
+              <Link to={`/schools/alignment/${subjectId}`} className="school-subj-planner-link no-print">
+                {t('schoolSubjects.plannerCta')}
+              </Link>
             </footer>
           </main>
 

@@ -5,7 +5,7 @@
 export function parseStandardsNote(note: string | undefined): {
   /** First segment — good for secondary line on cards */
   scopeLine: string | null
-  /** Trailing code after `;` — TEKS / CCSS / NGSS-style tag */
+  /** Trailing code after `;` — CCSS / NGSS / CA framework-style tag */
   codeBadge: string | null
 } {
   if (!note?.trim()) return { scopeLine: null, codeBadge: null }

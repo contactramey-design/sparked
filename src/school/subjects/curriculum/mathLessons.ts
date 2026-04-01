@@ -9,7 +9,16 @@ export const MATH_LESSONS: SchoolSubjectLesson[] = [
     order: 1,
     ageBands: ['tots'],
     estMinutes: 14,
-    standardsNote: 'Counting & cardinality (pre-K); K.CC',
+    caStandards: {
+      framework: 'PTKLF',
+      codes: [
+        'Mathematics / Number Sense: oral counting in sequence',
+        'One-to-one correspondence while counting objects',
+      ],
+      gradeSpan: 'PK/TK',
+      cdeSearchQuery: 'California preschool learning foundations mathematics number sense',
+    },
+    standardsNote: 'CA PTKLF Mathematics — Number Sense; counting (PK/TK)',
     cardEmoji: '🔢',
     en: {
       title: 'Counting 1 to 5 with Sparki',
@@ -169,7 +178,13 @@ export const MATH_LESSONS: SchoolSubjectLesson[] = [
     order: 2,
     ageBands: ['tots'],
     estMinutes: 14,
-    standardsNote: 'Repeating patterns (pre-K); algebraic thinking foundations',
+    caStandards: {
+      framework: 'PTKLF',
+      codes: ['Algebra & Functions: recognize and duplicate simple repeating patterns', 'Sort and classify by attribute'],
+      gradeSpan: 'PK/TK',
+      cdeSearchQuery: 'California preschool learning foundations algebra functions pattern',
+    },
+    standardsNote: 'CA PTKLF Math — Algebra & Functions; repeating patterns (PK/TK)',
     cardEmoji: '🎨',
     en: {
       title: 'Color Patterns',
@@ -289,7 +304,13 @@ export const MATH_LESSONS: SchoolSubjectLesson[] = [
     order: 1,
     ageBands: ['kids'],
     estMinutes: 16,
-    standardsNote: 'Addition within 10 (Grades 1–2); 1.OA',
+    caStandards: {
+      framework: 'CCSS_MATH',
+      codes: ['1.OA.A.1', '1.OA.C.5'],
+      gradeSpan: '1',
+      cdeSearchQuery: 'California Common Core 1.OA.A.1',
+    },
+    standardsNote: 'CA CCSS Math Gr.1; operations & algebraic thinking; 1.OA.A.1',
     cardEmoji: '➕',
     en: {
       title: 'Addition Stories Within 10',
@@ -425,7 +446,13 @@ export const MATH_LESSONS: SchoolSubjectLesson[] = [
     order: 2,
     ageBands: ['kids'],
     estMinutes: 16,
-    standardsNote: '2D shapes & attributes (Grades 1–2); 1.G',
+    caStandards: {
+      framework: 'CCSS_MATH',
+      codes: ['1.G.A.1', '1.G.A.2'],
+      gradeSpan: '1',
+      cdeSearchQuery: 'California Common Core 1.G.A.1 geometry',
+    },
+    standardsNote: 'CA CCSS Math Gr.1; geometry; 1.G.A.1',
     cardEmoji: '🔷',
     en: {
       title: 'Shapes and Attributes',
@@ -553,7 +580,13 @@ export const MATH_LESSONS: SchoolSubjectLesson[] = [
     order: 1,
     ageBands: ['crew'],
     estMinutes: 18,
-    standardsNote: 'Multiplication as equal groups (Grades 3–5); 3.OA',
+    caStandards: {
+      framework: 'CCSS_MATH',
+      codes: ['3.OA.A.1', '3.OA.A.3'],
+      gradeSpan: '3',
+      cdeSearchQuery: 'California Common Core 3.OA.A.1',
+    },
+    standardsNote: 'CA CCSS Math Gr.3; interpret products; 3.OA.A.1',
     cardEmoji: '✖️',
     en: {
       title: 'Equal Groups & Multiplication',
@@ -673,7 +706,13 @@ export const MATH_LESSONS: SchoolSubjectLesson[] = [
     order: 2,
     ageBands: ['crew'],
     estMinutes: 14,
-    standardsNote: 'Unit fractions & parts of a whole (Grades 3–5)',
+    caStandards: {
+      framework: 'CCSS_MATH',
+      codes: ['3.NF.A.1', '4.NF.A.1'],
+      gradeSpan: '3–4',
+      cdeSearchQuery: 'California Common Core 3.NF.A.1 fractions',
+    },
+    standardsNote: 'CA CCSS Math Gr.3–4; fractions as parts of a whole; 3.NF.A.1',
     cardEmoji: '½',
     en: {
       title: 'Parts of a Whole',

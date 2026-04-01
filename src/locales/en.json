@@ -194,7 +194,7 @@
     "quizExplainFallback": "The choice that best fits this question is: {answer}. Compare each option to what you read in Learn — the correct one uses the same vocabulary and logic."
   },
   "schoolSubjects": {
-    "alignmentBadge": "Aligned to TEKS & state standards",
+    "alignmentBadge": "Aligned to California standards (CDE)",
     "sequenceSummary": "{count} lessons · about {minutes} min total",
     "sequenceTitle": "Lesson sequence",
     "sequenceLead": "Work top to bottom for a clear progression, or assign individual lessons to match your unit.",
@@ -207,9 +207,25 @@
     "howToStep1": "Pick your grade band, then open a lesson. Project the Learn section for a quick teach, or assign students on devices.",
     "howToStep2": "Use the built-in practice to check understanding; wrong answers include teaching notes students can learn from.",
     "howToStep3": "Close with the real-world tip, or connect the objective to your district pacing guide.",
-    "plannerTitle": "Alignment & lesson planner",
-    "plannerBody": "A printable TEKS / standards alignment map and pacing planner will be available here for administrators.",
-    "plannerCtaSoon": "Download PDF (coming soon)",
+    "plannerTitle": "Standards alignment map",
+    "plannerBody": "Open a printable alignment table for this subject (California PTKLF, CCSS, NGSS, or HSS). Use Print → Save as PDF for your records.",
+    "plannerCta": "Open alignment map",
+    "viewCde": "California Department of Education — framework",
+    "viewCdeSearch": "Search CDE for this standard",
+    "caStandardsHeading": "California alignment",
+    "alignmentHubTitle": "Subject alignment maps",
+    "alignmentHubIntro": "Each table lists Sparki school lessons with California framework codes. Many states use similar expectations to CA CCSS and NGSS.",
+    "alignmentBackSubjects": "All subject maps",
+    "alignmentBackTrack": "Back to subject",
+    "alignmentPrintHint": "Tip: use your browser Print dialog and choose “Save as PDF.”",
+    "alignmentColLesson": "Lesson",
+    "alignmentColBand": "Age band",
+    "alignmentColFramework": "Framework",
+    "alignmentColCodes": "Standard(s)",
+    "alignmentColObjective": "Primary objective",
+    "alignmentColTime": "Minutes",
+    "alignmentColLink": "Open",
+    "alignmentUnknownFramework": "See lesson notes",
     "heroAlt": {
       "math": "Colorful hero art for math with Sparki",
       "english": "Colorful hero art for English language arts with Sparki",
@@ -1033,7 +1049,9 @@
     "homeActivityFallbackDesc": "A family-friendly homework activity.",
     "homeworkTopic": "Homework topic: {topic}",
     "sparkiPracticeTitle": "Suggested Sparki practice",
-    "sparkiPracticeDesc": "Short subject lessons that match this unit’s themes. Your teacher may limit which subjects appear."
+    "sparkiPracticeDesc": "Short subject lessons that match this unit’s themes. Your teacher may limit which subjects appear.",
+    "standardCodesTitle": "California standards reference (teacher)",
+    "standardCodesHint": "Codes are for planning and documentation; lesson text for students stays code-free."
   },
   "digitalFootprint": {
     "title": "Digital Footprint Challenge",

@@ -127,7 +127,9 @@ function buildSystemPrompt(locale, ageBand = 'kids') {
   const ageLine = ageBandInstruction(ageBand, isEs ? 'es' : 'en')
   const audience = bandAudienceLabel(ageBand, isEs ? 'es' : 'en')
   if (isEs) {
-    return `Eres un equipo curricular (dirección académica): diseñas unidades semanales alineadas al PDF del docente y a estándares habituales de EE.UU. (CCSS / NGSS / C3 donde aplique, sin citar códigos).
+    return `Eres un equipo curricular (dirección académica): diseñas unidades semanales alineadas al PDF del docente y a los marcos oficiales de **California** según la edad:
+- **tots (3–5):** Fundamentos de aprendizaje preescolar de California (PTKLF).
+- **kids (6–8) y crew (9–11):** CA CCSS (matemáticas y ELA), NGSS de California (ciencias) y CA HSS / marco de historia y estudios sociales (2016) cuando aplique.
 
 Audiencia: ${audience}
 
@@ -146,6 +148,7 @@ Reglas:
     - cada pregunta: id (string unico), prompt (string), options (3 strings), correctIndex (0-2).
     - evita respuestas obvias por longitud; distractores plausibles.
   - homeworkAdventure: title, subject, topic; steps: EXACTAMENTE 5 pasos (id, story 2-3 frases, prompt, hint sin dar la respuesta).
+  - standardCodes: array opcional de 0 a 12 cadenas cortas con códigos o referencias alineadas a California (ej. "1.OA.A.1", "2-PS1-1", "1.RI.2", descriptores PTKLF o HSS). Son solo para el docente: NO pongas estos códigos dentro de contentBlocks, quizQuestions ni homeworkAdventure (el texto para estudiantes debe estar sin códigos).
 - ${ageLine}
 - No incluyas markdown ni texto fuera del JSON.
 - Responde SOLO con un JSON valido con esta forma:
@@ -155,6 +158,7 @@ Reglas:
     {
       "title": string,
       "summary": string,
+      "standardCodes": string[],
       "contentBlocks": string[],
       "quizQuestions": Array<{id:string,prompt:string,options:string[],correctIndex:number}>,
       "homeworkAdventure": {
@@ -168,7 +172,9 @@ Reglas:
 }`
   }
 
-  return `You are a curriculum director and instructional designer. Build weekly units grounded in the teacher’s PDF and typical U.S. standards (CCSS / NGSS / C3 as appropriate—do not quote standard codes).
+  return `You are a curriculum director and instructional designer. Build weekly units grounded in the teacher’s PDF and **California** official frameworks for the class age band:
+- **tots (ages 3–5):** California Preschool Learning Foundations (PTKLF).
+- **kids (ages 6–8) and crew (ages 9–11):** CA CCSS (math & ELA), California NGSS (science), and CA History–Social Science (2016 framework themes) as applicable.
 
 Audience: ${audience}
 
@@ -187,6 +193,7 @@ Rules:
     - each item: id (unique string), prompt, options (3 strings), correctIndex (0–2).
     - use plausible distractors; avoid “longest answer is correct.”
   - homeworkAdventure: title, subject, topic; steps: EXACTLY 5 steps (id, story 2–3 sentences, prompt, Socratic hint without the final answer).
+  - standardCodes: optional array of 0–12 short strings: California-aligned codes or labels for teachers only (e.g. "3.OA.A.1", "4-ESS2-1", "1.RI.2", PTKLF or HSS descriptors). Do **not** put these codes inside student-facing contentBlocks, quizQuestions, or homeworkAdventure text (keep student text code-free).
 - ${ageLine}
 - No markdown or text outside JSON.
 - Respond ONLY with valid JSON with this shape:
@@ -196,6 +203,7 @@ Rules:
     {
       "title": string,
       "summary": string,
+      "standardCodes": string[],
       "contentBlocks": string[],
       "quizQuestions": Array<{id:string,prompt:string,options:string[],correctIndex:number}>,
       "homeworkAdventure": {
@@ -277,6 +285,18 @@ function validateHomeworkSteps(steps) {
       typeof s.hint === 'string'
     return ok
   })
+}
+
+/** Optional teacher-facing CA-aligned codes from the model; omit if empty. */
+function normalizeStandardCodes(raw) {
+  if (!Array.isArray(raw)) return undefined
+  const out = raw
+    .filter((x) => typeof x === 'string')
+    .map((s) => s.trim())
+    .filter(Boolean)
+    .slice(0, 12)
+    .map((s) => (s.length > 120 ? s.slice(0, 120) : s))
+  return out.length ? out : undefined
 }
 
 async function generateHomeworkVideoForUnit({ homeworkAdventure, locale }) {
@@ -429,12 +449,13 @@ export default async function handler(req, res) {
     const normalizedUnits = units.map((u, idx) => {
       const title = typeof u?.title === 'string' ? u.title.trim() : `Generated Unit ${idx + 1}`
       const summary = typeof u?.summary === 'string' ? u.summary.trim() : ''
+      const standardCodes = normalizeStandardCodes(u?.standardCodes)
       const contentBlocks = Array.isArray(u?.contentBlocks) ? u.contentBlocks.filter((x) => typeof x === 'string') : []
       let quizQuestions = Array.isArray(u?.quizQuestions) ? u.quizQuestions : []
       if (quizQuestions.length > 12) quizQuestions = quizQuestions.slice(0, 12)
       const homeworkAdventure = u?.homeworkAdventure
 
-      return { title, summary, contentBlocks, quizQuestions, homeworkAdventure }
+      return { title, summary, standardCodes, contentBlocks, quizQuestions, homeworkAdventure }
     })
 
     for (const [i, u] of normalizedUnits.entries()) {
@@ -525,6 +546,7 @@ export default async function handler(req, res) {
           id: unitId,
           title: u.title,
           summary: u.summary,
+          ...(u.standardCodes?.length ? { standardCodes: u.standardCodes } : {}),
           estMinutes: 20,
           ageGroup: 'age2',
           ageBand,

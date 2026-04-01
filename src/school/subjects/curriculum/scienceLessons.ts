@@ -6,7 +6,13 @@ export const SCIENCE_LESSONS: SchoolSubjectLesson[] = [
     order: 1,
     ageBands: ['tots'],
     estMinutes: 14,
-    standardsNote: 'Observe with senses (pre-K); practices of science',
+    caStandards: {
+      framework: 'PTKLF',
+      codes: ['Scientific Inquiry: observe and describe using the senses', 'Physical Sciences: properties of objects'],
+      gradeSpan: 'PK/TK',
+      cdeSearchQuery: 'California preschool learning foundations science observation senses',
+    },
+    standardsNote: 'CA PTKLF Science — observation with senses (PK/TK)',
     cardEmoji: '👁️',
     en: {
       title: 'Five Senses Explore',
@@ -142,7 +148,13 @@ export const SCIENCE_LESSONS: SchoolSubjectLesson[] = [
     order: 2,
     ageBands: ['tots'],
     estMinutes: 10,
-    standardsNote: 'Living vs nonliving (pre-K)',
+    caStandards: {
+      framework: 'PTKLF',
+      codes: ['Life Sciences: distinguish living from nonliving things'],
+      gradeSpan: 'PK/TK',
+      cdeSearchQuery: 'California preschool learning foundations life sciences living nonliving',
+    },
+    standardsNote: 'CA PTKLF Science — living vs. nonliving (PK/TK)',
     cardEmoji: '🌱',
     en: {
       title: 'Living or Nonliving?',
@@ -270,7 +282,13 @@ export const SCIENCE_LESSONS: SchoolSubjectLesson[] = [
     order: 1,
     ageBands: ['kids'],
     estMinutes: 16,
-    standardsNote: 'Properties of matter (Grades 1–2); PS1',
+    caStandards: {
+      framework: 'CA_NGSS',
+      codes: ['2-PS1-1'],
+      gradeSpan: '2',
+      cdeSearchQuery: 'California NGSS 2-PS1-1 matter properties',
+    },
+    standardsNote: 'CA NGSS Gr.2; matter and its interactions; 2-PS1-1',
     cardEmoji: '💧',
     en: {
       title: 'Solids, Liquids, and Gases',
@@ -398,7 +416,13 @@ export const SCIENCE_LESSONS: SchoolSubjectLesson[] = [
     order: 2,
     ageBands: ['kids'],
     estMinutes: 16,
-    standardsNote: 'Plant needs (Grades 1–2); LS1',
+    caStandards: {
+      framework: 'CA_NGSS',
+      codes: ['2-LS2-1'],
+      gradeSpan: '2',
+      cdeSearchQuery: 'California NGSS 2-LS2-1 plants sunlight water',
+    },
+    standardsNote: 'CA NGSS Gr.2; ecosystems; plant needs; 2-LS2-1',
     cardEmoji: '🌻',
     en: {
       title: 'What Plants Need',
@@ -542,7 +566,13 @@ export const SCIENCE_LESSONS: SchoolSubjectLesson[] = [
     order: 1,
     ageBands: ['crew'],
     estMinutes: 18,
-    standardsNote: 'Energy in ecosystems (Grades 3–5); LS2',
+    caStandards: {
+      framework: 'CA_NGSS',
+      codes: ['5-PS3-1', '5-LS2-1'],
+      gradeSpan: '5',
+      cdeSearchQuery: 'California NGSS 5-LS2-1 food web energy',
+    },
+    standardsNote: 'CA NGSS Gr.5; matter & energy in ecosystems; 5-LS2-1',
     cardEmoji: '🦊',
     en: {
       title: 'Food Chains & Webs',
@@ -662,7 +692,13 @@ export const SCIENCE_LESSONS: SchoolSubjectLesson[] = [
     order: 2,
     ageBands: ['crew'],
     estMinutes: 18,
-    standardsNote: 'Earth & human activity (Grades 3–5); ESS3',
+    caStandards: {
+      framework: 'CA_NGSS',
+      codes: ['4-PS3-2', '4-ESS3-1'],
+      gradeSpan: '4',
+      cdeSearchQuery: 'California NGSS 4-ESS3-1 natural resources energy',
+    },
+    standardsNote: 'CA NGSS Gr.4; energy transfer & Earth systems; 4-ESS3-1',
     cardEmoji: '☀️',
     en: {
       title: 'Energy from the Sun',

@@ -12,6 +12,23 @@ export const SUBJECT_LESSONS: Record<SchoolSubjectId, SchoolSubjectLesson[]> = {
   history: HISTORY_LESSONS,
 }
 
+function bandSortKey(lesson: SchoolSubjectLesson): number {
+  if (lesson.ageBands.includes('tots')) return 0
+  if (lesson.ageBands.includes('kids')) return 1
+  return 2
+}
+
+/** All lessons for a subject, ordered Tots → Kids → Crew then lesson order (for alignment tables). */
+export function getAllLessonsForSubjectOrdered(subjectId: SchoolSubjectId): SchoolSubjectLesson[] {
+  const all = SUBJECT_LESSONS[subjectId] ?? []
+  return [...all].sort((a, b) => {
+    const ka = bandSortKey(a)
+    const kb = bandSortKey(b)
+    if (ka !== kb) return ka - kb
+    return a.order - b.order
+  })
+}
+
 export function getLessonsForSubjectAndBand(subjectId: SchoolSubjectId, band: AgeBandId): SchoolSubjectLesson[] {
   const all = SUBJECT_LESSONS[subjectId] ?? []
   return all.filter((l) => l.ageBands.includes(band)).sort((a, b) => a.order - b.order)

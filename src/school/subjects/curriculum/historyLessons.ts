@@ -6,7 +6,13 @@ export const HISTORY_LESSONS: SchoolSubjectLesson[] = [
     order: 1,
     ageBands: ['tots'],
     estMinutes: 12,
-    standardsNote: 'Time & change (pre-K)',
+    caStandards: {
+      framework: 'PTKLF',
+      codes: ['History–Social Science: sense of time; past vs. present'],
+      gradeSpan: 'PK/TK',
+      cdeSearchQuery: 'California preschool learning foundations history social science time',
+    },
+    standardsNote: 'CA PTKLF HSS — time, change, then & now (PK/TK)',
     cardEmoji: '⏳',
     en: {
       title: 'Then and Now',
@@ -126,7 +132,13 @@ export const HISTORY_LESSONS: SchoolSubjectLesson[] = [
     order: 2,
     ageBands: ['tots'],
     estMinutes: 12,
-    standardsNote: 'Self & family in time (pre-K)',
+    caStandards: {
+      framework: 'PTKLF',
+      codes: ['Self in social context; family roles and personal history'],
+      gradeSpan: 'PK/TK',
+      cdeSearchQuery: 'California preschool learning foundations history social science family',
+    },
+    standardsNote: 'CA PTKLF HSS — self, family, personal stories (PK/TK)',
     cardEmoji: '👪',
     en: {
       title: 'My Family Story',
@@ -246,7 +258,13 @@ export const HISTORY_LESSONS: SchoolSubjectLesson[] = [
     order: 1,
     ageBands: ['kids'],
     estMinutes: 14,
-    standardsNote: 'Civics & community (Grades 1–2)',
+    caStandards: {
+      framework: 'CA_HSS',
+      codes: ['1.1'],
+      gradeSpan: '1',
+      cdeSearchQuery: 'California HSS grade 1.1 citizenship community helpers',
+    },
+    standardsNote: 'CA HSS Gr.1; citizenship & community; 1.1',
     cardEmoji: '🚒',
     en: {
       title: 'Community Helpers',
@@ -366,7 +384,13 @@ export const HISTORY_LESSONS: SchoolSubjectLesson[] = [
     order: 2,
     ageBands: ['kids'],
     estMinutes: 14,
-    standardsNote: 'Geography basics (Grades 1–2)',
+    caStandards: {
+      framework: 'CA_HSS',
+      codes: ['2.2'],
+      gradeSpan: '2',
+      cdeSearchQuery: 'California HSS grade 2.2 maps geography',
+    },
+    standardsNote: 'CA HSS Gr.2; geographic skills & maps; 2.2',
     cardEmoji: '🗺️',
     en: {
       title: 'Maps and Landmarks',
@@ -494,7 +518,13 @@ export const HISTORY_LESSONS: SchoolSubjectLesson[] = [
     order: 1,
     ageBands: ['crew'],
     estMinutes: 16,
-    standardsNote: 'Chronological reasoning (Grades 3–5)',
+    caStandards: {
+      framework: 'CA_HSS',
+      codes: ['Historical & Social Sciences Analysis Skills: Chronological thinking (Gr. 4–5)'],
+      gradeSpan: '4–5',
+      cdeSearchQuery: 'California HSS chronological thinking grade 4',
+    },
+    standardsNote: 'CA HSS Gr.4–5; chronological reasoning & timelines',
     cardEmoji: '📅',
     en: {
       title: 'Timelines Tell Time Order',
@@ -638,7 +668,13 @@ export const HISTORY_LESSONS: SchoolSubjectLesson[] = [
     order: 2,
     ageBands: ['crew'],
     estMinutes: 16,
-    standardsNote: 'Historical sources (Grades 3–5)',
+    caStandards: {
+      framework: 'CA_HSS',
+      codes: ['Historical & Social Sciences Analysis Skills: Research, evidence, point of view (Gr. 4–5)'],
+      gradeSpan: '4–5',
+      cdeSearchQuery: 'California HSS primary secondary sources grade 4',
+    },
+    standardsNote: 'CA HSS Gr.4–5; primary & secondary sources',
     cardEmoji: '📰',
     en: {
       title: 'Primary and Secondary Sources',

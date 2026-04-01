@@ -6,7 +6,13 @@ export const ENGLISH_LESSONS: SchoolSubjectLesson[] = [
     order: 1,
     ageBands: ['tots'],
     estMinutes: 14,
-    standardsNote: 'Phonological awareness (pre-K); RF.K',
+    caStandards: {
+      framework: 'PTKLF',
+      codes: ['Language & Literacy / Phonological Awareness: rhyme and alliteration'],
+      gradeSpan: 'PK/TK',
+      cdeSearchQuery: 'California preschool learning foundations language literacy phonological awareness',
+    },
+    standardsNote: 'CA PTKLF ELA — Phonological awareness; rhyme (PK/TK)',
     cardEmoji: '📚',
     en: {
       title: 'Rhyme Time with Sparki',
@@ -126,7 +132,13 @@ export const ENGLISH_LESSONS: SchoolSubjectLesson[] = [
     order: 2,
     ageBands: ['tots'],
     estMinutes: 14,
-    standardsNote: 'Beginning sounds (pre-K); RF.K',
+    caStandards: {
+      framework: 'PTKLF',
+      codes: ['Phonological Awareness: isolate initial sounds in spoken words'],
+      gradeSpan: 'PK/TK',
+      cdeSearchQuery: 'California preschool learning foundations beginning sounds phonological',
+    },
+    standardsNote: 'CA PTKLF ELA — Phonological awareness; initial sounds (PK/TK)',
     cardEmoji: '🔤',
     en: {
       title: 'First Sounds',
@@ -246,7 +258,13 @@ export const ENGLISH_LESSONS: SchoolSubjectLesson[] = [
     order: 1,
     ageBands: ['kids'],
     estMinutes: 16,
-    standardsNote: 'Reading comprehension (Grades 1–2); RI/RL.1–2',
+    caStandards: {
+      framework: 'CCSS_ELA',
+      codes: ['1.RI.2', '1.RL.2'],
+      gradeSpan: '1',
+      cdeSearchQuery: 'California Common Core ELA 1.RI.2 main topic',
+    },
+    standardsNote: 'CA CCSS ELA Gr.1; central topic / main idea; 1.RI.2',
     cardEmoji: '📖',
     en: {
       title: 'What Is This Mostly About?',
@@ -390,7 +408,13 @@ export const ENGLISH_LESSONS: SchoolSubjectLesson[] = [
     order: 2,
     ageBands: ['kids'],
     estMinutes: 16,
-    standardsNote: 'Sentences & questions (Grades 1–2); L.1',
+    caStandards: {
+      framework: 'CCSS_ELA',
+      codes: ['1.L.1.j', '1.L.2'],
+      gradeSpan: '1',
+      cdeSearchQuery: 'California Common Core ELA 1.L.1 conventions',
+    },
+    standardsNote: 'CA CCSS ELA Gr.1; conventions; types of sentences; 1.L.1',
     cardEmoji: '✏️',
     en: {
       title: 'Sentences Tell Complete Thoughts',
@@ -518,7 +542,13 @@ export const ENGLISH_LESSONS: SchoolSubjectLesson[] = [
     order: 1,
     ageBands: ['crew'],
     estMinutes: 18,
-    standardsNote: 'Citing textual evidence (Grades 3–5); RI/RL.1',
+    caStandards: {
+      framework: 'CCSS_ELA',
+      codes: ['4.RI.1', '4.RL.1'],
+      gradeSpan: '4',
+      cdeSearchQuery: 'California Common Core ELA 4.RI.1 textual evidence',
+    },
+    standardsNote: 'CA CCSS ELA Gr.4; refer to details and evidence; 4.RI.1',
     cardEmoji: '📝',
     en: {
       title: 'Prove It with the Text',
@@ -670,7 +700,13 @@ export const ENGLISH_LESSONS: SchoolSubjectLesson[] = [
     order: 2,
     ageBands: ['crew'],
     estMinutes: 18,
-    standardsNote: 'Vocabulary in context (Grades 3–5); L.4',
+    caStandards: {
+      framework: 'CCSS_ELA',
+      codes: ['4.L.4.a', '5.L.4.a'],
+      gradeSpan: '4–5',
+      cdeSearchQuery: 'California Common Core ELA 4.L.4 context clues',
+    },
+    standardsNote: 'CA CCSS ELA Gr.4–5; context clues; 4.L.4.a',
     cardEmoji: '🔍',
     en: {
       title: 'Context Clues for New Words',

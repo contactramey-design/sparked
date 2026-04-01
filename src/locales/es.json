@@ -194,7 +194,7 @@
     "quizExplainFallback": "La opción que mejor encaja es: {answer}. Compara cada opción con lo que leíste en Aprender — la correcta usa la misma lógica y vocabulario."
   },
   "schoolSubjects": {
-    "alignmentBadge": "Alineado a TEKS y estándares estatales",
+    "alignmentBadge": "Alineado a estándares de California (CDE)",
     "sequenceSummary": "{count} lecciones · unos {minutes} min en total",
     "sequenceTitle": "Secuencia de lecciones",
     "sequenceLead": "Sigue el orden para una progresión clara, o asigna lecciones sueltas según tu unidad.",
@@ -207,9 +207,25 @@
     "howToStep1": "Elige la franja de grado y abre una lección. Proyecta Aprender para enseñar rápido, o asigna en dispositivos.",
     "howToStep2": "Usa la práctica integrada para verificar comprensión; las respuestas incorrectas incluyen notas de enseñanza.",
     "howToStep3": "Cierra con el tip del mundo real, o conecta el objetivo con tu guía de ritmo del distrito.",
-    "plannerTitle": "Alineación y planificador",
-    "plannerBody": "Aquí habrá un PDF imprimible con mapa de alineación TEKS / estándares y planificador para administradores.",
-    "plannerCtaSoon": "Descargar PDF (próximamente)",
+    "plannerTitle": "Mapa de alineación de estándares",
+    "plannerBody": "Abre una tabla imprimible para esta materia (California: PTKLF, CCSS, NGSS o HSS). Usa Imprimir → Guardar como PDF.",
+    "plannerCta": "Abrir mapa de alineación",
+    "viewCde": "Departamento de Educación de California — marco",
+    "viewCdeSearch": "Buscar en el CDE este estándar",
+    "caStandardsHeading": "Alineación en California",
+    "alignmentHubTitle": "Mapas de alineación por materia",
+    "alignmentHubIntro": "Cada tabla lista las lecciones escolares de Sparki con códigos del marco de California. Muchos estados usan expectativas parecidas al CCSS y NGSS de California.",
+    "alignmentBackSubjects": "Todos los mapas",
+    "alignmentBackTrack": "Volver a la materia",
+    "alignmentPrintHint": "Consejo: usa Imprimir del navegador y elige “Guardar como PDF”.",
+    "alignmentColLesson": "Lección",
+    "alignmentColBand": "Franja",
+    "alignmentColFramework": "Marco",
+    "alignmentColCodes": "Estándar(es)",
+    "alignmentColObjective": "Objetivo principal",
+    "alignmentColTime": "Minutos",
+    "alignmentColLink": "Abrir",
+    "alignmentUnknownFramework": "Ver notas de la lección",
     "heroAlt": {
       "math": "Arte de cabecera colorido de matemáticas con Sparki",
       "english": "Arte de cabecera colorido de inglés con Sparki",
@@ -1033,7 +1049,9 @@
     "homeActivityFallbackDesc": "Una actividad de tarea familiar y segura.",
     "homeworkTopic": "Tema de tarea: {topic}",
     "sparkiPracticeTitle": "Práctica Sparki sugerida",
-    "sparkiPracticeDesc": "Lecciones cortas que encajan con los temas de esta unidad. Tu docente puede limitar qué materias aparecen."
+    "sparkiPracticeDesc": "Lecciones cortas que encajan con los temas de esta unidad. Tu docente puede limitar qué materias aparecen.",
+    "standardCodesTitle": "Referencia de estándares de California (docente)",
+    "standardCodesHint": "Los códigos sirven para planificación y documentación; el texto para estudiantes no incluye códigos."
   },
   "digitalFootprint": {
     "title": "Desafío de huella digital",

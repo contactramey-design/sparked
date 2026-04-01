@@ -37,11 +37,25 @@ export type SchoolSubjectLessonLocale = {
   realWorldTip: string
 }
 
+/** California official frameworks for school alignment (CDE). */
+export type CaStandardsFramework = 'PTKLF' | 'CCSS_MATH' | 'CCSS_ELA' | 'CA_NGSS' | 'CA_HSS'
+
+export type CaStandardsMeta = {
+  framework: CaStandardsFramework
+  codes: string[]
+  /** Optional grade hint shown in alignment tables, e.g. "TK–K", "1", "4". */
+  gradeSpan?: string
+  /** Optional CDE search string when a stable deep link is not used. */
+  cdeSearchQuery?: string
+}
+
 export type SchoolSubjectLesson = {
   id: string
   order: number
   ageBands: AgeBandId[]
   estMinutes: number
+  /** California alignment metadata; drives badges and CDE links. */
+  caStandards?: CaStandardsMeta
   standardsNote?: string
   cardEmoji?: string
   cardImageUrl?: string

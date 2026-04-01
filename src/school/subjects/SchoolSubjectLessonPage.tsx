@@ -7,6 +7,12 @@ import { getSubjectLessonById } from './registry'
 import { recordSchoolSubjectQuizResult } from './schoolSubjectProgress'
 import { getSchoolSubjectDeepDive } from './schoolSubjectDeepDives'
 import { getSchoolSubjectQuizFeedback } from './schoolSubjectQuizFeedback'
+import {
+  caFrameworkLabel,
+  cdeFrameworkUrl,
+  formatCaStandardsBadge,
+  caStandardsReferenceUrl,
+} from './caStandardsDisplay'
 import { isLessonInBand, isSchoolSubjectId, lessonLocale, type SchoolSubjectId } from './types'
 import './school-subject.css'
 
@@ -121,6 +127,29 @@ const SchoolSubjectLessonPage: React.FC = () => {
           {t('schoolSubject.durationLine', { minutes: lesson.estMinutes })}
           {lesson.standardsNote ? ` · ${lesson.standardsNote}` : ''}
         </p>
+        {lesson.caStandards ? (
+          <div className="school-subj-lesson-ca">
+            <h2 className="school-subj-lesson-ca__title">{t('schoolSubjects.caStandardsHeading')}</h2>
+            <p className="school-subj-lesson-ca__framework">
+              {caFrameworkLabel(lesson.caStandards.framework, locale)}
+              {lesson.caStandards.gradeSpan ? ` · ${lesson.caStandards.gradeSpan}` : ''}
+            </p>
+            <ul className="school-subj-lesson-ca__codes">
+              {lesson.caStandards.codes.map((c) => (
+                <li key={c}>{c}</li>
+              ))}
+            </ul>
+            <p className="school-subj-lesson-ca__badge muted text-sm">{formatCaStandardsBadge(lesson.caStandards)}</p>
+            <div className="school-subj-lesson-ca__links">
+              <a href={caStandardsReferenceUrl(lesson.caStandards)} target="_blank" rel="noopener noreferrer">
+                {t('schoolSubjects.viewCdeSearch')}
+              </a>
+              <a href={cdeFrameworkUrl(lesson.caStandards.framework)} target="_blank" rel="noopener noreferrer">
+                {t('schoolSubjects.viewCde')}
+              </a>
+            </div>
+          </div>
+        ) : null}
       </header>
 
       <div className="school-subj-stepper" role="tablist" aria-label={t('schoolSubject.stepsAria')}>
