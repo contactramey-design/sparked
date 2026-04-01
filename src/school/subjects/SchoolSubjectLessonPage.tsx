@@ -5,6 +5,8 @@ import { useAgeBand } from '@/contexts/AgeBandContext'
 import { Button } from '@/components/ui/button'
 import { getSubjectLessonById } from './registry'
 import { recordSchoolSubjectQuizResult } from './schoolSubjectProgress'
+import { getSchoolSubjectDeepDive } from './schoolSubjectDeepDives'
+import { getSchoolSubjectQuizFeedback } from './schoolSubjectQuizFeedback'
 import { isLessonInBand, isSchoolSubjectId, lessonLocale, type SchoolSubjectId } from './types'
 import './school-subject.css'
 
@@ -73,6 +75,16 @@ const SchoolSubjectLessonPage: React.FC = () => {
   const questions = loc.quiz
   const currentQ = questions[qIndex]
   const isLastQ = qIndex >= questions.length - 1
+  const deepDive = getSchoolSubjectDeepDive(lesson.id, locale)
+
+  const quizTeachingNote = useMemo(() => {
+    if (!currentQ) return ''
+    return (
+      currentQ.feedback?.trim() ||
+      getSchoolSubjectQuizFeedback(currentQ.id, locale)?.trim() ||
+      ''
+    )
+  }, [currentQ?.id, currentQ?.feedback, locale])
 
   const pickOption = (idx: number) => {
     if (revealed || !currentQ) return
@@ -129,8 +141,21 @@ const SchoolSubjectLessonPage: React.FC = () => {
       </div>
 
       {step === 'learn' && (
-        <div>
-          <h2 className="text-base font-semibold mb-2" style={{ color: 'var(--text-color)' }}>
+        <div className="school-subj-learn">
+          <div className="school-subj-summary-box">
+            <h2 className="school-subj-summary-box__title">{t('schoolSubject.summaryHeading')}</h2>
+            <p className="school-subj-summary-box__body">{loc.summary}</p>
+          </div>
+
+          {deepDive ? (
+            <div className="school-subj-deep-dive">
+              <h2 className="school-subj-deep-dive__title">{t('schoolSubject.deepDiveHeading')}</h2>
+              <p className="school-subj-deep-dive__sub muted text-sm">{t('schoolSubject.deepDiveSub')}</p>
+              <p className="school-subj-deep-dive__body">{deepDive}</p>
+            </div>
+          ) : null}
+
+          <h2 className="text-base font-semibold mb-2 mt-4" style={{ color: 'var(--text-color)' }}>
             {t('schoolSubject.objectivesHeading')}
           </h2>
           <ul className="school-subj-objectives">
@@ -138,10 +163,24 @@ const SchoolSubjectLessonPage: React.FC = () => {
               <li key={i}>{o}</li>
             ))}
           </ul>
+
           {loc.teachSections.map((sec, i) => (
             <div key={i} className="school-subj-section">
               <h2>{sec.heading}</h2>
-              <p>{sec.body}</p>
+              {sec.body
+                .split(/\n\n+/)
+                .map((para) => para.trim())
+                .filter(Boolean)
+                .map((para, j) => (
+                  <p key={j}>{para}</p>
+                ))}
+              {sec.bullets && sec.bullets.length > 0 ? (
+                <ul className="school-subj-teach-bullets">
+                  {sec.bullets.map((b, k) => (
+                    <li key={k}>{b}</li>
+                  ))}
+                </ul>
+              ) : null}
             </div>
           ))}
           <Button
@@ -188,6 +227,40 @@ const SchoolSubjectLessonPage: React.FC = () => {
               )
             })}
           </div>
+
+          {revealed && selected !== null ? (
+            <div
+              className={`school-subj-quiz-feedback ${selected === currentQ.correctIndex ? 'school-subj-quiz-feedback--correct' : 'school-subj-quiz-feedback--wrong'}`}
+              role="status"
+            >
+              <p className="school-subj-quiz-feedback__status">
+                {selected === currentQ.correctIndex
+                  ? t('schoolSubject.quizStatusCorrect')
+                  : t('schoolSubject.quizStatusWrong')}
+              </p>
+              <div className="school-subj-quiz-feedback__answers">
+                <p>
+                  <span className="school-subj-quiz-feedback__label">{t('schoolSubject.quizCorrectIs')}:</span>{' '}
+                  <strong>{currentQ.options[currentQ.correctIndex]}</strong>
+                </p>
+                {selected !== currentQ.correctIndex ? (
+                  <p>
+                    <span className="school-subj-quiz-feedback__label">{t('schoolSubject.quizYourAnswer')}:</span>{' '}
+                    {currentQ.options[selected]}
+                  </p>
+                ) : null}
+              </div>
+              <h3 className="school-subj-quiz-feedback__why">{t('schoolSubject.quizWhyHeading')}</h3>
+              <p className="school-subj-quiz-feedback__explain">
+                {quizTeachingNote ||
+                  t('schoolSubject.quizExplainFallback', {
+                    answer: currentQ.options[currentQ.correctIndex],
+                  })}
+              </p>
+              <p className="school-subj-quiz-feedback__hint muted text-sm">{t('schoolSubject.quizReviewLearn')}</p>
+            </div>
+          ) : null}
+
           <div className="school-subj-quiz-footer">
             <Button type="button" disabled={!revealed} onClick={onQuizNext}>
               {isLastQ ? t('schoolSubject.seeResults') : t('schoolSubject.nextQuestion')}

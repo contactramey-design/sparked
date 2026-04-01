@@ -18,19 +18,35 @@ export const MATH_LESSONS: SchoolSubjectLesson[] = [
       teachSections: [
         {
           heading: 'Warm-up',
-          body: 'Numbers help us tell “how many.” Sparki lines up 5 blocks. We touch each block once and say: one, two, three, four, five.',
+          body: 'Numbers help us tell “how many.” Sparki lines up 5 blocks. We touch each block once and say: one, two, three, four, five.\n\nStable order matters: the count words must match objects in a line or circle so nothing is counted twice.',
+          bullets: [
+            'Say the sequence 1–5 aloud as a class before touching objects.',
+            'Pair each touch with one spoken number—pause slightly between pairs.',
+          ],
         },
         {
           heading: 'Try it',
-          body: 'Hold up fingers as you count. Start at 1. Stop when you run out of objects. The last number you say is how many!',
+          body: 'Hold up fingers as you count. Start at 1. Stop when you run out of objects. The last number you say is how many!\n\nIf you rearrange the objects, the total stays the same—conservation of number is the deeper idea you are previewing.',
+          bullets: [
+            'Try “count on” from 1 with a small set, then scatter the objects and count again.',
+            'Ask: “Did we still get the same last number?”',
+          ],
         },
         {
           heading: 'Teacher tip',
-          body: 'Use classroom objects (crayons, counters). Slow counting beats fast guessing.',
+          body: 'Use classroom objects (crayons, counters). Slow counting beats fast guessing.\n\nWatch for sub-vocal skipping—some students mouth numbers faster than their finger moves.',
+          bullets: [
+            'Use a 5-frame or ten-frame to bound the set when beginners lose track.',
+            'Celebrate self-corrections when a child notices a double-count.',
+          ],
         },
         {
           heading: 'Formative check',
-          body: 'Ask: “Show me 4 cubes—touch and count aloud.” If a child skips or double-touches, model finger-tracking slowly.',
+          body: 'Ask: “Show me 4 cubes—touch and count aloud.” If a child skips or double-touches, model finger-tracking slowly.\n\nExtend with “Which is more, 4 or 3?” after they count two separate piles—links cardinality to comparison.',
+          bullets: [
+            'Note whether the last word said matches the pile you asked for.',
+            'If wrong, have them re-count with a slower partner or teacher finger.',
+          ],
         },
       ],
       quiz: [
@@ -78,19 +94,35 @@ export const MATH_LESSONS: SchoolSubjectLesson[] = [
       teachSections: [
         {
           heading: 'Calentamiento',
-          body: 'Los números nos dicen “cuántos.” Sparki alinea 5 bloques. Tocamos cada bloque una vez y decimos: uno, dos, tres, cuatro, cinco.',
+          body: 'Los números nos dicen “cuántos.” Sparki alinea 5 bloques. Tocamos cada bloque una vez y decimos: uno, dos, tres, cuatro, cinco.\n\nEl orden estable importa: cada palabra va con un objeto, sin saltos ni repeticiones.',
+          bullets: [
+            'Digan juntos la secuencia 1–5 antes de tocar objetos.',
+            'Cada toque con un número — pausa breve entre pares.',
+          ],
         },
         {
           heading: 'Pruébalo',
-          body: 'Levanta dedos mientras cuentas. Empieza en 1. Para cuando se acaben los objetos. ¡El último número es cuántos hay!',
+          body: 'Levanta dedos mientras cuentas. Empieza en 1. Para cuando se acaben los objetos. ¡El último número es cuántos hay!\n\nSi mueves los objetos, el total puede ser el mismo — es la idea de conservación del número.',
+          bullets: [
+            'Cuenta un montoncito, luego desparrama y cuenta otra vez.',
+            'Pregunta: “¿Seguimos llegando al mismo último número?”',
+          ],
         },
         {
           heading: 'Tip para el maestro',
-          body: 'Usa objetos del salón (crayones, fichas). Contar despacio es mejor que adivinar rápido.',
+          body: 'Usa objetos del salón (crayones, fichas). Contar despacio es mejor que adivinar rápido.\n\nOjo con quien dice números más rápido que mueve el dedo.',
+          bullets: [
+            'Un marco de 5 o 10 acota el conjunto si pierden el hilo.',
+            'Celebra cuando se corrigen solos tras un doble conteo.',
+          ],
         },
         {
           heading: 'Comprobación formativa',
-          body: 'Pide: “Muéstrame 4 cubos—toca y cuenta en voz alta.” Si saltan o tocan dos veces, modela lento con el dedo.',
+          body: 'Pide: “Muéstrame 4 cubos—toca y cuenta en voz alta.” Si saltan o tocan dos veces, modela lento con el dedo.\n\nAmplía con “¿Qué hay más, 4 o 3?” tras contar dos montones — enlaza cardinalidad y comparación.',
+          bullets: [
+            'Fíjate si la última palabra coincide con la cantidad pedida.',
+            'Si fallan, que cuenten otra vez contigo señalando despacio.',
+          ],
         },
       ],
       quiz: [

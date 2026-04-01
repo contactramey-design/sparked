@@ -171,7 +171,10 @@
     "stepLearn": "Aprender",
     "stepQuiz": "Quiz",
     "stepTip": "Tip del mundo real",
-    "objectivesHeading": "Objetivos",
+    "objectivesHeading": "Metas de aprendizaje",
+    "summaryHeading": "Panorama",
+    "deepDiveHeading": "Enseñar esta idea",
+    "deepDiveSub": "Lean juntos, hagan pausas con ejemplos y conecten con el salón.",
     "goToQuiz": "Ir al quiz",
     "questionProgress": "Pregunta {current} de {total}",
     "nextQuestion": "Siguiente pregunta",
@@ -181,37 +184,66 @@
     "quizRetry": "Intenta el quiz otra vez para reforzar.",
     "retryQuiz": "Repetir quiz",
     "goToTip": "Tip del mundo real",
-    "tipHeading": "Tip del mundo real"
+    "tipHeading": "Tip del mundo real",
+    "quizStatusCorrect": "¡Muy bien — coincide con la lección!",
+    "quizStatusWrong": "Casi — es un error frecuente. Lee la nota de abajo.",
+    "quizWhyHeading": "Por qué esta respuesta",
+    "quizCorrectIs": "Respuesta correcta",
+    "quizYourAnswer": "Tu respuesta",
+    "quizReviewLearn": "Consejo: abre Aprender y repasa los títulos buscando la misma idea.",
+    "quizExplainFallback": "La opción que mejor encaja es: {answer}. Compara cada opción con lo que leíste en Aprender — la correcta usa la misma lógica y vocabulario."
   },
   "schoolSubjects": {
+    "alignmentBadge": "Alineado a TEKS y estándares estatales",
+    "sequenceSummary": "{count} lecciones · unos {minutes} min en total",
+    "sequenceTitle": "Secuencia de lecciones",
+    "sequenceLead": "Sigue el orden para una progresión clara, o asigna lecciones sueltas según tu unidad.",
+    "cardObjectiveLabel": "Enfoque",
+    "cardTimeLabel": "{minutes} min",
+    "cardStandardsLabel": "Etiqueta de estándares",
+    "gameBadge": "Práctica interactiva",
+    "startLesson": "Empezar lección",
+    "howToTitle": "Cómo usarlo en clase",
+    "howToStep1": "Elige la franja de grado y abre una lección. Proyecta Aprender para enseñar rápido, o asigna en dispositivos.",
+    "howToStep2": "Usa la práctica integrada para verificar comprensión; las respuestas incorrectas incluyen notas de enseñanza.",
+    "howToStep3": "Cierra con el tip del mundo real, o conecta el objetivo con tu guía de ritmo del distrito.",
+    "plannerTitle": "Alineación y planificador",
+    "plannerBody": "Aquí habrá un PDF imprimible con mapa de alineación TEKS / estándares y planificador para administradores.",
+    "plannerCtaSoon": "Descargar PDF (próximamente)",
+    "heroAlt": {
+      "math": "Arte de cabecera colorido de matemáticas con Sparki",
+      "english": "Arte de cabecera colorido de inglés con Sparki",
+      "science": "Arte de cabecera colorido de ciencias con Sparki",
+      "history": "Arte de cabecera colorido de historia y estudios sociales con Sparki"
+    },
     "tracks": {
       "math": {
         "hubEmoji": "🔢",
         "cardTitle": "Matemáticas",
         "cardDesc": "Números, operaciones, geometría y fracciones — listo para clase o grupos pequeños.",
-        "title": "Matemáticas con Sparki (Escuela)",
-        "subtitle": "Lecciones cortas estructuradas. Añade más en `mathLessons.ts`."
+        "title": "Matemáticas con Sparki",
+        "subtitle": "Lecciones listas para enseñar con práctica integrada — sentido numérico hasta fracciones, por franjas de edad."
       },
       "english": {
         "hubEmoji": "📚",
         "cardTitle": "Inglés / Lengua",
         "cardDesc": "Fonología, comprensión, oraciones y lectura con evidencia.",
-        "title": "Inglés y lengua (Escuela)",
-        "subtitle": "Mini lecciones de lectura y lenguaje. Amplía en `englishLessons.ts`."
+        "title": "Inglés y lengua con Sparki",
+        "subtitle": "Fonología, comprensión, oraciones y evidencia — para grupo completo, pequeño grupo o práctica independiente."
       },
       "science": {
         "hubEmoji": "🔬",
         "cardTitle": "Ciencias",
         "cardDesc": "Observación, seres vivos, materia, energía y ecosistemas — con enfoque práctico.",
-        "title": "Ciencias con Sparki (Escuela)",
-        "subtitle": "Lecciones tipo indagación. Amplía en `scienceLessons.ts`."
+        "title": "Ciencias con Sparki",
+        "subtitle": "Observación, seres vivos, materia y energía — vocabulario rico y fácil de combinar con demostraciones."
       },
       "history": {
         "hubEmoji": "🌍",
         "cardTitle": "Historia y estudios sociales",
         "cardDesc": "Tiempo, comunidad, mapas, líneas de tiempo y fuentes — pensamiento cívico e histórico.",
-        "title": "Historia y estudios sociales (Escuela)",
-        "subtitle": "Mini lecciones sociales. Amplía en `historyLessons.ts`."
+        "title": "Historia y estudios sociales con Sparki",
+        "subtitle": "Tiempo, comunidad, mapas, líneas de tiempo y fuentes — pensamiento histórico y cívico sin preparación extra."
       }
     }
   },

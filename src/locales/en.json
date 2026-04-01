@@ -171,7 +171,10 @@
     "stepLearn": "Learn",
     "stepQuiz": "Quiz",
     "stepTip": "Real-world tip",
-    "objectivesHeading": "Objectives",
+    "objectivesHeading": "Learning goals",
+    "summaryHeading": "Big picture",
+    "deepDiveHeading": "Teach this idea",
+    "deepDiveSub": "Read together, pause for examples, and connect to your classroom.",
     "goToQuiz": "Go to quiz",
     "questionProgress": "Question {current} of {total}",
     "nextQuestion": "Next question",
@@ -181,37 +184,66 @@
     "quizRetry": "Try the quiz again to strengthen your skills.",
     "retryQuiz": "Retry quiz",
     "goToTip": "Real-world tip",
-    "tipHeading": "Real-world tip"
+    "tipHeading": "Real-world tip",
+    "quizStatusCorrect": "Nice work — that matches the lesson.",
+    "quizStatusWrong": "Not quite — that mix-up is common. Read the note below.",
+    "quizWhyHeading": "Why this answer",
+    "quizCorrectIs": "Correct answer",
+    "quizYourAnswer": "Your answer",
+    "quizReviewLearn": "Tip: open the Learn tab and skim the headings for the same idea.",
+    "quizExplainFallback": "The choice that best fits this question is: {answer}. Compare each option to what you read in Learn — the correct one uses the same vocabulary and logic."
   },
   "schoolSubjects": {
+    "alignmentBadge": "Aligned to TEKS & state standards",
+    "sequenceSummary": "{count} lessons · about {minutes} min total",
+    "sequenceTitle": "Lesson sequence",
+    "sequenceLead": "Work top to bottom for a clear progression, or assign individual lessons to match your unit.",
+    "cardObjectiveLabel": "Focus",
+    "cardTimeLabel": "{minutes} min",
+    "cardStandardsLabel": "Standards tag",
+    "gameBadge": "Interactive practice",
+    "startLesson": "Start lesson",
+    "howToTitle": "How to use in your classroom",
+    "howToStep1": "Pick your grade band, then open a lesson. Project the Learn section for a quick teach, or assign students on devices.",
+    "howToStep2": "Use the built-in practice to check understanding; wrong answers include teaching notes students can learn from.",
+    "howToStep3": "Close with the real-world tip, or connect the objective to your district pacing guide.",
+    "plannerTitle": "Alignment & lesson planner",
+    "plannerBody": "A printable TEKS / standards alignment map and pacing planner will be available here for administrators.",
+    "plannerCtaSoon": "Download PDF (coming soon)",
+    "heroAlt": {
+      "math": "Colorful hero art for math with Sparki",
+      "english": "Colorful hero art for English language arts with Sparki",
+      "science": "Colorful hero art for science with Sparki",
+      "history": "Colorful hero art for history and social studies with Sparki"
+    },
     "tracks": {
       "math": {
         "hubEmoji": "🔢",
         "cardTitle": "Math",
         "cardDesc": "Number sense, operations, geometry, and fractions — structured for class or small groups.",
-        "title": "Math with Sparki (School)",
-        "subtitle": "Short structured lessons. Add more anytime in `mathLessons.ts`."
+        "title": "Math with Sparki",
+        "subtitle": "Short, ready-to-teach lessons with built-in practice — number sense through fractions, matched to early elementary bands."
       },
       "english": {
         "hubEmoji": "📚",
         "cardTitle": "English / Language Arts",
         "cardDesc": "Phonics awareness, comprehension, sentences, and evidence-based reading.",
-        "title": "English & Language Arts (School)",
-        "subtitle": "Reading and language mini-lessons. Extend in `englishLessons.ts`."
+        "title": "English & Language Arts with Sparki",
+        "subtitle": "Phonics, comprehension, sentences, and evidence — scaffolded for whole group, small group, or independent practice."
       },
       "science": {
         "hubEmoji": "🔬",
         "cardTitle": "Science",
         "cardDesc": "Observation, living things, matter, energy, and ecosystems — hands-on friendly.",
-        "title": "Science with Sparki (School)",
-        "subtitle": "Inquiry-style lessons. Extend in `scienceLessons.ts`."
+        "title": "Science with Sparki",
+        "subtitle": "Observation, living things, matter, and energy — vocabulary-rich and easy to pair with hands-on demos."
       },
       "history": {
         "hubEmoji": "🌍",
         "cardTitle": "History & Social Studies",
         "cardDesc": "Time, community, maps, timelines, and sources — civic and historical thinking.",
-        "title": "History & Social Studies (School)",
-        "subtitle": "Social studies mini-lessons. Extend in `historyLessons.ts`."
+        "title": "History & Social Studies with Sparki",
+        "subtitle": "Time, community, maps, timelines, and sources — build civic and historical thinking without extra prep."
       }
     }
   },

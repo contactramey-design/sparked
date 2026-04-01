@@ -13,7 +13,10 @@ export function isSchoolSubjectId(s: string | undefined): s is SchoolSubjectId {
 
 export type SchoolSubjectTeachSection = {
   heading: string
+  /** Use \\n\\n for multiple paragraphs. */
   body: string
+  /** Optional short bullets under the paragraph(s). */
+  bullets?: string[]
 }
 
 export type SchoolSubjectQuizItem = {
@@ -21,6 +24,8 @@ export type SchoolSubjectQuizItem = {
   prompt: string
   options: [string, string, string]
   correctIndex: 0 | 1 | 2
+  /** Optional; overrides central map in `schoolSubjectQuizFeedback.ts` when set. */
+  feedback?: string
 }
 
 export type SchoolSubjectLessonLocale = {
@@ -40,6 +45,11 @@ export type SchoolSubjectLesson = {
   standardsNote?: string
   cardEmoji?: string
   cardImageUrl?: string
+  /**
+   * When true (default), lesson includes the interactive quiz step — show “game / practice” badge on track cards.
+   * Set false for future read-only lessons.
+   */
+  includesGameQuiz?: boolean
   en: SchoolSubjectLessonLocale
   es: SchoolSubjectLessonLocale
 }
