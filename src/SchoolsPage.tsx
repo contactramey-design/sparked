@@ -20,6 +20,13 @@ const SchoolsPage: React.FC = () => {
         <h2>{t('schools.title')}</h2>
         <p className="muted">{t('schools.subtitle')}</p>
         <p className="muted text-sm mt-2 max-w-prose">{t('schools.weeklyVsSubjectsNote')}</p>
+        <p className="muted text-sm mt-3 font-medium max-w-prose">{t('schools.fitIntro')}</p>
+        <ul className="muted text-sm mt-2 max-w-prose list-disc pl-5 space-y-1">
+          <li>{t('schools.fitBullet1')}</li>
+          <li>{t('schools.fitBullet2')}</li>
+          <li>{t('schools.fitBullet3')}</li>
+          <li>{t('schools.fitBullet4')}</li>
+        </ul>
       </header>
 
       <div className="stack-lg">

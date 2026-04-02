@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react'
+import { loadSchoolSubjectProgress } from '@/school/subjects/schoolSubjectProgress'
 import { Link } from 'react-router-dom'
 import { curriculum, getUnitsForBand } from './curriculum'
 import { loadProgress, getHasSafetyPass, setHasSafetyPass, setSafetyPassCheckoutSessionId } from './progress'
@@ -19,6 +20,26 @@ export const ParentViewContent: React.FC = () => {
   const hasSafetyPass = getHasSafetyPass()
   const [unlockLoading, setUnlockLoading] = useState(false)
   const [unlockErrorKey, setUnlockErrorKey] = useState<string | null>(null)
+  const [subjectTracksLocalActivity, setSubjectTracksLocalActivity] = useState(false)
+
+  useEffect(() => {
+    try {
+      const n = Object.keys(loadSchoolSubjectProgress().lessons).length
+      setSubjectTracksLocalActivity(n > 0)
+    } catch {
+      setSubjectTracksLocalActivity(false)
+    }
+  }, [])
+
+  const conversationKeys = useMemo(() => {
+    if (ageBand === 'tots') {
+      return ['convPromptTots1', 'convPromptTots2', 'convPromptTots3', 'convPromptTots4'] as const
+    }
+    if (ageBand === 'kids') {
+      return ['convPromptKids1', 'convPromptKids2', 'convPromptKids3', 'convPromptKids4'] as const
+    }
+    return ['convPromptCrew1', 'convPromptCrew2', 'convPromptCrew3', 'convPromptCrew4'] as const
+  }, [ageBand])
 
   const checkoutStatus = useMemo(() => {
     if (typeof window === 'undefined') return null
@@ -99,6 +120,16 @@ export const ParentViewContent: React.FC = () => {
         </div>
 
         <div className="lesson-media card">
+          <h3>{t('parentDashboard.conversationTitle')}</h3>
+          <p className="text-slate-700">{t('parentDashboard.conversationIntro')}</p>
+          <ul className="list-disc pl-5 text-sm text-slate-700 space-y-1 mt-2">
+            {conversationKeys.map((key) => (
+              <li key={key}>{t(`parentDashboard.${key}`)}</li>
+            ))}
+          </ul>
+        </div>
+
+        <div className="lesson-media card">
           <h3>{t('parentDashboard.parentGuideTitle')}</h3>
           <p>{t('parentDashboard.parentGuideDesc')}</p>
           <ul className="list-disc pl-5 text-sm text-slate-700 space-y-1 mt-2">
@@ -158,6 +189,12 @@ export const ParentViewContent: React.FC = () => {
             {t('parentDashboard.sparklesNote')}
           </p>
         </div>
+
+        {subjectTracksLocalActivity ? (
+          <div className="lesson-media card">
+            <p className="text-sm text-slate-700">{t('parentDashboard.schoolSubjectLocalNote')}</p>
+          </div>
+        ) : null}
 
         <div className="lesson-quiz card">
           <h3>{t('parentDashboard.unitsSummaryTitle')}</h3>

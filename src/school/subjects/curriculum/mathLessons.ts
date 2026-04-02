@@ -20,6 +20,7 @@ export const MATH_LESSONS: SchoolSubjectLesson[] = [
     },
     standardsNote: 'CA PTKLF Mathematics — Number Sense; counting (PK/TK)',
     cardEmoji: '🔢',
+    practiceGameId: 'sparki-ordered-tap',
     en: {
       title: 'Counting 1 to 5 with Sparki',
       summary: 'Touch-count objects in order and say the number name.',
@@ -94,7 +95,9 @@ export const MATH_LESSONS: SchoolSubjectLesson[] = [
           correctIndex: 0,
         },
       ],
-      realWorldTip: 'At snack time, count crackers on the plate together: one touch, one number.',
+      offlineApplication: 'At snack time, count crackers on the plate together: one touch, one number.',
+      realWorldTip:
+        'The last number you say means “how many.” That same idea works for toys in a basket, friends in line, or steps on the stairs.',
     },
     es: {
       title: 'Contar del 1 al 5 con Sparki',
@@ -170,7 +173,9 @@ export const MATH_LESSONS: SchoolSubjectLesson[] = [
           correctIndex: 0,
         },
       ],
-      realWorldTip: 'En la merienda, cuenten juntos las galletas en el plato: un toque, un número.',
+      offlineApplication: 'En la merienda, cuenten juntos las galletas en el plato: un toque, un número.',
+      realWorldTip:
+        'El último número que dices significa “cuántos.” La misma idea sirve para juguetes en una canasta, amigos en fila o escalones.',
     },
   },
   {

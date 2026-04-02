@@ -7,6 +7,8 @@ export type SchoolSubjectLessonProgress = {
   quizBestScore: number
   quizAttempts: number
   completedAt?: string
+  /** ISO timestamp when the learner finished the inline practice step. */
+  practiceCompletedAt?: string
 }
 
 export type SchoolSubjectProgressState = {
@@ -86,6 +88,18 @@ export function saveSchoolSubjectProgress(state: SchoolSubjectProgressState): vo
   persistSchoolSubjectProgress(state)
 }
 
+export function recordSchoolSubjectPracticeComplete(subjectId: SchoolSubjectId, lessonId: string): void {
+  const state = loadSchoolSubjectProgress()
+  const key = progressKey(subjectId, lessonId)
+  const prev = state.lessons[key]
+  const base: SchoolSubjectLessonProgress = prev ?? { quizBestScore: 0, quizAttempts: 0 }
+  state.lessons[key] = {
+    ...base,
+    practiceCompletedAt: new Date().toISOString(),
+  }
+  saveSchoolSubjectProgress(state)
+}
+
 export function recordSchoolSubjectQuizResult(
   subjectId: SchoolSubjectId,
   lessonId: string,
@@ -97,6 +111,7 @@ export function recordSchoolSubjectQuizResult(
   const prev = state.lessons[key]
   const ratio = total > 0 ? score / total : 0
   const next: SchoolSubjectLessonProgress = {
+    ...(prev ?? { quizBestScore: 0, quizAttempts: 0 }),
     quizBestScore: prev ? Math.max(prev.quizBestScore, ratio) : ratio,
     quizAttempts: (prev?.quizAttempts ?? 0) + 1,
     completedAt: ratio >= 1 ? new Date().toISOString() : prev?.completedAt,

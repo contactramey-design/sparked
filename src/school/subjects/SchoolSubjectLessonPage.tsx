@@ -1,10 +1,11 @@
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { useTranslation } from '@/contexts/LocaleContext'
 import { useAgeBand } from '@/contexts/AgeBandContext'
 import { Button } from '@/components/ui/button'
 import { getSubjectLessonById } from './registry'
-import { recordSchoolSubjectQuizResult } from './schoolSubjectProgress'
+import { recordSchoolSubjectPracticeComplete, recordSchoolSubjectQuizResult } from './schoolSubjectProgress'
+import { renderSchoolSubjectPracticeGame } from './games/registry'
 import { getSchoolSubjectTeacherPack } from './schoolSubjectTeacherPack'
 import { getSchoolSubjectQuizFeedback } from './schoolSubjectQuizFeedback'
 import {
@@ -18,7 +19,7 @@ import SchoolAudienceToggle from './SchoolAudienceToggle'
 import { isLessonInBand, isSchoolSubjectId, lessonLocale, type SchoolSubjectId } from './types'
 import './school-subject.css'
 
-type StepId = 'learn' | 'quiz' | 'tip'
+type StepId = 'learn' | 'practice' | 'quiz' | 'tip'
 
 const SchoolSubjectLessonPage: React.FC = () => {
   const { subjectId: rawSubject, lessonId: rawId } = useParams<{ subjectId: string; lessonId: string }>()
@@ -85,6 +86,16 @@ const SchoolSubjectLessonPage: React.FC = () => {
   const currentQ = questions[qIndex]
   const isLastQ = qIndex >= questions.length - 1
   const teacherPack = useMemo(() => getSchoolSubjectTeacherPack(lesson.id, locale), [lesson.id, locale])
+
+  const showPractice = lesson.includesGameQuiz !== false && lesson.includesPracticeStep !== false
+  const practiceGameId = lesson.practiceGameId ?? 'sparki-ordered-tap'
+  const lessonSteps = useMemo(() => {
+    return showPractice ? (['learn', 'practice', 'quiz', 'tip'] as const) : (['learn', 'quiz', 'tip'] as const)
+  }, [showPractice])
+
+  useEffect(() => {
+    if (step === 'practice' && !showPractice) setStep('learn')
+  }, [step, showPractice])
 
   const quizTeachingNote = useMemo(() => {
     if (!currentQ) return ''
@@ -167,7 +178,7 @@ const SchoolSubjectLessonPage: React.FC = () => {
       </header>
 
       <div className="school-subj-stepper" role="tablist" aria-label={t('schoolSubject.stepsAria')}>
-        {(['learn', 'quiz', 'tip'] as const).map((s) => (
+        {lessonSteps.map((s) => (
           <button
             key={s}
             type="button"
@@ -177,6 +188,7 @@ const SchoolSubjectLessonPage: React.FC = () => {
             onClick={() => setStep(s)}
           >
             {s === 'learn' && t('schoolSubject.stepLearn')}
+            {s === 'practice' && t('schoolSubject.stepPractice')}
             {s === 'quiz' && t('schoolSubject.stepQuiz')}
             {s === 'tip' && t('schoolSubject.stepTip')}
           </button>
@@ -299,13 +311,31 @@ const SchoolSubjectLessonPage: React.FC = () => {
             className="mt-2"
             onClick={() => {
               resetQuiz()
-              setStep('quiz')
+              setStep(showPractice ? 'practice' : 'quiz')
             }}
           >
-            {t('schoolSubject.goToQuiz')}
+            {showPractice ? t('schoolSubject.goToPractice') : t('schoolSubject.goToQuiz')}
           </Button>
         </div>
       )}
+
+      {step === 'practice' && showPractice ? (
+        <div className="school-subj-practice-wrap">
+          {renderSchoolSubjectPracticeGame(practiceGameId, {
+            onContinue: () => {
+              recordSchoolSubjectPracticeComplete(subjectId, lesson.id)
+              setStep('quiz')
+            },
+            labels: {
+              title: t('schoolSubject.practiceOrderedTapTitle'),
+              hint: t('schoolSubject.practiceOrderedTapHint'),
+              wrong: t('schoolSubject.practiceOrderedTapWrong'),
+              done: t('schoolSubject.practiceOrderedTapDone'),
+              continueLabel: t('schoolSubject.practiceContinueToQuiz'),
+            },
+          })}
+        </div>
+      ) : null}
 
       {step === 'quiz' && !quizFinished && currentQ && (
         <div className="school-subj-quiz-panel">
@@ -428,7 +458,20 @@ const SchoolSubjectLessonPage: React.FC = () => {
       {step === 'tip' && (
         <div className="school-subj-tip-panel">
           <h2 className="school-subj-lesson__section-title">{t('schoolSubject.tipHeading')}</h2>
-          <div className="school-subj-tip-box">{loc.realWorldTip}</div>
+          <p className="school-subj-tip-sublead muted text-sm">{t('schoolSubject.tipSublead')}</p>
+          {(ageBand === 'tots' || ageBand === 'kids') && !isTeacherView ? (
+            <p className="school-subj-tip-imagination muted text-sm">{t('schoolSubject.tipImaginationNote')}</p>
+          ) : null}
+          {loc.offlineApplication ? (
+            <>
+              <h3 className="school-subj-tip-kicker">{t('schoolSubject.tipTryHeading')}</h3>
+              <div className="school-subj-tip-box school-subj-tip-box--try">{loc.offlineApplication}</div>
+              <h3 className="school-subj-tip-kicker">{t('schoolSubject.tipWhyHeading')}</h3>
+              <div className="school-subj-tip-box">{loc.realWorldTip}</div>
+            </>
+          ) : (
+            <div className="school-subj-tip-box">{loc.realWorldTip}</div>
+          )}
           <div className="mt-4">
             <Link to={trackPath} className="primary-button">
               {t('schoolSubject.backToSubjectTrack')}

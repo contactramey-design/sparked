@@ -52,6 +52,8 @@ export type SchoolSubjectLessonLocale = {
   teachSections: SchoolSubjectTeachSection[]
   quiz: SchoolSubjectQuizItem[]
   realWorldTip: string
+  /** Optional offline “try this” line; when set, tip step shows Try + Why blocks. */
+  offlineApplication?: string
 }
 
 /** California official frameworks for school alignment (CDE). */
@@ -81,6 +83,13 @@ export type SchoolSubjectLesson = {
    * Set false for future read-only lessons.
    */
   includesGameQuiz?: boolean
+  /**
+   * When not false, show a short practice step after Learn and before the quick check.
+   * Ignored when `includesGameQuiz === false`.
+   */
+  includesPracticeStep?: boolean
+  /** Registry id under `subjects/games` (defaults to built-in ordered-tap when practice is on). */
+  practiceGameId?: string
   en: SchoolSubjectLessonLocale
   es: SchoolSubjectLessonLocale
 }

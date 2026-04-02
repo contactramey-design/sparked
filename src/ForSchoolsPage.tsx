@@ -222,6 +222,23 @@ const ForSchoolsPage: React.FC = () => {
 
         <Card>
           <CardHeader>
+            <CardTitle>{t('forSchoolsHub.ecosystemTitle')}</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            <p className="muted">{t('forSchoolsHub.ecosystemBody')}</p>
+            <ul className="list-disc pl-5 text-sm space-y-1">
+              <li>{t('forSchoolsHub.ecosystemBullet1')}</li>
+              <li>{t('forSchoolsHub.ecosystemBullet2')}</li>
+              <li>{t('forSchoolsHub.ecosystemBullet3')}</li>
+              <li>{t('forSchoolsHub.ecosystemBullet4')}</li>
+              <li>{t('forSchoolsHub.ecosystemBullet5')}</li>
+            </ul>
+            <p className="muted text-xs font-mono">{t('forSchoolsHub.ecosystemDocNote')}</p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
             <CardTitle>{t('forSchoolsHub.resourcesPdfTitle')}</CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">

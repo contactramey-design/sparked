@@ -46,6 +46,7 @@ export const homeworkExplanationSchema = z
     childExplanation: z.string().max(50000),
     steps: z.array(z.string().max(4000)).min(1).max(25),
     practiceQuestions: z.array(z.string().max(4000)).max(5),
+    offlineTry: z.string().max(2000).optional(),
     parentNotes: z.string().max(10000).optional(),
   })
   .strict()
@@ -62,6 +63,7 @@ export const homeworkExplanationInputSchema = z
     childExplanation: z.string().max(50000).default(''),
     steps: z.array(z.string().max(4000)).max(25).default([]),
     practiceQuestions: z.array(z.string().max(4000)).max(5).default([]),
+    offlineTry: z.string().max(2000).optional(),
     parentNotes: z.string().max(10000).optional(),
   })
   .refine(

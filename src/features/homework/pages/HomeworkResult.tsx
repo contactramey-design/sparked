@@ -13,6 +13,7 @@ import { StoryCard } from '../components/StoryCard'
 import { GenerateButton } from '../components/GenerateButton'
 import { AdventureVisuals } from '../components/AdventureVisuals'
 import { HomeworkQualityPanel } from '../components/HomeworkQualityPanel'
+import { HomeworkPedagogyBanner } from '../components/HomeworkPedagogyBanner'
 
 export default function HomeworkResult() {
   const { jobId } = useParams<{ jobId: string }>()
@@ -116,6 +117,8 @@ export default function HomeworkResult() {
 
   return (
     <div className="space-y-6">
+      <HomeworkPedagogyBanner />
+
       {job.previewDataUrl ? (
         <div>
           <h3 className="text-lg font-bold text-blue-900 mb-2">{t('homeworkFeature.previewHeading')}</h3>
@@ -154,6 +157,7 @@ export default function HomeworkResult() {
               title: t('homeworkFeature.explainHeading'),
               steps: t('homeworkFeature.stepsHeading'),
               parent: t('homeworkFeature.parentHeading'),
+              offline: t('homeworkFeature.offlineTryHeading'),
             }}
           />
           <PracticeCard questions={job.explanation.practiceQuestions} title={t('homeworkFeature.practiceHeading')} />
@@ -169,6 +173,7 @@ export default function HomeworkResult() {
               scene: t('homeworkFeature.sceneLabel'),
               recap: t('homeworkFeature.recapHeading'),
               teachingPoint: t('homeworkFeature.teachingPoint'),
+              fictionNote: t('homeworkFeature.storyFictionNote'),
             }}
           />
           <AdventureVisuals

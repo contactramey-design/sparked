@@ -17,6 +17,8 @@ export interface HomeworkExplanation {
   childExplanation: string
   steps: string[]
   practiceQuestions: string[]
+  /** Short no-screen activity tied to the learning objective (from AI). */
+  offlineTry?: string
   parentNotes?: string
 }
 

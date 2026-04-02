@@ -34,7 +34,8 @@ function normalizeExplanation(raw) {
     : []
   practiceQuestions = practiceQuestions.slice(0, 5)
   const parentNotes = typeof raw.parentNotes === 'string' ? raw.parentNotes : undefined
-  return { childExplanation, steps, practiceQuestions, parentNotes }
+  const offlineTry = typeof raw.offlineTry === 'string' ? raw.offlineTry.trim() || undefined : undefined
+  return { childExplanation, steps, practiceQuestions, offlineTry, parentNotes }
 }
 
 export default async function handler(req, res) {

@@ -2,7 +2,7 @@ import type { HomeworkExplanation } from '../types/homework'
 
 type Props = {
   explanation: HomeworkExplanation
-  labels: { title: string; steps: string; parent: string }
+  labels: { title: string; steps: string; parent: string; offline: string }
 }
 
 export function ExplanationCard({ explanation, labels }: Props) {
@@ -20,10 +20,17 @@ export function ExplanationCard({ explanation, labels }: Props) {
           </ol>
         </div>
       ) : null}
+      {explanation.offlineTry ? (
+        <div className="rounded-lg border border-emerald-200 bg-emerald-50/90 px-3 py-2 text-emerald-950">
+          <strong className="block text-sm font-semibold text-emerald-900">{labels.offline}</strong>
+          <p className="mt-1 text-sm leading-relaxed">{explanation.offlineTry}</p>
+        </div>
+      ) : null}
       {explanation.parentNotes ? (
-        <p className="text-sm text-slate-600">
-          <strong>{labels.parent}</strong> {explanation.parentNotes}
-        </p>
+        <div className="rounded-lg border border-amber-200 bg-amber-50/90 px-3 py-2 text-amber-950">
+          <strong className="block text-sm font-semibold text-amber-900">{labels.parent}</strong>
+          <p className="mt-1 text-sm leading-relaxed">{explanation.parentNotes}</p>
+        </div>
       ) : null}
     </div>
   )
