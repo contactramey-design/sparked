@@ -6,7 +6,8 @@ Short reference for curriculum leads, principals, and IT when discussing **suppl
 
 | Need | Where |
 |------|--------|
-| **Parent / grown-up dashboard** (progress on device, prompts, Safety Pass) | Signed in: footer link **Parent dashboard**, or **Academy → Grown-ups → Parent dashboard** (`/?view=parent`). With kid lock: footer **Grown-up?** |
+| **School parent hub** (class join, weekly track, subject tracks) | **`/schools/parent`** — also **School hub** card “Open school parent hub”, and **Academy → Parent hub — school & class** when School Mode is on. |
+| **Family parent dashboard** (safety tracks, Safety Pass, sparkles, unit table) | **`/?view=parent`** — **Academy → Grown-ups → Parent dashboard** (consumer nav). Footer **Parent dashboard** uses school hub when School Mode is on, otherwise this. With kid lock: footer **Grown-up?** (redirects by mode). |
 | **Teacher roster & tracking** (anonymous codes, CSV) | **Academy → Teacher sign in** (school theme: **Academy → Teacher tools → Teacher dashboard**) → tab **Roster & tracking**. Requires Supabase + teacher role. |
 | **Class join** (students) | **School Mode** on → **School hub** → enter class + student label. |
 

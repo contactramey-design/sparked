@@ -37,6 +37,8 @@ import TeacherHubLayout from './TeacherHubLayout'
 import TeacherDashboardPage from './TeacherDashboardPage'
 import TeacherWeeklyGeneratorPage from './TeacherWeeklyGeneratorPage.tsx'
 import SchoolsPage from './SchoolsPage'
+import SchoolParentPage from './SchoolParentPage'
+import ParentRedirect from './ParentRedirect'
 import SparkiAvatar from './components/SparkiAvatar'
 import MainNav from './components/MainNav'
 import InstallOnIpadBanner from './components/InstallOnIpadBanner'
@@ -212,7 +214,7 @@ function AppShell() {
           <Route path="/shop" element={<BooksPage />} />
           <Route path="/ebook/:ebookId" element={<EbookViewerPage />} />
           <Route path="/ebook" element={<EbookViewerPage />} />
-          <Route path="/parent" element={<Navigate to="/?view=parent" replace />} />
+          <Route path="/parent" element={<ParentRedirect />} />
           <Route path="/coming-soon" element={<ComingSoon />} />
           <Route path="/privacy" element={<PrivacyPage />} />
           <Route path="/compliance" element={<CompliancePage />} />
@@ -220,6 +222,7 @@ function AppShell() {
           <Route path="/for-schools/resources/:slug" element={<SchoolPrintResourcePage />} />
           <Route path="/for-schools/one-pager" element={<SchoolOnePagerPage />} />
           <Route path="/schools" element={<SchoolsPage />} />
+          <Route path="/schools/parent" element={<SchoolParentPage />} />
           <Route path="/schools/subjects" element={<SchoolSubjectsHubPage />} />
           <Route path="/schools/alignment/:subjectId" element={<SchoolAlignmentSubjectPage />} />
           <Route path="/schools/alignment" element={<SchoolAlignmentHubPage />} />

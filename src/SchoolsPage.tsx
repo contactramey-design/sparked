@@ -57,6 +57,25 @@ const SchoolsPage: React.FC = () => {
         {schoolMode && <SchoolJoinCard />}
 
         <div className="schools-grid">
+          <Card className="border-2 border-amber-200 bg-amber-50/50">
+            <CardHeader>
+              <CardTitle>{t('schools.schoolParentCardTitle')}</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="muted">{t('schools.schoolParentCardDesc')}</p>
+              <div className="schools-actions">
+                <Button
+                  variant="secondary"
+                  onClick={() => {
+                    navigate('/schools/parent')
+                  }}
+                >
+                  {t('schools.openSchoolParentHub')}
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+
           <Card>
             <CardHeader>
               <CardTitle>{t('schools.dashboardTitle')}</CardTitle>

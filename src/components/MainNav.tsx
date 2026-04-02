@@ -123,7 +123,7 @@ export default function MainNav({ variant }: Props) {
       ) : null}
       <SectionLabel>{t('nav.sectionGrownups')}</SectionLabel>
       {isLoggedIn && !kidLock ? (
-        <ItemLink to="/?view=parent">{t('nav.academyParent')}</ItemLink>
+        <ItemLink to="/schools/parent">{t('nav.schoolParent')}</ItemLink>
       ) : null}
     </>
   )
