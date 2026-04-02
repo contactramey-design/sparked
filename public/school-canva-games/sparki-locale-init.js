@@ -1,11 +1,22 @@
 /**
- * Runs synchronously in <head> before game scripts. When ?lang=es, loads
- * /school-canva-games/i18n/<basename>.es.json and exposes merges + small hooks.
+ * Runs synchronously in <head> before game scripts.
+ * Locale order: parent window __SPARKI_EMBED_LANG__ (set by React host) → ?lang= in iframe URL.
+ * Keeping a stable iframe path (no ?lang=) avoids the host treating the embed like a new navigation.
  */
 ;(function () {
   try {
+    var lang = 'en'
+    try {
+      if (window.parent && window.parent !== window) {
+        var pl = window.parent
+        if (pl.__SPARKI_EMBED_LANG__ === 'es' || pl.__SPARKI_EMBED_LANG__ === 'en') {
+          lang = pl.__SPARKI_EMBED_LANG__
+        }
+      }
+    } catch (e) {}
     var qs = new URLSearchParams(window.location.search)
-    var lang = (qs.get('lang') || '').toLowerCase() === 'es' ? 'es' : 'en'
+    if ((qs.get('lang') || '').toLowerCase() === 'es') lang = 'es'
+    if ((qs.get('lang') || '').toLowerCase() === 'en') lang = 'en'
     document.documentElement.lang = lang
     window.__SPARKI_MERGE_DEFAULTS__ = null
 

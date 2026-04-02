@@ -1,5 +1,5 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import React, { useCallback, useEffect, useLayoutEffect, useMemo, useState } from 'react'
+import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { useTranslation } from '@/contexts/LocaleContext'
 import { useAgeBand } from '@/contexts/AgeBandContext'
 import { Button } from '@/components/ui/button'
@@ -39,7 +39,7 @@ const SchoolSubjectLessonPage: React.FC = () => {
   const loc = lesson ? lessonLocale(lesson, locale) : null
   const inBand = !!(lesson && isLessonInBand(lesson, ageBand))
 
-  const [step, setStep] = useState<StepId>('learn')
+  const [step, setStepState] = useState<StepId>('learn')
   const [qIndex, setQIndex] = useState(0)
   const [selected, setSelected] = useState<number | null>(null)
   const [quizCorrect, setQuizCorrect] = useState(0)
@@ -72,9 +72,42 @@ const SchoolSubjectLessonPage: React.FC = () => {
     return showPractice ? (['learn', 'practice', 'quiz', 'tip'] as const) : (['learn', 'quiz', 'tip'] as const)
   }, [showPractice])
 
+  const [searchParams, setSearchParams] = useSearchParams()
+
+  const resolvedUrlStep = useMemo((): StepId | null => {
+    const raw = searchParams.get('step')
+    if (!raw) return null
+    const allSteps: StepId[] = ['learn', 'practice', 'quiz', 'tip']
+    if (!allSteps.includes(raw as StepId)) return null
+    if (!(lessonSteps as readonly StepId[]).includes(raw as StepId)) return null
+    if (raw === 'practice' && !showPractice) return null
+    return raw as StepId
+  }, [searchParams, lessonSteps, showPractice])
+
+  useLayoutEffect(() => {
+    if (resolvedUrlStep == null) return
+    setStepState((prev) => (prev === resolvedUrlStep ? prev : resolvedUrlStep))
+  }, [resolvedUrlStep])
+
+  const setStep = useCallback(
+    (s: StepId) => {
+      setStepState(s)
+      setSearchParams(
+        (prev) => {
+          const n = new URLSearchParams(prev)
+          if (s === 'learn') n.delete('step')
+          else n.set('step', s)
+          return n
+        },
+        { replace: true },
+      )
+    },
+    [setSearchParams],
+  )
+
   useEffect(() => {
     if (step === 'practice' && !showPractice) setStep('learn')
-  }, [step, showPractice])
+  }, [step, showPractice, setStep])
 
   const quizTeachingNote = useMemo(() => {
     if (!currentQ) return ''

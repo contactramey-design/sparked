@@ -30,13 +30,19 @@ export function LessonPractice({
   wrongHint,
   tryAgainLabel,
 }: Props) {
-  const canvaSrc = canvaPracticeGameSrc(lesson.id, locale)
+  const canvaSrc = canvaPracticeGameSrc(lesson.id)
   const pick = getPickOnePayload(lesson.id, locale)
 
   if (canvaSrc) {
     return (
       <div className="school-subj-practice-wrap school-subj-practice-wrap--canva">
-        <CanvaHtmlPractice src={canvaSrc} title={title} onContinue={onContinue} continueLabel={continueLabel} />
+        <CanvaHtmlPractice
+          src={canvaSrc}
+          locale={locale}
+          title={title}
+          onContinue={onContinue}
+          continueLabel={continueLabel}
+        />
       </div>
     )
   }
