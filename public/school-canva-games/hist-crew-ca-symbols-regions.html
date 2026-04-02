@@ -1,0 +1,937 @@
+<!doctype html>
+<html lang="en" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Timelines Tell Time Order</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&amp;display=swap" rel="stylesheet">
+  <style>
+    html, body { 
+      height: 100%; 
+      margin: 0; 
+      padding: 0;
+      font-family: 'Poppins', Arial, sans-serif;
+    }
+    
+    * { box-sizing: border-box; }
+
+
+    .wrapper {
+      height: 100%;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+
+
+    header {
+      background: linear-gradient(135deg, #5568d3 0%, #6c63b8 100%);
+      color: white;
+      padding: 24px 16px;
+      box-shadow: 0 8px 32px rgba(85, 104, 211, 0.3);
+      text-align: center;
+    }
+
+
+    header h1 { 
+      margin: 0; 
+      font-size: 2.2rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+
+
+    header p { 
+      margin: 8px 0 0 0; 
+      font-size: 0.95rem; 
+      opacity: 0.9;
+    }
+
+
+    main {
+      flex: 1;
+      overflow-y: auto;
+      padding: 28px 16px;
+      max-width: 1000px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+
+    .game-box {
+      background: white;
+      border-radius: 16px;
+      padding: 28px;
+      box-shadow: 0 12px 40px rgba(85, 104, 211, 0.15);
+      margin-bottom: 24px;
+    }
+
+
+    .progress {
+      width: 100%;
+      height: 10px;
+      background: #e5e7eb;
+      border-radius: 8px;
+      margin-bottom: 24px;
+      overflow: hidden;
+    }
+
+
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, #667eea, #764ba2);
+      transition: width 0.6s ease;
+      border-radius: 8px;
+    }
+
+
+    .challenge-number {
+      display: inline-block;
+      background: #667eea;
+      color: white;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+
+    .challenge-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #333;
+      margin-bottom: 16px;
+      line-height: 1.4;
+    }
+
+
+    .challenge-description {
+      background: #f3f4f6;
+      border-left: 4px solid #667eea;
+      padding: 16px;
+      border-radius: 8px;
+      margin-bottom: 24px;
+      font-size: 0.95rem;
+      color: #374151;
+      line-height: 1.6;
+    }
+
+
+    .timeline-visual {
+      background: #f9fafb;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 32px 20px;
+      margin: 24px 0;
+      position: relative;
+    }
+
+
+    .timeline-axis {
+      position: relative;
+      margin: 20px 0;
+      padding: 10px 0;
+    }
+
+
+    .timeline-line {
+      position: absolute;
+      top: 50%;
+      left: 40px;
+      right: 40px;
+      height: 4px;
+      background: linear-gradient(90deg, #667eea, #764ba2);
+      border-radius: 2px;
+      transform: translateY(-50%);
+    }
+
+
+    .timeline-labels {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      justify-content: space-between;
+      padding: 0 40px;
+      margin-bottom: 12px;
+      font-size: 0.8rem;
+      color: #6b7280;
+      font-weight: 600;
+    }
+
+
+    .timeline-slots {
+      position: relative;
+      z-index: 20;
+      display: flex;
+      justify-content: space-between;
+      padding: 0 20px;
+      gap: 8px;
+    }
+
+
+    .timeline-slot {
+      width: 70px;
+      height: 70px;
+      background: white;
+      border: 3px solid #e5e7eb;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+
+
+    .timeline-slot:hover {
+      border-color: #667eea;
+      background: #ede9fe;
+      transform: scale(1.08);
+      box-shadow: 0 6px 16px rgba(102, 126, 234, 0.2);
+    }
+
+
+    .timeline-slot.filled {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-color: #5568d3;
+    }
+
+
+    .timeline-slot.empty {
+      background: white;
+      border: 3px dashed #cbd5e1;
+    }
+
+
+    .timeline-event-inner {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.75rem;
+      text-align: center;
+      color: white;
+      padding: 4px;
+      cursor: grab;
+      user-select: none;
+    }
+
+
+    .timeline-event-inner:active {
+      cursor: grabbing;
+    }
+
+
+    .events-pool {
+      background: #ede9fe;
+      border: 2px solid #667eea;
+      border-radius: 12px;
+      padding: 20px;
+      margin: 24px 0;
+    }
+
+
+    .pool-label {
+      display: block;
+      font-weight: 700;
+      color: #5568d3;
+      margin-bottom: 14px;
+      font-size: 0.95rem;
+    }
+
+
+    .pool-items {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 12px;
+    }
+
+
+    .pool-item {
+      background: white;
+      border: 2px solid #cbd5e1;
+      border-radius: 10px;
+      padding: 14px;
+      text-align: center;
+      cursor: grab;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: all 0.2s ease;
+      user-select: none;
+      line-height: 1.4;
+      color: #374151;
+    }
+
+
+    .pool-item:hover {
+      border-color: #667eea;
+      background: #f3f4f6;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+    }
+
+
+    .pool-item.in-use {
+      opacity: 0.4;
+      pointer-events: none;
+    }
+
+
+    .buttons {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin: 24px 0;
+    }
+
+
+    button {
+      border: none;
+      border-radius: 10px;
+      padding: 14px 28px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: 'Poppins', Arial, sans-serif;
+    }
+
+
+    .btn-submit {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      min-width: 160px;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    }
+
+
+    .btn-submit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+    }
+
+
+    .btn-submit:active {
+      transform: translateY(0);
+    }
+
+
+    .btn-reset {
+      background: #e5e7eb;
+      color: #374151;
+    }
+
+
+    .btn-reset:hover {
+      background: #d1d5db;
+    }
+
+
+    .message {
+      padding: 16px 20px;
+      border-radius: 10px;
+      margin: 20px 0;
+      text-align: center;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      animation: slideIn 0.3s ease;
+    }
+
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+
+    .message.success {
+      background: #d1fae5;
+      color: #065f46;
+      border-left: 4px solid #10b981;
+    }
+
+
+    .message.error {
+      background: #fee2e2;
+      color: #991b1b;
+      border-left: 4px solid #ef4444;
+    }
+
+
+    .message.info {
+      background: #dbeafe;
+      color: #082f49;
+      border-left: 4px solid #3b82f6;
+    }
+
+
+    .hint-box {
+      background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+      border-left: 4px solid #f59e0b;
+      padding: 14px 16px;
+      border-radius: 8px;
+      margin: 20px 0;
+      font-size: 0.9rem;
+      color: #78350f;
+      font-weight: 500;
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+    }
+
+
+    .hint-box::before {
+      content: "💡";
+      flex-shrink: 0;
+    }
+
+
+    .finish-screen {
+      display: none;
+      text-align: center;
+      padding: 40px 20px;
+    }
+
+
+    .finish-screen.active {
+      display: block;
+      animation: fadeIn 0.5s ease;
+    }
+
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+
+    .finish-emoji {
+      font-size: 3.5rem;
+      margin-bottom: 20px;
+      animation: bounce 0.6s ease;
+    }
+
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-20px); }
+    }
+
+
+    .finish-title {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #333;
+      margin: 12px 0;
+    }
+
+
+    .finish-message {
+      font-size: 1.1rem;
+      color: #6b7280;
+      margin-bottom: 28px;
+    }
+
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 28px 0;
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+
+    .stat-box {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.2);
+    }
+
+
+    .stat-num {
+      font-size: 2.4rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+
+    .stat-label {
+      font-size: 0.85rem;
+      opacity: 0.9;
+      font-weight: 500;
+    }
+
+
+    .btn-play-again {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      margin-top: 24px;
+      min-width: 180px;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    }
+
+
+    .btn-play-again:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+    }
+
+
+    .finish-insight {
+      background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+      border-left: 4px solid #f59e0b;
+      padding: 16px;
+      border-radius: 8px;
+      margin: 24px 0;
+      font-size: 0.95rem;
+      color: #78350f;
+      font-weight: 500;
+      text-align: left;
+    }
+
+
+    .source-display {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 28px;
+      margin: 24px 0;
+      min-height: 200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      line-height: 1.8;
+      color: #374151;
+      border-left: 6px solid #667eea;
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.08);
+    }
+
+
+    .source-display.photo {
+      background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+      font-style: italic;
+      color: #6b7280;
+      padding: 60px 28px;
+    }
+
+
+    .source-details-box {
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+      padding: 20px;
+      margin: 20px 0;
+    }
+
+
+    .detail-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 12px 0;
+      border-bottom: 1px solid #e5e7eb;
+      font-size: 0.95rem;
+    }
+
+
+    .detail-row:last-child {
+      border-bottom: none;
+    }
+
+
+    .detail-label {
+      font-weight: 600;
+      color: #374151;
+    }
+
+
+    .detail-value {
+      color: #6b7280;
+      text-align: right;
+    }
+
+
+    .btn-answer {
+      background: white;
+      color: #374151;
+      border: 2px solid #e5e7eb;
+      flex: 1;
+      min-width: 140px;
+      transition: all 0.3s ease;
+      font-weight: 600;
+    }
+
+
+    .btn-answer:hover {
+      border-color: #667eea;
+      background: #ede9fe;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+    }
+
+
+    .btn-answer.selected-primary {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      border-color: #5568d3;
+    }
+
+
+    .btn-answer.selected-secondary {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      border-color: #5568d3;
+    }
+  </style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  <style>body { box-sizing: border-box; }</style>
+ </head>
+ <body class="h-full">
+  <div class="wrapper">
+   <header>
+    <h1 id="lessonTitle">🗺️ California Quest</h1>
+    <p id="instructionText">Explore California's regions, symbols, and capital—become a geography expert!</p>
+   </header>
+   <main>
+    <div id="gameScreen" class="game-box">
+     <div class="progress">
+      <div class="progress-bar" id="progressBar" style="width: 0%"></div>
+     </div>
+     <div style="margin-bottom: 12px;">
+      <span class="challenge-number" id="challengeNumber">Question 1 of 8</span>
+     </div>
+     <h2 class="challenge-title" id="challengeTitle">What is California's capital?</h2>
+     <div class="challenge-description" id="challengeDescription">
+      California is a huge state with many cities. Where do state leaders meet?
+     </div><!-- GEOGRAPHY DISPLAY -->
+     <div class="source-display" id="geoDisplay" style="border-left-color: #10b981;"></div><!-- HINT BOX -->
+     <div class="hint-box" id="hintBox">
+      Think about where governments meet and make decisions for the whole state.
+     </div><!-- ANSWER BUTTONS -->
+     <div class="buttons" id="answerContainer"></div><!-- FEEDBACK -->
+     <div id="messageBox"></div>
+     <div class="buttons" id="nextButtonContainer" style="display: none;"><button class="btn-submit" onclick="nextSource()">→ Next Source</button>
+     </div>
+    </div><!-- FINISH SCREEN -->
+    <div id="finishScreen" class="game-box finish-screen">
+     <div class="finish-emoji">
+      🎓
+     </div>
+     <h2 class="finish-title" id="finishTitle">California Explorer!</h2>
+     <p class="finish-message" id="finishMessage">You've explored California's regions, symbols, and capital like a true geographer!</p>
+     <div class="stats-grid">
+      <div class="stat-box">
+       <div class="stat-num" id="statCorrect">
+        8
+       </div>
+       <div class="stat-label">
+        Questions Answered
+       </div>
+      </div>
+      <div class="stat-box">
+       <div class="stat-num" id="statAccuracy">
+        100%
+       </div>
+       <div class="stat-label">
+        Accuracy
+       </div>
+      </div>
+     </div>
+     <div class="finish-insight" id="finishInsight"></div><button class="btn-play-again" onclick="location.reload()">🔄 Try Again</button>
+    </div>
+   </main>
+  </div>
+  <script>
+    const questions = [
+      {
+        title: "What is California's capital?",
+        description: "California is a huge state with many cities. Where do state leaders meet?",
+        category: "Capital",
+        displayText: "📍 Located in the foothills of the Sierra Nevada, near the center of the state. It's where the state Capitol building stands.",
+        hint: "The capital isn't the biggest city—it's in the middle of the state, not on the coast.",
+        answers: [
+          { text: "Sacramento", correct: true, explanation: "✅ Correct! Sacramento is California's state capital. It's in the Central Valley near the Sierra Nevada." },
+          { text: "Los Angeles", correct: false, explanation: "❌ Los Angeles is California's largest city, but it's not the capital. The capital is where the government meets, not the biggest city!" },
+          { text: "San Francisco", correct: false, explanation: "❌ San Francisco is a major city, but Sacramento is the capital. Capitals are chosen by people and laws, not by size." }
+        ],
+        learn: "🎓 The capital is the city where a state's government sits and makes decisions. Sacramento became California's capital in 1854."
+      },
+      {
+        title: "Which of these is California's official state flower?",
+        description: "California has official symbols that represent the state. Which one did lawmakers choose?",
+        category: "State Symbols",
+        displayText: "🌼 A wild flower that blooms bright orange across California's hillsides in spring. It only grows in California and is rare in other states.",
+        hint: "Look at the clues: grows wild in California, blooms in spring, bright orange color.",
+        answers: [
+          { text: "Golden Poppy", correct: true, explanation: "✅ Correct! The golden poppy is California's state flower. It's native to California and became the official symbol in 1903." },
+          { text: "Rose", correct: false, explanation: "❌ Roses grow in many states. California's flower is something special that only grows here in the wild." },
+          { text: "Sunflower", correct: false, explanation: "❌ Sunflowers are grown in many states. California chose a flower that's naturally wild only here." }
+        ],
+        learn: "🎓 State symbols tell the story of what makes a place unique. California's poppy represents the wild beauty of our state."
+      },
+      {
+        title: "Which region of California is known for farms and agriculture?",
+        description: "California has different regions with different jobs and landscapes. Which region grows most of California's crops?",
+        category: "Regions",
+        displayText: "🌾 A long, flat valley in central California. Rain from the ocean doesn't reach here much, so farmers bring water from rivers. Lots of fields stretch for miles.",
+        hint: "This region is flat, in the middle of the state, and gets less rain than the coast.",
+        answers: [
+          { text: "Central Valley", correct: true, explanation: "✅ Correct! The Central Valley is flat and gets water from rivers, making it perfect for growing crops like lettuce, cotton, and almonds." },
+          { text: "Sierra Nevada", correct: false, explanation: "❌ The Sierra Nevada is mountainous with forests and snow, not farmland. Look for the flat, middle region." },
+          { text: "Mojave Desert", correct: false, explanation: "❌ The Mojave Desert is too hot and dry for farming. The valley in the middle has farms." }
+        ],
+        learn: "🎓 The Central Valley is California's breadbasket. It grows a quarter of America's vegetables and a third of its fruits!"
+      },
+      {
+        title: "Which region includes California's tallest trees?",
+        description: "California has huge, ancient trees in one region. Which one?",
+        category: "Regions & Symbols",
+        displayText: "🌲 Tall evergreen trees that grow in foggy areas near the northern coast. They've lived for thousands of years and are taller than any building.",
+        hint: "Think about the north coast where it's foggy. These are the tallest living things on Earth.",
+        answers: [
+          { text: "Northern Coast", correct: true, explanation: "✅ Correct! Coast redwoods grow in the foggy forests of northern California. They're the tallest trees on Earth!" },
+          { text: "Central Valley", correct: false, explanation: "❌ The Central Valley is mostly farmland and flat. Redwoods grow in the foggy northern coast region." },
+          { text: "Southern Desert", correct: false, explanation: "❌ Deserts are hot and dry with small plants. The world's tallest trees grow in northern California's cool, foggy coast." }
+        ],
+        learn: "🎓 Coast redwoods are California's state tree. These ancient giants can live 2,000+ years and grow 350+ feet tall—taller than the Statue of Liberty!"
+      },
+      {
+        title: "Which side of California touches the ocean?",
+        description: "California has a long coastline with beaches, cliffs, and harbors. Which side faces the water?",
+        category: "Geography",
+        displayText: "🌊 A vast ocean on one side of California, touching the state's edge. Waves, beaches, and ships travel across it.",
+        hint: "Which direction is the United States? Which direction would you go if you walked to the water from California?",
+        answers: [
+          { text: "Western edge", correct: true, explanation: "✅ Correct! The Pacific Ocean is on California's western edge, creating beautiful coastlines and harbors." },
+          { text: "Eastern edge", correct: false, explanation: "❌ The eastern edge has deserts and Nevada. The Pacific Ocean is on the western side." },
+          { text: "Northern edge", correct: false, explanation: "❌ The north has mountains and the coast. The ocean is on the western edge of the state." }
+        ],
+        learn: "🎓 The Pacific Coast is one of California's main regions. It includes cliffs, beaches, harbors, and famous cities like San Francisco and San Diego."
+      },
+      {
+        title: "Which region of California has high mountains and snow?",
+        description: "One California region gets very cold in winter with lots of snow. Which one?",
+        category: "Regions",
+        displayText: "⛰️ A tall mountain range in eastern California. In winter, snow covers the peaks. Climbers try to reach the highest point. Rivers start from melting snow here.",
+        hint: "Mountain ranges block rain from the west. Snow falls in high, cold places.",
+        answers: [
+          { text: "Sierra Nevada", correct: true, explanation: "✅ Correct! The Sierra Nevada is a mountain range in eastern California. It gets snow in winter and is home to Yosemite National Park." },
+          { text: "Central Valley", correct: false, explanation: "❌ The Central Valley is mostly flat farmland with no mountains. Look for the mountain range on the east side." },
+          { text: "Mojave Desert", correct: false, explanation: "❌ The Mojave Desert is hot and dry in most places. The Sierra Nevada is California's snowy mountain range." }
+        ],
+        learn: "🎓 The Sierra Nevada includes Mount Whitney, California's highest peak at 14,505 feet. It also protects ancient giant sequoia trees and sends water across the state!"
+      },
+      {
+        title: "Which region is hot and dry with very little rain?",
+        description: "One region of California gets very hot and has little water. Which one?",
+        category: "Regions",
+        displayText: "🏜️ A region in southeastern California that's hot most of the year. Very little rain falls here. Some areas are among the hottest places on Earth.",
+        hint: "Deserts get little rain. This region is in the southeast, far from the ocean.",
+        answers: [
+          { text: "Mojave Desert", correct: true, explanation: "✅ Correct! The Mojave Desert in southeastern California is hot, dry, and gets very little rain. It includes Death Valley, one of Earth's hottest places." },
+          { text: "Pacific Coast", correct: false, explanation: "❌ The Pacific Coast is foggy and gets rain. The Mojave Desert is California's hot, dry region." },
+          { text: "Northern Forests", correct: false, explanation: "❌ Northern forests get plenty of rain and are cool. The Mojave Desert is the hot, dry part of California." }
+        ],
+        learn: "🎓 Deserts are one of California's four main regions. Even though they're hot and dry, they have unique plants and animals that survive there!"
+      },
+      {
+        title: "Why do different regions of California have different geography?",
+        description: "California's regions look totally different. What explains this?",
+        category: "Geography Concepts",
+        displayText: "🗺️ Think about: Where is the ocean? Where are the mountains? How high is the land? How far from the water?",
+        hint: "Geography means natural features. Mountains block rain. Distance from ocean matters. Height matters.",
+        answers: [
+          { text: "Different landforms and distance from ocean", correct: true, explanation: "✅ Correct! Mountains block rain, valleys stay flat, and areas near the coast are different from inland areas. These differences create California's four regions." },
+          { text: "California is flat everywhere", correct: false, explanation: "❌ California has huge differences! Mountains, valleys, coasts, and deserts make regions very different from each other." },
+          { text: "All regions are exactly the same", correct: false, explanation: "❌ Not at all! California's regions are super different. Look at geography—landforms and distance from ocean." }
+        ],
+        learn: "🎓 Geography means the natural features of a place: mountains, valleys, climate, water, and location. These features shape how people live, where they farm, and what grows there."
+      }
+    ];
+
+
+    let currentQuestion = 0;
+    let correctCount = 0;
+    let answered = false;
+    let selectedAnswer = null;
+
+
+    const defaultConfig = {
+      lesson_title: '🗺️ California Quest',
+      instruction_text: 'Explore California\'s regions, symbols, and capital—become a geography expert!',
+      completion_message: 'California Explorer!'
+    };
+
+
+    function loadQuestion() {
+      const question = questions[currentQuestion];
+      
+      document.getElementById('challengeNumber').textContent = `Question ${currentQuestion + 1} of ${questions.length}`;
+      document.getElementById('challengeTitle').textContent = question.title;
+      document.getElementById('challengeDescription').textContent = question.description;
+      document.getElementById('hintBox').textContent = question.hint;
+
+
+      // Render geography display
+      const geoDisplay = document.getElementById('geoDisplay');
+      geoDisplay.innerHTML = question.displayText;
+
+
+      // Build answer buttons
+      const answerContainer = document.getElementById('answerContainer');
+      answerContainer.innerHTML = '';
+      question.answers.forEach((ans, idx) => {
+        const btn = document.createElement('button');
+        btn.className = 'btn-answer';
+        btn.textContent = ans.text;
+        btn.onclick = () => answerQuestion(idx);
+        answerContainer.appendChild(btn);
+      });
+
+
+      answered = false;
+      selectedAnswer = null;
+      document.getElementById('messageBox').innerHTML = '';
+      document.getElementById('nextButtonContainer').style.display = 'none';
+      updateProgress();
+    }
+
+
+    function answerQuestion(idx) {
+      if (answered) return;
+      answered = true;
+      selectedAnswer = idx;
+
+
+      const question = questions[currentQuestion];
+      const answer = question.answers[idx];
+      const isCorrect = answer.correct;
+
+
+      // Visual feedback
+      document.querySelectorAll('.btn-answer').forEach((btn, i) => {
+        btn.disabled = true;
+        if (i === idx) {
+          btn.classList.add(isCorrect ? 'selected-primary' : 'selected-secondary');
+        }
+      });
+
+
+      // Show feedback
+      const messageBox = document.getElementById('messageBox');
+      if (isCorrect) {
+        correctCount++;
+        messageBox.innerHTML = `<div class="message success">${answer.explanation}</div>`;
+        messageBox.innerHTML += `<div class="message info">💡 ${question.learn}</div>`;
+      } else {
+        messageBox.innerHTML = `<div class="message error">${answer.explanation}</div>`;
+        messageBox.innerHTML += `<div class="message info">💡 ${question.learn}</div>`;
+      }
+
+
+      document.getElementById('nextButtonContainer').style.display = 'block';
+    }
+
+
+    function nextQuestion() {
+      if (currentQuestion < questions.length - 1) {
+        currentQuestion++;
+        loadQuestion();
+      } else {
+        finishGame();
+      }
+    }
+
+
+    function updateProgress() {
+      const pct = ((currentQuestion) / questions.length) * 100;
+      document.getElementById('progressBar').style.width = pct + '%';
+    }
+
+
+    function finishGame() {
+      document.getElementById('gameScreen').style.display = 'none';
+      document.getElementById('finishScreen').classList.add('active');
+      document.getElementById('finishTitle').textContent = defaultConfig.completion_message;
+      
+      const accuracy = Math.round((correctCount / questions.length) * 100);
+      document.getElementById('statCorrect').textContent = correctCount + "/" + questions.length;
+      document.getElementById('statAccuracy').textContent = accuracy + "%";
+
+
+      let insight = "";
+      if (accuracy === 100) {
+        insight = "🌟 Perfect score! You're a California geography master! You know our state's symbols, regions, capital, and geography!";
+      } else if (accuracy >= 75) {
+        insight = "🎯 Excellent work! You understand California's main regions and geography. You're well on your way to being a geography expert!";
+      } else if (accuracy >= 50) {
+        insight = "📚 Good job! You're learning California's geography. Keep exploring: Coast, Central Valley, Sierra Nevada, and Deserts!";
+      } else {
+        insight = "💪 Keep exploring! California has amazing geography. Review the regions and symbols, then try again!";
+      }
+      document.getElementById('finishInsight').textContent = insight;
+    }
+
+
+    function applyConfig(config) {
+      if (config.lesson_title) {
+        document.getElementById('lessonTitle').textContent = config.lesson_title;
+      }
+      if (config.instruction_text) {
+        document.getElementById('instructionText').textContent = config.instruction_text;
+      }
+      if (config.completion_message) {
+        defaultConfig.completion_message = config.completion_message;
+      }
+    }
+
+
+    window.elementSdk.init({
+      defaultConfig,
+      onConfigChange: async (config) => {
+        applyConfig(config);
+      },
+      mapToCapabilities: () => ({
+        recolorables: [],
+        borderables: [],
+        fontEditable: undefined,
+        fontSizeable: undefined
+      }),
+      mapToEditPanelValues: (config) => new Map([
+        ['lesson_title', config.lesson_title || defaultConfig.lesson_title],
+        ['instruction_text', config.instruction_text || defaultConfig.instruction_text],
+        ['completion_message', config.completion_message || defaultConfig.completion_message]
+      ])
+    });
+
+
+    applyConfig(defaultConfig);
+    loadQuestion();
+  </script>
+ </body>
+</html>

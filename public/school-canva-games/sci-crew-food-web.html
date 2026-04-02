@@ -1,0 +1,1034 @@
+<!doctype html>
+<html lang="en" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Food Chains &amp; Webs</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&amp;display=swap" rel="stylesheet">
+  <style>
+    html, body { 
+      height: 100%; 
+      margin: 0; 
+      padding: 0;
+      font-family: 'Fredoka', Arial, sans-serif;
+    }
+    
+    * { box-sizing: border-box; }
+
+
+    .wrapper {
+      height: 100%;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+    }
+
+
+    header {
+      background: linear-gradient(135deg, #d97706 0%, #f59e0b 100%);
+      color: white;
+      padding: 24px 16px;
+      box-shadow: 0 4px 20px rgba(217, 119, 6, 0.25);
+    }
+
+
+    header h1 { 
+      margin: 0; 
+      font-size: 2rem;
+      font-weight: 700;
+    }
+
+
+    header p { 
+      margin: 8px 0 0 0; 
+      font-size: 0.95rem; 
+      opacity: 0.95;
+    }
+
+
+    main {
+      flex: 1;
+      overflow-y: auto;
+      padding: 24px 16px;
+      max-width: 900px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+
+    .game-box {
+      background: white;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 4px 15px rgba(217, 119, 6, 0.1);
+      margin-bottom: 20px;
+    }
+
+
+    .challenge-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #d97706;
+      margin-bottom: 12px;
+    }
+
+
+    .progress {
+      width: 100%;
+      height: 8px;
+      background: #fed7aa;
+      border-radius: 4px;
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+
+
+    .progress-bar {
+      height: 100%;
+      background: #d97706;
+      transition: width 0.5s ease;
+    }
+
+
+    .passage-box {
+      background: #fffbeb;
+      border-left: 4px solid #d97706;
+      padding: 16px;
+      border-radius: 8px;
+      margin: 16px 0;
+      line-height: 1.6;
+      color: #333;
+    }
+
+
+    .passage-box p {
+      margin: 12px 0;
+      font-size: 0.95rem;
+    }
+
+
+    .passage-box p span.highlight {
+      background: #fbbf24;
+      padding: 2px 4px;
+      border-radius: 3px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+
+    .passage-box p span.highlight:hover {
+      background: #f59e0b;
+    }
+
+
+    .passage-box p span.highlight.selected {
+      background: #d97706;
+      color: white;
+      font-weight: 600;
+    }
+
+
+    .claim-box {
+      background: #dbeafe;
+      border-left: 4px solid #0369a1;
+      padding: 16px;
+      border-radius: 8px;
+      margin: 16px 0;
+    }
+
+
+    .claim-box label {
+      display: block;
+      font-weight: 600;
+      color: #0369a1;
+      margin-bottom: 8px;
+      font-size: 0.9rem;
+    }
+
+
+    .claim-text {
+      font-size: 1.1rem;
+      color: #333;
+      font-weight: 600;
+    }
+
+
+    .evidence-section {
+      background: #ecfdf5;
+      border-left: 4px solid #059669;
+      padding: 16px;
+      border-radius: 8px;
+      margin: 16px 0;
+    }
+
+
+    .evidence-section label {
+      display: block;
+      font-weight: 600;
+      color: #059669;
+      margin-bottom: 12px;
+      font-size: 0.9rem;
+    }
+
+
+    .evidence-options {
+      display: grid;
+      gap: 10px;
+    }
+
+
+    .evidence-option {
+      background: white;
+      border: 2px solid #d1fae5;
+      padding: 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+
+    .evidence-option:hover {
+      border-color: #059669;
+      background: #f0fdf4;
+    }
+
+
+    .evidence-option input[type="radio"] {
+      margin-right: 8px;
+    }
+
+
+    .evidence-option label {
+      margin: 0;
+      cursor: pointer;
+      font-weight: 500;
+      color: #333;
+      display: flex;
+      align-items: flex-start;
+    }
+
+
+    .evidence-option.selected {
+      background: #d1fae5;
+      border-color: #059669;
+    }
+
+
+    .explanation-box {
+      background: #fef3c7;
+      border-left: 4px solid #b45309;
+      padding: 16px;
+      border-radius: 8px;
+      margin: 16px 0;
+    }
+
+
+    .explanation-box label {
+      display: block;
+      font-weight: 600;
+      color: #b45309;
+      margin-bottom: 8px;
+      font-size: 0.9rem;
+    }
+
+
+    .explanation-box textarea {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #fcd34d;
+      border-radius: 6px;
+      font-family: 'Fredoka', Arial, sans-serif;
+      font-size: 0.95rem;
+      resize: vertical;
+      min-height: 80px;
+    }
+
+
+    .explanation-box textarea:focus {
+      outline: none;
+      border-color: #b45309;
+      background: white;
+    }
+
+
+    .buttons {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin: 20px 0;
+    }
+
+
+    button {
+      border: none;
+      border-radius: 8px;
+      padding: 12px 24px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: 'Fredoka', Arial, sans-serif;
+    }
+
+
+    .btn-submit {
+      background: #d97706;
+      color: white;
+      flex: 1;
+      min-width: 150px;
+    }
+
+
+    .btn-submit:hover {
+      background: #b45309;
+      transform: translateY(-2px);
+    }
+
+
+    .btn-reset {
+      background: #9ca3af;
+      color: white;
+    }
+
+
+    .btn-reset:hover {
+      background: #6b7280;
+    }
+
+
+    .message {
+      padding: 16px;
+      border-radius: 8px;
+      margin: 16px 0;
+      text-align: center;
+      font-weight: 600;
+    }
+
+
+    .message.success {
+      background: #d1fae5;
+      color: #065f46;
+      border-left: 4px solid #059669;
+    }
+
+
+    .message.error {
+      background: #fee2e2;
+      color: #991b1b;
+      border-left: 4px solid #dc2626;
+    }
+
+
+    .message.info {
+      background: #dbeafe;
+      color: #082f49;
+      border-left: 4px solid #0369a1;
+    }
+
+
+    .finish-screen {
+      display: none;
+      text-align: center;
+      padding: 40px 20px;
+    }
+
+
+    .finish-screen.active {
+      display: block;
+    }
+
+
+    .finish-emoji {
+      font-size: 3rem;
+      margin-bottom: 16px;
+    }
+
+
+    .web-container {
+      background: #f0f9ff;
+      border: 2px solid #0369a1;
+      border-radius: 12px;
+      padding: 20px;
+      margin: 16px 0;
+      min-height: 300px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+
+    .web-organism {
+      background: white;
+      border: 2px solid #0369a1;
+      border-radius: 8px;
+      padding: 12px 16px;
+      margin: 8px;
+      cursor: grab;
+      font-weight: 600;
+      text-align: center;
+      position: absolute;
+      user-select: none;
+      transition: all 0.2s ease;
+      font-size: 0.9rem;
+      min-width: 80px;
+    }
+
+
+    .web-organism:hover {
+      background: #dbeafe;
+      border-color: #0369a1;
+      box-shadow: 0 4px 12px rgba(3, 105, 161, 0.2);
+    }
+
+
+    .web-organism.sun {
+      background: #fef3c7;
+      border-color: #b45309;
+      font-size: 1rem;
+    }
+
+
+    .web-organism.sun:hover {
+      background: #fde68a;
+    }
+
+
+    .web-organism.producer {
+      background: #dcfce7;
+      border-color: #059669;
+    }
+
+
+    .web-organism.producer:hover {
+      background: #bbf7d0;
+    }
+
+
+    .web-organism.herbivore {
+      background: #ddd6fe;
+      border-color: #7c3aed;
+    }
+
+
+    .web-organism.herbivore:hover {
+      background: #ede9fe;
+    }
+
+
+    .web-organism.carnivore {
+      background: #fee2e2;
+      border-color: #dc2626;
+    }
+
+
+    .web-organism.carnivore:hover {
+      background: #fecaca;
+    }
+
+
+    .web-organism.omnivore {
+      background: #fed7aa;
+      border-color: #d97706;
+    }
+
+
+    .web-organism.omnivore:hover {
+      background: #fdba74;
+    }
+
+
+    .web-organism.placeholder {
+      background: #f3f4f6;
+      border: 2px dashed #9ca3af;
+      color: #9ca3af;
+      font-style: italic;
+    }
+
+
+    .connection-svg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+
+    .organism-pool {
+      background: #ecfdf5;
+      border: 2px solid #059669;
+      border-radius: 12px;
+      padding: 16px;
+      margin: 16px 0;
+    }
+
+
+    .organism-pool label {
+      display: block;
+      font-weight: 600;
+      color: #059669;
+      margin-bottom: 12px;
+      font-size: 0.9rem;
+    }
+
+
+    .pool-items {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+      gap: 10px;
+    }
+
+
+    .pool-item {
+      background: white;
+      border: 2px solid #d1fae5;
+      border-radius: 8px;
+      padding: 12px;
+      text-align: center;
+      cursor: grab;
+      font-weight: 600;
+      font-size: 0.85rem;
+      transition: all 0.2s ease;
+      user-select: none;
+    }
+
+
+    .pool-item:hover {
+      border-color: #059669;
+      background: #f0fdf4;
+      transform: translateY(-2px);
+    }
+
+
+    .pool-item.sun {
+      background: #fef3c7;
+      border-color: #b45309;
+      color: #b45309;
+    }
+
+
+    .pool-item.producer {
+      background: #dcfce7;
+      border-color: #059669;
+      color: #059669;
+    }
+
+
+    .pool-item.herbivore {
+      background: #ddd6fe;
+      border-color: #7c3aed;
+      color: #7c3aed;
+    }
+
+
+    .pool-item.carnivore {
+      background: #fee2e2;
+      border-color: #dc2626;
+      color: #dc2626;
+    }
+
+
+    .pool-item.omnivore {
+      background: #fed7aa;
+      border-color: #d97706;
+      color: #d97706;
+    }
+
+
+    .web-organism.dragging {
+      opacity: 0.5;
+      z-index: 1000;
+    }
+
+
+    .challenge-description {
+      background: #fffbeb;
+      border-left: 4px solid #d97706;
+      padding: 12px;
+      border-radius: 6px;
+      margin-bottom: 16px;
+      font-size: 0.95rem;
+      color: #333;
+    }
+
+
+    .finish-screen h2 {
+      font-size: 1.8rem;
+      color: #d97706;
+      margin: 12px 0;
+    }
+
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin: 20px 0;
+    }
+
+
+    .stat-box {
+      background: #fed7aa;
+      border: 2px solid #d97706;
+      border-radius: 8px;
+      padding: 16px;
+    }
+
+
+    .stat-num {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #d97706;
+    }
+
+
+    .stat-label {
+      font-size: 0.8rem;
+      color: #b45309;
+      margin-top: 4px;
+    }
+
+
+    .btn-play-again {
+      background: #d97706;
+      color: white;
+      margin-top: 16px;
+    }
+
+
+    .btn-play-again:hover {
+      background: #b45309;
+    }
+
+
+    .hint-box {
+      background: #e0e7ff;
+      border-left: 4px solid #6366f1;
+      padding: 12px;
+      border-radius: 8px;
+      margin: 16px 0;
+      font-size: 0.9rem;
+      color: #4f46e5;
+      font-style: italic;
+    }
+
+
+    @media (max-width: 600px) {
+      header h1 { font-size: 1.5rem; }
+      .passage-box { font-size: 0.9rem; }
+      .stats-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+  <style>body { box-sizing: border-box; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full">
+  <div class="wrapper">
+   <header>
+    <h1 id="lessonTitle">Food Chains &amp; Webs</h1>
+    <p id="instructionText">Trace energy flow through ecosystems—arrows show who eats whom!</p>
+   </header>
+   <main>
+    <div id="gameScreen" class="game-box">
+     <div class="progress">
+      <div class="progress-bar" id="progressBar" style="width: 0%"></div>
+     </div>
+     <div class="challenge-title" id="challengeTitle">
+      Question 1 of 5
+     </div>
+     <div class="challenge-description" id="challengeDescription"></div>
+     <div class="organism-pool" id="organismsPool"></div>
+     <div class="web-container" id="webContainer">
+      <svg class="connection-svg" id="connectionSvg"></svg>
+     </div>
+     <div class="hint-box" id="hintBox">
+      Drag organisms into the web area to build the food chain. Sun starts the chain → Plant → Animal. Arrows show energy flow!
+     </div>
+     <div class="buttons">
+      <button class="btn-reset" onclick="resetQuestion()">Start Over</button> <button class="btn-submit" onclick="submitAnswer()">Check Web</button>
+     </div>
+     <div id="messageBox"></div>
+    </div><!-- Finish Screen -->
+    <div id="finishScreen" class="game-box finish-screen">
+     <div class="finish-emoji">
+      🌍🐰🦊
+     </div>
+     <h2 id="finishTitle">Summary Master!</h2>
+     <p id="finishMessage">You compressed the main ideas perfectly!</p>
+     <div class="stats-grid">
+      <div class="stat-box">
+       <div class="stat-num" id="statCorrect">
+        0
+       </div>
+       <div class="stat-label">
+        Correct Webs
+       </div>
+      </div>
+      <div class="stat-box">
+       <div class="stat-num" id="statExplained">
+        0
+       </div>
+       <div class="stat-label">
+        Energy Flows Traced
+       </div>
+      </div>
+     </div><button class="btn-play-again" onclick="location.reload()">Try Again</button>
+    </div>
+   </main>
+  </div>
+  <script>
+    const lessons = [
+      {
+        description: "Build the food chain: Sun → Plant → Herbivore → Carnivore. Arrows show energy flowing from food to eater.",
+        organisms: [
+          { name: "☀️ Sun", type: "sun", role: "Energy source—not a producer!" },
+          { name: "🌱 Grass", type: "producer", role: "Producer: captures Sun energy" },
+          { name: "🐰 Rabbit", type: "herbivore", role: "Herbivore: eats plants" },
+          { name: "🦅 Eagle", type: "carnivore", role: "Carnivore: eats rabbits" }
+        ],
+        correctOrder: ["sun", "producer", "herbivore", "carnivore"],
+        webType: "chain"
+      },
+      {
+        description: "Build a food web: Sun → Plant → Two herbivores → Carnivore. Real ecosystems have many connections!",
+        organisms: [
+          { name: "☀️ Sun", type: "sun", role: "Energy source" },
+          { name: "🌾 Wheat", type: "producer", role: "Producer" },
+          { name: "🐭 Mouse", type: "herbivore", role: "Herbivore" },
+          { name: "🐄 Cow", type: "herbivore", role: "Herbivore" },
+          { name: "🐯 Tiger", type: "carnivore", role: "Carnivore" }
+        ],
+        correctOrder: ["sun", "producer", "herbivore", "herbivore", "carnivore"],
+        webType: "web"
+      },
+      {
+        description: "Build a food web with an OMNIVORE: Sun → Plant → Herbivore → Omnivore (eats plants AND meat)",
+        organisms: [
+          { name: "☀️ Sun", type: "sun", role: "Energy source" },
+          { name: "🍎 Apple Tree", type: "producer", role: "Producer" },
+          { name: "🦋 Caterpillar", type: "herbivore", role: "Herbivore" },
+          { name: "🐻 Bear", type: "omnivore", role: "Omnivore: eats plants AND animals" }
+        ],
+        correctOrder: ["sun", "producer", "herbivore", "omnivore"],
+        webType: "web"
+      },
+      {
+        description: "Ocean food chain: Sun → Algae → Small Fish → Large Fish → Shark",
+        organisms: [
+          { name: "☀️ Sun", type: "sun", role: "Energy source" },
+          { name: "🌿 Algae", type: "producer", role: "Producer" },
+          { name: "🐟 Tiny Fish", type: "herbivore", role: "Herbivore" },
+          { name: "🐠 Small Fish", type: "carnivore", role: "Carnivore" },
+          { name: "🦈 Shark", type: "carnivore", role: "Carnivore" }
+        ],
+        correctOrder: ["sun", "producer", "herbivore", "carnivore", "carnivore"],
+        webType: "chain"
+      },
+      {
+        description: "Forest food web: Sun → Plants → Herbivores (deer, squirrel) & Omnivore (raccoon) → Carnivore (wolf)",
+        organisms: [
+          { name: "☀️ Sun", type: "sun", role: "Energy source" },
+          { name: "🌳 Forest Plants", type: "producer", role: "Producer" },
+          { name: "🦌 Deer", type: "herbivore", role: "Herbivore" },
+          { name: "🐿️ Squirrel", type: "herbivore", role: "Herbivore" },
+          { name: "🦝 Raccoon", type: "omnivore", role: "Omnivore" },
+          { name: "🐺 Wolf", type: "carnivore", role: "Carnivore" }
+        ],
+        correctOrder: ["sun", "producer", "herbivore", "herbivore", "omnivore", "carnivore"],
+        webType: "web"
+      }
+    ];
+
+
+    let currentLesson = 0;
+    let correctCount = 0;
+    let placedOrganisms = [];
+    let draggedItem = null;
+    let offsetX = 0, offsetY = 0;
+
+
+    const defaultConfig = {
+      lesson_title: 'Food Chains & Webs',
+      instruction_text: 'Trace energy flow through ecosystems—arrows show who eats whom!',
+      completion_message: 'Ecosystem Expert!'
+    };
+
+
+    function initGame() {
+      loadLesson();
+      lucide.createIcons();
+    }
+
+
+    function loadLesson() {
+      const lesson = lessons[currentLesson];
+      
+      // Display challenge description
+      document.getElementById('challengeDescription').textContent = lesson.description;
+      
+      // Render organism pool with SCRAMBLED ORDER
+      const poolContainer = document.getElementById('organismsPool');
+      const shuffled = [...lesson.organisms].sort(() => Math.random() - 0.5);
+      poolContainer.innerHTML = `<label>Drag organisms into the web to build the food chain/web:</label><div class="pool-items">` + 
+        shuffled.map((org, idx) => `
+          <div class="pool-item ${org.type}" draggable="true" data-idx="${idx}" data-type="${org.type}" title="${org.role}">
+            ${org.name}
+          </div>
+        `).join('') + `</div>`;
+
+
+      // Setup drag listeners
+      setupDragListeners();
+
+
+      // Clear web
+      const webContainer = document.getElementById('webContainer');
+      webContainer.innerHTML = '<svg class="connection-svg" id="connectionSvg"></svg>';
+      
+      // Clear placed organisms and message
+      placedOrganisms = [];
+      document.getElementById('messageBox').innerHTML = '';
+      
+      // Update title and progress
+      document.getElementById('challengeTitle').textContent = `Question ${currentLesson + 1} of ${lessons.length}`;
+      updateProgress();
+    }
+
+
+    function setupDragListeners() {
+      document.querySelectorAll('.pool-item').forEach(item => {
+        item.addEventListener('dragstart', (e) => {
+          draggedItem = {
+            idx: e.target.dataset.idx,
+            name: e.target.textContent,
+            type: e.target.dataset.type
+          };
+          e.target.classList.add('dragging');
+        });
+        
+        item.addEventListener('dragend', (e) => {
+          e.target.classList.remove('dragging');
+        });
+      });
+
+
+      const webContainer = document.getElementById('webContainer');
+      webContainer.addEventListener('dragover', (e) => e.preventDefault());
+      webContainer.addEventListener('drop', (e) => {
+        e.preventDefault();
+        if (!draggedItem) return;
+
+
+        const rect = webContainer.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+
+
+        placedOrganisms.push({
+          name: draggedItem.name,
+          type: draggedItem.type,
+          x: Math.max(10, Math.min(x, rect.width - 100)),
+          y: Math.max(10, Math.min(y, rect.height - 50))
+        });
+
+
+        renderWeb();
+        draggedItem = null;
+      });
+    }
+
+
+    function renderWeb() {
+      const webContainer = document.getElementById('webContainer');
+      const svg = document.getElementById('connectionSvg');
+      
+      // Clear existing organisms
+      webContainer.querySelectorAll('.web-organism').forEach(el => el.remove());
+      svg.innerHTML = '';
+
+
+      // Draw organisms
+      placedOrganisms.forEach((org, idx) => {
+        const div = document.createElement('div');
+        div.className = `web-organism ${org.type}`;
+        div.textContent = org.name;
+        div.style.left = org.x + 'px';
+        div.style.top = org.y + 'px';
+        div.onclick = () => removeOrganism(idx);
+        webContainer.appendChild(div);
+      });
+
+
+      // Draw arrows between consecutive organisms
+      if (placedOrganisms.length > 1) {
+        placedOrganisms.forEach((org, idx) => {
+          if (idx < placedOrganisms.length - 1) {
+            const nextOrg = placedOrganisms[idx + 1];
+            const x1 = org.x + 50;
+            const y1 = org.y + 25;
+            const x2 = nextOrg.x + 50;
+            const y2 = nextOrg.y + 25;
+
+
+            // Draw arrow line with arrowhead
+            const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            line.setAttribute('x1', x1);
+            line.setAttribute('y1', y1);
+            line.setAttribute('x2', x2);
+            line.setAttribute('y2', y2);
+            line.setAttribute('stroke', '#0369a1');
+            line.setAttribute('stroke-width', '3');
+            line.setAttribute('marker-end', 'url(#arrowhead)');
+            svg.appendChild(line);
+          }
+        });
+
+
+        // Add arrowhead marker
+        const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+        const marker = document.createElementNS('http://www.w3.org/2000/svg', 'marker');
+        marker.setAttribute('id', 'arrowhead');
+        marker.setAttribute('markerWidth', '10');
+        marker.setAttribute('markerHeight', '10');
+        marker.setAttribute('refX', '9');
+        marker.setAttribute('refY', '3');
+        marker.setAttribute('orient', 'auto');
+        const polygon = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+        polygon.setAttribute('points', '0 0, 10 3, 0 6');
+        polygon.setAttribute('fill', '#0369a1');
+        marker.appendChild(polygon);
+        defs.appendChild(marker);
+        svg.appendChild(defs);
+      }
+    }
+
+
+    function removeOrganism(idx) {
+      placedOrganisms.splice(idx, 1);
+      renderWeb();
+    }
+
+
+    function resetQuestion() {
+      placedOrganisms = [];
+      renderWeb();
+      document.getElementById('messageBox').innerHTML = '';
+    }
+
+
+    function submitAnswer() {
+      if (placedOrganisms.length === 0) {
+        document.getElementById('messageBox').innerHTML = '<div class="message error">Drag organisms into the web to build the food chain!</div>';
+        return;
+      }
+
+
+      const lesson = lessons[currentLesson];
+      const placedTypes = placedOrganisms.map(org => org.type);
+
+
+      // Check if correct order
+      let isCorrect = true;
+      if (placedTypes.length !== lesson.correctOrder.length) {
+        isCorrect = false;
+      } else {
+        for (let i = 0; i < placedTypes.length; i++) {
+          if (placedTypes[i] !== lesson.correctOrder[i]) {
+            isCorrect = false;
+            break;
+          }
+        }
+      }
+
+
+      if (!isCorrect) {
+        document.getElementById('messageBox').innerHTML = '<div class="message error">Check the order! Remember: energy flows from Sun → Producers → Herbivores/Omnivores → Carnivores</div>';
+        return;
+      }
+
+
+      // Success!
+      correctCount++;
+      document.getElementById('messageBox').innerHTML = '<div class="message success">✅ Perfect! Energy flows correctly through your food ' + (lesson.webType === 'chain' ? 'chain' : 'web') + '!</div>';
+
+
+      setTimeout(() => {
+        if (currentLesson < lessons.length - 1) {
+          currentLesson++;
+          loadLesson();
+        } else {
+          finishGame();
+        }
+      }, 2000);
+    }
+
+
+    function updateProgress() {
+      const pct = (correctCount / lessons.length) * 100;
+      document.getElementById('progressBar').style.width = pct + '%';
+    }
+
+
+    function finishGame() {
+      document.getElementById('gameScreen').style.display = 'none';
+      document.getElementById('finishScreen').classList.add('active');
+      document.getElementById('finishMessage').textContent = defaultConfig.completion_message;
+      document.getElementById('finishTitle').textContent = defaultConfig.completion_message;
+      document.getElementById('statCorrect').textContent = correctCount;
+      document.getElementById('statExplained').textContent = correctCount;
+    }
+
+
+    function applyConfig(config) {
+      if (config.lesson_title) {
+        document.getElementById('lessonTitle').textContent = config.lesson_title;
+      }
+      if (config.instruction_text) {
+        document.getElementById('instructionText').textContent = config.instruction_text;
+      }
+      if (config.completion_message) {
+        defaultConfig.completion_message = config.completion_message;
+      }
+    }
+
+
+    window.elementSdk.init({
+      defaultConfig,
+      onConfigChange: async (config) => {
+        applyConfig(config);
+      },
+      mapToCapabilities: () => ({
+        recolorables: [],
+        borderables: [],
+        fontEditable: undefined,
+        fontSizeable: undefined
+      }),
+      mapToEditPanelValues: (config) => new Map([
+        ['lesson_title', config.lesson_title || defaultConfig.lesson_title],
+        ['instruction_text', config.instruction_text || defaultConfig.instruction_text],
+        ['completion_message', config.completion_message || defaultConfig.completion_message]
+      ])
+    });
+
+
+    applyConfig(defaultConfig);
+    initGame();
+  </script>
+ </body>
+</html>
+
+
+
+
+
+
+GAME 2 SCIENCE
+ENERGY FROM THE SUN

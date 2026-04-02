@@ -1,0 +1,763 @@
+<!doctype html>
+<html lang="en" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prove It with the Text</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&amp;display=swap" rel="stylesheet">
+  <style>
+    html, body { 
+      height: 100%; 
+      margin: 0; 
+      padding: 0;
+      font-family: 'Fredoka', Arial, sans-serif;
+    }
+    
+    * { box-sizing: border-box; }
+
+
+    .wrapper {
+      height: 100%;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+    }
+
+
+    header {
+      background: linear-gradient(135deg, #d97706 0%, #f59e0b 100%);
+      color: white;
+      padding: 24px 16px;
+      box-shadow: 0 4px 20px rgba(217, 119, 6, 0.25);
+    }
+
+
+    header h1 { 
+      margin: 0; 
+      font-size: 2rem;
+      font-weight: 700;
+    }
+
+
+    header p { 
+      margin: 8px 0 0 0; 
+      font-size: 0.95rem; 
+      opacity: 0.95;
+    }
+
+
+    main {
+      flex: 1;
+      overflow-y: auto;
+      padding: 24px 16px;
+      max-width: 900px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+
+    .game-box {
+      background: white;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 4px 15px rgba(217, 119, 6, 0.1);
+      margin-bottom: 20px;
+    }
+
+
+    .challenge-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #d97706;
+      margin-bottom: 12px;
+    }
+
+
+    .progress {
+      width: 100%;
+      height: 8px;
+      background: #fed7aa;
+      border-radius: 4px;
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+
+
+    .progress-bar {
+      height: 100%;
+      background: #d97706;
+      transition: width 0.5s ease;
+    }
+
+
+    .passage-box {
+      background: #fffbeb;
+      border-left: 4px solid #d97706;
+      padding: 16px;
+      border-radius: 8px;
+      margin: 16px 0;
+      line-height: 1.6;
+      color: #333;
+    }
+
+
+    .passage-box p {
+      margin: 12px 0;
+      font-size: 0.95rem;
+    }
+
+
+    .passage-box p span.highlight {
+      background: #fbbf24;
+      padding: 2px 4px;
+      border-radius: 3px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+
+    .passage-box p span.highlight:hover {
+      background: #f59e0b;
+    }
+
+
+    .passage-box p span.highlight.selected {
+      background: #d97706;
+      color: white;
+      font-weight: 600;
+    }
+
+
+    .claim-box {
+      background: #dbeafe;
+      border-left: 4px solid #0369a1;
+      padding: 16px;
+      border-radius: 8px;
+      margin: 16px 0;
+    }
+
+
+    .claim-box label {
+      display: block;
+      font-weight: 600;
+      color: #0369a1;
+      margin-bottom: 8px;
+      font-size: 0.9rem;
+    }
+
+
+    .claim-text {
+      font-size: 1.1rem;
+      color: #333;
+      font-weight: 600;
+    }
+
+
+    .evidence-section {
+      background: #ecfdf5;
+      border-left: 4px solid #059669;
+      padding: 16px;
+      border-radius: 8px;
+      margin: 16px 0;
+    }
+
+
+    .evidence-section label {
+      display: block;
+      font-weight: 600;
+      color: #059669;
+      margin-bottom: 12px;
+      font-size: 0.9rem;
+    }
+
+
+    .evidence-options {
+      display: grid;
+      gap: 10px;
+    }
+
+
+    .evidence-option {
+      background: white;
+      border: 2px solid #d1fae5;
+      padding: 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+
+    .evidence-option:hover {
+      border-color: #059669;
+      background: #f0fdf4;
+    }
+
+
+    .evidence-option input[type="radio"] {
+      margin-right: 8px;
+    }
+
+
+    .evidence-option label {
+      margin: 0;
+      cursor: pointer;
+      font-weight: 500;
+      color: #333;
+      display: flex;
+      align-items: flex-start;
+    }
+
+
+    .evidence-option.selected {
+      background: #d1fae5;
+      border-color: #059669;
+    }
+
+
+    .explanation-box {
+      background: #fef3c7;
+      border-left: 4px solid #b45309;
+      padding: 16px;
+      border-radius: 8px;
+      margin: 16px 0;
+    }
+
+
+    .explanation-box label {
+      display: block;
+      font-weight: 600;
+      color: #b45309;
+      margin-bottom: 8px;
+      font-size: 0.9rem;
+    }
+
+
+    .explanation-box textarea {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #fcd34d;
+      border-radius: 6px;
+      font-family: 'Fredoka', Arial, sans-serif;
+      font-size: 0.95rem;
+      resize: vertical;
+      min-height: 80px;
+    }
+
+
+    .explanation-box textarea:focus {
+      outline: none;
+      border-color: #b45309;
+      background: white;
+    }
+
+
+    .buttons {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin: 20px 0;
+    }
+
+
+    button {
+      border: none;
+      border-radius: 8px;
+      padding: 12px 24px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: 'Fredoka', Arial, sans-serif;
+    }
+
+
+    .btn-submit {
+      background: #d97706;
+      color: white;
+      flex: 1;
+      min-width: 150px;
+    }
+
+
+    .btn-submit:hover {
+      background: #b45309;
+      transform: translateY(-2px);
+    }
+
+
+    .btn-reset {
+      background: #9ca3af;
+      color: white;
+    }
+
+
+    .btn-reset:hover {
+      background: #6b7280;
+    }
+
+
+    .message {
+      padding: 16px;
+      border-radius: 8px;
+      margin: 16px 0;
+      text-align: center;
+      font-weight: 600;
+    }
+
+
+    .message.success {
+      background: #d1fae5;
+      color: #065f46;
+      border-left: 4px solid #059669;
+    }
+
+
+    .message.error {
+      background: #fee2e2;
+      color: #991b1b;
+      border-left: 4px solid #dc2626;
+    }
+
+
+    .message.info {
+      background: #dbeafe;
+      color: #082f49;
+      border-left: 4px solid #0369a1;
+    }
+
+
+    .finish-screen {
+      display: none;
+      text-align: center;
+      padding: 40px 20px;
+    }
+
+
+    .finish-screen.active {
+      display: block;
+    }
+
+
+    .finish-emoji {
+      font-size: 3rem;
+      margin-bottom: 16px;
+    }
+
+
+    .finish-screen h2 {
+      font-size: 1.8rem;
+      color: #d97706;
+      margin: 12px 0;
+    }
+
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin: 20px 0;
+    }
+
+
+    .stat-box {
+      background: #fed7aa;
+      border: 2px solid #d97706;
+      border-radius: 8px;
+      padding: 16px;
+    }
+
+
+    .stat-num {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #d97706;
+    }
+
+
+    .stat-label {
+      font-size: 0.8rem;
+      color: #b45309;
+      margin-top: 4px;
+    }
+
+
+    .btn-play-again {
+      background: #d97706;
+      color: white;
+      margin-top: 16px;
+    }
+
+
+    .btn-play-again:hover {
+      background: #b45309;
+    }
+
+
+    .paragraph-num {
+      color: #999;
+      font-size: 0.85rem;
+      font-weight: 500;
+      display: block;
+      margin-bottom: 4px;
+    }
+
+
+    @media (max-width: 600px) {
+      header h1 { font-size: 1.5rem; }
+      .passage-box { font-size: 0.9rem; }
+      .stats-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+  <style>body { box-sizing: border-box; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full">
+  <div class="wrapper">
+   <header>
+    <h1 id="lessonTitle">Prove It with the Text</h1>
+    <p id="instructionText">Find evidence from the passage to support your answer</p>
+   </header>
+   <main>
+    <div id="gameScreen" class="game-box">
+     <div class="progress">
+      <div class="progress-bar" id="progressBar" style="width: 0%"></div>
+     </div>
+     <div class="challenge-title" id="challengeTitle">
+      Question 1 of 5
+     </div><!-- Passage -->
+     <div class="passage-box" id="passageBox"></div><!-- Claim -->
+     <div class="claim-box"><label>What the passage tells us:</label>
+      <div class="claim-text" id="claimText"></div>
+     </div><!-- Evidence Selection -->
+     <div class="evidence-section"><label>Which sentence from the passage proves this?</label>
+      <div class="evidence-options" id="evidenceOptions"></div>
+     </div><!-- Explanation -->
+     <div class="explanation-box"><label>Why does that sentence prove it? Explain your thinking:</label> <textarea id="explanationInput" placeholder="Example: This sentence shows that... because..."></textarea>
+     </div><!-- Buttons -->
+     <div class="buttons"><button class="btn-reset" onclick="resetQuestion()">Start Over</button> <button class="btn-submit" onclick="submitAnswer()">Check My Work</button>
+     </div>
+     <div id="messageBox"></div>
+    </div><!-- Finish Screen -->
+    <div id="finishScreen" class="game-box finish-screen">
+     <div class="finish-emoji">
+      🔍✅📚
+     </div>
+     <h2 id="finishTitle">Evidence Detective!</h2>
+     <p id="finishMessage">You found textual evidence like a pro!</p>
+     <div class="stats-grid">
+      <div class="stat-box">
+       <div class="stat-num" id="statCorrect">
+        0
+       </div>
+       <div class="stat-label">
+        Correct Evidence
+       </div>
+      </div>
+      <div class="stat-box">
+       <div class="stat-num" id="statExplained">
+        0
+       </div>
+       <div class="stat-label">
+        Strong Explanations
+       </div>
+      </div>
+     </div><button class="btn-play-again" onclick="location.reload()">Try Again</button>
+    </div>
+   </main>
+  </div>
+  <script>
+    const lessons = [
+      {
+        passage: [
+          "Maya was nervous about the spelling bee. She had studied for weeks, but her hands shook as she walked on stage."
+        ],
+        claim: "Maya was worried about the spelling bee.",
+        evidenceOptions: [
+          { text: "She had studied for weeks", correct: false },
+          { text: "Her hands shook as she walked on stage", correct: true },
+          { text: "She walked on stage", correct: false }
+        ],
+        hint: "Look for details that SHOW how Maya felt"
+      },
+      {
+        passage: [
+          "The old library was a magical place. Books lined every shelf from floor to ceiling. In the corner sat a cozy reading nook with cushions and soft lighting. Children loved spending their afternoons there."
+        ],
+        claim: "The library was designed to make readers feel comfortable.",
+        evidenceOptions: [
+          { text: "Books lined every shelf from floor to ceiling", correct: false },
+          { text: "In the corner sat a cozy reading nook with cushions and soft lighting", correct: true },
+          { text: "Children loved spending their afternoons there", correct: false }
+        ],
+        hint: "What details describe things that make a space comfortable?"
+      },
+      {
+        passage: [
+          "The rain fell for three days straight. The creek behind the park overflowed its banks. The baseball field turned into a muddy swamp. Everyone stayed indoors waiting for the storm to pass."
+        ],
+        claim: "The storm caused damage in the park.",
+        evidenceOptions: [
+          { text: "The rain fell for three days straight", correct: false },
+          { text: "The creek behind the park overflowed its banks", correct: true },
+          { text: "Everyone stayed indoors", correct: false }
+        ],
+        hint: "Which sentence shows actual damage?"
+      },
+      {
+        passage: [
+          "Alex had always dreamed of learning to surf. When summer finally arrived, she signed up for lessons at the beach. On her first day, she paddled out and caught her first wave. The smile on her face said it all."
+        ],
+        claim: "Alex was excited about surfing.",
+        evidenceOptions: [
+          { text: "She signed up for lessons at the beach", correct: false },
+          { text: "The smile on her face said it all", correct: true },
+          { text: "She paddled out", correct: false }
+        ],
+        hint: "Look for a detail that SHOWS her emotion"
+      },
+      {
+        passage: [
+          "The restaurant was busy and loud. Waiters rushed between tables carrying trays of hot food. The kitchen was so crowded that chefs had to squeeze past each other. Despite the chaos, everyone worked together smoothly."
+        ],
+        claim: "The restaurant staff was very organized.",
+        evidenceOptions: [
+          { text: "The restaurant was busy and loud", correct: false },
+          { text: "Despite the chaos, everyone worked together smoothly", correct: true },
+          { text: "Waiters rushed between tables", correct: false }
+        ],
+        hint: "Which detail proves they worked well together?"
+      }
+    ];
+
+
+    let currentLesson = 0;
+    let correctCount = 0;
+    let explainedCount = 0;
+    let selectedEvidence = null;
+
+
+    const defaultConfig = {
+      lesson_title: 'Prove It with the Text',
+      instruction_text: 'Find evidence from the passage to support your answer',
+      completion_message: 'Evidence Detective!'
+    };
+
+
+    function initGame() {
+      loadLesson();
+      lucide.createIcons();
+    }
+
+
+    function loadLesson() {
+      const lesson = lessons[currentLesson];
+      
+      // Render passage
+      const passageBox = document.getElementById('passageBox');
+      passageBox.innerHTML = lesson.passage.map((para, idx) => 
+        `<p><span class="paragraph-num">Paragraph ${idx + 1}</span>${para}</p>`
+      ).join('');
+
+
+      // Set claim
+      document.getElementById('claimText').textContent = lesson.claim;
+
+
+      // Render evidence options
+      const optionsBox = document.getElementById('evidenceOptions');
+      optionsBox.innerHTML = lesson.evidenceOptions.map((option, idx) => `
+        <div class="evidence-option" onclick="selectEvidence(${idx})">
+          <label>
+            <input type="radio" name="evidence" value="${idx}">
+            <span>${option.text}</span>
+          </label>
+        </div>
+      `).join('');
+
+
+      // Clear explanation
+      document.getElementById('explanationInput').value = '';
+      document.getElementById('messageBox').innerHTML = '';
+      
+      // Reset selection
+      selectedEvidence = null;
+
+
+      // Update title
+      document.getElementById('challengeTitle').textContent = `Question ${currentLesson + 1} of ${lessons.length}`;
+      
+      updateProgress();
+    }
+
+
+    function selectEvidence(idx) {
+      selectedEvidence = idx;
+      const options = document.querySelectorAll('.evidence-option');
+      options.forEach((opt, i) => {
+        opt.classList.toggle('selected', i === idx);
+        opt.querySelector('input[type="radio"]').checked = (i === idx);
+      });
+    }
+
+
+    function resetQuestion() {
+      selectedEvidence = null;
+      document.querySelectorAll('.evidence-option').forEach(opt => opt.classList.remove('selected'));
+      document.querySelectorAll('input[type="radio"]').forEach(input => input.checked = false);
+      document.getElementById('explanationInput').value = '';
+      document.getElementById('messageBox').innerHTML = '';
+    }
+
+
+    function isValidExplanation(explanation) {
+      const weakPhrases = ['i don\'t know', 'idk', 'i guess', 'um', 'just because', 'i think so', 'no reason', 'random', 'not sure', 'dunno', 'whatever'];
+      const lowerExpl = explanation.toLowerCase().trim();
+      
+      // Reject empty or whitespace-only
+      if (lowerExpl.length === 0) {
+        return false;
+      }
+      
+      // Check for weak phrases
+      if (weakPhrases.some(phrase => lowerExpl.includes(phrase))) {
+        return false;
+      }
+      
+      // Minimum 20 characters (must be a real sentence)
+      if (explanation.length < 20) {
+        return false;
+      }
+      
+      // MUST have at least one connection word
+      const connectionWords = ['because', 'shows', 'proves', 'means', 'demonstrates', 'tells', 'explains', 'reveals', 'indicates', 'connects', 'links', 'this means', 'this shows'];
+      const hasConnections = connectionWords.some(word => lowerExpl.includes(word));
+      if (!hasConnections) {
+        return false;
+      }
+      
+      // MUST reference the claim or what it means
+      // Check that they're connecting the evidence to the CLAIM, not just repeating the sentence
+      const claimKeywords = ['worried', 'nervous', 'comfortable', 'damage', 'excited', 'happy', 'organized', 'feel', 'emotion', 'feel'];
+      const lesson = lessons[currentLesson];
+      const claimWords = lesson.claim.toLowerCase().split(' ');
+      
+      // At least 2 distinct words from explanation should NOT be in the evidence sentence
+      const selectedOption = lesson.evidenceOptions[selectedEvidence].text.toLowerCase();
+      const explanationWords = lowerExpl.split(' ');
+      const uniqueWords = explanationWords.filter(word => 
+        word.length > 3 && !selectedOption.includes(word) && word !== 'the' && word !== 'and' && word !== 'that'
+      );
+      
+      if (uniqueWords.length < 2) {
+        return false;
+      }
+      
+      return true;
+    }
+
+
+    function submitAnswer() {
+      if (selectedEvidence === null) {
+        document.getElementById('messageBox').innerHTML = '<div class="message error">Please pick evidence from the passage first!</div>';
+        return;
+      }
+
+
+      const explanation = document.getElementById('explanationInput').value.trim();
+      
+      const lesson = lessons[currentLesson];
+      const chosenOption = lesson.evidenceOptions[selectedEvidence];
+      const isCorrect = chosenOption.correct;
+      const hasStrongExplanation = isValidExplanation(explanation);
+
+
+      if (!isCorrect) {
+        document.getElementById('messageBox').innerHTML = '<div class="message error">That\'s not the best evidence. Look for details that directly SHOW what the claim says. Try another sentence!</div>';
+        return;
+      }
+
+
+      if (!hasStrongExplanation) {
+        document.getElementById('messageBox').innerHTML = '<div class="message error">Good evidence choice! But explain HOW that sentence proves it. Use words like "because," "shows," or "proves" to connect your thinking.</div>';
+        return;
+      }
+
+
+      // Both correct evidence AND strong explanation
+      correctCount++;
+      explainedCount++;
+      document.getElementById('messageBox').innerHTML = '<div class="message success">✅ Perfect! You found the right evidence AND explained your thinking clearly!</div>';
+
+
+      setTimeout(() => {
+        if (currentLesson < lessons.length - 1) {
+          currentLesson++;
+          loadLesson();
+        } else {
+          finishGame();
+        }
+      }, 2000);
+    }
+
+
+    function updateProgress() {
+      const pct = (correctCount / lessons.length) * 100;
+      document.getElementById('progressBar').style.width = pct + '%';
+    }
+
+
+    function finishGame() {
+      document.getElementById('gameScreen').style.display = 'none';
+      document.getElementById('finishScreen').classList.add('active');
+      document.getElementById('finishMessage').textContent = defaultConfig.completion_message;
+      document.getElementById('statCorrect').textContent = correctCount;
+      document.getElementById('statExplained').textContent = explainedCount;
+    }
+
+
+    function applyConfig(config) {
+      if (config.lesson_title) {
+        document.getElementById('lessonTitle').textContent = config.lesson_title;
+      }
+      if (config.instruction_text) {
+        document.getElementById('instructionText').textContent = config.instruction_text;
+      }
+      if (config.completion_message) {
+        defaultConfig.completion_message = config.completion_message;
+      }
+    }
+
+
+    window.elementSdk.init({
+      defaultConfig,
+      onConfigChange: async (config) => {
+        applyConfig(config);
+      },
+      mapToCapabilities: () => ({
+        recolorables: [],
+        borderables: [],
+        fontEditable: undefined,
+        fontSizeable: undefined
+      }),
+      mapToEditPanelValues: (config) => new Map([
+        ['lesson_title', config.lesson_title || defaultConfig.lesson_title],
+        ['instruction_text', config.instruction_text || defaultConfig.instruction_text],
+        ['completion_message', config.completion_message || defaultConfig.completion_message]
+      ])
+    });
+
+
+    applyConfig(defaultConfig);
+    initGame();
+  </script>
+ </body>
+</html>
+
+
+GAME 2 ENGLISH
+CONTEXT CLUES FOR NEW WORDS

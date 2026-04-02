@@ -1,0 +1,926 @@
+<!doctype html>
+<html lang="en" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Timelines Tell Time Order</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&amp;display=swap" rel="stylesheet">
+  <style>
+    html, body { 
+      height: 100%; 
+      margin: 0; 
+      padding: 0;
+      font-family: 'Poppins', Arial, sans-serif;
+    }
+    
+    * { box-sizing: border-box; }
+
+
+    .wrapper {
+      height: 100%;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+
+
+    header {
+      background: linear-gradient(135deg, #5568d3 0%, #6c63b8 100%);
+      color: white;
+      padding: 24px 16px;
+      box-shadow: 0 8px 32px rgba(85, 104, 211, 0.3);
+      text-align: center;
+    }
+
+
+    header h1 { 
+      margin: 0; 
+      font-size: 2.2rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+
+
+    header p { 
+      margin: 8px 0 0 0; 
+      font-size: 0.95rem; 
+      opacity: 0.9;
+    }
+
+
+    main {
+      flex: 1;
+      overflow-y: auto;
+      padding: 28px 16px;
+      max-width: 1000px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+
+    .game-box {
+      background: white;
+      border-radius: 16px;
+      padding: 28px;
+      box-shadow: 0 12px 40px rgba(85, 104, 211, 0.15);
+      margin-bottom: 24px;
+    }
+
+
+    .progress {
+      width: 100%;
+      height: 10px;
+      background: #e5e7eb;
+      border-radius: 8px;
+      margin-bottom: 24px;
+      overflow: hidden;
+    }
+
+
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, #667eea, #764ba2);
+      transition: width 0.6s ease;
+      border-radius: 8px;
+    }
+
+
+    .challenge-number {
+      display: inline-block;
+      background: #667eea;
+      color: white;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+
+    .challenge-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #333;
+      margin-bottom: 16px;
+      line-height: 1.4;
+    }
+
+
+    .challenge-description {
+      background: #f3f4f6;
+      border-left: 4px solid #667eea;
+      padding: 16px;
+      border-radius: 8px;
+      margin-bottom: 24px;
+      font-size: 0.95rem;
+      color: #374151;
+      line-height: 1.6;
+    }
+
+
+    .timeline-visual {
+      background: #f9fafb;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 32px 20px;
+      margin: 24px 0;
+      position: relative;
+    }
+
+
+    .timeline-axis {
+      position: relative;
+      margin: 20px 0;
+      padding: 10px 0;
+    }
+
+
+    .timeline-line {
+      position: absolute;
+      top: 50%;
+      left: 40px;
+      right: 40px;
+      height: 4px;
+      background: linear-gradient(90deg, #667eea, #764ba2);
+      border-radius: 2px;
+      transform: translateY(-50%);
+    }
+
+
+    .timeline-labels {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      justify-content: space-between;
+      padding: 0 40px;
+      margin-bottom: 12px;
+      font-size: 0.8rem;
+      color: #6b7280;
+      font-weight: 600;
+    }
+
+
+    .timeline-slots {
+      position: relative;
+      z-index: 20;
+      display: flex;
+      justify-content: space-between;
+      padding: 0 20px;
+      gap: 8px;
+    }
+
+
+    .timeline-slot {
+      width: 70px;
+      height: 70px;
+      background: white;
+      border: 3px solid #e5e7eb;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+
+
+    .timeline-slot:hover {
+      border-color: #667eea;
+      background: #ede9fe;
+      transform: scale(1.08);
+      box-shadow: 0 6px 16px rgba(102, 126, 234, 0.2);
+    }
+
+
+    .timeline-slot.filled {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-color: #5568d3;
+    }
+
+
+    .timeline-slot.empty {
+      background: white;
+      border: 3px dashed #cbd5e1;
+    }
+
+
+    .timeline-event-inner {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.75rem;
+      text-align: center;
+      color: white;
+      padding: 4px;
+      cursor: grab;
+      user-select: none;
+    }
+
+
+    .timeline-event-inner:active {
+      cursor: grabbing;
+    }
+
+
+    .events-pool {
+      background: #ede9fe;
+      border: 2px solid #667eea;
+      border-radius: 12px;
+      padding: 20px;
+      margin: 24px 0;
+    }
+
+
+    .pool-label {
+      display: block;
+      font-weight: 700;
+      color: #5568d3;
+      margin-bottom: 14px;
+      font-size: 0.95rem;
+    }
+
+
+    .pool-items {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 12px;
+    }
+
+
+    .pool-item {
+      background: white;
+      border: 2px solid #cbd5e1;
+      border-radius: 10px;
+      padding: 14px;
+      text-align: center;
+      cursor: grab;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: all 0.2s ease;
+      user-select: none;
+      line-height: 1.4;
+      color: #374151;
+    }
+
+
+    .pool-item:hover {
+      border-color: #667eea;
+      background: #f3f4f6;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+    }
+
+
+    .pool-item.in-use {
+      opacity: 0.4;
+      pointer-events: none;
+    }
+
+
+    .buttons {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin: 24px 0;
+    }
+
+
+    button {
+      border: none;
+      border-radius: 10px;
+      padding: 14px 28px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: 'Poppins', Arial, sans-serif;
+    }
+
+
+    .btn-submit {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      min-width: 160px;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    }
+
+
+    .btn-submit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+    }
+
+
+    .btn-submit:active {
+      transform: translateY(0);
+    }
+
+
+    .btn-reset {
+      background: #e5e7eb;
+      color: #374151;
+    }
+
+
+    .btn-reset:hover {
+      background: #d1d5db;
+    }
+
+
+    .message {
+      padding: 16px 20px;
+      border-radius: 10px;
+      margin: 20px 0;
+      text-align: center;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      animation: slideIn 0.3s ease;
+    }
+
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+
+    .message.success {
+      background: #d1fae5;
+      color: #065f46;
+      border-left: 4px solid #10b981;
+    }
+
+
+    .message.error {
+      background: #fee2e2;
+      color: #991b1b;
+      border-left: 4px solid #ef4444;
+    }
+
+
+    .message.info {
+      background: #dbeafe;
+      color: #082f49;
+      border-left: 4px solid #3b82f6;
+    }
+
+
+    .hint-box {
+      background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+      border-left: 4px solid #f59e0b;
+      padding: 14px 16px;
+      border-radius: 8px;
+      margin: 20px 0;
+      font-size: 0.9rem;
+      color: #78350f;
+      font-weight: 500;
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+    }
+
+
+    .hint-box::before {
+      content: "💡";
+      flex-shrink: 0;
+    }
+
+
+    .finish-screen {
+      display: none;
+      text-align: center;
+      padding: 40px 20px;
+    }
+
+
+    .finish-screen.active {
+      display: block;
+      animation: fadeIn 0.5s ease;
+    }
+
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+
+    .finish-emoji {
+      font-size: 3.5rem;
+      margin-bottom: 20px;
+      animation: bounce 0.6s ease;
+    }
+
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-20px); }
+    }
+
+
+    .finish-title {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #333;
+      margin: 12px 0;
+    }
+
+
+    .finish-message {
+      font-size: 1.1rem;
+      color: #6b7280;
+      margin-bottom: 28px;
+    }
+
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 28px 0;
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+
+    .stat-box {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.2);
+    }
+
+
+    .stat-num {
+      font-size: 2.4rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+
+    .stat-label {
+      font-size: 0.85rem;
+      opacity: 0.9;
+      font-weight: 500;
+    }
+
+
+    .btn-play-again {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      margin-top: 24px;
+      min-width: 180px;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    }
+
+
+    .btn-play-again:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+    }
+
+
+    .finish-insight {
+      background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+      border-left: 4px solid #f59e0b;
+      padding: 16px;
+      border-radius: 8px;
+      margin: 24px 0;
+      font-size: 0.95rem;
+      color: #78350f;
+      font-weight: 500;
+      text-align: left;
+    }
+
+
+    .source-display {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 28px;
+      margin: 24px 0;
+      min-height: 200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      line-height: 1.8;
+      color: #374151;
+      border-left: 6px solid #667eea;
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.08);
+    }
+
+
+    .source-display.photo {
+      background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+      font-style: italic;
+      color: #6b7280;
+      padding: 60px 28px;
+    }
+
+
+    .source-details-box {
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+      padding: 20px;
+      margin: 20px 0;
+    }
+
+
+    .detail-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 12px 0;
+      border-bottom: 1px solid #e5e7eb;
+      font-size: 0.95rem;
+    }
+
+
+    .detail-row:last-child {
+      border-bottom: none;
+    }
+
+
+    .detail-label {
+      font-weight: 600;
+      color: #374151;
+    }
+
+
+    .detail-value {
+      color: #6b7280;
+      text-align: right;
+    }
+
+
+    .btn-answer {
+      background: white;
+      color: #374151;
+      border: 2px solid #e5e7eb;
+      flex: 1;
+      min-width: 140px;
+      transition: all 0.3s ease;
+      font-weight: 600;
+    }
+
+
+    .btn-answer:hover {
+      border-color: #667eea;
+      background: #ede9fe;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+    }
+
+
+    .btn-answer.selected-primary {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      border-color: #5568d3;
+    }
+
+
+    .btn-answer.selected-secondary {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      border-color: #5568d3;
+    }
+  </style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  <style>body { box-sizing: border-box; }</style>
+ </head>
+ <body class="h-full">
+  <div class="wrapper">
+   <header>
+    <h1 id="lessonTitle">🔍 Source Sleuth</h1>
+    <p id="instructionText">Identify whether each source is primary or secondary—then become a history detective!</p>
+   </header>
+   <main>
+    <div id="gameScreen" class="game-box">
+     <div class="progress">
+      <div class="progress-bar" id="progressBar" style="width: 0%"></div>
+     </div>
+     <div style="margin-bottom: 12px;">
+      <span class="challenge-number" id="challengeNumber">Source 1 of 8</span>
+     </div>
+     <h2 class="challenge-title" id="challengeTitle">Gold Rush in California</h2>
+     <div class="challenge-description" id="challengeDescription">
+      Read this carefully and ask: Who created this? When? For what purpose?
+     </div><!-- SOURCE DISPLAY -->
+     <div class="source-display" id="sourceDisplay"></div><!-- SOURCE DETAILS BOX -->
+     <div class="source-details-box">
+      <div class="detail-row"><span class="detail-label">📝 Source type:</span> <span class="detail-value" id="sourceType">—</span>
+      </div>
+      <div class="detail-row"><span class="detail-label">📅 Created:</span> <span class="detail-value" id="sourceDate">—</span>
+      </div>
+      <div class="detail-row"><span class="detail-label">👤 Creator:</span> <span class="detail-value" id="sourceCreator">—</span>
+      </div>
+     </div><!-- HINT BOX -->
+     <div class="hint-box" id="hintBox">
+      Ask yourself: Was this created AT the time of the event (primary), or created LATER by someone studying it (secondary)?
+     </div><!-- ANSWER BUTTONS -->
+     <div class="buttons"><button class="btn-answer" onclick="answerSource('primary')">📌 Primary Source</button> <button class="btn-answer" onclick="answerSource('secondary')">📚 Secondary Source</button>
+     </div><!-- FEEDBACK -->
+     <div id="messageBox"></div>
+     <div class="buttons" id="nextButtonContainer" style="display: none;"><button class="btn-submit" onclick="nextSource()">→ Next Source</button>
+     </div>
+    </div><!-- FINISH SCREEN -->
+    <div id="finishScreen" class="game-box finish-screen">
+     <div class="finish-emoji">
+      🎓
+     </div>
+     <h2 class="finish-title" id="finishTitle">Source Expert!</h2>
+     <p class="finish-message" id="finishMessage">You can now identify primary and secondary sources like a true historian!</p>
+     <div class="stats-grid">
+      <div class="stat-box">
+       <div class="stat-num" id="statCorrect">
+        8
+       </div>
+       <div class="stat-label">
+        Sources Identified
+       </div>
+      </div>
+      <div class="stat-box">
+       <div class="stat-num" id="statAccuracy">
+        100%
+       </div>
+       <div class="stat-label">
+        Accuracy
+       </div>
+      </div>
+     </div>
+     <div class="finish-insight" id="finishInsight"></div><button class="btn-play-again" onclick="location.reload()">🔄 Try Again</button>
+    </div>
+   </main>
+  </div>
+  <script>
+    const sources = [
+      {
+        title: "Gold Rush in California",
+        type: "Diary entry from a Gold Rush miner",
+        date: "July 15, 1851",
+        creator: "James Wilson, miner",
+        text: "The camps are crowded and rough. Men work long hours hoping to strike it rich. I've found just enough gold to keep searching. Food is scarce and expensive. Many are growing sick from the poor conditions.",
+        answer: "primary",
+        explanation: "This diary was written BY someone who lived through the Gold Rush AT the time it was happening. It's an eyewitness account from the real experience.",
+        learn: "Primary sources like diaries show us what people actually experienced and felt during historical events."
+      },
+      {
+        title: "Native Americans of California",
+        type: "Photograph",
+        date: "1872",
+        creator: "Photographer (unknown)",
+        text: "[Historical photograph showing indigenous people and their settlement]",
+        answer: "primary",
+        explanation: "This photograph was taken DURING the 1800s, capturing a real moment in time. Photographs created at or near the time of an event are primary sources.",
+        learn: "Visual evidence like photographs, paintings, and sketches from the era are primary sources because they show what actually existed."
+      },
+      {
+        title: "Spanish Missions in California",
+        type: "Modern textbook chapter",
+        date: "2023",
+        creator: "Dr. Maria Rodriguez, history textbook author",
+        text: "The Spanish established 21 missions along the California coast between 1769 and 1823. These missions converted Native Americans to Christianity and taught them Spanish language and farming methods. The missions controlled large amounts of land and resources.",
+        answer: "secondary",
+        explanation: "This textbook was written in 2023, over 200 years after the missions were built! The author studied PRIMARY sources and wrote about them later. That makes it SECONDARY.",
+        learn: "Secondary sources like textbooks, encyclopedias, and websites are written by people who studied the event afterward—not by people who were there."
+      },
+      {
+        title: "Gold Panning Instructions",
+        type: "Online history website",
+        date: "2024",
+        creator: "California History Learning Center (modern website)",
+        text: "Gold panning was a common method used during the Gold Rush. Miners would fill a pan with gravel and water from streams, shake it, and look for small gold flakes in the bottom. This method was used by thousands of miners.",
+        answer: "secondary",
+        explanation: "This website was created in 2024 to EXPLAIN gold panning to students. It's not a source FROM the Gold Rush era—it's someone writing about the topic today.",
+        learn: "Websites, documentaries, and educational videos made recently are secondary sources, even if they explain historical events accurately."
+      },
+      {
+        title: "Letter to Governor",
+        type: "Political letter (official document)",
+        date: "1850",
+        creator: "Charles Huntington, California community leader",
+        text: "Sir, I request protection for our settlement from bandits who steal livestock. The Gold Rush has brought many desperate men to our region. We ask for soldiers to help keep the peace.",
+        answer: "primary",
+        explanation: "This letter was written in 1850 by someone who lived through this exact situation. It's a real document FROM that time, expressing real concerns people had.",
+        learn: "Letters, petitions, and official documents from the time are excellent primary sources because they show what people cared about and worried about."
+      },
+      {
+        title: "California Statehood Documentary",
+        type: "Video documentary",
+        date: "1995",
+        creator: "PBS Historical Films",
+        text: "California became a state in 1850, partly due to the rapid population growth from the Gold Rush. The discovery of gold brought thousands of people, creating the need for stronger government and laws.",
+        answer: "secondary",
+        explanation: "This documentary was made in 1995, long after California became a state. The filmmakers researched the topic and created this explanation—they weren't there in 1850.",
+        learn: "Documentaries and films are secondary sources because they're made AFTER the event happened, using other sources as their base."
+      },
+      {
+        title: "Indigenous People's Oral History",
+        type: "Recording of elder's story (recorded in 2000)",
+        date: "2000",
+        creator: "Tribal elder sharing memories passed down",
+        text: "My grandparent's grandparent told stories of the time before the Spanish came. Our people lived peacefully, following the seasons and caring for the land. When missions arrived, much changed.",
+        answer: "secondary",
+        explanation: "Although the elder is sharing stories from their family, this RECORDING was made in 2000. It's a modern recording of old knowledge, making it secondary—but it preserves important perspectives.",
+        learn: "Oral histories recorded recently are considered secondary, but they still carry the voices and wisdom of indigenous communities."
+      },
+      {
+        title: "Museum Label for Gold Rush Artifact",
+        type: "Museum display card",
+        date: "2010",
+        creator: "Museum curator",
+        text: "This gold pan belonged to a prospector during the 1850s Gold Rush. Gold pans like this were essential tools that miners used daily. The slight wear on the handle shows it was well-used.",
+        answer: "secondary",
+        explanation: "The museum LABEL was written in 2010 by someone studying the artifact. The pan itself is primary, but the label describing and explaining it is secondary.",
+        learn: "Sometimes sources work together: the original artifact is primary, but descriptions or analysis of it are secondary."
+      }
+    ];
+
+
+    let currentSource = 0;
+    let correctCount = 0;
+    let answered = false;
+    let selectedAnswer = null;
+
+
+    const defaultConfig = {
+      lesson_title: '🔍 Source Sleuth',
+      instruction_text: 'Identify whether each source is primary or secondary—then become a history detective!',
+      completion_message: 'Source Expert!'
+    };
+
+
+    function loadSource() {
+      const source = sources[currentSource];
+      
+      document.getElementById('challengeNumber').textContent = `Source ${currentSource + 1} of ${sources.length}`;
+      document.getElementById('challengeTitle').textContent = source.title;
+      document.getElementById('challengeDescription').textContent = source.type + " — " + source.date;
+
+
+      // Render source content
+      const sourceDisplay = document.getElementById('sourceDisplay');
+      sourceDisplay.innerHTML = source.text;
+      if (source.type.includes('Photograph') || source.type.includes('photo')) {
+        sourceDisplay.classList.add('photo');
+      }
+
+
+      // Update source details
+      document.getElementById('sourceType').textContent = source.type;
+      document.getElementById('sourceDate').textContent = source.date;
+      document.getElementById('sourceCreator').textContent = source.creator;
+
+
+      answered = false;
+      selectedAnswer = null;
+      document.querySelectorAll('.btn-answer').forEach(btn => btn.classList.remove('selected-primary', 'selected-secondary'));
+      document.getElementById('messageBox').innerHTML = '';
+      document.getElementById('nextButtonContainer').style.display = 'none';
+      updateProgress();
+    }
+
+
+    function answerSource(answer) {
+      if (answered) return;
+      answered = true;
+      selectedAnswer = answer;
+
+
+      const source = sources[currentSource];
+      const isCorrect = answer === source.answer;
+
+
+      // Visual feedback on buttons
+      document.querySelectorAll('.btn-answer').forEach(btn => btn.disabled = true);
+      if (answer === 'primary') {
+        document.querySelectorAll('[onclick*="primary"]')[0].classList.add('selected-primary');
+      } else {
+        document.querySelectorAll('[onclick*="secondary"]')[0].classList.add('selected-secondary');
+      }
+
+
+      // Show feedback
+      const messageBox = document.getElementById('messageBox');
+      if (isCorrect) {
+        correctCount++;
+        messageBox.innerHTML = `<div class="message success">✅ Correct! ${source.explanation}</div>`;
+        messageBox.innerHTML += `<div class="message info">💡 ${source.learn}</div>`;
+      } else {
+        messageBox.innerHTML = `<div class="message error">❌ Not quite. ${source.explanation}</div>`;
+        messageBox.innerHTML += `<div class="message info">💡 ${source.learn}</div>`;
+      }
+
+
+      document.getElementById('nextButtonContainer').style.display = 'block';
+    }
+
+
+    function nextSource() {
+      if (currentSource < sources.length - 1) {
+        currentSource++;
+        loadSource();
+      } else {
+        finishGame();
+      }
+    }
+
+
+    function updateProgress() {
+      const pct = ((currentSource) / sources.length) * 100;
+      document.getElementById('progressBar').style.width = pct + '%';
+    }
+
+
+    function finishGame() {
+      document.getElementById('gameScreen').style.display = 'none';
+      document.getElementById('finishScreen').classList.add('active');
+      document.getElementById('finishTitle').textContent = defaultConfig.completion_message;
+      
+      const accuracy = Math.round((correctCount / sources.length) * 100);
+      document.getElementById('statCorrect').textContent = correctCount + "/" + sources.length;
+      document.getElementById('statAccuracy').textContent = accuracy + "%";
+
+
+      let insight = "";
+      if (accuracy === 100) {
+        insight = "🌟 Perfect! You're a source expert! You can now analyze historical evidence like a real historian.";
+      } else if (accuracy >= 75) {
+        insight = "🎯 Great work! You understand the difference between primary and secondary sources. Keep practicing to master source analysis!";
+      } else if (accuracy >= 50) {
+        insight = "📚 Good start! Remember: primary = created AT the time by someone there. Secondary = created LATER by someone studying it.";
+      } else {
+        insight = "💪 Keep learning! The more you practice identifying sources, the better you'll become at understanding history. Review the lessons and try again!";
+      }
+      document.getElementById('finishInsight').textContent = insight;
+    }
+
+
+    function applyConfig(config) {
+      if (config.lesson_title) {
+        document.getElementById('lessonTitle').textContent = config.lesson_title;
+      }
+      if (config.instruction_text) {
+        document.getElementById('instructionText').textContent = config.instruction_text;
+      }
+      if (config.completion_message) {
+        defaultConfig.completion_message = config.completion_message;
+      }
+    }
+
+
+    window.elementSdk.init({
+      defaultConfig,
+      onConfigChange: async (config) => {
+        applyConfig(config);
+      },
+      mapToCapabilities: () => ({
+        recolorables: [],
+        borderables: [],
+        fontEditable: undefined,
+        fontSizeable: undefined
+      }),
+      mapToEditPanelValues: (config) => new Map([
+        ['lesson_title', config.lesson_title || defaultConfig.lesson_title],
+        ['instruction_text', config.instruction_text || defaultConfig.instruction_text],
+        ['completion_message', config.completion_message || defaultConfig.completion_message]
+      ])
+    });
+
+
+    applyConfig(defaultConfig);
+    loadSource();
+  </script>
+ </body>
+</html>
+
+
+
+
+
+
+Game 3 history and social sciences 
+California Symbols and Regions

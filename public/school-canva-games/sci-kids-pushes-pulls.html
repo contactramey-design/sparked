@@ -1,0 +1,704 @@
+<!doctype html>
+<html lang="en" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pushes, Pulls &amp; Motion</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&amp;family=Quicksand:wght@400;600;700&amp;display=swap" rel="stylesheet">
+  <style>
+    html, body { height: 100%; margin: 0; }
+    * { box-sizing: border-box; }
+
+
+    .app-wrapper {
+      font-family: 'Quicksand', Arial, sans-serif;
+      height: 100%;
+      width: 100%;
+      overflow-y: auto;
+      overflow-x: hidden;
+      background: linear-gradient(135deg, #e0e7ff 0%, #ddd6fe 100%);
+    }
+
+
+    .heading-font { font-family: 'Fredoka', Arial, sans-serif; font-weight: 700; }
+
+
+    @keyframes fadeSlideIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+
+    @keyframes grow-plant {
+      0% { transform: scaleY(0.8); }
+      100% { transform: scaleY(1); }
+    }
+
+
+    @keyframes glow-pulse {
+      0%, 100% { filter: drop-shadow(0 0 8px rgba(34, 197, 94, 0.3)); }
+      50% { filter: drop-shadow(0 0 16px rgba(34, 197, 94, 0.6)); }
+    }
+
+
+    @keyframes bounce-pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.08); }
+    }
+
+
+    @keyframes wiggle {
+      0%, 100% { transform: rotate(0deg); }
+      25% { transform: rotate(-3deg); }
+      75% { transform: rotate(3deg); }
+    }
+
+
+    header {
+      background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+      color: white;
+      box-shadow: 0 4px 20px rgba(124, 58, 237, 0.25);
+    }
+
+
+    .standards-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.2);
+      padding: 8px 14px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+
+    .instruction-box {
+      background: linear-gradient(135deg, #f3e8ff 0%, #ede9fe 100%);
+      border-left: 4px solid #7c3aed;
+      border-radius: 12px;
+      padding: 16px;
+      margin: 18px 0;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: #5b21b6;
+      font-weight: 500;
+    }
+
+
+    .plant-arena {
+      background: white;
+      border-radius: 16px;
+      padding: 24px;
+      margin: 24px 0;
+      box-shadow: 0 4px 15px rgba(124, 58, 237, 0.1);
+      text-align: center;
+    }
+
+
+    .plant-display {
+      margin: 24px 0;
+      position: relative;
+      min-height: 200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+
+    .motion-track {
+      width: 100%;
+      height: 80px;
+      background: linear-gradient(90deg, #ddd6fe 0%, #ede9fe 100%);
+      border-radius: 12px;
+      position: relative;
+      overflow: hidden;
+      border: 2px solid #c4b5fd;
+      margin-bottom: 16px;
+    }
+
+
+    .motion-object {
+      position: absolute;
+      width: 50px;
+      height: 50px;
+      background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+      left: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      transition: left 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+
+    .motion-object.moving {
+      animation: slide-motion 0.6s ease-out forwards;
+    }
+
+
+    @keyframes slide-motion {
+      from { left: 20px; }
+      to { left: calc(100% - 70px); }
+    }
+
+
+    .target-zone {
+      position: absolute;
+      width: 60px;
+      height: 100%;
+      right: 10px;
+      top: 0;
+      background: linear-gradient(90deg, rgba(168, 85, 247, 0.2) 0%, rgba(168, 85, 247, 0.4) 100%);
+      border-right: 3px dashed #a855f7;
+      border-radius: 0 8px 8px 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #6d28d9;
+      text-transform: uppercase;
+    }
+
+
+    .target-hit {
+      background: linear-gradient(90deg, rgba(34, 197, 94, 0.3) 0%, rgba(34, 197, 94, 0.5) 100%) !important;
+      border-right: 3px solid #22c55e !important;
+    }
+
+
+    .care-buttons {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin: 24px 0;
+    }
+
+
+    .care-btn {
+      padding: 16px;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      background: white;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.95rem;
+      transition: all 0.3s ease;
+      font-family: Quicksand, Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+
+    .care-btn:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+    }
+
+
+    .care-btn:active {
+      transform: translateY(-2px);
+    }
+
+
+    .care-btn.sun {
+      border-color: #fbbf24;
+      color: #b45309;
+    }
+
+
+    .care-btn.sun:hover {
+      background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+    }
+
+
+    .care-btn.water {
+      border-color: #0284c7;
+      color: #0369a1;
+    }
+
+
+    .care-btn.water:hover {
+      background: linear-gradient(135deg, #e0f2fe 0%, #cffafe 100%);
+    }
+
+
+    .care-btn.air {
+      border-color: #7c3aed;
+      color: #6d28d9;
+    }
+
+
+    .care-btn.air:hover {
+      background: linear-gradient(135deg, #ede9fe 0%, #f3e8ff 100%);
+    }
+
+
+    .care-btn.space {
+      border-color: #ec4899;
+      color: #be185d;
+    }
+
+
+    .care-btn.space:hover {
+      background: linear-gradient(135deg, #fce7f3 0%, #fbcfe8 100%);
+    }
+
+
+    .health-bar {
+      width: 100%;
+      height: 24px;
+      background: #e5e7eb;
+      border-radius: 12px;
+      margin: 16px 0;
+      overflow: hidden;
+    }
+
+
+    .health-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #a78bfa 0%, #7c3aed 50%, #6d28d9 100%);
+      width: 40%;
+      transition: width 0.5s ease;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding-right: 6px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: white;
+    }
+
+
+    .plant-needs {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin: 20px 0;
+    }
+
+
+    .need-indicator {
+      text-align: center;
+      padding: 12px;
+      background: #f3f4f6;
+      border-radius: 10px;
+      transition: all 0.3s ease;
+    }
+
+
+    .need-indicator.satisfied {
+      background: linear-gradient(135deg, #ddd6fe 0%, #c4b5fd 100%);
+      border: 2px solid #7c3aed;
+    }
+
+
+    .need-emoji {
+      font-size: 1.8rem;
+      margin-bottom: 4px;
+    }
+
+
+    .need-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #666;
+    }
+
+
+    .fact-box {
+      background: linear-gradient(135deg, #f3e8ff 0%, #ede9fe 100%);
+      border-left: 4px solid #7c3aed;
+      border-radius: 12px;
+      padding: 16px;
+      margin: 16px 0;
+      font-size: 0.9rem;
+      line-height: 1.6;
+      color: #5b21b6;
+      font-weight: 500;
+    }
+
+
+    .completion-screen {
+      text-align: center;
+      padding: 40px 20px;
+      animation: fadeSlideIn 0.6s ease-out;
+    }
+
+
+    .completion-emoji {
+      font-size: 3rem;
+      margin-bottom: 16px;
+      animation: bounce-pulse 0.8s ease-in-out infinite;
+    }
+
+
+    .completion-text h2 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #7c3aed;
+      margin: 16px 0;
+      font-family: 'Fredoka', Arial, sans-serif;
+    }
+
+
+    .completion-text p {
+      font-size: 1rem;
+      color: #666;
+      margin-bottom: 24px;
+      line-height: 1.6;
+    }
+
+
+    .btn-again {
+      background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      padding: 14px 28px;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      font-family: Quicksand, Arial, sans-serif;
+    }
+
+
+    .btn-again:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 16px rgba(124, 58, 237, 0.35);
+    }
+
+
+    .progress-tracker {
+      text-align: center;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #7c3aed;
+      margin: 20px 0;
+      padding: 12px;
+      background: rgba(124, 58, 237, 0.08);
+      border-radius: 10px;
+    }
+
+
+    @media (max-width: 768px) {
+      .care-buttons { grid-template-columns: repeat(2, 1fr); }
+      .plant-needs { grid-template-columns: repeat(2, 1fr); }
+      header h1 { font-size: 1.8rem; }
+    }
+  </style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  <style>body { box-sizing: border-box; }</style>
+ </head>
+ <body class="h-full">
+  <div class="app-wrapper" id="appWrapper">
+   <header class="py-8 px-4">
+    <div class="max-w-3xl mx-auto text-center">
+     <div class="standards-badge">
+      <i data-lucide="zap" style="width:16px;height:16px;"></i> <span>CA NGSS K-PS2-1 · Forces &amp; Motion</span>
+     </div>
+     <h1 class="heading-font text-4xl md:text-5xl font-bold" id="lessonTitle">Pushes, Pulls &amp; Motion</h1>
+     <p class="text-white text-opacity-90 mt-3 text-lg">Discover how forces change the way things move!</p>
+    </div>
+   </header>
+   <main class="max-w-3xl mx-auto px-4 py-6 pb-24">
+    <div class="instruction-box" id="instructionBox">
+     <strong>💨 Your Challenge:</strong>
+     <p id="instructionText" style="margin-top: 8px;">Test pushes and pulls! See how strength and direction change motion.</p>
+    </div>
+    <div class="progress-tracker">
+     <span id="progressText">Give your plant the care it needs!</span>
+    </div>
+    <div class="plant-arena">
+     <h2 class="heading-font text-2xl mb-4" style="color: #7c3aed;">🎯 <span id="challengeText">Can you reach the target?</span></h2>
+     <div class="motion-track" id="motionTrack">
+      <div class="motion-object" id="motionObject">
+       📦
+      </div>
+      <div class="target-zone" id="targetZone">
+       TARGET
+      </div>
+     </div>
+     <p style="color: #666; font-size: 0.9rem; margin: 12px 0; text-align: center;">Distance Traveled: <strong id="distanceDisplay">0 pixels</strong></p>
+    </div>
+    <div style="margin-bottom: 20px;">
+     <p style="text-align: center; font-weight: 600; margin-bottom: 16px;">🔬 Test Your Forces:</p>
+     <div class="care-buttons"><button class="care-btn sun" onclick="weakPush()" id="btnWeak"><span class="care-btn-emoji">🤏</span> <span id="weakPushLabel">Weak Push</span></button> <button class="care-btn water" onclick="strongPush()" id="btnStrong"><span class="care-btn-emoji">💪</span> <span id="strongPushLabel">Strong Push</span></button> <button class="care-btn air" onclick="pullBack()" id="btnPull"><span class="care-btn-emoji">👈</span> <span id="pullLabel">Pull Back</span></button> <button class="care-btn space" onclick="resetObject()" id="btnReset"><span class="care-btn-emoji">🔄</span> <span id="resetLabel">Reset</span></button>
+     </div>
+    </div>
+    <div class="plant-arena">
+     <h3 class="heading-font text-lg mb-4" style="color: #7c3aed;">📊 Test Results</h3>
+     <div class="plant-needs" id="testResults">
+      <div class="need-indicator">
+       <div class="need-emoji">
+        🤏
+       </div>
+       <div class="need-label">
+        Weak Push
+       </div>
+       <div style="font-size: 0.9rem; color: #333; margin-top: 6px;" id="weakResult">
+        -
+       </div>
+      </div>
+      <div class="need-indicator">
+       <div class="need-emoji">
+        💪
+       </div>
+       <div class="need-label">
+        Strong Push
+       </div>
+       <div style="font-size: 0.9rem; color: #333; margin-top: 6px;" id="strongResult">
+        -
+       </div>
+      </div>
+      <div class="need-indicator">
+       <div class="need-emoji">
+        👈
+       </div>
+       <div class="need-label">
+        Pull Back
+       </div>
+       <div style="font-size: 0.9rem; color: #333; margin-top: 6px;" id="pullResult">
+        -
+       </div>
+      </div>
+      <div class="need-indicator">
+       <div class="need-emoji">
+        🎯
+       </div>
+       <div class="need-label">
+        Hit Target?
+       </div>
+       <div style="font-size: 0.9rem; color: #333; margin-top: 6px;" id="targetResult">
+        No
+       </div>
+      </div>
+     </div>
+    </div>
+    <div class="fact-box" id="factBox"><strong>🧠 Physics Discovery:</strong>
+     <p id="factText" style="margin-top: 8px;">Stronger pushes and pulls make objects move faster and farther. A gentle push moves something a little way; a strong push moves it much farther!</p>
+    </div>
+    <div id="completionMessage" style="display:none;">
+     <div class="completion-screen">
+      <div class="completion-emoji">
+       🎉📦✨
+      </div>
+      <div class="completion-text">
+       <h2 id="successTitle">Forces Master!</h2>
+       <p id="successMessage">You discovered how pushes and pulls work! Stronger forces move objects farther!</p>
+       <p style="font-size: 0.9rem; opacity: 0.8;" id="discoveryMessage">You learned that force strength matters! 🎓</p><button class="btn-again" onclick="location.reload();">🔄 Test Again</button>
+      </div>
+     </div>
+    </div>
+   </main>
+  </div>
+  <script>
+    let forceState = {
+      objectPosition: 20, // Starting position in pixels
+      weakPushCount: 0,
+      strongPushCount: 0,
+      pullCount: 0,
+      distances: {},
+      completed: false
+    };
+
+
+    const trackWidth = 100; // Width in percentage
+    const weakPushDistance = 25; // pixels
+    const strongPushDistance = 65; // pixels
+    const pullDistance = -30; // pixels (moves left)
+    const targetStart = 80; // Target zone starts at 80% from left
+
+
+    const defaultConfig = {
+      lesson_title: 'Pushes, Pulls & Motion Explorer',
+      instruction_text: 'Test pushes and pulls! See how strength and direction change motion.',
+      weak_push_label: '🤏 Weak Push',
+      strong_push_label: '💪 Strong Push',
+      pull_label: '👈 Pull Back',
+      reset_label: '🔄 Reset',
+      challenge_text: 'Can you reach the target?',
+      discovery_message: 'You discovered: Stronger pushes move objects farther!',
+      background_color: '#e0e7ff',
+      text_color: '#1A1A2E',
+      font_family: 'Quicksand',
+      font_size: 16
+    };
+
+
+    function moveObject(distance) {
+      const object = document.getElementById('motionObject');
+      const track = document.getElementById('motionTrack');
+      const trackRect = track.getBoundingClientRect();
+      
+      // Calculate new position
+      forceState.objectPosition = Math.max(20, Math.min(forceState.objectPosition + distance, trackRect.width - 70));
+      object.style.left = forceState.objectPosition + 'px';
+      
+      // Update distance display
+      document.getElementById('distanceDisplay').textContent = Math.round(forceState.objectPosition - 20) + ' pixels';
+      
+      // Check if target was hit
+      checkTargetHit();
+    }
+
+
+    function weakPush() {
+      forceState.weakPushCount++;
+      moveObject(weakPushDistance);
+      document.getElementById('weakResult').textContent = `${forceState.weakPushCount}x (${weakPushDistance}px each)`;
+    }
+
+
+    function strongPush() {
+      forceState.strongPushCount++;
+      moveObject(strongPushDistance);
+      document.getElementById('strongResult').textContent = `${forceState.strongPushCount}x (${strongPushDistance}px each)`;
+    }
+
+
+    function pullBack() {
+      forceState.pullCount++;
+      moveObject(pullDistance);
+      document.getElementById('pullResult').textContent = `${forceState.pullCount}x (moves left)`;
+    }
+
+
+    function resetObject() {
+      forceState.objectPosition = 20;
+      forceState.weakPushCount = 0;
+      forceState.strongPushCount = 0;
+      forceState.pullCount = 0;
+      forceState.completed = false;
+      
+      document.getElementById('motionObject').style.left = '20px';
+      document.getElementById('distanceDisplay').textContent = '0 pixels';
+      document.getElementById('weakResult').textContent = '-';
+      document.getElementById('strongResult').textContent = '-';
+      document.getElementById('pullResult').textContent = '-';
+      document.getElementById('targetResult').textContent = 'No';
+      document.getElementById('completionMessage').style.display = 'none';
+      
+      const targetZone = document.getElementById('targetZone');
+      targetZone.classList.remove('target-hit');
+    }
+
+
+    function checkTargetHit() {
+      const track = document.getElementById('motionTrack');
+      const trackRect = track.getBoundingClientRect();
+      const targetZone = document.getElementById('targetZone');
+      
+      // Target zone is from 80% to 100% of track width
+      const targetStartPixels = (trackRect.width * 0.80);
+      const targetEndPixels = trackRect.width - 70;
+      
+      if (forceState.objectPosition >= targetStartPixels - 10 && !forceState.completed) {
+        targetZone.classList.add('target-hit');
+        document.getElementById('targetResult').textContent = '✅ YES!';
+        document.getElementById('targetResult').style.color = '#22c55e';
+        forceState.completed = true;
+        
+        setTimeout(() => {
+          showDiscovery();
+        }, 800);
+      }
+    }
+
+
+    function showDiscovery() {
+      document.getElementById('completionMessage').style.display = 'block';
+      
+      const strongerWins = forceState.strongPushCount > forceState.weakPushCount;
+      const discoveryMsg = strongerWins 
+        ? 'Strong pushes moved the object much farther than weak pushes!'
+        : 'You found that combining different forces can reach the target!';
+      
+      document.getElementById('discoveryMessage').textContent = discoveryMsg;
+    }
+
+
+    function applyConfig(cfg) {
+      const w = document.getElementById('appWrapper');
+      w.style.background = cfg.background_color || defaultConfig.background_color;
+      w.style.color = cfg.text_color || defaultConfig.text_color;
+
+
+      const baseFontStack = 'Arial, sans-serif';
+      const customFont = cfg.font_family || defaultConfig.font_family;
+      w.style.fontFamily = `${customFont}, ${baseFontStack}`;
+
+
+      const baseSize = cfg.font_size || defaultConfig.font_size;
+      document.getElementById('lessonTitle').textContent = cfg.lesson_title || defaultConfig.lesson_title;
+      document.getElementById('lessonTitle').style.fontSize = `${baseSize * 2.5}px`;
+
+
+      document.getElementById('instructionText').textContent = cfg.instruction_text || defaultConfig.instruction_text;
+      document.getElementById('challengeText').textContent = cfg.challenge_text || defaultConfig.challenge_text;
+      
+      document.getElementById('weakPushLabel').textContent = (cfg.weak_push_label || defaultConfig.weak_push_label).replace('🤏 ', '');
+      document.getElementById('strongPushLabel').textContent = (cfg.strong_push_label || defaultConfig.strong_push_label).replace('💪 ', '');
+      document.getElementById('pullLabel').textContent = (cfg.pull_label || defaultConfig.pull_label).replace('👈 ', '');
+      document.getElementById('resetLabel').textContent = (cfg.reset_label || defaultConfig.reset_label).replace('🔄 ', '');
+      
+      document.getElementById('successMessage').textContent = cfg.success_message || 'You discovered how pushes and pulls work!';
+      document.getElementById('discoveryMessage').textContent = cfg.discovery_message || defaultConfig.discovery_message;
+
+
+      document.querySelectorAll('.heading-font').forEach(el => {
+        el.style.fontFamily = `Fredoka, ${customFont}, ${baseFontStack}`;
+      });
+    }
+
+
+    window.elementSdk.init({
+      defaultConfig,
+      onConfigChange: async (cfg) => applyConfig(cfg),
+      mapToCapabilities: (cfg) => ({
+        recolorables: [
+          { get: () => cfg.background_color || defaultConfig.background_color, set: (v) => { cfg.background_color = v; window.elementSdk.setConfig({ background_color: v }); } },
+          { get: () => cfg.text_color || defaultConfig.text_color, set: (v) => { cfg.text_color = v; window.elementSdk.setConfig({ text_color: v }); } }
+        ],
+        borderables: [],
+        fontEditable: { get: () => cfg.font_family || defaultConfig.font_family, set: (v) => { cfg.font_family = v; window.elementSdk.setConfig({ font_family: v }); } },
+        fontSizeable: { get: () => cfg.font_size || defaultConfig.font_size, set: (v) => { cfg.font_size = v; window.elementSdk.setConfig({ font_size: v }); } }
+      }),
+      mapToEditPanelValues: (cfg) => new Map([
+        ['lesson_title', cfg.lesson_title || defaultConfig.lesson_title],
+        ['instruction_text', cfg.instruction_text || defaultConfig.instruction_text],
+        ['challenge_text', cfg.challenge_text || defaultConfig.challenge_text],
+        ['weak_push_label', cfg.weak_push_label || defaultConfig.weak_push_label],
+        ['strong_push_label', cfg.strong_push_label || defaultConfig.strong_push_label],
+        ['pull_label', cfg.pull_label || defaultConfig.pull_label],
+        ['reset_label', cfg.reset_label || defaultConfig.reset_label],
+        ['discovery_message', cfg.discovery_message || defaultConfig.discovery_message]
+      ])
+    });
+
+
+    applyConfig(defaultConfig);
+    lucide.createIcons();
+  </script>
+ </body>
+</html>
+HISTORY GAMES 
+
+
+GAME 1 Community Helpers

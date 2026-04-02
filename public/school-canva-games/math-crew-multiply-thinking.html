@@ -1,0 +1,661 @@
+<!doctype html>
+<html lang="en" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Equal Groups &amp; Multiplication</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&amp;family=Quicksand:wght@400;600;700&amp;display=swap" rel="stylesheet">
+  <style>
+    html, body { height: 100%; margin: 0; }
+    * { box-sizing: border-box; }
+
+
+    .app-wrapper {
+      font-family: 'Quicksand', Arial, sans-serif;
+      height: 100%;
+      width: 100%;
+      overflow-y: auto;
+      overflow-x: hidden;
+      background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+    }
+
+
+    .heading-font { font-family: 'Fredoka', Arial, sans-serif; font-weight: 700; }
+
+
+    @keyframes fadeSlideIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+
+    @keyframes bounce-pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.08); }
+    }
+
+
+    @keyframes popIn {
+      0% { opacity: 0; transform: scale(0.8); }
+      50% { transform: scale(1.1); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+
+
+    header {
+      background: linear-gradient(135deg, #0369a1 0%, #0284c7 100%);
+      color: white;
+      box-shadow: 0 4px 20px rgba(3, 105, 161, 0.25);
+    }
+
+
+    .standards-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.2);
+      padding: 8px 14px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+
+    .instruction-box {
+      background: linear-gradient(135deg, #e0f2fe 0%, #cffafe 100%);
+      border-left: 4px solid #0369a1;
+      border-radius: 12px;
+      padding: 16px;
+      margin: 18px 0;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: #164e63;
+      font-weight: 500;
+    }
+
+
+    .game-arena {
+      background: white;
+      border-radius: 16px;
+      padding: 24px;
+      margin: 24px 0;
+      box-shadow: 0 4px 15px rgba(3, 105, 161, 0.1);
+    }
+
+
+    .challenge-card {
+      background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+      border: 3px solid #fcd34d;
+      border-radius: 16px;
+      padding: 24px;
+      margin: 20px 0;
+      text-align: center;
+    }
+
+
+    .challenge-text {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #92400e;
+      margin-bottom: 16px;
+    }
+
+
+    .group-builder {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+      margin: 24px 0;
+      align-items: flex-start;
+    }
+
+
+    .group-display {
+      background: white;
+      border: 3px solid #0284c7;
+      border-radius: 12px;
+      padding: 16px;
+      text-align: center;
+      min-width: 140px;
+      box-shadow: 0 2px 8px rgba(3, 105, 161, 0.1);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+
+
+    .group-display:hover {
+      background: #f0f9ff;
+      border-color: #0369a1;
+      box-shadow: 0 4px 12px rgba(3, 105, 161, 0.2);
+    }
+
+
+    .remove-btn {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: #ef4444;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 28px;
+      height: 28px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+      font-size: 1.2rem;
+      padding: 0;
+      line-height: 1;
+    }
+
+
+    .group-display:hover .remove-btn {
+      opacity: 1;
+    }
+
+
+    .remove-btn:hover {
+      background: #dc2626;
+    }
+
+
+    .group-label {
+      font-weight: 700;
+      color: #0369a1;
+      margin-bottom: 12px;
+      font-size: 0.95rem;
+    }
+
+
+    .items-in-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+      min-height: 60px;
+      align-items: center;
+    }
+
+
+    .item-circle {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+      border: 2px solid #d97706;
+      animation: popIn 0.4s ease-out;
+    }
+
+
+    .equation-display {
+      background: linear-gradient(135deg, #e0f2fe 0%, #cffafe 100%);
+      border-radius: 12px;
+      padding: 20px;
+      margin: 20px 0;
+      text-align: center;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #0369a1;
+      border: 2px solid #0284c7;
+    }
+
+
+    .button-group {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      margin: 20px 0;
+      flex-wrap: wrap;
+    }
+
+
+    .btn-action {
+      background: linear-gradient(135deg, #0369a1 0%, #0284c7 100%);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      padding: 12px 24px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      font-family: Quicksand, Arial, sans-serif;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+
+    .btn-action:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 16px rgba(3, 105, 161, 0.35);
+    }
+
+
+    .btn-action:active {
+      transform: translateY(-1px);
+    }
+
+
+    .btn-action:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+
+    .learning-tip {
+      background: linear-gradient(135deg, #dbeafe 0%, #bae6fd 100%);
+      border-left: 4px solid #0284c7;
+      border-radius: 12px;
+      padding: 16px;
+      margin: 16px 0;
+      font-size: 0.9rem;
+      line-height: 1.6;
+      color: #0c4a6e;
+      font-weight: 500;
+    }
+
+
+    .repeated-addition {
+      background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+      border-left: 4px solid #059669;
+      border-radius: 12px;
+      padding: 16px;
+      margin: 12px 0;
+      font-size: 0.9rem;
+      color: #065f46;
+      font-weight: 600;
+    }
+
+
+    .progress-bar {
+      width: 100%;
+      height: 12px;
+      background: #bfdbfe;
+      border-radius: 6px;
+      margin: 20px 0;
+      overflow: hidden;
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #0369a1 0%, #0284c7 100%);
+      transition: width 0.5s ease;
+    }
+
+
+    .completion-screen {
+      text-align: center;
+      padding: 40px 20px;
+      animation: fadeSlideIn 0.6s ease-out;
+    }
+
+
+    .completion-emoji {
+      font-size: 3rem;
+      margin-bottom: 16px;
+      animation: bounce-pulse 0.8s ease-in-out infinite;
+    }
+
+
+    .completion-text h2 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #0369a1;
+      margin: 16px 0;
+      font-family: 'Fredoka', Arial, sans-serif;
+    }
+
+
+    .completion-text p {
+      font-size: 1rem;
+      color: #0c4a6e;
+      margin-bottom: 16px;
+      line-height: 1.6;
+    }
+
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      margin: 24px 0;
+    }
+
+
+    .stat-card {
+      background: linear-gradient(135deg, #e0f2fe 0%, #cffafe 100%);
+      border: 2px solid #0284c7;
+      border-radius: 12px;
+      padding: 16px;
+      text-align: center;
+    }
+
+
+    .stat-number {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #0369a1;
+    }
+
+
+    .stat-label {
+      font-size: 0.85rem;
+      color: #0c4a6e;
+      font-weight: 600;
+      margin-top: 4px;
+    }
+
+
+    .btn-again {
+      background: linear-gradient(135deg, #0369a1 0%, #0284c7 100%);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      padding: 14px 28px;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      font-family: Quicksand, Arial, sans-serif;
+    }
+
+
+    .btn-again:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 16px rgba(3, 105, 161, 0.35);
+    }
+
+
+    @media (max-width: 768px) {
+      .group-builder { gap: 12px; }
+      .stats-grid { grid-template-columns: 1fr; }
+      header h1 { font-size: 1.8rem; }
+      .equation-display { font-size: 1.4rem; }
+    }
+  </style>
+  <style>body { box-sizing: border-box; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full">
+  <div class="app-wrapper" id="appWrapper">
+   <header class="py-8 px-4">
+    <div class="max-w-4xl mx-auto text-center">
+     <div class="standards-badge">
+      <i data-lucide="calculator" style="width:16px;height:16px;"></i> <span>CA CCSS Math Gr.3 · 3.OA.A.1, 3.OA.A.3</span>
+     </div>
+     <h1 class="heading-font text-4xl md:text-5xl font-bold" id="lessonTitle">Equal Groups &amp; Multiplication</h1>
+     <p class="text-white text-opacity-90 mt-3 text-lg">Build equal groups and discover multiplication!</p>
+    </div>
+   </header>
+   <main class="max-w-4xl mx-auto px-4 py-6 pb-24">
+    <div class="instruction-box" id="instructionBox">
+     <strong>🎯 Your Challenge:</strong>
+     <p id="instructionText" style="margin-top: 8px;">Click on groups to add items. Build until you think it's right, then check!</p>
+    </div>
+    <div class="game-arena">
+     <div class="progress-bar">
+      <div class="progress-fill" id="progressFill" style="width: 0%;"></div>
+     </div>
+     <div class="challenge-card" id="challengeCard">
+      <div class="challenge-text" id="challengeText">
+       Build <span id="numGroups">3</span> groups with <span id="itemsPerGroup">4</span> items each
+      </div>
+     </div>
+     <div class="equation-display" id="equationDisplay">
+      <span id="groups">3</span> × <span id="size">4</span> = <span id="total">?</span>
+     </div>
+     <div class="group-builder" id="groupBuilder"></div>
+     <div class="button-group">
+      <button class="btn-action" id="btnCheck" onclick="checkAnswer()" style="background: linear-gradient(135deg, #059669 0%, #047857 100%); width: 100%;"> <i data-lucide="check-circle" style="width:20px;height:20px;"></i> Check Answer </button>
+     </div>
+     <div id="feedbackMessage"></div>
+    </div>
+    <div id="completionMessage" style="display:none;">
+     <div class="game-arena">
+      <div class="completion-screen">
+       <div class="completion-emoji">
+        ✨🎉🧮
+       </div>
+       <div class="completion-text">
+        <h2 id="successTitle">Multiplication Master!</h2>
+        <p id="successMessage">You're a multiplication expert!</p>
+        <div class="stats-grid">
+         <div class="stat-card">
+          <div class="stat-number" id="statChallenges">
+           0
+          </div>
+          <div class="stat-label">
+           Challenges Solved
+          </div>
+         </div>
+         <div class="stat-card">
+          <div class="stat-number" id="statCorrect">
+           0
+          </div>
+          <div class="stat-label">
+           First Try Wins
+          </div>
+         </div>
+        </div>
+        <p style="font-size: 0.9rem; opacity: 0.8; margin: 16px 0;">You understand equal groups and multiplication! 🌟</p><button class="btn-again" onclick="location.reload();">🔄 Play Again</button>
+       </div>
+      </div>
+     </div>
+    </div>
+    <div class="learning-tip" style="margin-top: 32px;">
+     <strong>📚 Key Idea:</strong> Multiplication is a fast way to count equal groups. Instead of counting by ones, we count by groups!
+    </div>
+   </main>
+  </div>
+  <script>
+    const challenges = [
+      { groups: 3, size: 4 },
+      { groups: 4, size: 3 },
+      { groups: 5, size: 2 },
+      { groups: 2, size: 6 },
+      { groups: 6, size: 2 }
+    ];
+
+
+    let currentChallenge = 0;
+    let gameState = {
+      groups: [],
+      challengesCompleted: 0,
+      firstTryWins: 0
+    };
+
+
+    const defaultConfig = {
+      lesson_title: 'Equal Groups & Multiplication',
+      instruction_text: 'Build the correct number of equal groups. Match the groups to the equation!',
+      game_intro: 'Build Equal Groups',
+      completion_message: 'You\'re a multiplication expert!'
+    };
+
+
+    function initChallenge() {
+      const challenge = challenges[currentChallenge];
+      gameState.groups = Array(challenge.groups).fill(null).map(() => []);
+
+
+      document.getElementById('numGroups').textContent = challenge.groups;
+      document.getElementById('itemsPerGroup').textContent = challenge.size;
+      document.getElementById('groups').textContent = challenge.groups;
+      document.getElementById('size').textContent = challenge.size;
+      document.getElementById('total').textContent = '?';
+
+
+      renderGroups();
+      updateProgress();
+      document.getElementById('feedbackMessage').innerHTML = '';
+    }
+
+
+    function renderGroups() {
+      const container = document.getElementById('groupBuilder');
+      container.innerHTML = '';
+
+
+      gameState.groups.forEach((group, idx) => {
+        const groupEl = document.createElement('div');
+        groupEl.className = 'group-display';
+        groupEl.id = `group-${idx}`;
+        groupEl.innerHTML = `
+          <button class="remove-btn" onclick="removeItemFromGroup(${idx}, event)">−</button>
+          <div class="group-label">Group ${idx + 1}</div>
+          <div class="items-in-group" onclick="addItemToGroup(${idx})" style="cursor: pointer;">
+            ${group.map(() => '<div class="item-circle">🟡</div>').join('')}
+          </div>
+        `;
+        container.appendChild(groupEl);
+      });
+    }
+
+
+    function addItemToGroup(groupIdx) {
+      gameState.groups[groupIdx].push(1);
+      renderGroups();
+      lucide.createIcons();
+      updateEquation();
+    }
+
+
+    function removeItemFromGroup(groupIdx, event) {
+      event.stopPropagation();
+      if (gameState.groups[groupIdx].length > 0) {
+        gameState.groups[groupIdx].pop();
+        renderGroups();
+        updateEquation();
+      }
+    }
+
+
+    function updateEquation() {
+      let total = gameState.groups.reduce((sum, group) => sum + group.length, 0);
+      document.getElementById('total').textContent = total;
+    }
+
+
+    function checkAnswer() {
+      const challenge = challenges[currentChallenge];
+      const groupsCount = gameState.groups.length;
+      const itemsInEachGroup = gameState.groups[0] ? gameState.groups[0].length : 0;
+
+
+      // Check if all groups have equal items
+      const allEqual = gameState.groups.every(g => g.length === itemsInEachGroup);
+      const correctGroups = groupsCount === challenge.groups;
+      const correctItems = itemsInEachGroup === challenge.size;
+
+
+      if (correctGroups && correctItems && allEqual) {
+        gameState.firstTryWins++;
+        showFeedback(`✅ Correct! ${challenge.groups} × ${challenge.size} = ${challenge.groups * challenge.size}`, true);
+        gameState.challengesCompleted++;
+
+
+        setTimeout(() => {
+          if (currentChallenge < challenges.length - 1) {
+            currentChallenge++;
+            initChallenge();
+          } else {
+            showCompletion();
+          }
+        }, 1500);
+      } else {
+        let feedback = '❌ Try again! ';
+        if (!correctGroups) {
+          feedback += `Need ${challenge.groups} groups (have ${groupsCount}). `;
+        }
+        if (!correctItems) {
+          feedback += `Each group needs ${challenge.size} items (have ${itemsInEachGroup}). `;
+        }
+        if (!allEqual) {
+          feedback += 'All groups must have the same number of items!';
+        }
+        showFeedback(feedback, false);
+      }
+    }
+
+
+    function showFeedback(message, correct) {
+      const feedbackDiv = document.getElementById('feedbackMessage');
+      const style = correct 
+        ? 'background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%); border-left-color: #059669; color: #065f46;'
+        : 'background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%); border-left-color: #dc2626; color: #7f1d1d;';
+
+
+      feedbackDiv.innerHTML = `<div class="learning-tip" style="${style}">${message}</div>`;
+    }
+
+
+    function updateProgress() {
+      const percentage = (gameState.challengesCompleted / challenges.length) * 100;
+      document.getElementById('progressFill').style.width = percentage + '%';
+    }
+
+
+    function showCompletion() {
+      document.getElementById('statChallenges').textContent = gameState.challengesCompleted;
+      document.getElementById('statCorrect').textContent = gameState.firstTryWins;
+      document.getElementById('completionMessage').style.display = 'block';
+    }
+
+
+    function applyConfig(cfg) {
+      document.getElementById('lessonTitle').textContent = cfg.lesson_title || defaultConfig.lesson_title;
+      document.getElementById('instructionText').textContent = cfg.instruction_text || defaultConfig.instruction_text;
+      document.getElementById('successMessage').textContent = cfg.completion_message || defaultConfig.completion_message;
+    }
+
+
+    window.elementSdk.init({
+      defaultConfig,
+      onConfigChange: async (cfg) => applyConfig(cfg),
+      mapToCapabilities: (cfg) => ({
+        recolorables: [],
+        borderables: [],
+        fontEditable: undefined,
+        fontSizeable: undefined
+      }),
+      mapToEditPanelValues: (cfg) => new Map([
+        ['lesson_title', cfg.lesson_title || defaultConfig.lesson_title],
+        ['instruction_text', cfg.instruction_text || defaultConfig.instruction_text],
+        ['game_intro', cfg.game_intro || defaultConfig.game_intro],
+        ['completion_message', cfg.completion_message || defaultConfig.completion_message]
+      ])
+    });
+
+
+    applyConfig(defaultConfig);
+    initChallenge();
+    lucide.createIcons();
+  </script>
+ </body>
+</html>
+
+
+
+
+
+
+Game 2 MATH 
+PARTS OF A WHOLE

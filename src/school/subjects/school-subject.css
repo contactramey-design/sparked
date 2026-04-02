@@ -1507,6 +1507,13 @@
   margin-top: 0.5rem;
 }
 
+.school-subj-canva-iframe {
+  display: block;
+  min-height: min(70vh, 40rem);
+  height: min(70vh, 40rem);
+  max-width: 100%;
+}
+
 .school-subj-practice-taps {
   display: flex;
   flex-wrap: wrap;

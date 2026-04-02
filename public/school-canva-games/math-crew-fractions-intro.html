@@ -1,0 +1,767 @@
+<!doctype html>
+<html lang="en" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Parts of a Whole: Fractions</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&amp;family=Quicksand:wght@400;600;700&amp;display=swap" rel="stylesheet">
+  <style>
+    html, body { height: 100%; margin: 0; }
+    * { box-sizing: border-box; }
+
+
+    .app-wrapper {
+      font-family: 'Quicksand', Arial, sans-serif;
+      height: 100%;
+      width: 100%;
+      overflow-y: auto;
+      overflow-x: hidden;
+      background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+    }
+
+
+    .heading-font { font-family: 'Fredoka', Arial, sans-serif; font-weight: 700; }
+
+
+    @keyframes fadeSlideIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+
+    @keyframes bounce-pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.08); }
+    }
+
+
+    @keyframes popIn {
+      0% { opacity: 0; transform: scale(0.8); }
+      50% { transform: scale(1.1); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+
+
+    header {
+      background: linear-gradient(135deg, #0369a1 0%, #0284c7 100%);
+      color: white;
+      box-shadow: 0 4px 20px rgba(3, 105, 161, 0.25);
+    }
+
+
+    .standards-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.2);
+      padding: 8px 14px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+
+    .instruction-box {
+      background: linear-gradient(135deg, #e0f2fe 0%, #cffafe 100%);
+      border-left: 4px solid #0369a1;
+      border-radius: 12px;
+      padding: 16px;
+      margin: 18px 0;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: #164e63;
+      font-weight: 500;
+    }
+
+
+    .game-arena {
+      background: white;
+      border-radius: 16px;
+      padding: 24px;
+      margin: 24px 0;
+      box-shadow: 0 4px 15px rgba(3, 105, 161, 0.1);
+    }
+
+
+    .challenge-card {
+      background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+      border: 3px solid #fcd34d;
+      border-radius: 16px;
+      padding: 24px;
+      margin: 20px 0;
+      text-align: center;
+    }
+
+
+    .challenge-text {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #92400e;
+      margin-bottom: 16px;
+    }
+
+
+    .fraction-display {
+      font-size: 3rem;
+      font-weight: 700;
+      color: #0369a1;
+      margin: 16px 0;
+      font-family: 'Quicksand', Arial, sans-serif;
+    }
+
+
+    .whole-container {
+      display: flex;
+      justify-content: center;
+      margin: 32px 0;
+      align-items: center;
+    }
+
+
+    #pieSvg {
+      width: 280px;
+      height: 280px;
+      filter: drop-shadow(0 8px 24px rgba(3, 105, 161, 0.2));
+    }
+
+
+    .pie-slice {
+      cursor: pointer;
+      transition: all 0.2s ease;
+      stroke: white;
+      stroke-width: 3;
+    }
+
+
+    .pie-slice:hover {
+      filter: brightness(1.15);
+    }
+
+
+    .pie-slice.shaded {
+      animation: sliceFill 0.4s ease-out;
+    }
+
+
+    @keyframes sliceFill {
+      0% { filter: brightness(0.8); }
+      100% { filter: brightness(1); }
+    }
+
+
+    .pie-label {
+      font-weight: 700;
+      color: #0369a1;
+      font-size: 1.2rem;
+      text-anchor: middle;
+      dominant-baseline: middle;
+      pointer-events: none;
+      z-index: 10;
+    }
+
+
+    .group-builder {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+      margin: 24px 0;
+      align-items: flex-start;
+    }
+
+
+    .group-display {
+      background: white;
+      border: 3px solid #0284c7;
+      border-radius: 12px;
+      padding: 16px;
+      text-align: center;
+      min-width: 140px;
+      box-shadow: 0 2px 8px rgba(3, 105, 161, 0.1);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+
+
+    .group-display:hover {
+      background: #f0f9ff;
+      border-color: #0369a1;
+      box-shadow: 0 4px 12px rgba(3, 105, 161, 0.2);
+    }
+
+
+    .remove-btn {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: #ef4444;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 28px;
+      height: 28px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+      font-size: 1.2rem;
+      padding: 0;
+      line-height: 1;
+    }
+
+
+    .group-display:hover .remove-btn {
+      opacity: 1;
+    }
+
+
+    .remove-btn:hover {
+      background: #dc2626;
+    }
+
+
+    .group-label {
+      font-weight: 700;
+      color: #0369a1;
+      margin-bottom: 12px;
+      font-size: 0.95rem;
+    }
+
+
+    .items-in-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+      min-height: 60px;
+      align-items: center;
+    }
+
+
+    .item-circle {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+      border: 2px solid #d97706;
+      animation: popIn 0.4s ease-out;
+    }
+
+
+    .equation-display {
+      background: linear-gradient(135deg, #e0f2fe 0%, #cffafe 100%);
+      border-radius: 12px;
+      padding: 20px;
+      margin: 20px 0;
+      text-align: center;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #0369a1;
+      border: 2px solid #0284c7;
+    }
+
+
+    .button-group {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      margin: 20px 0;
+      flex-wrap: wrap;
+    }
+
+
+    .btn-action {
+      background: linear-gradient(135deg, #0369a1 0%, #0284c7 100%);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      padding: 12px 24px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      font-family: Quicksand, Arial, sans-serif;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+
+    .btn-action:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 16px rgba(3, 105, 161, 0.35);
+    }
+
+
+    .btn-action:active {
+      transform: translateY(-1px);
+    }
+
+
+    .btn-action:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+
+    .learning-tip {
+      background: linear-gradient(135deg, #dbeafe 0%, #bae6fd 100%);
+      border-left: 4px solid #0284c7;
+      border-radius: 12px;
+      padding: 16px;
+      margin: 16px 0;
+      font-size: 0.9rem;
+      line-height: 1.6;
+      color: #0c4a6e;
+      font-weight: 500;
+    }
+
+
+    .repeated-addition {
+      background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+      border-left: 4px solid #059669;
+      border-radius: 12px;
+      padding: 16px;
+      margin: 12px 0;
+      font-size: 0.9rem;
+      color: #065f46;
+      font-weight: 600;
+    }
+
+
+    .progress-bar {
+      width: 100%;
+      height: 12px;
+      background: #bfdbfe;
+      border-radius: 6px;
+      margin: 20px 0;
+      overflow: hidden;
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #0369a1 0%, #0284c7 100%);
+      transition: width 0.5s ease;
+    }
+
+
+    .completion-screen {
+      text-align: center;
+      padding: 40px 20px;
+      animation: fadeSlideIn 0.6s ease-out;
+    }
+
+
+    .completion-emoji {
+      font-size: 3rem;
+      margin-bottom: 16px;
+      animation: bounce-pulse 0.8s ease-in-out infinite;
+    }
+
+
+    .completion-text h2 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #0369a1;
+      margin: 16px 0;
+      font-family: 'Fredoka', Arial, sans-serif;
+    }
+
+
+    .completion-text p {
+      font-size: 1rem;
+      color: #0c4a6e;
+      margin-bottom: 16px;
+      line-height: 1.6;
+    }
+
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      margin: 24px 0;
+    }
+
+
+    .stat-card {
+      background: linear-gradient(135deg, #e0f2fe 0%, #cffafe 100%);
+      border: 2px solid #0284c7;
+      border-radius: 12px;
+      padding: 16px;
+      text-align: center;
+    }
+
+
+    .stat-number {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #0369a1;
+    }
+
+
+    .stat-label {
+      font-size: 0.85rem;
+      color: #0c4a6e;
+      font-weight: 600;
+      margin-top: 4px;
+    }
+
+
+    .btn-again {
+      background: linear-gradient(135deg, #0369a1 0%, #0284c7 100%);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      padding: 14px 28px;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      font-family: Quicksand, Arial, sans-serif;
+    }
+
+
+    .btn-again:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 16px rgba(3, 105, 161, 0.35);
+    }
+
+
+    @media (max-width: 768px) {
+      .group-builder { gap: 12px; }
+      .stats-grid { grid-template-columns: 1fr; }
+      header h1 { font-size: 1.8rem; }
+      .equation-display { font-size: 1.4rem; }
+    }
+  </style>
+  <style>body { box-sizing: border-box; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full">
+  <div class="app-wrapper" id="appWrapper">
+   <header class="py-8 px-4">
+    <div class="max-w-4xl mx-auto text-center">
+     <div class="standards-badge">
+      <i data-lucide="pie-chart" style="width:16px;height:16px;"></i> <span>CA CCSS Math Gr.3–4 · 3.NF.A.1, 4.NF.A.1</span>
+     </div>
+     <h1 class="heading-font text-4xl md:text-5xl font-bold" id="lessonTitle">Parts of a Whole: Fractions</h1>
+     <p class="text-white text-opacity-90 mt-3 text-lg">Shade the correct amount to show fractions!</p>
+    </div>
+   </header>
+   <main class="max-w-4xl mx-auto px-4 py-6 pb-24">
+    <div class="instruction-box" id="instructionBox">
+     <strong>🎯 Your Challenge:</strong>
+     <p id="instructionText" style="margin-top: 8px;">Click on groups to add items. Build until you think it's right, then check!</p>
+    </div>
+    <div class="game-arena">
+     <div class="progress-bar">
+      <div class="progress-fill" id="progressFill" style="width: 0%;"></div>
+     </div>
+     <div class="challenge-card" id="challengeCard">
+      <div class="challenge-text" id="challengeText">
+       Shade <span id="numerator">1</span> out of <span id="denominator">2</span> parts
+      </div>
+     </div>
+     <div class="fraction-display">
+      <span id="fractionNum">1</span>/<span id="fractionDen">2</span>
+     </div>
+     <div class="whole-container" id="wholeContainer"></div>
+     <div class="button-group">
+      <button class="btn-action" id="btnCheck" onclick="checkAnswer()" style="background: linear-gradient(135deg, #059669 0%, #047857 100%); width: 100%;"> <i data-lucide="check-circle" style="width:20px;height:20px;"></i> Check Answer </button>
+     </div>
+     <div id="feedbackMessage"></div>
+     <div id="decimalDisplay" style="display:none; margin-top: 24px;"></div>
+    </div>
+    <div id="completionMessage" style="display:none;">
+     <div class="game-arena">
+      <div class="completion-screen">
+       <div class="completion-emoji">
+        ✨🎉🧮
+       </div>
+       <div class="completion-text">
+        <h2 id="successTitle">Multiplication Master!</h2>
+        <p id="successMessage">You're a multiplication expert!</p>
+        <div class="stats-grid">
+         <div class="stat-card">
+          <div class="stat-number" id="statChallenges">
+           0
+          </div>
+          <div class="stat-label">
+           Challenges Solved
+          </div>
+         </div>
+         <div class="stat-card">
+          <div class="stat-number" id="statCorrect">
+           0
+          </div>
+          <div class="stat-label">
+           First Try Wins
+          </div>
+         </div>
+        </div>
+        <p style="font-size: 0.9rem; opacity: 0.8; margin: 16px 0;">You understand equal groups and multiplication! 🌟</p><button class="btn-again" onclick="location.reload();">🔄 Play Again</button>
+       </div>
+      </div>
+     </div>
+    </div>
+    <div class="learning-tip" style="margin-top: 32px;">
+     <strong>📚 Key Idea:</strong> Fractions show equal parts of a whole. The bottom number tells how many equal parts. The top number tells how many parts we're talking about!
+    </div>
+   </main>
+  </div>
+  <script>
+    const challenges = [
+      { numerator: 1, denominator: 2 },
+      { numerator: 1, denominator: 3 },
+      { numerator: 2, denominator: 3 },
+      { numerator: 1, denominator: 4 },
+      { numerator: 3, denominator: 4 },
+      { numerator: 2, denominator: 4 },
+      { numerator: 1, denominator: 5 },
+      { numerator: 3, denominator: 5 }
+    ];
+
+
+    let currentChallenge = 0;
+    let gameState = {
+      shaded: [],
+      challengesCompleted: 0,
+      firstTryWins: 0
+    };
+
+
+    const defaultConfig = {
+      lesson_title: 'Parts of a Whole: Fractions',
+      instruction_text: 'Click on the pie slices to shade them. Show the correct fraction!',
+      game_intro: 'Learn Fractions',
+      completion_message: 'You\'re a fractions expert!'
+    };
+
+
+    // Colors for pie slices
+    const sliceColors = [
+      '#fbbf24', '#f59e0b', '#f97316', '#ef4444', '#ec4899',
+      '#d946ef', '#a855f7', '#7c3aed', '#6366f1', '#3b82f6'
+    ];
+
+
+    function initChallenge() {
+      const challenge = challenges[currentChallenge];
+      gameState.shaded = Array(challenge.denominator).fill(false);
+
+
+      document.getElementById('numerator').textContent = challenge.numerator;
+      document.getElementById('denominator').textContent = challenge.denominator;
+      document.getElementById('fractionNum').textContent = challenge.numerator;
+      document.getElementById('fractionDen').textContent = challenge.denominator;
+
+
+      renderPie();
+      updateProgress();
+      document.getElementById('feedbackMessage').innerHTML = '';
+      document.getElementById('decimalDisplay').innerHTML = '';
+      document.getElementById('decimalDisplay').style.display = 'none';
+    }
+
+
+    function renderPie() {
+      const container = document.getElementById('wholeContainer');
+      container.innerHTML = '';
+
+
+      const challenge = challenges[currentChallenge];
+      const totalSlices = challenge.denominator;
+      const anglePerSlice = 360 / totalSlices;
+
+
+      // Create SVG pie
+      const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      svg.id = 'pieSvg';
+      svg.setAttribute('viewBox', '0 0 200 200');
+
+
+      const centerX = 100;
+      const centerY = 100;
+      const radius = 90;
+
+
+      // Draw each slice
+      gameState.shaded.forEach((isShaded, idx) => {
+        const startAngle = idx * anglePerSlice - 90;
+        const endAngle = (idx + 1) * anglePerSlice - 90;
+
+
+        const startRad = (startAngle * Math.PI) / 180;
+        const endRad = (endAngle * Math.PI) / 180;
+
+
+        const x1 = centerX + radius * Math.cos(startRad);
+        const y1 = centerY + radius * Math.sin(startRad);
+        const x2 = centerX + radius * Math.cos(endRad);
+        const y2 = centerY + radius * Math.sin(endRad);
+
+
+        const largeArc = anglePerSlice > 180 ? 1 : 0;
+
+
+        const pathData = [
+          `M ${centerX} ${centerY}`,
+          `L ${x1} ${y1}`,
+          `A ${radius} ${radius} 0 ${largeArc} 1 ${x2} ${y2}`,
+          'Z'
+        ].join(' ');
+
+
+        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        path.setAttribute('d', pathData);
+        path.setAttribute('fill', isShaded ? sliceColors[idx % sliceColors.length] : '#e5e7eb');
+        path.setAttribute('class', 'pie-slice' + (isShaded ? ' shaded' : ''));
+        path.setAttribute('data-index', idx);
+        path.onclick = () => toggleSlice(idx);
+
+
+        svg.appendChild(path);
+      });
+
+
+      // Add center label
+      const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      text.setAttribute('x', centerX);
+      text.setAttribute('y', centerY);
+      text.setAttribute('class', 'pie-label');
+      text.textContent = `${challenge.numerator}/${challenge.denominator}`;
+      svg.appendChild(text);
+
+
+      container.appendChild(svg);
+    }
+
+
+    function toggleSlice(idx) {
+      gameState.shaded[idx] = !gameState.shaded[idx];
+      renderPie();
+    }
+
+
+    function checkAnswer() {
+      const challenge = challenges[currentChallenge];
+      const shadedCount = gameState.shaded.filter(s => s).length;
+
+
+      if (shadedCount === challenge.numerator) {
+        const decimal = (challenge.numerator / challenge.denominator).toFixed(2);
+        showFeedback(`✅ Perfect! You shaded ${challenge.numerator} out of ${challenge.denominator} parts!`, true);
+        showDecimal(challenge.numerator, challenge.denominator, decimal);
+        gameState.firstTryWins++;
+        gameState.challengesCompleted++;
+
+
+        setTimeout(() => {
+          if (currentChallenge < challenges.length - 1) {
+            currentChallenge++;
+            initChallenge();
+          } else {
+            showCompletion();
+          }
+        }, 2500);
+      } else {
+        const feedback = `❌ Try again! Shade ${challenge.numerator} slice${challenge.numerator === 1 ? '' : 's'} (you shaded ${shadedCount}). It doesn't matter which ones!`;
+        showFeedback(feedback, false);
+      }
+    }
+
+
+    function showFeedback(message, correct) {
+      const feedbackDiv = document.getElementById('feedbackMessage');
+      const style = correct 
+        ? 'background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%); border-left-color: #059669; color: #065f46;'
+        : 'background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%); border-left-color: #dc2626; color: #7f1d1d;';
+
+
+      feedbackDiv.innerHTML = `<div class="learning-tip" style="${style}">${message}</div>`;
+    }
+
+
+    function showDecimal(numerator, denominator, decimal) {
+      const decimalDiv = document.getElementById('decimalDisplay');
+      decimalDiv.style.display = 'block';
+      decimalDiv.innerHTML = `
+        <div class="learning-tip" style="background: linear-gradient(135deg, #e9d5ff 0%, #f3e8ff 100%); border-left-color: #a855f7; color: #5b21b6;">
+          <strong>📊 Same Fraction, Different Way:</strong>
+          <p style="margin-top: 8px; font-size: 1.1rem;">
+            <strong>${numerator}/${denominator} = ${decimal}</strong> (as a decimal)
+          </p>
+          <p style="margin-top: 8px; font-size: 0.9rem; opacity: 0.9;">Both ways show the same part of the whole! 🎯</p>
+        </div>
+      `;
+    }
+
+
+    function updateProgress() {
+      const percentage = (gameState.challengesCompleted / challenges.length) * 100;
+      document.getElementById('progressFill').style.width = percentage + '%';
+    }
+
+
+    function showCompletion() {
+      document.getElementById('statChallenges').textContent = gameState.challengesCompleted;
+      document.getElementById('statCorrect').textContent = gameState.firstTryWins;
+      document.getElementById('completionMessage').style.display = 'block';
+    }
+
+
+    function applyConfig(cfg) {
+      document.getElementById('lessonTitle').textContent = cfg.lesson_title || defaultConfig.lesson_title;
+      document.getElementById('instructionText').textContent = cfg.instruction_text || defaultConfig.instruction_text;
+      document.getElementById('successMessage').textContent = cfg.completion_message || defaultConfig.completion_message;
+    }
+
+
+    window.elementSdk.init({
+      defaultConfig,
+      onConfigChange: async (cfg) => applyConfig(cfg),
+      mapToCapabilities: (cfg) => ({
+        recolorables: [],
+        borderables: [],
+        fontEditable: undefined,
+        fontSizeable: undefined
+      }),
+      mapToEditPanelValues: (cfg) => new Map([
+        ['lesson_title', cfg.lesson_title || defaultConfig.lesson_title],
+        ['instruction_text', cfg.instruction_text || defaultConfig.instruction_text],
+        ['game_intro', cfg.game_intro || defaultConfig.game_intro],
+        ['completion_message', cfg.completion_message || defaultConfig.completion_message]
+      ])
+    });
+
+
+    applyConfig(defaultConfig);
+    initChallenge();
+    lucide.createIcons();
+  </script>
+ </body>
+</html>
+
+
+
+
+
+
+GAME 3 MATH
+AREA WITH UNIT SQUARES

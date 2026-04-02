@@ -1,0 +1,808 @@
+<!doctype html>
+<html lang="en" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>What Is This Mostly About? - Main Idea Lesson</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&amp;family=Quicksand:wght@400;600;700&amp;display=swap" rel="stylesheet">
+  <style>
+    html, body { height: 100%; margin: 0; }
+    * { box-sizing: border-box; }
+
+
+    .app-wrapper {
+      font-family: 'Quicksand', 'Arial', sans-serif;
+      height: 100%;
+      width: 100%;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+
+
+    .heading-font { font-family: 'Fredoka', 'Arial', sans-serif; font-weight: 700; }
+
+
+    @keyframes fadeSlideIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+
+    @keyframes bounce {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+
+
+    @keyframes sparkle {
+      0%, 100% { transform: scale(1) rotate(0deg); opacity: 1; }
+      50% { transform: scale(1.2) rotate(180deg); opacity: 0.8; }
+    }
+
+
+    @keyframes slideInLeft {
+      from { opacity: 0; transform: translateX(-40px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+
+    @keyframes pop {
+      0% { transform: scale(0.8); opacity: 0; }
+      50% { transform: scale(1.15); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.6; }
+    }
+
+
+    .animate-in { animation: fadeSlideIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; }
+    .animate-bounce { animation: bounce 0.5s ease; }
+    .animate-sparkle { animation: sparkle 0.8s ease-in-out; }
+    .animate-slide-in { animation: slideInLeft 0.5s ease-out; }
+    .animate-pop { animation: pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); }
+
+
+    .sparki-box {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 20px;
+      padding: 24px;
+      color: white;
+      text-align: center;
+      margin-bottom: 24px;
+      box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3);
+      animation: slideInLeft 0.6s ease-out;
+    }
+
+
+    .sparki-avatar {
+      width: 80px;
+      height: 80px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3.5rem;
+      margin: 0 auto 12px;
+      animation: bounce 0.8s ease-in-out;
+    }
+
+
+    .sparki-text { font-size: 1.1rem; line-height: 1.5; margin-bottom: 8px; }
+    .sparki-hint { font-size: 0.9rem; opacity: 0.9; font-style: italic; }
+
+
+    .sparkles-counter {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: rgba(255, 215, 0, 0.95);
+      border-radius: 50px;
+      padding: 12px 24px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 1.1rem;
+      box-shadow: 0 4px 16px rgba(255, 215, 0, 0.3);
+      z-index: 100;
+    }
+
+
+    .sparkle-icon { font-size: 1.5rem; animation: sparkle 1s ease-in-out infinite; }
+
+
+    .counting-round {
+      background: white;
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 24px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+      animation: fadeSlideIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      opacity: 0;
+    }
+
+
+    .counting-round.completed {
+      border: 4px solid #10b981;
+      background: linear-gradient(135deg, #d1fae5 0%, #ecfdf5 100%);
+    }
+
+
+    .round-header {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+
+    .round-title { font-size: 1.2rem; font-weight: 700; margin-bottom: 8px; }
+    .round-instruction { font-size: 0.95rem; opacity: 0.7; line-height: 1.5; margin-bottom: 12px; }
+    .round-number { font-size: 2.5rem; font-weight: 700; margin: 12px 0; }
+
+
+    .objects-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 16px;
+      margin: 30px 0;
+      min-height: 120px;
+      align-items: center;
+    }
+
+
+    .counting-object {
+      width: 80px;
+      height: 80px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      position: relative;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      border: 3px solid transparent;
+    }
+
+
+    .counting-object:hover {
+      transform: scale(1.1);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+    }
+
+
+    .counting-object.touched {
+      transform: scale(1.05) rotateZ(8deg);
+      animation: pop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+
+    .number-badge {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: white;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+
+
+    .counting-object.touched .number-badge {
+      opacity: 1;
+      animation: pop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+
+    .count-display {
+      text-align: center;
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin: 20px 0;
+      min-height: 30px;
+      opacity: 0.8;
+    }
+
+
+    .count-result {
+      text-align: center;
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin: 20px 0;
+      min-height: 40px;
+    }
+
+
+    .count-result.correct {
+      color: #10b981;
+      animation: bounce 0.5s ease;
+    }
+
+
+    .count-result.incorrect {
+      color: #ef4444;
+    }
+
+
+    .action-buttons {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      margin-top: 20px;
+    }
+
+
+    .btn-primary {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      padding: 12px 28px;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+    }
+
+
+    .btn-primary:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+
+    .btn-secondary {
+      background: linear-gradient(135deg, #FFD93D 0%, #FFC107 100%);
+      color: #1A1A2E;
+      border: none;
+      border-radius: 12px;
+      padding: 12px 28px;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+
+    .btn-secondary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4);
+    }
+
+
+    .success-banner {
+      background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+      border-radius: 16px;
+      padding: 20px;
+      text-align: center;
+      margin: 20px 0;
+      color: white;
+      font-weight: 700;
+      box-shadow: 0 8px 24px rgba(132, 250, 176, 0.3);
+      animation: bounce 0.6s ease;
+    }
+
+
+    .completion-message {
+      text-align: center;
+      padding: 40px 20px;
+      animation: fadeSlideIn 0.6s ease-out;
+    }
+
+
+    .completion-message h2 {
+      font-size: 2rem;
+      font-weight: 700;
+      margin: 16px 0;
+    }
+
+
+    .completion-message p {
+      font-size: 1.1rem;
+      opacity: 0.7;
+      margin-bottom: 20px;
+    }
+
+
+    .confidence-tracker {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      margin: 12px 0;
+    }
+
+
+    .confidence-dot {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: 2px solid;
+      transition: all 0.3s ease;
+    }
+
+
+    .confidence-dot.filled {
+      transform: scale(1.1);
+    }
+
+
+    @media (max-width: 768px) {
+      .counting-object { width: 70px; height: 70px; font-size: 2rem; }
+      .objects-container { gap: 12px; }
+      .sparkles-counter { top: 10px; right: 10px; font-size: 0.95rem; padding: 10px 16px; }
+      .counting-round { padding: 20px; }
+    }
+  </style>
+  <style>body { box-sizing: border-box; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full">
+  <div class="app-wrapper" id="appWrapper">
+   <!-- Sparkles Counter -->
+   <div class="sparkles-counter" id="sparklesCounter">
+    <span class="sparkle-icon">✨</span> <span id="sparkleCount">0</span>
+   </div><!-- Header -->
+   <header class="relative text-center py-10 px-4">
+    <div style="position:absolute;inset:0;opacity:0.05;background-image:url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2240%22 height=%2240%22><circle cx=%2220%22 cy=%2220%22 r=%225%22 fill=%22%23000%22/></svg>');background-size:40px 40px;"></div>
+    <div class="relative z-10">
+     <div class="inline-flex items-center gap-2 mb-4" style="font-size:0.8rem;letter-spacing:0.1em;text-transform:uppercase;opacity:0.6;">
+      <i data-lucide="plus" style="width:18px;height:18px;"></i> <span>Math &amp; Number Sense</span>
+     </div>
+     <h1 class="heading-font text-4xl md:text-5xl font-bold mb-2" id="gameTitle">What Is This Mostly About?</h1>
+     <p class="text-lg opacity-70" id="gameSubtitle">Find the main idea!</p>
+    </div>
+   </header><!-- Main Content -->
+   <main class="max-w-2xl mx-auto px-4 pb-20">
+    <!-- Sparki Introduction -->
+    <div class="sparki-box" id="sparkiIntro">
+     <div class="sparki-avatar">
+      🤖
+     </div>
+     <div class="sparki-text" id="sparkiGreeting">
+      Hi! I'm Sparki!
+     </div>
+    </div><!-- Counting Rounds Container -->
+    <div id="roundsContainer"></div><!-- Completion Message -->
+    <div id="completionMessage" style="display:none;">
+     <div class="completion-message">
+      <div style="font-size:3rem;margin-bottom:16px;">
+       🎉✨📖
+      </div>
+      <h2>Main Idea Master! 🎉</h2>
+      <p>You found all the main ideas! Excellent reading skills!</p>
+      <div class="success-banner">
+       <span id="finalSparkles">0</span> Sparkles Earned! 🌟
+      </div><button class="btn-primary" onclick="location.reload();" style="margin-top: 20px;">Again!</button>
+     </div>
+    </div>
+   </main>
+  </div>
+  <script>
+    // ─── MAIN IDEA LESSON DATA ───
+    // Passages with supporting details and distractors
+    const passages = [
+      {
+        id: 1,
+        title: 'Dogs',
+        text: 'Dogs are great pets. They can learn tricks. Dogs love to play fetch. Dogs like to cuddle with their owners.',
+        mainIdea: 'Dogs make wonderful companions.',
+        wrongDetail: 'Dogs can learn tricks.',
+        configKeys: { text: 'passage_1', main: 'main_idea_1', detail: 'detail_wrong_1' }
+      },
+      {
+        id: 2,
+        title: 'How Seeds Travel',
+        text: 'Seeds travel in many ways. Some seeds blow in the wind. Some seeds float on water. Birds eat seeds and drop them far away.',
+        mainIdea: 'Seeds use different ways to travel to new places.',
+        wrongDetail: 'Some seeds float on water.',
+        configKeys: { text: 'passage_2', main: 'main_idea_2', detail: 'detail_wrong_2' }
+      },
+      {
+        id: 3,
+        title: 'Bees and Flowers',
+        text: 'Bees visit many flowers. They drink nectar from flowers. Bees also pick up yellow powder called pollen. The pollen helps flowers make seeds.',
+        mainIdea: 'Bees help flowers by collecting pollen.',
+        wrongDetail: 'Yellow powder is called pollen.',
+        configKeys: { text: 'passage_3', main: 'main_idea_3', detail: 'detail_wrong_3' }
+      },
+      {
+        id: 4,
+        title: 'Butterfly Wings',
+        text: 'Butterflies have beautiful wings. Their wings have bright colors and patterns. Butterflies use their wings to fly from flower to flower. Colorful wings help butterflies hide from predators.',
+        mainIdea: 'Butterfly wings are special and help them survive.',
+        wrongDetail: 'Butterflies visit flowers.',
+        configKeys: { text: 'passage_4', main: 'main_idea_4', detail: 'detail_wrong_4' }
+      }
+    ];
+
+
+    // ─── STATE ───
+    let completedPassages = new Set();
+    let totalSparkles = 0;
+    let passageData = {};
+
+
+    const defaultConfig = {
+      background_color: '#F8FAFF',
+      surface_color: '#FFFFFF',
+      text_color: '#1A1A2E',
+      primary_action_color: '#667eea',
+      secondary_action_color: '#FFD93D',
+      font_family: 'Quicksand',
+      font_size: 16,
+      game_title: 'What Is This Mostly About?',
+      game_subtitle: 'Find the main idea!',
+      sparki_greeting: "Hi! I'm Sparki, your main idea buddy!",
+      passage_1: 'Dogs are great pets. They can learn tricks. Dogs love to play fetch. Dogs like to cuddle with their owners.',
+      main_idea_1: 'Dogs make wonderful companions.',
+      detail_wrong_1: 'Dogs can learn tricks.',
+      passage_2: 'Seeds travel in many ways. Some seeds blow in the wind. Some seeds float on water. Birds eat seeds and drop them far away.',
+      main_idea_2: 'Seeds use different ways to travel to new places.',
+      detail_wrong_2: 'Some seeds float on water.',
+      passage_3: 'Bees visit many flowers. They drink nectar from flowers. Bees also pick up yellow powder called pollen. The pollen helps flowers make seeds.',
+      main_idea_3: 'Bees help flowers by collecting pollen.',
+      detail_wrong_3: 'Yellow powder is called pollen.',
+      passage_4: 'Butterflies have beautiful wings. Their wings have bright colors and patterns. Butterflies use their wings to fly from flower to flower. Colorful wings help butterflies hide from predators.',
+      main_idea_4: 'Butterfly wings are special and help them survive.',
+      detail_wrong_4: 'Butterflies visit flowers.'
+    };
+
+
+    // ─── RENDER PASSAGES ───
+    function renderPassages() {
+      const container = document.getElementById('roundsContainer');
+      const cfg = window.elementSdk?.config || defaultConfig;
+
+
+      container.innerHTML = '';
+
+
+      passages.forEach((passage, index) => {
+        const isCompleted = completedPassages.has(passage.id);
+        const passageInfo = passageData[passage.id] || { answered: false, selected: null };
+        const passageText = cfg[passage.configKeys.text] || passage.text;
+        const mainIdeaText = cfg[passage.configKeys.main] || passage.mainIdea;
+        const wrongDetailText = cfg[passage.configKeys.detail] || passage.wrongDetail;
+
+
+        // Shuffle answer choices
+        const choices = [
+          { text: mainIdeaText, correct: true },
+          { text: wrongDetailText, correct: false }
+        ].sort(() => Math.random() - 0.5);
+
+
+        const passageDiv = document.createElement('div');
+        passageDiv.className = `counting-round ${isCompleted ? 'completed' : ''}`;
+        passageDiv.style.animationDelay = `${index * 0.1}s`;
+        passageDiv.style.animationFillMode = 'forwards';
+        passageDiv.style.opacity = '0';
+        passageDiv.id = `passage${passage.id}`;
+
+
+        let choicesHTML = choices.map((choice, idx) => {
+          const isSelected = passageInfo.answered && passageInfo.selected === idx;
+          const bgColor = !passageInfo.answered ? '#f0f9ff' : (choice.correct ? '#d1fae5' : '#fee2e2');
+          const borderColor = !passageInfo.answered ? '#0ea5e9' : (choice.correct ? '#10b981' : '#ef4444');
+          const badge = passageInfo.answered ? (choice.correct ? '📚 Main Idea' : '🔍 Supporting Detail') : '';
+          const icon = passageInfo.answered ? (isSelected ? (choice.correct ? '✅' : '❌') : (choice.correct ? '📚' : '🔍')) : '❓';
+          
+          return `
+            <button 
+              class="btn-choice"
+              onclick="selectMainIdea(${passage.id}, ${choice.correct})"
+              style="
+                display: flex;
+                align-items: flex-start;
+                gap: 12px;
+                width: 100%;
+                text-align: left;
+                background: ${isSelected ? bgColor : '#f0f9ff'};
+                border: 3px solid ${isSelected ? borderColor : '#0ea5e9'};
+                border-radius: 12px;
+                padding: 16px;
+                margin-bottom: 12px;
+                font-size: 1rem;
+                font-weight: 600;
+                cursor: ${passageInfo.answered ? 'not-allowed' : 'pointer'};
+                opacity: ${passageInfo.answered && !isSelected ? 0.5 : 1};
+                transition: all 0.3s ease;
+                font-family: Quicksand, Arial, sans-serif;
+                color: ${cfg.text_color || defaultConfig.text_color};
+                transform: ${!passageInfo.answered ? 'scale(1)' : 'scale(1)'};
+              "
+              ${passageInfo.answered ? 'disabled' : ''}
+              onmouseover="this.style.transform = 'scale(1.02)'; this.style.boxShadow = '0 6px 20px rgba(14, 165, 233, 0.2)';"
+              onmouseout="this.style.transform = 'scale(1)'; this.style.boxShadow = 'none';"
+            >
+              <div style="font-size: 1.8rem; flex-shrink: 0; min-width: 40px; text-align: center;">
+                ${icon}
+              </div>
+              <div style="flex-grow: 1;">
+                ${badge ? `<div style="font-size: 0.8rem; opacity: 0.7; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px;">${badge}</div>` : ''}
+                <div style="font-size: 1rem; line-height: 1.5;">
+                  ${choice.text}
+                </div>
+              </div>
+            </button>
+          `;
+        }).join('');
+
+
+        passageDiv.innerHTML = `
+          <div class="round-header">
+            <div style="text-align: center; margin-bottom: 20px; font-size: 0.9rem; opacity: 0.6; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">Passage ${passage.id}</div>
+            <div style="background: linear-gradient(135deg, ${cfg.primary_action_color}22, ${cfg.secondary_action_color}22); border-radius: 12px; padding: 20px; margin-bottom: 24px; line-height: 1.7; font-size: 1rem;">"${passageText}"</div>
+          </div>
+
+
+          <div style="text-align: center; margin: 24px 0; font-weight: 600; font-size: 1.1rem; opacity: 0.8;">
+            What is this text mostly about?
+          </div>
+
+
+          <div style="margin-bottom: 24px;">
+            ${choicesHTML}
+          </div>
+
+
+          <div id="passageResult${passage.id}" class="count-result"></div>
+
+
+          ${isCompleted ? `
+            <div class="success-banner" style="background: linear-gradient(135deg, ${cfg.primary_action_color}66, ${cfg.secondary_action_color}66);">
+              ✓ Correct!
+            </div>
+          ` : ''}
+        `;
+
+
+        container.appendChild(passageDiv);
+      });
+
+
+      lucide.createIcons();
+    }
+
+
+    window.selectMainIdea = function(passageId, isCorrect) {
+      if (!passageData[passageId]) {
+        passageData[passageId] = { answered: false, selected: null };
+      }
+
+
+      const passageInfo = passageData[passageId];
+      if (passageInfo.answered) return;
+
+
+      passageInfo.answered = true;
+      
+      // Find which choice index was clicked
+      const passage = passages.find(p => p.id === passageId);
+      const cfg = window.elementSdk?.config || defaultConfig;
+      const mainIdeaText = cfg[passage.configKeys.main] || passage.mainIdea;
+      const wrongDetailText = cfg[passage.configKeys.detail] || passage.wrongDetail;
+      const choices = [
+        { text: mainIdeaText, correct: true },
+        { text: wrongDetailText, correct: false }
+      ].sort(() => Math.random() - 0.5);
+      
+      // This is a bit of a workaround - we need to find which button was clicked
+      // For now, we'll determine it based on whether the answer was correct
+      passageInfo.selected = choices.findIndex(c => c.correct === isCorrect);
+      
+      const resultEl = document.getElementById(`passageResult${passageId}`);
+
+
+      if (isCorrect) {
+        resultEl.innerHTML = `<span style="font-size: 2rem; display: block; margin-bottom: 8px;">🎉✨</span>That's the main idea! Amazing detective work!`;
+        resultEl.className = 'count-result correct';
+        completePassage(passageId);
+      } else {
+        resultEl.innerHTML = `
+          <div style="margin-bottom: 12px;">
+            <span style="font-size: 1.8rem; display: block; margin-bottom: 8px;">🤔 Good try!</span>
+          </div>
+          <div style="text-align: left; background: rgba(255, 215, 0, 0.15); border-left: 4px solid #fbbf24; padding: 12px; border-radius: 8px; margin-bottom: 12px; font-size: 0.95rem; line-height: 1.6;">
+            <strong>💡 Here's the difference:</strong><br>
+            That sentence is a <strong>supporting detail</strong> — it tells us <em>one specific thing</em> from the passage.<br><br>
+            The <strong>main idea</strong> tells us what the <em>whole passage is mostly about</em> — the big picture!
+          </div>
+        `;
+        resultEl.className = 'count-result incorrect';
+        setTimeout(() => {
+          passageInfo.answered = false;
+          passageInfo.selected = null;
+          renderPassages();
+        }, 3000);
+      }
+
+
+      renderPassages();
+    };
+
+
+    function completePassage(passageId) {
+      if (completedPassages.has(passageId)) return;
+
+
+      completedPassages.add(passageId);
+      totalSparkles += 25;
+
+
+      updateSparklesDisplay();
+      createConfetti();
+
+
+      setTimeout(() => {
+        renderPassages();
+
+
+        if (completedPassages.size === passages.length) {
+          setTimeout(() => {
+            document.getElementById('roundsContainer').style.display = 'none';
+            document.getElementById('completionMessage').style.display = 'block';
+            document.getElementById('finalSparkles').textContent = totalSparkles;
+          }, 1000);
+        } else {
+          const nextPassage = document.getElementById(`passage${passageId + 1}`);
+          if (nextPassage) {
+            nextPassage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+        }
+      }, 1200);
+    }
+
+
+    function updateSparklesDisplay() {
+      document.getElementById('sparkleCount').textContent = totalSparkles;
+    }
+
+
+    function createConfetti() {
+      const cfg = window.elementSdk?.config || defaultConfig;
+      for (let i = 0; i < 20; i++) {
+        const conf = document.createElement('div');
+        conf.style.position = 'fixed';
+        conf.style.width = '12px';
+        conf.style.height = '12px';
+        conf.style.left = Math.random() * 100 + '%';
+        conf.style.top = '-20px';
+        conf.style.background = [cfg.primary_action_color, cfg.secondary_action_color, '#84fab0'][Math.floor(Math.random() * 3)];
+        conf.style.borderRadius = '50%';
+        conf.style.pointerEvents = 'none';
+        conf.style.animation = `confettiFall ${2 + Math.random()}s ease-in forwards`;
+        conf.style.zIndex = '99';
+        document.body.appendChild(conf);
+        setTimeout(() => conf.remove(), 3000);
+      }
+    }
+
+
+    // Add confetti animation to CSS
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes confettiFall {
+        to {
+          transform: translateY(100vh) rotate(360deg);
+          opacity: 0;
+        }
+      }
+    `;
+    document.head.appendChild(style);
+
+
+    // ─── APPLY CONFIG ───
+    function applyConfig(cfg) {
+      const w = document.getElementById('appWrapper');
+      w.style.background = cfg.background_color || defaultConfig.background_color;
+      w.style.color = cfg.text_color || defaultConfig.text_color;
+
+
+      const baseFontStack = 'Arial, sans-serif';
+      const customFont = cfg.font_family || defaultConfig.font_family;
+      w.style.fontFamily = `${customFont}, ${baseFontStack}`;
+
+
+      const baseSize = cfg.font_size || defaultConfig.font_size;
+
+
+      document.getElementById('gameTitle').textContent = cfg.game_title || defaultConfig.game_title;
+      document.getElementById('gameTitle').style.fontSize = `${baseSize * 2.2}px`;
+      document.getElementById('gameSubtitle').textContent = cfg.game_subtitle || defaultConfig.game_subtitle;
+      document.getElementById('gameSubtitle').style.fontSize = `${baseSize * 1.1}px`;
+      document.getElementById('sparkiGreeting').textContent = cfg.sparki_greeting || defaultConfig.sparki_greeting;
+      document.getElementById('sparkiGreeting').style.fontSize = `${baseSize * 1.1}px`;
+
+
+      document.querySelectorAll('.heading-font').forEach(el => {
+        el.style.fontFamily = `Fredoka, ${customFont}, ${baseFontStack}`;
+      });
+
+
+      renderPassages();
+    }
+
+
+    // ─── SDK INIT ───
+    window.elementSdk.init({
+      defaultConfig,
+      onConfigChange: async (cfg) => applyConfig(cfg),
+      mapToCapabilities: (cfg) => ({
+        recolorables: [
+          { get: () => cfg.background_color || defaultConfig.background_color, set: (v) => { cfg.background_color = v; window.elementSdk.setConfig({ background_color: v }); } },
+          { get: () => cfg.surface_color || defaultConfig.surface_color, set: (v) => { cfg.surface_color = v; window.elementSdk.setConfig({ surface_color: v }); } },
+          { get: () => cfg.text_color || defaultConfig.text_color, set: (v) => { cfg.text_color = v; window.elementSdk.setConfig({ text_color: v }); } },
+          { get: () => cfg.primary_action_color || defaultConfig.primary_action_color, set: (v) => { cfg.primary_action_color = v; window.elementSdk.setConfig({ primary_action_color: v }); } },
+          { get: () => cfg.secondary_action_color || defaultConfig.secondary_action_color, set: (v) => { cfg.secondary_action_color = v; window.elementSdk.setConfig({ secondary_action_color: v }); } }
+        ],
+        borderables: [],
+        fontEditable: {
+          get: () => cfg.font_family || defaultConfig.font_family,
+          set: (v) => { cfg.font_family = v; window.elementSdk.setConfig({ font_family: v }); }
+        },
+        fontSizeable: {
+          get: () => cfg.font_size || defaultConfig.font_size,
+          set: (v) => { cfg.font_size = v; window.elementSdk.setConfig({ font_size: v }); }
+        }
+      }),
+      mapToEditPanelValues: (cfg) => new Map([
+        ['game_title', cfg.game_title || defaultConfig.game_title],
+        ['game_subtitle', cfg.game_subtitle || defaultConfig.game_subtitle],
+        ['sparki_greeting', cfg.sparki_greeting || defaultConfig.sparki_greeting],
+        ['passage_1', cfg.passage_1 || defaultConfig.passage_1],
+        ['main_idea_1', cfg.main_idea_1 || defaultConfig.main_idea_1],
+        ['detail_wrong_1', cfg.detail_wrong_1 || defaultConfig.detail_wrong_1],
+        ['passage_2', cfg.passage_2 || defaultConfig.passage_2],
+        ['main_idea_2', cfg.main_idea_2 || defaultConfig.main_idea_2],
+        ['detail_wrong_2', cfg.detail_wrong_2 || defaultConfig.detail_wrong_2],
+        ['passage_3', cfg.passage_3 || defaultConfig.passage_3],
+        ['main_idea_3', cfg.main_idea_3 || defaultConfig.main_idea_3],
+        ['detail_wrong_3', cfg.detail_wrong_3 || defaultConfig.detail_wrong_3],
+        ['passage_4', cfg.passage_4 || defaultConfig.passage_4],
+        ['main_idea_4', cfg.main_idea_4 || defaultConfig.main_idea_4],
+        ['detail_wrong_4', cfg.detail_wrong_4 || defaultConfig.detail_wrong_4]
+      ])
+    });
+
+
+    // ─── INITIAL RENDER ───
+    applyConfig(defaultConfig);
+    updateSparklesDisplay();
+    renderPassages();
+    lucide.createIcons();
+  </script>
+ </body>
+</html>
+
+
+
+
+
+
+
+
+Game 2 ENGLISH Sentences Tell Complete Thoughts

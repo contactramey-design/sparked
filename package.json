@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "generate:curriculum-bands": "node scripts/generate-curriculum-band-plugins.mjs",
+    "split:canva-games": "node scripts/split-canva-games.mjs",
     "dev": "vite",
     "dev:api": "node server/local-api.js",
     "dev:local": "node server/run-dev-with-api.js",

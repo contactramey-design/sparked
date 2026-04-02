@@ -1,0 +1,668 @@
+<!doctype html>
+<html lang="en" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sentences Tell Complete Thoughts - Grammar Lesson</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&amp;family=Quicksand:wght@400;600;700&amp;display=swap" rel="stylesheet">
+  <style>
+    html, body { height: 100%; margin: 0; }
+    * { box-sizing: border-box; }
+
+
+    .app-wrapper {
+      font-family: 'Quicksand', 'Arial', sans-serif;
+      height: 100%;
+      width: 100%;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+
+
+    .heading-font { font-family: 'Fredoka', 'Arial', sans-serif; font-weight: 700; }
+
+
+    @keyframes fadeSlideIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+
+    @keyframes bounce {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+
+
+    @keyframes sparkle {
+      0%, 100% { transform: scale(1) rotate(0deg); opacity: 1; }
+      50% { transform: scale(1.2) rotate(180deg); opacity: 0.8; }
+    }
+
+
+    @keyframes slideInLeft {
+      from { opacity: 0; transform: translateX(-40px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+
+    @keyframes pop {
+      0% { transform: scale(0.8); opacity: 0; }
+      50% { transform: scale(1.15); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+
+    .animate-in { animation: fadeSlideIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; }
+    .animate-bounce { animation: bounce 0.5s ease; }
+    .animate-sparkle { animation: sparkle 0.8s ease-in-out; }
+    .animate-slide-in { animation: slideInLeft 0.5s ease-out; }
+    .animate-pop { animation: pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); }
+
+
+    .sparki-box {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 20px;
+      padding: 24px;
+      color: white;
+      text-align: center;
+      margin-bottom: 24px;
+      box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3);
+      animation: slideInLeft 0.6s ease-out;
+    }
+
+
+    .sparki-avatar {
+      width: 80px;
+      height: 80px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3.5rem;
+      margin: 0 auto 12px;
+      animation: bounce 0.8s ease-in-out;
+    }
+
+
+    .sparki-text { font-size: 1.1rem; line-height: 1.5; }
+
+
+    .sparkles-counter {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: rgba(255, 215, 0, 0.95);
+      border-radius: 50px;
+      padding: 12px 24px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 1.1rem;
+      box-shadow: 0 4px 16px rgba(255, 215, 0, 0.3);
+      z-index: 100;
+    }
+
+
+    .sparkle-icon { font-size: 1.5rem; animation: sparkle 1s ease-in-out infinite; }
+
+
+    .card-item {
+      background: white;
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 16px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+      animation: fadeSlideIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      opacity: 0;
+      border: 3px solid #e5e7eb;
+      transition: all 0.3s ease;
+    }
+
+
+    .card-item.selected {
+      border-color: #667eea;
+      background: linear-gradient(135deg, #f0f4ff 0%, #f9f5ff 100%);
+      transform: scale(1.02);
+    }
+
+
+    .card-item.completed {
+      border-color: #10b981;
+      background: linear-gradient(135deg, #d1fae5 0%, #ecfdf5 100%);
+    }
+
+
+    .card-item.incorrect {
+      border-color: #ef4444;
+      background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+    }
+
+
+    .card-text {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+      line-height: 1.6;
+    }
+
+
+    .card-label {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 700;
+      opacity: 0.6;
+      margin-bottom: 8px;
+    }
+
+
+    .card-buttons {
+      display: flex;
+      gap: 8px;
+      margin-top: 16px;
+      flex-wrap: wrap;
+    }
+
+
+    .btn-choice {
+      flex: 1;
+      min-width: 120px;
+      padding: 12px 16px;
+      border: 2px solid;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-family: Quicksand, Arial, sans-serif;
+    }
+
+
+    .btn-choice:disabled {
+      cursor: not-allowed;
+      opacity: 0.5;
+    }
+
+
+    .btn-choice:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+    }
+
+
+    .btn-sentence {
+      background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+      color: white;
+      border-color: #5ae4a0;
+    }
+
+
+    .btn-fragment {
+      background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+      color: white;
+      border-color: #fa8888;
+    }
+
+
+    .btn-question {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border-color: #5568d3;
+    }
+
+
+    .btn-command {
+      background: linear-gradient(135deg, #ffa751 0%, #ffe259 100%);
+      color: white;
+      border-color: #ff9844;
+    }
+
+
+    .feedback-message {
+      margin-top: 12px;
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      font-weight: 500;
+    }
+
+
+    .feedback-correct {
+      background: rgba(16, 185, 129, 0.15);
+      color: #047857;
+      border-left: 4px solid #10b981;
+    }
+
+
+    .feedback-incorrect {
+      background: rgba(239, 68, 68, 0.15);
+      color: #991b1b;
+      border-left: 4px solid #ef4444;
+    }
+
+
+    .progress-tracker {
+      text-align: center;
+      font-size: 0.9rem;
+      font-weight: 600;
+      opacity: 0.7;
+      margin-bottom: 24px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+
+    .hint-box {
+      background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+      border-left: 4px solid #fbbf24;
+      border-radius: 8px;
+      padding: 16px;
+      margin: 20px 0;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: #92400e;
+    }
+
+
+    .completion-message {
+      text-align: center;
+      padding: 40px 20px;
+      animation: fadeSlideIn 0.6s ease-out;
+    }
+
+
+    .completion-message h2 {
+      font-size: 2rem;
+      font-weight: 700;
+      margin: 16px 0;
+    }
+
+
+    .success-banner {
+      background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+      border-radius: 16px;
+      padding: 20px;
+      text-align: center;
+      margin: 20px 0;
+      color: white;
+      font-weight: 700;
+      box-shadow: 0 8px 24px rgba(132, 250, 176, 0.3);
+      animation: bounce 0.6s ease;
+    }
+
+
+    @media (max-width: 768px) {
+      .card-item { padding: 16px; }
+      .btn-choice { font-size: 0.85rem; padding: 10px 12px; }
+      .sparkles-counter { top: 10px; right: 10px; font-size: 0.95rem; padding: 10px 16px; }
+    }
+  </style>
+  <style>body { box-sizing: border-box; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full">
+  <div class="app-wrapper" id="appWrapper">
+   <div class="sparkles-counter" id="sparklesCounter">
+    <span class="sparkle-icon">✨</span> <span id="sparkleCount">0</span>
+   </div>
+   <header class="relative text-center py-10 px-4">
+    <div style="position:absolute;inset:0;opacity:0.05;background-image:url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2240%22 height=%2240%22><circle cx=%2220%22 cy=%2220%22 r=%225%22 fill=%22%23000%22/></svg>');background-size:40px 40px;"></div>
+    <div class="relative z-10">
+     <div class="inline-flex items-center gap-2 mb-4" style="font-size:0.8rem;letter-spacing:0.1em;text-transform:uppercase;opacity:0.6;">
+      <i data-lucide="book-open" style="width:18px;height:18px;"></i> <span>Grammar &amp; Conventions</span>
+     </div>
+     <h1 class="heading-font text-4xl md:text-5xl font-bold mb-2" id="gameTitle">Sentences Tell Complete Thoughts</h1>
+     <p class="text-lg opacity-70" id="gameSubtitle">Sentence or fragment?</p>
+    </div>
+   </header>
+   <main class="max-w-2xl mx-auto px-4 pb-20">
+    <div class="sparki-box" id="sparkiIntro">
+     <div class="sparki-avatar">
+      🤖
+     </div>
+     <div class="sparki-text" id="sparkiGreeting">
+      Hi! I'm Sparki. Let's learn about sentences!
+     </div>
+    </div>
+    <div class="hint-box" id="hintBox">
+     💡 <strong id="hintText">Does it tell a complete thought? Who did what?</strong>
+    </div>
+    <div class="progress-tracker" id="progressTracker"></div>
+    <div id="itemsContainer"></div>
+    <div id="completionMessage" style="display:none;">
+     <div class="completion-message">
+      <div style="font-size:3rem;margin-bottom:16px;">
+       🎉📖✨
+      </div>
+      <h2>Sentence Master! 🎉</h2>
+      <p>You discovered all the complete sentences! Wonderful grammar detective work!</p>
+      <div class="success-banner">
+       <span id="finalSparkles">0</span> Sparkles Earned! 🌟
+      </div><button class="btn-primary" onclick="location.reload();" style="margin-top: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 12px; padding: 12px 28px; font-weight: 700; font-size: 1rem; cursor: pointer;">Again!</button>
+     </div>
+    </div>
+   </main>
+  </div>
+  <script>
+    // ─── LESSON DATA ───
+    const items = [
+      { id: 1, text: 'The dog runs.', type: 'Sentence', category: 'sentence', emoji: '🐕' },
+      { id: 2, text: 'On the table.', type: 'Fragment', category: 'fragment', emoji: '📦' },
+      { id: 3, text: 'Can you play?', type: 'Question', category: 'question', emoji: '❓' },
+      { id: 4, text: 'Line up quietly.', type: 'Command', category: 'command', emoji: '🎯' },
+      { id: 5, text: 'The cat sleeps.', type: 'Sentence', category: 'sentence', emoji: '😴' },
+      { id: 6, text: 'Running fast.', type: 'Fragment', category: 'fragment', emoji: '💨' }
+    ];
+
+
+    // ─── STATE ───
+    let completedItems = new Set();
+    let totalSparkles = 0;
+    let itemData = {};
+
+
+    const defaultConfig = {
+      background_color: '#F8FAFF',
+      surface_color: '#FFFFFF',
+      text_color: '#1A1A2E',
+      primary_action_color: '#667eea',
+      secondary_action_color: '#FFD93D',
+      font_family: 'Quicksand',
+      font_size: 16,
+      game_title: 'Sentences Tell Complete Thoughts',
+      game_subtitle: 'Sentence or fragment?',
+      sparki_greeting: "Hi! I'm Sparki. Let's learn about sentences!",
+      item_1_text: 'The dog runs.',
+      item_1_type: 'Sentence',
+      item_2_text: 'On the table.',
+      item_2_type: 'Fragment',
+      item_3_text: 'Can you play?',
+      item_3_type: 'Question',
+      item_4_text: 'Line up quietly.',
+      item_4_type: 'Command',
+      item_5_text: 'The cat sleeps.',
+      item_5_type: 'Sentence',
+      item_6_text: 'Running fast.',
+      item_6_type: 'Fragment',
+      hint_text: 'Does it tell a complete thought? Who did what?',
+      success_message: 'Great thinking! You found the complete sentences!'
+    };
+
+
+    // ─── RENDER ITEMS ───
+    function renderItems() {
+      const container = document.getElementById('itemsContainer');
+      const cfg = window.elementSdk?.config || defaultConfig;
+
+
+      container.innerHTML = '';
+
+
+      // Update items with config values
+      items.forEach((item, idx) => {
+        const configKey = `item_${idx + 1}_text`;
+        if (cfg[configKey]) {
+          item.text = cfg[configKey];
+        }
+      });
+
+
+      items.forEach((item, index) => {
+        const isCompleted = completedItems.has(item.id);
+        const itemInfo = itemData[item.id] || { answered: false, selected: null };
+
+
+        const itemDiv = document.createElement('div');
+        itemDiv.className = `card-item ${isCompleted ? 'completed' : ''} ${itemInfo.answered && !isCompleted ? 'incorrect' : ''}`;
+        itemDiv.style.animationDelay = `${index * 0.1}s`;
+        itemDiv.style.animationFillMode = 'forwards';
+        itemDiv.style.opacity = '0';
+        itemDiv.id = `item${item.id}`;
+
+
+        const categoryEmoji = { sentence: '📝', fragment: '✏️', question: '❓', command: '🎯' }[item.category];
+        const categoryLabel = { sentence: 'Sentence (tells a complete thought)', fragment: 'Fragment (incomplete)', question: 'Question (asks something)', command: 'Command (tells what to do)' }[item.category];
+
+
+        let buttonsHTML = '';
+        if (!itemInfo.answered) {
+          buttonsHTML = `
+            <div class="card-buttons">
+              <button class="btn-choice btn-sentence" onclick="selectItem(${item.id}, 'sentence')">📝 Sentence</button>
+              <button class="btn-choice btn-fragment" onclick="selectItem(${item.id}, 'fragment')">✏️ Fragment</button>
+              <button class="btn-choice btn-question" onclick="selectItem(${item.id}, 'question')">❓ Question</button>
+              <button class="btn-choice btn-command" onclick="selectItem(${item.id}, 'command')">🎯 Command</button>
+            </div>
+          `;
+        } else if (isCompleted) {
+          buttonsHTML = `
+            <div style="margin-top: 12px; padding: 12px; background: rgba(16, 185, 129, 0.15); border-radius: 8px; border-left: 4px solid #10b981;">
+              <div style="color: #047857; font-weight: 600;">✓ ${categoryLabel}</div>
+            </div>
+          `;
+        } else {
+          buttonsHTML = `
+            <div class="feedback-message feedback-incorrect">
+              <strong>🤔 Try again!</strong> Think about whether this tells a complete thought.
+            </div>
+          `;
+        }
+
+
+        itemDiv.innerHTML = `
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
+            <div class="card-label">${item.emoji}</div>
+            <div class="card-label">Item ${item.id}</div>
+          </div>
+          <div class="card-text">"${item.text}"</div>
+          ${buttonsHTML}
+          <div id="itemResult${item.id}"></div>
+        `;
+
+
+        container.appendChild(itemDiv);
+      });
+
+
+      lucide.createIcons();
+    }
+
+
+    window.selectItem = function(itemId, selectedCategory) {
+      const item = items.find(i => i.id === itemId);
+      
+      if (!itemData[itemId]) {
+        itemData[itemId] = { answered: false, selected: null };
+      }
+
+
+      const itemInfo = itemData[itemId];
+      if (itemInfo.answered) return;
+
+
+      itemInfo.answered = true;
+      itemInfo.selected = selectedCategory;
+
+
+      const isCorrect = selectedCategory === item.category;
+      const resultEl = document.getElementById(`itemResult${itemId}`);
+
+
+      if (isCorrect) {
+        completeItem(itemId);
+      } else {
+        setTimeout(() => {
+          itemInfo.answered = false;
+          itemInfo.selected = null;
+          renderItems();
+        }, 2500);
+      }
+
+
+      renderItems();
+    };
+
+
+    function completeItem(itemId) {
+      if (completedItems.has(itemId)) return;
+
+
+      completedItems.add(itemId);
+      totalSparkles += 15;
+
+
+      updateSparklesDisplay();
+      createConfetti();
+
+
+      setTimeout(() => {
+        renderItems();
+
+
+        if (completedItems.size === items.length) {
+          setTimeout(() => {
+            document.getElementById('itemsContainer').style.display = 'none';
+            document.getElementById('completionMessage').style.display = 'block';
+            document.getElementById('finalSparkles').textContent = totalSparkles;
+          }, 800);
+        }
+      }, 1000);
+    }
+
+
+    function updateSparklesDisplay() {
+      document.getElementById('sparkleCount').textContent = totalSparkles;
+      const completed = completedItems.size;
+      document.getElementById('progressTracker').textContent = `${completed} of ${items.length} complete`;
+    }
+
+
+    function createConfetti() {
+      const cfg = window.elementSdk?.config || defaultConfig;
+      for (let i = 0; i < 15; i++) {
+        const conf = document.createElement('div');
+        conf.style.position = 'fixed';
+        conf.style.width = '12px';
+        conf.style.height = '12px';
+        conf.style.left = Math.random() * 100 + '%';
+        conf.style.top = '-20px';
+        conf.style.background = [cfg.primary_action_color, cfg.secondary_action_color, '#84fab0'][Math.floor(Math.random() * 3)];
+        conf.style.borderRadius = '50%';
+        conf.style.pointerEvents = 'none';
+        conf.style.animation = `confettiFall ${2 + Math.random()}s ease-in forwards`;
+        conf.style.zIndex = '99';
+        document.body.appendChild(conf);
+        setTimeout(() => conf.remove(), 3000);
+      }
+    }
+
+
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes confettiFall {
+        to { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+      }
+    `;
+    document.head.appendChild(style);
+
+
+    // ─── APPLY CONFIG ───
+    function applyConfig(cfg) {
+      const w = document.getElementById('appWrapper');
+      w.style.background = cfg.background_color || defaultConfig.background_color;
+      w.style.color = cfg.text_color || defaultConfig.text_color;
+
+
+      const baseFontStack = 'Arial, sans-serif';
+      const customFont = cfg.font_family || defaultConfig.font_family;
+      w.style.fontFamily = `${customFont}, ${baseFontStack}`;
+
+
+      const baseSize = cfg.font_size || defaultConfig.font_size;
+
+
+      document.getElementById('gameTitle').textContent = cfg.game_title || defaultConfig.game_title;
+      document.getElementById('gameTitle').style.fontSize = `${baseSize * 2.2}px`;
+      document.getElementById('gameSubtitle').textContent = cfg.game_subtitle || defaultConfig.game_subtitle;
+      document.getElementById('gameSubtitle').style.fontSize = `${baseSize * 1.1}px`;
+      document.getElementById('sparkiGreeting').textContent = cfg.sparki_greeting || defaultConfig.sparki_greeting;
+      document.getElementById('sparkiGreeting').style.fontSize = `${baseSize * 1.1}px`;
+      document.getElementById('hintText').textContent = cfg.hint_text || defaultConfig.hint_text;
+
+
+      document.querySelectorAll('.heading-font').forEach(el => {
+        el.style.fontFamily = `Fredoka, ${customFont}, ${baseFontStack}`;
+      });
+
+
+      renderItems();
+    }
+
+
+    // ─── SDK INIT ───
+    window.elementSdk.init({
+      defaultConfig,
+      onConfigChange: async (cfg) => applyConfig(cfg),
+      mapToCapabilities: (cfg) => ({
+        recolorables: [
+          { get: () => cfg.background_color || defaultConfig.background_color, set: (v) => { cfg.background_color = v; window.elementSdk.setConfig({ background_color: v }); } },
+          { get: () => cfg.surface_color || defaultConfig.surface_color, set: (v) => { cfg.surface_color = v; window.elementSdk.setConfig({ surface_color: v }); } },
+          { get: () => cfg.text_color || defaultConfig.text_color, set: (v) => { cfg.text_color = v; window.elementSdk.setConfig({ text_color: v }); } },
+          { get: () => cfg.primary_action_color || defaultConfig.primary_action_color, set: (v) => { cfg.primary_action_color = v; window.elementSdk.setConfig({ primary_action_color: v }); } },
+          { get: () => cfg.secondary_action_color || defaultConfig.secondary_action_color, set: (v) => { cfg.secondary_action_color = v; window.elementSdk.setConfig({ secondary_action_color: v }); } }
+        ],
+        borderables: [],
+        fontEditable: {
+          get: () => cfg.font_family || defaultConfig.font_family,
+          set: (v) => { cfg.font_family = v; window.elementSdk.setConfig({ font_family: v }); }
+        },
+        fontSizeable: {
+          get: () => cfg.font_size || defaultConfig.font_size,
+          set: (v) => { cfg.font_size = v; window.elementSdk.setConfig({ font_size: v }); }
+        }
+      }),
+      mapToEditPanelValues: (cfg) => new Map([
+        ['game_title', cfg.game_title || defaultConfig.game_title],
+        ['game_subtitle', cfg.game_subtitle || defaultConfig.game_subtitle],
+        ['sparki_greeting', cfg.sparki_greeting || defaultConfig.sparki_greeting],
+        ['item_1_text', cfg.item_1_text || defaultConfig.item_1_text],
+        ['item_1_type', cfg.item_1_type || defaultConfig.item_1_type],
+        ['item_2_text', cfg.item_2_text || defaultConfig.item_2_text],
+        ['item_2_type', cfg.item_2_type || defaultConfig.item_2_type],
+        ['item_3_text', cfg.item_3_text || defaultConfig.item_3_text],
+        ['item_3_type', cfg.item_3_type || defaultConfig.item_3_type],
+        ['item_4_text', cfg.item_4_text || defaultConfig.item_4_text],
+        ['item_4_type', cfg.item_4_type || defaultConfig.item_4_type],
+        ['item_5_text', cfg.item_5_text || defaultConfig.item_5_text],
+        ['item_5_type', cfg.item_5_type || defaultConfig.item_5_type],
+        ['item_6_text', cfg.item_6_text || defaultConfig.item_6_text],
+        ['item_6_type', cfg.item_6_type || defaultConfig.item_6_type],
+        ['hint_text', cfg.hint_text || defaultConfig.hint_text]
+      ])
+    });
+
+
+    // ─── INITIAL RENDER ───
+    applyConfig(defaultConfig);
+    updateSparklesDisplay();
+    renderItems();
+    lucide.createIcons();
+  </script>
+ </body>
+</html>
+
+
+
+
+
+
+Game 3 ENLGISH Blend Sounds into Words

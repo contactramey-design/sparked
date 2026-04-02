@@ -1,0 +1,900 @@
+<!doctype html>
+<html lang="en" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Timelines Tell Time Order</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&amp;display=swap" rel="stylesheet">
+  <style>
+    html, body { 
+      height: 100%; 
+      margin: 0; 
+      padding: 0;
+      font-family: 'Poppins', Arial, sans-serif;
+    }
+    
+    * { box-sizing: border-box; }
+
+
+    .wrapper {
+      height: 100%;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+
+
+    header {
+      background: linear-gradient(135deg, #5568d3 0%, #6c63b8 100%);
+      color: white;
+      padding: 24px 16px;
+      box-shadow: 0 8px 32px rgba(85, 104, 211, 0.3);
+      text-align: center;
+    }
+
+
+    header h1 { 
+      margin: 0; 
+      font-size: 2.2rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+
+
+    header p { 
+      margin: 8px 0 0 0; 
+      font-size: 0.95rem; 
+      opacity: 0.9;
+    }
+
+
+    main {
+      flex: 1;
+      overflow-y: auto;
+      padding: 28px 16px;
+      max-width: 1000px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+
+    .game-box {
+      background: white;
+      border-radius: 16px;
+      padding: 28px;
+      box-shadow: 0 12px 40px rgba(85, 104, 211, 0.15);
+      margin-bottom: 24px;
+    }
+
+
+    .progress {
+      width: 100%;
+      height: 10px;
+      background: #e5e7eb;
+      border-radius: 8px;
+      margin-bottom: 24px;
+      overflow: hidden;
+    }
+
+
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, #667eea, #764ba2);
+      transition: width 0.6s ease;
+      border-radius: 8px;
+    }
+
+
+    .challenge-number {
+      display: inline-block;
+      background: #667eea;
+      color: white;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+
+    .challenge-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #333;
+      margin-bottom: 16px;
+      line-height: 1.4;
+    }
+
+
+    .challenge-description {
+      background: #f3f4f6;
+      border-left: 4px solid #667eea;
+      padding: 16px;
+      border-radius: 8px;
+      margin-bottom: 24px;
+      font-size: 0.95rem;
+      color: #374151;
+      line-height: 1.6;
+    }
+
+
+    .timeline-visual {
+      background: #f9fafb;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 32px 20px;
+      margin: 24px 0;
+      position: relative;
+    }
+
+
+    .timeline-axis {
+      position: relative;
+      margin: 20px 0;
+      padding: 10px 0;
+    }
+
+
+    .timeline-line {
+      position: absolute;
+      top: 50%;
+      left: 40px;
+      right: 40px;
+      height: 4px;
+      background: linear-gradient(90deg, #667eea, #764ba2);
+      border-radius: 2px;
+      transform: translateY(-50%);
+    }
+
+
+    .timeline-labels {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      justify-content: space-between;
+      padding: 0 40px;
+      margin-bottom: 12px;
+      font-size: 0.8rem;
+      color: #6b7280;
+      font-weight: 600;
+    }
+
+
+    .timeline-slots {
+      position: relative;
+      z-index: 20;
+      display: flex;
+      justify-content: space-between;
+      padding: 0 20px;
+      gap: 8px;
+    }
+
+
+    .timeline-slot {
+      width: 70px;
+      height: 70px;
+      background: white;
+      border: 3px solid #e5e7eb;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+
+
+    .timeline-slot:hover {
+      border-color: #667eea;
+      background: #ede9fe;
+      transform: scale(1.08);
+      box-shadow: 0 6px 16px rgba(102, 126, 234, 0.2);
+    }
+
+
+    .timeline-slot.filled {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-color: #5568d3;
+    }
+
+
+    .timeline-slot.empty {
+      background: white;
+      border: 3px dashed #cbd5e1;
+    }
+
+
+    .timeline-event-inner {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.75rem;
+      text-align: center;
+      color: white;
+      padding: 4px;
+      cursor: grab;
+      user-select: none;
+    }
+
+
+    .timeline-event-inner:active {
+      cursor: grabbing;
+    }
+
+
+    .events-pool {
+      background: #ede9fe;
+      border: 2px solid #667eea;
+      border-radius: 12px;
+      padding: 20px;
+      margin: 24px 0;
+    }
+
+
+    .pool-label {
+      display: block;
+      font-weight: 700;
+      color: #5568d3;
+      margin-bottom: 14px;
+      font-size: 0.95rem;
+    }
+
+
+    .pool-items {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 12px;
+    }
+
+
+    .pool-item {
+      background: white;
+      border: 2px solid #cbd5e1;
+      border-radius: 10px;
+      padding: 14px;
+      text-align: center;
+      cursor: grab;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: all 0.2s ease;
+      user-select: none;
+      line-height: 1.4;
+      color: #374151;
+    }
+
+
+    .pool-item:hover {
+      border-color: #667eea;
+      background: #f3f4f6;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+    }
+
+
+    .pool-item.in-use {
+      opacity: 0.4;
+      pointer-events: none;
+    }
+
+
+    .buttons {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin: 24px 0;
+    }
+
+
+    button {
+      border: none;
+      border-radius: 10px;
+      padding: 14px 28px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: 'Poppins', Arial, sans-serif;
+    }
+
+
+    .btn-submit {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      min-width: 160px;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    }
+
+
+    .btn-submit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+    }
+
+
+    .btn-submit:active {
+      transform: translateY(0);
+    }
+
+
+    .btn-reset {
+      background: #e5e7eb;
+      color: #374151;
+    }
+
+
+    .btn-reset:hover {
+      background: #d1d5db;
+    }
+
+
+    .message {
+      padding: 16px 20px;
+      border-radius: 10px;
+      margin: 20px 0;
+      text-align: center;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      animation: slideIn 0.3s ease;
+    }
+
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+
+    .message.success {
+      background: #d1fae5;
+      color: #065f46;
+      border-left: 4px solid #10b981;
+    }
+
+
+    .message.error {
+      background: #fee2e2;
+      color: #991b1b;
+      border-left: 4px solid #ef4444;
+    }
+
+
+    .message.info {
+      background: #dbeafe;
+      color: #082f49;
+      border-left: 4px solid #3b82f6;
+    }
+
+
+    .hint-box {
+      background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+      border-left: 4px solid #f59e0b;
+      padding: 14px 16px;
+      border-radius: 8px;
+      margin: 20px 0;
+      font-size: 0.9rem;
+      color: #78350f;
+      font-weight: 500;
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+    }
+
+
+    .hint-box::before {
+      content: "💡";
+      flex-shrink: 0;
+    }
+
+
+    .finish-screen {
+      display: none;
+      text-align: center;
+      padding: 40px 20px;
+    }
+
+
+    .finish-screen.active {
+      display: block;
+      animation: fadeIn 0.5s ease;
+    }
+
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+
+    .finish-emoji {
+      font-size: 3.5rem;
+      margin-bottom: 20px;
+      animation: bounce 0.6s ease;
+    }
+
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-20px); }
+    }
+
+
+    .finish-title {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #333;
+      margin: 12px 0;
+    }
+
+
+    .finish-message {
+      font-size: 1.1rem;
+      color: #6b7280;
+      margin-bottom: 28px;
+    }
+
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 28px 0;
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+
+    .stat-box {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.2);
+    }
+
+
+    .stat-num {
+      font-size: 2.4rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+
+    .stat-label {
+      font-size: 0.85rem;
+      opacity: 0.9;
+      font-weight: 500;
+    }
+
+
+    .btn-play-again {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      margin-top: 24px;
+      min-width: 180px;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    }
+
+
+    .btn-play-again:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+    }
+
+
+    @media (max-width: 600px) {
+      header h1 { font-size: 1.6rem; }
+      main { padding: 16px; }
+      .game-box { padding: 16px; }
+      .timeline-slot { width: 60px; height: 60px; }
+      .timeline-event-inner { font-size: 0.7rem; }
+      .stats-grid { grid-template-columns: 1fr; }
+      .pool-items { grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); }
+    }
+  </style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  <style>body { box-sizing: border-box; }</style>
+ </head>
+ <body class="h-full">
+  <div class="wrapper">
+   <header>
+    <h1 id="lessonTitle">📅 Timelines Tell Time Order</h1>
+    <p id="instructionText">Arrange events from earliest to latest to master chronological thinking!</p>
+   </header>
+   <main>
+    <div id="gameScreen" class="game-box">
+     <div class="progress">
+      <div class="progress-bar" id="progressBar" style="width: 0%"></div>
+     </div>
+     <div style="margin-bottom: 12px;"><span class="challenge-number" id="challengeNumber">Challenge 1 of 4</span>
+     </div>
+     <h2 class="challenge-title" id="challengeTitle">Ancient California History</h2>
+     <div class="challenge-description" id="challengeDescription"></div>
+     <div class="timeline-visual">
+      <div class="timeline-labels"><span>Earliest (left)</span> <span>Latest (right)</span>
+      </div>
+      <div class="timeline-axis">
+       <div class="timeline-line"></div>
+       <div class="timeline-slots" id="timelineSlots"></div>
+      </div>
+     </div>
+     <div class="events-pool"><label class="pool-label">📌 Drag events below onto the timeline:</label>
+      <div class="pool-items" id="eventPool"></div>
+     </div>
+     <div class="hint-box" id="hintBox">
+      Think about what happened first in history. Then the second event, third, and so on. Older events go on the left!
+     </div>
+     <div class="buttons"><button class="btn-reset" onclick="resetQuestion()">↻ Start Over</button> <button class="btn-submit" onclick="submitAnswer()">✓ Check Answer</button>
+     </div>
+     <div id="messageBox"></div>
+    </div><!-- Finish Screen -->
+    <div id="finishScreen" class="game-box finish-screen">
+     <div class="finish-emoji">
+      🎓
+     </div>
+     <h2 class="finish-title" id="finishTitle">Timeline Master!</h2>
+     <p class="finish-message" id="finishMessage">You successfully arranged all events in correct chronological order!</p>
+     <div class="stats-grid">
+      <div class="stat-box">
+       <div class="stat-num" id="statCorrect">
+        4
+       </div>
+       <div class="stat-label">
+        Timelines Mastered
+       </div>
+      </div>
+      <div class="stat-box">
+       <div class="stat-num">
+        100%
+       </div>
+       <div class="stat-label">
+        Accuracy
+       </div>
+      </div>
+     </div><button class="btn-play-again" onclick="location.reload()">🔄 Try Again</button>
+    </div>
+   </main>
+  </div>
+  <script>
+    const lessons = [
+      {
+        title: "Ancient California History",
+        scenario: "California has a long history. Native peoples lived here for thousands of years, then came Spanish explorers, missions, and finally statehood. Put these key events in the order they happened.",
+        events: [
+          { label: "Native Peoples", details: "Indigenous people live in California for thousands of years", date: "~1500 BCE", order: 1 },
+          { label: "Spanish Explorers", details: "Spanish explorers arrive in California", date: "~1540 CE", order: 2 },
+          { label: "Spanish Missions", details: "Missions are built to teach and convert people", date: "~1769 CE", order: 3 },
+          { label: "California Statehood", details: "California becomes the 31st state", date: "1850 CE", order: 4 }
+        ],
+        learn: "California's history shows how groups of people arrived at different times. Each group changed the land and the way people lived."
+      },
+      {
+        title: "Your Community's Growth",
+        scenario: "Most communities grow over time. First came indigenous residents, then settlers, then towns grew. Order these community events from earliest to most recent.",
+        events: [
+          { label: "Indigenous People", details: "Native people lived in this area for many years", date: "Before 1800s", order: 1 },
+          { label: "Early Settlers", details: "Families arrived and built the first homes", date: "1800s", order: 2 },
+          { label: "School Built", details: "A school and stores were established", date: "1900s", order: 3 },
+          { label: "Modern Growth", details: "Neighborhoods expanded into a big community", date: "1950s–Today", order: 4 }
+        ],
+        learn: "Communities follow a pattern: first inhabitants, then pioneers, then growth. Your town followed this same path!"
+      },
+      {
+        title: "Technology Through Time",
+        scenario: "Inventions don't appear all at once—they are created over centuries. Older inventions led to newer ones. Order these major inventions by when they were created.",
+        events: [
+          { label: "Printing Press", details: "Gutenberg invents the printing press", date: "1440", order: 1 },
+          { label: "Steam Engine", details: "Steam power drives the Industrial Revolution", date: "1760", order: 2 },
+          { label: "Electricity", details: "Edison invents the light bulb", date: "1879", order: 3 },
+          { label: "Internet", details: "The internet connects computers worldwide", date: "1969–1990", order: 4 }
+        ],
+        learn: "Technology builds over time. Each invention gave people ideas for the next invention. That's why understanding order helps us understand progress!"
+      },
+      {
+        title: "Your School Day",
+        scenario: "Did you know timelines aren't just for history? Your own school day is a timeline! Order these events from morning to end of day.",
+        events: [
+          { label: "Wake Up", details: "You wake up and eat breakfast", date: "Morning", order: 1 },
+          { label: "School Starts", details: "You arrive and classes begin", date: "Mid-morning", order: 2 },
+          { label: "Lunch & Play", details: "You eat lunch and have recess time", date: "Afternoon", order: 3 },
+          { label: "Home & Rest", details: "School ends and you head home", date: "Evening", order: 4 }
+        ],
+        learn: "Timelines are everywhere! From history books to your day—whenever events happen in order, you're using chronological thinking. Same skill, different time!"
+      }
+    ];
+
+
+    let currentChallenge = 0;
+    let successCount = 0;
+    let placedEvents = {};
+    let draggedEvent = null;
+
+
+    const defaultConfig = {
+      lesson_title: '📅 Timelines Tell Time Order',
+      instruction_text: 'Arrange events from earliest to latest to master chronological thinking!',
+      completion_message: 'Timeline Master!'
+    };
+
+
+    function shuffle(arr) {
+      return [...arr].sort(() => Math.random() - 0.5);
+    }
+
+
+    function initGame() {
+      loadChallenge();
+      lucide.createIcons();
+    }
+
+
+    function loadChallenge() {
+      const challenge = lessons[currentChallenge];
+      
+      document.getElementById('challengeNumber').textContent = `Challenge ${currentChallenge + 1} of ${lessons.length}`;
+      document.getElementById('challengeTitle').textContent = challenge.title;
+      document.getElementById('challengeDescription').textContent = challenge.scenario;
+
+
+      // Render timeline slots
+      const slotsContainer = document.getElementById('timelineSlots');
+      slotsContainer.innerHTML = challenge.events
+        .map((_, idx) => `<div class="timeline-slot empty" data-slot="${idx}"></div>`)
+        .join('');
+
+
+      // Render shuffled event pool
+      const poolContainer = document.getElementById('eventPool');
+      const shuffled = shuffle(challenge.events);
+      poolContainer.innerHTML = shuffled
+        .map((evt, idx) => `
+          <div class="pool-item" draggable="true" data-event-id="${evt.order}" data-label="${evt.label}" data-date="${evt.date}" title="${evt.details}">
+            <strong>${evt.label}</strong><br><span style="font-size: 0.85rem; opacity: 0.8;">${evt.date}</span>
+          </div>
+        `)
+        .join('');
+
+
+      placedEvents = {};
+      document.getElementById('messageBox').innerHTML = '';
+      updateProgress();
+      setupDragAndDrop();
+    }
+
+
+    function setupDragAndDrop() {
+      // Pool items
+      document.querySelectorAll('.pool-item').forEach(item => {
+        item.addEventListener('dragstart', (e) => {
+          draggedEvent = {
+            eventId: parseInt(e.target.closest('.pool-item').dataset.eventId),
+            label: e.target.closest('.pool-item').dataset.label,
+            date: e.target.closest('.pool-item').dataset.date
+          };
+          e.target.closest('.pool-item').style.opacity = '0.5';
+        });
+        
+        item.addEventListener('dragend', (e) => {
+          e.target.closest('.pool-item').style.opacity = '1';
+        });
+      });
+
+
+      // Timeline slots
+      document.querySelectorAll('.timeline-slot').forEach(slot => {
+        const slotIdx = parseInt(slot.dataset.slot);
+
+
+        slot.addEventListener('dragover', (e) => {
+          e.preventDefault();
+          slot.style.background = '#fef3c7';
+          slot.style.borderColor = '#f59e0b';
+        });
+
+
+        slot.addEventListener('dragleave', (e) => {
+          slot.style.background = '';
+          slot.style.borderColor = '';
+        });
+
+
+        slot.addEventListener('drop', (e) => {
+          e.preventDefault();
+          slot.style.background = '';
+          slot.style.borderColor = '';
+
+
+          if (!draggedEvent) return;
+
+
+          // Remove if already placed elsewhere
+          Object.keys(placedEvents).forEach(key => {
+            if (placedEvents[key].eventId === draggedEvent.eventId) {
+              delete placedEvents[key];
+            }
+          });
+
+
+          placedEvents[slotIdx] = draggedEvent;
+          renderTimeline();
+          draggedEvent = null;
+        });
+      });
+    }
+
+
+    function renderTimeline() {
+      const challenge = lessons[currentChallenge];
+      document.querySelectorAll('.timeline-slot').forEach(slot => {
+        const slotIdx = parseInt(slot.dataset.slot);
+        const event = placedEvents[slotIdx];
+
+
+        slot.innerHTML = '';
+        slot.classList.remove('filled');
+        slot.classList.add('empty');
+
+
+        if (event) {
+          const eventEl = document.createElement('div');
+          eventEl.className = 'timeline-event-inner';
+          eventEl.innerHTML = `${event.label}<br><span style="font-size: 0.65rem; opacity: 0.85;">${event.date}</span>`;
+          eventEl.draggable = true;
+          eventEl.addEventListener('dragstart', (e) => {
+            draggedEvent = event;
+            eventEl.style.opacity = '0.5';
+          });
+          eventEl.addEventListener('dragend', (e) => {
+            eventEl.style.opacity = '1';
+          });
+          
+          slot.appendChild(eventEl);
+          slot.classList.add('filled');
+          slot.classList.remove('empty');
+        }
+      });
+
+
+      // Update pool item opacity
+      document.querySelectorAll('.pool-item').forEach(item => {
+        const eventId = parseInt(item.dataset.eventId);
+        const isPlaced = Object.values(placedEvents).some(e => e.eventId === eventId);
+        item.classList.toggle('in-use', isPlaced);
+      });
+    }
+
+
+    function resetQuestion() {
+      placedEvents = {};
+      renderTimeline();
+      document.getElementById('messageBox').innerHTML = '';
+    }
+
+
+    function submitAnswer() {
+      const challenge = lessons[currentChallenge];
+      
+      if (Object.keys(placedEvents).length < challenge.events.length) {
+        document.getElementById('messageBox').innerHTML = '<div class="message error">⚠️ Place all events on the timeline first!</div>';
+        return;
+      }
+
+
+      // Check if order is correct
+      let allCorrect = true;
+      for (let slotIdx = 0; slotIdx < challenge.events.length; slotIdx++) {
+        const event = placedEvents[slotIdx];
+        if (!event || event.eventId !== slotIdx + 1) {
+          allCorrect = false;
+          break;
+        }
+      }
+
+
+      if (!allCorrect) {
+        document.getElementById('messageBox').innerHTML = '<div class="message error">❌ Not quite right. Think about which event happened first, second, third, and last. Try again!</div>';
+        return;
+      }
+
+
+      successCount++;
+      document.getElementById('messageBox').innerHTML = `<div class="message success">✅ Perfect! ${challenge.learn}</div>`;
+
+
+      setTimeout(() => {
+        if (currentChallenge < lessons.length - 1) {
+          currentChallenge++;
+          loadChallenge();
+        } else {
+          finishGame();
+        }
+      }, 3000);
+    }
+
+
+    function updateProgress() {
+      const pct = (successCount / lessons.length) * 100;
+      document.getElementById('progressBar').style.width = pct + '%';
+    }
+
+
+    function finishGame() {
+      document.getElementById('gameScreen').style.display = 'none';
+      document.getElementById('finishScreen').classList.add('active');
+      document.getElementById('finishTitle').textContent = defaultConfig.completion_message;
+      document.getElementById('finishMessage').textContent = "You successfully ordered all events in correct chronological sequence! You've mastered understanding time order.";
+      document.getElementById('statCorrect').textContent = successCount;
+    }
+
+
+    function applyConfig(config) {
+      if (config.lesson_title) {
+        document.getElementById('lessonTitle').textContent = config.lesson_title;
+      }
+      if (config.instruction_text) {
+        document.getElementById('instructionText').textContent = config.instruction_text;
+      }
+      if (config.completion_message) {
+        defaultConfig.completion_message = config.completion_message;
+      }
+    }
+
+
+    window.elementSdk.init({
+      defaultConfig,
+      onConfigChange: async (config) => {
+        applyConfig(config);
+      },
+      mapToCapabilities: () => ({
+        recolorables: [],
+        borderables: [],
+        fontEditable: undefined,
+        fontSizeable: undefined
+      }),
+      mapToEditPanelValues: (config) => new Map([
+        ['lesson_title', config.lesson_title || defaultConfig.lesson_title],
+        ['instruction_text', config.instruction_text || defaultConfig.instruction_text],
+        ['completion_message', config.completion_message || defaultConfig.completion_message]
+      ])
+    });
+
+
+    applyConfig(defaultConfig);
+    initGame();
+  </script>
+ </body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+Game 2 History and social sciences
+Primary and secondary sources

@@ -1,0 +1,639 @@
+<!doctype html>
+<html lang="en" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Maps and Landmarks Explorer</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&amp;family=Quicksand:wght@400;600;700&amp;display=swap" rel="stylesheet">
+  <style>
+    html, body { height: 100%; margin: 0; }
+    * { box-sizing: border-box; }
+
+
+    .app-wrapper {
+      font-family: 'Quicksand', Arial, sans-serif;
+      height: 100%;
+      width: 100%;
+      overflow-y: auto;
+      overflow-x: hidden;
+      background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+    }
+
+
+    .heading-font { font-family: 'Fredoka', Arial, sans-serif; font-weight: 700; }
+
+
+    @keyframes fadeSlideIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+
+    @keyframes bounce-pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.08); }
+    }
+
+
+    @keyframes pulse-highlight {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.5); }
+      50% { box-shadow: 0 0 0 8px rgba(59, 130, 246, 0); }
+    }
+
+
+    header {
+      background: linear-gradient(135deg, #0369a1 0%, #0284c7 100%);
+      color: white;
+      box-shadow: 0 4px 20px rgba(3, 105, 161, 0.25);
+    }
+
+
+    .standards-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.2);
+      padding: 8px 14px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+
+    .instruction-box {
+      background: linear-gradient(135deg, #e0f2fe 0%, #cffafe 100%);
+      border-left: 4px solid #0369a1;
+      border-radius: 12px;
+      padding: 16px;
+      margin: 18px 0;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: #0c4a6e;
+      font-weight: 500;
+    }
+
+
+    .game-arena {
+      background: white;
+      border-radius: 16px;
+      padding: 24px;
+      margin: 24px 0;
+      box-shadow: 0 4px 15px rgba(3, 105, 161, 0.1);
+    }
+
+
+    .map-legend {
+      background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 20px;
+      border: 2px solid #38bdf8;
+    }
+
+
+    .legend-title {
+      font-weight: 700;
+      color: #0369a1;
+      font-size: 1rem;
+      margin-bottom: 12px;
+    }
+
+
+    .legend-items {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 12px;
+    }
+
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      background: white;
+      border-radius: 8px;
+      border: 1px solid #bae6fd;
+      font-size: 0.9rem;
+      color: #0c4a6e;
+    }
+
+
+    .legend-symbol {
+      font-size: 1.5rem;
+      min-width: 24px;
+    }
+
+
+    .map-container {
+      background: linear-gradient(135deg, #ecf0f1 0%, #f8f9fa 100%);
+      border: 3px solid #7dd3fc;
+      border-radius: 12px;
+      padding: 20px;
+      margin: 20px 0;
+      position: relative;
+      min-height: 400px;
+      display: grid;
+      gap: 12px;
+    }
+
+
+    .map-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+
+    .map-tile {
+      background: white;
+      border: 2px solid #bae6fd;
+      border-radius: 10px;
+      padding: 16px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      min-height: 80px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+
+    .map-tile:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 6px 16px rgba(3, 105, 161, 0.2);
+    }
+
+
+    .map-tile.landmark {
+      background: white;
+      border-color: #bae6fd;
+    }
+
+
+    .map-tile.found {
+      background: linear-gradient(135deg, #86efac 0%, #4ade80 100%);
+      border-color: #22c55e;
+      animation: pulse-highlight 0.6s ease-out;
+    }
+
+
+    .map-tile-emoji {
+      font-size: 2rem;
+      margin-bottom: 4px;
+    }
+
+
+    .map-tile-label {
+      font-weight: 600;
+      font-size: 0.85rem;
+      color: #0c4a6e;
+    }
+
+
+    .current-challenge {
+      background: linear-gradient(135deg, #fef3c7 0%, #fcd34d 100%);
+      border: 2px solid #f59e0b;
+      border-radius: 12px;
+      padding: 16px;
+      margin: 16px 0;
+      text-align: center;
+    }
+
+
+    .challenge-text {
+      font-weight: 700;
+      color: #92400e;
+      font-size: 1.1rem;
+      margin-bottom: 8px;
+    }
+
+
+    .landmark-to-find {
+      font-size: 1.5rem;
+      margin: 8px 0;
+    }
+
+
+    .progress-bar {
+      width: 100%;
+      height: 8px;
+      background: #bae6fd;
+      border-radius: 4px;
+      margin: 20px 0;
+      overflow: hidden;
+    }
+
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #0369a1 0%, #0284c7 100%);
+      transition: width 0.5s ease;
+    }
+
+
+    .found-landmarks {
+      margin: 20px 0;
+      padding: 16px;
+      background: linear-gradient(135deg, #e0f2fe 0%, #cffafe 100%);
+      border-radius: 12px;
+      border: 2px solid #0284c7;
+    }
+
+
+    .found-landmarks-title {
+      font-weight: 700;
+      color: #0369a1;
+      margin-bottom: 12px;
+    }
+
+
+    .found-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+
+    .found-badge {
+      background: linear-gradient(135deg, #86efac 0%, #4ade80 100%);
+      color: #166534;
+      padding: 8px 12px;
+      border-radius: 20px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      animation: fadeSlideIn 0.4s ease-out;
+    }
+
+
+    .feedback-message {
+      background: linear-gradient(135deg, #fef3c7 0%, #fcd34d 100%);
+      border-left: 4px solid #d97706;
+      border-radius: 8px;
+      padding: 12px;
+      margin: 12px 0;
+      color: #92400e;
+      font-weight: 600;
+      text-align: center;
+      animation: fadeSlideIn 0.3s ease-out;
+    }
+
+
+    .completion-screen {
+      text-align: center;
+      padding: 40px 20px;
+      animation: fadeSlideIn 0.6s ease-out;
+    }
+
+
+    .completion-emoji {
+      font-size: 3rem;
+      margin-bottom: 16px;
+      animation: bounce-pulse 0.8s ease-in-out infinite;
+    }
+
+
+    .completion-text h2 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #0369a1;
+      margin: 16px 0;
+      font-family: 'Fredoka', Arial, sans-serif;
+    }
+
+
+    .completion-text p {
+      font-size: 1rem;
+      color: #0c4a6e;
+      margin-bottom: 24px;
+      line-height: 1.6;
+    }
+
+
+    .btn-again {
+      background: linear-gradient(135deg, #0369a1 0%, #0284c7 100%);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      padding: 14px 28px;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      font-family: Quicksand, Arial, sans-serif;
+    }
+
+
+    .btn-again:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 16px rgba(3, 105, 161, 0.35);
+    }
+
+
+    .fact-box {
+      background: linear-gradient(135deg, #e0f2fe 0%, #cffafe 100%);
+      border-left: 4px solid #0369a1;
+      border-radius: 12px;
+      padding: 16px;
+      margin: 16px 0;
+      font-size: 0.9rem;
+      line-height: 1.6;
+      color: #0c4a6e;
+      font-weight: 500;
+    }
+
+
+    @media (max-width: 768px) {
+      .map-grid { grid-template-columns: repeat(2, 1fr); }
+      header h1 { font-size: 1.8rem; }
+      .legend-items { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+  <style>body { box-sizing: border-box; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full">
+  <div class="app-wrapper" id="appWrapper">
+   <header class="py-8 px-4">
+    <div class="max-w-3xl mx-auto text-center">
+     <div class="standards-badge"><i data-lucide="map" style="width:16px;height:16px;"></i> <span>CA HSS Gr.2 · Geographic Skills &amp; Maps</span>
+     </div>
+     <h1 class="heading-font text-4xl md:text-5xl font-bold" id="lessonTitle">Maps and Landmarks Explorer</h1>
+     <p class="text-white text-opacity-90 mt-3 text-lg">Learn to read map symbols and find landmarks!</p>
+    </div>
+   </header>
+   <main class="max-w-3xl mx-auto px-4 py-6 pb-24">
+    <div class="instruction-box" id="instructionBox"><strong>🗺️ Your Challenge:</strong>
+     <p id="instructionText" style="margin-top: 8px;">Read the map legend first! Then click on landmarks to find them on the map.</p>
+    </div>
+    <div class="game-arena">
+     <h2 class="heading-font text-2xl mb-4" style="color: #0369a1;" id="gameIntro">Learn to Read Maps!</h2>
+     <div class="map-legend">
+      <div class="legend-title">
+       📋 Map Legend (What the symbols mean)
+      </div>
+      <div class="legend-items">
+       <div class="legend-item">
+        <div class="legend-symbol">
+         🏫
+        </div><span>School</span>
+       </div>
+       <div class="legend-item">
+        <div class="legend-symbol">
+         🌳
+        </div><span>Park</span>
+       </div>
+       <div class="legend-item">
+        <div class="legend-symbol">
+         🏠
+        </div><span>Homes</span>
+       </div>
+       <div class="legend-item">
+        <div class="legend-symbol">
+         🛒
+        </div><span>Store</span>
+       </div>
+       <div class="legend-item">
+        <div class="legend-symbol">
+         🏥
+        </div><span>Hospital</span>
+       </div>
+       <div class="legend-item">
+        <div class="legend-symbol">
+         🌊
+        </div><span>Water</span>
+       </div>
+      </div>
+     </div>
+     <div class="current-challenge">
+      <div class="challenge-text">
+       Find this landmark:
+      </div>
+      <div class="landmark-to-find" id="landmarkToFind">
+       🏫
+      </div>
+     </div>
+     <div class="progress-bar">
+      <div class="progress-fill" id="progressFill" style="width: 0%;"></div>
+     </div>
+     <div id="feedbackMessage"></div>
+     <div class="map-container">
+      <div class="map-grid" id="mapGrid"></div>
+     </div>
+     <div id="foundContainer" style="display:none;">
+      <div class="found-landmarks">
+       <div class="found-landmarks-title">
+        ✅ Landmarks Found:
+       </div>
+       <div class="found-list" id="foundList"></div>
+      </div>
+     </div>
+    </div>
+    <div class="fact-box" id="factBox"><strong>🧠 Map Discovery:</strong>
+     <p id="factText" style="margin-top: 8px;">Maps are pictures from above that show where places are. Symbols stand for real things—like a tree symbol means a park. Always check the legend first to understand what the symbols mean!</p>
+    </div>
+    <div id="completionMessage" style="display:none;">
+     <div class="game-arena">
+      <div class="completion-screen">
+       <div class="completion-emoji">
+        🗺️🎉✨
+       </div>
+       <div class="completion-text">
+        <h2 id="successTitle">Map Explorer!</h2>
+        <p id="successMessage">You learned to read a map and find landmarks using symbols!</p>
+        <p style="font-size: 0.9rem; opacity: 0.8;" id="discoveryMessage">Maps help us find our way! 🧭</p><button class="btn-again" onclick="location.reload();">🔄 Play Again</button>
+       </div>
+      </div>
+     </div>
+    </div>
+   </main>
+  </div>
+  <script>
+    const landmarks = [
+      { id: 1, emoji: '🏫', name: 'School', type: 'school', x: 0, y: 0, definition: 'A place where children go to learn with teachers.' },
+      { id: 2, emoji: '🌳', name: 'Park', type: 'park', x: 1, y: 0, definition: 'A green space with trees and places to play and relax.' },
+      { id: 3, emoji: '🏠', name: 'Homes', type: 'homes', x: 2, y: 0, definition: 'Houses where people and families live.' },
+      { id: 4, emoji: '🛒', name: 'Store', type: 'store', x: 3, y: 0, definition: 'A shop where you can buy food, clothes, and other items.' },
+      { id: 5, emoji: '🏥', name: 'Hospital', type: 'hospital', x: 0, y: 1, definition: 'A place where doctors help sick and injured people get better.' },
+      { id: 6, emoji: '🌊', name: 'Water', type: 'water', x: 1, y: 1, definition: 'Lakes, rivers, or oceans that are important to communities.' },
+      { id: 7, emoji: '🏠', name: 'Homes', type: 'homes', x: 2, y: 1, definition: 'Houses where people and families live.' },
+      { id: 8, emoji: '🌳', name: 'Park', type: 'park', x: 3, y: 1, definition: 'A green space with trees and places to play and relax.' },
+      { id: 9, emoji: '🛒', name: 'Store', type: 'store', x: 0, y: 2, definition: 'A shop where you can buy food, clothes, and other items.' },
+      { id: 10, emoji: '🏠', name: 'Homes', type: 'homes', x: 1, y: 2, definition: 'Houses where people and families live.' },
+      { id: 11, emoji: '🌳', name: 'Park', type: 'park', x: 2, y: 2, definition: 'A green space with trees and places to play and relax.' },
+      { id: 12, emoji: '🌊', name: 'Water', type: 'water', x: 3, y: 2, definition: 'Lakes, rivers, or oceans that are important to communities.' }
+    ];
+
+
+    const challengeSequence = ['school', 'park', 'homes', 'store', 'hospital', 'water'];
+
+
+    let gameState = {
+      currentChallengeIndex: 0,
+      found: [],
+      completed: false
+    };
+
+
+    const defaultConfig = {
+      lesson_title: 'Maps and Landmarks Explorer',
+      instruction_text: 'Read the map legend first! Then click on landmarks to find them on the map.',
+      game_intro: 'Learn to Read Maps!',
+      completion_message: 'You learned to read a map and find landmarks using symbols!'
+    };
+
+
+    function initGame() {
+      renderMap();
+      updateChallenge();
+    }
+
+
+    function renderMap() {
+      const grid = document.getElementById('mapGrid');
+      grid.innerHTML = '';
+      landmarks.forEach(landmark => {
+        const tile = document.createElement('div');
+        tile.className = 'map-tile';
+        if (landmark.id <= 6) {
+          tile.classList.add('landmark');
+        }
+        tile.dataset.landmarkId = landmark.id;
+        
+        const isFound = gameState.found.some(f => f.id === landmark.id);
+        if (isFound) {
+          tile.classList.add('found');
+        }
+        
+        tile.innerHTML = `
+          <div class="map-tile-emoji">${landmark.emoji}</div>
+          <div class="map-tile-label">${landmark.name}</div>
+        `;
+        
+        if (!isFound) {
+          tile.onclick = () => checkLandmark(landmark.id);
+        }
+        
+        grid.appendChild(tile);
+      });
+    }
+
+
+    function updateChallenge() {
+      if (gameState.currentChallengeIndex >= challengeSequence.length) {
+        return;
+      }
+      
+      const targetType = challengeSequence[gameState.currentChallengeIndex];
+      const target = landmarks.find(l => l.type === targetType);
+      document.getElementById('landmarkToFind').textContent = target.emoji;
+    }
+
+
+    function checkLandmark(landmarkId) {
+      if (gameState.currentChallengeIndex >= challengeSequence.length) {
+        return;
+      }
+      
+      const targetType = challengeSequence[gameState.currentChallengeIndex];
+      const landmark = landmarks.find(l => l.id === landmarkId);
+      const feedbackDiv = document.getElementById('feedbackMessage');
+      
+      if (landmark.type === targetType) {
+        gameState.found.push(landmark);
+        gameState.currentChallengeIndex++;
+        
+        feedbackDiv.innerHTML = '<div class="feedback-message"><strong>✅ Correct! You found ' + landmark.name + '!</strong><br><em style="font-size: 0.9rem; margin-top: 8px; display: block;">' + landmark.definition + '</em></div>';
+        
+        renderMap();
+        updateFoundList();
+        updateProgress();
+        
+        if (gameState.currentChallengeIndex >= challengeSequence.length) {
+          setTimeout(showCompletion, 800);
+        } else {
+          updateChallenge();
+        }
+      } else {
+        feedbackDiv.innerHTML = '<div class="feedback-message">❌ That\'s ' + landmark.name + ', but look for ' + landmarks.find(l => l.type === targetType).name + '!</div>';
+      }
+    }
+
+
+    function updateFoundList() {
+      const container = document.getElementById('foundContainer');
+      const list = document.getElementById('foundList');
+      
+      if (gameState.found.length > 0) {
+        container.style.display = 'block';
+        list.innerHTML = '';
+        gameState.found.forEach(landmark => {
+          const badge = document.createElement('div');
+          badge.className = 'found-badge';
+          badge.textContent = landmark.emoji + ' ' + landmark.name;
+          list.appendChild(badge);
+        });
+      }
+    }
+
+
+    function updateProgress() {
+      const percentage = (gameState.found.length / challengeSequence.length) * 100;
+      document.getElementById('progressFill').style.width = percentage + '%';
+    }
+
+
+    function showCompletion() {
+      gameState.completed = true;
+      document.getElementById('completionMessage').style.display = 'block';
+    }
+
+
+    function applyConfig(cfg) {
+      document.getElementById('lessonTitle').textContent = cfg.lesson_title || defaultConfig.lesson_title;
+      document.getElementById('instructionText').textContent = cfg.instruction_text || defaultConfig.instruction_text;
+      document.getElementById('gameIntro').textContent = cfg.game_intro || defaultConfig.game_intro;
+      document.getElementById('successMessage').textContent = cfg.completion_message || defaultConfig.completion_message;
+    }
+
+
+    window.elementSdk.init({
+      defaultConfig,
+      onConfigChange: async (cfg) => applyConfig(cfg),
+      mapToCapabilities: (cfg) => ({
+        recolorables: [],
+        borderables: [],
+        fontEditable: undefined,
+        fontSizeable: undefined
+      }),
+      mapToEditPanelValues: (cfg) => new Map([
+        ['lesson_title', cfg.lesson_title || defaultConfig.lesson_title],
+        ['instruction_text', cfg.instruction_text || defaultConfig.instruction_text],
+        ['game_intro', cfg.game_intro || defaultConfig.game_intro],
+        ['completion_message', cfg.completion_message || defaultConfig.completion_message]
+      ])
+    });
+
+
+    applyConfig(defaultConfig);
+    initGame();
+    lucide.createIcons();
+  </script>
+ </body>
+</html>
+
+
+
+
+Game 3
+Goods and services

@@ -6,6 +6,8 @@ import { Button } from '@/components/ui/button'
 import { getSubjectLessonById } from './registry'
 import { recordSchoolSubjectPracticeComplete, recordSchoolSubjectQuizResult } from './schoolSubjectProgress'
 import { renderSchoolSubjectPracticeGame } from './games/registry'
+import { CanvaHtmlPractice } from './games/CanvaHtmlPractice'
+import { canvaPracticeGameSrc } from './canvaLessonGames'
 import { getSchoolSubjectTeacherPack } from './schoolSubjectTeacherPack'
 import { getSchoolSubjectQuizFeedback } from './schoolSubjectQuizFeedback'
 import {
@@ -89,6 +91,7 @@ const SchoolSubjectLessonPage: React.FC = () => {
 
   const showPractice = lesson.includesGameQuiz !== false && lesson.includesPracticeStep !== false
   const practiceGameId = lesson.practiceGameId ?? 'sparki-ordered-tap'
+  const canvaSrc = canvaPracticeGameSrc(lesson.id)
   const lessonSteps = useMemo(() => {
     return showPractice ? (['learn', 'practice', 'quiz', 'tip'] as const) : (['learn', 'quiz', 'tip'] as const)
   }, [showPractice])
@@ -321,19 +324,31 @@ const SchoolSubjectLessonPage: React.FC = () => {
 
       {step === 'practice' && showPractice ? (
         <div className="school-subj-practice-wrap">
-          {renderSchoolSubjectPracticeGame(practiceGameId, {
-            onContinue: () => {
-              recordSchoolSubjectPracticeComplete(subjectId, lesson.id)
-              setStep('quiz')
-            },
-            labels: {
-              title: t('schoolSubject.practiceOrderedTapTitle'),
-              hint: t('schoolSubject.practiceOrderedTapHint'),
-              wrong: t('schoolSubject.practiceOrderedTapWrong'),
-              done: t('schoolSubject.practiceOrderedTapDone'),
-              continueLabel: t('schoolSubject.practiceContinueToQuiz'),
-            },
-          })}
+          {canvaSrc ? (
+            <CanvaHtmlPractice
+              src={canvaSrc}
+              title={loc.title}
+              continueLabel={t('schoolSubject.practiceContinueToQuiz')}
+              onContinue={() => {
+                recordSchoolSubjectPracticeComplete(subjectId, lesson.id)
+                setStep('quiz')
+              }}
+            />
+          ) : (
+            renderSchoolSubjectPracticeGame(practiceGameId, {
+              onContinue: () => {
+                recordSchoolSubjectPracticeComplete(subjectId, lesson.id)
+                setStep('quiz')
+              },
+              labels: {
+                title: t('schoolSubject.practiceOrderedTapTitle'),
+                hint: t('schoolSubject.practiceOrderedTapHint'),
+                wrong: t('schoolSubject.practiceOrderedTapWrong'),
+                done: t('schoolSubject.practiceOrderedTapDone'),
+                continueLabel: t('schoolSubject.practiceContinueToQuiz'),
+              },
+            })
+          )}
         </div>
       ) : null}
 
