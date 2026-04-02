@@ -37,6 +37,7 @@ const SchoolSubjectLessonPage: React.FC = () => {
     return getSubjectLessonById(subjectId, lessonId)
   }, [validSubject, subjectId, lessonId])
   const loc = lesson ? lessonLocale(lesson, locale) : null
+  const inBand = !!(lesson && isLessonInBand(lesson, ageBand))
 
   const [step, setStep] = useState<StepId>('learn')
   const [qIndex, setQIndex] = useState(0)
@@ -55,40 +56,18 @@ const SchoolSubjectLessonPage: React.FC = () => {
 
   const trackPath = validSubject ? `/schools/subjects/${subjectId}` : '/schools/subjects'
 
-  if (!validSubject || !lesson || !loc) {
-    return (
-      <section className="school-subj-lesson">
-        <Link to={validSubject ? trackPath : '/schools/subjects'} className="link-back">
-          {t('schoolSubject.backToSubjectTrack')}
-        </Link>
-        <p className="muted">{t('schoolSubject.lessonNotFound')}</p>
-      </section>
-    )
-  }
-
-  if (!isLessonInBand(lesson, ageBand)) {
-    return (
-      <section className="school-subj-lesson">
-        <Link to={trackPath} className="link-back">
-          {t('schoolSubject.backToSubjectTrack')}
-        </Link>
-        <div className="card p-4 space-y-3">
-          <p>{t('schoolSubject.wrongBand')}</p>
-          <Button type="button" variant="secondary" onClick={() => navigate(trackPath)}>
-            {t('schoolSubject.chooseBand')}
-          </Button>
-        </div>
-      </section>
-    )
-  }
-
-  const questions = loc.quiz
+  const questions = useMemo(() => (loc?.quiz.length ? loc.quiz : []), [loc])
   const currentQ = questions[qIndex]
   const isLastQ = qIndex >= questions.length - 1
-  const teacherPack = useMemo(() => getSchoolSubjectTeacherPack(lesson.id, locale), [lesson.id, locale])
 
-  const showPractice = lesson.includesGameQuiz !== false && lesson.includesPracticeStep !== false
-  const practiceGameId = lesson.practiceGameId ?? 'sparki-ordered-tap'
+  const teacherPack = useMemo(() => {
+    if (!lesson || !inBand) return null
+    return getSchoolSubjectTeacherPack(lesson.id, locale)
+  }, [lesson, inBand, locale])
+
+  const showPractice =
+    !!(lesson && inBand && lesson.includesGameQuiz !== false && lesson.includesPracticeStep !== false)
+  const practiceGameId = lesson?.practiceGameId ?? 'sparki-ordered-tap'
   const lessonSteps = useMemo(() => {
     return showPractice ? (['learn', 'practice', 'quiz', 'tip'] as const) : (['learn', 'quiz', 'tip'] as const)
   }, [showPractice])
@@ -108,6 +87,39 @@ const SchoolSubjectLessonPage: React.FC = () => {
       ''
     )
   }, [currentQ?.id, currentQ?.feedback, locale, isTeacherView])
+
+  const quizProgressPct = useMemo(() => {
+    if (questions.length === 0) return 0
+    const stepped = qIndex + (revealed ? 1 : 0)
+    return Math.min(100, Math.round((stepped / questions.length) * 100))
+  }, [qIndex, revealed, questions.length])
+
+  if (!validSubject || !lesson || !loc) {
+    return (
+      <section className="school-subj-lesson">
+        <Link to={validSubject ? trackPath : '/schools/subjects'} className="link-back">
+          {t('schoolSubject.backToSubjectTrack')}
+        </Link>
+        <p className="muted">{t('schoolSubject.lessonNotFound')}</p>
+      </section>
+    )
+  }
+
+  if (!inBand) {
+    return (
+      <section className="school-subj-lesson">
+        <Link to={trackPath} className="link-back">
+          {t('schoolSubject.backToSubjectTrack')}
+        </Link>
+        <div className="card p-4 space-y-3">
+          <p>{t('schoolSubject.wrongBand')}</p>
+          <Button type="button" variant="secondary" onClick={() => navigate(trackPath)}>
+            {t('schoolSubject.chooseBand')}
+          </Button>
+        </div>
+      </section>
+    )
+  }
 
   const pickOption = (idx: number) => {
     if (revealed || !currentQ) return
@@ -129,12 +141,6 @@ const SchoolSubjectLessonPage: React.FC = () => {
       setRevealed(false)
     }
   }
-
-  const quizProgressPct = useMemo(() => {
-    if (questions.length === 0) return 0
-    const stepped = qIndex + (revealed ? 1 : 0)
-    return Math.min(100, Math.round((stepped / questions.length) * 100))
-  }, [qIndex, revealed, questions.length])
 
   return (
     <section className="school-subj-lesson">
