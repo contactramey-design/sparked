@@ -65,6 +65,10 @@ const DashboardPage: React.FC = () => {
       )}
       {viewMode === 'parent' && (
         <div id="dashboard-parent-panel" role="tabpanel" aria-labelledby="tab-parent">
+          <header className="mb-4">
+            <h2 className="text-xl font-semibold text-slate-900">{t('dashboardPage.parentPanelHeading')}</h2>
+            <p className="text-sm text-slate-600 mt-1 max-w-prose">{t('dashboardPage.parentPanelLead')}</p>
+          </header>
           <ParentViewContent />
         </div>
       )}

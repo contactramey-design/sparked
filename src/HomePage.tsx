@@ -199,6 +199,10 @@ const HomePage: React.FC = () => {
           </Link>
         </div>
         <div className="hub-parent-wrap" key={locale}>
+          <header className="mb-4 px-1">
+            <h2 className="text-xl font-semibold text-slate-900">{t('dashboardPage.parentPanelHeading')}</h2>
+            <p className="text-sm text-slate-600 mt-1 max-w-prose">{t('dashboardPage.parentPanelLead')}</p>
+          </header>
           <ParentViewContent />
         </div>
       </section>
@@ -224,6 +228,10 @@ const HomePage: React.FC = () => {
           ) : null}
         </div>
         <div className="hub-parent-wrap" key={locale}>
+          <header className="mb-4 px-1">
+            <h2 className="text-xl font-semibold text-slate-900">{t('dashboardPage.parentPanelHeading')}</h2>
+            <p className="text-sm text-slate-600 mt-1 max-w-prose">{t('dashboardPage.parentPanelLead')}</p>
+          </header>
           <ParentViewContent />
         </div>
       </section>

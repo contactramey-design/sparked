@@ -128,6 +128,9 @@ function AppFooter() {
         <Link to="/for-schools">{t('footer.forSchools')}</Link>
         <Link to="/contact">{t('footer.contact')}</Link>
         {isLoggedIn && !kidLock && (
+          <Link to="/?view=parent">{t('footer.parentDashboard')}</Link>
+        )}
+        {isLoggedIn && !kidLock && (
           <button type="button" className="footer-link-button" onClick={() => void signOut()}>
             {t('header.signOut')}
           </button>

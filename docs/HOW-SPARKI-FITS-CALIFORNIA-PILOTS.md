@@ -2,6 +2,14 @@
 
 Short reference for curriculum leads, principals, and IT when discussing **supplemental** use of Sparki Academy alongside district scope-and-sequence. This is product positioning and technical transparency, not legal advice.
 
+## Where to find it in the app
+
+| Need | Where |
+|------|--------|
+| **Parent / grown-up dashboard** (progress on device, prompts, Safety Pass) | Signed in: footer link **Parent dashboard**, or **Academy → Grown-ups → Parent dashboard** (`/?view=parent`). With kid lock: footer **Grown-up?** |
+| **Teacher roster & tracking** (anonymous codes, CSV) | **Academy → Teacher sign in** (school theme: **Academy → Teacher tools → Teacher dashboard**) → tab **Roster & tracking**. Requires Supabase + teacher role. |
+| **Class join** (students) | **School Mode** on → **School hub** → enter class + student label. |
+
 ## What Sparki is in pilot v1
 
 - **Supplemental practice**: Short subject tracks (math, English, science, history) with California framework metadata (PTKLF, CCSS, NGSS, HSS) and printable alignment tables — not a full-year replacement curriculum or LMS.

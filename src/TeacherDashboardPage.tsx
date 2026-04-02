@@ -273,6 +273,7 @@ const TeacherDashboardPage: React.FC = () => {
           <CardContent>
             <div className="stack-lg">
               <div className="muted">{t('teacherDashboard.subtitle')}</div>
+              <p className="text-sm text-slate-700 max-w-prose leading-relaxed">{t('teacherDashboard.hubExplainer')}</p>
               {!!error && <div className="muted">{error}</div>}
                   <div className="stack-lg">
                 <div>
@@ -298,9 +299,9 @@ const TeacherDashboardPage: React.FC = () => {
           value={tab}
           onValueChange={(v) => setTab(v as 'classes' | 'students' | 'home')}
         >
-          <TabsList>
+            <TabsList>
             <TabsTrigger value="classes">{t('teacherDashboard.tabsClasses')}</TabsTrigger>
-            <TabsTrigger value="students">{t('teacherDashboard.tabsStudents')}</TabsTrigger>
+            <TabsTrigger value="students">{t('teacherDashboard.tabsRoster')}</TabsTrigger>
             <TabsTrigger value="home">{t('teacherDashboard.tabsHomePackets')}</TabsTrigger>
           </TabsList>
 
@@ -437,6 +438,7 @@ const TeacherDashboardPage: React.FC = () => {
               </CardHeader>
               <CardContent>
                 <div className="stack-lg">
+                  <p className="text-sm text-slate-700 max-w-prose leading-relaxed">{t('teacherDashboard.rosterExplainer')}</p>
                   <div className="muted">
                     {selectedClass
                       ? t('teacherDashboard.studentsFor', { name: selectedClass.name, code: selectedClass.class_code })
@@ -559,6 +561,7 @@ const TeacherDashboardPage: React.FC = () => {
                   </div>
 
                   <div className="muted">{t('teacherDashboard.schemaNote')}</div>
+                  <p className="text-sm text-slate-600 max-w-prose">{t('teacherDashboard.trackingScopeNote')}</p>
                 </div>
               </CardContent>
             </Card>

@@ -4,6 +4,7 @@ import { ALL_AGE_BANDS, type AgeBandId } from '@/ageBand'
 import { useAgeBand } from '@/contexts/AgeBandContext'
 import { useTranslation } from '@/contexts/LocaleContext'
 import { useAuth } from '@/AuthContext'
+import { isTeacherUser } from '@/lib/supabaseUserRole'
 
 type NavKey = 'academy' | 'shop'
 
@@ -20,7 +21,7 @@ export default function MainNav({ variant }: Props) {
   const navigate = useNavigate()
   const location = useLocation()
   const { setAgeBand, ageBand } = useAgeBand()
-  const { isLoggedIn, kidLock } = useAuth()
+  const { isLoggedIn, kidLock, user } = useAuth()
   const [open, setOpen] = useState<NavKey | null>(null)
   const wrapRef = useRef<HTMLDivElement>(null)
   const baseId = useId()
@@ -89,7 +90,9 @@ export default function MainNav({ variant }: Props) {
       <ItemLink to="/compliance">{t('nav.schoolCompliance')}</ItemLink>
       <SectionLabel>{t('nav.sectionGrownups')}</SectionLabel>
       {!isLoggedIn && <ItemLink to="/login">{t('nav.academySignIn')}</ItemLink>}
-      {isLoggedIn && !kidLock && <ItemLink to="/?view=parent">{t('nav.academyParent')}</ItemLink>}
+      {isLoggedIn && !kidLock && (
+        <ItemLink to="/?view=parent">{t('nav.academyParent')}</ItemLink>
+      )}
     </>
   )
 
@@ -108,6 +111,20 @@ export default function MainNav({ variant }: Props) {
       <ItemLink to="/compliance">{t('nav.schoolCompliance')}</ItemLink>
       <ItemLink to="/schools">{t('nav.schoolSchoolHub')}</ItemLink>
       <ItemLink to="/schools/subjects">{t('nav.schoolSubjectsHub')}</ItemLink>
+      <SectionLabel>{t('nav.sectionTeacherTools')}</SectionLabel>
+      {isLoggedIn && user && isTeacherUser(user) ? (
+        <ItemLink to="/teacher/dashboard">{t('nav.schoolTeacher')}</ItemLink>
+      ) : null}
+      {isLoggedIn && user && isTeacherUser(user) ? (
+        <ItemLink to="/teacher/generator">{t('nav.schoolGenerator')}</ItemLink>
+      ) : null}
+      {!isLoggedIn ? (
+        <ItemLink to="/login?redirect=%2Fteacher%2Fdashboard">{t('nav.teacherSignIn')}</ItemLink>
+      ) : null}
+      <SectionLabel>{t('nav.sectionGrownups')}</SectionLabel>
+      {isLoggedIn && !kidLock ? (
+        <ItemLink to="/?view=parent">{t('nav.academyParent')}</ItemLink>
+      ) : null}
     </>
   )
 
