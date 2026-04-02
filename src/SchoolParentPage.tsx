@@ -1,11 +1,12 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { supabase } from '@/lib/supabaseClient'
 import { loadSchoolSubjectProgress } from '@/school/subjects/schoolSubjectProgress'
 import { getSchoolSession } from '@/school/schoolSession'
 import { useAuth } from './AuthContext'
 import { useTranslation } from './contexts/LocaleContext'
 import { useAgeBand } from './contexts/AgeBandContext'
+import PageHeader from '@/components/PageHeader'
+import { SchoolClassBulletinCard } from '@/components/SchoolClassBulletinCard'
 
 /**
  * Grown-up view for Sparki **School** flows: class join, weekly track, subject tracks.
@@ -17,7 +18,6 @@ const SchoolParentPage: React.FC = () => {
   const { kidLock, setKidLock } = useAuth()
   const [session, setSession] = useState(() => getSchoolSession())
   const [subjectTracksLocalActivity, setSubjectTracksLocalActivity] = useState(false)
-  const [bulletin, setBulletin] = useState<{ text: string; at: string | null }>({ text: '', at: null })
 
   useEffect(() => {
     setSession(getSchoolSession())
@@ -54,35 +54,16 @@ const SchoolParentPage: React.FC = () => {
 
   const { classId, studentCode } = session
 
-  useEffect(() => {
-    if (!classId || !supabase) {
-      setBulletin({ text: '', at: null })
-      return
-    }
-    let cancelled = false
-    void (async () => {
-      const { data, error } = await supabase.rpc('public_bulletin_for_class', { p_class_id: classId })
-      if (cancelled || error) return
-      const o = data as { bulletin_text?: string; bulletin_updated_at?: string | null }
-      setBulletin({
-        text: typeof o?.bulletin_text === 'string' ? o.bulletin_text : '',
-        at: o?.bulletin_updated_at ?? null,
-      })
-    })()
-    return () => {
-      cancelled = true
-    }
-  }, [classId])
-
   return (
     <div className="page page-narrow">
-      <header className="page-header">
-        <h2>{t('schoolParent.pageTitle')}</h2>
-        <p className="muted max-w-prose">{t('schoolParent.pageSubtitle')}</p>
-        <Link to="/schools" className="link-back mt-2 inline-block">
+      <PageHeader
+        title={t('schoolParent.pageTitle')}
+        subtitle={<span className="max-w-prose inline-block">{t('schoolParent.pageSubtitle')}</span>}
+      >
+        <Link to="/schools" className="link-back">
           {t('schoolParent.backToSchoolHub')}
         </Link>
-      </header>
+      </PageHeader>
 
       <div className="stack-lg lesson-layout">
         <div className="lesson-media card border-2 border-orange-200 bg-orange-50/40">
@@ -104,25 +85,7 @@ const SchoolParentPage: React.FC = () => {
           )}
         </div>
 
-        {classId ? (
-          <div className="lesson-media card border border-amber-200 bg-amber-50/30">
-            <h3>{t('schoolParent.bulletinTitle')}</h3>
-            {bulletin.text.trim() ? (
-              <>
-                <p className="text-slate-800 mt-2 whitespace-pre-wrap">{bulletin.text}</p>
-                {bulletin.at ? (
-                  <p className="text-xs text-slate-500 mt-2">
-                    {t('schoolParent.bulletinUpdated', {
-                      when: new Date(bulletin.at).toLocaleString(),
-                    })}
-                  </p>
-                ) : null}
-              </>
-            ) : (
-              <p className="text-slate-600 mt-2">{t('schoolParent.bulletinEmpty')}</p>
-            )}
-          </div>
-        ) : null}
+        <SchoolClassBulletinCard classId={classId} />
 
         {classId ? (
           <div className="lesson-media card">

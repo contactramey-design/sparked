@@ -9,6 +9,8 @@ import { getSchoolSession } from '@/school/schoolSession'
 import { setPostLoginRedirect } from '@/lib/postLoginRedirect'
 import { supabase } from '@/lib/supabaseClient'
 import { schoolEngagementPingToSupabase } from '@/school/syncSchoolProgress'
+import PageHeader from '@/components/PageHeader'
+import { SchoolClassBulletinCard } from '@/components/SchoolClassBulletinCard'
 
 const SchoolsPage: React.FC = () => {
   const { t } = useTranslation()
@@ -20,18 +22,25 @@ const SchoolsPage: React.FC = () => {
 
   return (
     <div className="page page-narrow">
-      <header className="page-header">
-        <h2>{t('schools.title')}</h2>
-        <p className="muted">{t('schools.subtitle')}</p>
-        <p className="muted text-sm mt-2 max-w-prose">{t('schools.weeklyVsSubjectsNote')}</p>
-        <p className="muted text-sm mt-3 font-medium max-w-prose">{t('schools.fitIntro')}</p>
-        <ul className="muted text-sm mt-2 max-w-prose list-disc pl-5 space-y-1">
+      <PageHeader title={t('schools.title')} subtitle={t('schools.weeklyVsSubjectsNote')} />
+
+      <details className="schools-about-pilot mb-4 rounded-xl border border-amber-200/80 bg-amber-50/40 px-4 py-2">
+        <summary className="cursor-pointer font-semibold text-amber-950 py-2 outline-none">
+          {t('schools.aboutPilotToggle')}
+        </summary>
+        <p className="muted text-sm mt-2 max-w-prose">{t('schools.fitIntro')}</p>
+        <ul className="muted text-sm mt-2 max-w-prose list-disc pl-5 space-y-1 pb-2">
           <li>{t('schools.fitBullet1')}</li>
           <li>{t('schools.fitBullet2')}</li>
           <li>{t('schools.fitBullet3')}</li>
           <li>{t('schools.fitBullet4')}</li>
         </ul>
-      </header>
+        <p className="text-sm pb-2">
+          <Link to="/for-schools" className="underline font-medium text-amber-900">
+            {t('schools.aboutPilotMoreLink')}
+          </Link>
+        </p>
+      </details>
 
       <div className="stack-lg">
         <Card>
@@ -59,6 +68,28 @@ const SchoolsPage: React.FC = () => {
         </Card>
 
         {schoolMode && <SchoolJoinCard />}
+
+        {schoolMode && classId ? (
+          <SchoolClassBulletinCard
+            classId={classId}
+            moreHref="/schools/parent"
+            moreLabel={t('schools.openSchoolParentHub')}
+          />
+        ) : null}
+
+        {schoolMode && classId ? (
+          <Card className="border-2 border-amber-400 bg-gradient-to-br from-amber-50 to-orange-50 shadow-sm">
+            <CardHeader>
+              <CardTitle>{t('schools.weeklyTrackTitle')}</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="muted">{t('schools.weeklyTrackDesc')}</p>
+              <Button className="mt-3" size="lg" onClick={() => navigate('/schools/weekly-track')}>
+                {t('schools.openWeeklyTrack')}
+              </Button>
+            </CardContent>
+          </Card>
+        ) : null}
 
         {schoolMode && classId ? (
           <Card>
@@ -197,7 +228,7 @@ const SchoolsPage: React.FC = () => {
             <CardContent>
               <p className="muted">{t('schools.complianceDesc')}</p>
               <div className="schools-actions">
-                <Link to="/for-schools" className="secondary-button">
+                <Link to="/for-schools?tab=compliance" className="secondary-button">
                   {t('schools.openCompliance')}
                 </Link>
               </div>
@@ -210,4 +241,3 @@ const SchoolsPage: React.FC = () => {
 }
 
 export default SchoolsPage
-

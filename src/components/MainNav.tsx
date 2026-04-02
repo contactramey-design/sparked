@@ -83,16 +83,9 @@ export default function MainNav({ variant }: Props) {
       <ItemLink to="/track/ai-coding">{t('nav.academyAiCoding')}</ItemLink>
       <ItemLink to="/weekly">{t('nav.academyWeekly')}</ItemLink>
       <ItemLink to="/homework">{t('nav.academyHomework')}</ItemLink>
-      <SectionLabel>{t('nav.sectionForSchools')}</SectionLabel>
-      <ItemLink to="/for-schools">{t('nav.academyForSchoolsOverview')}</ItemLink>
-      <ItemLink to="/schools">{t('nav.schoolSchoolHub')}</ItemLink>
-      <ItemLink to="/schools/subjects">{t('nav.schoolSubjectsHub')}</ItemLink>
-      <ItemLink to="/compliance">{t('nav.schoolCompliance')}</ItemLink>
       <SectionLabel>{t('nav.sectionGrownups')}</SectionLabel>
       {!isLoggedIn && <ItemLink to="/login">{t('nav.academySignIn')}</ItemLink>}
-      {isLoggedIn && !kidLock && (
-        <ItemLink to="/?view=parent">{t('nav.academyParent')}</ItemLink>
-      )}
+      {isLoggedIn && !kidLock && <ItemLink to="/parent">{t('nav.academyParent')}</ItemLink>}
     </>
   )
 
@@ -122,8 +115,9 @@ export default function MainNav({ variant }: Props) {
         <ItemLink to="/login?redirect=%2Fteacher%2Fdashboard">{t('nav.teacherSignIn')}</ItemLink>
       ) : null}
       <SectionLabel>{t('nav.sectionGrownups')}</SectionLabel>
+      <ItemLink to="/schools/parent">{t('nav.schoolParent')}</ItemLink>
       {isLoggedIn && !kidLock ? (
-        <ItemLink to="/schools/parent">{t('nav.schoolParent')}</ItemLink>
+        <ItemLink to="/parent">{t('footer.parentDashboard')}</ItemLink>
       ) : null}
     </>
   )
@@ -175,8 +169,8 @@ export default function MainNav({ variant }: Props) {
         </>
       ) : (
         <>
-          {renderDropdown('academy', t('nav.academy'), schoolAcademy)}
-          {renderDropdown('shop', t('nav.shop'), schoolShop)}
+          {renderDropdown('academy', t('nav.schoolMenuSchool'), schoolAcademy)}
+          {renderDropdown('shop', t('nav.schoolMenuMaterials'), schoolShop)}
         </>
       )}
     </nav>

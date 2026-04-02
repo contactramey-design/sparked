@@ -101,6 +101,11 @@ function AppHeader() {
         >
           {t('header.forSchools')}
         </Link>
+        {!isSchoolRoute ? (
+          <Link to="/schools" className="header-school-hub-link">
+            {t('header.schoolHubLink')}
+          </Link>
+        ) : null}
         <MainNav variant={isSchoolRoute ? 'school' : 'consumer'} />
         <LangSwitcher />
       </div>
@@ -129,8 +134,11 @@ function AppFooter() {
         <Link to="/privacy">{t('footer.privacy')}</Link>
         <Link to="/for-schools">{t('footer.forSchools')}</Link>
         <Link to="/contact">{t('footer.contact')}</Link>
+        {(schoolMode || isSchoolRoute) && (
+          <Link to="/schools/parent">{t('footer.schoolParentHub')}</Link>
+        )}
         {isLoggedIn && !kidLock && (
-          <Link to="/?view=parent">{t('footer.parentDashboard')}</Link>
+          <Link to="/parent">{t('footer.parentDashboard')}</Link>
         )}
         {isLoggedIn && !kidLock && (
           <button type="button" className="footer-link-button" onClick={() => void signOut()}>
