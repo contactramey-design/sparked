@@ -43,7 +43,8 @@ import SparkiAvatar from './components/SparkiAvatar'
 import MainNav from './components/MainNav'
 import InstallOnIpadBanner from './components/InstallOnIpadBanner'
 import OfflineBanner from './components/OfflineBanner'
-import { useSchoolMode } from './hooks/useSchoolMode'
+import { useSchoolShopHidden } from './hooks/useSchoolMode'
+import { isSchoolShellPath } from './lib/schoolShell'
 import SchoolWeeklyTrackPage from './SchoolWeeklyTrackPage.tsx'
 import SchoolGeneratedUnitPage from './SchoolGeneratedUnitPage.tsx'
 import SchoolSubjectsHubPage from './school/subjects/SchoolSubjectsHubPage'
@@ -78,11 +79,8 @@ function LangSwitcher() {
 function AppHeader() {
   const location = useLocation()
   const { t } = useTranslation()
-  const isSchoolRoute =
-    location.pathname.startsWith('/schools') ||
-    location.pathname.startsWith('/for-schools') ||
-    location.pathname.startsWith('/compliance') ||
-    location.pathname.startsWith('/teacher')
+  const isSchoolRoute = isSchoolShellPath(location.pathname)
+  const schoolShopHidden = useSchoolShopHidden()
 
   return (
     <header className="app-header">
@@ -106,7 +104,7 @@ function AppHeader() {
             {t('header.schoolHubLink')}
           </Link>
         ) : null}
-        <MainNav variant={isSchoolRoute ? 'school' : 'consumer'} />
+        <MainNav variant={schoolShopHidden ? 'school' : 'consumer'} />
         <LangSwitcher />
       </div>
     </header>
@@ -114,29 +112,21 @@ function AppHeader() {
 }
 
 function AppFooter() {
-  const location = useLocation()
   const { kidLock, isLoggedIn, signOut } = useAuth()
   const { t } = useTranslation()
-  const { schoolMode } = useSchoolMode()
-  const isSchoolRoute =
-    location.pathname.startsWith('/schools') ||
-    location.pathname.startsWith('/for-schools') ||
-    location.pathname.startsWith('/compliance') ||
-    location.pathname.startsWith('/teacher')
+  const schoolShopHidden = useSchoolShopHidden()
   return (
     <footer className="app-footer">
       <small>
         © {new Date().getFullYear()} {t('header.appName')} · {t('footer.copyright')}
       </small>
       <span className="app-footer-links">
-        {!schoolMode && !isSchoolRoute && <Link to="/shop">{t('footer.shop')}</Link>}
+        {!schoolShopHidden && <Link to="/shop">{t('footer.shop')}</Link>}
         <Link to="/about">{t('footer.about')}</Link>
         <Link to="/privacy">{t('footer.privacy')}</Link>
         <Link to="/for-schools">{t('footer.forSchools')}</Link>
         <Link to="/contact">{t('footer.contact')}</Link>
-        {(schoolMode || isSchoolRoute) && (
-          <Link to="/schools/parent">{t('footer.schoolParentHub')}</Link>
-        )}
+        {schoolShopHidden && <Link to="/schools/parent">{t('footer.schoolParentHub')}</Link>}
         {isLoggedIn && !kidLock && (
           <Link to="/parent">{t('footer.parentDashboard')}</Link>
         )}
@@ -162,11 +152,7 @@ function AppShell() {
   // - Orange ONLY on actual school routes (`/schools`, `/for-schools`, `/teacher/*`, `/compliance`)
   // - Everything else (home + regular parent customer experience) stays BLUE
   // Note: `schoolMode` toggle is for navigation/UI behavior; it should not recolor Home.
-  const useSchoolTheme =
-    location.pathname.startsWith('/schools') ||
-    location.pathname.startsWith('/for-schools') ||
-    location.pathname.startsWith('/teacher') ||
-    location.pathname.startsWith('/compliance')
+  const useSchoolTheme = isSchoolShellPath(location.pathname)
 
   const theme = useSchoolTheme
     ? {

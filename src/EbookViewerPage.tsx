@@ -1,10 +1,11 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { Link, useParams, useSearchParams } from 'react-router-dom'
+import { Link, Navigate, useParams, useSearchParams } from 'react-router-dom'
 import * as pdfjsLib from 'pdfjs-dist'
 import type { PDFDocumentProxy } from 'pdfjs-dist'
 import { books } from './books'
 import { getSafetyPassCheckoutSessionId } from './progress'
 import { useTranslation } from './contexts/LocaleContext'
+import { useSchoolShopHidden } from './hooks/useSchoolMode'
 import { Button } from '@/components/ui/button'
 
 // Vite bundler-friendly worker wiring.
@@ -24,6 +25,7 @@ const EbookViewerPage: React.FC = () => {
   const [searchParams] = useSearchParams()
   const ebookIdFromQuery = searchParams.get('ebookId')
   const { t } = useTranslation()
+  const schoolShopHidden = useSchoolShopHidden()
 
   const ebook = useMemo(() => {
     const effectiveId = ebookId || ebookIdFromQuery
@@ -50,6 +52,8 @@ const EbookViewerPage: React.FC = () => {
   const [offlineSaveError, setOfflineSaveError] = useState<string | null>(null)
 
   useEffect(() => {
+    if (schoolShopHidden) return
+
     setPageNumber(1)
     setNumPages(null)
     pdfDocRef.current = null
@@ -217,11 +221,16 @@ const EbookViewerPage: React.FC = () => {
   }, [])
 
   useEffect(() => {
+    if (schoolShopHidden) return
     if (!pdfDocRef.current) return
     if (pageNumber < 1) return
     if (numPages && pageNumber > numPages) return
     void renderPage(pageNumber)
-  }, [pageNumber, numPages, renderPage])
+  }, [pageNumber, numPages, renderPage, schoolShopHidden])
+
+  if (schoolShopHidden) {
+    return <Navigate to="/tracks" replace />
+  }
 
   const isFreeTestEbook = effectiveEbookId === 'ebook-1'
   const canPrev = pageNumber > 1 && !loadingPdf

@@ -3,6 +3,7 @@ import { NavLink, Navigate, Outlet, useLocation } from 'react-router-dom'
 import { useAuth } from './AuthContext'
 import { useTranslation } from './contexts/LocaleContext'
 import { clearPostLoginRedirect, setPostLoginRedirect } from './lib/postLoginRedirect'
+import TeacherHubClassBar from './components/TeacherHubClassBar'
 
 const SCHOOL_AUDIENCE_STORAGE_KEY = 'sparki_school_audience_v1'
 
@@ -74,6 +75,7 @@ const TeacherHubLayout: React.FC = () => {
           </NavLink>
         </nav>
       </header>
+      <TeacherHubClassBar />
       <div className="teacher-hub__body">
         <Outlet />
       </div>

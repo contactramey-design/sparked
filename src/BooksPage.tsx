@@ -1,10 +1,16 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, Navigate } from 'react-router-dom'
 import { books } from './books'
 import { useTranslation } from './contexts/LocaleContext'
+import { useSchoolShopHidden } from './hooks/useSchoolMode'
 
 const BooksPage: React.FC = () => {
   const { t, locale } = useTranslation()
+  const schoolShopHidden = useSchoolShopHidden()
+
+  if (schoolShopHidden) {
+    return <Navigate to="/tracks" replace />
+  }
 
   return (
     <section className="lesson-page" key={locale}>

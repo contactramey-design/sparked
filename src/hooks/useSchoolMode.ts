@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
+import { isSchoolShellPath } from '@/lib/schoolShell'
 
 const SCHOOL_MODE_STORAGE_KEY = 'sparki_mode_school_v1'
 
@@ -59,5 +60,12 @@ export function useSchoolMode(): {
   }
 
   return { schoolMode, setSchoolMode }
+}
+
+/** True when the app should hide shop/ebook commerce (school routes or school mode toggle). */
+export function useSchoolShopHidden(): boolean {
+  const { pathname } = useLocation()
+  const { schoolMode } = useSchoolMode()
+  return schoolMode || isSchoolShellPath(pathname)
 }
 

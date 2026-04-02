@@ -13,7 +13,7 @@ type Props = {
 }
 
 /**
- * Two top-level nav items (Academy + Shop) with disclosure-style dropdowns.
+ * Consumer: Academy + Shop dropdowns. School theme: single menu (no shop) + internet safety links.
  * Touch targets ≥ 48px; Escape and outside-click close panels.
  */
 export default function MainNav({ variant }: Props) {
@@ -104,6 +104,9 @@ export default function MainNav({ variant }: Props) {
       <ItemLink to="/compliance">{t('nav.schoolCompliance')}</ItemLink>
       <ItemLink to="/schools">{t('nav.schoolSchoolHub')}</ItemLink>
       <ItemLink to="/schools/subjects">{t('nav.schoolSubjectsHub')}</ItemLink>
+      <SectionLabel>{t('nav.schoolInternetSafetySection')}</SectionLabel>
+      <ItemLink to="/track/social-safety">{t('nav.academySafety')}</ItemLink>
+      <ItemLink to="/tracks">{t('nav.academyAllCourses')}</ItemLink>
       <SectionLabel>{t('nav.sectionTeacherTools')}</SectionLabel>
       {isLoggedIn && user && isTeacherUser(user) ? (
         <ItemLink to="/teacher/dashboard">{t('nav.schoolTeacher')}</ItemLink>
@@ -119,13 +122,6 @@ export default function MainNav({ variant }: Props) {
       {isLoggedIn && !kidLock ? (
         <ItemLink to="/parent">{t('footer.parentDashboard')}</ItemLink>
       ) : null}
-    </>
-  )
-
-  const schoolShop = (
-    <>
-      <ItemLink to="/shop">{t('nav.schoolShopMaterials')}</ItemLink>
-      <ItemLink to="/contact">{t('nav.schoolContact')}</ItemLink>
     </>
   )
 
@@ -168,10 +164,7 @@ export default function MainNav({ variant }: Props) {
           {renderDropdown('shop', t('nav.shop'), consumerShop)}
         </>
       ) : (
-        <>
-          {renderDropdown('academy', t('nav.schoolMenuSchool'), schoolAcademy)}
-          {renderDropdown('shop', t('nav.schoolMenuMaterials'), schoolShop)}
-        </>
+        <>{renderDropdown('academy', t('nav.schoolMenuSchool'), schoolAcademy)}</>
       )}
     </nav>
   )

@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import { useAuth } from './AuthContext'
 import { useTranslation } from './contexts/LocaleContext'
 import { supabase } from './lib/supabaseClient'
@@ -12,6 +12,7 @@ import { Button } from '@/components/ui/button'
 import { Progress } from '@/components/ui/progress'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { writeTeacherClassSnapshot } from '@/lib/teacherSelectedClassStorage'
 
 const TEACHER_ONBOARDING_KEY = 'sparki_teacher_onboarding_dismissed_v1'
 
@@ -97,8 +98,16 @@ function computeTrackCompletion(trackId: string, progress: unknown): number {
 const TeacherDashboardPage: React.FC = () => {
   const { user } = useAuth()
   const { t } = useTranslation()
+  const [searchParams, setSearchParams] = useSearchParams()
 
-  const [tab, setTab] = useState<'classes' | 'students' | 'home'>('classes')
+  const tabParam = searchParams.get('tab')
+  const tab: 'classes' | 'students' | 'home' =
+    tabParam === 'students' || tabParam === 'home' ? tabParam : 'classes'
+
+  const setTab = (v: 'classes' | 'students' | 'home') => {
+    if (v === 'classes') setSearchParams({}, { replace: true })
+    else setSearchParams({ tab: v }, { replace: true })
+  }
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -230,6 +239,19 @@ const TeacherDashboardPage: React.FC = () => {
   }, [teacherOk, selectedClassId])
 
   const selectedClass = classes.find((c) => c.id === selectedClassId) ?? null
+
+  useEffect(() => {
+    if (!selectedClass) {
+      writeTeacherClassSnapshot(null)
+    } else {
+      writeTeacherClassSnapshot({
+        id: selectedClass.id,
+        name: selectedClass.name,
+        class_code: selectedClass.class_code,
+      })
+    }
+    window.dispatchEvent(new Event('sparki-teacher-class-snapshot'))
+  }, [selectedClass])
 
   useEffect(() => {
     setBulletinDraft(selectedClass?.bulletin_text?.trim() ? String(selectedClass.bulletin_text) : '')

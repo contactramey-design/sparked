@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { writeTeacherClassSnapshot } from '@/lib/teacherSelectedClassStorage'
 import { supabase } from './lib/supabaseClient'
 import { isTeacherUser } from './lib/supabaseUserRole'
 import { useAuth } from './AuthContext'
@@ -76,6 +77,19 @@ const TeacherWeeklyGeneratorPage: React.FC = () => {
     () => classes.find((c) => c.id === selectedClassId) ?? null,
     [classes, selectedClassId],
   )
+
+  useEffect(() => {
+    if (!selectedClass) {
+      writeTeacherClassSnapshot(null)
+    } else {
+      writeTeacherClassSnapshot({
+        id: selectedClass.id,
+        name: selectedClass.name,
+        class_code: selectedClass.class_code,
+      })
+    }
+    window.dispatchEvent(new Event('sparki-teacher-class-snapshot'))
+  }, [selectedClass])
 
   const selectedClassAgeBand: AgeBandId = useMemo(() => {
     const b = selectedClass?.age_band
