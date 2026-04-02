@@ -3,6 +3,8 @@
  <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="/school-canva-games/sparki-locale-init.js"></script>
+
   <title>Counting with Sparki: 1 to 5</title>
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
   <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
@@ -737,17 +739,10 @@
 
 
     // ─── INITIAL RENDER ───
+    if (window.__SPARKI_MERGE_DEFAULTS__) Object.assign(defaultConfig, window.__SPARKI_MERGE_DEFAULTS__);
     applyConfig(defaultConfig);
     updateSparklesDisplay();
     lucide.createIcons();
   </script>
  </body>
 </html>
-
-
-
-
-
-
-Game 3 
-Tots math 3 more, less or the same

@@ -1,0 +1,19 @@
+{
+  "game_title": "Las oraciones cuentan ideas completas",
+  "game_subtitle": "¿Oración o fragmento?",
+  "sparki_greeting": "¡Hola! Soy Sparki. ¡Aprendamos sobre las oraciones!",
+  "item_1_text": "El perro corre.",
+  "item_1_type": "Oración",
+  "item_2_text": "Sobre la mesa.",
+  "item_2_type": "Fragmento",
+  "item_3_text": "¿Puedes jugar?",
+  "item_3_type": "Pregunta",
+  "item_4_text": "Formen fila en silencio.",
+  "item_4_type": "Mandato",
+  "item_5_text": "El gato duerme.",
+  "item_5_type": "Oración",
+  "item_6_text": "Corriendo rápido.",
+  "item_6_type": "Fragmento",
+  "hint_text": "¿Cuenta una idea completa? ¿Quién hizo qué?",
+  "success_message": "¡Buen trabajo! ¡Encontraste las oraciones completas!"
+}

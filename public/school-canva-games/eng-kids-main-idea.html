@@ -3,6 +3,8 @@
  <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="/school-canva-games/sparki-locale-init.js"></script>
+
   <title>What Is This Mostly About? - Main Idea Lesson</title>
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
   <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
@@ -475,6 +477,7 @@
     function renderPassages() {
       const container = document.getElementById('roundsContainer');
       const cfg = window.elementSdk?.config || defaultConfig;
+      const es = document.documentElement.lang === 'es';
 
 
       container.innerHTML = '';
@@ -507,7 +510,9 @@
           const isSelected = passageInfo.answered && passageInfo.selected === idx;
           const bgColor = !passageInfo.answered ? '#f0f9ff' : (choice.correct ? '#d1fae5' : '#fee2e2');
           const borderColor = !passageInfo.answered ? '#0ea5e9' : (choice.correct ? '#10b981' : '#ef4444');
-          const badge = passageInfo.answered ? (choice.correct ? '📚 Main Idea' : '🔍 Supporting Detail') : '';
+          const badge = passageInfo.answered
+            ? (choice.correct ? (es ? '📚 Idea principal' : '📚 Main Idea') : (es ? '🔍 Detalle de apoyo' : '🔍 Supporting Detail'))
+            : '';
           const icon = passageInfo.answered ? (isSelected ? (choice.correct ? '✅' : '❌') : (choice.correct ? '📚' : '🔍')) : '❓';
           
           return `
@@ -552,15 +557,18 @@
         }).join('');
 
 
+        const passageLabel = es ? 'Texto' : 'Passage';
+        const questionPrompt = es ? '¿De qué trata este texto en general?' : 'What is this text mostly about?';
+        const correctBanner = es ? '✓ ¡Correcto!' : '✓ Correct!';
         passageDiv.innerHTML = `
           <div class="round-header">
-            <div style="text-align: center; margin-bottom: 20px; font-size: 0.9rem; opacity: 0.6; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">Passage ${passage.id}</div>
+            <div style="text-align: center; margin-bottom: 20px; font-size: 0.9rem; opacity: 0.6; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">${passageLabel} ${passage.id}</div>
             <div style="background: linear-gradient(135deg, ${cfg.primary_action_color}22, ${cfg.secondary_action_color}22); border-radius: 12px; padding: 20px; margin-bottom: 24px; line-height: 1.7; font-size: 1rem;">"${passageText}"</div>
           </div>
 
 
           <div style="text-align: center; margin: 24px 0; font-weight: 600; font-size: 1.1rem; opacity: 0.8;">
-            What is this text mostly about?
+            ${questionPrompt}
           </div>
 
 
@@ -574,7 +582,7 @@
 
           ${isCompleted ? `
             <div class="success-banner" style="background: linear-gradient(135deg, ${cfg.primary_action_color}66, ${cfg.secondary_action_color}66);">
-              ✓ Correct!
+              ${correctBanner}
             </div>
           ` : ''}
         `;
@@ -589,6 +597,7 @@
 
 
     window.selectMainIdea = function(passageId, isCorrect) {
+      const es = document.documentElement.lang === 'es';
       if (!passageData[passageId]) {
         passageData[passageId] = { answered: false, selected: null };
       }
@@ -618,11 +627,24 @@
 
 
       if (isCorrect) {
-        resultEl.innerHTML = `<span style="font-size: 2rem; display: block; margin-bottom: 8px;">🎉✨</span>That's the main idea! Amazing detective work!`;
+        resultEl.innerHTML = es
+          ? `<span style="font-size: 2rem; display: block; margin-bottom: 8px;">🎉✨</span>¡Esa es la idea principal! ¡Buen trabajo de detective!`
+          : `<span style="font-size: 2rem; display: block; margin-bottom: 8px;">🎉✨</span>That's the main idea! Amazing detective work!`;
         resultEl.className = 'count-result correct';
         completePassage(passageId);
       } else {
-        resultEl.innerHTML = `
+        resultEl.innerHTML = es
+          ? `
+          <div style="margin-bottom: 12px;">
+            <span style="font-size: 1.8rem; display: block; margin-bottom: 8px;">🤔 ¡Buen intento!</span>
+          </div>
+          <div style="text-align: left; background: rgba(255, 215, 0, 0.15); border-left: 4px solid #fbbf24; padding: 12px; border-radius: 8px; margin-bottom: 12px; font-size: 0.95rem; line-height: 1.6;">
+            <strong>💡 La diferencia:</strong><br>
+            Esa oración es un <strong>detalle de apoyo</strong>: nos cuenta <em>una cosa concreta</em> del texto.<br><br>
+            La <strong>idea principal</strong> dice de qué trata <em>casi todo el texto</em>: ¡la idea grande!
+          </div>
+        `
+          : `
           <div style="margin-bottom: 12px;">
             <span style="font-size: 1.8rem; display: block; margin-bottom: 8px;">🤔 Good try!</span>
           </div>
@@ -715,6 +737,27 @@
     document.head.appendChild(style);
 
 
+    function patchMainIdeaEsChrome() {
+      if (document.documentElement.lang !== 'es') return;
+      const badge = document.querySelector('header .relative.z-10 .inline-flex span:last-child');
+      if (badge) badge.textContent = 'Lectura y comprensión';
+      const comp = document.getElementById('completionMessage');
+      if (!comp) return;
+      const h2 = comp.querySelector('h2');
+      if (h2) h2.textContent = '¡Maestro de la idea principal! 🎉';
+      const p = comp.querySelector('p');
+      if (p) p.textContent = '¡Identificaste las ideas principales en todos los textos!';
+      const btn = comp.querySelector('.btn-primary');
+      if (btn) btn.textContent = '¡Otra vez!';
+      const ban = comp.querySelector('.success-banner');
+      if (ban) {
+        const n = document.getElementById('finalSparkles');
+        const val = n ? n.textContent : '0';
+        ban.innerHTML = '<span id="finalSparkles">' + val + '</span> ¡destellos ganados! 🌟';
+      }
+    }
+
+
     // ─── APPLY CONFIG ───
     function applyConfig(cfg) {
       const w = document.getElementById('appWrapper');
@@ -790,19 +833,12 @@
 
 
     // ─── INITIAL RENDER ───
+    if (window.__SPARKI_MERGE_DEFAULTS__) Object.assign(defaultConfig, window.__SPARKI_MERGE_DEFAULTS__);
     applyConfig(defaultConfig);
+    patchMainIdeaEsChrome();
     updateSparklesDisplay();
     renderPassages();
     lucide.createIcons();
   </script>
  </body>
 </html>
-
-
-
-
-
-
-
-
-Game 2 ENGLISH Sentences Tell Complete Thoughts

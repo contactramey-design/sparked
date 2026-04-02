@@ -3,6 +3,8 @@
  <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="/school-canva-games/sparki-locale-init.js"></script>
+
   <title>Counting with Sparki: 1 to 5</title>
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
   <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
@@ -569,7 +571,7 @@
 
         // Update Sparki's guidance with the number said aloud
         const guidance = document.getElementById(`sparkiGuidance${roundId}`);
-        const numberWords = ['', 'One', 'Two', 'Three', 'Four', 'Five'];
+        const numberWords = window.__SPARKI_NUMBER_WORDS__ || ['', 'One', 'Two', 'Three', 'Four', 'Five'];
         guidance.textContent = numberWords[round.count];
         guidance.style.fontSize = '4rem';
         guidance.style.fontWeight = '900';
@@ -776,13 +778,10 @@
 
 
     // ─── INITIAL RENDER ───
+    if (window.__SPARKI_MERGE_DEFAULTS__) Object.assign(defaultConfig, window.__SPARKI_MERGE_DEFAULTS__);
     applyConfig(defaultConfig);
     updateSparklesDisplay();
     lucide.createIcons();
   </script>
  </body>
 </html>
-
-
-Game 2
-Tots math Color Patterns

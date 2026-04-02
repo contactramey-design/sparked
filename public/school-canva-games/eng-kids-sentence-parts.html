@@ -3,6 +3,8 @@
  <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="/school-canva-games/sparki-locale-init.js"></script>
+
   <title>Sentences Tell Complete Thoughts - Grammar Lesson</title>
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
   <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
@@ -402,6 +404,7 @@
     function renderItems() {
       const container = document.getElementById('itemsContainer');
       const cfg = window.elementSdk?.config || defaultConfig;
+      const es = document.documentElement.lang === 'es';
 
 
       container.innerHTML = '';
@@ -430,17 +433,23 @@
 
 
         const categoryEmoji = { sentence: '📝', fragment: '✏️', question: '❓', command: '🎯' }[item.category];
-        const categoryLabel = { sentence: 'Sentence (tells a complete thought)', fragment: 'Fragment (incomplete)', question: 'Question (asks something)', command: 'Command (tells what to do)' }[item.category];
+        const categoryLabel = es
+          ? { sentence: 'Oración (idea completa)', fragment: 'Fragmento (incompleto)', question: 'Pregunta (pregunta algo)', command: 'Mandato (indica qué hacer)' }[item.category]
+          : { sentence: 'Sentence (tells a complete thought)', fragment: 'Fragment (incomplete)', question: 'Question (asks something)', command: 'Command (tells what to do)' }[item.category];
 
 
         let buttonsHTML = '';
         if (!itemInfo.answered) {
+          const b0 = es ? 'Oración' : 'Sentence';
+          const b1 = es ? 'Fragmento' : 'Fragment';
+          const b2 = es ? 'Pregunta' : 'Question';
+          const b3 = es ? 'Mandato' : 'Command';
           buttonsHTML = `
             <div class="card-buttons">
-              <button class="btn-choice btn-sentence" onclick="selectItem(${item.id}, 'sentence')">📝 Sentence</button>
-              <button class="btn-choice btn-fragment" onclick="selectItem(${item.id}, 'fragment')">✏️ Fragment</button>
-              <button class="btn-choice btn-question" onclick="selectItem(${item.id}, 'question')">❓ Question</button>
-              <button class="btn-choice btn-command" onclick="selectItem(${item.id}, 'command')">🎯 Command</button>
+              <button class="btn-choice btn-sentence" onclick="selectItem(${item.id}, 'sentence')">📝 ${b0}</button>
+              <button class="btn-choice btn-fragment" onclick="selectItem(${item.id}, 'fragment')">✏️ ${b1}</button>
+              <button class="btn-choice btn-question" onclick="selectItem(${item.id}, 'question')">❓ ${b2}</button>
+              <button class="btn-choice btn-command" onclick="selectItem(${item.id}, 'command')">🎯 ${b3}</button>
             </div>
           `;
         } else if (isCompleted) {
@@ -450,7 +459,13 @@
             </div>
           `;
         } else {
-          buttonsHTML = `
+          buttonsHTML = es
+            ? `
+            <div class="feedback-message feedback-incorrect">
+              <strong>🤔 ¡Intenta otra vez!</strong> Piensa si esto cuenta una idea completa.
+            </div>
+          `
+            : `
             <div class="feedback-message feedback-incorrect">
               <strong>🤔 Try again!</strong> Think about whether this tells a complete thought.
             </div>
@@ -458,10 +473,11 @@
         }
 
 
+        const itemLabel = es ? 'Ítem' : 'Item';
         itemDiv.innerHTML = `
           <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
             <div class="card-label">${item.emoji}</div>
-            <div class="card-label">Item ${item.id}</div>
+            <div class="card-label">${itemLabel} ${item.id}</div>
           </div>
           <div class="card-text">"${item.text}"</div>
           ${buttonsHTML}
@@ -575,6 +591,27 @@
     document.head.appendChild(style);
 
 
+    function patchSentencePartsEsChrome() {
+      if (document.documentElement.lang !== 'es') return;
+      const badge = document.querySelector('header .relative.z-10 .inline-flex span:last-child');
+      if (badge) badge.textContent = 'Gramática y convenciones';
+      const comp = document.getElementById('completionMessage');
+      if (!comp) return;
+      const h2 = comp.querySelector('h2');
+      if (h2) h2.textContent = '¡Maestro de las oraciones! 🎉';
+      const p = comp.querySelector('p');
+      if (p) p.textContent = '¡Descubriste todas las oraciones completas! ¡Buen trabajo de detective de gramática!';
+      const btn = comp.querySelector('.btn-primary');
+      if (btn) btn.textContent = '¡Otra vez!';
+      const ban = comp.querySelector('.success-banner');
+      if (ban) {
+        const n = document.getElementById('finalSparkles');
+        const val = n ? n.textContent : '0';
+        ban.innerHTML = '<span id="finalSparkles">' + val + '</span> ¡destellos ganados! 🌟';
+      }
+    }
+
+
     // ─── APPLY CONFIG ───
     function applyConfig(cfg) {
       const w = document.getElementById('appWrapper');
@@ -652,17 +689,12 @@
 
 
     // ─── INITIAL RENDER ───
+    if (window.__SPARKI_MERGE_DEFAULTS__) Object.assign(defaultConfig, window.__SPARKI_MERGE_DEFAULTS__);
     applyConfig(defaultConfig);
+    patchSentencePartsEsChrome();
     updateSparklesDisplay();
     renderItems();
     lucide.createIcons();
   </script>
  </body>
 </html>
-
-
-
-
-
-
-Game 3 ENLGISH Blend Sounds into Words

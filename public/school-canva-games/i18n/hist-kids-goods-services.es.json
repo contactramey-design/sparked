@@ -1,0 +1,8 @@
+{
+  "lesson_title": "Explorador de bienes y servicios",
+  "instruction_text": "Arrastra cada ítem a la categoría correcta: BIENES (cosas que puedes tocar) o SERVICIOS (trabajo que hacen las personas).",
+  "game_intro": "¡Clasifica bienes y servicios!",
+  "completion_message": "¡Aprendiste la diferencia entre bienes y servicios!",
+  "goods_label": "BIENES (cosas que puedes tocar)",
+  "services_label": "SERVICIOS (trabajo que hacen las personas)"
+}

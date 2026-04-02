@@ -13,13 +13,17 @@ type Props = {
 export function CanvaHtmlPractice({ src, title, onContinue, continueLabel }: Props) {
   return (
     <div className="school-subj-practice-panel school-subj-canva-embed space-y-4">
-      <iframe
-        title={title}
-        src={src}
-        className="school-subj-canva-iframe w-full rounded-xl border border-slate-200 bg-white shadow-sm"
-        sandbox="allow-scripts allow-same-origin"
-      />
-      <div className="flex justify-end">
+      <div className="school-subj-canva-frame">
+        <iframe
+          key={src}
+          title={title}
+          src={src}
+          className="school-subj-canva-iframe"
+          sandbox="allow-scripts allow-same-origin"
+          loading="lazy"
+        />
+      </div>
+      <div className="flex flex-wrap justify-end gap-2">
         <Button type="button" onClick={onContinue}>
           {continueLabel}
         </Button>

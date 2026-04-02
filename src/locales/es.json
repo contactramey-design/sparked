@@ -19,7 +19,8 @@
     "langSwitchAriaEn": "Cambiar a español",
     "langSwitchAriaEs": "Cambiar a inglés",
     "langSwitchTitleEn": "Español",
-    "langSwitchTitleEs": "English"
+    "langSwitchTitleEs": "English",
+    "schoolHubLink": "Hub escolar"
   },
   "listenButton": {
     "heading": "Escuchar el encabezado",
@@ -62,7 +63,9 @@
     "schoolGenerator": "Generador de lecciones semanales",
     "schoolSubjectsHub": "Rutas por materia",
     "schoolShopMaterials": "Ebooks",
-    "schoolContact": "Contacto y pilotos"
+    "schoolContact": "Contacto y pilotos",
+    "schoolMenuSchool": "Escuela",
+    "schoolMenuMaterials": "Materiales y contacto"
   },
   "footer": {
     "copyright": "Aprende sobre IA de forma segura.",
@@ -169,7 +172,9 @@
     "subjectHubDesc": "Matemáticas, inglés, ciencias e historia — lecciones cortas de Sparki para tu franja de edad. Complementan el PDF semanal del docente; no lo reemplazan.",
     "subjectHubSupplemental": "Cada ruta se centra en grupos de estándares clave de California (PTKLF, CCSS, NGSS, HSS), no en un programa anual completo. Combínalas con el mapa del distrito y las tablas de alineación imprimibles.",
     "openSubjectHub": "Ver rutas por materia",
-    "openSubjectTrack": "Abrir {subject}"
+    "openSubjectTrack": "Abrir {subject}",
+    "aboutPilotToggle": "Sobre este piloto escolar (cómo encaja Sparki)",
+    "aboutPilotMoreLink": "Resumen completo para escuelas →"
   },
   "schoolSubject": {
     "backToSchools": "Volver a Escuelas",
@@ -218,6 +223,8 @@
     "practiceOrderedTapHint": "Toca los números en orden: 1, luego 2, luego 3.",
     "practiceOrderedTapWrong": "Empezamos otra vez: toca primero el 1.",
     "practiceOrderedTapDone": "¡Bien! Ya puedes hacer la comprobación.",
+    "practicePickWrongHint": "Casi — prueba otra respuesta.",
+    "practicePickTryAgain": "Intentar otra vez",
     "practiceContinueToQuiz": "Continuar a la comprobación",
     "questionProgress": "Pregunta {current} de {total}",
     "quizProgressAria": "Progreso del quiz: pregunta {current} de {total}",
@@ -425,6 +432,11 @@
   "forSchoolsHub": {
     "pageTitle": "Sparki Academy — Curso gratis de seguridad + IA para iPad",
     "heroSubtitle": "Lecciones seguras para niños, sitio bilingüe EN/ES, PWA sin conexion en iPad y panel de profesor activo para pilotos.",
+    "tabPilot": "Iniciar piloto",
+    "tabProgram": "Programa",
+    "tabPricing": "Precios",
+    "tabResources": "Recursos",
+    "tabCompliance": "Cumplimiento y privacidad",
     "coursesTitle": "Tres rutas de aprendizaje",
     "course1Name": "Seguridad en internet y redes",
     "course1Desc": "Unidades apropiadas por edad sobre apps, juegos y cuidarse en linea (Instagram, TikTok, Roblox y mas).",
@@ -551,7 +563,9 @@
     "navAria": "Secciones de herramientas para docentes",
     "tabOverview": "Clases y lista",
     "tabGenerator": "Generador semanal",
-    "checkingSession": "Restaurando tu sesión…"
+    "checkingSession": "Restaurando tu sesión…",
+    "classBarAria": "Acciones rápidas de la clase seleccionada",
+    "classBarRoster": "Lista y CSV"
   },
   "teacherDashboard": {
     "title": "Panel del profesor",

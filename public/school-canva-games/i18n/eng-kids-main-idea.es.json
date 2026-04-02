@@ -1,0 +1,17 @@
+{
+  "game_title": "¿De qué trata esto en general?",
+  "game_subtitle": "¡Encuentra la idea principal!",
+  "sparki_greeting": "¡Hola! Soy Sparki, tu amigo de la idea principal!",
+  "passage_1": "Los perros son excelentes mascotas. Pueden aprender trucos. Les encanta traer la pelota. Les gusta acurrucarse con su familia.",
+  "main_idea_1": "Los perros son compañeros maravillosos.",
+  "detail_wrong_1": "Los perros pueden aprender trucos.",
+  "passage_2": "Las semillas viajan de muchas maneras. Algunas vuelan con el viento. Otras flotan en el agua. Los pájaros comen semillas y las dejan lejos.",
+  "main_idea_2": "Las semillas usan distintas formas de viajar a nuevos lugares.",
+  "detail_wrong_2": "Algunas semillas flotan en el agua.",
+  "passage_3": "Las abejas visitan muchas flores. Beben néctar. También recogen polvo amarillo llamado polen. El polen ayuda a las flores a formar semillas.",
+  "main_idea_3": "Las abejas ayudan a las flores al recoger polen.",
+  "detail_wrong_3": "El polvo amarillo se llama polen.",
+  "passage_4": "Las mariposas tienen alas hermosas. Sus alas tienen colores y dibujos brillantes. Vuelan de flor en flor. Las alas coloridas ayudan a esconderse.",
+  "main_idea_4": "Las alas de la mariposa son especiales y la ayudan a vivir.",
+  "detail_wrong_4": "Las mariposas visitan flores."
+}

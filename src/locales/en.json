@@ -19,7 +19,8 @@
     "langSwitchAriaEn": "Switch to Spanish",
     "langSwitchAriaEs": "Switch to English",
     "langSwitchTitleEn": "Español",
-    "langSwitchTitleEs": "English"
+    "langSwitchTitleEs": "English",
+    "schoolHubLink": "School hub"
   },
   "listenButton": {
     "heading": "Listen to heading",
@@ -62,7 +63,9 @@
     "schoolGenerator": "Weekly lesson generator",
     "schoolSubjectsHub": "Subject tracks",
     "schoolShopMaterials": "Ebooks",
-    "schoolContact": "Contact & pilots"
+    "schoolContact": "Contact & pilots",
+    "schoolMenuSchool": "School",
+    "schoolMenuMaterials": "Materials & contact"
   },
   "footer": {
     "copyright": "Learning AI the safe way.",
@@ -169,7 +172,9 @@
     "subjectHubDesc": "Math, English, science, and history — short Sparki lessons matched to your age band. They supplement your teacher’s weekly PDF units, not replace them.",
     "subjectHubSupplemental": "Each track targets important California-aligned clusters (PTKLF, CCSS, NGSS, HSS)—not a complete scope-and-sequence. Pair with your district map and the printable alignment tables.",
     "openSubjectHub": "Browse subject tracks",
-    "openSubjectTrack": "Open {subject}"
+    "openSubjectTrack": "Open {subject}",
+    "aboutPilotToggle": "About this school pilot (how Sparki fits)",
+    "aboutPilotMoreLink": "Full overview for schools →"
   },
   "schoolSubject": {
     "backToSchools": "Back to Schools",
@@ -218,6 +223,8 @@
     "practiceOrderedTapHint": "Tap the numbers in order: 1, then 2, then 3.",
     "practiceOrderedTapWrong": "Start again: tap 1 first.",
     "practiceOrderedTapDone": "Nice — you’re ready for the quick check.",
+    "practicePickWrongHint": "Not quite — pick another answer.",
+    "practicePickTryAgain": "Try again",
     "practiceContinueToQuiz": "Continue to quick check",
     "questionProgress": "Question {current} of {total}",
     "quizProgressAria": "Quiz progress: question {current} of {total}",
@@ -425,6 +432,11 @@
   "forSchoolsHub": {
     "pageTitle": "Sparki Academy — Free Safety + AI Curriculum for iPads",
     "heroSubtitle": "Kid-safe lessons, bilingual EN/ES toggle, offline PWA on iPad, and a live teacher dashboard for pilots.",
+    "tabPilot": "Start pilot",
+    "tabProgram": "Program",
+    "tabPricing": "Pricing",
+    "tabResources": "Resources",
+    "tabCompliance": "Compliance & privacy",
     "coursesTitle": "Three core learning paths",
     "course1Name": "Internet & social safety",
     "course1Desc": "Kind, age-appropriate units on apps, games, and staying safe online (Instagram, TikTok, Roblox, and more).",
@@ -551,7 +563,9 @@
     "navAria": "Teacher tools sections",
     "tabOverview": "Classes & roster",
     "tabGenerator": "Weekly generator",
-    "checkingSession": "Restoring your session…"
+    "checkingSession": "Restoring your session…",
+    "classBarAria": "Selected class quick actions",
+    "classBarRoster": "Roster & CSV"
   },
   "teacherDashboard": {
     "title": "Teacher Dashboard",

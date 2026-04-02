@@ -1,0 +1,11 @@
+{
+  "lesson_title": "Explorador de estados de la materia",
+  "instruction_text": "Clasifica cada objeto en sólidos, líquidos y gases arrastrándolo. Luego explora cómo el calor cambia la materia.",
+  "solid_label": "SÓLIDOS",
+  "liquid_label": "LÍQUIDOS",
+  "gas_label": "GASES",
+  "solid_description": "Mantiene su forma",
+  "liquid_description": "Toma la forma del recipiente",
+  "gas_description": "Llena todo el espacio",
+  "success_message": "¡Clasificaste todos los objetos y aprendiste cómo el calor cambia la materia!"
+}

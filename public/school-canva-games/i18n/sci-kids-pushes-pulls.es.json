@@ -1,0 +1,10 @@
+{
+  "lesson_title": "Explorador de empujes, tirones y movimiento",
+  "instruction_text": "¡Prueba empujes y tirones! Observa cómo la fuerza y la dirección cambian el movimiento.",
+  "weak_push_label": "🤏 Empuje suave",
+  "strong_push_label": "💪 Empuje fuerte",
+  "pull_label": "👈 Tirar hacia atrás",
+  "reset_label": "🔄 Reiniciar",
+  "challenge_text": "¿Puedes llegar a la meta?",
+  "discovery_message": "Descubriste: ¡los empujes más fuertes mueven los objetos más lejos!"
+}
