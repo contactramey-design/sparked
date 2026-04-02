@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useTranslation } from './contexts/LocaleContext'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -7,12 +7,16 @@ import { useSchoolMode } from './hooks/useSchoolMode'
 import SchoolJoinCard from './components/SchoolJoinCard'
 import { getSchoolSession } from '@/school/schoolSession'
 import { setPostLoginRedirect } from '@/lib/postLoginRedirect'
+import { supabase } from '@/lib/supabaseClient'
+import { schoolEngagementPingToSupabase } from '@/school/syncSchoolProgress'
 
 const SchoolsPage: React.FC = () => {
   const { t } = useTranslation()
   const { schoolMode, setSchoolMode } = useSchoolMode()
   const navigate = useNavigate()
   const { classId } = getSchoolSession()
+  const [checkInBusy, setCheckInBusy] = useState(false)
+  const [checkInMsg, setCheckInMsg] = useState<string | null>(null)
 
   return (
     <div className="page page-narrow">
@@ -55,6 +59,45 @@ const SchoolsPage: React.FC = () => {
         </Card>
 
         {schoolMode && <SchoolJoinCard />}
+
+        {schoolMode && classId ? (
+          <Card>
+            <CardHeader>
+              <CardTitle>{t('schools.engagementCardTitle')}</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="muted">{t('schools.engagementCardBody')}</p>
+              {!supabase ? (
+                <p className="text-sm text-amber-800 mt-2">{t('schools.engagementNeedSupabase')}</p>
+              ) : (
+                <>
+                  <Button
+                    type="button"
+                    className="mt-3"
+                    disabled={checkInBusy}
+                    onClick={() => {
+                      setCheckInMsg(null)
+                      setCheckInBusy(true)
+                      void (async () => {
+                        try {
+                          await schoolEngagementPingToSupabase()
+                          setCheckInMsg(t('schools.engagementDone'))
+                        } catch {
+                          setCheckInMsg(t('schoolJoin.errorGeneric'))
+                        } finally {
+                          setCheckInBusy(false)
+                        }
+                      })()
+                    }}
+                  >
+                    {checkInBusy ? '…' : t('schools.engagementButton')}
+                  </Button>
+                  {checkInMsg ? <p className="text-sm text-emerald-800 mt-2">{checkInMsg}</p> : null}
+                </>
+              )}
+            </CardContent>
+          </Card>
+        ) : null}
 
         <div className="schools-grid">
           <Card className="border-2 border-amber-200 bg-amber-50/50">

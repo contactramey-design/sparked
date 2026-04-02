@@ -37,3 +37,9 @@ Subject lessons are intentionally short: **Learn → Practice → Quick check �
 - Deeper LMS replacement features  
 
 For deployment steps, see `PILOT-RUNBOOK.md`, `SUPABASE-PILOT-SETUP.md`, and the compliance overview linked from **For Schools** in the app.
+
+## Operating model & CSV contract
+
+- **[SCHOOL-OPERATING-MODEL.md](./SCHOOL-OPERATING-MODEL.md)** — audiences, data truth, what is not SIS/attendance.  
+- **[SCHOOL-CSV-EXPORT.md](./SCHOOL-CSV-EXPORT.md)** — stable roster export columns.  
+- **[SCHOOL-SUBJECT-SYNC.md](./SCHOOL-SUBJECT-SYNC.md)** · **[SCHOOL-CLASS-BULLETIN.md](./SCHOOL-CLASS-BULLETIN.md)** · **[SCHOOL-ENGAGEMENT-SIGNALS.md](./SCHOOL-ENGAGEMENT-SIGNALS.md)** — pilot mechanics.

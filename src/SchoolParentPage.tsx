@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { supabase } from '@/lib/supabaseClient'
 import { loadSchoolSubjectProgress } from '@/school/subjects/schoolSubjectProgress'
 import { getSchoolSession } from '@/school/schoolSession'
 import { useAuth } from './AuthContext'
@@ -16,6 +17,7 @@ const SchoolParentPage: React.FC = () => {
   const { kidLock, setKidLock } = useAuth()
   const [session, setSession] = useState(() => getSchoolSession())
   const [subjectTracksLocalActivity, setSubjectTracksLocalActivity] = useState(false)
+  const [bulletin, setBulletin] = useState<{ text: string; at: string | null }>({ text: '', at: null })
 
   useEffect(() => {
     setSession(getSchoolSession())
@@ -52,6 +54,26 @@ const SchoolParentPage: React.FC = () => {
 
   const { classId, studentCode } = session
 
+  useEffect(() => {
+    if (!classId || !supabase) {
+      setBulletin({ text: '', at: null })
+      return
+    }
+    let cancelled = false
+    void (async () => {
+      const { data, error } = await supabase.rpc('public_bulletin_for_class', { p_class_id: classId })
+      if (cancelled || error) return
+      const o = data as { bulletin_text?: string; bulletin_updated_at?: string | null }
+      setBulletin({
+        text: typeof o?.bulletin_text === 'string' ? o.bulletin_text : '',
+        at: o?.bulletin_updated_at ?? null,
+      })
+    })()
+    return () => {
+      cancelled = true
+    }
+  }, [classId])
+
   return (
     <div className="page page-narrow">
       <header className="page-header">
@@ -81,6 +103,26 @@ const SchoolParentPage: React.FC = () => {
             <p className="text-slate-700 mt-2">{t('schoolParent.classStatusNotJoined')}</p>
           )}
         </div>
+
+        {classId ? (
+          <div className="lesson-media card border border-amber-200 bg-amber-50/30">
+            <h3>{t('schoolParent.bulletinTitle')}</h3>
+            {bulletin.text.trim() ? (
+              <>
+                <p className="text-slate-800 mt-2 whitespace-pre-wrap">{bulletin.text}</p>
+                {bulletin.at ? (
+                  <p className="text-xs text-slate-500 mt-2">
+                    {t('schoolParent.bulletinUpdated', {
+                      when: new Date(bulletin.at).toLocaleString(),
+                    })}
+                  </p>
+                ) : null}
+              </>
+            ) : (
+              <p className="text-slate-600 mt-2">{t('schoolParent.bulletinEmpty')}</p>
+            )}
+          </div>
+        ) : null}
 
         {classId ? (
           <div className="lesson-media card">

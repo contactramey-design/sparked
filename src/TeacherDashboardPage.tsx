@@ -13,6 +13,26 @@ import { Progress } from '@/components/ui/progress'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
+const TEACHER_ONBOARDING_KEY = 'sparki_teacher_onboarding_dismissed_v1'
+
+function subjectTrackStats(progress: unknown): { count: number; mastered: number } {
+  const p = progress as Record<string, unknown>
+  const st = p.sparkiSubjectTracks as { lessons?: Record<string, { quizBestScore?: number }> } | undefined
+  const lessons = st?.lessons
+  if (!lessons || typeof lessons !== 'object') return { count: 0, mastered: 0 }
+  const vals = Object.values(lessons)
+  return {
+    count: vals.length,
+    mastered: vals.filter((e) => (e?.quizBestScore ?? 0) >= 1).length,
+  }
+}
+
+function engagementLastPing(progress: unknown): string {
+  const p = progress as Record<string, unknown>
+  const e = p.sparkiEngagement as { lastPingAt?: string } | undefined
+  return e?.lastPingAt ? String(e.lastPingAt) : ''
+}
+
 type SchoolClassRow = {
   id: string
   name: string
@@ -20,6 +40,8 @@ type SchoolClassRow = {
   teacher_id: string
   created_at: string
   age_band?: AgeBandId | string
+  bulletin_text?: string | null
+  bulletin_updated_at?: string | null
 }
 
 type StudentProgressRow = {
@@ -87,6 +109,14 @@ const TeacherDashboardPage: React.FC = () => {
 
   const [students, setStudents] = useState<StudentProgressRow[]>([])
   const [homeworkGeneratedUnitIds, setHomeworkGeneratedUnitIds] = useState<string[]>([])
+  const [onboardingDismissed, setOnboardingDismissed] = useState(() => {
+    try {
+      return typeof window !== 'undefined' && window.localStorage.getItem(TEACHER_ONBOARDING_KEY) === '1'
+    } catch {
+      return false
+    }
+  })
+  const [bulletinDraft, setBulletinDraft] = useState('')
 
   const canUseSupabase = !!supabase
 
@@ -201,6 +231,10 @@ const TeacherDashboardPage: React.FC = () => {
 
   const selectedClass = classes.find((c) => c.id === selectedClassId) ?? null
 
+  useEffect(() => {
+    setBulletinDraft(selectedClass?.bulletin_text?.trim() ? String(selectedClass.bulletin_text) : '')
+  }, [selectedClassId, selectedClass?.bulletin_text])
+
   const aggregated = useMemo(() => {
     const totalStudents = students.length
     const safetyAvg =
@@ -293,6 +327,37 @@ const TeacherDashboardPage: React.FC = () => {
             </div>
           </CardContent>
         </Card>
+
+        {!onboardingDismissed && (
+          <Card className="border-2 border-amber-200 bg-amber-50/60">
+            <CardHeader>
+              <CardTitle>{t('teacherDashboard.onboardingTitle')}</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <ol className="list-decimal pl-5 space-y-2 text-sm text-slate-800">
+                <li>{t('teacherDashboard.onboardingStep1')}</li>
+                <li>{t('teacherDashboard.onboardingStep2')}</li>
+                <li>{t('teacherDashboard.onboardingStep3')}</li>
+                <li>{t('teacherDashboard.onboardingStep4')}</li>
+              </ol>
+              <p className="text-xs text-slate-600 max-w-prose">{t('teacherDashboard.onboardingCsvHint')}</p>
+              <Button
+                type="button"
+                variant="secondary"
+                onClick={() => {
+                  try {
+                    window.localStorage.setItem(TEACHER_ONBOARDING_KEY, '1')
+                  } catch {
+                    /* ignore */
+                  }
+                  setOnboardingDismissed(true)
+                }}
+              >
+                {t('teacherDashboard.onboardingDismiss')}
+              </Button>
+            </CardContent>
+          </Card>
+        )}
 
         <Tabs
           defaultValue="classes"
@@ -426,6 +491,47 @@ const TeacherDashboardPage: React.FC = () => {
                     </TableBody>
                   </Table>
                   </div>
+
+                  {selectedClass ? (
+                    <div className="rounded-xl border border-orange-200 bg-orange-50/40 p-4 space-y-3">
+                      <h3 className="font-semibold text-slate-900">{t('teacherDashboard.bulletinTitle')}</h3>
+                      <p className="text-sm text-slate-600">{t('teacherDashboard.bulletinHelp')}</p>
+                      <textarea
+                        value={bulletinDraft}
+                        onChange={(e) => setBulletinDraft(e.target.value)}
+                        rows={4}
+                        className="w-full min-h-[100px] rounded-lg border border-slate-300 px-3 py-2 text-sm"
+                        aria-label={t('teacherDashboard.bulletinTitle')}
+                      />
+                      <Button
+                        type="button"
+                        disabled={loading || !supabase || !user}
+                        onClick={async () => {
+                          if (!supabase || !user || !selectedClassId) return
+                          setLoading(true)
+                          setError(null)
+                          try {
+                            const { error: be } = await supabase
+                              .from('school_classes')
+                              .update({
+                                bulletin_text: bulletinDraft.trim(),
+                                bulletin_updated_at: new Date().toISOString(),
+                              })
+                              .eq('id', selectedClassId)
+                              .eq('teacher_id', user.id)
+                            if (be) throw be
+                            await refreshClasses()
+                          } catch (e: unknown) {
+                            setError(e instanceof Error ? e.message : t('teacherDashboard.bulletinSaveError'))
+                          } finally {
+                            setLoading(false)
+                          }
+                        }}
+                      >
+                        {t('teacherDashboard.bulletinSave')}
+                      </Button>
+                    </div>
+                  ) : null}
                 </div>
               </CardContent>
             </Card>
@@ -472,6 +578,8 @@ const TeacherDashboardPage: React.FC = () => {
                                 })()
 
                           const overall = Math.round((safety + ai + homeworkPercent) / 3)
+                          const subj = subjectTrackStats(s.progress)
+                          const ping = engagementLastPing(s.progress)
                           return {
                             class_code: selectedClass?.class_code ?? '',
                             student_code: s.student_code,
@@ -479,7 +587,10 @@ const TeacherDashboardPage: React.FC = () => {
                             ai_coding_percent: ai,
                             homework_percent: homeworkPercent,
                             overall_percent: overall,
-                            updated_at: s.updated_at,
+                            subject_track_lessons_count: subj.count,
+                            subject_track_mastered_count: subj.mastered,
+                            engagement_last_ping_at: ping,
+                            progress_row_updated_at: s.updated_at,
                           }
                         })
                         const csv = toCsv(rows)
@@ -490,6 +601,13 @@ const TeacherDashboardPage: React.FC = () => {
                     </Button>
                   </div>
 
+                  <details className="text-sm text-slate-600 max-w-prose">
+                    <summary className="cursor-pointer font-medium text-slate-800">
+                      {t('teacherDashboard.csvDocToggle')}
+                    </summary>
+                    <p className="mt-2 whitespace-pre-line">{t('teacherDashboard.csvDocBody')}</p>
+                  </details>
+
                   <div className="w-full overflow-x-auto -mx-1 px-1 touch-pan-x">
                   <Table>
                     <TableHeader>
@@ -499,6 +617,8 @@ const TeacherDashboardPage: React.FC = () => {
                         <TableHead>{t('teacherDashboard.tableAi')}</TableHead>
                         <TableHead>{t('teacherDashboard.tableHomework')}</TableHead>
                         <TableHead>{t('teacherDashboard.tableOverall')}</TableHead>
+                        <TableHead>{t('teacherDashboard.tableSubjectTracks')}</TableHead>
+                        <TableHead>{t('teacherDashboard.tableEngagement')}</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -514,6 +634,8 @@ const TeacherDashboardPage: React.FC = () => {
                                 return percent(masteredCount, homeworkGeneratedUnitIds.length)
                               })()
                         const overall = Math.round((safety + ai + homeworkPercent) / 3)
+                        const subj = subjectTrackStats(s.progress)
+                        const ping = engagementLastPing(s.progress)
                         return (
                           <TableRow key={s.id}>
                             <TableCell>
@@ -546,12 +668,27 @@ const TeacherDashboardPage: React.FC = () => {
                                 {overall}%
                               </div>
                             </TableCell>
+                            <TableCell>
+                              <span className="text-sm">
+                                {subj.count === 0
+                                  ? '—'
+                                  : t('teacherDashboard.subjectTrackCell', {
+                                      mastered: subj.mastered,
+                                      total: subj.count,
+                                    })}
+                              </span>
+                            </TableCell>
+                            <TableCell>
+                              <span className="text-sm muted">
+                                {ping ? new Date(ping).toLocaleString() : '—'}
+                              </span>
+                            </TableCell>
                           </TableRow>
                         )
                       })}
                       {students.length === 0 && (
                         <TableRow>
-                          <TableCell colSpan={5}>
+                          <TableCell colSpan={7}>
                             <span className="muted">{t('teacherDashboard.noStudents')}</span>
                           </TableCell>
                         </TableRow>
@@ -562,6 +699,7 @@ const TeacherDashboardPage: React.FC = () => {
 
                   <div className="muted">{t('teacherDashboard.schemaNote')}</div>
                   <p className="text-sm text-slate-600 max-w-prose">{t('teacherDashboard.trackingScopeNote')}</p>
+                  <p className="text-sm text-slate-600 max-w-prose">{t('teacherDashboard.engagementNote')}</p>
                 </div>
               </CardContent>
             </Card>

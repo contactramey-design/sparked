@@ -28,6 +28,7 @@ In Supabase → **SQL Editor**, run:
 2. **[student_class_age_band_rpc.sql](../supabase/student_class_age_band_rpc.sql)** — **`student_my_class_age_band()`** for students who joined before the join RPC returned `age_band` (backfills app band from `school_classes`).
 3. **[age_band_school_classes.sql](../supabase/age_band_school_classes.sql)** — adds `age_band` (`tots` | `kids` | `crew`) on `school_classes` for teacher class setup and weekly PDF prompt targeting.
 4. **[school_weekly_generators.sql](../supabase/school_weekly_generators.sql)** — weekly generators, generated units, storage bucket + policies for `school-generated-curriculum`.
+5. **[school_class_bulletin_and_engagement.sql](../supabase/school_class_bulletin_and_engagement.sql)** — `bulletin_text` / `bulletin_updated_at` on `school_classes` and **`public_bulletin_for_class(uuid)`** RPC (read-only bulletin for families by class id).
 
 (Optional) [licensing_curriculum_uploads.sql](../supabase/licensing_curriculum_uploads.sql) only if you use that licensing flow.
 

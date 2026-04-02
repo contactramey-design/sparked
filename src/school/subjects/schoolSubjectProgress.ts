@@ -1,3 +1,4 @@
+import { syncSparkiSubjectTracksToSupabase } from '@/school/syncSchoolProgress'
 import type { SchoolSubjectId } from './types'
 
 const STORAGE_KEY = 'sparki_school_subjects_progress_v1'
@@ -98,6 +99,7 @@ export function recordSchoolSubjectPracticeComplete(subjectId: SchoolSubjectId, 
     practiceCompletedAt: new Date().toISOString(),
   }
   saveSchoolSubjectProgress(state)
+  void syncSparkiSubjectTracksToSupabase()
 }
 
 export function recordSchoolSubjectQuizResult(
@@ -118,6 +120,7 @@ export function recordSchoolSubjectQuizResult(
   }
   state.lessons[key] = next
   saveSchoolSubjectProgress(state)
+  void syncSparkiSubjectTracksToSupabase()
 }
 
 export function isSchoolSubjectLessonMastered(subjectId: SchoolSubjectId, lessonId: string): boolean {
