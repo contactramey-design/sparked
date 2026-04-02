@@ -143,7 +143,9 @@ const SchoolSubjectLessonPage: React.FC = () => {
   }
 
   return (
-    <section className="school-subj-lesson">
+    <section
+      className={`school-subj-lesson${step === 'practice' ? ' school-subj-lesson--practice-immersive' : ''}`}
+    >
       <Link to={trackPath} className="link-back">
         {t('schoolSubject.backToSubjectTrack')}
       </Link>
