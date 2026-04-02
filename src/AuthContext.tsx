@@ -7,6 +7,7 @@ import React, {
 } from 'react'
 import type { User } from '@supabase/supabase-js'
 import { createLocalDevTeacherUser } from './lib/authDevUser'
+import { clearPostLoginRedirect } from './lib/postLoginRedirect'
 import { supabase } from './lib/supabaseClient'
 
 const STORAGE_KEY = 'sparki_academy_logged_in'
@@ -106,6 +107,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     } finally {
       setUser(null)
       setIsLoggedIn(false)
+      clearPostLoginRedirect()
       try {
         window.localStorage.removeItem(STORAGE_KEY)
         window.localStorage.removeItem(KID_LOCK_KEY)

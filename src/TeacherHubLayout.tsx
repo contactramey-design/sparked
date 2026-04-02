@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import { NavLink, Navigate, Outlet, useLocation } from 'react-router-dom'
 import { useAuth } from './AuthContext'
 import { useTranslation } from './contexts/LocaleContext'
+import { clearPostLoginRedirect, setPostLoginRedirect } from './lib/postLoginRedirect'
 
 const SCHOOL_AUDIENCE_STORAGE_KEY = 'sparki_school_audience_v1'
 
@@ -21,6 +22,20 @@ const TeacherHubLayout: React.FC = () => {
       // ignore
     }
   }, [])
+
+  // Magic links often land on / with no ?redirect= — persist intended /teacher/* path for LoginPage.
+  useEffect(() => {
+    if (!authHydrated || isLoggedIn) return
+    const target = `${location.pathname}${location.search ?? ''}`
+    if (target.startsWith('/teacher')) {
+      setPostLoginRedirect(target)
+    }
+  }, [authHydrated, isLoggedIn, location.pathname, location.search])
+
+  useEffect(() => {
+    if (!isLoggedIn) return
+    clearPostLoginRedirect()
+  }, [isLoggedIn])
 
   if (!authHydrated) {
     return (

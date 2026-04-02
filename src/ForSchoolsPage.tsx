@@ -5,6 +5,7 @@ import { useAuth } from './AuthContext'
 import { supabase } from './lib/supabaseClient'
 import { isTeacherUser } from './lib/supabaseUserRole'
 import { randomSchoolClassCode } from './lib/schoolClassCode'
+import { setPostLoginRedirect } from './lib/postLoginRedirect'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import SparkiAvatar from './components/SparkiAvatar'
@@ -206,7 +207,12 @@ const ForSchoolsPage: React.FC = () => {
                     <Link to="/schools">{t('forSchoolsHub.openSchoolHub')}</Link>
                   </Button>
                   <Button variant="outline" size="sm" asChild>
-                    <Link to="/teacher/dashboard">{t('forSchoolsHub.openTeacherDashboard')}</Link>
+                    <Link
+                      to="/teacher/dashboard"
+                      onClick={() => setPostLoginRedirect('/teacher/dashboard')}
+                    >
+                      {t('forSchoolsHub.openTeacherDashboard')}
+                    </Link>
                   </Button>
                 </div>
               </div>
@@ -339,10 +345,20 @@ const ForSchoolsPage: React.FC = () => {
           <CardContent className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
             <p className="muted flex-1 min-w-[200px]">{t('forSchoolsHub.teacherMvpBody')}</p>
             <Button asChild>
-              <Link to="/teacher/dashboard">{t('forSchoolsHub.openTeacherDashboard')}</Link>
+              <Link
+                to="/teacher/dashboard"
+                onClick={() => setPostLoginRedirect('/teacher/dashboard')}
+              >
+                {t('forSchoolsHub.openTeacherDashboard')}
+              </Link>
             </Button>
             <Button variant="secondary" asChild>
-              <Link to="/teacher/generator">{t('forSchoolsHub.openWeeklyGenerator')}</Link>
+              <Link
+                to="/teacher/generator"
+                onClick={() => setPostLoginRedirect('/teacher/generator')}
+              >
+                {t('forSchoolsHub.openWeeklyGenerator')}
+              </Link>
             </Button>
           </CardContent>
         </Card>
@@ -382,7 +398,12 @@ const ForSchoolsPage: React.FC = () => {
                 <Link to="/contact">{t('forSchoolsHub.openContactForPilot')}</Link>
               </Button>
               <Button variant="outline" asChild>
-                <Link to="/teacher/dashboard">{t('forSchoolsHub.openTeacherDashboard')}</Link>
+                <Link
+                  to="/teacher/dashboard"
+                  onClick={() => setPostLoginRedirect('/teacher/dashboard')}
+                >
+                  {t('forSchoolsHub.openTeacherDashboard')}
+                </Link>
               </Button>
             </div>
             <p className="muted text-sm">{t('forSchoolsHub.pilotDocNote')}</p>

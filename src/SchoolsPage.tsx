@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { useSchoolMode } from './hooks/useSchoolMode'
 import SchoolJoinCard from './components/SchoolJoinCard'
 import { getSchoolSession } from '@/school/schoolSession'
+import { setPostLoginRedirect } from '@/lib/postLoginRedirect'
 
 const SchoolsPage: React.FC = () => {
   const { t } = useTranslation()
@@ -58,6 +59,7 @@ const SchoolsPage: React.FC = () => {
               <div className="schools-actions">
                 <Button
                   onClick={() => {
+                    setPostLoginRedirect('/teacher/dashboard')
                     navigate('/teacher/dashboard')
                   }}
                 >

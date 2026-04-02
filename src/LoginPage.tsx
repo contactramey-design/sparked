@@ -2,6 +2,12 @@ import React, { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from './AuthContext'
 import { useTranslation } from './contexts/LocaleContext'
+import {
+  clearPostLoginRedirect,
+  getPostLoginRedirect,
+  readSafeInternalPath,
+  resolveLoginRedirect,
+} from './lib/postLoginRedirect'
 
 const LoginPage: React.FC = () => {
   const { isLoggedIn, devLogin } = useAuth()
@@ -11,13 +17,15 @@ const LoginPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null)
 
   const searchParams = new URLSearchParams(location.search)
-  const redirect = searchParams.get('redirect') ?? '/'
-  const fromRedirect = !!searchParams.get('redirect')
+  const redirect = resolveLoginRedirect(searchParams)
+  const fromRedirect =
+    !!readSafeInternalPath(searchParams.get('redirect')) ||
+    !!getPostLoginRedirect()?.startsWith('/teacher')
 
   React.useEffect(() => {
-    if (isLoggedIn) {
-      navigate(redirect, { replace: true })
-    }
+    if (!isLoggedIn) return
+    clearPostLoginRedirect()
+    navigate(redirect, { replace: true })
   }, [isLoggedIn, navigate, redirect])
 
   const handleStartTrial = async () => {
@@ -68,6 +76,7 @@ const LoginPage: React.FC = () => {
             className="secondary-button mt-3"
             onClick={() => {
               devLogin()
+              clearPostLoginRedirect()
               navigate(redirect, { replace: true })
             }}
           >

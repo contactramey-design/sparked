@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
-import { Link, useSearchParams } from 'react-router-dom'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { appConfig } from './config'
 import { useAuth } from './AuthContext'
 import { useTranslation } from './contexts/LocaleContext'
@@ -7,6 +7,7 @@ import { useAgeBand } from './contexts/AgeBandContext'
 import AgeBandSelector from './components/AgeBandSelector'
 import { awardDailyLoginBonus, getPlayerStats } from './progress'
 import { ParentViewContent } from './ParentDashboard'
+import { clearPostLoginRedirect, getPostLoginRedirect } from './lib/postLoginRedirect'
 
 const TIERS = [
   {
@@ -85,7 +86,8 @@ function TierCard({
 }
 
 const HomePage: React.FC = () => {
-  const { isLoggedIn } = useAuth()
+  const { authHydrated, isLoggedIn } = useAuth()
+  const navigate = useNavigate()
   const { t, locale } = useTranslation()
   const { ageBand, ageBandDisplayName } = useAgeBand()
   const [searchParams] = useSearchParams()
@@ -100,6 +102,16 @@ const HomePage: React.FC = () => {
   const prevSparklesRef = useRef(0)
 
   const isParentView = viewParam === 'parent'
+
+  // Email magic links usually return to site root with tokens in the hash — no /login?redirect=.
+  useEffect(() => {
+    if (!authHydrated || !isLoggedIn || isParentView) return
+    const pending = getPostLoginRedirect()
+    if (!pending?.startsWith('/teacher')) return
+    clearPostLoginRedirect()
+    navigate(pending, { replace: true })
+  }, [authHydrated, isLoggedIn, isParentView, navigate])
+
   const checkoutStatus = useMemo(() => {
     const v = searchParams.get('checkout')
     if (v === 'success' || v === 'cancel') return v
