@@ -1,9 +1,9 @@
 /* School subject tracks (math, English, science, history) — school orange theme */
 
 .school-subj-page {
-  max-width: 56rem;
+  max-width: min(56rem, 100%);
   margin: 0 auto;
-  padding: 0 1rem 2rem;
+  padding: 0 0 clamp(1.25rem, 3vw, 2rem);
 }
 
 .school-subj-page .track-age-band-toolbar {
@@ -119,9 +119,9 @@
 
 /* Lesson player */
 .school-subj-lesson {
-  max-width: 44rem;
+  max-width: min(var(--layout-prose-max, 42rem), 100%);
   margin: 0 auto;
-  padding: 0 1rem 2.5rem;
+  padding: 0 0 clamp(1.5rem, 3vw, 2.5rem);
 }
 
 .school-subj-learn .muted {

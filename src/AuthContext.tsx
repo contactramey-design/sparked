@@ -6,6 +6,7 @@ import React, {
   useState,
 } from 'react'
 import type { User } from '@supabase/supabase-js'
+import { createLocalDevTeacherUser } from './lib/authDevUser'
 import { supabase } from './lib/supabaseClient'
 
 const STORAGE_KEY = 'sparki_academy_logged_in'
@@ -14,6 +15,8 @@ const KID_LOCK_KEY = 'sparki_academy_kid_lock'
 interface AuthContextValue {
   isLoggedIn: boolean
   user: User | null
+  /** True after the initial Supabase session check finishes (or immediately if Supabase is off). */
+  authHydrated: boolean
   configured: boolean
   signInWithEmail: (email: string) => Promise<{ ok: true } | { ok: false; error: string }>
   devLogin: () => void
@@ -28,6 +31,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [kidLock, setKidLockState] = useState(false)
   const [user, setUser] = useState<User | null>(null)
+  const [authHydrated, setAuthHydrated] = useState(false)
   const configured = !!supabase
 
   useEffect(() => {
@@ -44,7 +48,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, [])
 
   useEffect(() => {
-    if (!supabase) return
+    if (!supabase) {
+      setAuthHydrated(true)
+      return
+    }
     let cancelled = false
 
     supabase.auth
@@ -59,6 +66,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           setUser(null)
           setIsLoggedIn(false)
         }
+      })
+      .finally(() => {
+        if (!cancelled) setAuthHydrated(true)
       })
 
     const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
@@ -107,6 +117,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const devLogin = useCallback(() => {
     setIsLoggedIn(true)
+    setUser((u) => u ?? createLocalDevTeacherUser())
     try {
       window.localStorage.setItem(STORAGE_KEY, 'true')
     } catch {
@@ -130,6 +141,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const value: AuthContextValue = {
     isLoggedIn,
     user,
+    authHydrated,
     configured,
     signInWithEmail,
     devLogin,

@@ -29,6 +29,18 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Shared layout tokens — one gutter + max-width story across pages */
+:root {
+  --layout-content-max: 72rem;
+  --layout-prose-max: 42rem;
+  --layout-gutter-x: clamp(1rem, 4vw, 1.75rem);
+  --layout-gutter-y: clamp(0.875rem, 2.5vw, 1.375rem);
+  --layout-radius-lg: 1rem;
+  --layout-radius-md: 0.75rem;
+  --bp-md: 768px;
+  --bp-lg: 1024px;
+}
+
 a {
   text-decoration: none;
 }

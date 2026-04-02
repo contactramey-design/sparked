@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { useAuth } from './AuthContext'
 import { useTranslation } from './contexts/LocaleContext'
 import { supabase } from './lib/supabaseClient'
@@ -73,9 +73,8 @@ function computeTrackCompletion(trackId: string, progress: unknown): number {
 }
 
 const TeacherDashboardPage: React.FC = () => {
-  const { user, isLoggedIn } = useAuth()
+  const { user } = useAuth()
   const { t } = useTranslation()
-  const navigate = useNavigate()
 
   const [tab, setTab] = useState<'classes' | 'students' | 'home'>('classes')
   const [loading, setLoading] = useState(false)
@@ -90,12 +89,6 @@ const TeacherDashboardPage: React.FC = () => {
   const [homeworkGeneratedUnitIds, setHomeworkGeneratedUnitIds] = useState<string[]>([])
 
   const canUseSupabase = !!supabase
-
-  useEffect(() => {
-    if (!isLoggedIn) {
-      navigate('/login?redirect=%2Fteacher%2Fdashboard', { replace: true })
-    }
-  }, [isLoggedIn, navigate])
 
   const teacherOk = !!user && isTeacherUser(user)
 
@@ -242,7 +235,7 @@ const TeacherDashboardPage: React.FC = () => {
 
   if (!canUseSupabase) {
     return (
-      <div className="page-narrow">
+      <div>
         <Card>
           <CardHeader>
             <CardTitle>{t('teacherDashboard.title')}</CardTitle>
@@ -257,7 +250,7 @@ const TeacherDashboardPage: React.FC = () => {
 
   if (!teacherOk) {
     return (
-      <div className="page-narrow">
+      <div>
         <Card>
           <CardHeader>
             <CardTitle>{t('teacherDashboard.title')}</CardTitle>
@@ -272,11 +265,10 @@ const TeacherDashboardPage: React.FC = () => {
   }
 
   return (
-    <div className="page-narrow">
-      <div className="stack-lg">
+    <div className="stack-lg">
         <Card>
           <CardHeader>
-            <CardTitle>{t('teacherDashboard.title')}</CardTitle>
+            <CardTitle>{t('teacherDashboard.snapshotTitle')}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="stack-lg">
@@ -293,12 +285,8 @@ const TeacherDashboardPage: React.FC = () => {
               </div>
 
               <div className="schools-actions" style={{ justifyContent: 'flex-start' }}>
-                <Button
-                  onClick={() => {
-                    navigate('/teacher/generator')
-                  }}
-                >
-                  {t('teacherDashboard.generateWeeklyTrack')}
+                <Button asChild>
+                  <Link to="/teacher/generator">{t('teacherDashboard.generateWeeklyTrack')}</Link>
                 </Button>
               </div>
             </div>
@@ -590,7 +578,6 @@ const TeacherDashboardPage: React.FC = () => {
             </Card>
           </TabsContent>
         </Tabs>
-      </div>
     </div>
   )
 }

@@ -33,6 +33,7 @@ import CompliancePage from './CompliancePage'
 import ForSchoolsPage from './ForSchoolsPage'
 import SchoolPrintResourcePage from './SchoolPrintResourcePage'
 import SchoolOnePagerPage from './SchoolOnePagerPage'
+import TeacherHubLayout from './TeacherHubLayout'
 import TeacherDashboardPage from './TeacherDashboardPage'
 import TeacherWeeklyGeneratorPage from './TeacherWeeklyGeneratorPage.tsx'
 import SchoolsPage from './SchoolsPage'
@@ -225,8 +226,11 @@ function AppShell() {
           <Route path="/schools/math/:lessonId" element={<SchoolMathLegacyRedirect />} />
           <Route path="/schools/weekly-track" element={<SchoolWeeklyTrackPage />} />
           <Route path="/schools/unit/:unitId" element={<SchoolGeneratedUnitPage />} />
-          <Route path="/teacher/dashboard" element={<TeacherDashboardPage />} />
-          <Route path="/teacher/generator" element={<TeacherWeeklyGeneratorPage />} />
+          <Route path="/teacher" element={<TeacherHubLayout />}>
+            <Route index element={<Navigate to="dashboard" replace />} />
+            <Route path="dashboard" element={<TeacherDashboardPage />} />
+            <Route path="generator" element={<TeacherWeeklyGeneratorPage />} />
+          </Route>
           <Route path="/about" element={<AboutPage />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="*" element={<Navigate to="/" replace />} />

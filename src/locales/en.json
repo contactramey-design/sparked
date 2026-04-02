@@ -55,6 +55,7 @@
     "schoolCompliance": "Compliance & resources",
     "schoolSchoolHub": "School hub & class codes",
     "schoolTeacher": "Teacher dashboard",
+    "schoolTeacherHub": "Teacher tools",
     "schoolGenerator": "Weekly lesson generator",
     "schoolSubjectsHub": "Subject tracks",
     "schoolShopMaterials": "Ebooks",
@@ -507,8 +508,17 @@
     "siteUrl": "www.sparkiedu.com",
     "footerNote": "Informational only — not legal advice. © Sparki Academy."
   },
+  "teacherHub": {
+    "title": "Teacher tools",
+    "subtitle": "Classes, student progress, and weekly lesson generation — all in one place.",
+    "navAria": "Teacher tools sections",
+    "tabOverview": "Overview & classes",
+    "tabGenerator": "Weekly generator",
+    "checkingSession": "Restoring your session…"
+  },
   "teacherDashboard": {
     "title": "Teacher Dashboard",
+    "snapshotTitle": "Class snapshot",
     "subtitle": "Create classes, view anonymous progress, and export CSV.",
     "supabaseMissing": "Supabase is not configured. Set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY to enable the teacher dashboard.",
     "notTeacher": "This dashboard is for teachers only.",

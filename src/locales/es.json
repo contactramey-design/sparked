@@ -55,6 +55,7 @@
     "schoolCompliance": "Cumplimiento y recursos",
     "schoolSchoolHub": "Hub escolar y códigos de clase",
     "schoolTeacher": "Panel del profesor",
+    "schoolTeacherHub": "Herramientas para docentes",
     "schoolGenerator": "Generador de lecciones semanales",
     "schoolSubjectsHub": "Rutas por materia",
     "schoolShopMaterials": "Ebooks",
@@ -507,8 +508,17 @@
     "siteUrl": "www.sparkiedu.com",
     "footerNote": "Solo informativo — no es asesoria legal. © Sparki Academy."
   },
+  "teacherHub": {
+    "title": "Herramientas para docentes",
+    "subtitle": "Clases, progreso de estudiantes y generación de lecciones semanales, todo junto.",
+    "navAria": "Secciones de herramientas para docentes",
+    "tabOverview": "Resumen y clases",
+    "tabGenerator": "Generador semanal",
+    "checkingSession": "Restaurando tu sesión…"
+  },
   "teacherDashboard": {
     "title": "Panel del profesor",
+    "snapshotTitle": "Resumen de la clase",
     "subtitle": "Crea clases, ve progreso anónimo y exporta CSV.",
     "supabaseMissing": "Supabase no está configurado. Configura VITE_SUPABASE_URL y VITE_SUPABASE_ANON_KEY para habilitar el panel del profesor.",
     "notTeacher": "Este panel es solo para profesores.",

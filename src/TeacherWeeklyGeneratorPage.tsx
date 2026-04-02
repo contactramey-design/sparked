@@ -31,7 +31,7 @@ type GeneratorResult = {
 }
 
 const TeacherWeeklyGeneratorPage: React.FC = () => {
-  const { user, isLoggedIn } = useAuth()
+  const { user } = useAuth()
   const { t } = useTranslation()
   const { locale } = useLocale()
   const navigate = useNavigate()
@@ -64,11 +64,6 @@ const TeacherWeeklyGeneratorPage: React.FC = () => {
       setLoading(false)
     }
   }
-
-  useEffect(() => {
-    if (!canUseSupabase) return
-    if (!isLoggedIn) navigate('/login?redirect=%2Fteacher%2Fgenerator', { replace: true })
-  }, [canUseSupabase, isLoggedIn, navigate])
 
   useEffect(() => {
     if (!teacherOk) return
@@ -130,7 +125,7 @@ const TeacherWeeklyGeneratorPage: React.FC = () => {
 
   if (!canUseSupabase) {
     return (
-      <div className="page page-narrow">
+      <div>
         <Card>
           <CardHeader>
             <CardTitle>{t('teacherGenerator.title')}</CardTitle>
@@ -145,7 +140,7 @@ const TeacherWeeklyGeneratorPage: React.FC = () => {
 
   if (!teacherOk) {
     return (
-      <div className="page page-narrow">
+      <div>
         <Card>
           <CardHeader>
             <CardTitle>{t('teacherGenerator.title')}</CardTitle>
@@ -160,19 +155,14 @@ const TeacherWeeklyGeneratorPage: React.FC = () => {
   }
 
   return (
-    <div className="page page-narrow">
-      <header className="page-header">
-        <h2>{t('teacherGenerator.title')}</h2>
-        <p className="muted">{t('teacherGenerator.subtitle')}</p>
-      </header>
-
-      <div className="stack-lg">
+    <div className="stack-lg">
         <Card>
           <CardHeader>
             <CardTitle>{t('teacherGenerator.generateTitle')}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="stack-lg">
+              <p className="muted">{t('teacherGenerator.subtitle')}</p>
               <label className="muted">
                 {t('teacherGenerator.classLabel')}
                 <select
@@ -318,7 +308,6 @@ const TeacherWeeklyGeneratorPage: React.FC = () => {
             </CardContent>
           </Card>
         )}
-      </div>
     </div>
   )
 }
