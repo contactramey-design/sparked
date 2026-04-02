@@ -86,7 +86,6 @@ export default function MainNav({ variant }: Props) {
       <ItemLink to="/for-schools">{t('nav.academyForSchoolsOverview')}</ItemLink>
       <ItemLink to="/schools">{t('nav.schoolSchoolHub')}</ItemLink>
       <ItemLink to="/schools/subjects">{t('nav.schoolSubjectsHub')}</ItemLink>
-      <ItemLink to="/teacher/dashboard">{t('nav.schoolTeacherHub')}</ItemLink>
       <ItemLink to="/compliance">{t('nav.schoolCompliance')}</ItemLink>
       <SectionLabel>{t('nav.sectionGrownups')}</SectionLabel>
       {!isLoggedIn && <ItemLink to="/login">{t('nav.academySignIn')}</ItemLink>}
@@ -109,7 +108,6 @@ export default function MainNav({ variant }: Props) {
       <ItemLink to="/compliance">{t('nav.schoolCompliance')}</ItemLink>
       <ItemLink to="/schools">{t('nav.schoolSchoolHub')}</ItemLink>
       <ItemLink to="/schools/subjects">{t('nav.schoolSubjectsHub')}</ItemLink>
-      <ItemLink to="/teacher/dashboard">{t('nav.schoolTeacherHub')}</ItemLink>
     </>
   )
 

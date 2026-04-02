@@ -1,5 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
+import { useAuth } from './AuthContext'
+import { isTeacherUser } from './lib/supabaseUserRole'
 import { supabase } from './lib/supabaseClient'
 import { ensureAnonymousSchoolAuth, getSchoolSession } from '@/school/schoolSession'
 import { isAgeBandId } from '@/ageBand'
@@ -135,8 +137,10 @@ const SchoolGeneratedUnitPage: React.FC = () => {
   const { locale } = useLocale()
   const { ageBand, recommendedAgesShort } = useAgeBand()
   const navigate = useNavigate()
+  const { user } = useAuth()
 
   const { classId } = getSchoolSession()
+  const teacherPreviewWithoutClass = Boolean(user && isTeacherUser(user))
   const [unitJson, setUnitJson] = useState<GeneratedUnitJson | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -157,7 +161,7 @@ const SchoolGeneratedUnitPage: React.FC = () => {
   useEffect(() => {
     if (!supabase) return
     if (!unitIdSafe) return
-    if (!classId) {
+    if (!classId && !teacherPreviewWithoutClass) {
       navigate('/schools', { replace: true })
       return
     }
@@ -258,7 +262,7 @@ const SchoolGeneratedUnitPage: React.FC = () => {
     return () => {
       cancelled = true
     }
-  }, [ageBand, classId, navigate, t, unitIdSafe])
+  }, [ageBand, classId, navigate, t, teacherPreviewWithoutClass, unitIdSafe])
 
   const parsed = useMemo(() => {
     if (!unitJson?.contentBlocks) return { story: null as string | null, rules: [] as Array<{ label: string | null; text: string }> }

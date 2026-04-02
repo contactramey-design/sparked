@@ -51,6 +51,24 @@ const SchoolsPage: React.FC = () => {
         <div className="schools-grid">
           <Card>
             <CardHeader>
+              <CardTitle>{t('schools.dashboardTitle')}</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="muted">{t('schools.dashboardDesc')}</p>
+              <div className="schools-actions">
+                <Button
+                  onClick={() => {
+                    navigate('/teacher/dashboard')
+                  }}
+                >
+                  {t('schools.openTeacherDashboard')}
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
               <CardTitle>{t('schools.subjectHubTitle')}</CardTitle>
             </CardHeader>
             <CardContent>
@@ -97,24 +115,6 @@ const SchoolsPage: React.FC = () => {
                 <Link to="/for-schools#school-compliance" className="secondary-button">
                   {t('schools.openInstallGuide')}
                 </Link>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>{t('schools.dashboardTitle')}</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="muted">{t('schools.dashboardDesc')}</p>
-              <div className="schools-actions">
-                <Button
-                  onClick={() => {
-                    navigate('/teacher/dashboard')
-                  }}
-                >
-                  {t('schools.openTeacherDashboard')}
-                </Button>
               </div>
             </CardContent>
           </Card>
