@@ -21,6 +21,9 @@
     "api/schools/generate-weekly-units.js": {
       "maxDuration": 300
     },
+    "api/schools/propose-pacing-from-pdf.js": {
+      "maxDuration": 120
+    },
     "api/homework/analyze.js": {
       "maxDuration": 60
     },

@@ -171,6 +171,10 @@
     "engagementNeedJoin": "Join a class on this device first.",
     "engagementNeedSupabase": "Check-in needs Supabase (same as class join).",
     "subjectHubTitle": "Subject tracks",
+    "missionTracksTitle": "Start with safety & AI literacy",
+    "missionTracksBody": "Before subject practice, every class should touch internet safety and how AI works — that is Sparki’s core mission. These tracks are non-optional for responsible pilots.",
+    "openSafetyTrackCta": "Internet safety adventures",
+    "openAiTrackCta": "AI & coding essentials",
     "subjectHubDesc": "Math, English, science, and history — short Sparki lessons matched to your age band. They supplement your teacher’s weekly PDF units, not replace them.",
     "subjectHubSupplemental": "Each track targets important California-aligned clusters (PTKLF, CCSS, NGSS, HSS)—not a complete scope-and-sequence. Pair with your district map and the printable alignment tables.",
     "openSubjectHub": "Browse subject tracks",
@@ -293,38 +297,38 @@
     "alignmentColLink": "Open",
     "alignmentUnknownFramework": "See lesson notes",
     "heroAlt": {
-      "math": "Colorful hero art for math with Sparki",
-      "english": "Colorful hero art for English language arts with Sparki",
-      "science": "Colorful hero art for science with Sparki",
-      "history": "Colorful hero art for history and social studies with Sparki"
+      "math": "Colorful hero art for math",
+      "english": "Colorful hero art for English language arts",
+      "science": "Colorful hero art for science",
+      "history": "Colorful hero art for history and social studies"
     },
     "tracks": {
       "math": {
         "hubEmoji": "🔢",
         "cardTitle": "Math",
         "cardDesc": "Number sense, operations, geometry, and fractions — structured for class or small groups.",
-        "title": "Math with Sparki",
+        "title": "Math",
         "subtitle": "Short, ready-to-teach lessons with built-in practice — number sense through fractions, matched to early elementary bands."
       },
       "english": {
         "hubEmoji": "📚",
         "cardTitle": "English / Language Arts",
         "cardDesc": "Phonics awareness, comprehension, sentences, and evidence-based reading.",
-        "title": "English & Language Arts with Sparki",
+        "title": "English & Language Arts",
         "subtitle": "Phonics, comprehension, sentences, and evidence — scaffolded for whole group, small group, or independent practice."
       },
       "science": {
         "hubEmoji": "🔬",
         "cardTitle": "Science",
         "cardDesc": "Observation, living things, matter, energy, and ecosystems — hands-on friendly.",
-        "title": "Science with Sparki",
+        "title": "Science",
         "subtitle": "Observation, living things, matter, and energy — vocabulary-rich and easy to pair with hands-on demos."
       },
       "history": {
         "hubEmoji": "🌍",
         "cardTitle": "History & Social Studies",
         "cardDesc": "Time, community, maps, timelines, and sources — civic and historical thinking.",
-        "title": "History & Social Studies with Sparki",
+        "title": "History & Social Studies",
         "subtitle": "Time, community, maps, timelines, and sources — build civic and historical thinking without extra prep."
       }
     }
@@ -431,6 +435,31 @@
       }
     }
   },
+  "governance": {
+    "pageTitle": "Governance & data (for districts and counties)",
+    "pageIntro": "Use this page to brief superintendents, county offices, and boards on how SpArki handles student data and AI. It complements the full compliance checklist below.",
+    "pageIntroShort": "SpArki is built as a supplement to your existing curriculum and systems—not a replacement. AI assists with optional generation after teacher upload; educators remain in charge.",
+    "downloadPacket": "Download governance summary (TXT)",
+    "fullComplianceLink": "Open full compliance & privacy",
+    "packetDocTitle": "SpArki — Governance summary",
+    "packetGeneratedAt": "Generated: {date}",
+    "packetFooter": "This summary is informational. Schools should align use with local policy and legal counsel.",
+    "dataFlowTitle": "How data flows (plain language)",
+    "dataFlowStep1": "Teachers sign in with a school email. Class list and join codes live in your Supabase project under your control.",
+    "dataFlowStep2": "Students join with a class code and an anonymous label (e.g. Explorer-42). We recommend not using full student names in the product.",
+    "dataFlowStep3": "Progress syncs as JSON tied to that anonymous label—internet safety, AI & coding tracks, optional generated weekly units, and subject practice signals.",
+    "dataFlowStep4": "Optional: teachers upload a PDF for the weekly generator. Text is sent to OpenAI to draft units; source PDFs can be stored in private Supabase Storage for the pilot.",
+    "dataFlowBody": "Teacher account → SpArki (Supabase) → anonymous student progress rows; optional PDF → OpenAI → generated units stored in Supabase; no ads or behavioral profiling in the kid experience.",
+    "aiUseTitle": "Where AI is used",
+    "aiUseWeekly": "Weekly lesson generator: teacher-uploaded PDF text is summarized into three short units with practice and an optional Sparki-themed adventure layer—teachers review before assigning.",
+    "aiUseHomework": "Homework adventure (when enabled): image or text of a homework page may be analyzed to produce a guided, age-safe story prompt—grown-up consent and configuration apply.",
+    "aiUseNoTraining": "We do not use student chat or child content to train public AI models. Use commercial APIs per their terms; prefer minimal retention settings where available.",
+    "studentIdTitle": "Student identifiers — do this / avoid this",
+    "studentIdDo": "Do: use class codes plus anonymous labels; export CSV for your own gradebook mapping offline if the district requires it.",
+    "studentIdDont": "Avoid: pasting full rosters, student emails, or state IDs into bulletin or free-text fields.",
+    "boardSummaryTitle": "One-paragraph board summary",
+    "boardSummaryBody": "SpArki delivers bilingual, standards-aligned digital citizenship and AI literacy for ages 3–11. Schools keep data in their own Supabase project; students can participate without full names; AI features are teacher-initiated supplements with clear human oversight."
+  },
   "forSchoolsHub": {
     "pageTitle": "Sparki Academy — Free Safety + AI Curriculum for iPads",
     "heroSubtitle": "Kid-safe lessons, bilingual EN/ES toggle, offline PWA on iPad, and a live teacher dashboard for pilots.",
@@ -501,6 +530,12 @@
     "pricingDistrictPrice": "$7,500 – $10,000+ / year",
     "pricingDistrictNotes": "Scaled onboarding, optional homework packets, priority feature requests (case-by-case).",
     "pricingFootnote": "Not a binding quote — contact us for a formal proposal.",
+    "ssoTitle": "Single sign-on (SSO) roadmap",
+    "ssoBody": "District IT usually asks for Google Workspace, Clever, or ClassLink before a wide rollout. We do not use fake SSO switches — this is the honest pilot path:",
+    "ssoBulletGoogle": "Google Workspace: enable the Google provider in your Supabase project, then set VITE_GOOGLE_AUTH_ENABLED to show an optional “Continue with Google” button on Login.",
+    "ssoBulletClever": "Clever / ClassLink: district-specific OAuth and roster rules — contact us with your SIS and timeline; we scope integration after core classroom adoption.",
+    "ssoBulletContact": "Need SAML or a custom IdP? Mention it in your pilot request for county or COE security review.",
+    "ssoCta": "Contact us about SSO",
     "ecosystemTitle": "California pilots — how Sparki fits",
     "ecosystemBody": "Sparki is built as supplemental, pacing-friendly practice with honest limits on what teachers see in exports today.",
     "ecosystemBullet1": "Pairs with your scope: short subject lessons + teacher PDF weekly units — not a year-long replacement curriculum.",
@@ -582,6 +617,7 @@
     "tabsStudents": "Students",
     "tabsRoster": "Roster & tracking",
     "tabsHomePackets": "Home packets",
+    "tabsGovernance": "Governance",
     "hubExplainer": "This hub is Sparki’s pilot answer to “can teachers see the class?” Students join with your class code and pick an anonymous label (not a full SIS roster). Each label becomes one row here with completion estimates you can export. Full district roster sync and SSO are roadmap items.",
     "rosterExplainer": "Your roster is the list of anonymous student codes that have joined this class and synced progress. There is one row per device/session label — map labels to real students only in your own gradebook if your district requires it.",
     "trackingScopeNote": "Percentages here reflect core Academy tracks (safety, AI & coding) and generated weekly homework units when active. Subject-track columns fill when students complete subject lessons on a joined device (synced into the same progress row).",
@@ -608,6 +644,8 @@
     "selectClassFirst": "Select a class first.",
     "refresh": "Refresh",
     "exportCsv": "Export CSV",
+    "exportParentSummary": "Download parent summary (TXT)",
+    "exportCountySummary": "Download pilot summary for leaders (TXT)",
     "tableStudent": "Roster code (anonymous)",
     "tableSafety": "Internet Safety",
     "tableAi": "AI & Coding",
@@ -732,6 +770,7 @@
   "homeworkFeature": {
     "layoutTitle": "Homework Adventure",
     "layoutSubtitle": "Upload a worksheet. SpArki analyzes it, explains it, and can tell a short story that teaches the same skill.",
+    "layoutRewardNote": "School use: treat the story as a light reward after the real teaching — objectives and checks come first.",
     "homeIntro": "Choose what you want to do. Everything stays on this device until you run the helper (photos are not stored on our servers).",
     "ctaUpload": "Upload homework",
     "ctaDemo": "Try a demo",
@@ -817,7 +856,9 @@
     "submitButton": "Sign in and open home",
     "coppaNote": "Grown-ups: Sign in once on this device so your family can use SpArki. This keeps the experience parent-approved.",
     "startTrialButton": "Start 30-day free trial (card required)",
-    "alreadyAccessButton": "I already have access on this device"
+    "alreadyAccessButton": "I already have access on this device",
+    "continueWithGoogle": "Continue with Google (school pilots)",
+    "googleNotConfigured": "Google sign-in: set VITE_GOOGLE_AUTH_ENABLED and enable the Google provider in Supabase."
   },
   "dashboardPage": {
     "switchView": "Switch view:",
@@ -1183,7 +1224,21 @@
     "subjectTagsSaving": "Saving…",
     "subjectTagsSaved": "Saved.",
     "subjectTagsLoadError": "Could not load units for tagging.",
-    "subjectTagsSaveError": "Could not save subject tags."
+    "subjectTagsSaveError": "Could not save subject tags.",
+    "pacingCardTitle": "Step 1 — Review PDF pacing",
+    "pacingCardBody": "We use AI to read your PDF and show what it likely emphasizes. You confirm before we generate full weekly units (human-in-the-loop).",
+    "pacingButton": "Review PDF pacing",
+    "pacingBusy": "Analyzing PDF…",
+    "pacingSummaryLabel": "Summary for you",
+    "pacingThemesLabel": "Detected themes",
+    "pacingNotesLabel": "Notes / gaps",
+    "pacingConfidenceLabel": "Confidence",
+    "pacingConfidenceHigh": "high",
+    "pacingConfidenceMedium": "medium",
+    "pacingConfidenceLow": "low",
+    "pacingConfirmCheckbox": "This matches my intent for this week’s generation.",
+    "pacingGenerateBlocked": "Review pacing and check the confirmation box before generating.",
+    "pacingError": "Could not analyze PDF for pacing."
   },
   "schoolGeneratedUnit": {
     "lessonQuizHomework": "Lesson + Quiz + Homework",
@@ -1196,7 +1251,9 @@
     "unitNotFound": "Unit not found.",
     "expired": "This generated unit has expired.",
     "loadFailed": "Failed to load unit.",
-    "homeworkAdventureTitle": "Homework Adventure",
+    "realWorldTitle": "Real-world tip",
+    "realWorldListenAria": "Listen to real-world tip",
+    "homeworkAdventureTitle": "Homework Adventure (Sparki reward)",
     "videoAdventure": "Video adventure",
     "stepOf": "(Step {current} of {total})",
     "hintLabel": "Hint",

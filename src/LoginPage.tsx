@@ -8,6 +8,7 @@ import {
   readSafeInternalPath,
   resolveLoginRedirect,
 } from './lib/postLoginRedirect'
+import { supabase } from './lib/supabaseClient'
 
 const LoginPage: React.FC = () => {
   const { isLoggedIn, devLogin } = useAuth()
@@ -27,6 +28,18 @@ const LoginPage: React.FC = () => {
     clearPostLoginRedirect()
     navigate(redirect, { replace: true })
   }, [isLoggedIn, navigate, redirect])
+
+  const googleAuthEnabled = import.meta.env.VITE_GOOGLE_AUTH_ENABLED === 'true'
+
+  const handleGoogle = async () => {
+    if (!supabase) return
+    setError(null)
+    const { error: oauthErr } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: { redirectTo: `${window.location.origin}/login` },
+    })
+    if (oauthErr) setError(oauthErr.message || 'Google sign-in failed.')
+  }
 
   const handleStartTrial = async () => {
     setError(null)
@@ -64,9 +77,14 @@ const LoginPage: React.FC = () => {
             {t('login.intro')}
           </p>
           {error && <p className="quiz-error text-sm mt-2">{error}</p>}
+          {googleAuthEnabled && supabase ? (
+            <button type="button" className="primary-button mt-4" onClick={() => void handleGoogle()}>
+              {t('login.continueWithGoogle')}
+            </button>
+          ) : null}
           <button
             type="button"
-            className="primary-button mt-4"
+            className={`${googleAuthEnabled && supabase ? 'secondary-button' : 'primary-button'} mt-4`}
             onClick={() => void handleStartTrial()}
           >
             {t('login.startTrialButton')}
@@ -82,6 +100,9 @@ const LoginPage: React.FC = () => {
           >
             {t('login.alreadyAccessButton')}
           </button>
+          {googleAuthEnabled && !supabase ? (
+            <p className="login-coppa-note text-sm">{t('login.googleNotConfigured')}</p>
+          ) : null}
           <p className="login-coppa-note">
             {t('login.coppaNote')}
           </p>

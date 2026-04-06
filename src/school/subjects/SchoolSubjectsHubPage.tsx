@@ -33,6 +33,19 @@ const SchoolSubjectsHubPage: React.FC = () => {
         )}
       </header>
 
+      <div className="school-subj-hub-mission no-print rounded-2xl border-2 border-orange-200 bg-orange-50/70 p-4 md:p-6 mb-6 max-w-3xl">
+        <h2 className="text-lg font-bold text-slate-900 m-0 mb-2">{t('schools.missionTracksTitle')}</h2>
+        <p className="text-slate-800 text-sm md:text-base m-0 mb-4">{t('schools.missionTracksBody')}</p>
+        <div className="flex flex-wrap gap-3">
+          <Link to="/track/social-safety" className="primary-button">
+            {t('schools.openSafetyTrackCta')}
+          </Link>
+          <Link to="/track/ai-coding" className="secondary-button">
+            {t('schools.openAiTrackCta')}
+          </Link>
+        </div>
+      </div>
+
       <ul className="school-subj-hub-grid">
         {SCHOOL_SUBJECT_IDS.map((id: SchoolSubjectId) => (
           <li key={id}>

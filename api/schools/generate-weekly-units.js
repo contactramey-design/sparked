@@ -5,13 +5,14 @@
  *  - class_id: uuid string
  *  - locale: optional 'en'|'es' (defaults 'en')
  *  - generate_video: optional 'true'|'false' (defaults 'false')
+ *  - teacher_pacing_confirmed: required 'true' — teacher reviewed PDF pacing in the UI first.
  *
  * Auth:
  *  - Teacher access token must be provided as Authorization: Bearer <jwt>.
  *  - Backend uses that identity for Supabase DB + Storage writes (RLS enforced).
  */
 import { createClient } from '@supabase/supabase-js'
-import { randomUUID } from 'node:crypto'
+import { createHash, randomUUID } from 'node:crypto'
 import * as pdfjsLib from 'pdfjs-dist/legacy/build/pdf.js'
 import { bearerAuthHeaders } from '../lib/serviceAuth.js'
 
@@ -147,7 +148,8 @@ Reglas:
     - mezcla: recordar vocabulario, idea principal, aplicacion corta, y un mini escenario de 1-2 frases.
     - cada pregunta: id (string unico), prompt (string), options (3 strings), correctIndex (0-2).
     - evita respuestas obvias por longitud; distractores plausibles.
-  - homeworkAdventure: title, subject, topic; steps: EXACTAMENTE 5 pasos (id, story 2-3 frases, prompt, hint sin dar la respuesta).
+  - homeworkAdventure: title, subject, topic; steps: EXACTAMENTE 5 pasos (id, story 2-3 frases, prompt, hint sin dar la respuesta). La aventura debe reforzar el objetivo de esta unidad y NO introducir nuevos estándares obligatorios.
+  - realWorldTip: string obligatorio (1-3 oraciones en español claro) que conecte la lección con la vida fuera de pantalla (casa, salón o comunidad). Debe incluir UNA acción concreta que las familias puedan intentar sin dispositivo. NO menciones a Sparki como entidad real; Sparki solo puede aparecer dentro de homeworkAdventure como fantasía, pero realWorldTip se mantiene anclado en la realidad.
   - standardCodes: array opcional de 0 a 12 cadenas cortas con códigos o referencias alineadas a California (ej. "1.OA.A.1", "2-PS1-1", "1.RI.2", descriptores PTKLF o HSS). Son solo para el docente: NO pongas estos códigos dentro de contentBlocks, quizQuestions ni homeworkAdventure (el texto para estudiantes debe estar sin códigos).
 - ${ageLine}
 - No incluyas markdown ni texto fuera del JSON.
@@ -166,7 +168,8 @@ Reglas:
         "subject": string,
         "topic": string,
         "steps": Array<{id:string,story:string,prompt:string,hint:string}>
-      }
+      },
+      "realWorldTip": string
     }
   ]
 }`
@@ -192,7 +195,8 @@ Rules:
     - mix recall, main idea, short application, and one brief scenario (1–2 sentences) per unit.
     - each item: id (unique string), prompt, options (3 strings), correctIndex (0–2).
     - use plausible distractors; avoid “longest answer is correct.”
-  - homeworkAdventure: title, subject, topic; steps: EXACTLY 5 steps (id, story 2–3 sentences, prompt, Socratic hint without the final answer).
+  - homeworkAdventure: title, subject, topic; steps: EXACTLY 5 steps (id, story 2–3 sentences, prompt, Socratic hint without the final answer). The adventure must reinforce this unit’s objective and must **not** introduce new required standards.
+  - realWorldTip: required string (1–3 sentences) that connects the lesson to offline, observable life (home, classroom, or community). Include ONE clear action families can try without a screen. Do **not** describe Sparki as a real entity; Sparki may only appear inside homeworkAdventure as fantasy framing, but realWorldTip stays grounded in reality.
   - standardCodes: optional array of 0–12 short strings: California-aligned codes or labels for teachers only (e.g. "3.OA.A.1", "4-ESS2-1", "1.RI.2", PTKLF or HSS descriptors). Do **not** put these codes inside student-facing contentBlocks, quizQuestions, or homeworkAdventure text (keep student text code-free).
 - ${ageLine}
 - No markdown or text outside JSON.
@@ -211,10 +215,18 @@ Rules:
         "subject": string,
         "topic": string,
         "steps": Array<{id:string,story:string,prompt:string,hint:string}>
-      }
+      },
+      "realWorldTip": string
     }
   ]
 }`
+}
+
+function validateRealWorldTip(tip) {
+  if (typeof tip !== 'string') return false
+  const s = tip.trim()
+  if (s.length < 20) return false
+  return true
 }
 
 async function generateWeeklyUnits({ pdfText, locale, ageBand = 'kids' }) {
@@ -370,6 +382,8 @@ async function generateHomeworkVideoForUnit({ homeworkAdventure, locale }) {
 }
 
 export default async function handler(req, res) {
+  /** @type {string | null} */
+  let runId = null
   try {
     if (req.method !== 'POST') {
       res.status(405).json({ error: 'Method not allowed' })
@@ -407,6 +421,9 @@ export default async function handler(req, res) {
     const classId = (fields?.class_id?.[0] ?? fields?.class_id ?? '').toString().trim()
     const locale = (fields?.locale?.[0] ?? fields?.locale ?? 'en').toString().trim()
     const generateVideo = normalizeBool(fields?.generate_video?.[0] ?? fields?.generate_video ?? false)
+    const teacherPacingConfirmed = normalizeBool(
+      fields?.teacher_pacing_confirmed?.[0] ?? fields?.teacher_pacing_confirmed ?? false,
+    )
 
     if (!classId) {
       res.status(400).json({ error: 'Missing class_id.' })
@@ -439,6 +456,31 @@ export default async function handler(req, res) {
       return
     }
 
+    if (!teacherPacingConfirmed) {
+      res.status(400).json({
+        error:
+          'Confirm PDF pacing before generating. Use “Review PDF pacing” in the weekly generator, then generate.',
+      })
+      return
+    }
+
+    runId = randomUUID()
+    const pdfTextHash = createHash('sha256').update(pdfText).digest('hex').slice(0, 40)
+    const { error: runInsErr } = await supabase.from('weekly_generation_runs').insert({
+      id: runId,
+      teacher_id: teacherId,
+      class_id: classId,
+      pdf_text_hash: pdfTextHash,
+      model: 'gpt-4o',
+      prompt_version: 'weekly-v2-realworld-pacing',
+      locale: locale === 'es' ? 'es' : 'en',
+      status: 'started',
+    })
+    if (runInsErr) {
+      console.warn('[generate-weekly-units] weekly_generation_runs insert skipped:', runInsErr.message)
+      runId = null
+    }
+
     const { weekly_track_label: weeklyTrackLabel, units } = await generateWeeklyUnits({
       pdfText,
       locale: locale === 'es' ? 'es' : 'en',
@@ -449,13 +491,14 @@ export default async function handler(req, res) {
     const normalizedUnits = units.map((u, idx) => {
       const title = typeof u?.title === 'string' ? u.title.trim() : `Generated Unit ${idx + 1}`
       const summary = typeof u?.summary === 'string' ? u.summary.trim() : ''
+      const realWorldTip = typeof u?.realWorldTip === 'string' ? u.realWorldTip.trim() : ''
       const standardCodes = normalizeStandardCodes(u?.standardCodes)
       const contentBlocks = Array.isArray(u?.contentBlocks) ? u.contentBlocks.filter((x) => typeof x === 'string') : []
       let quizQuestions = Array.isArray(u?.quizQuestions) ? u.quizQuestions : []
       if (quizQuestions.length > 12) quizQuestions = quizQuestions.slice(0, 12)
       const homeworkAdventure = u?.homeworkAdventure
 
-      return { title, summary, standardCodes, contentBlocks, quizQuestions, homeworkAdventure }
+      return { title, summary, realWorldTip, standardCodes, contentBlocks, quizQuestions, homeworkAdventure }
     })
 
     for (const [i, u] of normalizedUnits.entries()) {
@@ -469,6 +512,10 @@ export default async function handler(req, res) {
       }
       if (!validateQuizQuestions(u.quizQuestions)) {
         res.status(500).json({ error: `Model returned invalid quizQuestions for unit ${i + 1}.` })
+        return
+      }
+      if (!validateRealWorldTip(u.realWorldTip)) {
+        res.status(500).json({ error: `Model returned an invalid realWorldTip for unit ${i + 1}.` })
         return
       }
       if (!u.homeworkAdventure || typeof u.homeworkAdventure !== 'object') {
@@ -546,6 +593,7 @@ export default async function handler(req, res) {
           id: unitId,
           title: u.title,
           summary: u.summary,
+          realWorldTip: u.realWorldTip,
           ...(u.standardCodes?.length ? { standardCodes: u.standardCodes } : {}),
           estMinutes: 20,
           ageGroup: 'age2',
@@ -562,8 +610,36 @@ export default async function handler(req, res) {
 
     const { error: unitsErr } = await supabase.from('school_weekly_generator_units').insert(rows)
     if (unitsErr) {
+      if (runId) {
+        await supabase
+          .from('weekly_generation_runs')
+          .update({
+            status: 'error',
+            error_message: 'Failed to create generated units.',
+            updated_at: new Date().toISOString(),
+          })
+          .eq('id', runId)
+      }
       res.status(500).json({ error: 'Failed to create generated units.' })
       return
+    }
+
+    if (runId) {
+      const nowIso = new Date().toISOString()
+      await supabase
+        .from('weekly_generation_runs')
+        .update({
+          status: 'success',
+          generator_id: generatorId,
+          updated_at: nowIso,
+        })
+        .eq('id', runId)
+      const { error: auditErr } = await supabase.from('governance_audit_log').insert({
+        actor_uid: teacherId,
+        action: 'generate_weekly',
+        metadata: { run_id: runId, generator_id: generatorId, class_id: classId },
+      })
+      if (auditErr) console.warn('[generate-weekly-units] governance_audit_log:', auditErr.message)
     }
 
     res.status(200).json({
@@ -579,6 +655,29 @@ export default async function handler(req, res) {
       : message.includes('Rate limit') ? 'Too many requests. Please try again in a moment.'
       : message.includes('Invalid generator response') ? 'Could not generate content from this PDF. Please try a different PDF.'
       : message
+
+    try {
+      const accessToken = getBearerToken(req)
+      const supabaseUrl = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL
+      const supabaseAnonKey = process.env.VITE_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY
+      if (runId && accessToken && supabaseUrl && supabaseAnonKey) {
+        const supabaseErr = createClient(supabaseUrl, supabaseAnonKey, {
+          auth: { persistSession: false },
+          global: { headers: { Authorization: `Bearer ${accessToken}` } },
+        })
+        await supabaseErr
+          .from('weekly_generation_runs')
+          .update({
+            status: 'error',
+            error_message: safeMessage.slice(0, 500),
+            updated_at: new Date().toISOString(),
+          })
+          .eq('id', runId)
+      }
+    } catch {
+      /* ignore logging failures */
+    }
+
     res.status(500).json({ error: safeMessage })
   }
 }

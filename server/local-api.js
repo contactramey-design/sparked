@@ -142,6 +142,11 @@ const server = http.createServer(async (req, res) => {
       await m.default(req, wrapped)
       return
     }
+    if (url === '/api/schools/propose-pacing-from-pdf' && req.method === 'POST') {
+      const m = await import('../api/schools/propose-pacing-from-pdf.js')
+      await m.default(req, wrapped)
+      return
+    }
     if (url === '/api/schools/generate-weekly-units' && req.method === 'POST') {
       const m = await import('../api/schools/generate-weekly-units.js')
       await m.default(req, wrapped)

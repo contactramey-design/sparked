@@ -13,6 +13,7 @@ import { Progress } from '@/components/ui/progress'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { writeTeacherClassSnapshot } from '@/lib/teacherSelectedClassStorage'
+import GovernanceOverviewContent from '@/components/GovernanceOverviewContent'
 
 const TEACHER_ONBOARDING_KEY = 'sparki_teacher_onboarding_dismissed_v1'
 
@@ -51,6 +52,16 @@ type StudentProgressRow = {
   student_code: string
   progress: unknown
   updated_at: string
+}
+
+function downloadPlainTextFile(filename: string, content: string) {
+  const blob = new Blob([content], { type: 'text/plain;charset=utf-8' })
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement('a')
+  a.href = url
+  a.download = filename
+  a.click()
+  URL.revokeObjectURL(url)
 }
 
 function downloadTextFile(filename: string, content: string) {
@@ -95,16 +106,85 @@ function computeTrackCompletion(trackId: string, progress: unknown): number {
   return percent(masteredCount, unitIds.length)
 }
 
+function buildParentProgressSummary(opts: {
+  className: string
+  classCode: string
+  bulletin: string
+  studentsCount: number
+  safetyAvg: number
+  aiAvg: number
+  homeworkAvg: number
+  overallAvg: number
+  exportedAt: string
+}): string {
+  const lines = [
+    `Class: ${opts.className}`,
+    `Join code: ${opts.classCode}`,
+    `Exported: ${opts.exportedAt}`,
+    '',
+    'What we are practicing in SpArki (anonymous class averages):',
+    `- Internet safety track: ${opts.safetyAvg}%`,
+    `- AI & coding track: ${opts.aiAvg}%`,
+    `- Homework adventures (when active): ${opts.homeworkAvg}%`,
+    `- Overall blend: ${opts.overallAvg}%`,
+    '',
+    `Students with synced progress: ${opts.studentsCount}`,
+    '',
+    'Teacher / class note for families:',
+    opts.bulletin.trim() || '(No class note saved yet.)',
+    '',
+    'Tip: SpArki uses anonymous labels on devices—not a full official roster.',
+    'Ask your teacher if you need help joining from home with the class code.',
+  ]
+  return lines.join('\n')
+}
+
+function buildCountyPilotSummary(opts: {
+  className: string
+  classCode: string
+  studentsCount: number
+  safetyAvg: number
+  aiAvg: number
+  homeworkAvg: number
+  overallAvg: number
+  subjectLessonsTouched: number
+  subjectLessonsMastered: number
+  exportedAt: string
+}): string {
+  const lines = [
+    'SpArki pilot — class summary (for principals / county / board packets)',
+    '',
+    `Class: ${opts.className}`,
+    `Join code: ${opts.classCode}`,
+    `Export timestamp (UTC): ${opts.exportedAt}`,
+    '',
+    'Aggregate completion (anonymous student rows, class average):',
+    `- Internet safety track: ${opts.safetyAvg}%`,
+    `- AI & coding track: ${opts.aiAvg}%`,
+    `- Generated homework units (when active): ${opts.homeworkAvg}%`,
+    `- Blended overall: ${opts.overallAvg}%`,
+    '',
+    `Synced anonymous rows: ${opts.studentsCount}`,
+    `Subject-track practice (totals across roster): ${opts.subjectLessonsMastered} mastered / ${opts.subjectLessonsTouched} lesson touches`,
+    '',
+    'Data notes:',
+    '- No ads or behavioral ads in the student experience.',
+    '- COPPA / FERPA-oriented design: class codes + anonymous labels; see For Schools → Compliance.',
+    '- For raw columns, use Teacher dashboard → Export CSV.',
+  ]
+  return lines.join('\n')
+}
+
 const TeacherDashboardPage: React.FC = () => {
   const { user } = useAuth()
   const { t } = useTranslation()
   const [searchParams, setSearchParams] = useSearchParams()
 
   const tabParam = searchParams.get('tab')
-  const tab: 'classes' | 'students' | 'home' =
-    tabParam === 'students' || tabParam === 'home' ? tabParam : 'classes'
+  const tab: 'classes' | 'students' | 'home' | 'governance' =
+    tabParam === 'students' || tabParam === 'home' || tabParam === 'governance' ? tabParam : 'classes'
 
-  const setTab = (v: 'classes' | 'students' | 'home') => {
+  const setTab = (v: 'classes' | 'students' | 'home' | 'governance') => {
     if (v === 'classes') setSearchParams({}, { replace: true })
     else setSearchParams({ tab: v }, { replace: true })
   }
@@ -384,7 +464,7 @@ const TeacherDashboardPage: React.FC = () => {
         <Tabs
           defaultValue="classes"
           value={tab}
-          onValueChange={(v) => setTab(v as 'classes' | 'students' | 'home')}
+          onValueChange={(v) => setTab(v as 'classes' | 'students' | 'home' | 'governance')}
         >
             <TabsList>
             <TabsTrigger value="classes">{t('teacherDashboard.tabsClasses')}</TabsTrigger>
@@ -585,6 +665,66 @@ const TeacherDashboardPage: React.FC = () => {
                       {t('teacherDashboard.refresh')}
                     </Button>
                     <Button
+                      variant="secondary"
+                      disabled={!selectedClassId || students.length === 0}
+                      onClick={() => {
+                        if (!selectedClass) return
+                        const now = new Date().toISOString()
+                        const text = buildParentProgressSummary({
+                          className: selectedClass.name,
+                          classCode: selectedClass.class_code,
+                          bulletin: selectedClass.bulletin_text ?? '',
+                          studentsCount: students.length,
+                          safetyAvg: aggregated.safetyAvg,
+                          aiAvg: aggregated.aiAvg,
+                          homeworkAvg: aggregated.homeworkAvg,
+                          overallAvg: aggregated.overallAvg,
+                          exportedAt: now,
+                        })
+                        downloadPlainTextFile(
+                          `sparki-parent-summary-${selectedClass.class_code}.txt`,
+                          text,
+                        )
+                      }}
+                    >
+                      {t('teacherDashboard.exportParentSummary')}
+                    </Button>
+                    <Button
+                      variant="secondary"
+                      disabled={!selectedClassId || students.length === 0}
+                      onClick={() => {
+                        if (!selectedClass) return
+                        const now = new Date().toISOString()
+                        const subjectTotals = students.reduce(
+                          (acc, s) => {
+                            const st = subjectTrackStats(s.progress)
+                            acc.touched += st.count
+                            acc.mastered += st.mastered
+                            return acc
+                          },
+                          { touched: 0, mastered: 0 },
+                        )
+                        const text = buildCountyPilotSummary({
+                          className: selectedClass.name,
+                          classCode: selectedClass.class_code,
+                          studentsCount: students.length,
+                          safetyAvg: aggregated.safetyAvg,
+                          aiAvg: aggregated.aiAvg,
+                          homeworkAvg: aggregated.homeworkAvg,
+                          overallAvg: aggregated.overallAvg,
+                          subjectLessonsTouched: subjectTotals.touched,
+                          subjectLessonsMastered: subjectTotals.mastered,
+                          exportedAt: now,
+                        })
+                        downloadPlainTextFile(
+                          `sparki-county-pilot-${selectedClass.class_code}.txt`,
+                          text,
+                        )
+                      }}
+                    >
+                      {t('teacherDashboard.exportCountySummary')}
+                    </Button>
+                    <Button
                       disabled={!selectedClassId || students.length === 0}
                       onClick={() => {
                         const rows = students.map((s) => {
@@ -739,6 +879,10 @@ const TeacherDashboardPage: React.FC = () => {
                 </div>
               </CardContent>
             </Card>
+          </TabsContent>
+
+          <TabsContent value="governance">
+            <GovernanceOverviewContent compact />
           </TabsContent>
         </Tabs>
     </div>

@@ -286,6 +286,23 @@ const ForSchoolsPage: React.FC = () => {
 
           <Card>
             <CardHeader>
+              <CardTitle>{t('forSchoolsHub.ssoTitle')}</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <p className="muted">{t('forSchoolsHub.ssoBody')}</p>
+              <ul className="list-disc pl-5 text-sm space-y-1">
+                <li>{t('forSchoolsHub.ssoBulletGoogle')}</li>
+                <li>{t('forSchoolsHub.ssoBulletClever')}</li>
+                <li>{t('forSchoolsHub.ssoBulletContact')}</li>
+              </ul>
+              <Button variant="secondary" asChild>
+                <Link to="/contact">{t('forSchoolsHub.ssoCta')}</Link>
+              </Button>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
               <CardTitle>{t('forSchoolsHub.coursesTitle')}</CardTitle>
             </CardHeader>
             <CardContent>

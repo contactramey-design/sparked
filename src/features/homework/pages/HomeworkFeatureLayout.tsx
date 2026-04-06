@@ -16,6 +16,9 @@ export default function HomeworkFeatureLayout() {
           {t('common.backToDashboard')}
         </Link>
       </PageHeader>
+      <p className="muted homework-feature-reward-note max-w-prose text-sm px-1 -mt-2 mb-2">
+        {t('homeworkFeature.layoutRewardNote')}
+      </p>
       <Outlet />
     </section>
   )

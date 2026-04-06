@@ -31,6 +31,13 @@ type GeneratorResult = {
   units: GeneratorUnitSummary[]
 }
 
+type PacingProposal = {
+  detectedThemes: string[]
+  weeklyFocusSummary: string
+  pacingNotes: string[]
+  confidence: string
+}
+
 const TeacherWeeklyGeneratorPage: React.FC = () => {
   const { user } = useAuth()
   const { t } = useTranslation()
@@ -48,6 +55,10 @@ const TeacherWeeklyGeneratorPage: React.FC = () => {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [result, setResult] = useState<GeneratorResult | null>(null)
+
+  const [pacingLoading, setPacingLoading] = useState(false)
+  const [pacingProposal, setPacingProposal] = useState<PacingProposal | null>(null)
+  const [pacingConfirmed, setPacingConfirmed] = useState(false)
 
   const refreshClasses = async () => {
     if (!supabase || !user) return
@@ -96,11 +107,12 @@ const TeacherWeeklyGeneratorPage: React.FC = () => {
     return b === 'tots' || b === 'kids' || b === 'crew' ? b : 'kids'
   }, [selectedClass?.age_band])
 
-  const submit = async () => {
+  const runPacingReview = async () => {
     if (!supabase || !user) return
     setError(null)
-    setLoading(true)
-    setResult(null)
+    setPacingLoading(true)
+    setPacingProposal(null)
+    setPacingConfirmed(false)
     try {
       if (!selectedClassId) throw new Error(t('teacherGenerator.errorSelectClass'))
       if (!file) throw new Error(t('teacherGenerator.errorChoosePdf'))
@@ -114,7 +126,43 @@ const TeacherWeeklyGeneratorPage: React.FC = () => {
       formData.append('pdf', file)
       formData.append('class_id', selectedClassId)
       formData.append('locale', locale)
+
+      const res = await fetch('/api/schools/propose-pacing-from-pdf', {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${accessToken}` },
+        body: formData,
+      })
+      const data = await res.json().catch(() => ({}))
+      if (!res.ok) throw new Error(typeof data?.error === 'string' ? data.error : t('teacherGenerator.pacingError'))
+      setPacingProposal(data as PacingProposal)
+    } catch (e: unknown) {
+      setError(e instanceof Error ? e.message : t('teacherGenerator.pacingError'))
+    } finally {
+      setPacingLoading(false)
+    }
+  }
+
+  const submit = async () => {
+    if (!supabase || !user) return
+    setError(null)
+    setLoading(true)
+    setResult(null)
+    try {
+      if (!selectedClassId) throw new Error(t('teacherGenerator.errorSelectClass'))
+      if (!file) throw new Error(t('teacherGenerator.errorChoosePdf'))
+      if (file.type !== 'application/pdf') throw new Error(t('teacherGenerator.errorPdfType'))
+      if (!pacingConfirmed) throw new Error(t('teacherGenerator.pacingGenerateBlocked'))
+
+      const { data: sessionData } = await supabase.auth.getSession()
+      const accessToken = sessionData.session?.access_token
+      if (!accessToken) throw new Error(t('teacherGenerator.errorMissingSession'))
+
+      const formData = new FormData()
+      formData.append('pdf', file)
+      formData.append('class_id', selectedClassId)
+      formData.append('locale', locale)
       formData.append('generate_video', generateVideoPerUnit.toString())
+      formData.append('teacher_pacing_confirmed', 'true')
 
       const res = await fetch('/api/schools/generate-weekly-units', {
         method: 'POST',
@@ -222,6 +270,8 @@ const TeacherWeeklyGeneratorPage: React.FC = () => {
                     setError(null)
                     setFile(e.target.files?.[0] ?? null)
                     setResult(null)
+                    setPacingProposal(null)
+                    setPacingConfirmed(false)
                   }}
                   style={{
                     display: 'block',
@@ -240,6 +290,67 @@ const TeacherWeeklyGeneratorPage: React.FC = () => {
                 {t('teacherGenerator.videoToggle')}
               </label>
 
+              <Card className="border border-amber-200/80 bg-amber-50/40">
+                <CardHeader className="py-3">
+                  <CardTitle className="text-base">{t('teacherGenerator.pacingCardTitle')}</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3 text-sm">
+                  <p className="text-slate-700">{t('teacherGenerator.pacingCardBody')}</p>
+                  <Button
+                    type="button"
+                    variant="secondary"
+                    disabled={pacingLoading || loading || !selectedClassId || !file}
+                    onClick={() => void runPacingReview()}
+                  >
+                    {pacingLoading ? t('teacherGenerator.pacingBusy') : t('teacherGenerator.pacingButton')}
+                  </Button>
+
+                  {pacingProposal ? (
+                    <div className="space-y-2 rounded-lg border border-slate-200 bg-white/80 p-3">
+                      <div>
+                        <div className="font-semibold text-slate-800">{t('teacherGenerator.pacingSummaryLabel')}</div>
+                        <p className="text-slate-700 mt-1">{pacingProposal.weeklyFocusSummary}</p>
+                      </div>
+                      <div>
+                        <div className="font-semibold text-slate-800">{t('teacherGenerator.pacingThemesLabel')}</div>
+                        <ul className="list-disc pl-5 mt-1 space-y-0.5 text-slate-700">
+                          {pacingProposal.detectedThemes.map((th) => (
+                            <li key={th}>{th}</li>
+                          ))}
+                        </ul>
+                      </div>
+                      {pacingProposal.pacingNotes.length > 0 ? (
+                        <div>
+                          <div className="font-semibold text-slate-800">{t('teacherGenerator.pacingNotesLabel')}</div>
+                          <ul className="list-disc pl-5 mt-1 space-y-0.5 text-slate-600">
+                            {pacingProposal.pacingNotes.map((n) => (
+                              <li key={n}>{n}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      ) : null}
+                      <p className="text-xs text-slate-600">
+                        {t('teacherGenerator.pacingConfidenceLabel')}:{' '}
+                        {pacingProposal.confidence === 'high'
+                          ? t('teacherGenerator.pacingConfidenceHigh')
+                          : pacingProposal.confidence === 'low'
+                            ? t('teacherGenerator.pacingConfidenceLow')
+                            : t('teacherGenerator.pacingConfidenceMedium')}
+                      </p>
+                      <label className="flex items-start gap-3 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          className="mt-1"
+                          checked={pacingConfirmed}
+                          onChange={(e) => setPacingConfirmed(e.target.checked)}
+                        />
+                        <span>{t('teacherGenerator.pacingConfirmCheckbox')}</span>
+                      </label>
+                    </div>
+                  ) : null}
+                </CardContent>
+              </Card>
+
               {!!error && (
                 <p className="quiz-error" role="alert">
                   {error}
@@ -247,13 +358,16 @@ const TeacherWeeklyGeneratorPage: React.FC = () => {
               )}
 
               <Button
-                disabled={loading || !selectedClassId || !file}
+                disabled={loading || !selectedClassId || !file || !pacingConfirmed}
                 onClick={() => {
                   void submit()
                 }}
               >
                 {loading ? t('teacherGenerator.buttonBusy') : t('teacherGenerator.buttonIdle')}
               </Button>
+              {!pacingConfirmed && selectedClassId && file ? (
+                <p className="text-sm text-slate-600">{t('teacherGenerator.pacingGenerateBlocked')}</p>
+              ) : null}
             </div>
           </CardContent>
         </Card>

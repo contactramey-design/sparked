@@ -171,6 +171,10 @@
     "engagementNeedJoin": "Primero únete a una clase en este dispositivo.",
     "engagementNeedSupabase": "El registro necesita Supabase (igual que unirse a clase).",
     "subjectHubTitle": "Rutas por materia",
+    "missionTracksTitle": "Empieza por seguridad y alfabetización en IA",
+    "missionTracksBody": "Antes de la práctica por materia, cada clase debería abordar seguridad en internet y cómo funciona la IA — es la misión central de Sparki. Estas rutas son esenciales en pilotos responsables.",
+    "openSafetyTrackCta": "Aventuras de seguridad en internet",
+    "openAiTrackCta": "Fundamentos de IA y programación",
     "subjectHubDesc": "Matemáticas, inglés, ciencias e historia — lecciones cortas de Sparki para tu franja de edad. Complementan el PDF semanal del docente; no lo reemplazan.",
     "subjectHubSupplemental": "Cada ruta se centra en grupos de estándares clave de California (PTKLF, CCSS, NGSS, HSS), no en un programa anual completo. Combínalas con el mapa del distrito y las tablas de alineación imprimibles.",
     "openSubjectHub": "Ver rutas por materia",
@@ -293,38 +297,38 @@
     "alignmentColLink": "Abrir",
     "alignmentUnknownFramework": "Ver notas de la lección",
     "heroAlt": {
-      "math": "Arte de cabecera colorido de matemáticas con Sparki",
-      "english": "Arte de cabecera colorido de inglés con Sparki",
-      "science": "Arte de cabecera colorido de ciencias con Sparki",
-      "history": "Arte de cabecera colorido de historia y estudios sociales con Sparki"
+      "math": "Arte de cabecera colorido de matemáticas",
+      "english": "Arte de cabecera colorido de inglés",
+      "science": "Arte de cabecera colorido de ciencias",
+      "history": "Arte de cabecera colorido de historia y estudios sociales"
     },
     "tracks": {
       "math": {
         "hubEmoji": "🔢",
         "cardTitle": "Matemáticas",
         "cardDesc": "Números, operaciones, geometría y fracciones — listo para clase o grupos pequeños.",
-        "title": "Matemáticas con Sparki",
+        "title": "Matemáticas",
         "subtitle": "Lecciones listas para enseñar con práctica integrada — sentido numérico hasta fracciones, por franjas de edad."
       },
       "english": {
         "hubEmoji": "📚",
         "cardTitle": "Inglés / Lengua",
         "cardDesc": "Fonología, comprensión, oraciones y lectura con evidencia.",
-        "title": "Inglés y lengua con Sparki",
+        "title": "Inglés y lengua",
         "subtitle": "Fonología, comprensión, oraciones y evidencia — para grupo completo, pequeño grupo o práctica independiente."
       },
       "science": {
         "hubEmoji": "🔬",
         "cardTitle": "Ciencias",
         "cardDesc": "Observación, seres vivos, materia, energía y ecosistemas — con enfoque práctico.",
-        "title": "Ciencias con Sparki",
+        "title": "Ciencias",
         "subtitle": "Observación, seres vivos, materia y energía — vocabulario rico y fácil de combinar con demostraciones."
       },
       "history": {
         "hubEmoji": "🌍",
         "cardTitle": "Historia y estudios sociales",
         "cardDesc": "Tiempo, comunidad, mapas, líneas de tiempo y fuentes — pensamiento cívico e histórico.",
-        "title": "Historia y estudios sociales con Sparki",
+        "title": "Historia y estudios sociales",
         "subtitle": "Tiempo, comunidad, mapas, líneas de tiempo y fuentes — pensamiento histórico y cívico sin preparación extra."
       }
     }
@@ -431,6 +435,31 @@
       }
     }
   },
+  "governance": {
+    "pageTitle": "Gobernanza y datos (distritos y condados)",
+    "pageIntro": "Use esta página para informar a superintendentes, oficinas de condado y juntas sobre cómo SpArki maneja datos estudiantiles e IA. Complementa la lista completa de cumplimiento más abajo.",
+    "pageIntroShort": "SpArki es un complemento a su currículo y sistemas actuales, no un reemplazo. La IA asiste de forma opcional tras la carga del docente; el educador sigue al mando.",
+    "downloadPacket": "Descargar resumen de gobernanza (TXT)",
+    "fullComplianceLink": "Abrir cumplimiento y privacidad completos",
+    "packetDocTitle": "SpArki — Resumen de gobernanza",
+    "packetGeneratedAt": "Generado: {date}",
+    "packetFooter": "Este resumen es informativo. Las escuelas deben alinear el uso con políticas locales y asesoría legal.",
+    "dataFlowTitle": "Flujo de datos (lenguaje claro)",
+    "dataFlowStep1": "Los docentes inician sesión con correo escolar. La lista de clases y códigos vive en su proyecto Supabase bajo su control.",
+    "dataFlowStep2": "Los estudiantes se unen con un código de clase y una etiqueta anónima (p. ej., Explorador-42). Recomendamos no usar nombres completos en el producto.",
+    "dataFlowStep3": "El progreso se sincroniza como JSON ligado a esa etiqueta — seguridad en internet, IA y programación, unidades semanales generadas opcionales y práctica por materia.",
+    "dataFlowStep4": "Opcional: el docente sube un PDF para el generador semanal. El texto se envía a OpenAI para redactar unidades; los PDF de origen pueden guardarse en Almacenamiento privado de Supabase.",
+    "dataFlowBody": "Cuenta docente → SpArki (Supabase) → filas de progreso anónimo; PDF opcional → OpenAI → unidades almacenadas en Supabase; sin anuncios ni perfilado conductual en la experiencia infantil.",
+    "aiUseTitle": "Dónde se usa IA",
+    "aiUseWeekly": "Generador semanal: el texto del PDF del docente se resume en tres unidades cortas con práctica y una capa opcional de aventura con Sparki — el docente revisa antes de asignar.",
+    "aiUseHomework": "Aventura de tareas (si está activada): una imagen o texto de la tarea puede analizarse para generar una guía narrativa según la edad — aplica consentimiento y configuración del adulto.",
+    "aiUseNoTraining": "No usamos el chat de estudiantes ni contenido infantil para entrenar modelos públicos de IA. Se usan APIs comerciales según sus términos; preferir retención mínima cuando esté disponible.",
+    "studentIdTitle": "Identificadores estudiantiles — qué hacer / qué evitar",
+    "studentIdDo": "Sí: usar códigos de clase más etiquetas anónimas; exportar CSV para mapear en su propio libro de calificaciones si el distrito lo requiere.",
+    "studentIdDont": "Evitar: pegar listas completas, correos de estudiantes o IDs estatales en boletines o campos de texto libre.",
+    "boardSummaryTitle": "Resumen de un párrafo para la junta",
+    "boardSummaryBody": "SpArki ofrece ciudadanía digital y alfabetización en IA bilingüe y alineada a estándares para edades 3–11. Las escuelas conservan datos en su propio proyecto Supabase; los estudiantes pueden participar sin nombres completos; las funciones de IA son complementos iniciados por el docente con supervisión humana clara."
+  },
   "forSchoolsHub": {
     "pageTitle": "Sparki Academy — Curso gratis de seguridad + IA para iPad",
     "heroSubtitle": "Lecciones seguras para niños, sitio bilingüe EN/ES, PWA sin conexion en iPad y panel de profesor activo para pilotos.",
@@ -501,6 +530,12 @@
     "pricingDistrictPrice": "7.500 – 10.000+ USD / año",
     "pricingDistrictNotes": "Implementación ampliada, paquetes opcionales para casa, prioridad en funciones (caso por caso).",
     "pricingFootnote": "No es una cotización vinculante — contáctanos para una propuesta formal.",
+    "ssoTitle": "Hoja de ruta de inicio de sesión único (SSO)",
+    "ssoBody": "El equipo de TI suele pedir Google Workspace, Clever o ClassLink antes de un despliegue amplio. No usamos interruptores falsos — esta es la ruta honesta del piloto:",
+    "ssoBulletGoogle": "Google Workspace: activa el proveedor Google en tu proyecto Supabase y define VITE_GOOGLE_AUTH_ENABLED para mostrar el botón opcional «Continuar con Google» en Entrar.",
+    "ssoBulletClever": "Clever / ClassLink: OAuth y reglas de lista según el distrito — contáctanos con tu SIS y cronograma; integramos tras la adopción en aula.",
+    "ssoBulletContact": "¿Necesitas SAML u otro IdP? Inclúyelo en la solicitud de piloto para revisión de seguridad del condado o COE.",
+    "ssoCta": "Contáctanos sobre SSO",
     "ecosystemTitle": "Pilotos en California — cómo encaja Sparki",
     "ecosystemBody": "Sparki es práctica complementaria con límites claros sobre qué ven los docentes en las exportaciones hoy.",
     "ecosystemBullet1": "Encaja con tu alcance: lecciones cortas por materia + unidades semanales en PDF del docente — no un currículo anual sustituto.",
@@ -582,6 +617,7 @@
     "tabsStudents": "Estudiantes",
     "tabsRoster": "Lista y seguimiento",
     "tabsHomePackets": "Paquetes",
+    "tabsGovernance": "Gobernanza",
     "hubExplainer": "Este hub es la respuesta piloto de Sparki a “¿el profesor ve a la clase?”. Los estudiantes se unen con tu código y eligen una etiqueta anónima (no es una lista del SIS). Cada etiqueta es una fila aquí con estimaciones de avance que puedes exportar. La sincronización completa con el distrito y el SSO están en la hoja de ruta.",
     "rosterExplainer": "Tu lista son los códigos anónimos que se unieron a esta clase y sincronizaron progreso. Hay una fila por etiqueta de dispositivo/sesión; vincula etiquetas con alumnos reales solo en tu propio libro de calificaciones si tu distrito lo exige.",
     "trackingScopeNote": "Los porcentajes reflejan las rutas base de la Academia (seguridad, IA y programación) y las unidades semanales generadas cuando están activas. Las columnas de materias se rellenan cuando los estudiantes completan lecciones por materia en un dispositivo unido a la clase (sincronizadas en la misma fila de progreso).",
@@ -608,6 +644,8 @@
     "selectClassFirst": "Primero selecciona una clase.",
     "refresh": "Actualizar",
     "exportCsv": "Exportar CSV",
+    "exportParentSummary": "Descargar resumen para familias (TXT)",
+    "exportCountySummary": "Descargar resumen piloto para líderes (TXT)",
     "tableStudent": "Código de lista (anónimo)",
     "tableSafety": "Seguridad en Internet",
     "tableAi": "IA y programación",
@@ -732,6 +770,7 @@
   "homeworkFeature": {
     "layoutTitle": "Aventura de Tareas",
     "layoutSubtitle": "Sube una hoja de tareas. SpArki la analiza, la explica y puede contar una historia corta con la misma idea.",
+    "layoutRewardNote": "Uso escolar: la historia es una recompensa ligera tras la enseñanza real — primero objetivos y comprobaciones.",
     "homeIntro": "Elige qué quieres hacer. Todo se guarda en este dispositivo; las fotos no se almacenan en nuestros servidores.",
     "ctaUpload": "Subir tarea",
     "ctaDemo": "Probar demo",
@@ -817,7 +856,9 @@
     "submitButton": "Entrar e ir al inicio",
     "coppaNote": "Adultos: entren una vez en este dispositivo para que su familia pueda usar SpArki. Así la experiencia queda aprobada por los padres.",
     "startTrialButton": "Inicia la prueba gratis de 30 días (se requiere tarjeta)",
-    "alreadyAccessButton": "Ya tengo acceso en este dispositivo"
+    "alreadyAccessButton": "Ya tengo acceso en este dispositivo",
+    "continueWithGoogle": "Continuar con Google (pilotos escolares)",
+    "googleNotConfigured": "Inicio con Google: activa VITE_GOOGLE_AUTH_ENABLED y el proveedor Google en Supabase."
   },
   "dashboardPage": {
     "switchView": "Cambiar vista:",
@@ -1183,7 +1224,21 @@
     "subjectTagsSaving": "Guardando…",
     "subjectTagsSaved": "Guardado.",
     "subjectTagsLoadError": "No se pudieron cargar las unidades para etiquetar.",
-    "subjectTagsSaveError": "No se pudieron guardar las materias."
+    "subjectTagsSaveError": "No se pudieron guardar las materias.",
+    "pacingCardTitle": "Paso 1 — Revisar ritmo del PDF",
+    "pacingCardBody": "Usamos IA para leer tu PDF y mostrar qué probablemente enfatiza. Confirmas antes de generar las unidades semanales (con control humano).",
+    "pacingButton": "Revisar ritmo del PDF",
+    "pacingBusy": "Analizando PDF…",
+    "pacingSummaryLabel": "Resumen para ti",
+    "pacingThemesLabel": "Temas detectados",
+    "pacingNotesLabel": "Notas / vacíos",
+    "pacingConfidenceLabel": "Confianza",
+    "pacingConfidenceHigh": "alta",
+    "pacingConfidenceMedium": "media",
+    "pacingConfidenceLow": "baja",
+    "pacingConfirmCheckbox": "Esto coincide con mi intención para la generación de esta semana.",
+    "pacingGenerateBlocked": "Revisa el ritmo y marca la casilla de confirmación antes de generar.",
+    "pacingError": "No se pudo analizar el ritmo del PDF."
   },
   "schoolGeneratedUnit": {
     "lessonQuizHomework": "Leccion + Quiz + Tarea",
@@ -1196,7 +1251,9 @@
     "unitNotFound": "Unidad no encontrada.",
     "expired": "Esta unidad generada ya vencio.",
     "loadFailed": "No se pudo cargar la unidad.",
-    "homeworkAdventureTitle": "Aventura de tarea",
+    "realWorldTitle": "Consejo del mundo real",
+    "realWorldListenAria": "Escuchar consejo del mundo real",
+    "homeworkAdventureTitle": "Aventura de tarea (recompensa Sparki)",
     "videoAdventure": "Aventura en video",
     "stepOf": "(Paso {current} de {total})",
     "hintLabel": "Pista",

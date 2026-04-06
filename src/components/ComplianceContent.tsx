@@ -3,6 +3,7 @@ import { useTranslation } from '@/contexts/LocaleContext'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import ListenButton from './ListenButton'
+import GovernanceOverviewContent from './GovernanceOverviewContent'
 
 /** Shared COPPA / FERPA / CIPA + PWA + teacher dashboard copy for /for-schools and legacy /compliance. */
 export default function ComplianceContent() {
@@ -41,6 +42,8 @@ export default function ComplianceContent() {
           </ul>
         </CardContent>
       </Card>
+
+      <GovernanceOverviewContent />
 
       <Card>
         <CardHeader>

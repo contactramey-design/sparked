@@ -92,18 +92,23 @@ function AppHeader() {
         <p className="app-header-tagline">{t('header.tagline')}</p>
       </div>
       <div className="header-nav-cluster">
-        <Link
-          to="/for-schools"
-          className="header-for-schools-badge"
-          aria-label={t('header.forSchools')}
-        >
-          {t('header.forSchools')}
-        </Link>
         {!isSchoolRoute ? (
-          <Link to="/schools" className="header-school-hub-link">
+          <Link
+            to="/for-schools"
+            className="header-for-schools-badge"
+            aria-label={t('header.forSchools')}
+          >
+            {t('header.forSchools')}
+          </Link>
+        ) : (
+          <Link
+            to="/schools"
+            className="header-for-schools-badge"
+            aria-label={t('header.schoolHubLink')}
+          >
             {t('header.schoolHubLink')}
           </Link>
-        ) : null}
+        )}
         <MainNav variant={schoolShopHidden ? 'school' : 'consumer'} />
         <LangSwitcher />
       </div>

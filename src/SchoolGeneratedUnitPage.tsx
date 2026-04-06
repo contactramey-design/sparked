@@ -50,6 +50,8 @@ type GeneratedUnitJson = {
   isFree?: boolean
   sparklesReward?: number
   contentBlocks: string[]
+  /** Grounded offline action; required for newly generated units. */
+  realWorldTip?: string
   quizQuestions: QuizQuestion[]
   homeworkAdventure: GeneratedHomeworkAdventure
   homeworkAdventureVideoUrl?: string
@@ -529,6 +531,24 @@ const SchoolGeneratedUnitPage: React.FC = () => {
 
         {materialFinished && score !== null && (
           <div className="mt-8 space-y-4">
+            {unitJson.realWorldTip?.trim() ? (
+              <Card className="border-2 border-emerald-200 bg-emerald-50/70 shadow-sm rounded-2xl">
+                <CardHeader className="pb-2">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <CardTitle className="text-lg md:text-xl">{t('schoolGeneratedUnit.realWorldTitle')}</CardTitle>
+                    <ListenButton
+                      text={unitJson.realWorldTip.trim()}
+                      ariaLabel={t('schoolGeneratedUnit.realWorldListenAria')}
+                      size="sm"
+                    />
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-base leading-relaxed text-slate-900">{unitJson.realWorldTip.trim()}</p>
+                </CardContent>
+              </Card>
+            ) : null}
+
             <Card>
               <CardHeader>
                 <CardTitle className="text-xl">{t('schoolGeneratedUnit.homeworkAdventureTitle')}</CardTitle>
