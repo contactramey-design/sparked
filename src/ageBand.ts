@@ -22,22 +22,22 @@ export function homeworkAgeHintForBand(band: AgeBandId, locale: 'en' | 'es' = 'e
   if (locale === 'es') {
     switch (band) {
       case 'tots':
-        return 'Preescolar / edades 3–5'
+        return 'Preescolar (EE. UU. típico Pre-K–K) · edades 3–5'
       case 'kids':
-        return '1.º–2.º grado / edades 6–8'
+        return '1.º–2.º grado (EE. UU.) · edades 6–8'
       case 'crew':
-        return '3.º–5.º grado / edades 9–11'
+        return '3.º–5.º grado (EE. UU.) · edades 9–11'
       default:
         return homeworkAgeHintForBand('kids', 'es')
     }
   }
   switch (band) {
     case 'tots':
-      return 'Pre-K / ages 3–5'
+      return 'Typical US Pre-K–K · ages 3–5'
     case 'kids':
-      return 'Grades 1–2 / ages 6–8'
+      return 'Typical US grades 1–2 · ages 6–8'
     case 'crew':
-      return 'Grades 3–5 / ages 9–11'
+      return 'Typical US grades 3–5 · ages 9–11'
     default:
       return homeworkAgeHintForBand('kids', 'en')
   }

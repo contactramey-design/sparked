@@ -507,9 +507,15 @@ const TeacherDashboardPage: React.FC = () => {
                             minWidth: 200,
                           }}
                         >
-                          <option value="tots">{t('ageBand.names.tots.full')}</option>
-                          <option value="kids">{t('ageBand.names.kids.full')}</option>
-                          <option value="crew">{t('ageBand.names.crew.full')}</option>
+                          <option value="tots">
+                            {t('ageBand.names.tots.full')} — {t('ageBand.names.tots.gradesUs')}
+                          </option>
+                          <option value="kids">
+                            {t('ageBand.names.kids.full')} — {t('ageBand.names.kids.gradesUs')}
+                          </option>
+                          <option value="crew">
+                            {t('ageBand.names.crew.full')} — {t('ageBand.names.crew.gradesUs')}
+                          </option>
                         </select>
                         <Button
                           disabled={loading || !newClassName.trim()}

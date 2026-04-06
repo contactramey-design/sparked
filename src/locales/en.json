@@ -102,17 +102,20 @@
       "tots": {
         "short": "Sparki Tots",
         "full": "Sparki Tots (3–5)",
-        "ages": "3–5"
+        "ages": "3–5",
+        "gradesUs": "Typical US grades: Pre-K–K"
       },
       "kids": {
         "short": "Sparki Kids",
         "full": "Sparki Kids (6–8)",
-        "ages": "6–8"
+        "ages": "6–8",
+        "gradesUs": "Typical US grades: 1–2"
       },
       "crew": {
         "short": "Sparki Crew",
         "full": "Sparki Crew (9–11)",
-        "ages": "9–11"
+        "ages": "9–11",
+        "gradesUs": "Typical US grades: 3–5"
       }
     },
     "modeBadge": {
@@ -175,8 +178,9 @@
     "missionTracksBody": "Before subject practice, every class should touch internet safety and how AI works — that is Sparki’s core mission. These tracks are non-optional for responsible pilots.",
     "openSafetyTrackCta": "Internet safety adventures",
     "openAiTrackCta": "AI & coding essentials",
-    "subjectHubDesc": "Internet safety, AI literacy, math, English, science, and history — the same lesson structure for every track, matched to your age band. Tracks supplement your teacher’s weekly PDF units, not replace them.",
-    "subjectHubSupplemental": "Each track targets important California-aligned clusters (PTKLF, CCSS, NGSS, HSS)—not a complete scope-and-sequence. Pair with your district map and the printable alignment tables.",
+    "subjectHubDesc": "Internet safety, AI literacy, math, English, science, and history — the same lesson structure for every track. Pick the age band for your class (Tots, Kids, or Crew); each band aligns to common US grade spans from Pre-K–K through grade 5. Tracks supplement your teacher’s weekly PDF units, not replace them.",
+    "subjectHubGradeBands": "Age bands: Tots → typical Pre-K–K · Kids → grades 1–2 · Crew → grades 3–5 (ages are shown on the band selector).",
+    "subjectHubSupplemental": "Core subject tracks target California-aligned clusters (PTKLF, CCSS, NGSS, HSS). Mission tracks (internet safety, AI literacy) use the same lesson flow; map them to your district’s digital citizenship / CS scope. Nothing here is a full year scope — pair with your district map and the printable alignment tables.",
     "openSubjectHub": "Browse subject tracks",
     "openSubjectTrack": "Open {subject}",
     "aboutPilotToggle": "About this school pilot (how Sparki fits)",
@@ -264,6 +268,7 @@
     "sequenceSummary": "{count} lessons · about {minutes} min total",
     "sequenceTitle": "Lesson sequence",
     "sequenceLead": "Work top to bottom for a clear progression, or assign individual lessons to match your unit.",
+    "sequenceGradeNote": "Each lesson lists typical US grades for documentation; your class age band still controls which lessons appear.",
     "supplementalScopeTitle": "Supplemental curriculum, California-aligned",
     "supplementalScopeBody": "Each track offers focused mini-units on important standard clusters—not a complete year of instruction. Combine with your scope and sequence; use the alignment map for documentation.",
     "cardObjectiveLabel": "Focus",
@@ -800,9 +805,9 @@
     "modeStory": "Story mode — SpArki story too",
     "gradeOptional": "Grade (optional)",
     "gradePlaceholder": "Select…",
-    "gradeBandTots": "Sparki Tots — Pre-K / ages 3–5",
-    "gradeBandKids": "Sparki Kids — grades 1–2 / ages 6–8",
-    "gradeBandCrew": "Sparki Crew — grades 3–5 / ages 9–11",
+    "gradeBandTots": "Sparki Tots — typical US Pre-K–K · ages 3–5",
+    "gradeBandKids": "Sparki Kids — typical US grades 1–2 · ages 6–8",
+    "gradeBandCrew": "Sparki Crew — typical US grades 3–5 · ages 9–11",
     "permissionCheckbox": "I have permission to upload this worksheet and there are no faces or private details I should hide.",
     "generate": "Generate",
     "phaseAnalyze": "Analyzing worksheet…",

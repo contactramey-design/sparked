@@ -80,6 +80,11 @@ export type SchoolSubjectLesson = {
   order: number
   ageBands: AgeBandId[]
   estMinutes: number
+  /**
+   * Optional US grade span for lesson cards, alignment tables, and docs.
+   * When omitted, UI uses `ageBand.names.{band}.gradesUs` from locales (first band in `ageBands`).
+   */
+  gradeSpan?: { en: string; es: string }
   /** California alignment metadata; drives badges and CDE links. */
   caStandards?: CaStandardsMeta
   standardsNote?: string

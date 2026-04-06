@@ -102,17 +102,20 @@
       "tots": {
         "short": "Sparki Peques",
         "full": "Sparki Peques (3–5)",
-        "ages": "3–5"
+        "ages": "3–5",
+        "gradesUs": "Grados EE. UU. típicos: Pre-K–K"
       },
       "kids": {
         "short": "Sparki Kids",
         "full": "Sparki Kids (6–8)",
-        "ages": "6–8"
+        "ages": "6–8",
+        "gradesUs": "Grados EE. UU. típicos: 1.º–2.º"
       },
       "crew": {
         "short": "Sparki Crew",
         "full": "Sparki Crew (9–11)",
-        "ages": "9–11"
+        "ages": "9–11",
+        "gradesUs": "Grados EE. UU. típicos: 3.º–5.º"
       }
     },
     "modeBadge": {
@@ -175,8 +178,9 @@
     "missionTracksBody": "Antes de la práctica por materia, cada clase debería abordar seguridad en internet y cómo funciona la IA — es la misión central de Sparki. Estas rutas son esenciales en pilotos responsables.",
     "openSafetyTrackCta": "Aventuras de seguridad en internet",
     "openAiTrackCta": "Fundamentos de IA y programación",
-    "subjectHubDesc": "Seguridad en internet, alfabetización en IA, matemáticas, inglés, ciencias e historia — la misma estructura de lección en cada ruta, para tu franja de edad. Complementan el PDF semanal del docente; no lo reemplazan.",
-    "subjectHubSupplemental": "Cada ruta se centra en grupos de estándares clave de California (PTKLF, CCSS, NGSS, HSS), no en un programa anual completo. Combínalas con el mapa del distrito y las tablas de alineación imprimibles.",
+    "subjectHubDesc": "Seguridad en internet, alfabetización en IA, matemáticas, inglés, ciencias e historia — la misma estructura de lección en cada ruta. Elige la franja de tu clase (Peques, Kids o Crew); cada franja se alinea a rangos típicos de EE. UU. desde Pre-K–K hasta 5.º grado. Complementan el PDF semanal del docente; no lo reemplazan.",
+    "subjectHubGradeBands": "Franjas: Peques → Pre-K–K típico · Kids → 1.º–2.º · Crew → 3.º–5.º (las edades aparecen en el selector de franja).",
+    "subjectHubSupplemental": "Las materias núcleo apuntan a grupos alineados con California (PTKLF, CCSS, NGSS, HSS). Las rutas de misión (seguridad en internet, IA) usan el mismo flujo de lección; alinéalas al alcance de ciudadanía digital / CS de tu distrito. Nada sustituye un año escolar completo — combina con el mapa del distrito y las tablas de alineación.",
     "openSubjectHub": "Ver rutas por materia",
     "openSubjectTrack": "Abrir {subject}",
     "aboutPilotToggle": "Sobre este piloto escolar (cómo encaja Sparki)",
@@ -264,6 +268,7 @@
     "sequenceSummary": "{count} lecciones · unos {minutes} min en total",
     "sequenceTitle": "Secuencia de lecciones",
     "sequenceLead": "Sigue el orden para una progresión clara, o asigna lecciones sueltas según tu unidad.",
+    "sequenceGradeNote": "Cada lección indica grados EE. UU. típicos para documentación; la franja de la clase sigue controlando qué lecciones aparecen.",
     "supplementalScopeTitle": "Currículo complementario, alineado a California",
     "supplementalScopeBody": "Cada ruta ofrece miniunidades sobre grupos de estándares importantes — no un año completo de enseñanza. Combínalas con tu alcance y secuencia; usa el mapa de alineación para documentar.",
     "cardObjectiveLabel": "Enfoque",
@@ -800,9 +805,9 @@
     "modeStory": "Modo historia — también historia de SpArki",
     "gradeOptional": "Grado (opcional)",
     "gradePlaceholder": "Elegir…",
-    "gradeBandTots": "Sparki Tots — preescolar / 3–5 años",
-    "gradeBandKids": "Sparki Kids — 1.º–2.º grado / 6–8 años",
-    "gradeBandCrew": "Sparki Crew — 3.º–5.º grado / 9–11 años",
+    "gradeBandTots": "Sparki Peques — EE. UU. típico Pre-K–K · 3–5 años",
+    "gradeBandKids": "Sparki Kids — EE. UU. típico 1.º–2.º · 6–8 años",
+    "gradeBandCrew": "Sparki Crew — EE. UU. típico 3.º–5.º · 9–11 años",
     "permissionCheckbox": "Tengo permiso para subir esta tarea y no hay caras ni datos privados que deba ocultar.",
     "generate": "Generar",
     "phaseAnalyze": "Analizando la tarea…",

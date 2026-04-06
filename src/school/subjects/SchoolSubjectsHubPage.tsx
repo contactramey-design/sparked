@@ -23,6 +23,7 @@ const SchoolSubjectsHubPage: React.FC = () => {
       <header className="school-subj-hero">
         <h1>{t('schools.subjectHubTitle')}</h1>
         <p>{t('schools.subjectHubDesc')}</p>
+        <p className="school-subj-hub-grade-bands muted text-sm m-0 mt-2">{t('schools.subjectHubGradeBands')}</p>
         {isTeacherView ? (
           <>
             <p className="school-subj-hub-supplemental muted">{t('schools.subjectHubSupplemental')}</p>

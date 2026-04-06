@@ -10,6 +10,7 @@ import { parseStandardsNote } from './subjectStandards'
 import { SUBJECT_TRACK_VISUAL } from './subjectTrackVisuals'
 import { useSchoolAudience } from '@/hooks/useSchoolAudience'
 import SchoolAudienceToggle from './SchoolAudienceToggle'
+import { lessonTypicalGradesLine } from './lessonGradeSpan'
 import { isSchoolSubjectId, lessonLocale, type SchoolSubjectId } from './types'
 import './school-subject.css'
 
@@ -95,6 +96,9 @@ const SchoolSubjectTrackPage: React.FC = () => {
           <p className="school-subj-track-hero__band">
             {t('schoolSubject.bandLabel', { band: ageBandDisplayName })}
           </p>
+          <p className="school-subj-track-hero__grades muted text-sm m-0">
+            {t(`ageBand.names.${ageBand}.gradesUs`)}
+          </p>
         </div>
       </header>
 
@@ -118,6 +122,7 @@ const SchoolSubjectTrackPage: React.FC = () => {
                 {t('schoolSubjects.sequenceSummary', { count: lessons.length, minutes: totalMinutes })}
               </p>
               <p className="school-subj-sequence-head__lead muted">{t('schoolSubjects.sequenceLead')}</p>
+              <p className="school-subj-sequence-head__grades muted text-sm m-0">{t('schoolSubjects.sequenceGradeNote')}</p>
             </div>
 
             <ul className="school-subj-track-card-grid">
@@ -180,6 +185,9 @@ const SchoolSubjectTrackPage: React.FC = () => {
                         ) : null}
                         <span className="school-subj-time-pill">
                           {t('schoolSubjects.cardTimeLabel', { minutes: lesson.estMinutes })}
+                        </span>
+                        <span className="school-subj-grade-pill" title={lessonTypicalGradesLine(lesson, locale, t)}>
+                          {lessonTypicalGradesLine(lesson, locale, t)}
                         </span>
                         {showGame ? <span className="school-subj-game-pill">{t('schoolSubjects.gameBadge')}</span> : null}
                       </div>

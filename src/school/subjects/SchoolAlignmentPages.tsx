@@ -13,6 +13,7 @@ import {
   caStandardsReferenceUrl,
 } from './caStandardsDisplay'
 import { parseStandardsNote } from './subjectStandards'
+import { lessonTypicalGradesLine } from './lessonGradeSpan'
 import './school-subject.css'
 
 function formatBandsLabel(bands: AgeBandId[], t: (k: string) => string): string {
@@ -159,7 +160,12 @@ export const SchoolAlignmentSubjectPage: React.FC = () => {
               return (
                 <tr key={lesson.id}>
                   <td>{loc.title}</td>
-                  <td>{formatBandsLabel(lesson.ageBands, t)}</td>
+                  <td>
+                    {formatBandsLabel(lesson.ageBands, t)}
+                    <div className="school-subj-alignment-grades muted text-sm">
+                      {lessonTypicalGradesLine(lesson, locale, t)}
+                    </div>
+                  </td>
                   <td>
                     {ca ? (
                       <span title={formatCaStandardsBadge(ca)}>{frameworkLabel}</span>

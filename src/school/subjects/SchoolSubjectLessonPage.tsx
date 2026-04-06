@@ -16,6 +16,7 @@ import {
 } from './caStandardsDisplay'
 import { useSchoolAudience } from '@/hooks/useSchoolAudience'
 import SchoolAudienceToggle from './SchoolAudienceToggle'
+import { lessonTypicalGradesLine } from './lessonGradeSpan'
 import { isLessonInBand, isSchoolSubjectId, lessonLocale, type SchoolSubjectId } from './types'
 import './school-subject.css'
 
@@ -191,6 +192,8 @@ const SchoolSubjectLessonPage: React.FC = () => {
         <h1 className="school-subj-lesson__title">{loc.title}</h1>
         <p className="school-subj-lesson__meta muted text-sm">
           {t('schoolSubject.durationLine', { minutes: lesson.estMinutes })}
+          {' · '}
+          {lessonTypicalGradesLine(lesson, locale, t)}
           {isTeacherView && lesson.standardsNote ? ` · ${lesson.standardsNote}` : ''}
         </p>
         {isTeacherView && lesson.caStandards ? (
