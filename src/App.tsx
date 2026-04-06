@@ -81,6 +81,9 @@ function AppHeader() {
   const { t } = useTranslation()
   const isSchoolRoute = isSchoolShellPath(location.pathname)
   const schoolShopHidden = useSchoolShopHidden()
+  // School dropdown belongs on shell routes only; school mode on home still uses consumer nav (one header CTA).
+  const mainNavVariant = isSchoolRoute ? 'school' : 'consumer'
+  const hideShopOnConsumer = schoolShopHidden && !isSchoolRoute
 
   return (
     <header className="app-header">
@@ -109,7 +112,7 @@ function AppHeader() {
             {t('header.schoolHubLink')}
           </Link>
         )}
-        <MainNav variant={schoolShopHidden ? 'school' : 'consumer'} />
+        <MainNav variant={mainNavVariant} hideShop={hideShopOnConsumer} />
         <LangSwitcher />
       </div>
     </header>

@@ -10,13 +10,15 @@ type NavKey = 'academy' | 'shop'
 
 type Props = {
   variant: 'consumer' | 'school'
+  /** When true on consumer routes, show Academy only (e.g. school mode — shop hidden without duplicating school header links). */
+  hideShop?: boolean
 }
 
 /**
  * Consumer: Academy + Shop dropdowns. School theme: single menu (no shop) + internet safety links.
  * Touch targets ≥ 48px; Escape and outside-click close panels.
  */
-export default function MainNav({ variant }: Props) {
+export default function MainNav({ variant, hideShop = false }: Props) {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const location = useLocation()
@@ -161,7 +163,7 @@ export default function MainNav({ variant }: Props) {
       {variant === 'consumer' ? (
         <>
           {renderDropdown('academy', t('nav.academy'), consumerAcademy)}
-          {renderDropdown('shop', t('nav.shop'), consumerShop)}
+          {!hideShop ? renderDropdown('shop', t('nav.shop'), consumerShop) : null}
         </>
       ) : (
         <>{renderDropdown('academy', t('nav.schoolMenuSchool'), schoolAcademy)}</>
