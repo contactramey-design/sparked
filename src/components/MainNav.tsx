@@ -107,7 +107,8 @@ export default function MainNav({ variant, hideShop = false }: Props) {
       <ItemLink to="/schools">{t('nav.schoolSchoolHub')}</ItemLink>
       <ItemLink to="/schools/subjects">{t('nav.schoolSubjectsHub')}</ItemLink>
       <SectionLabel>{t('nav.schoolInternetSafetySection')}</SectionLabel>
-      <ItemLink to="/track/social-safety">{t('nav.academySafety')}</ItemLink>
+      <ItemLink to="/schools/subjects/internet-safety">{t('nav.academySafety')}</ItemLink>
+      <ItemLink to="/schools/subjects/ai-literacy">{t('nav.academyAiCoding')}</ItemLink>
       <ItemLink to="/tracks">{t('nav.academyAllCourses')}</ItemLink>
       <SectionLabel>{t('nav.sectionTeacherTools')}</SectionLabel>
       {isLoggedIn && user && isTeacherUser(user) ? (

@@ -11,10 +11,24 @@ export type SubjectTrackVisual = {
   /** Served from site root, e.g. `/school-subject-heroes/math.webp` */
   heroImage: string
   /** Modifier class for gradient / pattern fallback when image fails to load */
-  fallbackModifier: 'math' | 'english' | 'science' | 'history'
+  fallbackModifier:
+    | 'math'
+    | 'english'
+    | 'science'
+    | 'history'
+    | 'internet-safety'
+    | 'ai-literacy'
 }
 
 export const SUBJECT_TRACK_VISUAL: Record<SchoolSubjectId, SubjectTrackVisual> = {
+  'internet-safety': {
+    heroImage: '/safety-card.png',
+    fallbackModifier: 'internet-safety',
+  },
+  'ai-literacy': {
+    heroImage: '/sparkiaicodingcardhomepage.png',
+    fallbackModifier: 'ai-literacy',
+  },
   math: {
     heroImage: '/school-subject-heroes/math.svg',
     fallbackModifier: 'math',

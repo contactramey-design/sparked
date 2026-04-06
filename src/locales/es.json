@@ -175,7 +175,7 @@
     "missionTracksBody": "Antes de la práctica por materia, cada clase debería abordar seguridad en internet y cómo funciona la IA — es la misión central de Sparki. Estas rutas son esenciales en pilotos responsables.",
     "openSafetyTrackCta": "Aventuras de seguridad en internet",
     "openAiTrackCta": "Fundamentos de IA y programación",
-    "subjectHubDesc": "Matemáticas, inglés, ciencias e historia — lecciones cortas de Sparki para tu franja de edad. Complementan el PDF semanal del docente; no lo reemplazan.",
+    "subjectHubDesc": "Seguridad en internet, alfabetización en IA, matemáticas, inglés, ciencias e historia — la misma estructura de lección en cada ruta, para tu franja de edad. Complementan el PDF semanal del docente; no lo reemplazan.",
     "subjectHubSupplemental": "Cada ruta se centra en grupos de estándares clave de California (PTKLF, CCSS, NGSS, HSS), no en un programa anual completo. Combínalas con el mapa del distrito y las tablas de alineación imprimibles.",
     "openSubjectHub": "Ver rutas por materia",
     "openSubjectTrack": "Abrir {subject}",
@@ -297,12 +297,28 @@
     "alignmentColLink": "Abrir",
     "alignmentUnknownFramework": "Ver notas de la lección",
     "heroAlt": {
+      "internetSafety": "Arte de cabecera de seguridad en internet y ciudadanía digital",
+      "aiLiteracy": "Arte de cabecera de alfabetización en IA y programación",
       "math": "Arte de cabecera colorido de matemáticas",
       "english": "Arte de cabecera colorido de inglés",
       "science": "Arte de cabecera colorido de ciencias",
       "history": "Arte de cabecera colorido de historia y estudios sociales"
     },
     "tracks": {
+      "internet-safety": {
+        "hubEmoji": "🛡️",
+        "cardTitle": "Seguridad en internet",
+        "cardDesc": "Pantallas, amabilidad, privacidad y hábitos sanos — lecciones con estructura escolar que puedes alinear al alcance de ciudadanía digital del distrito.",
+        "title": "Seguridad en internet",
+        "subtitle": "Borradores de piloto reflejan las aventuras familiares de seguridad; amplía aquí para ritmo de clase, documentación y secuencia por edad."
+      },
+      "ai-literacy": {
+        "hubEmoji": "🤖",
+        "cardTitle": "Alfabetización en IA y programación",
+        "cardDesc": "Cómo funciona la IA, uso responsable y pensamiento computacional — el mismo flujo enseñar → practicar → comprobar que en las demás materias.",
+        "title": "Alfabetización en IA y programación",
+        "subtitle": "Borradores de piloto reflejan la ruta familiar de IA y código; añade módulos según evolucione tu política de CS / IA en la escuela."
+      },
       "math": {
         "hubEmoji": "🔢",
         "cardTitle": "Matemáticas",

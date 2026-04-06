@@ -1,11 +1,15 @@
 import type { AgeBandId } from '@/ageBand'
+import { AI_LITERACY_LESSONS } from './curriculum/aiLiteracyLessons'
 import { ENGLISH_LESSONS } from './curriculum/englishLessons'
 import { HISTORY_LESSONS } from './curriculum/historyLessons'
+import { INTERNET_SAFETY_LESSONS } from './curriculum/internetSafetyLessons'
 import { MATH_LESSONS } from './curriculum/mathLessons'
 import { SCIENCE_LESSONS } from './curriculum/scienceLessons'
 import type { SchoolSubjectId, SchoolSubjectLesson } from './types'
 
 export const SUBJECT_LESSONS: Record<SchoolSubjectId, SchoolSubjectLesson[]> = {
+  'internet-safety': INTERNET_SAFETY_LESSONS,
+  'ai-literacy': AI_LITERACY_LESSONS,
   math: MATH_LESSONS,
   english: ENGLISH_LESSONS,
   science: SCIENCE_LESSONS,

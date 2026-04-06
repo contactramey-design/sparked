@@ -14,6 +14,8 @@ import { isSchoolSubjectId, lessonLocale, type SchoolSubjectId } from './types'
 import './school-subject.css'
 
 const HERO_ALT_KEYS: Record<SchoolSubjectId, string> = {
+  'internet-safety': 'schoolSubjects.heroAlt.internetSafety',
+  'ai-literacy': 'schoolSubjects.heroAlt.aiLiteracy',
   math: 'schoolSubjects.heroAlt.math',
   english: 'schoolSubjects.heroAlt.english',
   science: 'schoolSubjects.heroAlt.science',
@@ -22,6 +24,8 @@ const HERO_ALT_KEYS: Record<SchoolSubjectId, string> = {
 
 /** Default track-card thumbnails when `lesson.cardImageUrl` is unset */
 const SUBJECT_CARD_THUMB: Record<SchoolSubjectId, string> = {
+  'internet-safety': '/safety-card.png',
+  'ai-literacy': '/sparkiaicodingcardhomepage.png',
   math: '/tots-video-thumbnails/found-3-numbers.png',
   english: '/tots-video-thumbnails/found-4-letters.png',
   science: '/tots-video-thumbnails/found-2-shapes.png',

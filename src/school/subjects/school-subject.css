@@ -511,6 +511,14 @@
   background: linear-gradient(145deg, #b45309 0%, #f59e0b 38%, #fcd34d 100%);
 }
 
+.school-subj-hero-fallback--internet-safety {
+  background: linear-gradient(145deg, #0f766e 0%, #14b8a6 40%, #99f6e4 100%);
+}
+
+.school-subj-hero-fallback--ai-literacy {
+  background: linear-gradient(145deg, #5b21b6 0%, #7c3aed 38%, #c4b5fd 100%);
+}
+
 .school-subj-track-hero__copy {
   padding: 1.25rem 1.35rem 1.4rem;
   display: flex;

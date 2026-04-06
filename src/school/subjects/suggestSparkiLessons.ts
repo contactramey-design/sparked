@@ -3,7 +3,7 @@
  * Used for "Suggested Sparki practice" links (hybrid: no extra LLM cost).
  */
 import type { AgeBandId } from '@/ageBand'
-import type { SchoolSubjectId } from './types'
+import { SCHOOL_SUBJECT_IDS, type SchoolSubjectId } from './types'
 import { getLessonsForSubjectAndBand } from './registry'
 
 export type SparkiLessonSuggestion = {
@@ -42,12 +42,30 @@ const LESSON_KEYWORDS: Record<string, string[]> = {
   'hist-kids-map-landmarks': ['map', 'legend', 'symbol', 'mapa', 'leyenda'],
   'hist-crew-timeline-basics': ['timeline', 'before', 'after', 'order', 'línea de tiempo', 'orden'],
   'hist-crew-sources': ['primary source', 'secondary', 'photograph', 'fuente', 'evidencia histórica'],
+  // Internet safety (school track — scaffold lesson ids)
+  'safety-tots-screen-balance': ['screen', 'break', 'rest', 'watch', 'pantalla', 'descanso', 'video'],
+  'safety-kids-kind-online': ['kind', 'online', 'message', 'chat', 'cyber', 'internet', 'amable', 'mensaje'],
+  'safety-crew-privacy-basics': ['privacy', 'settings', 'scam', 'dm', 'location', 'privacidad', 'estafa'],
+  // AI literacy (school track)
+  'ai-tots-robots-helpers': ['robot', 'steps', 'tool', 'program', 'herramienta'],
+  'ai-kids-what-is-ai': ['artificial intelligence', 'ai', 'pattern', 'verify', 'inteligencia artificial', 'patrón'],
+  'ai-crew-training-bias-intro': ['training data', 'bias', 'generative', 'cite', 'sesgo', 'datos de entrenamiento'],
 }
 
 /** Rough map from homework adventure subject line to Sparki subject */
 function subjectLabelToSparkiSubjects(subjectRaw: string): SchoolSubjectId[] {
   const s = subjectRaw.toLowerCase()
   const out: SchoolSubjectId[] = []
+  if (/safety|internet|online|cyber|digital citizen|screen|privacy|kind online|seguridad|ciber|ciudadan[ií]a digital/i.test(s)) {
+    out.push('internet-safety')
+  }
+  if (
+    /\bai\b|artificial intelligence|coding|code|algorithm|computer science|program|generative|inteligencia artificial|programaci[oó]n|algoritm/i.test(
+      s,
+    )
+  ) {
+    out.push('ai-literacy')
+  }
   if (/math|matem|núm|number|frac|geometry|suma|sum|count/i.test(s)) out.push('math')
   if (/read|writ|english|language|ela|literacy|phon|spell|story|text|vocab/i.test(s)) out.push('english')
   if (/science|sci\b|plant|animal|matter|energy|earth|experiment|observe/i.test(s)) out.push('science')
@@ -75,8 +93,7 @@ export function suggestSparkiLessonsFromGeneratedUnit(input: {
     if (seenLesson.has(lessonId)) continue
     if (!keywords.some((kw) => text.includes(kw.toLowerCase()))) continue
 
-    const allSubjects: SchoolSubjectId[] = ['math', 'english', 'science', 'history']
-    for (const subjectId of allSubjects) {
+    for (const subjectId of SCHOOL_SUBJECT_IDS) {
       const lessons = getLessonsForSubjectAndBand(subjectId, input.ageBand)
       if (lessons.some((l) => l.id === lessonId)) {
         seenLesson.add(lessonId)
@@ -112,7 +129,7 @@ export function mergeSuggestionsWithTeacherOverrides(
 
   if (pinned) {
     for (const [sid, lid] of Object.entries(pinned) as [SchoolSubjectId, string][]) {
-      if (!lid || !['math', 'english', 'science', 'history'].includes(sid)) continue
+      if (!lid || !SCHOOL_SUBJECT_IDS.includes(sid)) continue
       const key = `${sid}:${lid}`
       if (seen.has(key)) continue
       seen.add(key)

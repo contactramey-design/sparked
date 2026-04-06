@@ -175,7 +175,7 @@
     "missionTracksBody": "Before subject practice, every class should touch internet safety and how AI works — that is Sparki’s core mission. These tracks are non-optional for responsible pilots.",
     "openSafetyTrackCta": "Internet safety adventures",
     "openAiTrackCta": "AI & coding essentials",
-    "subjectHubDesc": "Math, English, science, and history — short Sparki lessons matched to your age band. They supplement your teacher’s weekly PDF units, not replace them.",
+    "subjectHubDesc": "Internet safety, AI literacy, math, English, science, and history — the same lesson structure for every track, matched to your age band. Tracks supplement your teacher’s weekly PDF units, not replace them.",
     "subjectHubSupplemental": "Each track targets important California-aligned clusters (PTKLF, CCSS, NGSS, HSS)—not a complete scope-and-sequence. Pair with your district map and the printable alignment tables.",
     "openSubjectHub": "Browse subject tracks",
     "openSubjectTrack": "Open {subject}",
@@ -297,12 +297,28 @@
     "alignmentColLink": "Open",
     "alignmentUnknownFramework": "See lesson notes",
     "heroAlt": {
+      "internetSafety": "Hero art for internet safety and digital citizenship",
+      "aiLiteracy": "Hero art for AI and coding literacy",
       "math": "Colorful hero art for math",
       "english": "Colorful hero art for English language arts",
       "science": "Colorful hero art for science",
       "history": "Colorful hero art for history and social studies"
     },
     "tracks": {
+      "internet-safety": {
+        "hubEmoji": "🛡️",
+        "cardTitle": "Internet safety",
+        "cardDesc": "Screens, kindness, privacy, and healthy habits — school-structured lessons you can align to your district’s digital citizenship scope.",
+        "title": "Internet safety",
+        "subtitle": "Pilot scaffolds mirror the family safety adventures; expand here for class pacing, documentation, and age-band sequencing."
+      },
+      "ai-literacy": {
+        "hubEmoji": "🤖",
+        "cardTitle": "AI & coding literacy",
+        "cardDesc": "How AI works, responsible use, and computational thinking — same teach → practice → check flow as other school subjects.",
+        "title": "AI & coding literacy",
+        "subtitle": "Pilot scaffolds mirror the family AI & coding track; add modules as your CS / AI-in-schools policy evolves."
+      },
       "math": {
         "hubEmoji": "🔢",
         "cardTitle": "Math",

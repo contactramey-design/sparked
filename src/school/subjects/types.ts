@@ -1,10 +1,17 @@
 /**
- * Shared types for school subject tracks (math, English, science, history).
+ * Shared types for school subject tracks (mission + core subjects).
  * Add lessons in `curriculum/*.ts` and register in `registry.ts`.
  */
 import type { AgeBandId } from '@/ageBand'
 
-export const SCHOOL_SUBJECT_IDS = ['math', 'english', 'science', 'history'] as const
+export const SCHOOL_SUBJECT_IDS = [
+  'internet-safety',
+  'ai-literacy',
+  'math',
+  'english',
+  'science',
+  'history',
+] as const
 export type SchoolSubjectId = (typeof SCHOOL_SUBJECT_IDS)[number]
 
 export function isSchoolSubjectId(s: string | undefined): s is SchoolSubjectId {
