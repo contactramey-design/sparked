@@ -31,6 +31,15 @@ export interface ThinkPrompt {
   text: string
 }
 
+/** Platform label for parent ebook CTA (i18n: `unit.parentEbookPlatform.*`). */
+export type ParentEbookPlatformKey =
+  | 'instagram'
+  | 'tiktok'
+  | 'snapchat'
+  | 'roblox'
+  | 'fortnite'
+  | 'reddit'
+
 export interface UnitConfig {
   id: string
   trackId: TrackId
@@ -43,6 +52,8 @@ export interface UnitConfig {
   contentBlocks: string[]
   quizQuestions: QuizQuestion[]
   activity: ActivityConfig
+  /** Optional link to paid parent PDF in `books` catalog (`/ebook?ebookId=…`). */
+  parentEbook?: { catalogId: string; platformKey: ParentEbookPlatformKey }
   unlocksUnitId?: string
   /** Optional video: URL to MP4/WebM or YouTube embed (e.g. https://www.youtube.com/embed/...) */
   videoUrl?: string
@@ -597,6 +608,7 @@ export const curriculum: CurriculumConfig = {
         { label: 'Think about this!', text: 'Who is one grown-up you could ask before posting a photo? Talk to them about it!' },
         { label: 'Think about this!', text: 'What would you never put in your profile? (Hint: school name, address, phone number)' },
       ],
+      parentEbook: { catalogId: 'ebook-1', platformKey: 'instagram' },
     },
     {
       id: 'safety-tiktok',
@@ -656,6 +668,7 @@ export const curriculum: CurriculumConfig = {
       unlocksUnitId: 'safety-snapchat',
       videoUrl: '/safety_into.mp4',
       videoPosterUrl: '/social-safety-covers/tiktok.png',
+      parentEbook: { catalogId: 'ebook-2', platformKey: 'tiktok' },
     },
     {
       id: 'safety-snapchat',
@@ -715,6 +728,7 @@ export const curriculum: CurriculumConfig = {
       unlocksUnitId: 'safety-roblox',
       videoUrl: '/safety_into.mp4',
       videoPosterUrl: '/social-safety-covers/snapchat.png',
+      parentEbook: { catalogId: 'ebook-3', platformKey: 'snapchat' },
     },
     {
       id: 'safety-roblox',
@@ -774,6 +788,7 @@ export const curriculum: CurriculumConfig = {
       unlocksUnitId: 'safety-fortnite',
       videoUrl: '/safety_into.mp4',
       videoPosterUrl: '/social-safety-covers/roblox.png',
+      parentEbook: { catalogId: 'ebook-4', platformKey: 'roblox' },
     },
     {
       id: 'safety-fortnite',
@@ -833,6 +848,7 @@ export const curriculum: CurriculumConfig = {
       unlocksUnitId: 'safety-reddit',
       videoUrl: '/safety_into.mp4',
       videoPosterUrl: '/social-safety-covers/fortnite.png',
+      parentEbook: { catalogId: 'ebook-5', platformKey: 'fortnite' },
     },
     {
       id: 'safety-reddit',
@@ -891,6 +907,7 @@ export const curriculum: CurriculumConfig = {
       },
       videoUrl: '/safety_into.mp4',
       videoPosterUrl: '/social-safety-covers/reddit.png',
+      parentEbook: { catalogId: 'ebook-6', platformKey: 'reddit' },
     },
   ],
 }

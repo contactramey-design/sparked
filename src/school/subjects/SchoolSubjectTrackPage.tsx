@@ -12,6 +12,7 @@ import { ClassroomGuideAside } from '@/features/school-curriculum/ClassroomGuide
 import { SUBJECT_TRACK_VISUAL } from './subjectTrackVisuals'
 import { useSchoolAudience } from '@/hooks/useSchoolAudience'
 import SchoolAudienceToggle from './SchoolAudienceToggle'
+import ListenButton from '@/components/ListenButton'
 import { lessonTypicalGradesLine } from './lessonGradeSpan'
 import { isSchoolSubjectId, lessonLocale, type SchoolSubjectId } from './types'
 import './school-subject.css'
@@ -54,6 +55,29 @@ const SchoolSubjectTrackPage: React.FC = () => {
 
   const visual = valid ? SUBJECT_TRACK_VISUAL[subjectId] : null
 
+  const trackIntroSpeak = useMemo(() => {
+    if (!valid) return ''
+    const title = t(`schoolSubjects.tracks.${subjectId}.title`)
+    if (!isTeacherView) return title
+    return `${title}. ${t(`schoolSubjects.tracks.${subjectId}.subtitle`)}`
+  }, [valid, subjectId, t, isTeacherView])
+
+  const sequenceOverviewSpeak = useMemo(() => {
+    if (!valid || lessons.length === 0) return ''
+    if (!isTeacherView) {
+      return [
+        t('schoolSubjects.sequenceTitle'),
+        t('schoolSubjects.sequenceSummary', { count: lessons.length, minutes: totalMinutes }),
+      ].join('. ')
+    }
+    return [
+      t('schoolSubjects.sequenceTitle'),
+      t('schoolSubjects.sequenceSummary', { count: lessons.length, minutes: totalMinutes }),
+      t('schoolSubjects.sequenceLead'),
+      t('schoolSubjects.sequenceGradeNote'),
+    ].join('. ')
+  }, [valid, lessons.length, totalMinutes, t, isTeacherView])
+
   if (!valid) {
     return (
       <section className="lesson-page school-subj-page">
@@ -74,8 +98,16 @@ const SchoolSubjectTrackPage: React.FC = () => {
           { label: t(`schoolSubjects.tracks.${subjectId}.title`) },
         ]}
         title={t(`schoolSubjects.tracks.${subjectId}.title`)}
-        description={t(`schoolSubjects.tracks.${subjectId}.subtitle`)}
+        description={isTeacherView ? t(`schoolSubjects.tracks.${subjectId}.subtitle`) : undefined}
         className="school-subj-track-page-header"
+        actions={
+          <ListenButton
+            text={trackIntroSpeak}
+            ariaLabel={t('listenButton.schoolTrackIntro')}
+            size="sm"
+            className="no-print"
+          />
+        }
       />
 
       <Link to="/schools/subjects" className="link-back school-subj-track-back">
@@ -85,7 +117,7 @@ const SchoolSubjectTrackPage: React.FC = () => {
       <div className="track-age-band-toolbar school-subj-track-toolbar flex-col items-stretch gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="min-w-0">
           <p className="mb-2 text-xs font-bold uppercase tracking-wide text-slate-600 font-school">
-            {t('ageBand.forThisSession')}
+            {t(isTeacherView ? 'ageBand.forThisSession' : 'ageBand.forSchoolStudent')}
           </p>
           <GradeBandTabs />
         </div>
@@ -110,18 +142,36 @@ const SchoolSubjectTrackPage: React.FC = () => {
             <span className="school-subj-alignment-pill">{t('schoolSubjects.alignmentBadge')}</span>
           ) : null}
           <p className="school-subj-track-hero__sr-title sr-only">{t(`schoolSubjects.tracks.${subjectId}.title`)}</p>
-          <p className="school-subj-track-hero__band">
-            {t('schoolSubject.bandLabel', { band: ageBandDisplayName })}
-          </p>
-          <p className="school-subj-track-hero__grades muted text-sm m-0">
-            {t(`ageBand.names.${ageBand}.gradesUs`)}
-          </p>
+          {isTeacherView ? (
+            <>
+              <p className="school-subj-track-hero__band">
+                {t('schoolSubject.bandLabel', { band: ageBandDisplayName })}
+              </p>
+              <p className="school-subj-track-hero__grades muted text-sm m-0">
+                {t(`ageBand.names.${ageBand}.gradesUs`)}
+              </p>
+            </>
+          ) : (
+            <p className="school-subj-track-hero__band m-0 text-base font-semibold text-slate-800 font-school">
+              {t('schoolSubject.trackPickLesson')}
+            </p>
+          )}
         </div>
       </header>
 
       {isTeacherView ? (
         <div className="school-subj-supplemental-banner" role="region" aria-label={t('schoolSubjects.supplementalScopeTitle')}>
-          <h2 className="school-subj-supplemental-banner__title">{t('schoolSubjects.supplementalScopeTitle')}</h2>
+          <div className="flex flex-wrap items-start gap-2">
+            <h2 className="school-subj-supplemental-banner__title m-0 flex-1 min-w-0">
+              {t('schoolSubjects.supplementalScopeTitle')}
+            </h2>
+            <ListenButton
+              text={`${t('schoolSubjects.supplementalScopeTitle')}. ${t('schoolSubjects.supplementalScopeBody')}`}
+              ariaLabel={t('listenButton.schoolSupplementalScope')}
+              size="sm"
+              className="shrink-0 no-print"
+            />
+          </div>
           <p className="school-subj-supplemental-banner__body">{t('schoolSubjects.supplementalScopeBody')}</p>
         </div>
       ) : null}
@@ -134,12 +184,26 @@ const SchoolSubjectTrackPage: React.FC = () => {
         <div className="school-subj-track-body">
           <main className="school-subj-track-main">
             <div className="school-subj-sequence-head">
-              <h2 className="school-subj-sequence-head__title">{t('schoolSubjects.sequenceTitle')}</h2>
+              <div className="flex flex-wrap items-center gap-2">
+                <h2 className="school-subj-sequence-head__title m-0 flex-1 min-w-0">
+                  {t('schoolSubjects.sequenceTitle')}
+                </h2>
+                <ListenButton
+                  text={sequenceOverviewSpeak}
+                  ariaLabel={t('listenButton.schoolSequenceOverview')}
+                  size="sm"
+                  className="shrink-0 no-print"
+                />
+              </div>
               <p className="school-subj-sequence-head__summary">
                 {t('schoolSubjects.sequenceSummary', { count: lessons.length, minutes: totalMinutes })}
               </p>
-              <p className="school-subj-sequence-head__lead muted">{t('schoolSubjects.sequenceLead')}</p>
-              <p className="school-subj-sequence-head__grades muted text-sm m-0">{t('schoolSubjects.sequenceGradeNote')}</p>
+              {isTeacherView ? (
+                <>
+                  <p className="school-subj-sequence-head__lead muted">{t('schoolSubjects.sequenceLead')}</p>
+                  <p className="school-subj-sequence-head__grades muted text-sm m-0">{t('schoolSubjects.sequenceGradeNote')}</p>
+                </>
+              ) : null}
             </div>
 
             <ul className="school-subj-track-card-grid">
@@ -179,17 +243,31 @@ const SchoolSubjectTrackPage: React.FC = () => {
                         <p>{primaryObjective}</p>
                       </div>
 
+                      <div className="flex justify-end no-print">
+                        <ListenButton
+                          text={`${loc.title}. ${t('schoolSubjects.cardObjectiveLabel')}: ${primaryObjective}`}
+                          ariaLabel={t('listenButton.schoolLessonCard')}
+                          size="sm"
+                        />
+                      </div>
+
                       {isTeacherView && scopeLine ? <p className="school-subj-track-card__scope muted">{scopeLine}</p> : null}
 
                       <div className="school-subj-track-card__badges" aria-label={t('schoolSubjects.cardStandardsLabel')}>
                         {isTeacherView ? <StandardsBadge lesson={lesson} compact className="max-w-full" /> : null}
-                        <span className="school-subj-time-pill">
-                          {t('schoolSubjects.cardTimeLabel', { minutes: lesson.estMinutes })}
-                        </span>
-                        <span className="school-subj-grade-pill" title={lessonTypicalGradesLine(lesson, locale, t)}>
-                          {lessonTypicalGradesLine(lesson, locale, t)}
-                        </span>
-                        {showGame ? <span className="school-subj-game-pill">{t('schoolSubjects.gameBadge')}</span> : null}
+                        {isTeacherView ? (
+                          <span className="school-subj-time-pill">
+                            {t('schoolSubjects.cardTimeLabel', { minutes: lesson.estMinutes })}
+                          </span>
+                        ) : null}
+                        {isTeacherView ? (
+                          <span className="school-subj-grade-pill" title={lessonTypicalGradesLine(lesson, locale, t)}>
+                            {lessonTypicalGradesLine(lesson, locale, t)}
+                          </span>
+                        ) : null}
+                        {showGame && isTeacherView ? (
+                          <span className="school-subj-game-pill">{t('schoolSubjects.gameBadge')}</span>
+                        ) : null}
                       </div>
 
                       <div className="school-subj-track-card__status">
@@ -215,7 +293,17 @@ const SchoolSubjectTrackPage: React.FC = () => {
 
             {isTeacherView ? (
               <footer className="school-subj-track-planner-footer">
-                <h3 className="school-subj-track-planner-footer__title">{t('schoolSubjects.plannerTitle')}</h3>
+                <div className="flex flex-wrap items-start gap-2">
+                  <h3 className="school-subj-track-planner-footer__title m-0 flex-1 min-w-0">
+                    {t('schoolSubjects.plannerTitle')}
+                  </h3>
+                  <ListenButton
+                    text={`${t('schoolSubjects.plannerTitle')}. ${t('schoolSubjects.plannerBody')}`}
+                    ariaLabel={t('listenButton.summary')}
+                    size="sm"
+                    className="shrink-0 no-print"
+                  />
+                </div>
                 <p className="school-subj-track-planner-footer__body muted">{t('schoolSubjects.plannerBody')}</p>
                 <Link to={`/schools/alignment/${subjectId}`} className="school-subj-planner-link no-print">
                   {t('schoolSubjects.plannerCta')}

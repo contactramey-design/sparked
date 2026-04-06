@@ -57,6 +57,8 @@ export default function MainNav({ variant, hideShop = false }: Props) {
     <p className="nav-dropdown-section-label">{children}</p>
   )
 
+  const NavDivider: React.FC = () => <div className="nav-dropdown-divider" role="presentation" />
+
   const ItemLink: React.FC<{ to: string; children: React.ReactNode }> = ({ to, children }) => (
     <Link to={to} className="nav-dropdown-link" onClick={() => setOpen(null)}>
       {children}
@@ -79,12 +81,13 @@ export default function MainNav({ variant, hideShop = false }: Props) {
           </button>
         ))}
       </div>
-      <SectionLabel>{t('nav.sectionLearn')}</SectionLabel>
+      <NavDivider />
       <ItemLink to="/tracks">{t('nav.academyAllCourses')}</ItemLink>
       <ItemLink to="/track/social-safety">{t('nav.academySafety')}</ItemLink>
       <ItemLink to="/track/ai-coding">{t('nav.academyAiCoding')}</ItemLink>
       <ItemLink to="/weekly">{t('nav.academyWeekly')}</ItemLink>
       <ItemLink to="/homework">{t('nav.academyHomework')}</ItemLink>
+      <NavDivider />
       <SectionLabel>{t('nav.sectionGrownups')}</SectionLabel>
       {!isLoggedIn && <ItemLink to="/login">{t('nav.academySignIn')}</ItemLink>}
       {isLoggedIn && !kidLock && <ItemLink to="/parent">{t('nav.academyParent')}</ItemLink>}
@@ -93,37 +96,37 @@ export default function MainNav({ variant, hideShop = false }: Props) {
 
   const consumerShop = (
     <>
-      <SectionLabel>{t('nav.sectionShop')}</SectionLabel>
       <ItemLink to="/shop">{t('nav.shopEbooks')}</ItemLink>
       <ItemLink to="/?view=parent">{t('nav.shopSubscription')}</ItemLink>
     </>
   )
 
+  const showTeacherLinks = isLoggedIn && user && isTeacherUser(user)
+  const showTeacherSignIn = !isLoggedIn
+
   const schoolAcademy = (
     <>
       <ItemLink to="/">{t('nav.schoolFamilyHome')}</ItemLink>
-      <ItemLink to="/for-schools">{t('nav.schoolForSchoolsHub')}</ItemLink>
-      <ItemLink to="/compliance">{t('nav.schoolCompliance')}</ItemLink>
       <ItemLink to="/schools">{t('nav.schoolSchoolHub')}</ItemLink>
       <ItemLink to="/schools/subjects">{t('nav.schoolSubjectsHub')}</ItemLink>
-      <SectionLabel>{t('nav.schoolInternetSafetySection')}</SectionLabel>
+      <NavDivider />
       <ItemLink to="/schools/subjects/internet-safety">{t('nav.academySafety')}</ItemLink>
       <ItemLink to="/schools/subjects/ai-literacy">{t('nav.academyAiCoding')}</ItemLink>
-      <ItemLink to="/tracks">{t('nav.academyAllCourses')}</ItemLink>
-      <SectionLabel>{t('nav.sectionTeacherTools')}</SectionLabel>
-      {isLoggedIn && user && isTeacherUser(user) ? (
-        <ItemLink to="/teacher/dashboard">{t('nav.schoolTeacher')}</ItemLink>
-      ) : null}
-      {isLoggedIn && user && isTeacherUser(user) ? (
-        <ItemLink to="/teacher/generator">{t('nav.schoolGenerator')}</ItemLink>
-      ) : null}
-      {!isLoggedIn ? (
+      <NavDivider />
+      <ItemLink to="/for-schools">{t('nav.schoolForSchoolsHub')}</ItemLink>
+      <ItemLink to="/compliance">{t('nav.schoolCompliance')}</ItemLink>
+      <ItemLink to="/schools/parent">{t('nav.schoolParent')}</ItemLink>
+      {showTeacherLinks || showTeacherSignIn ? <NavDivider /> : null}
+      {showTeacherLinks ? <ItemLink to="/teacher/dashboard">{t('nav.schoolTeacher')}</ItemLink> : null}
+      {showTeacherLinks ? <ItemLink to="/teacher/generator">{t('nav.schoolGenerator')}</ItemLink> : null}
+      {showTeacherSignIn ? (
         <ItemLink to="/login?redirect=%2Fteacher%2Fdashboard">{t('nav.teacherSignIn')}</ItemLink>
       ) : null}
-      <SectionLabel>{t('nav.sectionGrownups')}</SectionLabel>
-      <ItemLink to="/schools/parent">{t('nav.schoolParent')}</ItemLink>
       {isLoggedIn && !kidLock ? (
-        <ItemLink to="/parent">{t('footer.parentDashboard')}</ItemLink>
+        <>
+          <NavDivider />
+          <ItemLink to="/parent">{t('footer.parentDashboard')}</ItemLink>
+        </>
       ) : null}
     </>
   )

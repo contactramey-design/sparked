@@ -316,6 +316,17 @@ h1, h2, h3 {
   margin-top: 0.15rem;
 }
 
+.nav-dropdown-divider {
+  height: 1px;
+  margin: 0.4rem 0.35rem;
+  border: 0;
+  background: rgba(15, 23, 42, 0.1);
+}
+
+.app[data-school-theme='true'] .nav-dropdown-divider {
+  background: rgba(124, 45, 18, 0.14);
+}
+
 /* High specificity so .main-nav a never forces white text on panel links */
 .main-nav .nav-dropdown-panel a.nav-dropdown-link {
   display: flex;

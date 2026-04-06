@@ -13,6 +13,7 @@ import { StandardsBadge } from '@/design-system/components/StandardsBadge'
 import { LessonPlayerLayout } from '@/features/school-curriculum/LessonPlayerLayout'
 import { useSchoolAudience } from '@/hooks/useSchoolAudience'
 import SchoolAudienceToggle from './SchoolAudienceToggle'
+import ListenButton from '@/components/ListenButton'
 import { lessonTypicalGradesLine } from './lessonGradeSpan'
 import { isLessonInBand, isSchoolSubjectId, lessonLocale, type SchoolSubjectId } from './types'
 import './school-subject.css'
@@ -125,6 +126,60 @@ const SchoolSubjectLessonPage: React.FC = () => {
     return Math.min(100, Math.round((stepped / questions.length) * 100))
   }, [qIndex, revealed, questions.length])
 
+  const quizPromptSpeakText = useMemo(() => {
+    if (!currentQ) return ''
+    const opts = currentQ.options.map((o, i) => `${String.fromCharCode(65 + i)}. ${o}`).join('. ')
+    return `${currentQ.prompt} ${opts}`
+  }, [currentQ])
+
+  const quizFeedbackSpeakText = useMemo(() => {
+    if (!currentQ || selected === null || !revealed) return ''
+    const parts: string[] = []
+    parts.push(
+      selected === currentQ.correctIndex ? t('schoolSubject.quizStatusCorrect') : t('schoolSubject.quizStatusWrong'),
+    )
+    parts.push(`${t('schoolSubject.quizCorrectIs')}: ${currentQ.options[currentQ.correctIndex]}`)
+    if (selected !== currentQ.correctIndex) {
+      parts.push(`${t('schoolSubject.quizYourAnswer')}: ${currentQ.options[selected]}`)
+    }
+    parts.push(`${t('schoolSubject.quizWhyHeading')}.`)
+    const explain =
+      quizTeachingNote ||
+      t(
+        isTeacherView ? 'schoolSubject.quizExplainFallback' : 'schoolSubject.quizExplainFallbackStudent',
+        { answer: currentQ.options[currentQ.correctIndex] },
+      )
+    parts.push(explain)
+    if (isTeacherView) {
+      if (selected !== currentQ.correctIndex) {
+        parts.push(t('schoolSubject.quizWrongCoach'))
+      }
+      parts.push(t('schoolSubject.quizReviewLearn'))
+    }
+    return parts.join(' ')
+  }, [currentQ, revealed, selected, quizTeachingNote, isTeacherView, t])
+
+  const tipSpeakText = useMemo(() => {
+    if (!loc) return ''
+    if (!isTeacherView) {
+      if (loc.offlineApplication) {
+        return [loc.offlineApplication, loc.realWorldTip].filter(Boolean).join('. ')
+      }
+      return loc.realWorldTip
+    }
+    const parts: string[] = [t('schoolSubject.tipHeading'), t('schoolSubject.tipSublead')]
+    if (ageBand === 'tots' || ageBand === 'kids') {
+      parts.push(t('schoolSubject.tipImaginationNote'))
+    }
+    if (loc.offlineApplication) {
+      parts.push(`${t('schoolSubject.tipTryHeading')}. ${loc.offlineApplication}`)
+      parts.push(`${t('schoolSubject.tipWhyHeading')}. ${loc.realWorldTip}`)
+    } else {
+      parts.push(loc.realWorldTip)
+    }
+    return parts.filter(Boolean).join('. ')
+  }, [t, ageBand, isTeacherView, loc])
+
   if (!validSubject || !lesson || !loc) {
     return (
       <section className="school-subj-lesson">
@@ -186,20 +241,37 @@ const SchoolSubjectLessonPage: React.FC = () => {
       </div>
 
       <header className="school-subj-lesson__header">
-        <h1 className="school-subj-lesson__title">{loc.title}</h1>
+        <div className="flex flex-wrap items-start gap-2">
+          <h1 className="school-subj-lesson__title min-w-0 flex-1">{loc.title}</h1>
+          <ListenButton text={loc.title} ariaLabel={t('listenButton.schoolLessonTitle')} size="sm" className="shrink-0" />
+        </div>
         <p className="school-subj-lesson__meta muted text-sm">
           {t('schoolSubject.durationLine', { minutes: lesson.estMinutes })}
-          {' · '}
-          {lessonTypicalGradesLine(lesson, locale, t)}
-          {isTeacherView && lesson.standardsNote ? ` · ${lesson.standardsNote}` : ''}
+          {isTeacherView ? (
+            <>
+              {' · '}
+              {lessonTypicalGradesLine(lesson, locale, t)}
+              {lesson.standardsNote ? ` · ${lesson.standardsNote}` : ''}
+            </>
+          ) : null}
         </p>
       </header>
 
       {isTeacherView ? (
         <div className="school-subj-lesson-standards-callout no-print mx-auto mb-4 w-full max-w-4xl rounded-2xl border border-slate-200 bg-white px-4 py-4 shadow-sm md:px-6">
-          <h2 className="mb-3 text-sm font-bold uppercase tracking-wide text-slate-600 font-school">
-            {t('schoolSubjects.caStandardsHeading')}
-          </h2>
+          <div className="mb-3 flex flex-wrap items-center gap-2">
+            <h2 className="text-sm font-bold uppercase tracking-wide text-slate-600 font-school m-0 flex-1 min-w-0">
+              {t('schoolSubjects.caStandardsHeading')}
+            </h2>
+            {lesson.standardsNote?.trim() ? (
+              <ListenButton
+                text={`${t('schoolSubjects.caStandardsHeading')}. ${lesson.standardsNote.trim()}`}
+                ariaLabel={t('listenButton.summary')}
+                size="sm"
+                className="shrink-0"
+              />
+            ) : null}
+          </div>
           <StandardsBadge lesson={lesson} />
         </div>
       ) : null}
@@ -229,22 +301,65 @@ const SchoolSubjectLessonPage: React.FC = () => {
         <div className="school-subj-learn px-4 py-4 md:px-6 md:pb-6">
           {isTeacherView ? (
             <div className="school-subj-supplemental-callout" role="note">
-              <p>{t('schoolSubject.lessonSupplementalNote')}</p>
+              <div className="flex flex-wrap items-start gap-2">
+                <p className="m-0 flex-1 min-w-0">{t('schoolSubject.lessonSupplementalNote')}</p>
+                <ListenButton
+                  text={t('schoolSubject.lessonSupplementalNote')}
+                  ariaLabel={t('listenButton.schoolSupplementalNote')}
+                  size="sm"
+                  className="shrink-0"
+                />
+              </div>
             </div>
           ) : null}
 
           <div className="school-subj-summary-box">
-            <h2 className="school-subj-summary-box__title">{t('schoolSubject.summaryHeading')}</h2>
-            <p className="school-subj-summary-box__body">{loc.summary}</p>
+            {isTeacherView ? (
+              <>
+                <div className="flex flex-wrap items-center gap-2">
+                  <h2 className="school-subj-summary-box__title m-0 flex-1 min-w-0">{t('schoolSubject.summaryHeading')}</h2>
+                  <ListenButton
+                    text={`${t('schoolSubject.summaryHeading')}. ${loc.summary}`}
+                    ariaLabel={t('listenButton.schoolLessonSummary')}
+                    size="sm"
+                    className="shrink-0"
+                  />
+                </div>
+                <p className="school-subj-summary-box__body">{loc.summary}</p>
+              </>
+            ) : (
+              <div className="flex flex-wrap items-start gap-2">
+                <p className="school-subj-summary-box__body m-0 flex-1 min-w-0 text-base leading-relaxed">{loc.summary}</p>
+                <ListenButton text={loc.summary} ariaLabel={t('listenButton.schoolLessonSummary')} size="sm" className="shrink-0" />
+              </div>
+            )}
           </div>
 
           {isTeacherView && teacherPack ? (
             <div className="school-subj-teacher-toolkit">
-              <h2 className="school-subj-teacher-toolkit__title">{t('schoolSubject.teacherToolkitTitle')}</h2>
+              <div className="flex flex-wrap items-start gap-2">
+                <h2 className="school-subj-teacher-toolkit__title m-0 flex-1 min-w-0">
+                  {t('schoolSubject.teacherToolkitTitle')}
+                </h2>
+                <ListenButton
+                  text={`${t('schoolSubject.teacherToolkitTitle')}. ${t('schoolSubject.teacherToolkitSub')}`}
+                  ariaLabel={t('listenButton.schoolTeacherToolkitIntro')}
+                  size="sm"
+                  className="shrink-0"
+                />
+              </div>
               <p className="school-subj-teacher-toolkit__sub muted text-sm">{t('schoolSubject.teacherToolkitSub')}</p>
 
               <div className="school-subj-deep-dive school-subj-deep-dive--in-toolkit">
-                <h3 className="school-subj-deep-dive__title">{t('schoolSubject.deepDiveHeading')}</h3>
+                <div className="flex flex-wrap items-start gap-2">
+                  <h3 className="school-subj-deep-dive__title m-0 flex-1 min-w-0">{t('schoolSubject.deepDiveHeading')}</h3>
+                  <ListenButton
+                    text={`${t('schoolSubject.deepDiveHeading')}. ${t('schoolSubject.deepDiveSub')}. ${teacherPack.conceptualDeepDive}`}
+                    ariaLabel={t('listenButton.schoolDeepDive')}
+                    size="sm"
+                    className="shrink-0"
+                  />
+                </div>
                 <p className="school-subj-deep-dive__sub muted text-sm">{t('schoolSubject.deepDiveSub')}</p>
                 <p className="school-subj-deep-dive__body">{teacherPack.conceptualDeepDive}</p>
               </div>
@@ -255,7 +370,15 @@ const SchoolSubjectLessonPage: React.FC = () => {
                   <dl className="school-subj-vocab-list">
                     {teacherPack.vocabularyTerms.map((row) => (
                       <div key={row.term} className="school-subj-vocab-row">
-                        <dt>{row.term}</dt>
+                        <div className="flex flex-wrap items-start gap-2">
+                          <dt className="m-0 flex-1 min-w-0">{row.term}</dt>
+                          <ListenButton
+                            text={`${row.term}. ${row.definition}`}
+                            ariaLabel={t('listenButton.schoolVocabulary')}
+                            size="sm"
+                            className="shrink-0"
+                          />
+                        </div>
                         <dd>{row.definition}</dd>
                       </div>
                     ))}
@@ -265,7 +388,17 @@ const SchoolSubjectLessonPage: React.FC = () => {
 
               {teacherPack.sayThisAloud ? (
                 <div className="school-subj-modeling-block">
-                  <h3 className="school-subj-toolkit-section-title">{t('schoolSubject.modelingHeading')}</h3>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <h3 className="school-subj-toolkit-section-title m-0 flex-1 min-w-0">
+                      {t('schoolSubject.modelingHeading')}
+                    </h3>
+                    <ListenButton
+                      text={`${t('schoolSubject.modelingHeading')}. ${teacherPack.sayThisAloud}`}
+                      ariaLabel={t('listenButton.schoolModelingScript')}
+                      size="sm"
+                      className="shrink-0"
+                    />
+                  </div>
                   <blockquote className="school-subj-modeling-quote">{teacherPack.sayThisAloud}</blockquote>
                 </div>
               ) : null}
@@ -276,7 +409,17 @@ const SchoolSubjectLessonPage: React.FC = () => {
                   <ul className="school-subj-myth-list">
                     {teacherPack.misconceptions.map((m, i) => (
                       <li key={i} className="school-subj-myth-item">
-                        <p className="school-subj-myth-item__label">{t('schoolSubject.misconceptionMyth')}</p>
+                        <div className="flex flex-wrap items-start gap-2">
+                          <p className="school-subj-myth-item__label m-0 flex-1 min-w-0">
+                            {t('schoolSubject.misconceptionMyth')}
+                          </p>
+                          <ListenButton
+                            text={`${t('schoolSubject.misconceptionMyth')}: ${m.myth}. ${t('schoolSubject.misconceptionFix')}: ${m.correction}`}
+                            ariaLabel={t('listenButton.schoolMisconception')}
+                            size="sm"
+                            className="shrink-0"
+                          />
+                        </div>
                         <p className="school-subj-myth-item__myth">{m.myth}</p>
                         <p className="school-subj-myth-item__label">{t('schoolSubject.misconceptionFix')}</p>
                         <p>{m.correction}</p>
@@ -288,18 +431,48 @@ const SchoolSubjectLessonPage: React.FC = () => {
 
               <div className="school-subj-diff-grid">
                 <div className="school-subj-diff-card">
-                  <h3 className="school-subj-toolkit-section-title">{t('schoolSubject.supportEmergingLabel')}</h3>
+                  <div className="flex flex-wrap items-start gap-2">
+                    <h3 className="school-subj-toolkit-section-title m-0 flex-1 min-w-0">
+                      {t('schoolSubject.supportEmergingLabel')}
+                    </h3>
+                    <ListenButton
+                      text={`${t('schoolSubject.supportEmergingLabel')}. ${teacherPack.supportEmergingLearners}`}
+                      ariaLabel={t('listenButton.schoolSupportEmerging')}
+                      size="sm"
+                      className="shrink-0"
+                    />
+                  </div>
                   <p>{teacherPack.supportEmergingLearners}</p>
                 </div>
                 <div className="school-subj-diff-card school-subj-diff-card--extend">
-                  <h3 className="school-subj-toolkit-section-title">{t('schoolSubject.extendDepthLabel')}</h3>
+                  <div className="flex flex-wrap items-start gap-2">
+                    <h3 className="school-subj-toolkit-section-title m-0 flex-1 min-w-0">
+                      {t('schoolSubject.extendDepthLabel')}
+                    </h3>
+                    <ListenButton
+                      text={`${t('schoolSubject.extendDepthLabel')}. ${teacherPack.extendForDepth}`}
+                      ariaLabel={t('listenButton.schoolExtendDepth')}
+                      size="sm"
+                      className="shrink-0"
+                    />
+                  </div>
                   <p>{teacherPack.extendForDepth}</p>
                 </div>
               </div>
 
               {teacherPack.extraPracticeIdeas.length > 0 ? (
                 <div className="school-subj-extra-practice">
-                  <h3 className="school-subj-toolkit-section-title">{t('schoolSubject.extraPracticeHeading')}</h3>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <h3 className="school-subj-toolkit-section-title m-0 flex-1 min-w-0">
+                      {t('schoolSubject.extraPracticeHeading')}
+                    </h3>
+                    <ListenButton
+                      text={`${t('schoolSubject.extraPracticeHeading')}. ${teacherPack.extraPracticeIdeas.join('. ')}`}
+                      ariaLabel={t('listenButton.schoolExtraPractice')}
+                      size="sm"
+                      className="shrink-0"
+                    />
+                  </div>
                   <ul className="school-subj-teach-bullets">
                     {teacherPack.extraPracticeIdeas.map((idea, i) => (
                       <li key={i}>{idea}</li>
@@ -310,16 +483,43 @@ const SchoolSubjectLessonPage: React.FC = () => {
             </div>
           ) : null}
 
-          <h2 className="school-subj-lesson__section-title">{t('schoolSubject.objectivesHeading')}</h2>
-          <ul className="school-subj-objectives">
-            {loc.objectives.map((o, i) => (
-              <li key={i}>{o}</li>
-            ))}
-          </ul>
+          {isTeacherView ? (
+            <>
+              <div className="flex flex-wrap items-center gap-2">
+                <h2 className="school-subj-lesson__section-title m-0 flex-1 min-w-0">{t('schoolSubject.objectivesHeading')}</h2>
+                <ListenButton
+                  text={loc.objectives.join('. ')}
+                  ariaLabel={t('listenButton.schoolObjectives')}
+                  size="sm"
+                  className="shrink-0"
+                />
+              </div>
+              <ul className="school-subj-objectives">
+                {loc.objectives.map((o, i) => (
+                  <li key={i}>{o}</li>
+                ))}
+              </ul>
+            </>
+          ) : null}
 
-          {loc.teachSections.map((sec, i) => (
+          {loc.teachSections.map((sec, i) => {
+            const paras = sec.body
+              .split(/\n\n+/)
+              .map((para) => para.trim())
+              .filter(Boolean)
+            const bulletsJoined = sec.bullets?.length ? sec.bullets.join('. ') : ''
+            const sectionSpeak = [sec.heading, ...paras, bulletsJoined].filter(Boolean).join('. ')
+            return (
             <div key={i} className="school-subj-section">
-              <h2>{sec.heading}</h2>
+              <div className="flex flex-wrap items-start gap-2">
+                <h2 className="m-0 flex-1 min-w-0">{sec.heading}</h2>
+                <ListenButton
+                  text={sectionSpeak}
+                  ariaLabel={t('listenButton.schoolTeachSection')}
+                  size="sm"
+                  className="shrink-0"
+                />
+              </div>
               {sec.body
                 .split(/\n\n+/)
                 .map((para) => para.trim())
@@ -335,7 +535,8 @@ const SchoolSubjectLessonPage: React.FC = () => {
                 </ul>
               ) : null}
             </div>
-          ))}
+            )
+          })}
           <Button
             type="button"
             className="mt-2"
@@ -395,7 +596,15 @@ const SchoolSubjectLessonPage: React.FC = () => {
               total: questions.length,
             })}
           </p>
-          <div className="school-subj-quiz-prompt">{currentQ.prompt}</div>
+          <div className="school-subj-quiz-prompt flex flex-wrap items-start gap-2">
+            <span className="min-w-0 flex-1">{currentQ.prompt}</span>
+            <ListenButton
+              text={quizPromptSpeakText}
+              ariaLabel={t('listenButton.schoolQuizQuestion')}
+              size="sm"
+              className="shrink-0"
+            />
+          </div>
           <div className="school-subj-quiz-options">
             {currentQ.options.map((opt, idx) => {
               const isSel = selected === idx
@@ -460,6 +669,13 @@ const SchoolSubjectLessonPage: React.FC = () => {
               <p className="school-subj-quiz-feedback__hint muted text-sm">
                 {t(isTeacherView ? 'schoolSubject.quizReviewLearn' : 'schoolSubject.quizReviewLearnStudent')}
               </p>
+              <div className="mt-3 flex justify-end">
+                <ListenButton
+                  text={quizFeedbackSpeakText}
+                  ariaLabel={t('listenButton.schoolQuizFeedback')}
+                  size="sm"
+                />
+              </div>
             </div>
           ) : null}
 
@@ -494,9 +710,17 @@ const SchoolSubjectLessonPage: React.FC = () => {
 
         {step === 'tip' && (
         <div className="school-subj-tip-panel px-4 py-4 md:px-6 md:pb-6">
-          <h2 className="school-subj-lesson__section-title">{t('schoolSubject.tipHeading')}</h2>
-          <p className="school-subj-tip-sublead muted text-sm">{t('schoolSubject.tipSublead')}</p>
-          {(ageBand === 'tots' || ageBand === 'kids') && !isTeacherView ? (
+          <div className="flex flex-wrap items-center gap-2">
+            <h2 className="school-subj-lesson__section-title m-0 flex-1 min-w-0">{t('schoolSubject.tipHeading')}</h2>
+            <ListenButton
+              text={tipSpeakText}
+              ariaLabel={t('listenButton.schoolTip')}
+              size="sm"
+              className="shrink-0"
+            />
+          </div>
+          {isTeacherView ? <p className="school-subj-tip-sublead muted text-sm">{t('schoolSubject.tipSublead')}</p> : null}
+          {isTeacherView && (ageBand === 'tots' || ageBand === 'kids') ? (
             <p className="school-subj-tip-imagination muted text-sm">{t('schoolSubject.tipImaginationNote')}</p>
           ) : null}
           {loc.offlineApplication ? (

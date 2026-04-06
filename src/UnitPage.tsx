@@ -433,6 +433,27 @@ const UnitPage: React.FC = () => {
         </Link>
       </header>
 
+      {unit.parentEbook ? (
+        <div className="unit-parent-ebook-cta mx-auto mb-4 max-w-4xl rounded-2xl border border-sky-200 bg-sky-50/90 px-4 py-3 shadow-sm sm:px-5 sm:py-4">
+          <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
+            <p className="m-0 text-sm text-slate-700 sm:max-w-[28rem]">{t('unit.parentEbookHint')}</p>
+            <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-3">
+              <Link
+                to={`/ebook?ebookId=${encodeURIComponent(unit.parentEbook.catalogId)}`}
+                className="inline-flex min-h-11 items-center justify-center rounded-xl border-2 border-sky-500 bg-white px-4 py-2 text-center text-sm font-bold text-sky-800 shadow-sm transition-colors hover:bg-sky-100"
+              >
+                {t('unit.parentEbookCta', {
+                  platform: t(`unit.parentEbookPlatform.${unit.parentEbook.platformKey}`),
+                })}
+              </Link>
+              <Link to="/shop" className="text-center text-sm font-semibold text-sky-700 underline-offset-2 hover:underline">
+                {t('unit.parentEbookSeeShop')}
+              </Link>
+            </div>
+          </div>
+        </div>
+      ) : null}
+
       <div className="unit-material-section rounded-2xl border border-slate-200 bg-white/95 p-4 shadow-lg sm:p-6 md:p-8">
         {showVideo && (
           <div className="video-wrapper mb-8">
