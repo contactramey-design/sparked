@@ -39,7 +39,21 @@ body {
   --layout-radius-md: 0.75rem;
   --bp-md: 768px;
   --bp-lg: 1024px;
+  --font-school: Inter, ui-sans-serif, system-ui, sans-serif;
 }
+
+/* School mode: calm professional type in main content (header keeps high-contrast chips) */
+.app[data-school-theme='true'] .app-main {
+  font-family: var(--font-school);
+}
+
+.app[data-school-theme='true'] .app-main h1,
+.app[data-school-theme='true'] .app-main h2,
+.app[data-school-theme='true'] .app-main h3 {
+  font-family: var(--font-school);
+  letter-spacing: -0.02em;
+}
+
 
 a {
   text-decoration: none;

@@ -8,12 +8,9 @@ import { recordSchoolSubjectPracticeComplete, recordSchoolSubjectQuizResult } fr
 import { LessonPractice } from './games/LessonPractice'
 import { getSchoolSubjectTeacherPack } from './schoolSubjectTeacherPack'
 import { getSchoolSubjectQuizFeedback } from './schoolSubjectQuizFeedback'
-import {
-  caFrameworkLabel,
-  cdeFrameworkUrl,
-  formatCaStandardsBadge,
-  caStandardsReferenceUrl,
-} from './caStandardsDisplay'
+import { Stepper } from '@/design-system/components/Stepper'
+import { StandardsBadge } from '@/design-system/components/StandardsBadge'
+import { LessonPlayerLayout } from '@/features/school-curriculum/LessonPlayerLayout'
 import { useSchoolAudience } from '@/hooks/useSchoolAudience'
 import SchoolAudienceToggle from './SchoolAudienceToggle'
 import { lessonTypicalGradesLine } from './lessonGradeSpan'
@@ -178,7 +175,7 @@ const SchoolSubjectLessonPage: React.FC = () => {
 
   return (
     <section
-      className={`school-subj-lesson${step === 'practice' ? ' school-subj-lesson--practice-immersive' : ''}`}
+      className={`school-subj-lesson${step === 'practice' && showPractice ? ' school-subj-lesson--practice-immersive' : ''}`}
     >
       <Link to={trackPath} className="link-back">
         {t('schoolSubject.backToSubjectTrack')}
@@ -196,51 +193,40 @@ const SchoolSubjectLessonPage: React.FC = () => {
           {lessonTypicalGradesLine(lesson, locale, t)}
           {isTeacherView && lesson.standardsNote ? ` · ${lesson.standardsNote}` : ''}
         </p>
-        {isTeacherView && lesson.caStandards ? (
-          <div className="school-subj-lesson-ca">
-            <h2 className="school-subj-lesson-ca__title">{t('schoolSubjects.caStandardsHeading')}</h2>
-            <p className="school-subj-lesson-ca__framework">
-              {caFrameworkLabel(lesson.caStandards.framework, locale)}
-              {lesson.caStandards.gradeSpan ? ` · ${lesson.caStandards.gradeSpan}` : ''}
-            </p>
-            <ul className="school-subj-lesson-ca__codes">
-              {lesson.caStandards.codes.map((c) => (
-                <li key={c}>{c}</li>
-              ))}
-            </ul>
-            <p className="school-subj-lesson-ca__badge muted text-sm">{formatCaStandardsBadge(lesson.caStandards)}</p>
-            <div className="school-subj-lesson-ca__links">
-              <a href={caStandardsReferenceUrl(lesson.caStandards)} target="_blank" rel="noopener noreferrer">
-                {t('schoolSubjects.viewCdeSearch')}
-              </a>
-              <a href={cdeFrameworkUrl(lesson.caStandards.framework)} target="_blank" rel="noopener noreferrer">
-                {t('schoolSubjects.viewCde')}
-              </a>
-            </div>
-          </div>
-        ) : null}
       </header>
 
-      <div className="school-subj-stepper" role="tablist" aria-label={t('schoolSubject.stepsAria')}>
-        {lessonSteps.map((s) => (
-          <button
-            key={s}
-            type="button"
-            role="tab"
-            aria-selected={step === s}
-            className={`school-subj-step ${step === s ? 'school-subj-step--active' : ''}`}
-            onClick={() => setStep(s)}
-          >
-            {s === 'learn' && t('schoolSubject.stepLearn')}
-            {s === 'practice' && t('schoolSubject.stepPractice')}
-            {s === 'quiz' && t('schoolSubject.stepQuiz')}
-            {s === 'tip' && t('schoolSubject.stepTip')}
-          </button>
-        ))}
-      </div>
+      {isTeacherView ? (
+        <div className="school-subj-lesson-standards-callout no-print mx-auto mb-4 w-full max-w-4xl rounded-2xl border border-slate-200 bg-white px-4 py-4 shadow-sm md:px-6">
+          <h2 className="mb-3 text-sm font-bold uppercase tracking-wide text-slate-600 font-school">
+            {t('schoolSubjects.caStandardsHeading')}
+          </h2>
+          <StandardsBadge lesson={lesson} />
+        </div>
+      ) : null}
 
-      {step === 'learn' && (
-        <div className="school-subj-learn">
+      <LessonPlayerLayout
+        immersive={step === 'practice' && showPractice}
+        stepper={
+          <Stepper
+            steps={lessonSteps.map((s) => ({
+              id: s,
+              label:
+                s === 'learn'
+                  ? t('schoolSubject.stepLearn')
+                  : s === 'practice'
+                    ? t('schoolSubject.stepPractice')
+                    : s === 'quiz'
+                      ? t('schoolSubject.stepQuiz')
+                      : t('schoolSubject.stepTip'),
+            }))}
+            currentId={step}
+            onStepClick={(id) => setStep(id as StepId)}
+            ariaLabel={t('schoolSubject.stepsAria')}
+          />
+        }
+      >
+        {step === 'learn' && (
+        <div className="school-subj-learn px-4 py-4 md:px-6 md:pb-6">
           {isTeacherView ? (
             <div className="school-subj-supplemental-callout" role="note">
               <p>{t('schoolSubject.lessonSupplementalNote')}</p>
@@ -361,9 +347,10 @@ const SchoolSubjectLessonPage: React.FC = () => {
             {showPractice ? t('schoolSubject.goToPractice') : t('schoolSubject.goToQuiz')}
           </Button>
         </div>
-      )}
+        )}
 
-      {step === 'practice' && showPractice ? (
+        {step === 'practice' && showPractice ? (
+        <div className="px-2 py-3 md:px-4 md:py-4">
         <LessonPractice
           lesson={lesson}
           title={loc.title}
@@ -384,10 +371,11 @@ const SchoolSubjectLessonPage: React.FC = () => {
             setStep('quiz')
           }}
         />
-      ) : null}
+        </div>
+        ) : null}
 
-      {step === 'quiz' && !quizFinished && currentQ && (
-        <div className="school-subj-quiz-panel">
+        {step === 'quiz' && !quizFinished && currentQ && (
+        <div className="school-subj-quiz-panel px-4 py-4 md:px-6 md:pb-6">
           <div
             className="school-subj-quiz-progress"
             role="progressbar"
@@ -481,10 +469,10 @@ const SchoolSubjectLessonPage: React.FC = () => {
             </Button>
           </div>
         </div>
-      )}
+        )}
 
-      {step === 'quiz' && quizFinished && (
-        <div className="school-subj-quiz-results space-y-3">
+        {step === 'quiz' && quizFinished && (
+        <div className="school-subj-quiz-results space-y-3 px-4 py-4 md:px-6 md:pb-6">
           <p className="school-subj-quiz-results__score font-semibold">
             {t('schoolSubject.quizDone', { score: quizCorrect, total: questions.length })}
           </p>
@@ -502,10 +490,10 @@ const SchoolSubjectLessonPage: React.FC = () => {
             </Button>
           </div>
         </div>
-      )}
+        )}
 
-      {step === 'tip' && (
-        <div className="school-subj-tip-panel">
+        {step === 'tip' && (
+        <div className="school-subj-tip-panel px-4 py-4 md:px-6 md:pb-6">
           <h2 className="school-subj-lesson__section-title">{t('schoolSubject.tipHeading')}</h2>
           <p className="school-subj-tip-sublead muted text-sm">{t('schoolSubject.tipSublead')}</p>
           {(ageBand === 'tots' || ageBand === 'kids') && !isTeacherView ? (
@@ -527,7 +515,8 @@ const SchoolSubjectLessonPage: React.FC = () => {
             </Link>
           </div>
         </div>
-      )}
+        )}
+      </LessonPlayerLayout>
     </section>
   )
 }

@@ -18,10 +18,18 @@ export default {
           soft: '#F0F9FF',
           softEnd: '#E0F2FE',
         },
+        /** Semantic surfaces — pair with CSS vars from AppShell when needed */
+        surface: {
+          DEFAULT: '#ffffff',
+          muted: '#f8fafc',
+          school: '#fff7ed',
+          border: 'rgba(15, 23, 42, 0.08)',
+        },
       },
       fontFamily: {
         heading: ['Fredoka One', 'system-ui', 'sans-serif'],
         body: ['Baloo 2', 'Comic Neue', 'system-ui', 'sans-serif'],
+        school: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
       },
       borderRadius: {
         '3xl': '1.5rem',

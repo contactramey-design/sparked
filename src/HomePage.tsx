@@ -4,92 +4,17 @@ import { appConfig } from './config'
 import { useAuth } from './AuthContext'
 import { useTranslation } from './contexts/LocaleContext'
 import { useAgeBand } from './contexts/AgeBandContext'
-import AgeBandSelector from './components/AgeBandSelector'
+import { AdventureGrid } from './features/family-home/AdventureGrid'
+import { HomeHero } from './features/family-home/HomeHero'
 import { awardDailyLoginBonus, getPlayerStats } from './progress'
 import { ParentViewContent } from './ParentDashboard'
 import { clearPostLoginRedirect, getPostLoginRedirect } from './lib/postLoginRedirect'
-
-const TIERS = [
-  {
-    id: 'safety',
-    title: 'Internet Safety',
-    description: 'Learn safe watching, kind comments, and healthy screen time with SpArki.',
-    path: '/track/social-safety',
-    imageSrc: '/safety-card.png',
-    imageAlt: 'SpArki in the Internet Safety world',
-  },
-  {
-    id: 'ai-coding',
-    title: 'AI & Coding',
-    description: 'Discover what AI is, how code works, and how software helps people.',
-    path: '/track/ai-coding',
-    imageSrc: '/sparkiaicodingcardhomepage.png',
-    imageAlt: 'SpArki in the AI and Coding world',
-  },
-  {
-    id: 'homework',
-    title: 'Homework Adventure',
-    description: 'Turn homework into a story-based quest. Grown-up uploads; SpArki guides.',
-    path: '/homework',
-    imageSrc: '/homework-card.png',
-    imageAlt: 'SpArki as Homework Adventure tutor',
-  },
-] as const
-
-function TierCard({
-  tier,
-  href,
-}: {
-  tier: (typeof TIERS)[number]
-  href: string
-}) {
-  const [imgFailed, setImgFailed] = useState(false)
-  const { t } = useTranslation()
-  const title = t(`home.tiers.${tier.id}.title`)
-  const description = t(`home.tiers.${tier.id}.description`)
-  const imageAlt = t(`home.tiers.${tier.id}.imageAlt`)
-
-  return (
-    <Link to={href} className="home-tier-card glitch-card" title={title}>
-      <div className="glitch-card-outer" aria-hidden />
-      <div className="glitch-card-inner">
-        <div className="glitch-card-img-wrap">
-          {imgFailed ? (
-            <span className="home-tier-placeholder">{title}</span>
-          ) : (
-            <img
-              src={tier.imageSrc}
-              alt={imageAlt}
-              className="home-tier-image"
-              onError={() => setImgFailed(true)}
-            />
-          )}
-          <div className="glitch-card-corners">
-            <span className="glitch-corner tl" />
-            <span className="glitch-corner tr" />
-            <span className="glitch-corner bl" />
-            <span className="glitch-corner br" />
-          </div>
-          <div className="glitch-card-info">
-            <span className="glitch-card-status" aria-hidden>
-              {t('home.adventure')}
-            </span>
-            <h3 className="glitch-card-title">{title}</h3>
-            <p className="glitch-card-desc">{description}</p>
-            <span className="glitch-card-cta">{t('home.startAdventure')}</span>
-          </div>
-        </div>
-      </div>
-      <div className="glitch-scanlines" aria-hidden />
-    </Link>
-  )
-}
 
 const HomePage: React.FC = () => {
   const { authHydrated, isLoggedIn } = useAuth()
   const navigate = useNavigate()
   const { t, locale } = useTranslation()
-  const { ageBand, ageBandDisplayName } = useAgeBand()
+  const { ageBand } = useAgeBand()
   const [searchParams] = useSearchParams()
   const viewParam = searchParams.get('view')
   const [username, setUsername] = useState('')
@@ -276,52 +201,12 @@ const HomePage: React.FC = () => {
           </button>
         </div>
       )}
-      <div className="home-hero">
-        <div className="home-hero-sparki" aria-hidden>
-          <img
-            src="/sparkiacademylogo.webp"
-            alt=""
-            className="home-hero-character"
-            onError={(e) => {
-              e.currentTarget.style.display = 'none'
-              const next = e.currentTarget.nextElementSibling
-              if (next) (next as HTMLElement).style.display = 'block'
-            }}
-          />
-          <span className="home-hero-character-emoji" aria-hidden>
-            🤖✨
-          </span>
-        </div>
-        <div className="home-hero-content">
-          <h1 className="home-title">{t('header.appName')}</h1>
-          <p className="home-tagline">{t('header.tagline')}</p>
-          <div className="home-hero-age-wrap">
-            <h2 className="home-hero-age-label">{t('ageBand.homeSectionTitle')}</h2>
-            <p className="home-hero-age-sub muted text-sm">{t('ageBand.homeSectionSubtitle')}</p>
-            <p className="home-hero-age-current sr-only">
-              {t('ageBand.currentLabel', { name: ageBandDisplayName })}
-            </p>
-            <AgeBandSelector variant="compact" idPrefix="home-hero-age" />
-          </div>
-          <Link to={ctaHref} className="home-hero-cta primary-button">
-            {t('home.joinAdventure')}
-          </Link>
-        </div>
+      <div className="home-hero-wrap mx-auto max-w-5xl px-4">
+        <HomeHero ctaHref={ctaHref} />
       </div>
 
-      <div className="home-tiers">
-        <h2 className="home-tiers-title">{t('home.chooseAdventure')}</h2>
-        <div className="home-tier-grid">
-          {TIERS.map((tier) => {
-            return (
-              <TierCard
-                key={tier.id}
-                tier={tier}
-                href={tier.path}
-              />
-            )
-          })}
-        </div>
+      <div className="home-adventure-wrap mx-auto max-w-6xl px-4">
+        <AdventureGrid />
       </div>
 
       <div className="home-grownups-footer muted text-center">

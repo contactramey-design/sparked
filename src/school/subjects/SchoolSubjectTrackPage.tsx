@@ -2,11 +2,13 @@ import React, { useMemo, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { useTranslation } from '@/contexts/LocaleContext'
 import { useAgeBand } from '@/contexts/AgeBandContext'
-import AgeBandSelector from '@/components/AgeBandSelector'
 import { getLessonsForSubjectAndBand } from './registry'
 import { isSchoolSubjectLessonMastered } from './schoolSubjectProgress'
-import { formatCaStandardsBadge, caStandardsReferenceUrl } from './caStandardsDisplay'
 import { parseStandardsNote } from './subjectStandards'
+import { PageHeader } from '@/design-system/components/PageHeader'
+import { StandardsBadge } from '@/design-system/components/StandardsBadge'
+import { GradeBandTabs } from '@/features/school-curriculum/GradeBandTabs'
+import { ClassroomGuideAside } from '@/features/school-curriculum/ClassroomGuideAside'
 import { SUBJECT_TRACK_VISUAL } from './subjectTrackVisuals'
 import { useSchoolAudience } from '@/hooks/useSchoolAudience'
 import SchoolAudienceToggle from './SchoolAudienceToggle'
@@ -65,13 +67,29 @@ const SchoolSubjectTrackPage: React.FC = () => {
 
   return (
     <section className="lesson-page school-subj-page school-subj-track-page">
+      <PageHeader
+        breadcrumb={[
+          { label: t('header.schools'), to: '/schools' },
+          { label: t('schools.subjectHubTitle'), to: '/schools/subjects' },
+          { label: t(`schoolSubjects.tracks.${subjectId}.title`) },
+        ]}
+        title={t(`schoolSubjects.tracks.${subjectId}.title`)}
+        description={t(`schoolSubjects.tracks.${subjectId}.subtitle`)}
+        className="school-subj-track-page-header"
+      />
+
       <Link to="/schools/subjects" className="link-back school-subj-track-back">
         {t('schoolSubject.backToSubjectList')}
       </Link>
 
-      <div className="track-age-band-toolbar school-subj-track-toolbar">
-        <AgeBandSelector variant="compact" />
-        <SchoolAudienceToggle compact className="school-subj-track-audience" />
+      <div className="track-age-band-toolbar school-subj-track-toolbar flex-col items-stretch gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div className="min-w-0">
+          <p className="mb-2 text-xs font-bold uppercase tracking-wide text-slate-600 font-school">
+            {t('ageBand.forThisSession')}
+          </p>
+          <GradeBandTabs />
+        </div>
+        <SchoolAudienceToggle compact className="school-subj-track-audience self-start sm:self-center" />
       </div>
 
       <header className="school-subj-track-hero">
@@ -91,8 +109,7 @@ const SchoolSubjectTrackPage: React.FC = () => {
           {isTeacherView ? (
             <span className="school-subj-alignment-pill">{t('schoolSubjects.alignmentBadge')}</span>
           ) : null}
-          <h1 className="school-subj-track-hero__title">{t(`schoolSubjects.tracks.${subjectId}.title`)}</h1>
-          <p className="school-subj-track-hero__subtitle">{t(`schoolSubjects.tracks.${subjectId}.subtitle`)}</p>
+          <p className="school-subj-track-hero__sr-title sr-only">{t(`schoolSubjects.tracks.${subjectId}.title`)}</p>
           <p className="school-subj-track-hero__band">
             {t('schoolSubject.bandLabel', { band: ageBandDisplayName })}
           </p>
@@ -129,8 +146,7 @@ const SchoolSubjectTrackPage: React.FC = () => {
               {lessons.map((lesson, index) => {
                 const loc = lessonLocale(lesson, locale)
                 const mastered = isSchoolSubjectLessonMastered(subjectId, lesson.id)
-                const ca = lesson.caStandards
-                const { scopeLine, codeBadge } = parseStandardsNote(lesson.standardsNote)
+                const { scopeLine } = parseStandardsNote(lesson.standardsNote)
                 const primaryObjective = loc.objectives[0] ?? loc.summary
                 const showGame = lesson.includesGameQuiz !== false
                 const toLesson = `/schools/subjects/${subjectId}/${encodeURIComponent(lesson.id)}`
@@ -166,23 +182,7 @@ const SchoolSubjectTrackPage: React.FC = () => {
                       {isTeacherView && scopeLine ? <p className="school-subj-track-card__scope muted">{scopeLine}</p> : null}
 
                       <div className="school-subj-track-card__badges" aria-label={t('schoolSubjects.cardStandardsLabel')}>
-                        {isTeacherView && ca ? (
-                          <a
-                            href={caStandardsReferenceUrl(ca)}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="school-subj-ca-pill"
-                            title={formatCaStandardsBadge(ca)}
-                          >
-                            {ca.codes.slice(0, 2).join(' · ')}
-                            {ca.codes.length > 2 ? '…' : ''}
-                          </a>
-                        ) : null}
-                        {isTeacherView && !ca && codeBadge ? (
-                          <span className="school-subj-tek-pill" title={lesson.standardsNote}>
-                            {codeBadge}
-                          </span>
-                        ) : null}
+                        {isTeacherView ? <StandardsBadge lesson={lesson} compact className="max-w-full" /> : null}
                         <span className="school-subj-time-pill">
                           {t('schoolSubjects.cardTimeLabel', { minutes: lesson.estMinutes })}
                         </span>
@@ -229,18 +229,7 @@ const SchoolSubjectTrackPage: React.FC = () => {
             aria-labelledby={isTeacherView ? 'school-subj-how-to-heading' : undefined}
             aria-label={isTeacherView ? undefined : t('schoolSubjects.sequenceTitle')}
           >
-            {isTeacherView ? (
-              <div className="school-subj-aside-block">
-                <h3 id="school-subj-how-to-heading" className="school-subj-aside-block__title">
-                  {t('schoolSubjects.howToTitle')}
-                </h3>
-                <ol className="school-subj-howto-list">
-                  <li>{t('schoolSubjects.howToStep1')}</li>
-                  <li>{t('schoolSubjects.howToStep2')}</li>
-                  <li>{t('schoolSubjects.howToStep3')}</li>
-                </ol>
-              </div>
-            ) : null}
+            {isTeacherView ? <ClassroomGuideAside /> : null}
 
             <nav className="school-subj-aside-block" aria-label={t('schoolSubjects.sequenceTitle')}>
               <h3 className="school-subj-aside-block__title">{t('schoolSubjects.sequenceTitle')}</h3>

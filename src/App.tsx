@@ -1,14 +1,7 @@
 import React from 'react'
-import {
-  BrowserRouter,
-  Routes,
-  Route,
-  Link,
-  Navigate,
-  useLocation,
-} from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import { appConfig } from './config'
-import { AuthProvider, useAuth } from './AuthContext'
+import { AuthProvider } from './AuthContext'
 import { LocaleProvider, useTranslation } from './contexts/LocaleContext'
 import { AgeBandProvider } from './contexts/AgeBandContext'
 import ProtectedRoute from './ProtectedRoute'
@@ -39,11 +32,10 @@ import TeacherWeeklyGeneratorPage from './TeacherWeeklyGeneratorPage.tsx'
 import SchoolsPage from './SchoolsPage'
 import SchoolParentPage from './SchoolParentPage'
 import ParentRedirect from './ParentRedirect'
-import SparkiAvatar from './components/SparkiAvatar'
-import MainNav from './components/MainNav'
+import { AppShellFooter } from './design-system/components/AppShellFooter'
+import { AppShellHeader } from './design-system/components/AppShellHeader'
 import InstallOnIpadBanner from './components/InstallOnIpadBanner'
 import OfflineBanner from './components/OfflineBanner'
-import { useSchoolShopHidden } from './hooks/useSchoolMode'
 import { isSchoolShellPath } from './lib/schoolShell'
 import SchoolWeeklyTrackPage from './SchoolWeeklyTrackPage.tsx'
 import SchoolGeneratedUnitPage from './SchoolGeneratedUnitPage.tsx'
@@ -58,99 +50,6 @@ import './App.css'
 function SkipToMainLabel() {
   const { t } = useTranslation()
   return <>{t('header.skipToMain')}</>
-}
-
-function LangSwitcher() {
-  const { locale, setLocale, t } = useTranslation()
-  return (
-    <button
-      type="button"
-      onClick={() => setLocale((prev) => (prev === 'en' ? 'es' : 'en'))}
-      className="lang-switcher"
-      aria-label={locale === 'en' ? t('header.langSwitchAriaEn') : t('header.langSwitchAriaEs')}
-      title={locale === 'en' ? t('header.langSwitchTitleEn') : t('header.langSwitchTitleEs')}
-    >
-      <span className="lang-switcher-icon" aria-hidden>🌐</span>
-      <span className="lang-switcher-text">{locale === 'en' ? 'EN' : 'ES'}</span>
-    </button>
-  )
-}
-
-function AppHeader() {
-  const location = useLocation()
-  const { t } = useTranslation()
-  const isSchoolRoute = isSchoolShellPath(location.pathname)
-  const schoolShopHidden = useSchoolShopHidden()
-  // School dropdown belongs on shell routes only; school mode on home still uses consumer nav (one header CTA).
-  const mainNavVariant = isSchoolRoute ? 'school' : 'consumer'
-  const hideShopOnConsumer = schoolShopHidden && !isSchoolRoute
-
-  return (
-    <header className="app-header">
-      <Link to="/" className="logo-placeholder flex items-center gap-2" aria-label={t('header.home')}>
-        <SparkiAvatar size="sm" />
-      </Link>
-      <div className="app-titles">
-        <h1>{t('header.appName')}</h1>
-        <p className="app-header-tagline">{t('header.tagline')}</p>
-      </div>
-      <div className="header-nav-cluster">
-        {!isSchoolRoute ? (
-          <Link
-            to="/for-schools"
-            className="header-for-schools-badge"
-            aria-label={t('header.forSchools')}
-          >
-            {t('header.forSchools')}
-          </Link>
-        ) : (
-          <Link
-            to="/schools"
-            className="header-for-schools-badge"
-            aria-label={t('header.schoolHubLink')}
-          >
-            {t('header.schoolHubLink')}
-          </Link>
-        )}
-        <MainNav variant={mainNavVariant} hideShop={hideShopOnConsumer} />
-        <LangSwitcher />
-      </div>
-    </header>
-  )
-}
-
-function AppFooter() {
-  const { kidLock, isLoggedIn, signOut } = useAuth()
-  const { t } = useTranslation()
-  const schoolShopHidden = useSchoolShopHidden()
-  return (
-    <footer className="app-footer">
-      <small>
-        © {new Date().getFullYear()} {t('header.appName')} · {t('footer.copyright')}
-      </small>
-      <span className="app-footer-links">
-        {!schoolShopHidden && <Link to="/shop">{t('footer.shop')}</Link>}
-        <Link to="/about">{t('footer.about')}</Link>
-        <Link to="/privacy">{t('footer.privacy')}</Link>
-        <Link to="/for-schools">{t('footer.forSchools')}</Link>
-        <Link to="/contact">{t('footer.contact')}</Link>
-        {schoolShopHidden && <Link to="/schools/parent">{t('footer.schoolParentHub')}</Link>}
-        {isLoggedIn && !kidLock && (
-          <Link to="/parent">{t('footer.parentDashboard')}</Link>
-        )}
-        {isLoggedIn && !kidLock && (
-          <button type="button" className="footer-link-button" onClick={() => void signOut()}>
-            {t('header.signOut')}
-          </button>
-        )}
-      </span>
-      {kidLock && (
-        <Link to="/parent" className="footer-grownup-link" aria-label={t('footer.grownUp')}>
-          {t('footer.grownUp')}
-        </Link>
-      )}
-    </footer>
-  )
 }
 
 function AppShell() {
@@ -187,8 +86,8 @@ function AppShell() {
       </a>
       <InstallOnIpadBanner />
       <OfflineBanner />
-      <AppHeader />
-      <main id="app-main" className="app-main">
+      <AppShellHeader />
+      <main id="app-main" className={useSchoolTheme ? 'app-main font-school' : 'app-main'}>
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/home" element={<Navigate to="/" replace />} />
@@ -244,7 +143,7 @@ function AppShell() {
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </main>
-      <AppFooter />
+      <AppShellFooter />
     </div>
   )
 }
