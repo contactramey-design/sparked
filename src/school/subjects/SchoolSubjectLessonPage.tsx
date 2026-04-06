@@ -551,7 +551,7 @@ const SchoolSubjectLessonPage: React.FC = () => {
         )}
 
         {step === 'practice' && showPractice ? (
-        <div className="px-2 py-3 md:px-4 md:py-4">
+        <div className="w-full min-w-0 px-1 py-2 sm:px-3 sm:py-4">
         <LessonPractice
           lesson={lesson}
           title={loc.title}

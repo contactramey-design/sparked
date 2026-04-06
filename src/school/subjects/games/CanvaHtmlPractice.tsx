@@ -58,7 +58,7 @@ export function CanvaHtmlPractice({ src, locale, title, onContinue, continueLabe
           ref={iframeRef}
           title={title}
           className="school-subj-canva-iframe"
-          sandbox="allow-scripts allow-same-origin"
+          sandbox="allow-scripts allow-same-origin allow-pointer-lock"
           loading="lazy"
         />
       </div>
