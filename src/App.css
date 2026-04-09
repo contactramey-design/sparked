@@ -236,6 +236,34 @@ h1, h2, h3 {
     inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
+/* Consumer header: educators / classrooms — secondary to family IA */
+.header-educators-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0.35rem 0.65rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #64748b;
+  text-decoration: none;
+  white-space: nowrap;
+  flex-shrink: 0;
+  border-radius: 8px;
+  transition: color 0.15s ease, background 0.15s ease;
+}
+
+.header-educators-link:hover {
+  color: #0f172a;
+  background: rgba(15, 23, 42, 0.06);
+  text-decoration: none;
+}
+
+.header-educators-link:focus-visible {
+  outline: 2px solid var(--primary-color, #0ea5e9);
+  outline-offset: 2px;
+}
+
 .main-nav--two-tier {
   gap: 0.35rem 0.5rem;
 }
@@ -314,6 +342,11 @@ h1, h2, h3 {
 
 .nav-dropdown-section-label:first-child {
   margin-top: 0.15rem;
+}
+
+.nav-dropdown-blurb {
+  margin: 0;
+  padding: 0.15rem 0.6rem 0.35rem;
 }
 
 .nav-dropdown-divider {
@@ -625,6 +658,11 @@ h1, h2, h3 {
   min-height: 44px;
   display: inline-flex;
   align-items: center;
+}
+
+.app-footer-link-muted {
+  opacity: 0.88;
+  font-size: 0.9em;
 }
 
 .footer-link-button {

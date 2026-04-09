@@ -43,11 +43,15 @@ export function AppShellHeader() {
       </div>
       <div className="header-nav-cluster">
         {!isSchoolRoute ? (
-          <Link to="/for-schools" className="header-for-schools-badge" aria-label={t('header.forSchools')}>
-            {t('header.forSchools')}
+          <Link
+            to="/for-schools"
+            className="header-educators-link"
+            aria-label={t('header.educatorsAria')}
+          >
+            {t('header.educators')}
           </Link>
         ) : (
-          <Link to="/schools" className="header-for-schools-badge" aria-label={t('header.schoolHubLink')}>
+          <Link to="/schools/parent" className="header-for-schools-badge" aria-label={t('header.schoolHubLink')}>
             {t('header.schoolHubLink')}
           </Link>
         )}

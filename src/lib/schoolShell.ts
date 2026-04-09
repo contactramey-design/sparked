@@ -4,7 +4,6 @@
  */
 export function isSchoolShellPath(pathname: string): boolean {
   return (
-    pathname.startsWith('/schools') ||
     pathname.startsWith('/for-schools') ||
     pathname.startsWith('/compliance') ||
     pathname.startsWith('/teacher')

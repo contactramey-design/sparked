@@ -14,12 +14,14 @@ Use this when configuring **Production** (and Preview if you need full flows the
 | `OPENAI_API_KEY` | Required for homework analyze/explain/story, process-homework, school weekly units. |
 | `ALLOW_UNAUTH_HOMEWORK` | Dev/staging only: skips Stripe for homework APIs. **Do not** set on public production without other gates. |
 
-## Stripe (Safety Pass, ebooks)
+## Stripe (Safety Pass, Adventure Academy, ebooks)
 
 | Variable | Notes |
 |----------|--------|
 | `STRIPE_SECRET_KEY` | Live or test key per environment. |
-| `STRIPE_SAFETY_PASS_PRICE_ID`, checkout success/cancel URLs | As in `.env.example`. |
+| `STRIPE_SAFETY_PASS_PRICE_ID` | Legacy bundle / Safety Pass checkout (`product: bundle` in `POST /api/create-checkout-session`). |
+| `STRIPE_ACADEMY_PRICE_ID` | Adventure Academy subscription (`product: academy`); homework APIs accept checkout sessions with `entitlement_type` `bundle` **or** `academy`. |
+| Checkout success/cancel URLs | Must allow `checkout_session_id` + `entitlement_type` query params (see `.env.example`). |
 | `STRIPE_EBOOK_*_PRICE_ID` | One per ebook product. |
 
 ## Listen / TTS (ElevenLabs)

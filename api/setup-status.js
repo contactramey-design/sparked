@@ -26,7 +26,7 @@ export default async function handler(req, res) {
   res.setHeader('Cache-Control', 'no-store, max-age=0')
   res.status(200).json({
     // Bump when setup-status shape changes — if missing in production, you are NOT on this deploy.
-    schemaVersion: 6,
+    schemaVersion: 7,
     /** Vercel injects these on deploy; use to confirm Production matches your latest Git push. */
     deployment: {
       environment: process.env.VERCEL_ENV ?? null,
@@ -85,8 +85,9 @@ export default async function handler(req, res) {
     // Stripe: paid bundle, ebooks, homework entitlement (optional for free school-only pilots)
     stripe: {
       configured: Boolean(process.env.STRIPE_SECRET_KEY?.trim()),
+      academyPriceConfigured: Boolean(process.env.STRIPE_ACADEMY_PRICE_ID?.trim()),
       message: process.env.STRIPE_SECRET_KEY?.trim()
-        ? 'STRIPE_SECRET_KEY set — verify price IDs and checkout URLs in Production before promising paid flows.'
+        ? 'STRIPE_SECRET_KEY set — verify STRIPE_SAFETY_PASS_PRICE_ID, STRIPE_ACADEMY_PRICE_ID, ebook price IDs, and checkout URLs in Production before promising paid flows.'
         : 'No STRIPE_SECRET_KEY — scope pilot as free-only or homework without paid entitlement until Stripe is configured.',
     },
     // Blob: used by Vercel cron (cleanup) and by Railway worker (upload)

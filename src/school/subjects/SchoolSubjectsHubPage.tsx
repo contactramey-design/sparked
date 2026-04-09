@@ -4,29 +4,34 @@ import { useTranslation } from '@/contexts/LocaleContext'
 import { useSchoolAudience } from '@/hooks/useSchoolAudience'
 import SchoolAudienceToggle from './SchoolAudienceToggle'
 import ListenButton from '@/components/ListenButton'
+import { usePracticeSubjectRoutes } from '@/lib/practiceRoutes'
 import { SCHOOL_SUBJECT_IDS, type SchoolSubjectId } from './types'
 import './school-subject.css'
 
 const SchoolSubjectsHubPage: React.FC = () => {
   const { t } = useTranslation()
+  const { isFamilyPractice, buildSubjectPath } = usePracticeSubjectRoutes()
   const { isTeacherView } = useSchoolAudience()
+  const effectiveTeacherView = isTeacherView && !isFamilyPractice
 
   return (
     <section className="lesson-page school-subj-page">
-      <Link to="/schools" className="link-back">
-        {t('schoolSubject.backToSchools')}
+      <Link to={isFamilyPractice ? '/' : '/schools/parent'} className="link-back">
+        {isFamilyPractice ? t('practice.backToHome') : t('schoolSubject.backToSchools')}
       </Link>
 
-      <div className="school-subj-hub-audience no-print">
-        <SchoolAudienceToggle />
-      </div>
+      {!isFamilyPractice ? (
+        <div className="school-subj-hub-audience no-print">
+          <SchoolAudienceToggle />
+        </div>
+      ) : null}
 
       <header className="school-subj-hero">
         <div className="flex flex-wrap items-start gap-2">
           <h1 className="m-0 flex-1 min-w-0">{t('schools.subjectHubTitle')}</h1>
           <ListenButton
             text={
-              isTeacherView
+              effectiveTeacherView
                 ? [
                     t('schools.subjectHubTitle'),
                     t('schools.subjectHubDesc'),
@@ -40,7 +45,7 @@ const SchoolSubjectsHubPage: React.FC = () => {
             className="shrink-0 no-print"
           />
         </div>
-        {isTeacherView ? (
+        {effectiveTeacherView ? (
           <>
             <p>{t('schools.subjectHubDesc')}</p>
             <p className="school-subj-hub-grade-bands muted text-sm m-0 mt-2">{t('schools.subjectHubGradeBands')}</p>
@@ -63,7 +68,7 @@ const SchoolSubjectsHubPage: React.FC = () => {
                 <h2 className="school-subj-card-title">{t(`schoolSubjects.tracks.${id}.cardTitle`)}</h2>
                 <p className="school-subj-card-summary">{t(`schoolSubjects.tracks.${id}.cardDesc`)}</p>
                 <div className="school-subj-card-actions">
-                  <Link to={`/schools/subjects/${id}`} className="primary-button">
+                  <Link to={buildSubjectPath(id)} className="primary-button">
                     {t('schools.openSubjectTrack', { subject: t(`schoolSubjects.tracks.${id}.cardTitle`) })}
                   </Link>
                 </div>

@@ -1,7 +1,7 @@
 {
   "header": {
     "appName": "Academia de Aventuras SpArki",
-    "tagline": "Aprende sobre IA de forma segura, divertida y centrada en las personas.",
+    "tagline": "Aprendizaje corto y divertido en casa — hábitos de seguridad, aventuras, ayuda con tareas y práctica extra.",
     "home": "Inicio",
     "courses": "Cursos",
     "parent": "Adulto",
@@ -20,7 +20,9 @@
     "langSwitchAriaEs": "Cambiar a inglés",
     "langSwitchTitleEn": "Español",
     "langSwitchTitleEs": "English",
-    "schoolHubLink": "Hub escolar"
+    "schoolHubLink": "Hub escolar",
+    "educators": "Educadores",
+    "educatorsAria": "Información para docentes y escuelas — herramientas de aula y hoja de ruta"
   },
   "listenButton": {
     "heading": "Escuchar el encabezado",
@@ -74,6 +76,17 @@
     "academySignIn": "Entrar",
     "shopEbooks": "Ebooks",
     "shopSubscription": "Suscripción a la academia",
+    "practice": "Práctica",
+    "practiceBlurb": "Práctica extra en casa — no es el plan completo de la escuela. Elige mate, lectura, ciencias, historia, seguridad o IA.",
+    "practiceAllSubjects": "Todos los temas de práctica",
+    "practiceCoreLabel": "Materias principales",
+    "practiceMath": "Matemáticas",
+    "practiceEnglish": "Inglés / lectura",
+    "practiceScience": "Ciencias",
+    "practiceHistory": "Historia",
+    "practiceMissionLabel": "Seguridad e IA",
+    "practiceSafety": "Seguridad en internet",
+    "practiceAi": "Alfabetización en IA",
     "comingSoonBadge": "Pronto",
     "schoolFamilyHome": "Inicio (familias)",
     "schoolForSchoolsHub": "Centro para escuelas",
@@ -91,10 +104,11 @@
     "schoolMenuMaterials": "Materiales y contacto"
   },
   "footer": {
-    "copyright": "Aprende sobre IA de forma segura.",
+    "copyright": "Aprende en casa, con seguridad y diversión.",
     "about": "Nosotros",
     "privacy": "Privacidad",
     "forSchools": "Para escuelas",
+    "forEducators": "Educadores y escuelas",
     "contact": "Contacto",
     "grownUp": "¿Eres adulto?",
     "parentDashboard": "Panel para adultos",
@@ -196,8 +210,8 @@
     "engagementDone": "Registro guardado para tu docente.",
     "engagementNeedJoin": "Primero únete a una clase en este dispositivo.",
     "engagementNeedSupabase": "El registro necesita Supabase (igual que unirse a clase).",
-    "subjectHubTitle": "Rutas por materia",
-    "subjectHubStudentLead": "Elige un tema y abre la lección 1.",
+    "subjectHubTitle": "Práctica por materia",
+    "subjectHubStudentLead": "Refuerza en casa: elige un tema para tu franja de edad y empieza por la lección 1. Complementa la escuela — no sustituye el plan del docente.",
     "missionTracksTitle": "Empieza por seguridad y alfabetización en IA",
     "missionTracksBody": "Antes de la práctica por materia, cada clase debería abordar seguridad en internet y cómo funciona la IA — es la misión central de Sparki. Estas rutas son esenciales en pilotos responsables.",
     "openSafetyTrackCta": "Aventuras de seguridad en internet",
@@ -507,8 +521,8 @@
     "boardSummaryBody": "SpArki ofrece ciudadanía digital y alfabetización en IA bilingüe y alineada a estándares para edades 3–11. Las escuelas conservan datos en su propio proyecto Supabase; los estudiantes pueden participar sin nombres completos; las funciones de IA son complementos iniciados por el docente con supervisión humana clara."
   },
   "forSchoolsHub": {
-    "pageTitle": "Sparki Academy — Curso gratis de seguridad + IA para iPad",
-    "heroSubtitle": "Lecciones seguras para niños, sitio bilingüe EN/ES, PWA sin conexion en iPad y panel de profesor activo para pilotos.",
+    "pageTitle": "Para educadores y aulas — hoja de ruta Sparki",
+    "heroSubtitle": "Las familias usan Sparki primero en casa. Este centro es para docentes y equipos: programa, cumplimiento, recursos imprimibles y herramientas de piloto opcionales.",
     "tabPilot": "Iniciar piloto",
     "tabProgram": "Programa",
     "tabPricing": "Precios",
@@ -912,7 +926,7 @@
     "kidView": "Vista niño",
     "parentView": "Vista adulto",
     "parentPanelHeading": "Panel para adultos",
-    "parentPanelLead": "Progreso en este dispositivo, preguntas para conversar, Pase de Seguridad y bloqueo de vista infantil. Vuelve a la vista niño cuando quieras."
+    "parentPanelLead": "Progreso en este dispositivo, preguntas para conversar, Pase de Seguridad y bloqueo de vista infantil. Somos claros: tú controlas las compras; vuelve a la vista niño cuando quieras."
   },
   "dashboard": {
     "explorerName": "Nombre del explorador:",
@@ -1051,6 +1065,8 @@
   },
   "home": {
     "joinAdventure": "¡Únete a la aventura!",
+    "secondaryPractice": "Práctica por materia (mate, lectura y más)",
+    "secondaryParents": "Adultos — progreso y Pase de Seguridad",
     "chooseAdventure": "Elige tu aventura",
     "grownUpSignIn": "¿Eres adulto? Entrar",
     "parentGuide": "Guía para adultos",
@@ -1078,6 +1094,11 @@
         "title": "Aventura de Tareas",
         "description": "Convierte las tareas en una búsqueda con historia. El adulto sube; SpArki guía.",
         "imageAlt": "SpArki como tutor de Aventura de Tareas"
+      },
+      "practice": {
+        "title": "Práctica por materia",
+        "description": "Lecciones cortas de mate, inglés, ciencias, historia, seguridad e IA — según la edad de tu hijo o hija.",
+        "imageAlt": "Práctica por materia Sparki en casa"
       }
     }
   },

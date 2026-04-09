@@ -24,15 +24,27 @@ export default async function handler(req, res) {
 
   try {
     const stripeSecretKey = process.env.STRIPE_SECRET_KEY
-    const priceOrProductId = process.env.STRIPE_SAFETY_PASS_PRICE_ID
     const successUrlEnv = process.env.STRIPE_CHECKOUT_SUCCESS_URL
     const cancelUrlEnv = process.env.STRIPE_CHECKOUT_CANCEL_URL
 
     if (!stripeSecretKey) {
       return res.status(500).json({ error: 'Missing STRIPE_SECRET_KEY' })
     }
+
+    const body = req?.body && typeof req.body === 'object' ? req.body : {}
+    const product = body.product === 'academy' ? 'academy' : 'bundle'
+    const priceOrProductId =
+      product === 'academy'
+        ? process.env.STRIPE_ACADEMY_PRICE_ID
+        : process.env.STRIPE_SAFETY_PASS_PRICE_ID
+
     if (!priceOrProductId) {
-      return res.status(500).json({ error: 'Missing STRIPE_SAFETY_PASS_PRICE_ID' })
+      return res.status(500).json({
+        error:
+          product === 'academy'
+            ? 'Missing STRIPE_ACADEMY_PRICE_ID'
+            : 'Missing STRIPE_SAFETY_PASS_PRICE_ID',
+      })
     }
 
     const stripe = new Stripe(stripeSecretKey, {
@@ -41,15 +53,16 @@ export default async function handler(req, res) {
 
     const priceId = await resolvePriceIdFromEnv(stripe, priceOrProductId)
     if (!priceId) {
-      return res.status(500).json({ error: 'Could not resolve Stripe price for bundle' })
+      return res.status(500).json({ error: `Could not resolve Stripe price for ${product}` })
     }
+
+    const entitlementType = product === 'academy' ? 'academy' : 'bundle'
 
     const origin =
       (req.headers['x-forwarded-proto'] && req.headers['x-forwarded-host'])
         ? `${req.headers['x-forwarded-proto']}://${req.headers['x-forwarded-host']}`
         : req.headers.origin
 
-    const body = req?.body && typeof req.body === 'object' ? req.body : {}
     const requestedReturnTo = typeof body?.returnTo === 'string' ? body.returnTo : null
     const safeReturnTo =
       requestedReturnTo && (requestedReturnTo.startsWith('/ebook/') || requestedReturnTo.startsWith('/ebook?'))
@@ -63,13 +76,13 @@ export default async function handler(req, res) {
       success_url += `${success_url.includes('?') ? '&' : '?'}checkout_session_id={CHECKOUT_SESSION_ID}`
     }
     if (!success_url.includes('entitlement_type=')) {
-      success_url += `${success_url.includes('?') ? '&' : '?'}entitlement_type=bundle`
+      success_url += `${success_url.includes('?') ? '&' : '?'}entitlement_type=${entitlementType}`
     }
     if (safeReturnTo && !success_url.includes('returnTo=')) {
       success_url += `${success_url.includes('?') ? '&' : '?'}returnTo=${encodeURIComponent(safeReturnTo)}`
     }
     const cancel_url =
-      cancelUrlEnv || `${origin || ''}/?view=parent&checkout=cancel&entitlement_type=bundle`
+      cancelUrlEnv || `${origin || ''}/?view=parent&checkout=cancel&entitlement_type=${entitlementType}`
 
     const session = await stripe.checkout.sessions.create({
       mode: 'subscription',
@@ -81,7 +94,7 @@ export default async function handler(req, res) {
       success_url,
       cancel_url,
       metadata: {
-        entitlement_type: 'bundle',
+        entitlement_type: entitlementType,
         stripePriceId: priceId,
       },
     })
@@ -92,4 +105,3 @@ export default async function handler(req, res) {
     return res.status(500).json({ error: message })
   }
 }
-

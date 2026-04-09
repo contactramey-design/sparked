@@ -1,19 +1,33 @@
 /**
  * Runs synchronously in <head> before game scripts.
- * Locale order: parent window __SPARKI_EMBED_LANG__ (set by React host) → ?lang= in iframe URL.
+ * Locale order: walk same-origin parent chain for __SPARKI_EMBED_LANG__ (React host) → ?lang= in iframe URL.
+ * i18n JSON is loaded relative to this document so it works with a Vite base path or nested deploys.
  * Keeping a stable iframe path (no ?lang=) avoids the host treating the embed like a new navigation.
  */
 ;(function () {
+  function getHostEmbedLang() {
+    var w = window
+    var seen = {}
+    for (var i = 0; i < 12; i++) {
+      try {
+        var next = w.parent
+        if (!next || next === w) break
+        w = next
+        if (seen[w]) break
+        seen[w] = true
+        var l = w.__SPARKI_EMBED_LANG__
+        if (l === 'es' || l === 'en') return l
+      } catch (e) {
+        break
+      }
+    }
+    return null
+  }
+
   try {
     var lang = 'en'
-    try {
-      if (window.parent && window.parent !== window) {
-        var pl = window.parent
-        if (pl.__SPARKI_EMBED_LANG__ === 'es' || pl.__SPARKI_EMBED_LANG__ === 'en') {
-          lang = pl.__SPARKI_EMBED_LANG__
-        }
-      }
-    } catch (e) {}
+    var hostLang = getHostEmbedLang()
+    if (hostLang === 'es' || hostLang === 'en') lang = hostLang
     var qs = new URLSearchParams(window.location.search)
     if ((qs.get('lang') || '').toLowerCase() === 'es') lang = 'es'
     if ((qs.get('lang') || '').toLowerCase() === 'en') lang = 'en'
@@ -30,7 +44,8 @@
     if (!id) return
 
     var xhr = new XMLHttpRequest()
-    xhr.open('GET', '/school-canva-games/i18n/' + encodeURIComponent(id) + '.es.json', false)
+    var i18nUrl = new URL('i18n/' + encodeURIComponent(id) + '.es.json', window.location.href).href
+    xhr.open('GET', i18nUrl, false)
     xhr.send()
     if (xhr.status !== 200 || !xhr.responseText) return
 

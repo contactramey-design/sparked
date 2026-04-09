@@ -19,6 +19,11 @@ const TIERS = [
     path: '/homework',
     imageSrc: '/homework-card.png',
   },
+  {
+    id: 'practice',
+    path: '/practice',
+    imageSrc: '/globalposter.png',
+  },
 ] as const
 
 function AdventureCard({
@@ -77,7 +82,7 @@ export function AdventureGrid() {
   return (
     <div className="home-tiers mt-10 md:mt-14">
       <h2 className="home-tiers-title mb-6 text-center font-heading text-2xl text-blue-900 md:text-3xl">{t('home.chooseAdventure')}</h2>
-      <div className="home-tier-grid mx-auto grid max-w-5xl gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="home-tier-grid mx-auto grid max-w-6xl gap-6 sm:grid-cols-2 xl:grid-cols-4">
         {TIERS.map((tier) => (
           <AdventureCard key={tier.id} tier={tier} href={tier.path} />
         ))}

@@ -17,8 +17,10 @@ export function AppShellFooter() {
         {!schoolShopHidden && <Link to="/shop">{t('footer.shop')}</Link>}
         <Link to="/about">{t('footer.about')}</Link>
         <Link to="/privacy">{t('footer.privacy')}</Link>
-        <Link to="/for-schools">{t('footer.forSchools')}</Link>
         <Link to="/contact">{t('footer.contact')}</Link>
+        <Link to="/for-schools" className="app-footer-link-muted">
+          {t('footer.forEducators')}
+        </Link>
         {schoolShopHidden && <Link to="/schools/parent">{t('footer.schoolParentHub')}</Link>}
         {isLoggedIn && !kidLock && <Link to="/parent">{t('footer.parentDashboard')}</Link>}
         {isLoggedIn && !kidLock && (

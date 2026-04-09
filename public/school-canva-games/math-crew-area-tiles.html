@@ -330,7 +330,7 @@
   <div class="wrapper">
    <header>
     <h1 id="lessonTitle">Area with Unit Squares</h1>
-    <p id="instructionText">Click squares to cover the rectangle!</p>
+    <p id="instructionText">Use length × width to find the area!</p>
    </header>
    <main>
     <div id="gameScreen" class="game-box">
@@ -341,39 +341,39 @@
       Challenge 1 of 8
      </div><!-- Step 1: Show the dimensions -->
      <div id="dimensionBox" style="background: #e0f2fe; border-left: 4px solid #0369a1; padding: 16px; border-radius: 8px; margin: 16px 0; text-align: center;">
-      <div style="font-size: 0.9rem; color: #0369a1; margin-bottom: 8px;">
+      <div id="dimBoxLabel" style="font-size: 0.9rem; color: #0369a1; margin-bottom: 8px;">
        Rectangle dimensions:
       </div>
-      <div style="font-size: 1.8rem; font-weight: 700; color: #0369a1;"><span id="dimRows">2</span> rows × <span id="dimCols">3</span> columns
+      <div style="font-size: 1.8rem; font-weight: 700; color: #0369a1;"><span id="dimRows">2</span> <span id="dimRowsWord">rows</span> × <span id="dimCols">3</span> <span id="dimColsWord">columns</span>
       </div>
      </div><!-- Step 2: Ask for prediction -->
      <div id="predictionBox" style="background: #fef3c7; border-left: 4px solid #b45309; padding: 16px; border-radius: 8px; margin: 16px 0;">
-      <div style="font-size: 0.9rem; color: #b45309; margin-bottom: 12px; font-weight: 600;">
+      <div id="predictionQuestion" style="font-size: 0.9rem; color: #b45309; margin-bottom: 12px; font-weight: 600;">
        How many unit squares will cover this rectangle?
       </div>
-      <div style="display: flex; gap: 8px; align-items: center;"><span style="font-size: 0.9rem; color: #b45309;">Your answer:</span> <input type="number" id="predictionInput" style="width: 80px; padding: 8px; border: 2px solid #b45309; border-radius: 6px; font-size: 1rem; font-weight: 600;" placeholder="?"> <button onclick="checkPrediction()" style="background: #b45309; color: white; padding: 8px 16px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600;">Check</button>
+      <div style="display: flex; gap: 8px; align-items: center;"><span id="labelYourAnswer" style="font-size: 0.9rem; color: #b45309;">Your answer:</span> <input type="number" id="predictionInput" style="width: 80px; padding: 8px; border: 2px solid #b45309; border-radius: 6px; font-size: 1rem; font-weight: 600;" placeholder="?"> <button type="button" id="btnCheckPrediction" onclick="checkPrediction()" style="background: #b45309; color: white; padding: 8px 16px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600;">Check</button>
       </div>
       <div id="predictionFeedback"></div>
      </div><!-- Step 3: Show the math -->
      <div id="mathBox" style="display: none; background: #dcfce7; border-left: 4px solid #15803d; padding: 16px; border-radius: 8px; margin: 16px 0; text-align: center;">
-      <div style="font-size: 0.9rem; color: #15803d; margin-bottom: 8px;">
+      <div id="mathBoxLabel" style="font-size: 0.9rem; color: #15803d; margin-bottom: 8px;">
        The math:
       </div>
-      <div style="font-size: 1.8rem; font-weight: 700; color: #15803d;"><span id="mathRows">2</span> × <span id="mathCols">3</span> = <span id="mathAnswer">6</span> squares
+      <div style="font-size: 1.8rem; font-weight: 700; color: #15803d;"><span id="mathRows">2</span> × <span id="mathCols">3</span> = <span id="mathAnswer">6</span> <span id="mathSquaresWord">squares</span>
       </div>
      </div><!-- Step 4: Verify by covering -->
      <div id="verifyBox" style="display: none; margin: 20px 0;">
-      <div style="text-align: center; font-size: 0.9rem; color: #666; margin-bottom: 12px; font-weight: 600;">
+      <div id="verifyPrompt" style="text-align: center; font-size: 0.9rem; color: #666; margin-bottom: 12px; font-weight: 600;">
        Now cover the grid to verify:
       </div>
       <div class="grid-display">
        <div class="grid" id="gridContainer"></div>
       </div>
       <div class="counter">
-       Covered: <span id="covered">0</span> of <span id="total">6</span> squares
+       <span id="labelCovered">Covered:</span> <span id="covered">0</span> <span id="labelOf">of</span> <span id="total">6</span> <span id="labelSquares">squares</span>
       </div>
      </div><!-- Buttons -->
-     <div class="buttons" id="buttonBox"><button class="btn-reset" onclick="resetGame()">Reset</button> <button class="btn-check" onclick="completeChallenge()">Done Covering</button>
+     <div class="buttons" id="buttonBox"><button type="button" class="btn-reset" id="btnReset" onclick="resetGame()">Reset</button> <button type="button" class="btn-check" id="btnDoneCovering" onclick="completeChallenge()">Done Covering</button>
      </div>
      <div id="messageBox"></div>
     </div>
@@ -382,13 +382,14 @@
       ✨📏🟩
      </div>
      <h2 id="finishTitle">Area Master!</h2>
-     <p id="finishMessage">You completed all 8 challenges!</p>
+     <p id="finishSubtitle">You completed all 8 challenges!</p>
+     <p id="finishMessage">You're an area expert!</p>
      <div class="stats-grid">
       <div class="stat-box">
        <div class="stat-num" id="statComplete">
         0
        </div>
-       <div class="stat-label">
+       <div class="stat-label" id="statLabelComplete">
         Completed
        </div>
       </div>
@@ -396,11 +397,11 @@
        <div class="stat-num" id="statPerfect">
         0
        </div>
-       <div class="stat-label">
+       <div class="stat-label" id="statLabelPerfect">
         Perfect (1st try)
        </div>
       </div>
-     </div><button class="btn-play-again" onclick="location.reload()">Play Again</button>
+     </div><button type="button" class="btn-play-again" id="btnPlayAgain" onclick="location.reload()">Play Again</button>
     </div>
    </main>
   </div>
@@ -427,9 +428,44 @@
     const defaultConfig = {
       lesson_title: 'Area with Unit Squares',
       instruction_text: 'Use length × width to find the area!',
-      completion_message: "You're an area expert!"
+      completion_message: "You're an area expert!",
+      finish_title: 'Area Master!',
+      finish_all_template: 'You completed all {total} challenges!',
+      challenge_title_template: 'Challenge {current} of {total}',
+      dim_box_label: 'Rectangle dimensions:',
+      dim_rows_word: 'rows',
+      dim_cols_word: 'columns',
+      prediction_question: 'How many unit squares will cover this rectangle?',
+      label_your_answer: 'Your answer:',
+      btn_check: 'Check',
+      math_box_label: 'The math:',
+      math_squares_word: 'squares',
+      verify_prompt: 'Now cover the grid to verify:',
+      label_covered: 'Covered:',
+      label_of: 'of',
+      label_squares: 'squares',
+      btn_reset: 'Reset',
+      btn_done_covering: 'Done Covering',
+      stat_completed: 'Completed',
+      stat_perfect: 'Perfect (1st try)',
+      btn_play_again: 'Play Again',
+      err_enter_number: 'Please enter a number!',
+      success_prediction_template:
+        "✅ That's right! The formula is <strong>{rows} × {cols} = {answer}</strong>",
+      err_wrong_prediction: 'Not quite! Think about rows × columns. Try again!',
+      err_need_prediction_first: 'You need to get the prediction right first!',
+      success_perfect_cover: '⭐ Perfect! You predicted correctly AND covered all squares!',
+      err_partial_cover_template: 'You covered {covered} but need {need} more!',
     };
 
+    function sparkiTpl(str, vars) {
+      if (!str) return ''
+      let out = str
+      for (const [k, v] of Object.entries(vars)) {
+        out = out.split('{' + k + '}').join(String(v))
+      }
+      return out
+    }
 
     function initGame() {
       loadChallenge();
@@ -466,7 +502,10 @@
 
 
       // Update challenge title
-      document.getElementById('challengeTitle').textContent = `Challenge ${currentChallenge + 1} of ${challenges.length}`;
+      document.getElementById('challengeTitle').textContent = sparkiTpl(defaultConfig.challenge_title_template, {
+        current: currentChallenge + 1,
+        total: challenges.length,
+      })
       
       // Clear messages
       document.getElementById('messageBox').innerHTML = '';
@@ -482,7 +521,8 @@
 
 
       if (isNaN(userAnswer)) {
-        document.getElementById('predictionFeedback').innerHTML = '<div class="message error" style="margin-top: 8px;">Please enter a number!</div>';
+        document.getElementById('predictionFeedback').innerHTML =
+          '<div class="message error" style="margin-top: 8px;">' + defaultConfig.err_enter_number + '</div>';
         return;
       }
 
@@ -492,7 +532,14 @@
         predictionCorrect = true;
         firstTryCount++;
         
-        document.getElementById('predictionFeedback').innerHTML = '<div class="message success" style="margin-top: 8px;">✅ That\'s right! The formula is <strong>' + challenge.rows + ' × ' + challenge.cols + ' = ' + correctAnswer + '</strong></div>';
+        document.getElementById('predictionFeedback').innerHTML =
+          '<div class="message success" style="margin-top: 8px;">' +
+          sparkiTpl(defaultConfig.success_prediction_template, {
+            rows: challenge.rows,
+            cols: challenge.cols,
+            answer: correctAnswer,
+          }) +
+          '</div>';
         
         // Show the math box
         document.getElementById('mathRows').textContent = challenge.rows;
@@ -504,7 +551,8 @@
         document.getElementById('verifyBox').style.display = 'block';
         renderGrid();
       } else {
-        document.getElementById('predictionFeedback').innerHTML = '<div class="message error" style="margin-top: 8px;">Not quite! Think about rows × columns. Try again!</div>';
+        document.getElementById('predictionFeedback').innerHTML =
+          '<div class="message error" style="margin-top: 8px;">' + defaultConfig.err_wrong_prediction + '</div>';
       }
     }
 
@@ -543,7 +591,8 @@
 
     function completeChallenge() {
       if (!predictionCorrect) {
-        document.getElementById('messageBox').innerHTML = '<div class="message error">You need to get the prediction right first!</div>';
+        document.getElementById('messageBox').innerHTML =
+          '<div class="message error">' + defaultConfig.err_need_prediction_first + '</div>';
         return;
       }
 
@@ -555,7 +604,8 @@
 
       if (numCovered === total) {
         completedCount++;
-        document.getElementById('messageBox').innerHTML = '<div class="message success">⭐ Perfect! You predicted correctly AND covered all squares!</div>';
+        document.getElementById('messageBox').innerHTML =
+          '<div class="message success">' + defaultConfig.success_perfect_cover + '</div>';
 
 
         setTimeout(() => {
@@ -582,6 +632,10 @@
     function finishGame() {
       document.getElementById('gameScreen').style.display = 'none';
       document.getElementById('finishScreen').classList.add('active');
+      document.getElementById('finishTitle').textContent = defaultConfig.finish_title;
+      document.getElementById('finishSubtitle').textContent = sparkiTpl(defaultConfig.finish_all_template, {
+        total: challenges.length,
+      });
       document.getElementById('finishMessage').textContent = defaultConfig.completion_message;
       document.getElementById('statComplete').textContent = completedCount;
       document.getElementById('statPerfect').textContent = firstTryCount;
@@ -589,15 +643,38 @@
 
 
     function applyConfig(config) {
+      Object.assign(defaultConfig, config);
       if (config.lesson_title) {
         document.getElementById('lessonTitle').textContent = config.lesson_title;
       }
       if (config.instruction_text) {
         document.getElementById('instructionText').textContent = config.instruction_text;
       }
-      if (config.completion_message) {
-        defaultConfig.completion_message = config.completion_message;
-      }
+      const setTxt = (id, key) => {
+        const el = document.getElementById(id);
+        if (el && defaultConfig[key] != null) el.textContent = defaultConfig[key];
+      };
+      setTxt('dimBoxLabel', 'dim_box_label');
+      setTxt('dimRowsWord', 'dim_rows_word');
+      setTxt('dimColsWord', 'dim_cols_word');
+      setTxt('predictionQuestion', 'prediction_question');
+      setTxt('labelYourAnswer', 'label_your_answer');
+      const btnCh = document.getElementById('btnCheckPrediction');
+      if (btnCh && defaultConfig.btn_check) btnCh.textContent = defaultConfig.btn_check;
+      setTxt('mathBoxLabel', 'math_box_label');
+      setTxt('mathSquaresWord', 'math_squares_word');
+      setTxt('verifyPrompt', 'verify_prompt');
+      setTxt('labelCovered', 'label_covered');
+      setTxt('labelOf', 'label_of');
+      setTxt('labelSquares', 'label_squares');
+      const br = document.getElementById('btnReset');
+      if (br && defaultConfig.btn_reset) br.textContent = defaultConfig.btn_reset;
+      const bd = document.getElementById('btnDoneCovering');
+      if (bd && defaultConfig.btn_done_covering) bd.textContent = defaultConfig.btn_done_covering;
+      setTxt('statLabelComplete', 'stat_completed');
+      setTxt('statLabelPerfect', 'stat_perfect');
+      const pa = document.getElementById('btnPlayAgain');
+      if (pa && defaultConfig.btn_play_again) pa.textContent = defaultConfig.btn_play_again;
     }
 
 

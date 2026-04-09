@@ -6,7 +6,7 @@ import { useTranslation } from '@/contexts/LocaleContext'
 import { useAuth } from '@/AuthContext'
 import { isTeacherUser } from '@/lib/supabaseUserRole'
 
-type NavKey = 'academy' | 'shop'
+type NavKey = 'academy' | 'practice' | 'shop'
 
 type Props = {
   variant: 'consumer' | 'school'
@@ -94,6 +94,23 @@ export default function MainNav({ variant, hideShop = false }: Props) {
     </>
   )
 
+  const consumerPractice = (
+    <>
+      <p className="nav-dropdown-blurb muted text-sm leading-snug">{t('nav.practiceBlurb')}</p>
+      <NavDivider />
+      <ItemLink to="/practice">{t('nav.practiceAllSubjects')}</ItemLink>
+      <SectionLabel>{t('nav.practiceCoreLabel')}</SectionLabel>
+      <ItemLink to="/practice/math">{t('nav.practiceMath')}</ItemLink>
+      <ItemLink to="/practice/english">{t('nav.practiceEnglish')}</ItemLink>
+      <ItemLink to="/practice/science">{t('nav.practiceScience')}</ItemLink>
+      <ItemLink to="/practice/history">{t('nav.practiceHistory')}</ItemLink>
+      <NavDivider />
+      <SectionLabel>{t('nav.practiceMissionLabel')}</SectionLabel>
+      <ItemLink to="/practice/internet-safety">{t('nav.practiceSafety')}</ItemLink>
+      <ItemLink to="/practice/ai-literacy">{t('nav.practiceAi')}</ItemLink>
+    </>
+  )
+
   const consumerShop = (
     <>
       <ItemLink to="/shop">{t('nav.shopEbooks')}</ItemLink>
@@ -107,11 +124,11 @@ export default function MainNav({ variant, hideShop = false }: Props) {
   const schoolAcademy = (
     <>
       <ItemLink to="/">{t('nav.schoolFamilyHome')}</ItemLink>
-      <ItemLink to="/schools">{t('nav.schoolSchoolHub')}</ItemLink>
-      <ItemLink to="/schools/subjects">{t('nav.schoolSubjectsHub')}</ItemLink>
+      <ItemLink to="/schools/parent">{t('nav.schoolParentTools')}</ItemLink>
+      <ItemLink to="/practice">{t('nav.schoolSubjectsHub')}</ItemLink>
       <NavDivider />
-      <ItemLink to="/schools/subjects/internet-safety">{t('nav.academySafety')}</ItemLink>
-      <ItemLink to="/schools/subjects/ai-literacy">{t('nav.academyAiCoding')}</ItemLink>
+      <ItemLink to="/practice/internet-safety">{t('nav.academySafety')}</ItemLink>
+      <ItemLink to="/practice/ai-literacy">{t('nav.academyAiCoding')}</ItemLink>
       <NavDivider />
       <ItemLink to="/for-schools">{t('nav.schoolForSchoolsHub')}</ItemLink>
       <ItemLink to="/compliance">{t('nav.schoolCompliance')}</ItemLink>
@@ -167,6 +184,7 @@ export default function MainNav({ variant, hideShop = false }: Props) {
       {variant === 'consumer' ? (
         <>
           {renderDropdown('academy', t('nav.academy'), consumerAcademy)}
+          {renderDropdown('practice', t('nav.practice'), consumerPractice)}
           {!hideShop ? renderDropdown('shop', t('nav.shop'), consumerShop) : null}
         </>
       ) : (

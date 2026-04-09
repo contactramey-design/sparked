@@ -178,7 +178,7 @@ const SchoolsPage: React.FC = () => {
               <div className="schools-actions">
                 <Button
                   onClick={() => {
-                    navigate('/schools/subjects')
+                    navigate('/practice')
                   }}
                 >
                   {t('schools.openSubjectHub')}

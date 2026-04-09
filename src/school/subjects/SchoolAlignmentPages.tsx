@@ -14,6 +14,7 @@ import {
 } from './caStandardsDisplay'
 import { parseStandardsNote } from './subjectStandards'
 import { lessonTypicalGradesLine } from './lessonGradeSpan'
+import { buildPracticeHubPath, buildPracticeLessonPath, buildPracticeSubjectPath } from '@/lib/practiceRoutes'
 import './school-subject.css'
 
 function formatBandsLabel(bands: AgeBandId[], t: (k: string) => string): string {
@@ -27,7 +28,7 @@ export const SchoolAlignmentHubPage: React.FC = () => {
   if (schoolAudience === 'student') {
     return (
       <section className="lesson-page school-subj-page">
-        <Link to="/schools/subjects" className="link-back">
+        <Link to={buildPracticeHubPath()} className="link-back">
           {t('schoolSubject.backToSubjectList')}
         </Link>
         <div className="school-subj-alignment-student-gate card p-4 space-y-3 no-print">
@@ -37,7 +38,7 @@ export const SchoolAlignmentHubPage: React.FC = () => {
           <p className="muted">{t('schoolSubjects.alignmentStudentBody')}</p>
           <SchoolAudienceToggle />
           <p>
-            <Link to="/schools/subjects" className="primary-button">
+            <Link to={buildPracticeHubPath()} className="primary-button">
               {t('schoolSubject.backToSubjectList')}
             </Link>
           </p>
@@ -49,7 +50,7 @@ export const SchoolAlignmentHubPage: React.FC = () => {
   return (
     <section className="lesson-page school-subj-page school-subj-alignment-print">
       <div className="school-subj-alignment-teacher-bar no-print">
-        <Link to="/schools/subjects" className="link-back">
+        <Link to={buildPracticeHubPath()} className="link-back">
           {t('schoolSubject.backToSubjectList')}
         </Link>
         <SchoolAudienceToggle compact className="school-subj-alignment-audience" />
@@ -93,7 +94,7 @@ export const SchoolAlignmentSubjectPage: React.FC = () => {
     return (
       <section className="lesson-page school-subj-page">
         <div className="no-print school-subj-alignment-nav">
-          <Link to="/schools/subjects" className="link-back">
+          <Link to={buildPracticeHubPath()} className="link-back">
             {t('schoolSubject.backToSubjectList')}
           </Link>
         </div>
@@ -104,7 +105,7 @@ export const SchoolAlignmentSubjectPage: React.FC = () => {
           <p className="muted">{t('schoolSubjects.alignmentStudentBody')}</p>
           <SchoolAudienceToggle />
           <p>
-            <Link to={`/schools/subjects/${subjectId}`} className="primary-button">
+            <Link to={buildPracticeSubjectPath(subjectId)} className="primary-button">
               {t('schoolSubjects.alignmentBackTrack')}
             </Link>
           </p>
@@ -121,7 +122,7 @@ export const SchoolAlignmentSubjectPage: React.FC = () => {
         <Link to="/schools/alignment" className="link-back">
           {t('schoolSubjects.alignmentBackSubjects')}
         </Link>
-        <Link to={`/schools/subjects/${subjectId}`} className="link-back school-subj-alignment-nav__after">
+        <Link to={buildPracticeSubjectPath(subjectId)} className="link-back school-subj-alignment-nav__after">
           {t('schoolSubjects.alignmentBackTrack')}
         </Link>
         <SchoolAudienceToggle compact className="school-subj-alignment-audience" />
@@ -156,7 +157,7 @@ export const SchoolAlignmentSubjectPage: React.FC = () => {
               const codesText = ca?.codes.length
                 ? ca.codes.join(' · ')
                 : [codeBadge, scopeLine].filter(Boolean).join(' — ') || '—'
-              const toLesson = `/schools/subjects/${subjectId}/${encodeURIComponent(lesson.id)}`
+              const toLesson = buildPracticeLessonPath(subjectId, lesson.id)
               return (
                 <tr key={lesson.id}>
                   <td>{loc.title}</td>

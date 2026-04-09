@@ -28,6 +28,13 @@ export function CanvaHtmlPractice({ src, locale, title, onContinue, continueLabe
 
   useLayoutEffect(() => {
     window.__SPARKI_EMBED_LANG__ = locale
+    try {
+      if (typeof window !== 'undefined' && window.top && window.top !== window) {
+        window.top.__SPARKI_EMBED_LANG__ = locale
+      }
+    } catch {
+      // cross-origin top — host frame only
+    }
     const el = iframeRef.current
     if (!el) return
 

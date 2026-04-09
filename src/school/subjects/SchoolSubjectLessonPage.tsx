@@ -3,7 +3,7 @@ import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { useTranslation } from '@/contexts/LocaleContext'
 import { useAgeBand } from '@/contexts/AgeBandContext'
 import { Button } from '@/components/ui/button'
-import { getSubjectLessonById } from './registry'
+import { getLessonsForSubjectAndBand, getSubjectLessonById } from './registry'
 import { recordSchoolSubjectPracticeComplete, recordSchoolSubjectQuizResult } from './schoolSubjectProgress'
 import { LessonPractice } from './games/LessonPractice'
 import { getSchoolSubjectTeacherPack } from './schoolSubjectTeacherPack'
@@ -16,6 +16,8 @@ import SchoolAudienceToggle from './SchoolAudienceToggle'
 import ListenButton from '@/components/ListenButton'
 import { lessonTypicalGradesLine } from './lessonGradeSpan'
 import { isLessonInBand, isSchoolSubjectId, lessonLocale, type SchoolSubjectId } from './types'
+import { usePracticeSubjectRoutes } from '@/lib/practiceRoutes'
+import { hasFullSubjectPracticeAccess } from '@/progress'
 import './school-subject.css'
 
 type StepId = 'learn' | 'practice' | 'quiz' | 'tip'
@@ -28,6 +30,8 @@ const SchoolSubjectLessonPage: React.FC = () => {
   const { t, locale } = useTranslation()
   const { ageBand } = useAgeBand()
   const { isTeacherView } = useSchoolAudience()
+  const { isFamilyPractice, hubPath, buildSubjectPath } = usePracticeSubjectRoutes()
+  const effectiveTeacherView = isTeacherView && !isFamilyPractice
 
   const validSubject = subjectId && isSchoolSubjectId(subjectId)
 
@@ -53,7 +57,17 @@ const SchoolSubjectLessonPage: React.FC = () => {
     setRevealed(false)
   }, [])
 
-  const trackPath = validSubject ? `/schools/subjects/${subjectId}` : '/schools/subjects'
+  const trackPath = validSubject ? buildSubjectPath(subjectId) : hubPath
+
+  const lessonsInBand = useMemo(() => {
+    if (!validSubject) return []
+    return getLessonsForSubjectAndBand(subjectId, ageBand)
+  }, [validSubject, subjectId, ageBand])
+
+  const lessonIndexInBand = useMemo(() => {
+    if (!lesson) return -1
+    return lessonsInBand.findIndex((l) => l.id === lesson.id)
+  }, [lesson, lessonsInBand])
 
   const questions = useMemo(() => (loc?.quiz.length ? loc.quiz : []), [loc])
   const currentQ = questions[qIndex]
@@ -110,7 +124,7 @@ const SchoolSubjectLessonPage: React.FC = () => {
 
   const quizTeachingNote = useMemo(() => {
     if (!currentQ) return ''
-    if (!isTeacherView) {
+    if (!effectiveTeacherView) {
       return currentQ.feedback?.trim() || ''
     }
     return (
@@ -118,7 +132,7 @@ const SchoolSubjectLessonPage: React.FC = () => {
       getSchoolSubjectQuizFeedback(currentQ.id, locale)?.trim() ||
       ''
     )
-  }, [currentQ?.id, currentQ?.feedback, locale, isTeacherView])
+  }, [currentQ?.id, currentQ?.feedback, locale, effectiveTeacherView])
 
   const quizProgressPct = useMemo(() => {
     if (questions.length === 0) return 0
@@ -146,22 +160,22 @@ const SchoolSubjectLessonPage: React.FC = () => {
     const explain =
       quizTeachingNote ||
       t(
-        isTeacherView ? 'schoolSubject.quizExplainFallback' : 'schoolSubject.quizExplainFallbackStudent',
+        effectiveTeacherView ? 'schoolSubject.quizExplainFallback' : 'schoolSubject.quizExplainFallbackStudent',
         { answer: currentQ.options[currentQ.correctIndex] },
       )
     parts.push(explain)
-    if (isTeacherView) {
+    if (effectiveTeacherView) {
       if (selected !== currentQ.correctIndex) {
         parts.push(t('schoolSubject.quizWrongCoach'))
       }
       parts.push(t('schoolSubject.quizReviewLearn'))
     }
     return parts.join(' ')
-  }, [currentQ, revealed, selected, quizTeachingNote, isTeacherView, t])
+  }, [currentQ, revealed, selected, quizTeachingNote, effectiveTeacherView, t])
 
   const tipSpeakText = useMemo(() => {
     if (!loc) return ''
-    if (!isTeacherView) {
+    if (!effectiveTeacherView) {
       if (loc.offlineApplication) {
         return [loc.offlineApplication, loc.realWorldTip].filter(Boolean).join('. ')
       }
@@ -178,12 +192,12 @@ const SchoolSubjectLessonPage: React.FC = () => {
       parts.push(loc.realWorldTip)
     }
     return parts.filter(Boolean).join('. ')
-  }, [t, ageBand, isTeacherView, loc])
+  }, [t, ageBand, effectiveTeacherView, loc])
 
   if (!validSubject || !lesson || !loc) {
     return (
       <section className="school-subj-lesson">
-        <Link to={validSubject ? trackPath : '/schools/subjects'} className="link-back">
+        <Link to={validSubject ? trackPath : hubPath} className="link-back">
           {t('schoolSubject.backToSubjectTrack')}
         </Link>
         <p className="muted">{t('schoolSubject.lessonNotFound')}</p>
@@ -202,6 +216,24 @@ const SchoolSubjectLessonPage: React.FC = () => {
           <Button type="button" variant="secondary" onClick={() => navigate(trackPath)}>
             {t('schoolSubject.chooseBand')}
           </Button>
+        </div>
+      </section>
+    )
+  }
+
+  const fullSubjectAccess = hasFullSubjectPracticeAccess()
+  if (isFamilyPractice && lessonIndexInBand > 0 && !fullSubjectAccess) {
+    return (
+      <section className="school-subj-lesson">
+        <Link to={trackPath} className="link-back">
+          {t('schoolSubject.backToSubjectTrack')}
+        </Link>
+        <div className="card p-4 space-y-3 max-w-prose">
+          <h2 className="text-lg font-semibold text-slate-900 m-0">{t('schoolSubject.lessonPaywallTitle')}</h2>
+          <p className="text-slate-700 m-0">{t('schoolSubject.lessonPaywallBody')}</p>
+          <Link to="/?view=parent" className="primary-button inline-block mt-2">
+            {t('schoolSubject.lessonPaywallCta')}
+          </Link>
         </div>
       </section>
     )
@@ -236,9 +268,11 @@ const SchoolSubjectLessonPage: React.FC = () => {
         {t('schoolSubject.backToSubjectTrack')}
       </Link>
 
-      <div className="school-subj-lesson-audience-row no-print">
-        <SchoolAudienceToggle compact />
-      </div>
+      {!isFamilyPractice ? (
+        <div className="school-subj-lesson-audience-row no-print">
+          <SchoolAudienceToggle compact />
+        </div>
+      ) : null}
 
       <header className="school-subj-lesson__header">
         <div className="flex flex-wrap items-start gap-2">
@@ -247,7 +281,7 @@ const SchoolSubjectLessonPage: React.FC = () => {
         </div>
         <p className="school-subj-lesson__meta muted text-sm">
           {t('schoolSubject.durationLine', { minutes: lesson.estMinutes })}
-          {isTeacherView ? (
+          {effectiveTeacherView ? (
             <>
               {' · '}
               {lessonTypicalGradesLine(lesson, locale, t)}
@@ -257,7 +291,7 @@ const SchoolSubjectLessonPage: React.FC = () => {
         </p>
       </header>
 
-      {isTeacherView ? (
+      {effectiveTeacherView ? (
         <div className="school-subj-lesson-standards-callout no-print mx-auto mb-4 w-full max-w-4xl rounded-2xl border border-slate-200 bg-white px-4 py-4 shadow-sm md:px-6">
           <div className="mb-3 flex flex-wrap items-center gap-2">
             <h2 className="text-sm font-bold uppercase tracking-wide text-slate-600 font-school m-0 flex-1 min-w-0">
@@ -299,7 +333,7 @@ const SchoolSubjectLessonPage: React.FC = () => {
       >
         {step === 'learn' && (
         <div className="school-subj-learn px-4 py-4 md:px-6 md:pb-6">
-          {isTeacherView ? (
+          {effectiveTeacherView ? (
             <div className="school-subj-supplemental-callout" role="note">
               <div className="flex flex-wrap items-start gap-2">
                 <p className="m-0 flex-1 min-w-0">{t('schoolSubject.lessonSupplementalNote')}</p>
@@ -314,7 +348,7 @@ const SchoolSubjectLessonPage: React.FC = () => {
           ) : null}
 
           <div className="school-subj-summary-box">
-            {isTeacherView ? (
+            {effectiveTeacherView ? (
               <>
                 <div className="flex flex-wrap items-center gap-2">
                   <h2 className="school-subj-summary-box__title m-0 flex-1 min-w-0">{t('schoolSubject.summaryHeading')}</h2>
@@ -335,7 +369,7 @@ const SchoolSubjectLessonPage: React.FC = () => {
             )}
           </div>
 
-          {isTeacherView && teacherPack ? (
+          {effectiveTeacherView && teacherPack ? (
             <div className="school-subj-teacher-toolkit">
               <div className="flex flex-wrap items-start gap-2">
                 <h2 className="school-subj-teacher-toolkit__title m-0 flex-1 min-w-0">
@@ -483,7 +517,7 @@ const SchoolSubjectLessonPage: React.FC = () => {
             </div>
           ) : null}
 
-          {isTeacherView ? (
+          {effectiveTeacherView ? (
             <>
               <div className="flex flex-wrap items-center gap-2">
                 <h2 className="school-subj-lesson__section-title m-0 flex-1 min-w-0">{t('schoolSubject.objectivesHeading')}</h2>
@@ -655,7 +689,7 @@ const SchoolSubjectLessonPage: React.FC = () => {
               <p className="school-subj-quiz-feedback__explain">
                 {quizTeachingNote ||
                   t(
-                    isTeacherView ? 'schoolSubject.quizExplainFallback' : 'schoolSubject.quizExplainFallbackStudent',
+                    effectiveTeacherView ? 'schoolSubject.quizExplainFallback' : 'schoolSubject.quizExplainFallbackStudent',
                     {
                       answer: currentQ.options[currentQ.correctIndex],
                     },
@@ -663,11 +697,11 @@ const SchoolSubjectLessonPage: React.FC = () => {
               </p>
               {selected !== currentQ.correctIndex ? (
                 <p className="school-subj-quiz-feedback__coach">
-                  {t(isTeacherView ? 'schoolSubject.quizWrongCoach' : 'schoolSubject.quizWrongCoachStudent')}
+                  {t(effectiveTeacherView ? 'schoolSubject.quizWrongCoach' : 'schoolSubject.quizWrongCoachStudent')}
                 </p>
               ) : null}
               <p className="school-subj-quiz-feedback__hint muted text-sm">
-                {t(isTeacherView ? 'schoolSubject.quizReviewLearn' : 'schoolSubject.quizReviewLearnStudent')}
+                {t(effectiveTeacherView ? 'schoolSubject.quizReviewLearn' : 'schoolSubject.quizReviewLearnStudent')}
               </p>
               <div className="mt-3 flex justify-end">
                 <ListenButton
@@ -719,8 +753,8 @@ const SchoolSubjectLessonPage: React.FC = () => {
               className="shrink-0"
             />
           </div>
-          {isTeacherView ? <p className="school-subj-tip-sublead muted text-sm">{t('schoolSubject.tipSublead')}</p> : null}
-          {isTeacherView && (ageBand === 'tots' || ageBand === 'kids') ? (
+          {effectiveTeacherView ? <p className="school-subj-tip-sublead muted text-sm">{t('schoolSubject.tipSublead')}</p> : null}
+          {effectiveTeacherView && (ageBand === 'tots' || ageBand === 'kids') ? (
             <p className="school-subj-tip-imagination muted text-sm">{t('schoolSubject.tipImaginationNote')}</p>
           ) : null}
           {loc.offlineApplication ? (

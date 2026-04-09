@@ -12,6 +12,8 @@ function progressStorageKey(ageBand: AgeBandId): string {
 
 const SAFETY_PASS_KEY = 'sparki_safety_pass_v1'
 const SAFETY_PASS_CHECKOUT_SESSION_KEY = 'sparki_safety_pass_checkout_session_v1'
+const ACADEMY_SUB_KEY = 'sparki_academy_subscription_v1'
+const ACADEMY_CHECKOUT_SESSION_KEY = 'sparki_academy_checkout_session_v1'
 const DAILY_LOGIN_BONUS_LAST_DATE_KEY = 'sparki_daily_login_bonus_last_date_v1'
 
 export interface UnitProgress {
@@ -151,6 +153,61 @@ export function setSafetyPassCheckoutSessionId(sessionId: string | null): void {
   } catch {
     // ignore storage issues
   }
+}
+
+export function getHasAcademySubscription(): boolean {
+  if (typeof window === 'undefined') return false
+  try {
+    return window.localStorage.getItem(ACADEMY_SUB_KEY) === 'true'
+  } catch {
+    return false
+  }
+}
+
+export function setHasAcademySubscription(value: boolean): void {
+  if (typeof window === 'undefined') return
+  try {
+    if (value) {
+      window.localStorage.setItem(ACADEMY_SUB_KEY, 'true')
+    } else {
+      window.localStorage.removeItem(ACADEMY_SUB_KEY)
+    }
+  } catch {
+    // ignore
+  }
+}
+
+export function getAcademyCheckoutSessionId(): string | null {
+  if (typeof window === 'undefined') return null
+  try {
+    const raw = window.localStorage.getItem(ACADEMY_CHECKOUT_SESSION_KEY)
+    return raw && raw.trim() ? raw : null
+  } catch {
+    return null
+  }
+}
+
+export function setAcademyCheckoutSessionId(sessionId: string | null): void {
+  if (typeof window === 'undefined') return
+  try {
+    if (sessionId) {
+      window.localStorage.setItem(ACADEMY_CHECKOUT_SESSION_KEY, sessionId)
+    } else {
+      window.localStorage.removeItem(ACADEMY_CHECKOUT_SESSION_KEY)
+    }
+  } catch {
+    // ignore
+  }
+}
+
+/** Homework APIs accept Stripe checkout session from Adventure Academy or legacy Safety Pass bundle. */
+export function getHomeworkCheckoutSessionId(): string | null {
+  return getAcademyCheckoutSessionId() || getSafetyPassCheckoutSessionId()
+}
+
+/** Full subject-track depth (beyond first free lesson per track on `/practice`). */
+export function hasFullSubjectPracticeAccess(): boolean {
+  return getHasAcademySubscription() || getHasSafetyPass()
 }
 
 function updateGamification(progress: ChildProgress): void {

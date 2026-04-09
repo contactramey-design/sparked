@@ -59,7 +59,8 @@ const ForSchoolsPage: React.FC = () => {
   const canUseSupabase = !!supabase
   const teacherOk = !!user && isTeacherUser(user)
 
-  const defaultTab: ForSchoolsTabId = teacherOk && isLoggedIn ? 'pilot' : 'program'
+  /** Program overview first — classroom tools stay available in other tabs. */
+  const defaultTab: ForSchoolsTabId = 'program'
   const tabParam = searchParams.get('tab')
   const activeTab: ForSchoolsTabId = isForSchoolsTabId(tabParam) ? tabParam : defaultTab
 
@@ -249,7 +250,7 @@ const ForSchoolsPage: React.FC = () => {
                   <p className="muted mt-2 text-sm">{t('forSchoolsHub.pilotCodeHint')}</p>
                   <div className="mt-3 flex flex-wrap gap-2">
                     <Button variant="outline" size="sm" asChild>
-                      <Link to="/schools">{t('forSchoolsHub.openSchoolHub')}</Link>
+                      <Link to="/schools/parent">{t('forSchoolsHub.openSchoolHub')}</Link>
                     </Button>
                     <Button variant="outline" size="sm" asChild>
                       <Link
@@ -467,7 +468,7 @@ const ForSchoolsPage: React.FC = () => {
             <CardContent>
               <p className="muted mb-3">{t('forSchoolsHub.schoolOpsBody')}</p>
               <Button variant="outline" asChild>
-                <Link to="/schools">{t('forSchoolsHub.openSchoolHub')}</Link>
+                <Link to="/schools/parent">{t('forSchoolsHub.openSchoolHub')}</Link>
               </Button>
             </CardContent>
           </Card>

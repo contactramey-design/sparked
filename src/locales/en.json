@@ -1,7 +1,7 @@
 {
   "header": {
     "appName": "SpArki's Adventures Academy",
-    "tagline": "Learning AI the safe, playful, and human-first way.",
+    "tagline": "Short, playful learning at home — safety habits, adventures, homework help, and extra practice.",
     "home": "Home",
     "courses": "Courses",
     "parent": "Parent",
@@ -20,7 +20,9 @@
     "langSwitchAriaEs": "Switch to English",
     "langSwitchTitleEn": "Español",
     "langSwitchTitleEs": "English",
-    "schoolHubLink": "School hub"
+    "schoolHubLink": "School hub",
+    "educators": "Educators",
+    "educatorsAria": "Information for teachers and schools — classroom tools and roadmap"
   },
   "listenButton": {
     "heading": "Listen to heading",
@@ -74,11 +76,23 @@
     "academySignIn": "Sign in",
     "shopEbooks": "Ebooks",
     "shopSubscription": "Academy subscription",
+    "practice": "Practice",
+    "practiceBlurb": "Extra practice at home — not a full school curriculum. Pick math, reading, science, history, safety, or AI.",
+    "practiceAllSubjects": "All practice topics",
+    "practiceCoreLabel": "Core subjects",
+    "practiceMath": "Math",
+    "practiceEnglish": "English / reading",
+    "practiceScience": "Science",
+    "practiceHistory": "History",
+    "practiceMissionLabel": "Safety & AI",
+    "practiceSafety": "Internet safety",
+    "practiceAi": "AI literacy",
     "comingSoonBadge": "Soon",
     "schoolFamilyHome": "Family site home",
     "schoolForSchoolsHub": "For schools hub",
     "schoolCompliance": "Compliance & resources",
     "schoolSchoolHub": "School hub & class codes",
+    "schoolParentTools": "Class join & school parent hub",
     "schoolTeacher": "Teacher dashboard",
     "schoolParent": "Parent hub — school & class",
     "schoolTeacherHub": "Teacher tools",
@@ -91,10 +105,11 @@
     "schoolMenuMaterials": "Materials & contact"
   },
   "footer": {
-    "copyright": "Learning AI the safe way.",
+    "copyright": "Learning at home, safely and playfully.",
     "about": "About",
     "privacy": "Privacy",
     "forSchools": "For Schools",
+    "forEducators": "Educators & schools",
     "contact": "Contact",
     "grownUp": "Grown-up?",
     "parentDashboard": "Parent dashboard",
@@ -196,15 +211,15 @@
     "engagementDone": "Check-in saved for your teacher.",
     "engagementNeedJoin": "Join a class on this device first.",
     "engagementNeedSupabase": "Check-in needs Supabase (same as class join).",
-    "subjectHubTitle": "Subject tracks",
-    "subjectHubStudentLead": "Choose a topic, then open lesson 1.",
+    "subjectHubTitle": "Practice by subject",
+    "subjectHubStudentLead": "Boost skills at home: pick a topic for your age band and start with lesson 1. Great alongside school — not a replacement for your teacher’s plan.",
     "missionTracksTitle": "Start with safety & AI literacy",
     "missionTracksBody": "Before subject practice, every class should touch internet safety and how AI works — that is Sparki’s core mission. These tracks are non-optional for responsible pilots.",
     "openSafetyTrackCta": "Internet safety adventures",
     "openAiTrackCta": "AI & coding essentials",
     "subjectHubDesc": "Internet safety, AI literacy, math, English, science, and history — the same lesson structure for every track. Pick the age band for your class (Tots, Kids, or Crew); each band aligns to common US grade spans from Pre-K–K through grade 5. Tracks supplement your teacher’s weekly PDF units, not replace them.",
     "subjectHubGradeBands": "Age bands: Tots → typical Pre-K–K · Kids → grades 1–2 · Crew → grades 3–5 (ages are shown on the band selector).",
-    "subjectHubSupplemental": "Core subject tracks target California-aligned clusters (PTKLF, CCSS, NGSS, HSS). Mission tracks (internet safety, AI literacy) use the same lesson flow; map them to your district’s digital citizenship / CS scope. Nothing here is a full year scope — pair with your district map and the printable alignment tables.",
+    "subjectHubSupplemental": "Subject tracks highlight age-band and domain-aligned practice (including California cluster examples where noted). Mission tracks (internet safety, AI literacy) use the same lesson flow. Content is supplemental practice — not a district-adopted core program. Pair with your map and the printable alignment tables.",
     "openSubjectHub": "Browse subject tracks",
     "openSubjectTrack": "Open {subject}",
     "aboutPilotToggle": "About this school pilot (how Sparki fits)",
@@ -281,6 +296,10 @@
     "quizExplainFallback": "The choice that best fits this question is: {answer}. Compare each option to what you read in Learn — the correct one uses the same vocabulary and logic.",
     "quizReviewLearnStudent": "Tip: open the Learn tab if you want to reread the lesson before the next question.",
     "quizWrongCoachStudent": "Look back at the lesson in Learn if you are not sure why this answer fits best.",
+    "lessonPaywallTitle": "This lesson is part of Adventure Academy",
+    "lessonPaywallBody": "Everyone gets the first lesson in each subject free. Subscribe to Adventure Academy (or use Safety Pass where included) on the parent dashboard for the full track and Homework Adventure.",
+    "lessonPaywallCta": "Open parent dashboard",
+    "unlockMoreLessonsCta": "Unlock with Adventure Academy",
     "quizExplainFallbackStudent": "The best choice here is: {answer}. Reread the Learn section if you want more detail.",
     "audienceLabel": "View",
     "audienceStudent": "Student",
@@ -295,7 +314,7 @@
     "sequenceLead": "Work top to bottom for a clear progression, or assign individual lessons to match your unit.",
     "sequenceGradeNote": "Each lesson lists typical US grades for documentation; your class age band still controls which lessons appear.",
     "supplementalScopeTitle": "Supplemental curriculum, California-aligned",
-    "supplementalScopeBody": "Each track offers focused mini-units on important standard clusters—not a complete year of instruction. Combine with your scope and sequence; use the alignment map for documentation.",
+    "supplementalScopeBody": "Each track offers focused mini-units on important clusters (with published alignment notes where we map them)—not a complete year of instruction. Combine with your scope and sequence; use the alignment hub for documentation.",
     "cardObjectiveLabel": "Focus",
     "cardTimeLabel": "{minutes} min",
     "cardStandardsLabel": "Standards tag",
@@ -507,8 +526,8 @@
     "boardSummaryBody": "SpArki delivers bilingual, standards-aligned digital citizenship and AI literacy for ages 3–11. Schools keep data in their own Supabase project; students can participate without full names; AI features are teacher-initiated supplements with clear human oversight."
   },
   "forSchoolsHub": {
-    "pageTitle": "Sparki Academy — Free Safety + AI Curriculum for iPads",
-    "heroSubtitle": "Kid-safe lessons, bilingual EN/ES toggle, offline PWA on iPad, and a live teacher dashboard for pilots.",
+    "pageTitle": "For educators & classrooms — Sparki roadmap",
+    "heroSubtitle": "Families use Sparki at home first. This hub is for teachers and leaders: program overview, compliance, printable resources, and optional pilot tools when you’re ready.",
     "tabPilot": "Start pilot",
     "tabProgram": "Program",
     "tabPricing": "Pricing",
@@ -737,12 +756,13 @@
     "pageTitle": "Parent hub — Sparki School",
     "pageSubtitle": "For grown-ups when your child uses Sparki in a class or school pilot: join codes, weekly teacher units, and subject tracks. Internet-safety courses, sparkles, and Safety Pass stay on the family dashboard.",
     "backToSchoolHub": "← Back to School hub",
+    "backToFamilyHome": "← Back to family home",
     "hubCardTitle": "School hub & class join",
     "hubCardBody": "Turn on School Mode here, enter the teacher’s class code, and pick an anonymous student label (no names required for the pilot).",
     "hubCardCta": "Open School hub",
     "classStatusTitle": "This device & class",
     "classStatusJoined": "Joined with student label: {code}. Progress for teacher-assigned flows can sync when this device is in School Mode with Supabase enabled.",
-    "classStatusNotJoined": "Not joined to a class on this device yet. Open the School hub and use “Join your class” when your teacher shares a code.",
+    "classStatusNotJoined": "Not joined to a class on this device yet. Use “Join your class” on this page when your teacher shares a code.",
     "weeklyTitle": "Teacher weekly track",
     "weeklyBody": "When your teacher generates a weekly PDF unit, it appears here after the class joins. Open it to follow this week’s assigned Sparki activities.",
     "weeklyCta": "Open weekly track",
@@ -790,6 +810,10 @@
     "parentHandbookNote": "A downloadable PDF parent handbook will be added here as soon as it is ready.",
     "openingCheckout": "Opening checkout…",
     "unlockSafetyButton": "Unlock Safety Pass",
+    "unlockAcademyTitle": "Adventure Academy — full practice & Homework Adventure",
+    "unlockAcademyDesc": "Unlock every lesson in subject tracks (supplemental practice) and Homework Adventure with a separate subscription. Safety adventures stay generous on the free tier; this adds depth and worksheet help.",
+    "unlockAcademyButton": "Subscribe to Adventure Academy",
+    "academyActive": "Adventure Academy active on this device",
     "checkoutCanceled": "Checkout canceled. You can try again anytime.",
     "checkoutFailed": "Checkout failed. Please try again.",
     "conversationTitle": "Questions to ask this week",
@@ -813,9 +837,20 @@
     "returnToHome": "Return to Home",
     "backToDashboard": "← Back to Dashboard"
   },
+  "practice": {
+    "backToHome": "← Back to Home",
+    "breadcrumbHome": "Home",
+    "breadcrumbPractice": "Practice"
+  },
+  "productTiers": {
+    "freeLine": "Free: safety-led adventures plus one preview lesson per subject track.",
+    "pdfLine": "PDF ebooks: one-time purchase per title (separate Stripe checkout).",
+    "academyLine": "Adventure Academy: subscription for full subject practice (supplemental, not a full-year core adoption) and Homework Adventure — upload a worksheet or learning-moment photo.",
+    "summaryLine": "Pick what fits: free safety + previews · ebooks à la carte · Adventure Academy for depth and homework help."
+  },
   "homeworkFeature": {
     "layoutTitle": "Homework Adventure",
-    "layoutSubtitle": "Upload a worksheet. SpArki analyzes it, explains it, and can tell a short story that teaches the same skill.",
+    "layoutSubtitle": "Upload a worksheet or a photo of a learning moment (worksheet, whiteboard, or activity). SpArki analyzes it, explains it, and can tell a short story that teaches the same skill.",
     "layoutRewardNote": "School use: treat the story as a light reward after the real teaching — objectives and checks come first.",
     "homeIntro": "Choose what you want to do. Everything stays on this device until you run the helper (photos are not stored on our servers).",
     "ctaUpload": "Upload homework",
@@ -912,7 +947,7 @@
     "kidView": "Kid view",
     "parentView": "Parent view",
     "parentPanelHeading": "Parent & grown-up dashboard",
-    "parentPanelLead": "Progress on this device, conversation prompts, Safety Pass, and kid-view lock. Switch back to Kid view anytime."
+    "parentPanelLead": "Progress on this device, conversation prompts, Safety Pass, and kid-view lock. We’re transparent: you control purchases; switch back to Kid view anytime."
   },
   "dashboard": {
     "explorerName": "Your explorer name:",
@@ -992,7 +1027,7 @@
     "hintLabel": "SpArki's hint:",
     "errorFileType": "Please choose a JPG or PNG homework photo.",
     "errorChooseFirst": "Please choose a homework image first.",
-    "errorLockedByPass": "Ask a grown-up to unlock Safety Pass in the Parent dashboard first.",
+    "errorLockedByPass": "Ask a grown-up to subscribe to Adventure Academy (or complete Safety Pass checkout) in the Parent dashboard first, then try again.",
     "errorMissingCheckoutSession": "We could not verify your unlock. Ask a grown-up to open Parent dashboard after checkout, or try signing in again.",
     "errorGeneric": "Something went wrong. Ask a grown-up to try again.",
     "errorCreate": "Could not create adventure. Please try another photo.",
@@ -1051,6 +1086,8 @@
   },
   "home": {
     "joinAdventure": "Join the Adventure!",
+    "secondaryPractice": "Subject practice (math, reading & more)",
+    "secondaryParents": "Parents — progress & Safety Pass",
     "chooseAdventure": "Choose your adventure",
     "grownUpSignIn": "Grown-up? Sign in",
     "parentGuide": "Parent Guide",
@@ -1078,6 +1115,11 @@
         "title": "Homework Adventure",
         "description": "Turn homework into a story-based quest. Grown-up uploads; SpArki guides.",
         "imageAlt": "SpArki as Homework Adventure tutor"
+      },
+      "practice": {
+        "title": "Subject practice",
+        "description": "Short lessons in math, English, science, history, safety, and AI — matched to your child’s age band.",
+        "imageAlt": "Sparki subject practice for home"
       }
     }
   },

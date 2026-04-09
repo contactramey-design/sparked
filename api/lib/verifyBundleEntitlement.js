@@ -69,3 +69,60 @@ export async function verifyBundleCheckoutSession(checkoutSessionId) {
 
   return { ok: true }
 }
+
+/**
+ * Homework Adventure: active subscription from checkout session metadata `bundle` (legacy Safety Pass) or `academy`.
+ */
+export async function verifyHomeworkCheckoutSession(checkoutSessionId) {
+  const stripeSecretKey = process.env.STRIPE_SECRET_KEY
+  if (!stripeSecretKey) {
+    return { ok: false, status: 500, message: 'Server not configured for entitlement checks.' }
+  }
+  const id = (checkoutSessionId || '').toString().trim()
+  if (!id) {
+    return { ok: false, status: 403, message: 'Missing checkout session id.' }
+  }
+
+  const stripe = new Stripe(stripeSecretKey, { apiVersion: '2024-06-20' })
+  const session = await stripe.checkout.sessions.retrieve(id)
+  const entitlementType = session?.metadata?.entitlement_type
+
+  if (entitlementType !== 'bundle' && entitlementType !== 'academy') {
+    return { ok: false, status: 403, message: 'Not entitled to use Homework Adventure.' }
+  }
+
+  const subscriptionId = session?.subscription
+  if (!subscriptionId) {
+    return { ok: false, status: 403, message: 'No active subscription for this session.' }
+  }
+
+  const subscription = await stripe.subscriptions.retrieve(subscriptionId)
+  const status = subscription?.status
+  const subscriptionPriceId = subscription?.items?.data?.[0]?.price?.id ?? null
+  const expectedFromMeta = (session?.metadata?.stripePriceId || '').toString().trim()
+
+  const envPriceId =
+    entitlementType === 'academy'
+      ? process.env.STRIPE_ACADEMY_PRICE_ID
+      : process.env.STRIPE_SAFETY_PASS_PRICE_ID
+  if (!envPriceId) {
+    return { ok: false, status: 500, message: 'Server not configured for this entitlement type.' }
+  }
+
+  let expectedPriceId = expectedFromMeta || null
+  if (!expectedPriceId) {
+    expectedPriceId = await resolvePriceIdFromEnv(stripe, envPriceId)
+  }
+
+  const isEntitled =
+    (status === 'active' || status === 'trialing') &&
+    subscriptionPriceId &&
+    expectedPriceId &&
+    subscriptionPriceId === expectedPriceId
+
+  if (!isEntitled) {
+    return { ok: false, status: 403, message: 'Subscription is not active or does not match this product.' }
+  }
+
+  return { ok: true }
+}

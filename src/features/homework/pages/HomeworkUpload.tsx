@@ -5,7 +5,7 @@ import { useAgeBand } from '@/contexts/AgeBandContext'
 import type { AgeBandId } from '@/ageBand'
 import { homeworkAgeHintForBand, isAgeBandId } from '@/ageBand'
 import { getSchoolSession } from '@/school/schoolSession'
-import { getSafetyPassCheckoutSessionId } from '@/progress'
+import { getHomeworkCheckoutSessionId } from '@/progress'
 import { analyzeWorksheet, explainWorksheet, storyFromLesson } from '../api/homeworkApi'
 import { useHomeworkUpload } from '../hooks/useHomeworkUpload'
 import { saveHomeworkJob } from '../hooks/useHomeworkJob'
@@ -67,7 +67,7 @@ export default function HomeworkUpload() {
     }
   }, [])
 
-  const checkoutSessionId = getSafetyPassCheckoutSessionId()
+  const checkoutSessionId = getHomeworkCheckoutSessionId()
   const needsCheckout =
     import.meta.env.PROD && !checkoutSessionId && !homeworkAllowUnauth
 

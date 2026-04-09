@@ -1,5 +1,6 @@
 import React from 'react'
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom'
+import { practicePathFromLegacySchoolSubjectsPath } from './lib/practiceRoutes'
 import { appConfig } from './config'
 import { AuthProvider } from './AuthContext'
 import { LocaleProvider, useTranslation } from './contexts/LocaleContext'
@@ -29,7 +30,6 @@ import SchoolOnePagerPage from './SchoolOnePagerPage'
 import TeacherHubLayout from './TeacherHubLayout'
 import TeacherDashboardPage from './TeacherDashboardPage'
 import TeacherWeeklyGeneratorPage from './TeacherWeeklyGeneratorPage.tsx'
-import SchoolsPage from './SchoolsPage'
 import SchoolParentPage from './SchoolParentPage'
 import ParentRedirect from './ParentRedirect'
 import { AppShellFooter } from './design-system/components/AppShellFooter'
@@ -47,6 +47,12 @@ import SchoolMathLegacyRedirect from './school/subjects/SchoolMathLegacyRedirect
 import WeeklyAdventurePage from './WeeklyAdventurePage'
 import './App.css'
 
+function LegacySchoolSubjectsRedirect() {
+  const loc = useLocation()
+  const to = practicePathFromLegacySchoolSubjectsPath(loc.pathname) ?? '/practice'
+  return <Navigate to={`${to}${loc.search}${loc.hash}`} replace />
+}
+
 function SkipToMainLabel() {
   const { t } = useTranslation()
   return <>{t('header.skipToMain')}</>
@@ -56,8 +62,8 @@ function AppShell() {
   const location = useLocation()
 
   // Theme rule (strict):
-  // - Orange ONLY on actual school routes (`/schools`, `/for-schools`, `/teacher/*`, `/compliance`)
-  // - Everything else (home + regular parent customer experience) stays BLUE
+  // - Orange ONLY on `/for-schools`, `/teacher/*`, `/compliance` (not `/schools/*` — consumer blue shell)
+  // - Everything else (home + practice + school parent paths) stays BLUE
   // Note: `schoolMode` toggle is for navigation/UI behavior; it should not recolor Home.
   const useSchoolTheme = isSchoolShellPath(location.pathname)
 
@@ -122,13 +128,14 @@ function AppShell() {
           <Route path="/for-schools" element={<ForSchoolsPage />} />
           <Route path="/for-schools/resources/:slug" element={<SchoolPrintResourcePage />} />
           <Route path="/for-schools/one-pager" element={<SchoolOnePagerPage />} />
-          <Route path="/schools" element={<SchoolsPage />} />
+          <Route path="/schools" element={<Navigate to="/" replace />} />
           <Route path="/schools/parent" element={<SchoolParentPage />} />
-          <Route path="/schools/subjects" element={<SchoolSubjectsHubPage />} />
+          <Route path="/schools/subjects/*" element={<LegacySchoolSubjectsRedirect />} />
+          <Route path="/practice/:subjectId/:lessonId" element={<SchoolSubjectLessonPage />} />
+          <Route path="/practice/:subjectId" element={<SchoolSubjectTrackPage />} />
+          <Route path="/practice" element={<SchoolSubjectsHubPage />} />
           <Route path="/schools/alignment/:subjectId" element={<SchoolAlignmentSubjectPage />} />
           <Route path="/schools/alignment" element={<SchoolAlignmentHubPage />} />
-          <Route path="/schools/subjects/:subjectId/:lessonId" element={<SchoolSubjectLessonPage />} />
-          <Route path="/schools/subjects/:subjectId" element={<SchoolSubjectTrackPage />} />
           <Route path="/schools/math" element={<SchoolMathLegacyRedirect />} />
           <Route path="/schools/math/:lessonId" element={<SchoolMathLegacyRedirect />} />
           <Route path="/schools/weekly-track" element={<SchoolWeeklyTrackPage />} />

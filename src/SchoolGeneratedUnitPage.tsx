@@ -22,6 +22,7 @@ import { VIDEO_POSTER_DATA_URL } from './videoPoster'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { readJsonFromCache, unitJsonPath, writeJsonToCache } from './lib/schoolGeneratorCache'
+import { buildPracticeLessonPath } from '@/lib/practiceRoutes'
 
 type GeneratedHomeworkStep = {
   id: string
@@ -164,7 +165,7 @@ const SchoolGeneratedUnitPage: React.FC = () => {
     if (!supabase) return
     if (!unitIdSafe) return
     if (!classId && !teacherPreviewWithoutClass) {
-      navigate('/schools', { replace: true })
+      navigate('/schools/parent', { replace: true })
       return
     }
 
@@ -289,7 +290,7 @@ const SchoolGeneratedUnitPage: React.FC = () => {
       const lesson = getSubjectLessonById(s.subjectId, s.lessonId)
       const locContent = lesson ? lessonLocale(lesson, loc) : null
       return {
-        href: `/schools/subjects/${s.subjectId}/${encodeURIComponent(s.lessonId)}`,
+        href: buildPracticeLessonPath(s.subjectId, s.lessonId),
         title: locContent?.title ?? s.lessonId,
         subjectId: s.subjectId,
       }

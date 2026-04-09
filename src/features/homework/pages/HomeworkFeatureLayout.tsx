@@ -19,6 +19,7 @@ export default function HomeworkFeatureLayout() {
       <p className="muted homework-feature-reward-note max-w-prose text-sm px-1 -mt-2 mb-2">
         {t('homeworkFeature.layoutRewardNote')}
       </p>
+      <p className="muted max-w-prose text-sm px-1 mb-3">{t('productTiers.academyLine')}</p>
       <Outlet />
     </section>
   )

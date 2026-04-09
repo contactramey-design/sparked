@@ -3,12 +3,12 @@
  * Prefer the split pipeline: /api/homework/analyze → explain → story (see HOMEWORK-GENERATOR.md).
  * Body: multipart/form-data with field "image" (file).
  * Optional fields: checkout_session_id (required in production) — must be a Stripe Checkout session
- * for the Safety Pass bundle with an active or trialing subscription.
+ * for Adventure Academy or legacy Safety Pass bundle (active or trialing subscription).
  * Dev: set ALLOW_UNAUTH_HOMEWORK=true to skip server-side entitlement (local only).
  * Returns: { title, subject, topic, steps } — homework-specific adventure JSON.
  * COPPA: Process image in memory only; do not store or log image bytes.
  */
-import { verifyBundleCheckoutSession } from './lib/verifyBundleEntitlement.js'
+import { verifyHomeworkCheckoutSession } from './lib/verifyBundleEntitlement.js'
 
 const MAX_BODY_BYTES = 4.5 * 1024 * 1024 // 4.5 MB (Vercel limit)
 
@@ -192,7 +192,7 @@ export default async function handler(req, res) {
 
     const allowUnauth = process.env.ALLOW_UNAUTH_HOMEWORK === 'true'
     if (!allowUnauth) {
-      const entitlement = await verifyBundleCheckoutSession(checkoutSessionId)
+      const entitlement = await verifyHomeworkCheckoutSession(checkoutSessionId)
       if (!entitlement.ok) {
         res.status(entitlement.status).json({
           error:

@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { useTranslation } from '@/contexts/LocaleContext'
-import { getSafetyPassCheckoutSessionId } from '@/progress'
+import { getHomeworkCheckoutSessionId } from '@/progress'
 import { explainWorksheet, storyFromLesson } from '../api/homeworkApi'
 import { getHomeworkJob, saveHomeworkJob } from '../hooks/useHomeworkJob'
 import type { HomeworkJob } from '../types/homework'
@@ -35,7 +35,7 @@ export default function HomeworkResult() {
     setJob(next)
   }, [])
 
-  const session = getSafetyPassCheckoutSessionId()
+  const session = getHomeworkCheckoutSessionId()
 
   const regenerateExplain = async () => {
     if (!job) return

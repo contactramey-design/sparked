@@ -49,6 +49,23 @@ export function HomeHero({ ctaHref }: Props) {
         <Link to={ctaHref} className="home-hero-cta primary-button mt-6 inline-flex min-h-12 items-center justify-center px-8 text-base font-bold">
           {t('home.joinAdventure')}
         </Link>
+        <div className="home-hero-secondary-ctas mt-5 flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-sm text-slate-600">
+          <Link
+            to="/practice"
+            className="home-hero-secondary-link font-semibold text-sky-700 underline-offset-2 hover:text-sky-900 hover:underline"
+          >
+            {t('home.secondaryPractice')}
+          </Link>
+          <span className="text-slate-300 select-none" aria-hidden>
+            ·
+          </span>
+          <Link
+            to="/?view=parent"
+            className="home-hero-secondary-link font-semibold text-sky-700 underline-offset-2 hover:text-sky-900 hover:underline"
+          >
+            {t('home.secondaryParents')}
+          </Link>
+        </div>
       </div>
     </div>
   )

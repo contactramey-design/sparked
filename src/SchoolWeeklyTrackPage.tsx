@@ -249,7 +249,7 @@ const SchoolWeeklyTrackPage: React.FC = () => {
 
   useEffect(() => {
     if (!hasSchoolSession) {
-      navigate('/schools', { replace: true })
+      navigate('/schools/parent', { replace: true })
     }
   }, [hasSchoolSession, navigate])
 
@@ -263,7 +263,7 @@ const SchoolWeeklyTrackPage: React.FC = () => {
             <p className="muted text-sm mt-2 max-w-prose">{t('schools.weeklyTrackSupplementNote')}</p>
           </div>
         </div>
-        <Link to="/schools" className="link-back">
+        <Link to="/schools/parent" className="link-back">
           {t('schools.weeklyTrackBackToSchools')}
         </Link>
       </header>

@@ -7,6 +7,7 @@ import { useTranslation } from './contexts/LocaleContext'
 import { useAgeBand } from './contexts/AgeBandContext'
 import PageHeader from '@/components/PageHeader'
 import { SchoolClassBulletinCard } from '@/components/SchoolClassBulletinCard'
+import SchoolJoinCard from './components/SchoolJoinCard'
 
 /**
  * Grown-up view for Sparki **School** flows: class join, weekly track, subject tracks.
@@ -60,19 +61,13 @@ const SchoolParentPage: React.FC = () => {
         title={t('schoolParent.pageTitle')}
         subtitle={<span className="max-w-prose inline-block">{t('schoolParent.pageSubtitle')}</span>}
       >
-        <Link to="/schools" className="link-back">
-          {t('schoolParent.backToSchoolHub')}
+        <Link to="/" className="link-back">
+          {t('schoolParent.backToFamilyHome')}
         </Link>
       </PageHeader>
 
       <div className="stack-lg lesson-layout">
-        <div className="lesson-media card border-2 border-orange-200 bg-orange-50/40">
-          <h3>{t('schoolParent.hubCardTitle')}</h3>
-          <p className="text-slate-700 mt-2">{t('schoolParent.hubCardBody')}</p>
-          <Link to="/schools" className="primary-button mt-3 inline-block">
-            {t('schoolParent.hubCardCta')}
-          </Link>
-        </div>
+        <SchoolJoinCard />
 
         <div className="lesson-media card">
           <h3>{t('schoolParent.classStatusTitle')}</h3>
@@ -100,7 +95,7 @@ const SchoolParentPage: React.FC = () => {
         <div className="lesson-media card">
           <h3>{t('schoolParent.subjectsTitle')}</h3>
           <p className="text-slate-700 mt-2">{t('schoolParent.subjectsBody')}</p>
-          <Link to="/schools/subjects" className="primary-button mt-3 inline-block">
+          <Link to="/practice" className="primary-button mt-3 inline-block">
             {t('schoolParent.subjectsCta')}
           </Link>
         </div>

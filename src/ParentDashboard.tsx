@@ -2,7 +2,15 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { loadSchoolSubjectProgress } from '@/school/subjects/schoolSubjectProgress'
 import { Link } from 'react-router-dom'
 import { curriculum, getUnitsForBand } from './curriculum'
-import { loadProgress, getHasSafetyPass, setHasSafetyPass, setSafetyPassCheckoutSessionId } from './progress'
+import {
+  loadProgress,
+  getHasSafetyPass,
+  setHasSafetyPass,
+  setSafetyPassCheckoutSessionId,
+  getHasAcademySubscription,
+  setHasAcademySubscription,
+  setAcademyCheckoutSessionId,
+} from './progress'
 import { useAuth } from './AuthContext'
 import { useTranslation } from './contexts/LocaleContext'
 import { useAgeBand } from './contexts/AgeBandContext'
@@ -17,9 +25,13 @@ export const ParentViewContent: React.FC = () => {
   const weeklyTitleShort = t(`weekly.season1.weeks.${weeklyWk}.title`)
   const progress = loadProgress(ageBand)
   const { kidLock, setKidLock } = useAuth()
-  const hasSafetyPass = getHasSafetyPass()
+  const [entitlementVersion, setEntitlementVersion] = useState(0)
+  const hasSafetyPass = entitlementVersion >= 0 && getHasSafetyPass()
+  const hasAcademy = entitlementVersion >= 0 && getHasAcademySubscription()
   const [unlockLoading, setUnlockLoading] = useState(false)
+  const [academyUnlockLoading, setAcademyUnlockLoading] = useState(false)
   const [unlockErrorKey, setUnlockErrorKey] = useState<string | null>(null)
+  const [academyUnlockErrorKey, setAcademyUnlockErrorKey] = useState<string | null>(null)
   const [subjectTracksLocalActivity, setSubjectTracksLocalActivity] = useState(false)
 
   useEffect(() => {
@@ -64,8 +76,15 @@ export const ParentViewContent: React.FC = () => {
       const sessionId = url.searchParams.get('checkout_session_id')
       const entitlementType = url.searchParams.get('entitlement_type')
       const returnTo = url.searchParams.get('returnTo')
-      setSafetyPassCheckoutSessionId(sessionId)
-      setHasSafetyPass(entitlementType === 'bundle')
+      if (sessionId) {
+        if (entitlementType === 'academy') {
+          setAcademyCheckoutSessionId(sessionId)
+          setHasAcademySubscription(true)
+        } else if (entitlementType === 'bundle') {
+          setSafetyPassCheckoutSessionId(sessionId)
+          setHasSafetyPass(true)
+        }
+      }
 
       url.searchParams.delete('checkout')
       url.searchParams.delete('checkout_session_id')
@@ -76,6 +95,8 @@ export const ParentViewContent: React.FC = () => {
 
       if (returnTo && (returnTo.startsWith('/ebook/') || returnTo.startsWith('/ebook?'))) {
         window.location.replace(returnTo)
+      } else {
+        setEntitlementVersion((v) => v + 1)
       }
     } catch {
       // ignore
@@ -89,7 +110,7 @@ export const ParentViewContent: React.FC = () => {
       const res = await fetch('/api/create-checkout-session', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({}),
+        body: JSON.stringify({ product: 'bundle' }),
       })
 
       const data = await res.json().catch(() => ({}))
@@ -104,6 +125,31 @@ export const ParentViewContent: React.FC = () => {
       setUnlockErrorKey('parentDashboard.checkoutFailed')
     } finally {
       setUnlockLoading(false)
+    }
+  }
+
+  async function handleAcademyUnlock() {
+    setAcademyUnlockErrorKey(null)
+    setAcademyUnlockLoading(true)
+    try {
+      const res = await fetch('/api/create-checkout-session', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ product: 'academy' }),
+      })
+
+      const data = await res.json().catch(() => ({}))
+      if (!res.ok) {
+        throw new Error('CHECKOUT_FAILED')
+      }
+      if (!data || typeof data.url !== 'string') {
+        throw new Error('Missing checkout URL')
+      }
+      window.location.assign(data.url)
+    } catch {
+      setAcademyUnlockErrorKey('parentDashboard.checkoutFailed')
+    } finally {
+      setAcademyUnlockLoading(false)
     }
   }
 
@@ -163,6 +209,28 @@ export const ParentViewContent: React.FC = () => {
                 <p className="welcome-subtitle">{t('parentDashboard.checkoutCanceled')}</p>
               )}
               {unlockErrorKey && <p className="quiz-error">{t(unlockErrorKey)}</p>}
+            </>
+          )}
+        </div>
+
+        <div className="lesson-media card">
+          <h3>{t('parentDashboard.unlockAcademyTitle')}</h3>
+          <p>{t('parentDashboard.unlockAcademyDesc')}</p>
+          <p className="text-sm text-slate-600 mt-2">{t('productTiers.summaryLine')}</p>
+
+          {hasAcademy ? (
+            <p className="welcome-subtitle">{t('parentDashboard.academyActive')}</p>
+          ) : (
+            <>
+              <button
+                type="button"
+                className="primary-button mt-2"
+                onClick={() => void handleAcademyUnlock()}
+                disabled={academyUnlockLoading}
+              >
+                {academyUnlockLoading ? t('parentDashboard.openingCheckout') : t('parentDashboard.unlockAcademyButton')}
+              </button>
+              {academyUnlockErrorKey && <p className="quiz-error">{t(academyUnlockErrorKey)}</p>}
             </>
           )}
         </div>

@@ -22,6 +22,9 @@ export default defineConfig({
       strategies: 'injectManifest',
       srcDir: 'src',
       filename: 'sw.ts',
+      devOptions: {
+        enabled: false,
+      },
       includeAssets: ['globalposter.png'],
       manifest: {
         name: "Sparki's Adventures Academy",
