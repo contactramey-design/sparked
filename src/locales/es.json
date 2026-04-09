@@ -24,7 +24,10 @@
     "academyHome": "Inicio de la Academia",
     "academyHomeAria": "Volver al inicio de Sparki Academia — una sola app para familias y pilotos",
     "educators": "Educadores",
-    "educatorsAria": "Información para docentes y escuelas — herramientas de aula y hoja de ruta"
+    "educatorsAria": "Información para docentes y escuelas — herramientas de aula y hoja de ruta",
+    "mobileMenuOpen": "Abrir menú",
+    "mobileMenuClose": "Cerrar menú",
+    "mobileMenuTitle": "Menú principal"
   },
   "listenButton": {
     "heading": "Escuchar el encabezado",
@@ -116,6 +119,11 @@
     "privacy": "Privacidad",
     "forSchools": "Para escuelas",
     "forEducators": "Educadores y escuelas",
+    "schoolsPilotsAria": "Escuelas y pilotos",
+    "schoolsPilotsLabel": "Escuelas y pilotos",
+    "compliance": "Cumplimiento",
+    "teacherSignIn": "Entrada del profesor",
+    "teacherDashboard": "Panel del profesor",
     "contact": "Contacto",
     "grownUp": "¿Eres adulto?",
     "parentDashboard": "Panel para padres",

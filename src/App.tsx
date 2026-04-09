@@ -61,10 +61,10 @@ function SkipToMainLabel() {
 function AppShell() {
   const location = useLocation()
 
-  // Theme rule (strict):
-  // - Orange ONLY on `/for-schools`, `/teacher/*`, `/compliance` (not `/schools/*` — consumer blue shell)
-  // - Everything else (home + practice + school parent paths) stays BLUE
-  // Note: `schoolMode` toggle is for navigation/UI behavior; it should not recolor Home.
+  // Theme rule:
+  // - Orange on `/for-schools`, `/teacher/*`, `/compliance`, and `/schools/*` (pilot + class flows)
+  // - Consumer blue on home, tracks, `/practice`, etc.
+  // Note: `schoolMode` hides shop without changing pathname; it does not recolor by itself.
   const useSchoolTheme = isSchoolShellPath(location.pathname)
 
   const theme = useSchoolTheme
