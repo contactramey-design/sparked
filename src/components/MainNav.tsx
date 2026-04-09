@@ -90,13 +90,14 @@ export default function MainNav({ variant, hideShop = false }: Props) {
       <NavDivider />
       <SectionLabel>{t('nav.sectionGrownups')}</SectionLabel>
       {!isLoggedIn && <ItemLink to="/login">{t('nav.academySignIn')}</ItemLink>}
-      {isLoggedIn && !kidLock && <ItemLink to="/parent">{t('nav.academyParent')}</ItemLink>}
+      {isLoggedIn && !kidLock && <ItemLink to="/?view=parent">{t('nav.academyParent')}</ItemLink>}
     </>
   )
 
   const consumerPractice = (
     <>
       <p className="nav-dropdown-blurb muted text-sm leading-snug">{t('nav.practiceBlurb')}</p>
+      <p className="nav-dropdown-blurb muted text-xs leading-snug mt-1">{t('nav.practiceStructuredNote')}</p>
       <NavDivider />
       <ItemLink to="/practice">{t('nav.practiceAllSubjects')}</ItemLink>
       <SectionLabel>{t('nav.practiceCoreLabel')}</SectionLabel>
@@ -104,17 +105,15 @@ export default function MainNav({ variant, hideShop = false }: Props) {
       <ItemLink to="/practice/english">{t('nav.practiceEnglish')}</ItemLink>
       <ItemLink to="/practice/science">{t('nav.practiceScience')}</ItemLink>
       <ItemLink to="/practice/history">{t('nav.practiceHistory')}</ItemLink>
-      <NavDivider />
-      <SectionLabel>{t('nav.practiceMissionLabel')}</SectionLabel>
-      <ItemLink to="/practice/internet-safety">{t('nav.practiceSafety')}</ItemLink>
-      <ItemLink to="/practice/ai-literacy">{t('nav.practiceAi')}</ItemLink>
     </>
   )
 
   const consumerShop = (
     <>
       <ItemLink to="/shop">{t('nav.shopEbooks')}</ItemLink>
-      <ItemLink to="/?view=parent">{t('nav.shopSubscription')}</ItemLink>
+      <NavDivider />
+      <p className="nav-dropdown-blurb muted text-xs leading-snug">{t('nav.shopParentHint')}</p>
+      <ItemLink to="/?view=parent">{t('footer.parentDashboard')}</ItemLink>
     </>
   )
 
@@ -127,8 +126,8 @@ export default function MainNav({ variant, hideShop = false }: Props) {
       <ItemLink to="/practice">{t('nav.schoolSubjectsHub')}</ItemLink>
       <ItemLink to="/schools/parent">{t('nav.schoolPilotClassJoin')}</ItemLink>
       <NavDivider />
-      <ItemLink to="/practice/internet-safety">{t('nav.academySafety')}</ItemLink>
-      <ItemLink to="/practice/ai-literacy">{t('nav.academyAiCoding')}</ItemLink>
+      <ItemLink to="/track/social-safety">{t('nav.academySafety')}</ItemLink>
+      <ItemLink to="/track/ai-coding">{t('nav.academyAiCoding')}</ItemLink>
       <NavDivider />
       <ItemLink to="/for-schools">{t('nav.schoolForSchoolsOverview')}</ItemLink>
       <ItemLink to="/compliance">{t('nav.schoolCompliance')}</ItemLink>
@@ -141,7 +140,7 @@ export default function MainNav({ variant, hideShop = false }: Props) {
       {isLoggedIn && !kidLock ? (
         <>
           <NavDivider />
-          <ItemLink to="/parent">{t('footer.parentDashboard')}</ItemLink>
+          <ItemLink to="/?view=parent">{t('footer.parentDashboard')}</ItemLink>
         </>
       ) : null}
     </>

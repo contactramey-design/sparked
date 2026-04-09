@@ -3,16 +3,12 @@ import { Link } from 'react-router-dom'
 import { useTranslation } from '@/contexts/LocaleContext'
 import { cn } from '@/lib/utils'
 
+/** Order: safety + homework first (heroes), then subject practice depth, then AI adventures */
 const TIERS = [
   {
     id: 'safety',
     path: '/track/social-safety',
     imageSrc: '/safety-card.png',
-  },
-  {
-    id: 'ai-coding',
-    path: '/track/ai-coding',
-    imageSrc: '/sparkiaicodingcardhomepage.png',
   },
   {
     id: 'homework',
@@ -23,6 +19,11 @@ const TIERS = [
     id: 'practice',
     path: '/practice',
     imageSrc: '/globalposter.png',
+  },
+  {
+    id: 'ai-coding',
+    path: '/track/ai-coding',
+    imageSrc: '/sparkiaicodingcardhomepage.png',
   },
 ] as const
 
@@ -87,6 +88,9 @@ export function AdventureGrid() {
           <AdventureCard key={tier.id} tier={tier} href={tier.path} />
         ))}
       </div>
+      <p className="home-tiers-footnote mx-auto mt-8 max-w-3xl text-center text-sm leading-relaxed text-slate-600">
+        {t('home.tiersFootnote')}
+      </p>
     </div>
   )
 }

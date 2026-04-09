@@ -27,6 +27,14 @@ const TrackListPage: React.FC = () => {
         </div>
       </div>
 
+      <div className="track-list-practice-callout card mt-4 max-w-3xl">
+        <h3 className="m-0 text-lg font-semibold text-slate-900">{t('trackList.practiceCalloutTitle')}</h3>
+        <p className="welcome-subtitle mt-2 mb-0">{t('trackList.practiceCalloutBody')}</p>
+        <Link to="/practice" className="primary-button mt-4 inline-block">
+          {t('trackList.practiceCalloutLink')}
+        </Link>
+      </div>
+
       <div className="dashboard-grid">
         {tracks.map((track) => (
           <div key={track.id} className="card">

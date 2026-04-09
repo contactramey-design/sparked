@@ -53,7 +53,25 @@ const SchoolSubjectsHubPage: React.FC = () => {
             <p className="school-subj-hub-alignment">{t('schoolSubjects.alignmentBadge')}</p>
           </>
         ) : (
-          <p className="school-subj-hub-student-lead text-slate-700 mt-2 mb-0">{t('schools.subjectHubStudentLead')}</p>
+          <>
+            <p className="school-subj-hub-student-lead text-slate-700 mt-2 mb-0">{t('schools.subjectHubStudentLead')}</p>
+            {isFamilyPractice ? (
+              <div className="school-subj-hub-family-intro mt-4 rounded-xl border border-slate-200 bg-slate-50/90 p-4 text-left">
+                <h2 className="m-0 text-base font-semibold text-slate-900">{t('practice.hubFamilyIntroTitle')}</h2>
+                <ul className="mt-2 mb-0 list-disc space-y-1 pl-5 text-sm text-slate-700">
+                  <li>{t('practice.hubFamilyBullet1')}</li>
+                  <li>{t('practice.hubFamilyBullet2')}</li>
+                  <li>{t('practice.hubFamilyBullet3')}</li>
+                </ul>
+                <Link
+                  to="/?view=parent"
+                  className="mt-3 inline-block text-sm font-semibold text-sky-800 underline-offset-2 hover:text-sky-950 hover:underline"
+                >
+                  {t('practice.hubFamilyParentLink')}
+                </Link>
+              </div>
+            ) : null}
+          </>
         )}
       </header>
 

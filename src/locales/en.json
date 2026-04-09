@@ -77,9 +77,11 @@
     "academyParent": "Parent dashboard",
     "academySignIn": "Sign in",
     "shopEbooks": "Ebooks",
-    "shopSubscription": "Academy subscription",
+    "shopSubscription": "Parent dashboard",
+    "shopParentHint": "Subscriptions, Safety Pass & Adventure Academy",
     "practice": "Practice",
-    "practiceBlurb": "Extra practice at home — not a full school curriculum. Pick math, reading, science, history, safety, or AI.",
+    "practiceBlurb": "Structured lessons by subject — supplemental practice, not a full school curriculum.",
+    "practiceStructuredNote": "Safety and AI story adventures live under Academy. Here you get lesson-style tracks for the same topics plus core subjects.",
     "practiceAllSubjects": "All practice topics",
     "practiceCoreLabel": "Core subjects",
     "practiceMath": "Math",
@@ -846,7 +848,12 @@
   "practice": {
     "backToHome": "← Back to Home",
     "breadcrumbHome": "Home",
-    "breadcrumbPractice": "Practice"
+    "breadcrumbPractice": "Practice",
+    "hubFamilyIntroTitle": "How practice fits in Sparki",
+    "hubFamilyBullet1": "Structured lessons by subject — great alongside school, not a replacement for your teacher’s full plan.",
+    "hubFamilyBullet2": "First lesson in each subject is free; Adventure Academy unlocks the full track and Homework Adventure.",
+    "hubFamilyBullet3": "Story-style safety and AI adventures live under Academy or the home page — this hub is the lesson-style path.",
+    "hubFamilyParentLink": "Grown-ups: manage subscription in Parent dashboard"
   },
   "productTiers": {
     "freeLine": "Free: safety-led adventures plus one preview lesson per subject track.",
@@ -1010,6 +1017,11 @@
     "email": "sydney@sparkiedu.com",
     "respondNote": "We aim to respond to family and privacy inquiries in a timely manner."
   },
+  "trackList": {
+    "practiceCalloutTitle": "Subject practice hub",
+    "practiceCalloutBody": "Want structured lessons in math, reading, science, and history? Visit Practice — same family account as Academy, with a free first lesson in each track. Story-style safety and AI adventures stay here on tracks and Weekly.",
+    "practiceCalloutLink": "Open Practice hub"
+  },
   "comingSoon": {
     "title": "Coming Soon",
     "body": "SpArki is still building this adventure. Check back soon for new units and activities!"
@@ -1092,9 +1104,13 @@
   },
   "home": {
     "joinAdventure": "Join the Adventure!",
+    "heroPrimaryCta": "Start with safety adventures",
+    "heroBrowseAllAdventures": "Browse all adventures",
+    "secondaryGrownUps": "Grown-ups — subscriptions, Safety Pass & Academy",
     "secondaryPractice": "Subject practice (math, reading & more)",
     "secondaryParents": "Parents — progress & Safety Pass",
     "chooseAdventure": "Choose your adventure",
+    "tiersFootnote": "Free safety and previews · Adventure Academy for full subject depth and Homework Adventure · PDF ebooks in Shop.",
     "grownUpSignIn": "Grown-up? Sign in",
     "parentGuide": "Parent Guide",
     "view": "View:",
@@ -1124,7 +1140,7 @@
       },
       "practice": {
         "title": "Subject practice",
-        "description": "Short lessons in math, English, science, history, safety, and AI — matched to your child’s age band.",
+        "description": "Structured lessons in math, English, science, and history — matched to your child’s age band. (Safety & AI story adventures start from the cards above or Academy.)",
         "imageAlt": "Sparki subject practice for home"
       }
     }

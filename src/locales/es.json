@@ -74,12 +74,14 @@
     "academyHomework": "Tutor de tareas",
     "academySchools": "Programas escolares",
     "academyForSchoolsOverview": "Para escuelas",
-    "academyParent": "Panel para adultos — progreso y ajustes",
+    "academyParent": "Panel para padres",
     "academySignIn": "Entrar",
     "shopEbooks": "Ebooks",
-    "shopSubscription": "Suscripción a la academia",
+    "shopSubscription": "Panel para padres",
+    "shopParentHint": "Suscripciones, Pase de Seguridad y Adventure Academy",
     "practice": "Práctica",
-    "practiceBlurb": "Práctica extra en casa — no es el plan completo de la escuela. Elige mate, lectura, ciencias, historia, seguridad o IA.",
+    "practiceBlurb": "Lecciones estructuradas por materia — práctica complementaria, no el plan completo de la escuela.",
+    "practiceStructuredNote": "Las aventuras en formato historia (seguridad e IA) están en Academia. Aquí tienes rutas tipo lección para los mismos temas y las materias principales.",
     "practiceAllSubjects": "Todos los temas de práctica",
     "practiceCoreLabel": "Materias principales",
     "practiceMath": "Matemáticas",
@@ -116,7 +118,7 @@
     "forEducators": "Educadores y escuelas",
     "contact": "Contacto",
     "grownUp": "¿Eres adulto?",
-    "parentDashboard": "Panel para adultos",
+    "parentDashboard": "Panel para padres",
     "schoolParentHub": "Unirse a clase (piloto)",
     "classJoinPilot": "Unirse a clase (piloto)",
     "shop": "Tienda"
@@ -834,6 +836,21 @@
     "returnToHome": "Volver al inicio",
     "backToDashboard": "← Volver al panel"
   },
+  "practice": {
+    "backToHome": "← Volver al inicio",
+    "breadcrumbHome": "Inicio",
+    "breadcrumbPractice": "Práctica",
+    "hubFamilyIntroTitle": "Cómo encaja la práctica en Sparki",
+    "hubFamilyBullet1": "Lecciones estructuradas por materia — ideal junto a la escuela, no sustituye el plan completo del maestro o maestra.",
+    "hubFamilyBullet2": "La primera lección de cada materia es gratis; Adventure Academy desbloquea la ruta completa y Aventura de Tareas.",
+    "hubFamilyBullet3": "Las aventuras de seguridad e IA en formato historia están en Academia o en la página de inicio — aquí es la ruta tipo lección.",
+    "hubFamilyParentLink": "Adultos: gestiona la suscripción en el panel para padres"
+  },
+  "trackList": {
+    "practiceCalloutTitle": "Práctica por materias",
+    "practiceCalloutBody": "¿Quieres lecciones estructuradas de matemáticas, lectura, ciencias e historia? Ve a Práctica — la misma cuenta familiar que Academia, con una primera lección gratis en cada ruta. Las aventuras de seguridad e IA en historia siguen aquí en las rutas y en Semanal.",
+    "practiceCalloutLink": "Abrir práctica por materias"
+  },
   "homeworkFeature": {
     "layoutTitle": "Aventura de Tareas",
     "layoutSubtitle": "Sube una hoja de tareas. SpArki la analiza, la explica y puede contar una historia corta con la misma idea.",
@@ -1072,9 +1089,13 @@
   },
   "home": {
     "joinAdventure": "¡Únete a la aventura!",
+    "heroPrimaryCta": "Empieza con aventuras de seguridad",
+    "heroBrowseAllAdventures": "Ver todas las aventuras",
+    "secondaryGrownUps": "Adultos — suscripciones, Pase de Seguridad y Academia",
     "secondaryPractice": "Práctica por materia (mate, lectura y más)",
     "secondaryParents": "Adultos — progreso y Pase de Seguridad",
     "chooseAdventure": "Elige tu aventura",
+    "tiersFootnote": "Seguridad gratis y vistas previas · Adventure Academy para profundidad por materias y Aventura de Tareas · PDF en la Tienda.",
     "grownUpSignIn": "¿Eres adulto? Entrar",
     "parentGuide": "Guía para adultos",
     "view": "Ver:",
@@ -1104,7 +1125,7 @@
       },
       "practice": {
         "title": "Práctica por materia",
-        "description": "Lecciones cortas de mate, inglés, ciencias, historia, seguridad e IA — según la edad de tu hijo o hija.",
+        "description": "Lecciones estructuradas de matemáticas, inglés, ciencias e historia — según la edad de tu hijo o hija. (Las aventuras de seguridad e IA en historia empiezan en las tarjetas de arriba o en Academia.)",
         "imageAlt": "Práctica por materia Sparki en casa"
       }
     }

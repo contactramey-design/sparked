@@ -5,10 +5,11 @@ import AgeBandSelector from '@/components/AgeBandSelector'
 import { cn } from '@/lib/utils'
 
 type Props = {
-  ctaHref: string
+  /** Primary action — roadmap default: safety adventures track */
+  primaryCtaHref: string
 }
 
-export function HomeHero({ ctaHref }: Props) {
+export function HomeHero({ primaryCtaHref }: Props) {
   const { t } = useTranslation()
   const { ageBandDisplayName } = useAgeBand()
 
@@ -46,26 +47,28 @@ export function HomeHero({ ctaHref }: Props) {
             <AgeBandSelector variant="compact" idPrefix="home-hero-age" />
           </div>
         </div>
-        <Link to={ctaHref} className="home-hero-cta primary-button mt-6 inline-flex min-h-12 items-center justify-center px-8 text-base font-bold">
-          {t('home.joinAdventure')}
-        </Link>
-        <div className="home-hero-secondary-ctas mt-5 flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-sm text-slate-600">
+        <div className="mt-6 flex flex-col items-center gap-3 sm:flex-row sm:flex-wrap sm:justify-center">
           <Link
-            to="/practice"
-            className="home-hero-secondary-link font-semibold text-sky-700 underline-offset-2 hover:text-sky-900 hover:underline"
+            to={primaryCtaHref}
+            className="home-hero-cta primary-button inline-flex min-h-12 w-full max-w-xs items-center justify-center px-8 text-base font-bold sm:w-auto"
           >
-            {t('home.secondaryPractice')}
+            {t('home.heroPrimaryCta')}
           </Link>
-          <span className="text-slate-300 select-none" aria-hidden>
-            ·
-          </span>
+          <Link
+            to="/tracks"
+            className="inline-flex min-h-12 w-full max-w-xs items-center justify-center rounded-xl border-2 border-sky-200 bg-white px-6 text-sm font-semibold text-sky-800 shadow-sm hover:bg-sky-50 sm:w-auto"
+          >
+            {t('home.heroBrowseAllAdventures')}
+          </Link>
+        </div>
+        <p className="home-hero-secondary-ctas mt-5 text-center text-sm text-slate-600">
           <Link
             to="/?view=parent"
             className="home-hero-secondary-link font-semibold text-sky-700 underline-offset-2 hover:text-sky-900 hover:underline"
           >
-            {t('home.secondaryParents')}
+            {t('home.secondaryGrownUps')}
           </Link>
-        </div>
+        </p>
       </div>
     </div>
   )

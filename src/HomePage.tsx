@@ -107,8 +107,8 @@ const HomePage: React.FC = () => {
 
   const loginPath = '/login'
 
-  // Academy is public: no login required just to explore tracks + units.
-  const ctaHref = '/tracks'
+  // Primary home CTA: safety-led adventures; browse-all lives on second hero button.
+  const heroPrimaryHref = '/track/social-safety'
 
   // Checkout success returns to /?view=parent&checkout=success.
 
@@ -202,7 +202,7 @@ const HomePage: React.FC = () => {
         </div>
       )}
       <div className="home-hero-wrap mx-auto max-w-5xl px-4">
-        <HomeHero ctaHref={ctaHref} />
+        <HomeHero primaryCtaHref={heroPrimaryHref} />
       </div>
 
       <div className="home-adventure-wrap mx-auto max-w-6xl px-4">

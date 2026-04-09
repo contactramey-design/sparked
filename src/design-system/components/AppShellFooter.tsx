@@ -22,7 +22,7 @@ export function AppShellFooter() {
           {t('footer.forEducators')}
         </Link>
         {schoolShopHidden && <Link to="/schools/parent">{t('footer.classJoinPilot')}</Link>}
-        {isLoggedIn && !kidLock && <Link to="/parent">{t('footer.parentDashboard')}</Link>}
+        {isLoggedIn && !kidLock && <Link to="/?view=parent">{t('footer.parentDashboard')}</Link>}
         {isLoggedIn && !kidLock && (
           <button type="button" className="footer-link-button" onClick={() => void signOut()}>
             {t('header.signOut')}
@@ -30,7 +30,7 @@ export function AppShellFooter() {
         )}
       </span>
       {kidLock && (
-        <Link to="/parent" className="footer-grownup-link" aria-label={t('footer.grownUp')}>
+        <Link to="/?view=parent" className="footer-grownup-link" aria-label={t('footer.grownUp')}>
           {t('footer.grownUp')}
         </Link>
       )}
