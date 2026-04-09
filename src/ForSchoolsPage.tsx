@@ -250,7 +250,7 @@ const ForSchoolsPage: React.FC = () => {
                   <p className="muted mt-2 text-sm">{t('forSchoolsHub.pilotCodeHint')}</p>
                   <div className="mt-3 flex flex-wrap gap-2">
                     <Button variant="outline" size="sm" asChild>
-                      <Link to="/schools/parent">{t('forSchoolsHub.openSchoolHub')}</Link>
+                      <Link to="/schools/parent">{t('forSchoolsHub.openClassJoinPilot')}</Link>
                     </Button>
                     <Button variant="outline" size="sm" asChild>
                       <Link
@@ -468,7 +468,7 @@ const ForSchoolsPage: React.FC = () => {
             <CardContent>
               <p className="muted mb-3">{t('forSchoolsHub.schoolOpsBody')}</p>
               <Button variant="outline" asChild>
-                <Link to="/schools/parent">{t('forSchoolsHub.openSchoolHub')}</Link>
+                <Link to="/schools/parent">{t('forSchoolsHub.openClassJoinPilot')}</Link>
               </Button>
             </CardContent>
           </Card>

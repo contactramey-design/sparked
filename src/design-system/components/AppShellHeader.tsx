@@ -51,8 +51,8 @@ export function AppShellHeader() {
             {t('header.educators')}
           </Link>
         ) : (
-          <Link to="/schools/parent" className="header-for-schools-badge" aria-label={t('header.schoolHubLink')}>
-            {t('header.schoolHubLink')}
+          <Link to="/" className="header-for-schools-badge" aria-label={t('header.academyHomeAria')}>
+            {t('header.academyHome')}
           </Link>
         )}
         <MainNav variant={mainNavVariant} hideShop={hideShopOnConsumer} />

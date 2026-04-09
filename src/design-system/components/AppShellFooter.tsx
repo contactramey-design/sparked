@@ -21,7 +21,7 @@ export function AppShellFooter() {
         <Link to="/for-schools" className="app-footer-link-muted">
           {t('footer.forEducators')}
         </Link>
-        {schoolShopHidden && <Link to="/schools/parent">{t('footer.schoolParentHub')}</Link>}
+        {schoolShopHidden && <Link to="/schools/parent">{t('footer.classJoinPilot')}</Link>}
         {isLoggedIn && !kidLock && <Link to="/parent">{t('footer.parentDashboard')}</Link>}
         {isLoggedIn && !kidLock && (
           <button type="button" className="footer-link-button" onClick={() => void signOut()}>

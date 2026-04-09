@@ -124,15 +124,14 @@ export default function MainNav({ variant, hideShop = false }: Props) {
   const schoolAcademy = (
     <>
       <ItemLink to="/">{t('nav.schoolFamilyHome')}</ItemLink>
-      <ItemLink to="/schools/parent">{t('nav.schoolParentTools')}</ItemLink>
       <ItemLink to="/practice">{t('nav.schoolSubjectsHub')}</ItemLink>
+      <ItemLink to="/schools/parent">{t('nav.schoolPilotClassJoin')}</ItemLink>
       <NavDivider />
       <ItemLink to="/practice/internet-safety">{t('nav.academySafety')}</ItemLink>
       <ItemLink to="/practice/ai-literacy">{t('nav.academyAiCoding')}</ItemLink>
       <NavDivider />
-      <ItemLink to="/for-schools">{t('nav.schoolForSchoolsHub')}</ItemLink>
+      <ItemLink to="/for-schools">{t('nav.schoolForSchoolsOverview')}</ItemLink>
       <ItemLink to="/compliance">{t('nav.schoolCompliance')}</ItemLink>
-      <ItemLink to="/schools/parent">{t('nav.schoolParent')}</ItemLink>
       {showTeacherLinks || showTeacherSignIn ? <NavDivider /> : null}
       {showTeacherLinks ? <ItemLink to="/teacher/dashboard">{t('nav.schoolTeacher')}</ItemLink> : null}
       {showTeacherLinks ? <ItemLink to="/teacher/generator">{t('nav.schoolGenerator')}</ItemLink> : null}

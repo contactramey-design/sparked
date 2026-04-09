@@ -16,8 +16,8 @@ const SchoolSubjectsHubPage: React.FC = () => {
 
   return (
     <section className="lesson-page school-subj-page">
-      <Link to={isFamilyPractice ? '/' : '/schools/parent'} className="link-back">
-        {isFamilyPractice ? t('practice.backToHome') : t('schoolSubject.backToSchools')}
+      <Link to="/" className="link-back">
+        {t('practice.backToHome')}
       </Link>
 
       {!isFamilyPractice ? (

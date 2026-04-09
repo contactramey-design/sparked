@@ -105,7 +105,7 @@ const SchoolSubjectTrackPage: React.FC = () => {
                 { label: t(`schoolSubjects.tracks.${subjectId}.title`) },
               ]
             : [
-                { label: t('header.schools'), to: '/schools/parent' },
+                { label: t('header.academyHome'), to: '/' },
                 { label: t('schools.subjectHubTitle'), to: hubPath },
                 { label: t(`schoolSubjects.tracks.${subjectId}.title`) },
               ]
