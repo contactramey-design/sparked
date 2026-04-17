@@ -8,7 +8,7 @@
 - School vs consumer `MainNav` variant in [`AppShellHeader.tsx`](../src/design-system/components/AppShellHeader.tsx)
 - `useSchoolShopHidden` also treats `schoolMode` (localStorage) as commerce-off
 
-**School shell routes:** `/for-schools`, `/compliance`, `/teacher`, and **`/schools/*`** (pilot class, weekly track, generated units, alignment, etc.). Consumer family flows (`/`, `/tracks`, `/practice`, …) stay blue.
+**School shell routes:** `/for-schools`, `/compliance`, `/teacher`, and **`/schools/*`** (pilot class, weekly track, generated units, alignment, etc.). Consumer family flows (`/`, `/tracks`, `/practice`, …) use a warm **Ascent-aligned** canvas via `app-main--ascent` in [`App.tsx`](../src/App.tsx) and [`App.css`](../src/App.css) (teal-accent cards, Fredoka headings). School shell routes are unchanged (orange, no `app-main--ascent`).
 
 ## Educators / B2B entry
 

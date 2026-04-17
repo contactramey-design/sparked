@@ -85,7 +85,7 @@ const SchoolSubjectTrackPage: React.FC = () => {
 
   if (!valid) {
     return (
-      <section className="lesson-page school-subj-page">
+      <section className={`lesson-page school-subj-page${isFamilyPractice ? ' school-subj-page--consumer' : ''}`}>
         <Link to={hubPath} className="link-back">
           {t('schoolSubject.backToSubjectList')}
         </Link>
@@ -95,7 +95,9 @@ const SchoolSubjectTrackPage: React.FC = () => {
   }
 
   return (
-    <section className="lesson-page school-subj-page school-subj-track-page">
+    <section
+      className={`lesson-page school-subj-page school-subj-track-page${isFamilyPractice ? ' school-subj-page--consumer' : ''}`}
+    >
       <PageHeader
         breadcrumb={
           isFamilyPractice

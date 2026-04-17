@@ -4,8 +4,8 @@ Use this when configuring **Production** (and Preview if you need full flows the
 
 ## Verify after deploy
 
-1. Open **`GET /api/setup-status`** on your production origin (no auth). It reports OpenAI, FAL, video worker, ElevenLabs, Stripe, Blob, cron, and service-auth status.
-2. Open **`GET /api/config`** for client flags (`videoFeatureEnabled`, `homeworkAdventureConfigured`, `homeworkAllowUnauth`).
+1. Open **`GET /api/setup-status`** on your production origin (no auth). It reports OpenAI, FAL, video worker, ElevenLabs, Stripe, Blob, cron, service-auth, and **AI Tutor** (HeyGen + OpenAI) status.
+2. Open **`GET /api/config`** for client flags (`videoFeatureEnabled`, `homeworkAdventureConfigured`, `homeworkAllowUnauth`, `tutorAllowUnauth`).
 
 ## Core homework / AI
 
@@ -32,6 +32,22 @@ Use this when configuring **Production** (and Preview if you need full flows the
 | `ELEVENLABS_VOICE_ID`, `ELEVENLABS_VOICE_ID_ES` | Optional ES voice. |
 | `TTS_ALLOW_ORIGINS` | Comma-separated `https://` origins allowed to call `/api/tts` from the browser. |
 | `SPARKI_SERVICE_SECRET` | Shared secret: video worker → Vercel TTS; lock worker `/generate` in production. |
+
+**Streaming TTS:** `POST /api/tts-stream` uses the same **`ELEVENLABS_API_KEY`** and voice env vars as `/api/tts`; same **`TTS_ALLOW_ORIGINS`** / Bearer rules apply.
+
+## AI Tutor Academy (`/ai-tutor`)
+
+| Variable | Notes |
+|----------|--------|
+| `OPENAI_API_KEY` | Required for `POST /api/tutor-chat` (GPT-4o). |
+| `HEYGEN_API_KEY` | Required for live avatar (`POST /api/heygen-streaming-token`). Without it, text + voice-only still work. |
+| `HEYGEN_TUTOR_AVATAR_ID` | Optional; defaults to `default` in code. |
+| `HEYGEN_TUTOR_VOICE_ID` | Optional HeyGen voice for the streaming avatar. |
+| `HEYGEN_TUTOR_QUALITY` | Optional: `low`, `medium`, or `high`. |
+| `ELEVENLABS_API_KEY` | Same as Listen — needed for voice playback when not using avatar speech, and for `/api/tts-stream`. |
+| `ALLOW_UNAUTH_TUTOR` | Dev/staging only: skips Stripe on tutor APIs. **Do not** enable on public production. |
+
+Entitlement matches homework: active **Adventure Academy** (or legacy bundle) checkout session, unless `ALLOW_UNAUTH_TUTOR=true`.
 
 ## Optional scene art (homework)
 

@@ -87,6 +87,7 @@ export default function MainNav({ variant, hideShop = false }: Props) {
       <ItemLink to="/track/ai-coding">{t('nav.academyAiCoding')}</ItemLink>
       <ItemLink to="/weekly">{t('nav.academyWeekly')}</ItemLink>
       <ItemLink to="/homework">{t('nav.academyHomework')}</ItemLink>
+      <ItemLink to="/ai-tutor">{t('nav.academyAiTutor')}</ItemLink>
       <NavDivider />
       <SectionLabel>{t('nav.sectionGrownups')}</SectionLabel>
       {!isLoggedIn && <ItemLink to="/login">{t('nav.academySignIn')}</ItemLink>}

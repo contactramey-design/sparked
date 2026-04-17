@@ -9,6 +9,7 @@ import {
   resolveLoginRedirect,
 } from './lib/postLoginRedirect'
 import { supabase } from './lib/supabaseClient'
+import { AscentPageChrome } from '@/design-system/ascent/AscentPageChrome'
 
 const LoginPage: React.FC = () => {
   const { isLoggedIn, devLogin } = useAuth()
@@ -62,53 +63,45 @@ const LoginPage: React.FC = () => {
   }
 
   return (
-    <section className="lesson-page" key={locale}>
-      <header className="lesson-header">
-        <h2>{t('login.title')}</h2>
-      </header>
-      <div className="lesson-layout">
-        <div className="lesson-media card">
-          {fromRedirect && (
-            <p className="login-redirect-note">
-              {t('login.redirectNote')}
-            </p>
-          )}
-          <p>
-            {t('login.intro')}
-          </p>
-          {error && <p className="quiz-error text-sm mt-2">{error}</p>}
-          {googleAuthEnabled && supabase ? (
-            <button type="button" className="primary-button mt-4" onClick={() => void handleGoogle()}>
-              {t('login.continueWithGoogle')}
-            </button>
-          ) : null}
-          <button
-            type="button"
-            className={`${googleAuthEnabled && supabase ? 'secondary-button' : 'primary-button'} mt-4`}
-            onClick={() => void handleStartTrial()}
-          >
-            {t('login.startTrialButton')}
+    <AscentPageChrome
+      key={locale}
+      title={t('login.title')}
+      currentLabel={t('login.title')}
+      contentMaxWidthClassName="max-w-xl"
+    >
+      <div className="rounded-3xl border border-teal-100 bg-white p-6 shadow-sm md:p-8">
+        {fromRedirect && <p className="login-redirect-note">{t('login.redirectNote')}</p>}
+        <p className="text-slate-700">{t('login.intro')}</p>
+        {error && <p className="quiz-error mt-2 text-sm">{error}</p>}
+        {googleAuthEnabled && supabase ? (
+          <button type="button" className="primary-button mt-4" onClick={() => void handleGoogle()}>
+            {t('login.continueWithGoogle')}
           </button>
-          <button
-            type="button"
-            className="secondary-button mt-3"
-            onClick={() => {
-              devLogin()
-              clearPostLoginRedirect()
-              navigate(redirect, { replace: true })
-            }}
-          >
-            {t('login.alreadyAccessButton')}
-          </button>
-          {googleAuthEnabled && !supabase ? (
-            <p className="login-coppa-note text-sm">{t('login.googleNotConfigured')}</p>
-          ) : null}
-          <p className="login-coppa-note">
-            {t('login.coppaNote')}
-          </p>
-        </div>
+        ) : null}
+        <button
+          type="button"
+          className={`${googleAuthEnabled && supabase ? 'secondary-button' : 'primary-button'} mt-4`}
+          onClick={() => void handleStartTrial()}
+        >
+          {t('login.startTrialButton')}
+        </button>
+        <button
+          type="button"
+          className="secondary-button mt-3"
+          onClick={() => {
+            devLogin()
+            clearPostLoginRedirect()
+            navigate(redirect, { replace: true })
+          }}
+        >
+          {t('login.alreadyAccessButton')}
+        </button>
+        {googleAuthEnabled && !supabase ? (
+          <p className="login-coppa-note text-sm">{t('login.googleNotConfigured')}</p>
+        ) : null}
+        <p className="login-coppa-note">{t('login.coppaNote')}</p>
       </div>
-    </section>
+    </AscentPageChrome>
   )
 }
 

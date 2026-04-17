@@ -1,7 +1,5 @@
 import { Link } from 'react-router-dom'
 import { useTranslation } from '@/contexts/LocaleContext'
-import { useAgeBand } from '@/contexts/AgeBandContext'
-import AgeBandSelector from '@/components/AgeBandSelector'
 import { cn } from '@/lib/utils'
 
 type Props = {
@@ -11,65 +9,99 @@ type Props = {
 
 export function HomeHero({ primaryCtaHref }: Props) {
   const { t } = useTranslation()
-  const { ageBandDisplayName } = useAgeBand()
 
   return (
-    <div
+    <section
       className={cn(
-        'home-hero rounded-3xl border border-sky-100/80 bg-gradient-to-br from-sky-50 via-white to-indigo-50/60',
-        'px-6 py-8 shadow-sm md:px-10 md:py-10',
+        'home-hero-ascent relative overflow-hidden rounded-[1.75rem] border border-amber-100/70',
+        'bg-gradient-to-br from-[#fdf8f2] via-[#f9f4ec] to-[#e8f5f3]',
+        'px-6 py-10 shadow-sm md:px-12 md:py-14',
         'motion-safe:transition-shadow motion-safe:duration-300 motion-safe:hover:shadow-md',
       )}
+      aria-labelledby="home-hero-ascent-title"
     >
-      <div className="home-hero-sparki flex justify-center" aria-hidden>
-        <img
-          src="/sparkiacademylogo.webp"
-          alt=""
-          className="home-hero-character mx-auto max-h-28 w-auto object-contain md:max-h-36 motion-reduce:transition-none"
-          onError={(e) => {
-            e.currentTarget.style.display = 'none'
-            const next = e.currentTarget.nextElementSibling
-            if (next) (next as HTMLElement).style.display = 'block'
-          }}
-        />
-        <span className="home-hero-character-emoji hidden text-5xl" aria-hidden>
-          🤖✨
-        </span>
-      </div>
-      <div className="home-hero-content mx-auto mt-4 max-w-xl text-center">
-        <h1 className="home-title text-balance font-heading text-3xl text-blue-900 md:text-4xl">{t('header.appName')}</h1>
-        <p className="home-tagline mt-3 text-balance text-base text-slate-700 md:text-lg">{t('header.tagline')}</p>
-        <div className="home-hero-age-wrap mx-auto mt-6 max-w-md rounded-2xl bg-white/70 p-4 text-left shadow-inner backdrop-blur-sm">
-          <h2 className="home-hero-age-label font-heading text-lg text-blue-900">{t('ageBand.homeSectionTitle')}</h2>
-          <p className="home-hero-age-sub muted mt-1 text-sm">{t('ageBand.homeSectionSubtitle')}</p>
-          <p className="home-hero-age-current sr-only">{t('ageBand.currentLabel', { name: ageBandDisplayName })}</p>
-          <div className="mt-3">
-            <AgeBandSelector variant="compact" idPrefix="home-hero-age" />
+      {/* Decorative blobs — Ascent-style playful backdrop */}
+      <div className="pointer-events-none absolute -left-24 top-1/2 h-72 w-72 -translate-y-1/2 rounded-full bg-teal-300/25 blur-3xl" aria-hidden />
+      <div className="pointer-events-none absolute -right-16 -top-20 h-64 w-64 rounded-full bg-fuchsia-300/30 blur-3xl" aria-hidden />
+      <div className="pointer-events-none absolute bottom-0 right-1/4 h-48 w-48 rounded-full bg-amber-200/35 blur-2xl" aria-hidden />
+
+      <div className="relative z-[1] mx-auto grid max-w-6xl gap-10 md:grid-cols-[1.05fr_0.95fr] md:items-center md:gap-12">
+        <div className="text-center md:text-left">
+          <p className="mx-auto inline-flex max-w-full items-center justify-center rounded-full border border-teal-200/70 bg-white/85 px-4 py-2 text-center text-xs font-bold uppercase tracking-[0.12em] text-teal-900 shadow-sm backdrop-blur-sm md:mx-0">
+            <span className="text-balance">{t('home.heroAscentRibbon')}</span>
+          </p>
+          <p className="mt-5 font-heading text-sm font-semibold tracking-wide text-slate-500">{t('home.heroAscentKicker')}</p>
+          <h1
+            id="home-hero-ascent-title"
+            className="home-title mt-2 text-balance font-heading text-4xl font-extrabold leading-[1.08] tracking-tight text-slate-900 md:text-5xl"
+          >
+            <span className="block md:inline">{t('home.heroAscentTitleLead')}</span>{' '}
+            <span className="bg-gradient-to-r from-fuchsia-600 via-pink-500 to-rose-500 bg-clip-text text-transparent">
+              {t('home.heroAscentTitleAccent')}
+            </span>
+          </h1>
+          <p className="home-tagline mt-4 max-w-xl text-balance text-base leading-relaxed text-slate-600 md:mx-0 md:text-lg">
+            {t('home.heroAscentTagline')}
+          </p>
+          <p className="mt-5 max-w-xl text-sm font-medium text-slate-600 md:mx-0">{t('home.heroAgeTeaser')}</p>
+
+          <div className="mt-8 flex flex-col items-stretch gap-3 sm:flex-row sm:flex-wrap md:justify-start">
+            <Link
+              to={primaryCtaHref}
+              className={cn(
+                'inline-flex min-h-12 items-center justify-center rounded-2xl px-8 text-base font-bold text-white shadow-md',
+                'bg-teal-600 hover:bg-teal-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-700',
+                'motion-safe:transition-colors motion-safe:duration-200',
+                'sm:w-auto sm:min-w-[12rem]',
+              )}
+            >
+              {t('home.heroPrimaryCta')}
+            </Link>
+            <Link
+              to="/tracks"
+              className={cn(
+                'inline-flex min-h-12 items-center justify-center rounded-2xl border-2 border-teal-700/35 bg-white px-6 text-sm font-semibold text-teal-900 shadow-sm',
+                'hover:border-teal-600 hover:bg-teal-50/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-600',
+                'motion-safe:transition-colors motion-safe:duration-200',
+                'sm:w-auto',
+              )}
+            >
+              {t('home.heroBrowseAllAdventures')}
+            </Link>
+          </div>
+          <p className="home-hero-secondary-ctas mt-5 text-center text-sm text-slate-600 md:text-left">
+            <Link
+              to="/?view=parent"
+              className="home-hero-secondary-link font-semibold text-teal-800 underline-offset-2 hover:text-teal-950 hover:underline"
+            >
+              {t('home.secondaryGrownUps')}
+            </Link>
+          </p>
+        </div>
+
+        <div className="relative flex min-h-[220px] items-center justify-center md:min-h-[320px]" aria-hidden>
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="h-56 w-56 rounded-full bg-gradient-to-br from-teal-200/50 to-fuchsia-200/40 blur-sm md:h-72 md:w-72" />
+            <div className="absolute h-44 w-44 rounded-full border-2 border-dashed border-teal-400/40 md:h-56 md:w-56" />
+            <div className="absolute h-52 w-52 rounded-full border border-pink-300/35 md:h-64 md:w-64" />
+          </div>
+          <div className="home-hero-sparki relative z-[1] flex items-center justify-center">
+            <img
+              src="/sparkiacademylogo.webp"
+              alt=""
+              className="relative z-[1] h-auto max-h-40 w-auto max-w-[min(100%,280px)] object-contain drop-shadow-md motion-reduce:transition-none md:max-h-52"
+              onError={(e) => {
+                e.currentTarget.style.display = 'none'
+                const next = e.currentTarget.nextElementSibling
+                if (next) (next as HTMLElement).style.display = 'block'
+              }}
+            />
+            <span className="home-hero-character-emoji hidden text-7xl" aria-hidden>
+              🤖✨
+            </span>
           </div>
         </div>
-        <div className="mt-6 flex flex-col items-center gap-3 sm:flex-row sm:flex-wrap sm:justify-center">
-          <Link
-            to={primaryCtaHref}
-            className="home-hero-cta primary-button inline-flex min-h-12 w-full max-w-xs items-center justify-center px-8 text-base font-bold sm:w-auto"
-          >
-            {t('home.heroPrimaryCta')}
-          </Link>
-          <Link
-            to="/tracks"
-            className="inline-flex min-h-12 w-full max-w-xs items-center justify-center rounded-xl border-2 border-sky-200 bg-white px-6 text-sm font-semibold text-sky-800 shadow-sm hover:bg-sky-50 sm:w-auto"
-          >
-            {t('home.heroBrowseAllAdventures')}
-          </Link>
-        </div>
-        <p className="home-hero-secondary-ctas mt-5 text-center text-sm text-slate-600">
-          <Link
-            to="/?view=parent"
-            className="home-hero-secondary-link font-semibold text-sky-700 underline-offset-2 hover:text-sky-900 hover:underline"
-          >
-            {t('home.secondaryGrownUps')}
-          </Link>
-        </p>
       </div>
-    </div>
+    </section>
   )
 }

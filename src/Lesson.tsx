@@ -1,20 +1,19 @@
 import React from 'react'
+import { useTranslation } from './contexts/LocaleContext'
+import { AscentPageChrome } from '@/design-system/ascent/AscentPageChrome'
 
 const LessonPage: React.FC = () => {
+  const { t } = useTranslation()
   return (
-    <section className="lesson-page">
-      <header className="lesson-header">
-        <h2>Lesson View</h2>
-      </header>
-      <div className="lesson-layout">
-        <div className="lesson-media">
-          <p>
-            This project now focuses on unit-based learning. Individual lesson pages can
-            be wired here later if needed.
-          </p>
-        </div>
+    <AscentPageChrome
+      title={t('curriculum.lessonRoutePlaceholderTitle')}
+      currentLabel={t('curriculum.lessonRoutePlaceholderTitle')}
+      contentMaxWidthClassName="max-w-xl"
+    >
+      <div className="rounded-3xl border border-teal-100 bg-white p-6 text-slate-700 shadow-sm">
+        <p>{t('curriculum.lessonRoutePlaceholderBody')}</p>
       </div>
-    </section>
+    </AscentPageChrome>
   )
 }
 

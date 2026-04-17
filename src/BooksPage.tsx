@@ -3,6 +3,7 @@ import { Link, Navigate } from 'react-router-dom'
 import { books } from './books'
 import { useTranslation } from './contexts/LocaleContext'
 import { useSchoolShopHidden } from './hooks/useSchoolMode'
+import { AscentPageChrome } from '@/design-system/ascent/AscentPageChrome'
 
 const BooksPage: React.FC = () => {
   const { t, locale } = useTranslation()
@@ -13,22 +14,24 @@ const BooksPage: React.FC = () => {
   }
 
   return (
-    <section className="lesson-page" key={locale}>
-      <header className="lesson-header">
-        <div>
-          <h2>{t('booksPage.title')}</h2>
-          <p className="welcome-subtitle">{t('booksPage.subtitle')}</p>
-        </div>
-      </header>
+    <AscentPageChrome
+      key={locale}
+      title={t('booksPage.title')}
+      breadcrumb={[
+        { label: t('marketingPages.breadcrumbHome'), to: '/' },
+        { label: t('booksPage.title') },
+      ]}
+    >
+      <p className="mb-8 text-lg text-slate-600">{t('booksPage.subtitle')}</p>
 
-      <div className="card">
-        <p className="book-blurb">{t('booksPage.deliveryNote')}</p>
+      <div className="card rounded-2xl border border-teal-100/80">
+        <p className="book-blurb text-slate-700">{t('booksPage.deliveryNote')}</p>
       </div>
 
-      <h3 className="shop-section-heading mt-6">{t('booksPage.ebooksSectionTitle')}</h3>
+      <h3 className="shop-section-heading mt-8 font-heading text-xl font-bold text-teal-950">{t('booksPage.ebooksSectionTitle')}</h3>
       <div className="books-grid mt-4">
         {books.map((book) => (
-          <article key={book.id} className="card book-card">
+          <article key={book.id} className="card book-card rounded-2xl border border-teal-100/80">
             <div className="book-cover-wrap" aria-hidden>
               <img
                 src={book.coverSrc}
@@ -61,7 +64,7 @@ const BooksPage: React.FC = () => {
           </article>
         ))}
       </div>
-    </section>
+    </AscentPageChrome>
   )
 }
 

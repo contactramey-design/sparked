@@ -12,5 +12,7 @@ export default async function handler(req, res) {
     homeworkAdventureConfigured: Boolean(process.env.OPENAI_API_KEY),
     /** When true, homework APIs skip Stripe checkout; upload UI allows generate without Safety Pass (dev / OpenAI-only deploys). */
     homeworkAllowUnauth: process.env.ALLOW_UNAUTH_HOMEWORK === 'true',
+    /** When true, AI Tutor APIs skip Stripe checkout (local dev only — do not enable in production). */
+    tutorAllowUnauth: process.env.ALLOW_UNAUTH_TUTOR === 'true',
   })
 }

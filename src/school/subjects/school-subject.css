@@ -1721,3 +1721,261 @@
 .school-subj-alignment-nav__after {
   margin-left: 0.75rem;
 }
+
+/* -------------------------------------------------------------------------
+ * Consumer /practice — Ascent-aligned (teal + cream; matches app-main--ascent)
+ * ------------------------------------------------------------------------- */
+.school-subj-page.school-subj-page--consumer,
+.school-subj-lesson.school-subj-lesson--consumer {
+  --text-color: #0f172a;
+}
+
+.school-subj-page.school-subj-page--consumer .link-back,
+.school-subj-lesson.school-subj-lesson--consumer .link-back {
+  color: #0f766e;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.school-subj-page.school-subj-page--consumer .link-back:hover,
+.school-subj-lesson.school-subj-lesson--consumer .link-back:hover {
+  color: #115e59;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.school-subj-page.school-subj-page--consumer .font-school {
+  font-family: 'Baloo 2', 'Comic Neue', system-ui, sans-serif;
+}
+
+/* Hub */
+.school-subj-page.school-subj-page--consumer .school-subj-hero {
+  background: linear-gradient(135deg, rgba(45, 212, 191, 0.12), rgba(253, 248, 242, 0.95));
+  border: 1px solid rgba(13, 148, 136, 0.22);
+}
+
+.school-subj-page.school-subj-page--consumer .school-subj-hero h1,
+.school-subj-page.school-subj-page--consumer .school-subj-hero p {
+  color: #0f172a;
+}
+
+.school-subj-page.school-subj-page--consumer .school-subj-hub-alignment {
+  color: #0f766e;
+}
+
+.school-subj-page.school-subj-page--consumer .school-subj-card {
+  border: 1px solid rgba(13, 148, 136, 0.2);
+  box-shadow:
+    0 8px 28px -14px rgba(13, 148, 136, 0.18),
+    0 4px 14px -8px rgba(15, 23, 42, 0.06);
+}
+
+.school-subj-page.school-subj-page--consumer .school-subj-card-thumb {
+  background: linear-gradient(145deg, #ccfbf1, #e0f2fe);
+}
+
+.school-subj-page.school-subj-page--consumer .school-subj-badge {
+  background: rgba(13, 148, 136, 0.15);
+  color: #115e59;
+}
+
+/* Track page */
+.school-subj-page.school-subj-page--consumer .school-subj-track-hero {
+  border: 1px solid rgba(13, 148, 136, 0.2);
+  box-shadow: 0 12px 40px rgba(13, 148, 136, 0.1);
+}
+
+.school-subj-page.school-subj-page--consumer .school-subj-track-hero__copy {
+  background: linear-gradient(180deg, #ffffff 0%, #f0fdfa 100%);
+}
+
+.school-subj-page.school-subj-page--consumer .school-subj-alignment-pill {
+  background: linear-gradient(90deg, rgba(45, 212, 191, 0.25), rgba(204, 251, 241, 0.65));
+  color: #134e4a;
+  border: 1px solid rgba(13, 148, 136, 0.35);
+}
+
+.school-subj-page.school-subj-page--consumer .school-subj-track-hero__band {
+  color: #0f766e;
+}
+
+.school-subj-page.school-subj-page--consumer .school-subj-sequence-head__title {
+  color: #0f172a;
+}
+
+.school-subj-page.school-subj-page--consumer .school-subj-track-card {
+  border: 1px solid rgba(13, 148, 136, 0.18);
+  box-shadow: 0 4px 18px rgba(13, 148, 136, 0.08);
+}
+
+.school-subj-page.school-subj-page--consumer .school-subj-track-card:hover {
+  box-shadow: 0 8px 28px rgba(13, 148, 136, 0.14);
+}
+
+.school-subj-page.school-subj-page--consumer .school-subj-track-card__step {
+  background: rgba(45, 212, 191, 0.2);
+  color: #134e4a;
+}
+
+.school-subj-page.school-subj-page--consumer .school-subj-track-card__title a:hover {
+  color: #0d9488;
+}
+
+.school-subj-page.school-subj-page--consumer .school-subj-grade-pill {
+  background: #f0fdfa;
+  color: #115e59;
+  border: 1px solid rgba(13, 148, 136, 0.3);
+}
+
+.school-subj-page.school-subj-page--consumer .school-subj-start-lesson-btn {
+  background: linear-gradient(180deg, #2dd4bf 0%, #0d9488 100%);
+  box-shadow: 0 4px 16px rgba(13, 148, 136, 0.38);
+}
+
+.school-subj-page.school-subj-page--consumer .school-subj-start-lesson-btn:hover {
+  filter: brightness(1.04);
+}
+
+.school-subj-page.school-subj-page--consumer .school-subj-aside-block {
+  border: 1px solid rgba(13, 148, 136, 0.18);
+  box-shadow: 0 2px 12px rgba(13, 148, 136, 0.07);
+}
+
+.school-subj-page.school-subj-page--consumer .school-subj-aside-block__title {
+  color: #0f172a;
+}
+
+.school-subj-page.school-subj-page--consumer .school-subj-progress-list__link:hover {
+  background: rgba(13, 148, 136, 0.08);
+  color: #115e59;
+}
+
+.school-subj-page.school-subj-page--consumer .school-subj-progress-list__num {
+  color: #0d9488;
+}
+
+/* Lesson player */
+.school-subj-lesson.school-subj-lesson--consumer .school-subj-learn .muted {
+  color: #334155;
+  opacity: 0.9;
+}
+
+.school-subj-lesson.school-subj-lesson--consumer .school-subj-summary-box {
+  background: linear-gradient(135deg, rgba(240, 253, 250, 0.95), rgba(253, 248, 242, 0.75));
+  border: 1px solid rgba(13, 148, 136, 0.22);
+}
+
+.school-subj-lesson.school-subj-lesson--consumer .school-subj-summary-box__title,
+.school-subj-lesson.school-subj-lesson--consumer .school-subj-summary-box__body {
+  color: #0f172a;
+}
+
+.school-subj-lesson.school-subj-lesson--consumer .school-subj-section h2,
+.school-subj-lesson.school-subj-lesson--consumer .school-subj-section p,
+.school-subj-lesson.school-subj-lesson--consumer .school-subj-objectives {
+  color: #0f172a;
+}
+
+.school-subj-lesson.school-subj-lesson--consumer .school-subj-teach-bullets {
+  color: #334155;
+}
+
+.school-subj-lesson.school-subj-lesson--consumer .school-subj-lesson__title {
+  color: #0f172a;
+}
+
+.school-subj-lesson.school-subj-lesson--consumer .school-subj-lesson__section-title {
+  color: #0f172a;
+}
+
+.school-subj-lesson.school-subj-lesson--consumer .school-subj-step {
+  border: 1px solid rgba(13, 148, 136, 0.35);
+  color: #134e4a;
+}
+
+.school-subj-lesson.school-subj-lesson--consumer .school-subj-step:focus-visible {
+  outline: 2px solid #0d9488;
+}
+
+.school-subj-lesson.school-subj-lesson--consumer .school-subj-step--active {
+  background: linear-gradient(180deg, #2dd4bf 0%, #0d9488 100%);
+  color: #fff;
+  border-color: transparent;
+}
+
+.school-subj-lesson.school-subj-lesson--consumer .school-subj-quiz-prompt {
+  color: #0f172a;
+}
+
+.school-subj-lesson.school-subj-lesson--consumer .school-subj-quiz-opt {
+  border: 2px solid rgba(13, 148, 136, 0.28);
+  color: #0f172a;
+}
+
+.school-subj-lesson.school-subj-lesson--consumer .school-subj-quiz-opt:focus-visible {
+  outline: 2px solid #0d9488;
+}
+
+.school-subj-lesson.school-subj-lesson--consumer .school-subj-quiz-opt:hover:not(:disabled) {
+  border-color: #14b8a6;
+}
+
+.school-subj-lesson.school-subj-lesson--consumer .school-subj-quiz-feedback {
+  border: 1px solid rgba(13, 148, 136, 0.2);
+}
+
+.school-subj-lesson.school-subj-lesson--consumer .school-subj-quiz-feedback__status,
+.school-subj-lesson.school-subj-lesson--consumer .school-subj-quiz-feedback__answers,
+.school-subj-lesson.school-subj-lesson--consumer .school-subj-quiz-feedback__why,
+.school-subj-lesson.school-subj-lesson--consumer .school-subj-quiz-feedback__explain {
+  color: #0f172a;
+}
+
+.school-subj-lesson.school-subj-lesson--consumer .school-subj-quiz-progress {
+  background: rgba(13, 148, 136, 0.12);
+}
+
+.school-subj-lesson.school-subj-lesson--consumer .school-subj-quiz-progress__fill {
+  background: linear-gradient(90deg, #2dd4bf, #0d9488);
+}
+
+.school-subj-lesson.school-subj-lesson--consumer .school-subj-quiz-results {
+  border: 1px solid rgba(13, 148, 136, 0.2);
+  background: rgba(240, 253, 250, 0.5);
+}
+
+.school-subj-lesson.school-subj-lesson--consumer .school-subj-quiz-results__score {
+  color: #0f172a;
+}
+
+.school-subj-lesson.school-subj-lesson--consumer .school-subj-tip-box {
+  background: rgba(45, 212, 191, 0.1);
+  border: 1px solid rgba(13, 148, 136, 0.22);
+  color: #0f172a;
+}
+
+.school-subj-lesson.school-subj-lesson--consumer .school-subj-tip-kicker {
+  color: #115e59;
+}
+
+.school-subj-lesson.school-subj-lesson--consumer .school-subj-practice-tap-btn {
+  border: 2px solid rgba(13, 148, 136, 0.35);
+  color: #134e4a;
+}
+
+.school-subj-lesson.school-subj-lesson--consumer .school-subj-practice-tap-btn:hover {
+  border-color: rgba(13, 148, 136, 0.65);
+}
+
+.school-subj-lesson.school-subj-lesson--consumer .school-subj-myth-item {
+  border: 1px solid rgba(13, 148, 136, 0.22);
+  background: rgba(240, 253, 250, 0.55);
+}
+
+.school-subj-lesson.school-subj-lesson--consumer .school-subj-myth-item__label {
+  color: #0f766e;
+}
+
+.school-subj-lesson.school-subj-lesson--consumer .school-subj-myth-item__myth {
+  color: #0f172a;
+}

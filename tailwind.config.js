@@ -25,6 +25,12 @@ export default {
           school: '#fff7ed',
           border: 'rgba(15, 23, 42, 0.08)',
         },
+        /** Consumer home — Ascent-inspired marketing sections (do not use on school shell) */
+        ascent: {
+          warm: '#f9f4ec',
+          cream: '#fdf8f2',
+          teal: '#0f766e',
+        },
       },
       fontFamily: {
         heading: ['Fredoka One', 'system-ui', 'sans-serif'],

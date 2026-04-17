@@ -26,7 +26,7 @@ export default async function handler(req, res) {
   res.setHeader('Cache-Control', 'no-store, max-age=0')
   res.status(200).json({
     // Bump when setup-status shape changes — if missing in production, you are NOT on this deploy.
-    schemaVersion: 7,
+    schemaVersion: 8,
     /** Vercel injects these on deploy; use to confirm Production matches your latest Git push. */
     deployment: {
       environment: process.env.VERCEL_ENV ?? null,
@@ -63,6 +63,19 @@ export default async function handler(req, res) {
           ? 'SPARKI_SERVICE_SECRET set and TTS_ALLOW_ORIGINS set — worker + browser TTS should work.'
           : 'SPARKI_SERVICE_SECRET set but TTS_ALLOW_ORIGINS empty — video worker can call TTS; browser Listen needs TTS_ALLOW_ORIGINS (comma-separated https:// origins).'
         : 'SPARKI_SERVICE_SECRET unset — video worker /generate is not bearer-locked; TTS is open unless you set secret + TTS_ALLOW_ORIGINS. Recommended for production.',
+    },
+    // AI Tutor Academy: /ai-tutor, POST /api/tutor-chat, /api/heygen-streaming-token, /api/tts-stream
+    aiTutor: {
+      openaiConfigured: Boolean(process.env.OPENAI_API_KEY?.trim()),
+      heygenConfigured: Boolean(process.env.HEYGEN_API_KEY?.trim()),
+      heygenAvatarIdSet: Boolean(process.env.HEYGEN_TUTOR_AVATAR_ID?.trim()),
+      heygenVoiceIdSet: Boolean(process.env.HEYGEN_TUTOR_VOICE_ID?.trim()),
+      elevenLabsForTts: Boolean(elevenKey),
+      message: !process.env.OPENAI_API_KEY?.trim()
+        ? 'Add OPENAI_API_KEY for tutor chat (same as homework).'
+        : !process.env.HEYGEN_API_KEY?.trim()
+          ? 'HEYGEN_API_KEY unset — live video tutor will return 503 until set; text + ElevenLabs voice can still work.'
+          : 'HeyGen + OpenAI look configured for AI Tutor. Optional: HEYGEN_TUTOR_AVATAR_ID (default default), HEYGEN_TUTOR_VOICE_ID, HEYGEN_TUTOR_QUALITY.',
     },
     // TTS: used by worker for video narration (and Listen buttons)
     tts: {

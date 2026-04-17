@@ -1,26 +1,22 @@
-import { Link, Outlet } from 'react-router-dom'
+import { Outlet } from 'react-router-dom'
 import { useTranslation } from '@/contexts/LocaleContext'
-import PageHeader from '@/components/PageHeader'
+import { AscentPageChrome } from '@/design-system/ascent/AscentPageChrome'
 import '../homework-feature.css'
 
 export default function HomeworkFeatureLayout() {
   const { t } = useTranslation()
   return (
-    <section className="lesson-page homework-feature">
-      <PageHeader
-        className="homework-feature-header lesson-header"
-        title={t('homeworkFeature.layoutTitle')}
-        subtitle={t('homeworkFeature.layoutSubtitle')}
-      >
-        <Link to="/tracks" className="link-back">
-          {t('common.backToDashboard')}
-        </Link>
-      </PageHeader>
-      <p className="muted homework-feature-reward-note max-w-prose text-sm px-1 -mt-2 mb-2">
-        {t('homeworkFeature.layoutRewardNote')}
-      </p>
-      <p className="muted max-w-prose text-sm px-1 mb-3">{t('productTiers.academyLine')}</p>
+    <AscentPageChrome
+      title={t('homeworkFeature.layoutTitle')}
+      breadcrumb={[
+        { label: t('marketingPages.breadcrumbHome'), to: '/' },
+        { label: t('homeworkFeature.layoutTitle') },
+      ]}
+      className="homework-feature"
+    >
+      <p className="homework-feature-reward-note -mt-2 mb-2 max-w-prose text-sm text-slate-600">{t('homeworkFeature.layoutRewardNote')}</p>
+      <p className="mb-6 max-w-prose text-sm text-slate-600">{t('productTiers.academyLine')}</p>
       <Outlet />
-    </section>
+    </AscentPageChrome>
   )
 }

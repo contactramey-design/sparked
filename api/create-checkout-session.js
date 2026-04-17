@@ -87,9 +87,8 @@ export default async function handler(req, res) {
     const session = await stripe.checkout.sessions.create({
       mode: 'subscription',
       line_items: [{ price: priceId, quantity: 1 }],
-      subscription_data: {
-        trial_period_days: 30,
-      },
+      // 7-day trial for Adventure Academy only; Safety Pass / bundle bills from day one.
+      ...(product === 'academy' ? { subscription_data: { trial_period_days: 7 } } : {}),
       allow_promotion_codes: true,
       success_url,
       cancel_url,

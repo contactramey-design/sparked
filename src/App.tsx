@@ -18,11 +18,20 @@ import HomeworkHome from './features/homework/pages/HomeworkHome'
 import HomeworkUpload from './features/homework/pages/HomeworkUpload'
 import HomeworkResult from './features/homework/pages/HomeworkResult'
 import HomeworkHistory from './features/homework/pages/HomeworkHistory'
+import AiTutorLayout from './ai-tutor/AiTutorLayout'
+import AiTutorPage from './ai-tutor/AiTutorPage'
 import BooksPage from './BooksPage'
 import EbookViewerPage from './EbookViewerPage'
 import PrivacyPage from './PrivacyPage'
 import AboutPage from './AboutPage'
 import ContactPage from './ContactPage'
+import FaqMarketingPage from './features/marketing/FaqMarketingPage'
+import BlogMarketingPage from './features/marketing/BlogMarketingPage'
+import BlogPostMarketingPage from './features/marketing/BlogPostMarketingPage'
+import ServicesMarketingPage from './features/marketing/ServicesMarketingPage'
+import ServiceDetailsMarketingPage from './features/marketing/ServiceDetailsMarketingPage'
+import PortfolioMarketingPage from './features/marketing/PortfolioMarketingPage'
+import HomeTwoMarketingPage from './features/marketing/HomeTwoMarketingPage'
 import CompliancePage from './CompliancePage'
 import ForSchoolsPage from './ForSchoolsPage'
 import SchoolPrintResourcePage from './SchoolPrintResourcePage'
@@ -45,6 +54,7 @@ import SchoolSubjectLessonPage from './school/subjects/SchoolSubjectLessonPage'
 import { SchoolAlignmentHubPage, SchoolAlignmentSubjectPage } from './school/subjects/SchoolAlignmentPages'
 import SchoolMathLegacyRedirect from './school/subjects/SchoolMathLegacyRedirect'
 import WeeklyAdventurePage from './WeeklyAdventurePage'
+import DailySparkQuestPage from './DailySparkQuestPage'
 import './App.css'
 
 function LegacySchoolSubjectsRedirect() {
@@ -93,10 +103,23 @@ function AppShell() {
       <InstallOnIpadBanner />
       <OfflineBanner />
       <AppShellHeader />
-      <main id="app-main" className={useSchoolTheme ? 'app-main font-school' : 'app-main'}>
+      <main
+        id="app-main"
+        className={useSchoolTheme ? 'app-main font-school' : 'app-main app-main--ascent'}
+      >
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/home" element={<Navigate to="/" replace />} />
+          <Route path="/home-2" element={<HomeTwoMarketingPage />} />
+          <Route path="/about-us" element={<AboutPage />} />
+          <Route path="/contact-us" element={<ContactPage />} />
+          <Route path="/faq" element={<FaqMarketingPage />} />
+          <Route path="/blog" element={<BlogMarketingPage />} />
+          <Route path="/blog-details" element={<Navigate to="/blog/internet-safety" replace />} />
+          <Route path="/blog/:slug" element={<BlogPostMarketingPage />} />
+          <Route path="/services" element={<ServicesMarketingPage />} />
+          <Route path="/service-details" element={<ServiceDetailsMarketingPage />} />
+          <Route path="/portfolio" element={<PortfolioMarketingPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route
             path="/dashboard"
@@ -107,6 +130,7 @@ function AppShell() {
             }
           />
           <Route path="/weekly" element={<WeeklyAdventurePage />} />
+          <Route path="/daily" element={<DailySparkQuestPage />} />
           <Route path="/tracks" element={<TrackListPage />} />
           <Route path="/track/:trackId" element={<TrackPage />} />
           <Route path="/unit/:unitId" element={<UnitPage />} />
@@ -116,6 +140,9 @@ function AppShell() {
             <Route path="upload" element={<HomeworkUpload />} />
             <Route path="result/:jobId" element={<HomeworkResult />} />
             <Route path="history" element={<HomeworkHistory />} />
+          </Route>
+          <Route path="/ai-tutor" element={<AiTutorLayout />}>
+            <Route index element={<AiTutorPage />} />
           </Route>
           <Route path="/books" element={<BooksPage />} />
           <Route path="/shop" element={<BooksPage />} />

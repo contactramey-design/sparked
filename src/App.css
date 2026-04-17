@@ -794,6 +794,120 @@ h1, h2, h3 {
   max-width: 100%;
 }
 
+/*
+ * Consumer “Ascent” canvas — warm gradient + teal-forward cards site-wide (not school shell).
+ * Marketing routes use AscentPageChrome; this layer aligns /tracks, /practice, /homework, /login, etc.
+ */
+.app-main.app-main--ascent {
+  background: linear-gradient(180deg, #fdf8f2 0%, #f8fafc 22%, #ffffff 55%);
+}
+
+.app-main.app-main--ascent .home-page {
+  background: transparent;
+}
+
+.app-main.app-main--ascent .card {
+  border-color: rgba(13, 148, 136, 0.22);
+  box-shadow:
+    0 8px 28px -14px rgba(13, 148, 136, 0.2),
+    0 4px 14px -8px rgba(15, 23, 42, 0.07);
+}
+
+.app-main.app-main--ascent .card:hover {
+  box-shadow:
+    0 14px 36px -16px rgba(13, 148, 136, 0.24),
+    0 6px 18px -10px rgba(15, 23, 42, 0.09);
+}
+
+.app-main.app-main--ascent .primary-button {
+  background: linear-gradient(180deg, #2dd4bf 0%, #0d9488 100%);
+  box-shadow: 0 4px 16px rgba(13, 148, 136, 0.38);
+}
+
+.app-main.app-main--ascent .primary-button:hover {
+  box-shadow: 0 6px 22px rgba(13, 148, 136, 0.48);
+}
+
+.app-main.app-main--ascent .secondary-button {
+  border-color: rgba(13, 148, 136, 0.45);
+  color: #0f766e;
+}
+
+.app-main.app-main--ascent .secondary-button:hover {
+  background: rgba(13, 148, 136, 0.08);
+  border-color: #0d9488;
+}
+
+.app-main.app-main--ascent .lesson-header h2,
+.app-main.app-main--ascent .dashboard .welcome-card h2,
+.app-main.app-main--ascent .track-overview-title,
+.app-main.app-main--ascent .sparki-page-header h2 {
+  font-family: 'Fredoka One', 'Baloo 2', system-ui, sans-serif;
+  letter-spacing: -0.02em;
+  color: #0f172a;
+}
+
+.app-main.app-main--ascent .track-overview-title {
+  font-size: clamp(1.55rem, 4.2vw, 2.05rem);
+}
+
+.app-main.app-main--ascent .dashboard-view-toggle-label {
+  color: #0f766e;
+}
+
+.app-main.app-main--ascent .dashboard-view-toggle button {
+  border-color: rgba(13, 148, 136, 0.4);
+  color: #0f766e;
+}
+
+.app-main.app-main--ascent .dashboard-view-toggle button:hover {
+  background: rgba(13, 148, 136, 0.1);
+  border-color: #0d9488;
+}
+
+.app-main.app-main--ascent .dashboard-view-toggle button.active {
+  background: rgba(13, 148, 136, 0.18);
+  border-color: #0d9488;
+  color: #0f172a;
+}
+
+/* Adventure / unit pages — teal-forward chrome under consumer shell */
+.app-main.app-main--ascent .link-back {
+  color: #0f766e;
+  font-weight: 600;
+}
+
+.app-main.app-main--ascent .link-back:hover {
+  color: #115e59;
+}
+
+.app-main.app-main--ascent .unit-page-single::before {
+  background:
+    radial-gradient(circle at 10% 0%, rgba(45, 212, 191, 0.14), transparent 52%),
+    radial-gradient(circle at 92% 100%, rgba(251, 191, 36, 0.08), transparent 48%);
+}
+
+.app-main.app-main--ascent .unit-page-single .lesson-header {
+  background: linear-gradient(135deg, #f0fdfa 0%, #ecfdf5 100%);
+  border: 2px solid rgba(13, 148, 136, 0.28);
+  box-shadow: 0 4px 20px rgba(13, 148, 136, 0.1);
+}
+
+.app-main.app-main--ascent .unit-page-single .lesson-header .welcome-subtitle {
+  color: #115e59;
+}
+
+.app-main.app-main--ascent .unit-grid-plane {
+  background-image:
+    linear-gradient(to right, rgba(45, 212, 191, 0.14) 1px, transparent 1px),
+    linear-gradient(to top, rgba(45, 212, 191, 0.14) 1px, transparent 1px);
+}
+
+.app-main.app-main--ascent .unit-polygon {
+  border: 2px solid rgba(13, 148, 136, 0.28);
+  box-shadow: 0 0 14px rgba(13, 148, 136, 0.12);
+}
+
 .app-footer {
   padding: 0.85rem 1.5rem;
   text-align: center;
@@ -3028,6 +3142,19 @@ h1, h2, h3 {
   ) !important;
   border: 2px solid rgba(37, 99, 235, 0.22);
   box-shadow: 0 14px 42px rgba(37, 99, 235, 0.10);
+}
+
+/* Weekly page — teal-forward on consumer Ascent shell */
+.app-main.app-main--ascent .weekly-adventure-page .weekly-banner-note {
+  background: rgba(240, 253, 250, 0.95);
+  border-color: rgba(13, 148, 136, 0.25);
+  color: #0f172a;
+}
+
+.app-main.app-main--ascent .weekly-adventure-page .weekly-hero {
+  background: linear-gradient(135deg, rgba(45, 212, 191, 0.12) 0%, rgba(253, 248, 242, 0.92) 55%, rgba(224, 242, 254, 0.6) 100%) !important;
+  border-color: rgba(13, 148, 136, 0.22);
+  box-shadow: 0 14px 42px rgba(13, 148, 136, 0.10);
 }
 
 .weekly-hero-content-row {

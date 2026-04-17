@@ -15,6 +15,7 @@ import { useAuth } from './AuthContext'
 import { useTranslation } from './contexts/LocaleContext'
 import { useAgeBand } from './contexts/AgeBandContext'
 import { useB2CWeeklyEpisode } from './hooks/useB2CWeeklyEpisode'
+import { AscentPageChrome } from '@/design-system/ascent/AscentPageChrome'
 
 /** Parent view content only (used in merged Dashboard page and standalone /parent redirect) */
 export const ParentViewContent: React.FC = () => {
@@ -154,8 +155,8 @@ export const ParentViewContent: React.FC = () => {
   }
 
   return (
-    <div className="lesson-layout">
-        <div className="lesson-media card weekly-parent-teaser">
+    <div className="grid gap-4 md:grid-cols-2">
+        <div className="card weekly-parent-teaser rounded-2xl border border-teal-100/80">
           <h3>{t('weekly.parentDashboard.weeklyTeaser')}</h3>
           <p className="text-slate-700 mt-2">
             <strong>{weeklyTitleShort}</strong>
@@ -165,7 +166,7 @@ export const ParentViewContent: React.FC = () => {
           </Link>
         </div>
 
-        <div className="lesson-media card">
+        <div className="card rounded-2xl border border-teal-100/80">
           <h3>{t('parentDashboard.conversationTitle')}</h3>
           <p className="text-slate-700">{t('parentDashboard.conversationIntro')}</p>
           <ul className="list-disc pl-5 text-sm text-slate-700 space-y-1 mt-2">
@@ -175,7 +176,7 @@ export const ParentViewContent: React.FC = () => {
           </ul>
         </div>
 
-        <div className="lesson-media card">
+        <div className="card rounded-2xl border border-teal-100/80">
           <h3>{t('parentDashboard.parentGuideTitle')}</h3>
           <p>{t('parentDashboard.parentGuideDesc')}</p>
           <ul className="list-disc pl-5 text-sm text-slate-700 space-y-1 mt-2">
@@ -189,7 +190,7 @@ export const ParentViewContent: React.FC = () => {
           </p>
         </div>
 
-        <div className="lesson-media card">
+        <div className="card rounded-2xl border border-teal-100/80">
           <h3>{t('parentDashboard.unlockSafetyTitle')}</h3>
           <p>{t('parentDashboard.unlockSafetyDesc')}</p>
 
@@ -213,13 +214,25 @@ export const ParentViewContent: React.FC = () => {
           )}
         </div>
 
-        <div className="lesson-media card">
+        <div className="card rounded-2xl border border-teal-100/80">
           <h3>{t('parentDashboard.unlockAcademyTitle')}</h3>
           <p>{t('parentDashboard.unlockAcademyDesc')}</p>
           <p className="text-sm text-slate-600 mt-2">{t('productTiers.summaryLine')}</p>
 
           {hasAcademy ? (
-            <p className="welcome-subtitle">{t('parentDashboard.academyActive')}</p>
+            <>
+              <p className="welcome-subtitle">{t('parentDashboard.academyActive')}</p>
+              <div className="mt-4 rounded-lg border border-emerald-200 bg-emerald-50/80 p-4 text-left">
+                <h4 className="font-bold text-emerald-900">{t('parentDashboard.academyIncludesTitle')}</h4>
+                <p className="text-sm text-slate-700 mt-1">{t('parentDashboard.academyIncludesIntro')}</p>
+                <ul className="list-disc pl-5 text-sm text-slate-800 space-y-1 mt-2">
+                  <li>{t('parentDashboard.academyIncludes1')}</li>
+                  <li>{t('parentDashboard.academyIncludes2')}</li>
+                  <li>{t('parentDashboard.academyIncludes3')}</li>
+                  <li>{t('parentDashboard.academyIncludes4')}</li>
+                </ul>
+              </div>
+            </>
           ) : (
             <>
               <button
@@ -235,7 +248,7 @@ export const ParentViewContent: React.FC = () => {
           )}
         </div>
 
-        <div className="lesson-media card">
+        <div className="card rounded-2xl border border-teal-100/80">
           <h3>{t('parentDashboard.lockKidViewTitle')}</h3>
           <p>{t('parentDashboard.lockKidViewDesc')}</p>
           <label className="parent-toggle">
@@ -248,7 +261,7 @@ export const ParentViewContent: React.FC = () => {
           </label>
         </div>
 
-        <div className="lesson-media card">
+        <div className="card rounded-2xl border border-teal-100/80">
           <h3>{t('parentDashboard.overallSparklesTitle')}</h3>
           <p>
             {t('parentDashboard.overallSparklesDesc')} <strong>{progress.totalSparkles}</strong>
@@ -259,12 +272,12 @@ export const ParentViewContent: React.FC = () => {
         </div>
 
         {subjectTracksLocalActivity ? (
-          <div className="lesson-media card">
+          <div className="card rounded-2xl border border-teal-100/80">
             <p className="text-sm text-slate-700">{t('parentDashboard.schoolSubjectLocalNote')}</p>
           </div>
         ) : null}
 
-        <div className="lesson-quiz card">
+        <div className="card rounded-2xl border border-teal-100/80 md:col-span-2">
           <h3>{t('parentDashboard.unitsSummaryTitle')}</h3>
           <table className="parent-table">
             <thead>
@@ -310,15 +323,22 @@ export const ParentViewContent: React.FC = () => {
 const ParentDashboard: React.FC = () => {
   const { t, locale } = useTranslation()
   return (
-    <section className="lesson-page" key={locale}>
-      <header className="lesson-header">
-        <h2>{t('parentDashboard.title')}</h2>
-        <Link to="/tracks" className="link-back">
+    <AscentPageChrome
+      key={locale}
+      title={t('parentDashboard.title')}
+      breadcrumb={[
+        { label: t('marketingPages.breadcrumbHome'), to: '/' },
+        { label: t('parentDashboard.title') },
+      ]}
+      contentMaxWidthClassName="max-w-5xl"
+    >
+      <div className="mb-5">
+        <Link to="/tracks" className="secondary-button">
           {t('parentDashboard.backToDashboard')}
         </Link>
-      </header>
+      </div>
       <ParentViewContent />
-    </section>
+    </AscentPageChrome>
   )
 }
 

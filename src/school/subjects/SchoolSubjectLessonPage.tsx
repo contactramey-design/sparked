@@ -196,7 +196,7 @@ const SchoolSubjectLessonPage: React.FC = () => {
 
   if (!validSubject || !lesson || !loc) {
     return (
-      <section className="school-subj-lesson">
+      <section className={`school-subj-lesson${isFamilyPractice ? ' school-subj-lesson--consumer' : ''}`}>
         <Link to={validSubject ? trackPath : hubPath} className="link-back">
           {t('schoolSubject.backToSubjectTrack')}
         </Link>
@@ -207,7 +207,7 @@ const SchoolSubjectLessonPage: React.FC = () => {
 
   if (!inBand) {
     return (
-      <section className="school-subj-lesson">
+      <section className={`school-subj-lesson${isFamilyPractice ? ' school-subj-lesson--consumer' : ''}`}>
         <Link to={trackPath} className="link-back">
           {t('schoolSubject.backToSubjectTrack')}
         </Link>
@@ -224,7 +224,7 @@ const SchoolSubjectLessonPage: React.FC = () => {
   const fullSubjectAccess = hasFullSubjectPracticeAccess()
   if (isFamilyPractice && lessonIndexInBand > 0 && !fullSubjectAccess) {
     return (
-      <section className="school-subj-lesson">
+      <section className="school-subj-lesson school-subj-lesson--consumer">
         <Link to={trackPath} className="link-back">
           {t('schoolSubject.backToSubjectTrack')}
         </Link>
@@ -262,7 +262,7 @@ const SchoolSubjectLessonPage: React.FC = () => {
 
   return (
     <section
-      className={`school-subj-lesson${step === 'practice' && showPractice ? ' school-subj-lesson--practice-immersive' : ''}`}
+      className={`school-subj-lesson${isFamilyPractice ? ' school-subj-lesson--consumer' : ''}${step === 'practice' && showPractice ? ' school-subj-lesson--practice-immersive' : ''}`}
     >
       <Link to={trackPath} className="link-back">
         {t('schoolSubject.backToSubjectTrack')}

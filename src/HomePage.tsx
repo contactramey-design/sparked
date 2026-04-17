@@ -5,10 +5,14 @@ import { useAuth } from './AuthContext'
 import { useTranslation } from './contexts/LocaleContext'
 import { useAgeBand } from './contexts/AgeBandContext'
 import { AdventureGrid } from './features/family-home/AdventureGrid'
+import { AiTutorHomePromo } from './features/family-home/AiTutorHomePromo'
+import { HomeAscentBelowHero } from './features/family-home/HomeAscentBelowHero'
+import { HomeAgeBandsAscent } from './features/family-home/HomeAgeBandsAscent'
 import { HomeHero } from './features/family-home/HomeHero'
 import { awardDailyLoginBonus, getPlayerStats } from './progress'
 import { ParentViewContent } from './ParentDashboard'
 import { clearPostLoginRedirect, getPostLoginRedirect } from './lib/postLoginRedirect'
+import { AscentPageChrome } from '@/design-system/ascent/AscentPageChrome'
 
 const HomePage: React.FC = () => {
   const { authHydrated, isLoggedIn } = useAuth()
@@ -114,30 +118,41 @@ const HomePage: React.FC = () => {
 
   if (isParentView && !isLoggedIn && !checkoutStatus) {
     return (
-      <section className="home-page home-hub">
-        <div className="home-footer-actions">
-          <Link to="/login?redirect=%2F%3Fview%3Dparent" className="secondary-button">
+      <AscentPageChrome
+        key={locale}
+        title={t('dashboardPage.parentPanelHeading')}
+        breadcrumb={[
+          { label: t('marketingPages.breadcrumbHome'), to: '/' },
+          { label: t('dashboardPage.parentPanelHeading') },
+        ]}
+        contentMaxWidthClassName="max-w-5xl"
+      >
+        <div className="mb-5 flex flex-wrap items-center gap-3">
+          <Link to="/login?redirect=%2F%3Fview%3Dparent" className="primary-button">
             {t('login.title')}
           </Link>
-          <Link to="/" className="link-muted">
+          <Link to="/" className="font-semibold text-teal-800 underline-offset-2 hover:underline">
             {t('common.backToHome')}
           </Link>
         </div>
-        <div className="hub-parent-wrap" key={locale}>
-          <header className="mb-4 px-1">
-            <h2 className="text-xl font-semibold text-slate-900">{t('dashboardPage.parentPanelHeading')}</h2>
-            <p className="text-sm text-slate-600 mt-1 max-w-prose">{t('dashboardPage.parentPanelLead')}</p>
-          </header>
-          <ParentViewContent />
-        </div>
-      </section>
+        <p className="mb-6 max-w-prose text-sm text-slate-600">{t('dashboardPage.parentPanelLead')}</p>
+        <ParentViewContent />
+      </AscentPageChrome>
     )
   }
 
   if (isParentView) {
     return (
-      <section className="home-page home-hub">
-        <div className="home-footer-actions">
+      <AscentPageChrome
+        key={locale}
+        title={t('dashboardPage.parentPanelHeading')}
+        breadcrumb={[
+          { label: t('marketingPages.breadcrumbHome'), to: '/' },
+          { label: t('dashboardPage.parentPanelHeading') },
+        ]}
+        contentMaxWidthClassName="max-w-5xl"
+      >
+        <div className="mb-5 flex flex-wrap items-center gap-3">
           <Link to="/" className="secondary-button">
             {t('common.backToHome')}
           </Link>
@@ -146,20 +161,15 @@ const HomePage: React.FC = () => {
               href={appConfig.parentResources.handbookPdfUrl}
               target="_blank"
               rel="noreferrer"
-              className="link-muted"
+              className="font-semibold text-teal-800 underline-offset-2 hover:underline"
             >
               {t('home.parentGuide')}
             </a>
           ) : null}
         </div>
-        <div className="hub-parent-wrap" key={locale}>
-          <header className="mb-4 px-1">
-            <h2 className="text-xl font-semibold text-slate-900">{t('dashboardPage.parentPanelHeading')}</h2>
-            <p className="text-sm text-slate-600 mt-1 max-w-prose">{t('dashboardPage.parentPanelLead')}</p>
-          </header>
-          <ParentViewContent />
-        </div>
-      </section>
+        <p className="mb-6 max-w-prose text-sm text-slate-600">{t('dashboardPage.parentPanelLead')}</p>
+        <ParentViewContent />
+      </AscentPageChrome>
     )
   }
 
@@ -201,11 +211,32 @@ const HomePage: React.FC = () => {
           </button>
         </div>
       )}
-      <div className="home-hero-wrap mx-auto max-w-5xl px-4">
+      <div className="home-hero-wrap mx-auto max-w-6xl px-4">
         <HomeHero primaryCtaHref={heroPrimaryHref} />
       </div>
 
-      <div className="home-adventure-wrap mx-auto max-w-6xl px-4">
+      <HomeAscentBelowHero />
+
+      <HomeAgeBandsAscent />
+
+      <div className="mx-auto mt-6 max-w-5xl px-4">
+        <Link
+          to="/daily"
+          className="block rounded-2xl border border-amber-200 bg-gradient-to-r from-amber-50 to-orange-50 px-5 py-4 shadow-sm transition hover:shadow-md hover:border-amber-300"
+        >
+          <p className="font-heading text-lg font-bold text-amber-950">{t('retention.homeCardTitle')}</p>
+          <p className="text-sm text-amber-900/90 mt-1">{t('retention.homeCardBody')}</p>
+          <span className="mt-2 inline-block text-sm font-semibold text-orange-800 underline-offset-2">
+            {t('retention.homeCardCta')} →
+          </span>
+        </Link>
+      </div>
+
+      <div className="mx-auto mt-6 max-w-5xl px-4">
+        <AiTutorHomePromo />
+      </div>
+
+      <div id="home-adventures" className="home-adventure-wrap mx-auto max-w-6xl scroll-mt-24 px-4">
         <AdventureGrid />
       </div>
 

@@ -50,6 +50,7 @@ import {
 import ListenButton from './components/ListenButton'
 import SparkiAvatar from './components/SparkiAvatar'
 import { VIDEO_POSTER_DATA_URL } from './videoPoster'
+import { AscentPageChrome } from '@/design-system/ascent/AscentPageChrome'
 
 function isYouTubeEmbedUrl(url: string): boolean {
   return /youtube\.com\/embed\/|youtu\.be\//i.test(url)
@@ -172,18 +173,22 @@ const UnitPage: React.FC = () => {
 
   if (!unitAgeBands(unit).includes(ageBand)) {
     return (
-      <section className="lesson-page">
-        <header className="lesson-header">
-          <Link to="/tracks" className="link-back">
-            {t('curriculum.backToTracks')}
+      <AscentPageChrome
+        title={t('ageBand.unitNotInBandTitle')}
+        breadcrumb={[
+          { label: t('marketingPages.breadcrumbHome'), to: '/' },
+          { label: t('curriculum.chooseAdventure'), to: '/tracks' },
+          { label: t('ageBand.unitNotInBandTitle') },
+        ]}
+        contentMaxWidthClassName="max-w-lg"
+      >
+        <div className="rounded-3xl border border-teal-100 bg-white p-6 shadow-sm">
+          <p className="muted text-slate-700">{t('ageBand.unitNotInBandBody')}</p>
+          <Link to="/" className="primary-button mt-4 inline-block">
+            {t('ageBand.pickBandOnHome')}
           </Link>
-          <h2>{t('ageBand.unitNotInBandTitle')}</h2>
-        </header>
-        <p className="muted">{t('ageBand.unitNotInBandBody')}</p>
-        <Link to="/" className="primary-button">
-          {t('ageBand.pickBandOnHome')}
-        </Link>
-      </section>
+        </div>
+      </AscentPageChrome>
     )
   }
 
@@ -351,6 +356,16 @@ const UnitPage: React.FC = () => {
   const showFoundationsQuiz = ageBand === 'tots' || ageBand === 'crew'
 
   return (
+    <AscentPageChrome
+      title={displayUnit.title}
+      breadcrumb={[
+        { label: t('marketingPages.breadcrumbHome'), to: '/' },
+        { label: t('curriculum.chooseAdventure'), to: '/tracks' },
+        { label: displayTrack?.title ?? unit.trackId, to: `/track/${unit.trackId}` },
+        { label: displayUnit.title },
+      ]}
+      contentMaxWidthClassName="max-w-3xl"
+    >
     <section className="lesson-page unit-page-single">
       <div className="unit-cyber-layer">
         <div className="unit-grid-plane" />
@@ -421,16 +436,12 @@ const UnitPage: React.FC = () => {
         <div className="flex flex-wrap items-center gap-3">
           <SparkiAvatar size="md" />
           <div>
-            <h2>{displayUnit.title}</h2>
-            {displayTrack && <p className="welcome-subtitle">{displayTrack.title}</p>}
-            <p className="unit-age-disclaimer muted text-sm mt-2">
+            {displayTrack && <p className="welcome-subtitle m-0 font-heading text-base font-bold text-teal-900">{displayTrack.title}</p>}
+            <p className="unit-age-disclaimer muted mt-2 text-sm">
               {t('curriculum.ageDisclaimer', { ages: recommendedAgesShort })}
             </p>
           </div>
         </div>
-        <Link to={`/track/${unit.trackId}`} className="link-back">
-          {t('curriculum.backToTrack')}
-        </Link>
       </header>
 
       {unit.parentEbook ? (
@@ -1022,6 +1033,7 @@ const UnitPage: React.FC = () => {
         </div>
       )}
     </section>
+    </AscentPageChrome>
   )
 }
 

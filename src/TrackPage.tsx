@@ -8,6 +8,7 @@ import AgeBandSelector from './components/AgeBandSelector'
 import { useTranslatedTrack } from './hooks/useTranslatedCurriculum'
 import ListenButton from './components/ListenButton'
 import { VIDEO_POSTER_DATA_URL } from './videoPoster'
+import { AscentPageChrome } from '@/design-system/ascent/AscentPageChrome'
 
 const TrackPage: React.FC = () => {
   const { t } = useTranslation()
@@ -37,31 +38,28 @@ const TrackPage: React.FC = () => {
   const sortedUnits = [...units]
 
   return (
-    <section className="lesson-page track-overview-page">
-      <div className="track-age-band-toolbar">
-        <AgeBandSelector variant="compact" />
-      </div>
-      <header className="track-overview-header">
-        <Link to="/tracks" className="link-back">
-          {t('curriculum.backToTracks')}
-        </Link>
-        <div className="flex flex-wrap items-center gap-2">
-          <h1 className="track-overview-title">{translatedTrack.title}</h1>
-          <ListenButton
-            text={translatedTrack.title}
-            ariaLabel={t('aiCodingGames.trackPage.listenTitleAria')}
-            size="sm"
-          />
+    <AscentPageChrome
+      title={translatedTrack.title}
+      breadcrumb={[
+        { label: t('marketingPages.breadcrumbHome'), to: '/' },
+        { label: t('curriculum.chooseAdventure'), to: '/tracks' },
+        { label: translatedTrack.title },
+      ]}
+    >
+      <section className="track-overview-page">
+        <div className="track-age-band-toolbar">
+          <AgeBandSelector variant="compact" />
         </div>
-        <div className="flex flex-wrap items-center gap-2">
-          <p className="track-overview-description">{translatedTrack.description}</p>
-          <ListenButton
-            text={translatedTrack.description}
-            ariaLabel={t('aiCodingGames.trackPage.listenDescAria')}
-            size="sm"
-          />
+        <div className="mb-6 flex flex-col gap-3 rounded-2xl border border-teal-100/80 bg-white/90 p-4 shadow-sm sm:p-5">
+          <div className="flex flex-wrap items-center gap-2">
+            <p className="track-overview-description m-0 flex-1 text-slate-700">{translatedTrack.description}</p>
+            <ListenButton
+              text={translatedTrack.description}
+              ariaLabel={t('aiCodingGames.trackPage.listenDescAria')}
+              size="sm"
+            />
+          </div>
         </div>
-      </header>
 
       {introVideoSrc ? (
         <div className="track-intro-video video-wrapper">
@@ -169,6 +167,7 @@ const TrackPage: React.FC = () => {
         </ul>
       </div>
     </section>
+    </AscentPageChrome>
   )
 }
 

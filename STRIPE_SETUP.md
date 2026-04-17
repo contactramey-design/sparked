@@ -1,4 +1,4 @@
-## Stripe setup (Option A: subscription + 30‑day trial)
+## Stripe setup (Option A: subscription + 7‑day trial for Adventure Academy)
 
 This project uses **Stripe Checkout (hosted page)** + the **Stripe Node SDK**.
 

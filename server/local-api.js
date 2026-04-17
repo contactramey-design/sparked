@@ -79,6 +79,24 @@ const server = http.createServer(async (req, res) => {
       await m.default(req, wrapped)
       return
     }
+    if (url === '/api/tts-stream' && req.method === 'POST') {
+      await readJsonBody(req)
+      const m = await import('../api/tts-stream.js')
+      await m.default(req, wrapped)
+      return
+    }
+    if (url === '/api/tutor-chat' && req.method === 'POST') {
+      await readJsonBody(req)
+      const m = await import('../api/tutor-chat.js')
+      await m.default(req, wrapped)
+      return
+    }
+    if (url === '/api/heygen-streaming-token' && req.method === 'POST') {
+      await readJsonBody(req)
+      const m = await import('../api/heygen-streaming-token.js')
+      await m.default(req, wrapped)
+      return
+    }
     if (url === '/api/process-homework' && req.method === 'POST') {
       const m = await import('../api/process-homework.js')
       await m.default(req, wrapped)

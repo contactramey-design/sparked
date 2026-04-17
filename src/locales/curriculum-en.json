@@ -6,6 +6,8 @@
   "backToTrack": "← Back to Track",
   "unitsInTrack": "Units in this track",
   "learnWithSparkiHeading": "Learn with SpArki",
+  "lessonRoutePlaceholderTitle": "Lesson",
+  "lessonRoutePlaceholderBody": "This project now focuses on unit-based learning. Individual lesson pages can be wired here later if needed.",
   "finishedShowQuiz": "Finished, show quiz",
   "pauseAndThink": "Pause & Think",
   "unitActivity": "Unit Activity",

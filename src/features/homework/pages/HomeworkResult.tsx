@@ -3,7 +3,11 @@ import { Link, useParams } from 'react-router-dom'
 import { useTranslation } from '@/contexts/LocaleContext'
 import { getHomeworkCheckoutSessionId } from '@/progress'
 import { explainWorksheet, storyFromLesson } from '../api/homeworkApi'
+import { requestHomeworkVisuals } from '../lib/visualGenerator'
 import { getHomeworkJob, saveHomeworkJob } from '../hooks/useHomeworkJob'
+import { useHomeworkAllowUnauth } from '../hooks/useHomeworkAllowUnauth'
+import { getAvatarPreset } from '../constants/avatarPresets'
+import { getAvatarDescriptionForGeneration } from '../lib/homeworkAvatarSession'
 import type { HomeworkJob } from '../types/homework'
 import { HomeworkPreview } from '../components/HomeworkPreview'
 import { AnalyzeSummary } from '../components/AnalyzeSummary'
@@ -14,6 +18,14 @@ import { GenerateButton } from '../components/GenerateButton'
 import { AdventureVisuals } from '../components/AdventureVisuals'
 import { HomeworkQualityPanel } from '../components/HomeworkQualityPanel'
 import { HomeworkPedagogyBanner } from '../components/HomeworkPedagogyBanner'
+
+function clearAutoVisualSessionFlag(jobId: string) {
+  try {
+    sessionStorage.removeItem(`sparki_hw_autovisual_ok_${jobId}`)
+  } catch {
+    /* ignore */
+  }
+}
 
 export default function HomeworkResult() {
   const { jobId } = useParams<{ jobId: string }>()
@@ -36,6 +48,48 @@ export default function HomeworkResult() {
   }, [])
 
   const session = getHomeworkCheckoutSessionId()
+  const allowUnauthHomework = useHomeworkAllowUnauth()
+
+  const autoVisualKey = jobId ? `sparki_hw_autovisual_ok_${jobId}` : ''
+
+  /** Auto-illustrate story once per job when entitled (matches product “magical” default). */
+  useEffect(() => {
+    if (!jobId || !autoVisualKey || !job?.story || job.isDemo) return
+    if (job.storyVisuals && job.storyVisuals.length > 0) return
+    try {
+      if (typeof sessionStorage !== 'undefined' && sessionStorage.getItem(autoVisualKey) === '1') return
+    } catch {
+      /* ignore */
+    }
+    const checkoutSessionId = getHomeworkCheckoutSessionId()
+    if (import.meta.env.PROD && !checkoutSessionId && !allowUnauthHomework) return
+
+    let cancelled = false
+    ;(async () => {
+      try {
+        const latest = getHomeworkJob(jobId)
+        if (cancelled || !latest?.story || (latest.storyVisuals && latest.storyVisuals.length > 0)) return
+        const preset = getAvatarPreset(latest.avatarPresetId)
+        const avatarDescription = getAvatarDescriptionForGeneration(preset.imagePromptDescription)
+        const images = await requestHomeworkVisuals(latest.story, {
+          language: latest.language,
+          checkoutSessionId,
+          avatarDescription,
+        })
+        persist({ ...latest, storyVisuals: images })
+        try {
+          sessionStorage.setItem(autoVisualKey, '1')
+        } catch {
+          /* ignore */
+        }
+      } catch {
+        /* user can tap “Illustrate my story” to retry */
+      }
+    })()
+    return () => {
+      cancelled = true
+    }
+  }, [jobId, autoVisualKey, job?.story, job?.storyVisuals?.length, job?.isDemo, allowUnauthHomework, persist])
 
   const regenerateExplain = async () => {
     if (!job) return
@@ -69,6 +123,7 @@ export default function HomeworkResult() {
         setLoading('story')
         nextStory = await storyFromLesson(nextAnalysis, explanation, session)
       }
+      clearAutoVisualSessionFlag(job.jobId)
       persist({
         ...job,
         analysis: nextAnalysis,
@@ -89,6 +144,7 @@ export default function HomeworkResult() {
     setLoading('story')
     try {
       const story = await storyFromLesson(job.analysis, job.explanation, session)
+      clearAutoVisualSessionFlag(job.jobId)
       persist({ ...job, story, mode: 'story', storyVisuals: undefined })
     } catch (e) {
       setError(e instanceof Error ? e.message : t('homeworkPage.errorGeneric'))

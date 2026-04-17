@@ -7,6 +7,7 @@ import { useTranslatedUnit } from './hooks/useTranslatedCurriculum'
 import { getPlayerStats } from './progress'
 import { useAgeBand } from './contexts/AgeBandContext'
 import { VIDEO_POSTER_DATA_URL } from './videoPoster'
+import { AscentPageChrome } from '@/design-system/ascent/AscentPageChrome'
 
 const WeeklyAdventurePage: React.FC = () => {
   const { t } = useTranslation()
@@ -34,27 +35,41 @@ const WeeklyAdventurePage: React.FC = () => {
 
   if (!entry || !safetyUnit || !aiUnit) {
     return (
-      <section className="lesson-page weekly-adventure-page">
-        <p className="muted">{t('weekly.weeklyPage.browseTracks')}</p>
-        <Link to="/tracks" className="primary-button">
+      <AscentPageChrome
+        title={t('weekly.weeklyPage.title')}
+        breadcrumb={[
+          { label: t('marketingPages.breadcrumbHome'), to: '/' },
+          { label: t('weekly.weeklyPage.title') },
+        ]}
+        contentMaxWidthClassName="max-w-lg"
+      >
+        <p className="text-slate-600">{t('weekly.weeklyPage.browseTracks')}</p>
+        <Link to="/tracks" className="primary-button mt-4 inline-block">
           {t('weekly.weeklyPage.browseTracks')}
         </Link>
-      </section>
+      </AscentPageChrome>
     )
   }
 
   return (
-    <section className="lesson-page weekly-adventure-page">
-      <header className="lesson-header">
-        <Link to="/" className="link-back">
-          {t('weekly.weeklyPage.backHome')}
-        </Link>
-        {resolved.isBeforeSeasonStart && <p className="weekly-banner-note">{t('weekly.weeklyPage.previewBeforeLaunch')}</p>}
-      </header>
+    <AscentPageChrome
+      title={title}
+      breadcrumb={[
+        { label: t('marketingPages.breadcrumbHome'), to: '/' },
+        { label: t('weekly.weeklyPage.title') },
+        { label: title },
+      ]}
+    >
+    <section className="weekly-adventure-page">
+      {resolved.isBeforeSeasonStart && (
+        <p className="weekly-banner-note mb-4 rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-950">
+          {t('weekly.weeklyPage.previewBeforeLaunch')}
+        </p>
+      )}
 
-      <div className="weekly-hero card">
-        <h2 className="text-xl font-bold text-slate-800">{title}</h2>
-        <p className="text-sm text-slate-600 mt-2">{t('curriculum.ageDisclaimer', { ages: recommendedAgesShort })}</p>
+      <div className="weekly-hero card rounded-2xl border border-teal-100/80">
+        <p className="text-xs font-bold uppercase tracking-wide text-teal-800">{t('weekly.weeklyPage.storyHeading')}</p>
+        <p className="mt-2 text-sm text-slate-600">{t('curriculum.ageDisclaimer', { ages: recommendedAgesShort })}</p>
 
         <div className="weekly-hero-content-row">
           <div className="weekly-hero-media">
@@ -144,11 +159,12 @@ const WeeklyAdventurePage: React.FC = () => {
       </div>
 
       <div className="weekly-footer-nav">
-        <Link to="/tracks" className="link-muted">
+        <Link to="/tracks" className="font-semibold text-teal-800 underline-offset-2 hover:underline">
           {t('weekly.weeklyPage.browseTracks')}
         </Link>
       </div>
     </section>
+    </AscentPageChrome>
   )
 }
 

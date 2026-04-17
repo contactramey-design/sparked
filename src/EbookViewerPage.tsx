@@ -7,6 +7,7 @@ import { getSafetyPassCheckoutSessionId } from './progress'
 import { useTranslation } from './contexts/LocaleContext'
 import { useSchoolShopHidden } from './hooks/useSchoolMode'
 import { Button } from '@/components/ui/button'
+import { AscentPageChrome } from '@/design-system/ascent/AscentPageChrome'
 
 // Vite bundler-friendly worker wiring.
 // See: https://mozilla.github.io/pdf.js/getting_started/
@@ -306,15 +307,17 @@ const EbookViewerPage: React.FC = () => {
 
   if (subscriptionCatalog) {
     return (
-      <section className="lesson-page">
-        <header className="lesson-header">
-          <h2>{ebookTitle}</h2>
-          <Link to="/shop" className="link-back">
-            {t('ebookViewer.backToShop')}
-          </Link>
-        </header>
-        <div className="lesson-media card ebook-subscription-card">
-          <p className="leading-relaxed">{t('ebookViewer.subscriptionCatalogBody')}</p>
+      <AscentPageChrome
+        title={ebookTitle}
+        breadcrumb={[
+          { label: t('marketingPages.breadcrumbHome'), to: '/' },
+          { label: t('footer.shop'), to: '/shop' },
+          { label: ebookTitle },
+        ]}
+        contentMaxWidthClassName="max-w-2xl"
+      >
+        <div className="card ebook-subscription-card rounded-2xl border border-teal-100/80 p-6">
+          <p className="leading-relaxed text-slate-700">{t('ebookViewer.subscriptionCatalogBody')}</p>
           <div className="mt-4 flex flex-wrap gap-3">
             <Link to="/?view=parent" className="primary-button">
               {t('ebookViewer.openParentToSubscribe')}
@@ -324,22 +327,23 @@ const EbookViewerPage: React.FC = () => {
             </button>
           </div>
         </div>
-      </section>
+      </AscentPageChrome>
     )
   }
 
   if (entitlementErrorKey) {
     return (
-      <section className="lesson-page">
-        <header className="lesson-header">
-          <h2>{ebookTitle}</h2>
-          <Link to="/shop" className="link-back">
-            {t('ebookViewer.backToShop')}
-          </Link>
-        </header>
-
-        <div className="lesson-media card" role="alert" aria-live="polite">
-          <h3 style={{ marginTop: 0 }}>{t('ebookViewer.unlockToReadTitle')}</h3>
+      <AscentPageChrome
+        title={ebookTitle}
+        breadcrumb={[
+          { label: t('marketingPages.breadcrumbHome'), to: '/' },
+          { label: t('footer.shop'), to: '/shop' },
+          { label: ebookTitle },
+        ]}
+        contentMaxWidthClassName="max-w-2xl"
+      >
+        <div className="card rounded-2xl border border-teal-100/80 p-6" role="alert" aria-live="polite">
+          <h3 className="m-0 font-heading text-lg text-teal-950">{t('ebookViewer.unlockToReadTitle')}</h3>
           <p>{t(entitlementErrorKey)}</p>
           <>
             {ebook && ebook.id !== 'bundle' ? (
@@ -385,19 +389,21 @@ const EbookViewerPage: React.FC = () => {
             </p>
           </>
         </div>
-      </section>
+      </AscentPageChrome>
     )
   }
 
   return (
-    <section className="lesson-page">
-      <header className="lesson-header">
-        <h2>{ebookTitle}</h2>
-        <Link to="/shop" className="link-back">
-          {t('ebookViewer.backToShop')}
-        </Link>
-      </header>
-
+    <AscentPageChrome
+      title={ebookTitle}
+      breadcrumb={[
+        { label: t('marketingPages.breadcrumbHome'), to: '/' },
+        { label: t('footer.shop'), to: '/shop' },
+        { label: ebookTitle },
+      ]}
+      contentMaxWidthClassName="max-w-4xl"
+    >
+      <section className="lesson-page">
       <div
         className="ebook-viewer-wrap"
         ref={viewportContainerRef}
@@ -456,6 +462,7 @@ const EbookViewerPage: React.FC = () => {
         </p>
       ) : null}
     </section>
+    </AscentPageChrome>
   )
 }
 

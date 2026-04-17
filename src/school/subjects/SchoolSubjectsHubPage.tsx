@@ -15,7 +15,7 @@ const SchoolSubjectsHubPage: React.FC = () => {
   const effectiveTeacherView = isTeacherView && !isFamilyPractice
 
   return (
-    <section className="lesson-page school-subj-page">
+    <section className={`lesson-page school-subj-page${isFamilyPractice ? ' school-subj-page--consumer' : ''}`}>
       <Link to="/" className="link-back">
         {t('practice.backToHome')}
       </Link>
