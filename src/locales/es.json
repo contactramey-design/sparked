@@ -919,6 +919,7 @@
     "consentDecline": "Ahora no",
     "paywallTitle": "Academia Tutor IA",
     "paywallBody": "Esta experiencia forma parte de Adventure Academy. Completa el pago desde el panel para padres para confirmar tu suscripción y vuelve aquí.",
+    "paywallDemoBody": "Mira una demo rápida y luego suscríbete para desbloquear tu tutor personalizado.",
     "paywallHint": "Si ya te suscribiste, abre el panel para padres una vez en este navegador para sincronizar el desbloqueo.",
     "paywallCta": "Abrir panel para padres"
   },

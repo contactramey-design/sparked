@@ -925,6 +925,7 @@
     "consentDecline": "Not now",
     "paywallTitle": "AI Tutor Academy",
     "paywallBody": "This experience is part of Adventure Academy. Complete checkout from the Parent dashboard so we can confirm your subscription, then come back here.",
+    "paywallDemoBody": "Watch a quick demo, then subscribe to unlock your custom tutor.",
     "paywallHint": "If you already subscribed, open Parent dashboard once from the same browser so your unlock can sync.",
     "paywallCta": "Open Parent dashboard"
   },

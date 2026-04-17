@@ -65,7 +65,11 @@ export default async function handler(req, res) {
 
     const requestedReturnTo = typeof body?.returnTo === 'string' ? body.returnTo : null
     const safeReturnTo =
-      requestedReturnTo && (requestedReturnTo.startsWith('/ebook/') || requestedReturnTo.startsWith('/ebook?'))
+      requestedReturnTo &&
+      (requestedReturnTo === '/ai-tutor' ||
+        requestedReturnTo.startsWith('/ai-tutor?') ||
+        requestedReturnTo.startsWith('/ebook/') ||
+        requestedReturnTo.startsWith('/ebook?'))
         ? requestedReturnTo
         : null
 
