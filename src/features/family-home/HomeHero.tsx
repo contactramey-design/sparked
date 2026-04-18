@@ -89,17 +89,11 @@ export function HomeHero({ primaryCtaHref }: Props) {
           <div className="home-hero-sparki relative z-[1] flex items-center justify-center">
             <img
               src="/sparkiacademylogo.webp"
-              alt=""
+              alt={t('header.appName')}
               className="relative z-[1] h-auto max-h-40 w-auto max-w-[min(100%,280px)] object-contain drop-shadow-md motion-reduce:transition-none md:max-h-52"
-              onError={(e) => {
-                e.currentTarget.style.display = 'none'
-                const next = e.currentTarget.nextElementSibling
-                if (next) (next as HTMLElement).style.display = 'block'
-              }}
+              loading="eager"
+              decoding="async"
             />
-            <span className="home-hero-character-emoji hidden text-7xl" aria-hidden>
-              🤖✨
-            </span>
           </div>
         </div>
       </div>

@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import SparkiAvatar from '@/components/SparkiAvatar'
 import MainNav from '@/components/MainNav'
 import { KidWayfindingBar } from '@/design-system/ascent/KidWayfindingBar'
 import { useTranslation } from '@/contexts/LocaleContext'
@@ -82,7 +81,13 @@ export function AppShellHeader() {
     <>
       <header className={cn('app-header')}>
         <Link to="/" className="logo-placeholder flex min-h-[52px] items-center gap-2" aria-label={t('header.home')}>
-          <SparkiAvatar size="sm" />
+          <img
+            src="/sparkiacademylogo.webp"
+            alt={t('header.appName')}
+            className="h-[40px] w-auto max-w-[140px] object-contain"
+            loading="eager"
+            decoding="async"
+          />
         </Link>
         <div className="app-titles">
           <h1>{t('header.appName')}</h1>
