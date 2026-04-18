@@ -102,7 +102,8 @@ export default function InteractiveTutor({ checkoutSessionId }: Props) {
       )
 
       const cfg = await fetchLiveAvatarSession(checkoutSessionId)
-      const session = new LiveAvatarSession(cfg.sessionToken, { voiceChat: true })
+      /** Tots: no browser mic to LiveAvatar; parent-supervised typing + avatar lip-sync via repeat() only. */
+      const session = new LiveAvatarSession(cfg.sessionToken, { voiceChat: !isTots })
       avatarRef.current = session
 
       const onStreamReady = () => {
@@ -127,7 +128,7 @@ export default function InteractiveTutor({ checkoutSessionId }: Props) {
     } finally {
       setAvatarBusy(false)
     }
-  }, [checkoutSessionId, t, teardownAvatar])
+  }, [checkoutSessionId, isTots, t, teardownAvatar])
 
   const speakReply = useCallback(
     async (text: string) => {
@@ -135,13 +136,13 @@ export default function InteractiveTutor({ checkoutSessionId }: Props) {
       const ac = new AbortController()
       audioAbortRef.current = ac
 
-      if (liveAvatar && avatarRef.current && !isTots && voiceOut) {
+      if (liveAvatar && avatarRef.current) {
         try {
           avatarRef.current.repeat(text)
+          return
         } catch {
-          await playTtsStreamEphemeral(text, 'en', ac.signal)
+          /* fall through to TTS when avatar speech fails */
         }
-        return
       }
 
       if (!isTots && voiceOut) {
@@ -166,13 +167,14 @@ export default function InteractiveTutor({ checkoutSessionId }: Props) {
   }
 
   const onToggleLiveAvatar = async () => {
-    if (isTots) return
     if (!liveAvatar) {
       if (!readVoiceConsent()) {
         setConsentOpen(true)
         return
       }
-      setVoiceOut(true)
+      if (!isTots) {
+        setVoiceOut(true)
+      }
       setLiveAvatar(true)
       await startAvatarSession()
       return
@@ -279,7 +281,9 @@ export default function InteractiveTutor({ checkoutSessionId }: Props) {
         declineLabel={t('aiTutor.consentDecline')}
         onAccept={() => {
           writeVoiceConsent(true)
-          setVoiceOut(true)
+          if (!isTots) {
+            setVoiceOut(true)
+          }
           setConsentOpen(false)
         }}
         onDecline={() => setConsentOpen(false)}
@@ -324,8 +328,8 @@ export default function InteractiveTutor({ checkoutSessionId }: Props) {
         </fieldset>
       </div>
 
-      {!isTots && (
-        <div className="flex flex-wrap gap-3 rounded-xl bg-slate-50 p-4">
+      <div className="flex flex-wrap gap-3 rounded-xl bg-slate-50 p-4">
+        {!isTots && (
           <button
             type="button"
             className={`min-h-[48px] rounded-xl px-4 text-base font-semibold ${
@@ -335,31 +339,31 @@ export default function InteractiveTutor({ checkoutSessionId }: Props) {
           >
             {voiceOut ? t('aiTutor.voiceOn') : t('aiTutor.voiceOff')}
           </button>
+        )}
+        <button
+          type="button"
+          className={`min-h-[48px] rounded-xl px-4 text-base font-semibold ${
+            liveAvatar ? 'bg-indigo-600 text-white' : 'border-2 border-slate-300 bg-white text-slate-800'
+          }`}
+          onClick={() => void onToggleLiveAvatar()}
+          disabled={avatarBusy}
+        >
+          {liveAvatar ? t('aiTutor.avatarOn') : t('aiTutor.avatarOff')}
+        </button>
+        {!isTots && voiceOut && (
           <button
             type="button"
-            className={`min-h-[48px] rounded-xl px-4 text-base font-semibold ${
-              liveAvatar ? 'bg-indigo-600 text-white' : 'border-2 border-slate-300 bg-white text-slate-800'
-            }`}
-            onClick={() => void onToggleLiveAvatar()}
-            disabled={avatarBusy}
+            className="min-h-[48px] rounded-xl border-2 border-slate-300 bg-white px-4 text-base font-semibold text-slate-800"
+            onClick={startSpeechInput}
           >
-            {liveAvatar ? t('aiTutor.avatarOn') : t('aiTutor.avatarOff')}
+            {t('aiTutor.micOnce')}
           </button>
-          {voiceOut && (
-            <button
-              type="button"
-              className="min-h-[48px] rounded-xl border-2 border-slate-300 bg-white px-4 text-base font-semibold text-slate-800"
-              onClick={startSpeechInput}
-            >
-              {t('aiTutor.micOnce')}
-            </button>
-          )}
-        </div>
-      )}
+        )}
+      </div>
 
       {isTots && <p className="rounded-xl bg-amber-50 px-4 py-3 text-sm text-amber-950">{t('aiTutor.totsVoiceNote')}</p>}
 
-      {liveAvatar && !isTots && (
+      {liveAvatar && (
         <div className="overflow-hidden rounded-2xl border border-slate-200 bg-slate-900 shadow-md">
           <video ref={videoRef} className="aspect-video w-full object-cover" playsInline muted={false} autoPlay />
           {avatarMsg && <p className="bg-slate-800 px-3 py-2 text-sm text-amber-200">{avatarMsg}</p>}

@@ -906,7 +906,7 @@
     "avatarOn": "Live tutor video on",
     "avatarOff": "Live tutor video off",
     "micOnce": "Speak (one sentence)",
-    "totsVoiceNote": "For Sparki Tots (ages 3–5), voice is turned off. Type your questions for the tutor.",
+    "totsVoiceNote": "For Sparki Tots (ages 3–5), read-aloud voice and mic are off—type your questions. Parents: you can turn on Live video tutor (with permission) so the avatar speaks the tutor’s replies.",
     "emptyChat": "Ask a question or describe what you’re practicing. The tutor guides — you do the thinking.",
     "inputLabel": "Message for the tutor",
     "inputPlaceholder": "e.g. I’m stuck on fractions with unlike denominators…",

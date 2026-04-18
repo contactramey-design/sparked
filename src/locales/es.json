@@ -900,7 +900,7 @@
     "avatarOn": "Video tutor en vivo activado",
     "avatarOff": "Video tutor en vivo desactivado",
     "micOnce": "Hablar (una frase)",
-    "totsVoiceNote": "Para Sparki Tots (3–5 años), la voz está desactivada. Escribe tus preguntas para el tutor.",
+    "totsVoiceNote": "Para Sparki Tots (3–5 años), la voz de lectura y el micrófono están desactivados: escribe tus preguntas. Padres: pueden activar el tutor en video en vivo (con permiso) para que el avatar diga las respuestas del tutor.",
     "emptyChat": "Haz una pregunta o describe qué estás practicando. El tutor guía — tú piensas.",
     "inputLabel": "Mensaje para el tutor",
     "inputPlaceholder": "p. ej. No entiendo las fracciones con distinto denominador…",
