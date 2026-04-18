@@ -59,7 +59,7 @@ export function AvatarPlayer({ connect }: AvatarPlayerProps) {
   return (
     <video
       ref={videoRef}
-      className="aspect-video w-full max-w-3xl rounded-xl bg-black object-cover shadow-lg"
+      className="aspect-video w-full max-w-none rounded-xl bg-black object-cover shadow-lg sm:rounded-2xl"
       playsInline
       autoPlay
     />

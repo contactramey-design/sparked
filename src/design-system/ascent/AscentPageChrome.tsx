@@ -17,6 +17,8 @@ type Props = {
   contentClassName?: string
   /** Max width for the content column (default `max-w-6xl`). */
   contentMaxWidthClassName?: string
+  /** Overrides default padding on the main content column (after hero). */
+  contentPaddingClassName?: string
   /**
    * Kid landing (home): content only — quick nav lives in `AppShellHeader`.
    */
@@ -35,9 +37,12 @@ export function AscentPageChrome({
   className,
   contentClassName,
   contentMaxWidthClassName = 'max-w-6xl',
+  contentPaddingClassName,
   kidHomeLayout = false,
 }: Props) {
   const { t } = useTranslation()
+  const kidPadding = contentPaddingClassName ?? 'px-4 py-6 md:py-10'
+  const pagePadding = contentPaddingClassName ?? 'px-4 py-10 md:py-12'
 
   const items: AscentBreadcrumbItem[] =
     breadcrumb && breadcrumb.length > 0
@@ -76,7 +81,7 @@ export function AscentPageChrome({
   if (kidHomeLayout) {
     return (
       <div className={cn('min-h-[40vh] bg-gradient-to-b from-ascent-cream via-white to-slate-50/40 pb-16 pt-0', className)}>
-        <div className={cn('mx-auto px-4 py-6 md:py-10', contentMaxWidthClassName, contentClassName)}>{children}</div>
+        <div className={cn('mx-auto', kidPadding, contentMaxWidthClassName, contentClassName)}>{children}</div>
       </div>
     )
   }
@@ -95,7 +100,7 @@ export function AscentPageChrome({
           ) : null}
         </div>
       </div>
-      <div className={cn('mx-auto px-4 py-10 md:py-12', contentMaxWidthClassName, contentClassName)}>{children}</div>
+      <div className={cn('mx-auto', pagePadding, contentMaxWidthClassName, contentClassName)}>{children}</div>
     </div>
   )
 }

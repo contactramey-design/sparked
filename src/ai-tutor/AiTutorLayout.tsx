@@ -11,9 +11,13 @@ export default function AiTutorLayout() {
         { label: t('marketingPages.breadcrumbHome'), to: '/' },
         { label: t('aiTutor.layoutTitle') },
       ]}
+      contentMaxWidthClassName="max-w-none w-full"
+      contentPaddingClassName="px-2 py-6 sm:px-4 md:py-8 lg:px-6 xl:px-8"
     >
-      <p className="max-w-prose text-base font-medium leading-relaxed text-slate-800">{t('aiTutor.layoutSubtitleKid')}</p>
-      <details className="mt-3 max-w-prose rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-600 shadow-sm">
+      <p className="w-full text-base font-medium leading-relaxed text-slate-800 md:text-lg">
+        {t('aiTutor.layoutSubtitleKid')}
+      </p>
+      <details className="mt-3 w-full rounded-xl border border-slate-200 bg-white px-3 py-3 text-sm text-slate-600 shadow-sm sm:px-4">
         <summary className="cursor-pointer list-none font-semibold text-teal-900 [&::-webkit-details-marker]:hidden">
           {t('aiTutor.layoutGrownUpDetails')}
         </summary>

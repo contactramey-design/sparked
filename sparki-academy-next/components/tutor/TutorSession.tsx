@@ -219,7 +219,7 @@ export function TutorSession({
         </div>
       </header>
 
-      <div className="relative flex min-h-0 flex-1 flex-col items-center justify-center p-4">
+      <div className="relative flex min-h-0 flex-1 flex-col items-stretch justify-center px-2 py-2 sm:px-3 sm:py-3 md:px-4 md:py-4">
         {phase === "connecting" ? (
           <div
             className="pointer-events-none absolute inset-0 flex items-center justify-center bg-black/50"
@@ -245,7 +245,7 @@ export function TutorSession({
         {showVideo ? (
           <video
             ref={videoRef}
-            className="max-h-full w-full max-w-5xl rounded-xl bg-black object-contain shadow-2xl ring-1 ring-white/10"
+            className="max-h-[min(100dvh-5rem,100%)] w-full max-w-none rounded-xl bg-black object-contain shadow-2xl ring-1 ring-white/10 sm:rounded-2xl"
             playsInline
             autoPlay
           />

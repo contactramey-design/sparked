@@ -16,6 +16,7 @@ import {
 } from './tutorService'
 import { TUTOR_STATE_CHANGED_EVENT, TUTOR_STATE_LOCAL_KEY } from './sessionKeys'
 import type { ChatMessage } from './types'
+import { cn } from '@/lib/utils'
 import { stateNameFromCode } from './usStates'
 
 type Props = {
@@ -286,7 +287,7 @@ export default function InteractiveTutor({ checkoutSessionId }: Props) {
   }
 
   return (
-    <div className="mx-auto max-w-3xl space-y-8 px-2 pb-10 pt-2">
+    <div className="w-full space-y-6 pb-8 md:space-y-8">
       <TutorConsentModal
         open={consentOpen}
         title={t('aiTutor.consentTitle')}
@@ -304,7 +305,7 @@ export default function InteractiveTutor({ checkoutSessionId }: Props) {
       />
 
       <section
-        className="rounded-2xl border-2 border-teal-100 bg-gradient-to-b from-teal-50/90 to-white p-4 shadow-sm md:p-5"
+        className="rounded-2xl border-2 border-teal-100 bg-gradient-to-b from-teal-50/90 to-white p-3 shadow-sm sm:p-4 md:p-5"
         aria-labelledby="tutor-chat-rules-heading"
       >
         <h2 id="tutor-chat-rules-heading" className="font-heading text-lg font-bold text-teal-950 md:text-xl">
@@ -339,132 +340,160 @@ export default function InteractiveTutor({ checkoutSessionId }: Props) {
         </p>
       )}
 
-      <details className="group rounded-2xl border border-slate-200 bg-slate-50/90 shadow-sm open:bg-slate-50">
-        <summary className="flex min-h-[52px] cursor-pointer list-none items-center rounded-2xl px-4 py-3 font-semibold text-slate-800 [&::-webkit-details-marker]:hidden">
-          {t('aiTutor.sectionSoundVideo')}
-          <span className="ml-auto text-sm font-normal text-slate-500 transition-transform group-open:-rotate-180">▾</span>
-        </summary>
-        <div className="flex flex-wrap gap-2 border-t border-slate-200 px-3 pb-4 pt-3">
-          {!isTots && (
-            <button
-              type="button"
-              className={`min-h-[48px] rounded-xl px-4 text-base font-semibold ${
-                voiceOut ? 'bg-sky-600 text-white' : 'border-2 border-slate-300 bg-white text-slate-800'
-              }`}
-              onClick={onToggleVoiceOut}
-            >
-              {voiceOut ? t('aiTutor.voiceOn') : t('aiTutor.voiceOff')}
-            </button>
-          )}
-          <button
-            type="button"
-            className={`min-h-[48px] rounded-xl px-4 text-base font-semibold ${
-              liveAvatar ? 'bg-indigo-600 text-white' : 'border-2 border-slate-300 bg-white text-slate-800'
-            }`}
-            onClick={() => void onToggleLiveAvatar()}
-            disabled={avatarBusy}
-          >
-            {liveAvatar ? t('aiTutor.avatarOn') : t('aiTutor.avatarOff')}
-          </button>
-          {liveAvatar && (
-            <button
-              type="button"
-              className="min-h-[48px] rounded-xl border-2 border-amber-500/80 bg-amber-50 px-4 text-base font-semibold text-amber-950 disabled:opacity-50"
-              onClick={onPauseAvatarSpeech}
-              disabled={avatarBusy}
-            >
-              {t('aiTutor.avatarPauseSpeech')}
-            </button>
-          )}
-          {!isTots && voiceOut && (
-            <button
-              type="button"
-              className="min-h-[48px] rounded-xl border-2 border-slate-300 bg-white px-4 text-base font-semibold text-slate-800"
-              onClick={startSpeechInput}
-            >
-              {t('aiTutor.micOnce')}
-            </button>
-          )}
-        </div>
-      </details>
-
-      {isTots && (
-        <p className="rounded-xl bg-amber-50 px-4 py-3 text-sm leading-relaxed text-amber-950">{t('aiTutor.totsVoiceNote')}</p>
-      )}
-
-      {liveAvatar && (
-        <div className="overflow-hidden rounded-2xl border border-slate-200 bg-slate-900 shadow-md">
-          <video ref={videoRef} className="aspect-video w-full object-cover" playsInline muted={false} autoPlay />
-          {avatarMsg && <p className="bg-slate-800 px-3 py-2 text-sm text-amber-200">{avatarMsg}</p>}
-        </div>
-      )}
-
-      <section className="space-y-3" aria-labelledby="tutor-chat-heading">
-        <h2 id="tutor-chat-heading" className="font-heading text-base font-bold text-slate-900 md:text-lg">
-          {t('aiTutor.sectionChat')}
-        </h2>
-        <div
-          className="max-h-[min(48vh,380px)] space-y-3 overflow-y-auto rounded-2xl border border-slate-200 bg-slate-50 p-4"
-          aria-live="polite"
-        >
-          {messages.length === 0 && <p className="text-slate-600">{t('aiTutor.emptyChat')}</p>}
-          {messages.map((m, i) => (
-            <div
-              key={i}
-              className={`max-w-[95%] rounded-2xl px-4 py-3 text-base leading-relaxed ${
-                m.role === 'user' ? 'ml-auto bg-sky-600 text-white' : 'mr-auto bg-white text-slate-800 shadow-sm'
-              }`}
-            >
-              {m.content}
+      <div
+        className={cn(
+          'flex flex-col gap-6',
+          liveAvatar &&
+            'xl:grid xl:grid-cols-[minmax(0,1.2fr)_minmax(280px,26rem)] xl:items-start xl:gap-8',
+        )}
+      >
+        <div className="min-w-0 space-y-6">
+          <details className="group rounded-2xl border border-slate-200 bg-slate-50/90 shadow-sm open:bg-slate-50">
+            <summary className="flex min-h-[52px] cursor-pointer list-none items-center rounded-2xl px-3 py-3 font-semibold text-slate-800 sm:px-4 [&::-webkit-details-marker]:hidden">
+              {t('aiTutor.sectionSoundVideo')}
+              <span className="ml-auto text-sm font-normal text-slate-500 transition-transform group-open:-rotate-180">
+                ▾
+              </span>
+            </summary>
+            <div className="flex flex-wrap gap-2 border-t border-slate-200 px-2 pb-3 pt-2 sm:px-3 sm:pb-4 sm:pt-3">
+              {!isTots && (
+                <button
+                  type="button"
+                  className={`min-h-[48px] rounded-xl px-4 text-base font-semibold ${
+                    voiceOut ? 'bg-sky-600 text-white' : 'border-2 border-slate-300 bg-white text-slate-800'
+                  }`}
+                  onClick={onToggleVoiceOut}
+                >
+                  {voiceOut ? t('aiTutor.voiceOn') : t('aiTutor.voiceOff')}
+                </button>
+              )}
+              <button
+                type="button"
+                className={`min-h-[48px] rounded-xl px-4 text-base font-semibold ${
+                  liveAvatar ? 'bg-indigo-600 text-white' : 'border-2 border-slate-300 bg-white text-slate-800'
+                }`}
+                onClick={() => void onToggleLiveAvatar()}
+                disabled={avatarBusy}
+              >
+                {liveAvatar ? t('aiTutor.avatarOn') : t('aiTutor.avatarOff')}
+              </button>
+              {liveAvatar && (
+                <button
+                  type="button"
+                  className="min-h-[48px] rounded-xl border-2 border-amber-500/80 bg-amber-50 px-4 text-base font-semibold text-amber-950 disabled:opacity-50"
+                  onClick={onPauseAvatarSpeech}
+                  disabled={avatarBusy}
+                >
+                  {t('aiTutor.avatarPauseSpeech')}
+                </button>
+              )}
+              {!isTots && voiceOut && (
+                <button
+                  type="button"
+                  className="min-h-[48px] rounded-xl border-2 border-slate-300 bg-white px-4 text-base font-semibold text-slate-800"
+                  onClick={startSpeechInput}
+                >
+                  {t('aiTutor.micOnce')}
+                </button>
+              )}
             </div>
-          ))}
+          </details>
+
+          {isTots && (
+            <p className="rounded-xl bg-amber-50 px-3 py-3 text-sm leading-relaxed text-amber-950 sm:px-4">
+              {t('aiTutor.totsVoiceNote')}
+            </p>
+          )}
+
+          {liveAvatar && (
+            <div className="overflow-hidden rounded-2xl border border-slate-200 bg-slate-900 shadow-md md:rounded-3xl md:shadow-lg">
+              <video
+                ref={videoRef}
+                className="aspect-video w-full max-h-[min(72vh,720px)] object-cover object-center"
+                playsInline
+                muted={false}
+                autoPlay
+              />
+              {avatarMsg && (
+                <p className="bg-slate-800 px-3 py-2 text-sm text-amber-200 sm:px-4">{avatarMsg}</p>
+              )}
+            </div>
+          )}
         </div>
-      </section>
 
-      {error && (
-        <p className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-900" role="alert">
-          {error}
-        </p>
-      )}
+        <div className="min-w-0 space-y-6">
+          <section className="space-y-3" aria-labelledby="tutor-chat-heading">
+            <h2 id="tutor-chat-heading" className="font-heading text-base font-bold text-slate-900 md:text-lg">
+              {t('aiTutor.sectionChat')}
+            </h2>
+            <div
+              className="max-h-[min(50vh,400px)] space-y-3 overflow-y-auto rounded-2xl border border-slate-200 bg-slate-50 p-3 sm:p-4 md:max-h-[min(58vh,560px)]"
+              aria-live="polite"
+            >
+              {messages.length === 0 && <p className="text-slate-600">{t('aiTutor.emptyChat')}</p>}
+              {messages.map((m, i) => (
+                <div
+                  key={i}
+                  className={`max-w-[min(100%,52rem)] rounded-2xl px-4 py-3 text-base leading-relaxed md:text-lg ${
+                    m.role === 'user'
+                      ? 'ml-auto bg-sky-600 text-white'
+                      : 'mr-auto bg-white text-slate-800 shadow-sm'
+                  }`}
+                >
+                  {m.content}
+                </div>
+              ))}
+            </div>
+          </section>
 
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-end">
-        <label className="sr-only" htmlFor="ai-tutor-input">
-          {t('aiTutor.inputLabel')}
-        </label>
-        <textarea
-          id="ai-tutor-input"
-          className="min-h-[100px] flex-1 resize-y rounded-2xl border-2 border-slate-300 p-4 text-lg text-slate-900"
-          placeholder={t('aiTutor.inputPlaceholder')}
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter' && !e.shiftKey) {
-              e.preventDefault()
-              void send()
-            }
-          }}
-          disabled={loading}
-        />
-        <div className="flex flex-col gap-2 sm:w-44">
-          <button
-            type="button"
-            className="min-h-[52px] rounded-xl bg-sky-600 text-lg font-bold text-white disabled:opacity-50"
-            onClick={() => void send()}
-            disabled={loading}
-          >
-            {loading ? t('aiTutor.sending') : t('aiTutor.send')}
-          </button>
-          <button
-            type="button"
-            className="min-h-[48px] rounded-xl border-2 border-slate-300 text-base text-slate-700"
-            onClick={clearChat}
-          >
-            {t('aiTutor.clearChat')}
-          </button>
+          {error && (
+            <p className="rounded-xl bg-red-50 px-3 py-3 text-sm text-red-900 sm:px-4" role="alert">
+              {error}
+            </p>
+          )}
+
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-end">
+            <label className="sr-only" htmlFor="ai-tutor-input">
+              {t('aiTutor.inputLabel')}
+            </label>
+            <textarea
+              id="ai-tutor-input"
+              className="min-h-[100px] min-w-0 flex-1 resize-y rounded-2xl border-2 border-slate-300 p-3 text-lg text-slate-900 sm:p-4"
+              placeholder={t('aiTutor.inputPlaceholder')}
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                  e.preventDefault()
+                  void send()
+                }
+              }}
+              disabled={loading}
+            />
+            <div className="flex flex-col gap-2 sm:w-44">
+              <button
+                type="button"
+                className="min-h-[52px] rounded-xl bg-sky-600 text-lg font-bold text-white disabled:opacity-50"
+                onClick={() => void send()}
+                disabled={loading}
+              >
+                {loading ? t('aiTutor.sending') : t('aiTutor.send')}
+              </button>
+              <button
+                type="button"
+                className="min-h-[48px] rounded-xl border-2 border-slate-300 text-base text-slate-700"
+                onClick={clearChat}
+              >
+                {t('aiTutor.clearChat')}
+              </button>
+            </div>
+          </div>
+
+          <p className="text-center text-xs leading-relaxed text-slate-500 sm:text-left xl:text-center">
+            {t('aiTutor.footerHint')}
+          </p>
         </div>
       </div>
-
-      <p className="text-center text-xs leading-relaxed text-slate-500">{t('aiTutor.footerHint')}</p>
     </div>
   )
 }
