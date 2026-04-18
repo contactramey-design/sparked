@@ -3,10 +3,8 @@ import { useTranslation } from '@/contexts/LocaleContext'
 import type { HomeworkLanguage, HomeworkStory } from '../types/homework'
 import { requestHomeworkVisuals } from '../lib/visualGenerator'
 import { PresetAvatarPicker } from './PresetAvatarPicker'
-import { CustomAvatarBuilder } from './CustomAvatarBuilder'
 import { getAvatarPreset, type AvatarPreset } from '../constants/avatarPresets'
 import type { HomeworkStoryVisualItem } from '../types/homework'
-import { getAvatarDescriptionForGeneration } from '../lib/homeworkAvatarSession'
 
 type Props = {
   story: HomeworkStory
@@ -32,16 +30,13 @@ export function AdventureVisuals({
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [carouselIndex, setCarouselIndex] = useState(0)
-  /** Bumps when custom avatar session changes so prompts re-read storage. */
-  const [avatarRev, setAvatarRev] = useState(0)
 
   const hasStrip = Boolean(storyVisuals && storyVisuals.length > 0)
 
   const effectiveAvatarDescription = useMemo(() => {
-    void avatarRev
     const p = getAvatarPreset(avatarPresetId)
-    return getAvatarDescriptionForGeneration(p.imagePromptDescription)
-  }, [avatarPresetId, avatarRev])
+    return p.imagePromptDescription
+  }, [avatarPresetId])
 
   const onPresetChange = useCallback(
     (preset: AvatarPreset) => {
@@ -49,8 +44,6 @@ export function AdventureVisuals({
     },
     [onUpdateJob],
   )
-
-  const bumpAvatar = useCallback(() => setAvatarRev((x) => x + 1), [])
 
   const onGenerate = async () => {
     setError(null)
@@ -92,8 +85,6 @@ export function AdventureVisuals({
       )}
 
       <PresetAvatarPicker valueId={avatarPresetId} onChange={onPresetChange} disabled={loading} />
-
-      <CustomAvatarBuilder disabled={loading} onChange={bumpAvatar} />
 
       <div className="mt-4 flex flex-wrap gap-3 items-center">
         <button type="button" className="primary-button" disabled={loading} onClick={() => void onGenerate()}>

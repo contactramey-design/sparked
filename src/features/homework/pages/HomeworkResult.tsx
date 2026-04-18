@@ -7,7 +7,6 @@ import { requestHomeworkVisuals } from '../lib/visualGenerator'
 import { getHomeworkJob, saveHomeworkJob } from '../hooks/useHomeworkJob'
 import { useHomeworkSkipCheckoutGate } from '../hooks/useHomeworkAllowUnauth'
 import { getAvatarPreset } from '../constants/avatarPresets'
-import { getAvatarDescriptionForGeneration } from '../lib/homeworkAvatarSession'
 import type { HomeworkJob } from '../types/homework'
 import { HomeworkPreview } from '../components/HomeworkPreview'
 import { AnalyzeSummary } from '../components/AnalyzeSummary'
@@ -70,7 +69,7 @@ export default function HomeworkResult() {
         const latest = getHomeworkJob(jobId)
         if (cancelled || !latest?.story || (latest.storyVisuals && latest.storyVisuals.length > 0)) return
         const preset = getAvatarPreset(latest.avatarPresetId)
-        const avatarDescription = getAvatarDescriptionForGeneration(preset.imagePromptDescription)
+        const avatarDescription = preset.imagePromptDescription
         const images = await requestHomeworkVisuals(latest.story, {
           language: latest.language,
           checkoutSessionId,
