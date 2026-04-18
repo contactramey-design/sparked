@@ -56,7 +56,7 @@ export default async function handler(req, res) {
   const checkoutSessionId = typeof body.checkout_session_id === 'string' ? body.checkout_session_id.trim() : ''
   const ageBand = typeof body.age_band === 'string' ? body.age_band.trim() : 'kids'
   const state = typeof body.state === 'string' ? body.state.trim() : ''
-  const subject = typeof body.subject === 'string' ? body.subject.trim() : 'math'
+  const subject = typeof body.subject === 'string' ? body.subject.trim() : 'general'
   const messages = normalizeMessages(body.messages)
 
   if (messages.length === 0) {

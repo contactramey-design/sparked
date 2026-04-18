@@ -1003,6 +1003,7 @@ export const MATH_LESSONS: SchoolSubjectLesson[] = [
           prompt: '9 − 4 equals…',
           options: ['4', '5', '6'],
           correctIndex: 1,
+          dynamic: { kind: 'subtract_equation', maxMinuend: 10 },
         },
         {
           id: 'math-kids-sub-q2',
@@ -1013,6 +1014,7 @@ export const MATH_LESSONS: SchoolSubjectLesson[] = [
             'Double 7',
           ],
           correctIndex: 1,
+          dynamic: { kind: 'subtract_story_pick', maxMinuend: 10 },
         },
         {
           id: 'math-kids-sub-q3',
@@ -1025,12 +1027,14 @@ export const MATH_LESSONS: SchoolSubjectLesson[] = [
           prompt: 'If 6 + 4 = 10, then 10 − 4 =',
           options: ['4', '6', '14'],
           correctIndex: 1,
+          dynamic: { kind: 'sum_inverse_fact', maxSum: 10 },
         },
         {
           id: 'math-kids-sub-q5',
           prompt: 'A good drawing for 8 − 3 might show…',
           options: ['8 circles with 3 crossed out', 'Only the number 8', 'Three empty boxes only'],
           correctIndex: 0,
+          dynamic: { kind: 'subtract_drawing_pick', maxMinuend: 10 },
         },
       ],
       realWorldTip: 'Lunch: “We had 10 napkins; we used 3. How many left?”',
@@ -1063,6 +1067,7 @@ export const MATH_LESSONS: SchoolSubjectLesson[] = [
           prompt: '9 − 4 es igual a…',
           options: ['4', '5', '6'],
           correctIndex: 1,
+          dynamic: { kind: 'subtract_equation', maxMinuend: 10 },
         },
         {
           id: 'math-kids-sub-q2',
@@ -1073,6 +1078,7 @@ export const MATH_LESSONS: SchoolSubjectLesson[] = [
             'El doble de 7',
           ],
           correctIndex: 1,
+          dynamic: { kind: 'subtract_story_pick', maxMinuend: 10 },
         },
         {
           id: 'math-kids-sub-q3',
@@ -1085,12 +1091,14 @@ export const MATH_LESSONS: SchoolSubjectLesson[] = [
           prompt: 'Si 6 + 4 = 10, entonces 10 − 4 =',
           options: ['4', '6', '14'],
           correctIndex: 1,
+          dynamic: { kind: 'sum_inverse_fact', maxSum: 10 },
         },
         {
           id: 'math-kids-sub-q5',
           prompt: 'Un buen dibujo para 8 − 3 muestra…',
           options: ['8 círculos con 3 tachados', 'Solo el número 8', 'Solo tres cajas vacías'],
           correctIndex: 0,
+          dynamic: { kind: 'subtract_drawing_pick', maxMinuend: 10 },
         },
       ],
       realWorldTip: 'Almuerzo: “Había 10 servilletas; usamos 3. ¿Cuántas quedan?”',

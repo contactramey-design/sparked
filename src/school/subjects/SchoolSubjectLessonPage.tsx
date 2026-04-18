@@ -15,6 +15,8 @@ import { useSchoolAudience } from '@/hooks/useSchoolAudience'
 import SchoolAudienceToggle from './SchoolAudienceToggle'
 import ListenButton from '@/components/ListenButton'
 import { lessonTypicalGradesLine } from './lessonGradeSpan'
+import { getLocalDateKey } from './dailyPracticeSeed'
+import { resolveSchoolSubjectQuizItem } from './resolveSchoolSubjectQuizItem'
 import { isLessonInBand, isSchoolSubjectId, lessonLocale, type SchoolSubjectId } from './types'
 import { usePracticeSubjectRoutes } from '@/lib/practiceRoutes'
 import { hasFullSubjectPracticeAccess } from '@/progress'
@@ -69,7 +71,12 @@ const SchoolSubjectLessonPage: React.FC = () => {
     return lessonsInBand.findIndex((l) => l.id === lesson.id)
   }, [lesson, lessonsInBand])
 
-  const questions = useMemo(() => (loc?.quiz.length ? loc.quiz : []), [loc])
+  const practiceDayKey = useMemo(() => getLocalDateKey(), [])
+
+  const questions = useMemo(() => {
+    if (!lesson || !loc?.quiz.length) return []
+    return loc.quiz.map((q) => resolveSchoolSubjectQuizItem(q, lesson.id, practiceDayKey, locale))
+  }, [lesson, loc, practiceDayKey, locale])
   const currentQ = questions[qIndex]
   const isLastQ = qIndex >= questions.length - 1
 

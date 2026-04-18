@@ -813,6 +813,8 @@
   "parentDashboard": {
     "title": "Parent & Grown-Up Progress View",
     "backToDashboard": "← Back to Dashboard",
+    "tutorStateTitle": "AI Tutor — school state",
+    "tutorStateDesc": "We use this to align examples and standards to your state. Your child can ask about any subject in the tutor chat; you only choose the state here.",
     "parentGuideTitle": "Parent Guide",
     "parentGuideDesc": "Learn how we keep kids safe while they explore AI and technology.",
     "openParentGuide": "Open Parent Guide (PDF)",
@@ -903,9 +905,9 @@
   },
   "aiTutor": {
     "layoutTitle": "AI Tutor Academy",
-    "layoutSubtitleKid": "Pick your state and subject, then type a question. A grown-up should stay nearby.",
+    "layoutSubtitleKid": "Type a question about homework or anything you’re learning. A grown-up should stay nearby. Your parent picks your school state in Parent dashboard so examples match your state.",
     "layoutGrownUpDetails": "Details for grown-ups",
-    "layoutSubtitle": "Premium tutor chat aligned to your state and age band. Text-first; optional voice and live video tutor with parent permission (not for Sparki Tots). Chat for this session is stored only in your browser tab.",
+    "layoutSubtitle": "Premium tutor chat aligned to your state (set in Parent dashboard) and age band. Kids can discuss any subject in one chat—no separate subject picker. Text-first; optional voice and live video tutor with parent permission (not for Sparki Tots). Chat for this session is stored only in your browser tab.",
     "chatRulesTitle": "How this chat works",
     "chatRulesLead": "A few simple rules so everyone stays safe and learning stays on track.",
     "chatRulesBullet1": "This tutor is for learning — not medical, legal, or personal advice.",
@@ -914,7 +916,6 @@
     "chatRulesBullet4": "Be kind. If something feels weird or scary, stop and tell a grown-up you trust.",
     "chatRulesBullet5": "AI can be wrong sometimes. For big decisions, check with a parent or teacher.",
     "chatRulesGrownUpNote": "Reminder for grown-ups: this box summarizes how we designed the product, not a substitute for your lawyer or your Terms & Privacy Policy.",
-    "sectionStudySetup": "Your lesson",
     "sectionSoundVideo": "Sound & video (optional)",
     "sectionChat": "Chat with the tutor",
     "stateLabel": "What state does your child attend school in?",
@@ -938,7 +939,11 @@
     "sending": "Thinking…",
     "clearChat": "Clear chat",
     "footerHint": "You’re doing the thinking — the AI is here to guide. Parents: unlock with Adventure Academy.",
-    "errorPickState": "Please choose your school state so lessons can align to the right standards.",
+    "errorStateNotSet": "Your school state is not set yet. Ask a parent to open Parent dashboard and choose the state where your child goes to school, then try again.",
+    "stateBanner": "Tutoring is aligned to {state} standards.",
+    "stateBannerParentLink": "Change in Parent dashboard",
+    "stateMissingBanner": "A parent needs to choose your school state so standards and examples match.",
+    "stateMissingLink": "Open Parent dashboard",
     "errorGeneric": "Something went wrong. Try again in a moment.",
     "avatarDisconnected": "Video tutor disconnected. Toggle live video off and on to reconnect.",
     "avatarStartFailed": "Could not start live video tutor. Check HeyGen setup or use text + voice only.",
@@ -1301,7 +1306,9 @@
   },
   "home": {
     "joinAdventure": "Join the Adventure!",
-    "kidHomeChromeSubtitle": "Tap a shortcut below or scroll to pick your age and your adventure — everything important is one or two taps away.",
+    "kidHomeChromeSubtitle": "Pick an adventure below, then set your age — extras stay tucked away until you open them.",
+    "homeMoreSummary": "About Sparki & resources (optional)",
+    "homeMoreHint": "For grown-ups: trust notes, ebooks, and FAQs. Skip this if you’re ready to play.",
     "heroAscentRibbon": "Safe habits, homework help, and subject practice — built for ages 3–11",
     "heroAscentKicker": "Welcome, families",
     "heroAscentTitleLead": "Exploring minds at",
@@ -1392,7 +1399,7 @@
       },
       "aiTutor": {
         "title": "AI Tutor Academy",
-        "description": "Premium: a calm, human-style tutor for math, reading, science, and history — aligned to your state standards. Text-first; optional voice for older kids with parent permission.",
+        "description": "Premium: a calm, human-style tutor for any subject you bring — aligned to your state (set in Parent dashboard). Text-first; optional voice for older kids with parent permission.",
         "imageAlt": "AI Tutor Academy — professional tutor support"
       },
       "practice": {

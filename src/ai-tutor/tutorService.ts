@@ -1,5 +1,11 @@
 import type { AgeBandId } from '@/ageBand'
-import { TUTOR_MESSAGES_KEY, TUTOR_STATE_KEY, TUTOR_VOICE_CONSENT_KEY } from './sessionKeys'
+import {
+  TUTOR_MESSAGES_KEY,
+  TUTOR_STATE_CHANGED_EVENT,
+  TUTOR_STATE_KEY,
+  TUTOR_STATE_LOCAL_KEY,
+  TUTOR_VOICE_CONSENT_KEY,
+} from './sessionKeys'
 import type { ChatMessage, TutorSubject } from './types'
 import { stateNameFromCode } from './usStates'
 
@@ -7,16 +13,29 @@ export type { ChatMessage, TutorSubject }
 
 export function readTutorStateCode(): string {
   try {
-    return sessionStorage.getItem(TUTOR_STATE_KEY) || ''
+    const loc = localStorage.getItem(TUTOR_STATE_LOCAL_KEY)
+    if (loc) return loc
+    const sess = sessionStorage.getItem(TUTOR_STATE_KEY)
+    if (sess) {
+      localStorage.setItem(TUTOR_STATE_LOCAL_KEY, sess)
+      return sess
+    }
   } catch {
-    return ''
+    /* ignore */
   }
+  return ''
 }
 
 export function writeTutorStateCode(code: string) {
   try {
-    if (code) sessionStorage.setItem(TUTOR_STATE_KEY, code)
-    else sessionStorage.removeItem(TUTOR_STATE_KEY)
+    if (code) {
+      localStorage.setItem(TUTOR_STATE_LOCAL_KEY, code)
+      sessionStorage.setItem(TUTOR_STATE_KEY, code)
+    } else {
+      localStorage.removeItem(TUTOR_STATE_LOCAL_KEY)
+      sessionStorage.removeItem(TUTOR_STATE_KEY)
+    }
+    window.dispatchEvent(new CustomEvent(TUTOR_STATE_CHANGED_EVENT))
   } catch {
     /* ignore */
   }
@@ -69,6 +88,7 @@ export async function postTutorChat(params: {
   messages: ChatMessage[]
   ageBand: AgeBandId
   stateCode: string
+  /** Use `general` for cross-subject tutoring (default). */
   subject: TutorSubject
 }): Promise<string> {
   const stateName = stateNameFromCode(params.stateCode || 'CA')

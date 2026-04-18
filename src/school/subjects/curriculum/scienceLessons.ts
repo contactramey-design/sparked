@@ -42,6 +42,14 @@ export const SCIENCE_LESSONS: SchoolSubjectLesson[] = [
           prompt: 'We use our ears to…',
           options: ['Hear', 'See', 'Smell'],
           correctIndex: 0,
+          dynamic: {
+            kind: 'choice_variants',
+            variants: [
+              { prompt: 'We use our ears to…', options: ['Hear', 'See', 'Smell'], correctIndex: 0 },
+              { prompt: 'We use our eyes mainly to…', options: ['See', 'Taste', 'Hear'], correctIndex: 0 },
+              { prompt: 'We use our nose mainly to…', options: ['Smell', 'Hear', 'See'], correctIndex: 0 },
+            ],
+          },
         },
         {
           id: 'sci-tots-sens-q2',
@@ -106,6 +114,14 @@ export const SCIENCE_LESSONS: SchoolSubjectLesson[] = [
           prompt: 'Usamos los oídos para…',
           options: ['Oír', 'Ver', 'Oler'],
           correctIndex: 0,
+          dynamic: {
+            kind: 'choice_variants',
+            variants: [
+              { prompt: 'Usamos los oídos para…', options: ['Oír', 'Ver', 'Oler'], correctIndex: 0 },
+              { prompt: 'Usamos los ojos principalmente para…', options: ['Ver', 'Gustar', 'Oír'], correctIndex: 0 },
+              { prompt: 'Usamos la nariz principalmente para…', options: ['Oler', 'Oír', 'Ver'], correctIndex: 0 },
+            ],
+          },
         },
         {
           id: 'sci-tots-sens-q2',

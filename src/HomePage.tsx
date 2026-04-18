@@ -5,7 +5,6 @@ import { useAuth } from './AuthContext'
 import { useTranslation } from './contexts/LocaleContext'
 import { useAgeBand } from './contexts/AgeBandContext'
 import { AdventureGrid } from './features/family-home/AdventureGrid'
-import { AiTutorHomePromo } from './features/family-home/AiTutorHomePromo'
 import { HomeAscentBelowHero } from './features/family-home/HomeAscentBelowHero'
 import { HomeAgeBandsAscent } from './features/family-home/HomeAgeBandsAscent'
 import { HomeHero } from './features/family-home/HomeHero'
@@ -221,30 +220,26 @@ const HomePage: React.FC = () => {
         <HomeHero primaryCtaHref={heroPrimaryHref} />
       </div>
 
-      <HomeAscentBelowHero />
-
-      <HomeAgeBandsAscent />
-
-      <div className="mx-auto mt-6 max-w-5xl px-4">
-        <Link
-          to="/daily"
-          className="block rounded-2xl border border-amber-200 bg-gradient-to-r from-amber-50 to-orange-50 px-5 py-4 shadow-sm transition hover:shadow-md hover:border-amber-300"
-        >
-          <p className="font-heading text-lg font-bold text-amber-950">{t('retention.homeCardTitle')}</p>
-          <p className="text-sm text-amber-900/90 mt-1">{t('retention.homeCardBody')}</p>
-          <span className="mt-2 inline-block text-sm font-semibold text-orange-800 underline-offset-2">
-            {t('retention.homeCardCta')} →
-          </span>
-        </Link>
-      </div>
-
-      <div className="mx-auto mt-6 max-w-5xl px-4">
-        <AiTutorHomePromo />
-      </div>
-
       <div id="home-adventures" className="home-adventure-wrap mx-auto max-w-6xl scroll-mt-24 px-4">
         <AdventureGrid />
       </div>
+
+      <HomeAgeBandsAscent />
+
+      <div className="mx-auto mt-4 max-w-5xl px-4">
+        <Link
+          to="/daily"
+          className="flex flex-col gap-1 rounded-xl border border-amber-200/90 bg-gradient-to-r from-amber-50 to-orange-50 px-4 py-3 shadow-sm transition hover:border-amber-300 hover:shadow sm:flex-row sm:items-center sm:justify-between sm:gap-4"
+        >
+          <div>
+            <p className="font-heading text-base font-bold text-amber-950">{t('retention.homeCardTitle')}</p>
+            <p className="text-sm text-amber-900/85">{t('retention.homeCardBody')}</p>
+          </div>
+          <span className="shrink-0 text-sm font-semibold text-orange-800">{t('retention.homeCardCta')} →</span>
+        </Link>
+      </div>
+
+      <HomeAscentBelowHero />
 
       <div className="home-grownups-footer muted text-center">
         <Link to={loginPath} className="home-grownups-footer-link">

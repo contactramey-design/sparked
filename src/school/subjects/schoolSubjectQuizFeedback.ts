@@ -249,8 +249,8 @@ const SCHOOL_SUBJECT_QUIZ_FEEDBACK: Record<string, { en: string; es: string }> =
     "es": "Si fallan las pistas, relee o usa partes de palabra — el contexto es una herramienta."
   },
   "sci-tots-sens-q1": {
-    "en": "Eyes detect light and color; they are not for tasting.",
-    "es": "Los ojos detectan luz y color; no sirven para saborear."
+    "en": "Match each sense to its main job — ears for sounds, eyes for seeing, nose for smells.",
+    "es": "Empareja cada sentido con su función: oídos para sonidos, ojos para ver, nariz para olores."
   },
   "sci-tots-sens-q2": {
     "en": "Ears pick up vibrations we hear as sound.",

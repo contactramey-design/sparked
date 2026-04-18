@@ -26,6 +26,21 @@ export type SchoolSubjectTeachSection = {
   bullets?: string[]
 }
 
+/** Declarative specs resolved per local calendar day (deterministic) — see `resolveSchoolSubjectQuizItem.ts`. */
+export type SchoolSubjectQuizDynamic =
+  | { kind: 'subtract_equation'; maxMinuend: number }
+  | { kind: 'subtract_story_pick'; maxMinuend: number }
+  | { kind: 'sum_inverse_fact'; maxSum: number }
+  | { kind: 'subtract_drawing_pick'; maxMinuend: number }
+  | {
+      kind: 'choice_variants'
+      variants: Array<{
+        prompt: string
+        options: [string, string, string]
+        correctIndex: 0 | 1 | 2
+      }>
+    }
+
 export type SchoolSubjectQuizItem = {
   id: string
   prompt: string
@@ -33,6 +48,8 @@ export type SchoolSubjectQuizItem = {
   correctIndex: 0 | 1 | 2
   /** Optional; overrides central map in `schoolSubjectQuizFeedback.ts` when set. */
   feedback?: string
+  /** When set, prompt/options are regenerated from `kind` using the device’s local date. */
+  dynamic?: SchoolSubjectQuizDynamic
 }
 
 /** Rich teacher-only pedagogy (see `schoolSubjectTeacherPack.ts`); not shown to students as separate quiz copy. */

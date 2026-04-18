@@ -808,6 +808,8 @@
   "parentDashboard": {
     "title": "Vista de progreso para adultos",
     "backToDashboard": "← Volver al panel",
+    "tutorStateTitle": "Tutor IA — estado escolar",
+    "tutorStateDesc": "Lo usamos para alinear ejemplos y estándares a tu estado. Tu hijo puede preguntar sobre cualquier materia en el chat del tutor; aquí solo eliges el estado.",
     "parentGuideTitle": "Guía para adultos",
     "parentGuideDesc": "Aprende cómo mantenemos a los niños seguros mientras exploran la IA y la tecnología.",
     "openParentGuide": "Abrir guía para adultos (PDF)",
@@ -897,9 +899,9 @@
   },
   "aiTutor": {
     "layoutTitle": "Academia Tutor IA",
-    "layoutSubtitleKid": "Elige estado y materia, luego escribe tu pregunta. Un adulto debería estar cerca.",
+    "layoutSubtitleKid": "Escribe una pregunta sobre la tarea o lo que estés aprendiendo. Un adulto debería estar cerca. Tu adulto elige el estado de la escuela en el panel para padres para que los ejemplos coincidan con tu estado.",
     "layoutGrownUpDetails": "Detalles para adultos",
-    "layoutSubtitle": "Chat de tutor premium alineado a tu estado y grupo de edad. Primero texto; voz y video en vivo opcionales con permiso de un adulto (no para Sparki Tots). El chat de esta sesión solo se guarda en la pestaña del navegador.",
+    "layoutSubtitle": "Chat de tutor premium alineado a tu estado (se configura en el panel para padres) y grupo de edad. Los niños pueden hablar de cualquier materia en un solo chat, sin elegir materia aparte. Primero texto; voz y video en vivo opcionales con permiso de un adulto (no para Sparki Tots). El chat de esta sesión solo se guarda en la pestaña del navegador.",
     "chatRulesTitle": "Cómo funciona este chat",
     "chatRulesLead": "Unas reglas sencillas para que el aprendizaje sea seguro y claro.",
     "chatRulesBullet1": "Este tutor es para aprender — no es consejo médico, legal ni personal.",
@@ -908,7 +910,6 @@
     "chatRulesBullet4": "Sé amable. Si algo se siente raro o molesto, para y cuéntaselo a un adulto de confianza.",
     "chatRulesBullet5": "La IA a veces se equivoca. Para decisiones importantes, confirma con un adulto o maestro.",
     "chatRulesGrownUpNote": "Para adultos: este recuadro resume el diseño del producto; no sustituye a un abogado ni a tus Términos o Política de privacidad.",
-    "sectionStudySetup": "Tu lección",
     "sectionSoundVideo": "Sonido y video (opcional)",
     "sectionChat": "Chat con el tutor",
     "stateLabel": "¿En qué estado va tu hijo o hija a la escuela?",
@@ -932,7 +933,11 @@
     "sending": "Pensando…",
     "clearChat": "Borrar chat",
     "footerHint": "Tú haces el pensar — la IA solo guía. Padres: desbloquea con Adventure Academy.",
-    "errorPickState": "Elige el estado de la escuela para alinear las lecciones a los estándares correctos.",
+    "errorStateNotSet": "Aún no está configurado el estado de la escuela. Pide a un adulto que abra el panel para padres y elija el estado donde va tu hijo o hija a la escuela, e inténtalo de nuevo.",
+    "stateBanner": "El tutor usa estándares de {state}.",
+    "stateBannerParentLink": "Cambiar en el panel para padres",
+    "stateMissingBanner": "Un adulto debe elegir el estado de la escuela para que los estándares y ejemplos coincidan.",
+    "stateMissingLink": "Abrir el panel para padres",
     "errorGeneric": "Algo salió mal. Intenta de nuevo en un momento.",
     "avatarDisconnected": "El video tutor se desconectó. Desactiva y vuelve a activar el video en vivo.",
     "avatarStartFailed": "No se pudo iniciar el video tutor. Revisa la configuración de HeyGen o usa solo texto y voz.",
@@ -1290,7 +1295,9 @@
   },
   "home": {
     "joinAdventure": "¡Únete a la aventura!",
-    "kidHomeChromeSubtitle": "Toca un acceso abajo o baja para elegir tu edad y tu aventura — lo importante está a uno o dos toques.",
+    "kidHomeChromeSubtitle": "Elige una aventura abajo y luego tu edad — lo extra queda guardado hasta que lo abras.",
+    "homeMoreSummary": "Sobre Sparki y recursos (opcional)",
+    "homeMoreHint": "Para adultos: notas de confianza, ebooks y preguntas frecuentes. Puedes saltarlo si quieren jugar ya.",
     "heroAscentRibbon": "Hábitos seguros, tarea y práctica por materias — para edades de 3 a 11",
     "heroAscentKicker": "Bienvenidas y bienvenidos, familias",
     "heroAscentTitleLead": "Mentes que exploran en",
@@ -1381,7 +1388,7 @@
       },
       "aiTutor": {
         "title": "Academia Tutor IA",
-        "description": "Premium: un tutor humano y tranquilo para matemáticas, lectura, ciencias e historia — alineado a los estándares de tu estado. Primero texto; voz opcional para niños mayores con permiso de un adulto.",
+        "description": "Premium: un tutor humano y tranquilo para cualquier tema que traigas — alineado a tu estado (se configura en el panel para padres). Primero texto; voz opcional para niños mayores con permiso de un adulto.",
         "imageAlt": "Academia Tutor IA — apoyo de tutor profesional"
       },
       "practice": {

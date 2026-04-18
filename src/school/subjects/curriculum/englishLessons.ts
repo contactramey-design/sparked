@@ -42,6 +42,15 @@ export const ENGLISH_LESSONS: SchoolSubjectLesson[] = [
           prompt: 'Which word rhymes with “tree”?',
           options: ['Free', 'Truck', 'Table'],
           correctIndex: 0,
+          dynamic: {
+            kind: 'choice_variants',
+            variants: [
+              { prompt: 'Which word rhymes with “tree”?', options: ['Free', 'Truck', 'Table'], correctIndex: 0 },
+              { prompt: 'Which word rhymes with “cake”?', options: ['Bake', 'Chair', 'Door'], correctIndex: 0 },
+              { prompt: 'Which word rhymes with “star”?', options: ['Car', 'Kite', 'Book'], correctIndex: 0 },
+              { prompt: 'Which word rhymes with “light”?', options: ['Bright', 'Chair', 'Table'], correctIndex: 0 },
+            ],
+          },
         },
         {
           id: 'eng-tots-rhyme-q2',
@@ -98,6 +107,15 @@ export const ENGLISH_LESSONS: SchoolSubjectLesson[] = [
           prompt: '¿Qué palabra rima con “flor”?',
           options: ['Amor', 'Casa', 'Mesa'],
           correctIndex: 0,
+          dynamic: {
+            kind: 'choice_variants',
+            variants: [
+              { prompt: '¿Qué palabra rima con “flor”?', options: ['Amor', 'Casa', 'Mesa'], correctIndex: 0 },
+              { prompt: '¿Qué palabra rima con “sol”?', options: ['farol', 'casa', 'mesa'], correctIndex: 0 },
+              { prompt: '¿Qué palabra rima con “mar”?', options: ['luz (en juego creativo)', 'silla', 'mesa'], correctIndex: 0 },
+              { prompt: '¿Qué palabra rima con “gato”?', options: ['pato', 'mesa', 'luna'], correctIndex: 0 },
+            ],
+          },
         },
         {
           id: 'eng-tots-rhyme-q2',

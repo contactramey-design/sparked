@@ -17,26 +17,19 @@ function StatCard({ title, body }: { title: string; body: string }) {
   )
 }
 
-function MissionCard({ title, body, href, cta }: { title: string; body: string; href: string; cta: string }) {
-  return (
-    <div className="flex flex-col rounded-2xl border border-teal-100 bg-white p-6 shadow-sm">
-      <h3 className="font-heading text-xl font-bold text-teal-900">{title}</h3>
-      <p className="mt-2 flex-1 text-sm leading-relaxed text-slate-600">{body}</p>
-      <Link
-        to={href}
-        className="mt-4 inline-flex min-h-11 items-center justify-center rounded-xl bg-teal-600 px-4 text-sm font-bold text-white hover:bg-teal-700"
-      >
-        {cta}
-      </Link>
-    </div>
-  )
-}
-
 export function HomeAscentBelowHero() {
   const { t } = useTranslation()
 
   return (
-    <div className="mx-auto max-w-6xl space-y-14 px-4 py-8 md:space-y-16 md:py-12">
+    <details className="group home-more-details mx-auto max-w-6xl px-4 pb-4 pt-2 md:pb-8 md:pt-4">
+      <summary className="mx-auto flex cursor-pointer list-none items-center justify-center gap-2 rounded-2xl border border-slate-200/90 bg-white px-4 py-3 text-center shadow-sm marker:content-none [&::-webkit-details-marker]:hidden motion-safe:transition-colors hover:bg-slate-50 md:py-3.5">
+        <span className="font-heading text-base font-bold text-slate-800">{t('home.homeMoreSummary')}</span>
+        <span className="text-teal-700 motion-safe:transition-transform group-open:rotate-180" aria-hidden>
+          ▼
+        </span>
+      </summary>
+      <p className="mx-auto mt-3 max-w-lg text-center text-sm text-slate-600">{t('home.homeMoreHint')}</p>
+      <div className="mt-8 space-y-14 md:space-y-16">
       <section className="rounded-3xl border border-amber-100/80 bg-white/90 p-6 shadow-sm backdrop-blur-sm md:p-10" aria-labelledby="home-trust-heading">
         <SectionHeading
           id="home-trust-heading"
@@ -50,35 +43,6 @@ export function HomeAscentBelowHero() {
           <StatCard title={t('home.ascentStat2Title')} body={t('home.ascentStat2Body')} />
           <StatCard title={t('home.ascentStat3Title')} body={t('home.ascentStat3Body')} />
           <StatCard title={t('home.ascentStat4Title')} body={t('home.ascentStat4Body')} />
-        </div>
-      </section>
-
-      <section className="rounded-3xl border border-slate-200/80 bg-ascent-warm px-6 py-10 md:px-10" aria-labelledby="home-mission-heading">
-        <SectionHeading
-          id="home-mission-heading"
-          kicker={t('home.ascentMissionKicker')}
-          title={t('home.ascentMissionTitle')}
-          description={t('home.ascentMissionBody')}
-        />
-        <div className="mt-10 grid gap-6 md:grid-cols-3">
-          <MissionCard
-            title={t('home.ascentPillar1Title')}
-            body={t('home.ascentPillar1Body')}
-            href="/track/social-safety"
-            cta={t('home.ascentPillar1Cta')}
-          />
-          <MissionCard
-            title={t('home.ascentPillar2Title')}
-            body={t('home.ascentPillar2Body')}
-            href="/practice"
-            cta={t('home.ascentPillar2Cta')}
-          />
-          <MissionCard
-            title={t('home.ascentPillar3Title')}
-            body={t('home.ascentPillar3Body')}
-            href="/ai-tutor"
-            cta={t('home.ascentPillar3Cta')}
-          />
         </div>
       </section>
 
@@ -135,6 +99,7 @@ export function HomeAscentBelowHero() {
           ))}
         </div>
       </section>
-    </div>
+      </div>
+    </details>
   )
 }

@@ -42,6 +42,26 @@ export const HISTORY_LESSONS: SchoolSubjectLesson[] = [
           prompt: '“Long ago” usually means…',
           options: ['A time in the past', 'Only tomorrow', 'Only lunch time'],
           correctIndex: 0,
+          dynamic: {
+            kind: 'choice_variants',
+            variants: [
+              {
+                prompt: '“Long ago” usually means…',
+                options: ['A time in the past', 'Only tomorrow', 'Only lunch time'],
+                correctIndex: 0,
+              },
+              {
+                prompt: 'When someone says “long ago,” they mean…',
+                options: ['A time in the past', 'Only next week', 'Only snack time'],
+                correctIndex: 0,
+              },
+              {
+                prompt: 'The phrase “in the past” points to…',
+                options: ['A time that already happened', 'Only the future', 'A pretend story only'],
+                correctIndex: 0,
+              },
+            ],
+          },
         },
         {
           id: 'hist-tots-then-q2',
@@ -98,6 +118,26 @@ export const HISTORY_LESSONS: SchoolSubjectLesson[] = [
           prompt: '“Hace mucho tiempo” suele significar…',
           options: ['Un tiempo en el pasado', 'Solo mañana', 'Solo la hora del almuerzo'],
           correctIndex: 0,
+          dynamic: {
+            kind: 'choice_variants',
+            variants: [
+              {
+                prompt: '“Hace mucho tiempo” suele significar…',
+                options: ['Un tiempo en el pasado', 'Solo mañana', 'Solo la hora del almuerzo'],
+                correctIndex: 0,
+              },
+              {
+                prompt: 'Cuando decimos “en el pasado,” hablamos de…',
+                options: ['Un tiempo que ya pasó', 'Solo el futuro', 'Solo un cuento sin verdad'],
+                correctIndex: 0,
+              },
+              {
+                prompt: '“Antes” muchas veces significa…',
+                options: ['Un tiempo anterior al ahora', 'Solo el año que viene', 'Solo el recreo'],
+                correctIndex: 0,
+              },
+            ],
+          },
         },
         {
           id: 'hist-tots-then-q2',

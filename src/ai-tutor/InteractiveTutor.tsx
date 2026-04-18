@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { useAgeBand } from '@/contexts/AgeBandContext'
 import { useTranslation } from '@/contexts/LocaleContext'
 import { TutorConsentModal } from './TutorConsentModal'
@@ -11,18 +12,11 @@ import {
   readTutorStateCode,
   readVoiceConsent,
   saveTutorMessages,
-  writeTutorStateCode,
   writeVoiceConsent,
 } from './tutorService'
-import type { ChatMessage, TutorSubject } from './types'
-import { US_STATES_PLUS_DC } from './usStates'
-
-const SUBJECTS: { id: TutorSubject; labelKey: string }[] = [
-  { id: 'math', labelKey: 'aiTutor.subjectMath' },
-  { id: 'english', labelKey: 'aiTutor.subjectEnglish' },
-  { id: 'science', labelKey: 'aiTutor.subjectScience' },
-  { id: 'history', labelKey: 'aiTutor.subjectHistory' },
-]
+import { TUTOR_STATE_CHANGED_EVENT, TUTOR_STATE_LOCAL_KEY } from './sessionKeys'
+import type { ChatMessage } from './types'
+import { stateNameFromCode } from './usStates'
 
 type Props = {
   checkoutSessionId: string | null
@@ -34,7 +28,6 @@ export default function InteractiveTutor({ checkoutSessionId }: Props) {
   const isTots = ageBand === 'tots'
 
   const [stateCode, setStateCode] = useState('')
-  const [subject, setSubject] = useState<TutorSubject>('math')
   const [messages, setMessages] = useState<ChatMessage[]>([])
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
@@ -58,6 +51,19 @@ export default function InteractiveTutor({ checkoutSessionId }: Props) {
       setVoiceOut(true)
     }
   }, [isTots])
+
+  useEffect(() => {
+    const syncState = () => setStateCode(readTutorStateCode())
+    window.addEventListener(TUTOR_STATE_CHANGED_EVENT, syncState)
+    const onStorage = (e: StorageEvent) => {
+      if (e.key === TUTOR_STATE_LOCAL_KEY) syncState()
+    }
+    window.addEventListener('storage', onStorage)
+    return () => {
+      window.removeEventListener(TUTOR_STATE_CHANGED_EVENT, syncState)
+      window.removeEventListener('storage', onStorage)
+    }
+  }, [])
 
   useEffect(() => {
     saveTutorMessages(messages)
@@ -197,10 +203,9 @@ export default function InteractiveTutor({ checkoutSessionId }: Props) {
     if (!trimmed || loading) return
 
     if (!stateCode) {
-      setError(t('aiTutor.errorPickState'))
+      setError(t('aiTutor.errorStateNotSet'))
       return
     }
-    writeTutorStateCode(stateCode)
 
     setError(null)
     setInput('')
@@ -215,7 +220,7 @@ export default function InteractiveTutor({ checkoutSessionId }: Props) {
         messages: next,
         ageBand,
         stateCode,
-        subject,
+        subject: 'general',
       })
       const assistantMsg: ChatMessage = { role: 'assistant', content: reply }
       setMessages((m) => [...m, assistantMsg])
@@ -318,49 +323,21 @@ export default function InteractiveTutor({ checkoutSessionId }: Props) {
         </p>
       </section>
 
-      <section className="space-y-3" aria-labelledby="tutor-study-heading">
-        <h2 id="tutor-study-heading" className="font-heading text-base font-bold text-slate-900 md:text-lg">
-          {t('aiTutor.sectionStudySetup')}
-        </h2>
-        <div className="space-y-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-          <label className="flex min-h-[52px] flex-col gap-2">
-            <span className="text-sm font-semibold text-slate-800">{t('aiTutor.stateLabel')}</span>
-            <select
-              className="min-h-[48px] w-full max-w-md rounded-xl border border-slate-300 px-3 text-lg text-slate-900"
-              value={stateCode}
-              onChange={(e) => {
-                setStateCode(e.target.value)
-                writeTutorStateCode(e.target.value)
-              }}
-            >
-              <option value="">{t('aiTutor.statePlaceholder')}</option>
-              {US_STATES_PLUS_DC.map((s) => (
-                <option key={s.code} value={s.code}>
-                  {s.name}
-                </option>
-              ))}
-            </select>
-          </label>
-
-          <fieldset>
-            <legend className="text-sm font-semibold text-slate-800">{t('aiTutor.subjectLabel')}</legend>
-            <div className="mt-3 grid grid-cols-2 gap-2 sm:flex sm:flex-wrap">
-              {SUBJECTS.map((s) => (
-                <button
-                  key={s.id}
-                  type="button"
-                  className={`min-h-[48px] flex-1 rounded-xl border-2 px-3 text-base font-medium sm:min-w-[108px] ${
-                    subject === s.id ? 'border-sky-600 bg-sky-50 text-sky-900' : 'border-slate-200 bg-white text-slate-700'
-                  }`}
-                  onClick={() => setSubject(s.id)}
-                >
-                  {t(s.labelKey)}
-                </button>
-              ))}
-            </div>
-          </fieldset>
-        </div>
-      </section>
+      {stateCode ? (
+        <p className="rounded-xl border border-teal-200 bg-teal-50/90 px-4 py-3 text-sm leading-relaxed text-teal-950">
+          {t('aiTutor.stateBanner', { state: stateNameFromCode(stateCode) })}{' '}
+          <Link to="/?view=parent" className="font-semibold text-teal-900 underline-offset-2 hover:underline">
+            {t('aiTutor.stateBannerParentLink')}
+          </Link>
+        </p>
+      ) : (
+        <p className="rounded-xl border border-amber-200 bg-amber-50/90 px-4 py-3 text-sm leading-relaxed text-amber-950">
+          {t('aiTutor.stateMissingBanner')}{' '}
+          <Link to="/?view=parent" className="font-semibold text-amber-900 underline-offset-2 hover:underline">
+            {t('aiTutor.stateMissingLink')}
+          </Link>
+        </p>
+      )}
 
       <details className="group rounded-2xl border border-slate-200 bg-slate-50/90 shadow-sm open:bg-slate-50">
         <summary className="flex min-h-[52px] cursor-pointer list-none items-center rounded-2xl px-4 py-3 font-semibold text-slate-800 [&::-webkit-details-marker]:hidden">

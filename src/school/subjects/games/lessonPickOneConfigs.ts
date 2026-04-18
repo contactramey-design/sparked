@@ -1,4 +1,5 @@
 import type { Locale } from '@/contexts/LocaleContext'
+import { getLocalDateKey, mulberry32, quizDaySeed } from '../dailyPracticeSeed'
 
 export type PickOneOption = { id: string; label: string; emoji: string }
 
@@ -7,6 +8,60 @@ export type PickOneLessonPayload = {
   options: PickOneOption[]
   correctId: string
   successLine: string
+}
+
+const DIGIT_EMOJI: Record<number, string> = {
+  0: '0️⃣',
+  1: '1️⃣',
+  2: '2️⃣',
+  3: '3️⃣',
+  4: '4️⃣',
+  5: '5️⃣',
+  6: '6️⃣',
+  7: '7️⃣',
+  8: '8️⃣',
+  9: '9️⃣',
+}
+
+function buildSubtractWithin10Pick(lessonId: string, locale: Locale, dayKey: string): PickOneLessonPayload {
+  const seed = quizDaySeed(lessonId, 'pick-one-practice', dayKey)
+  const rng = mulberry32(seed)
+  const minM = 4
+  const maxM = 10
+  const m = minM + Math.floor(rng() * (maxM - minM + 1))
+  const maxS = m - 2
+  const s = 1 + Math.floor(rng() * Math.max(1, maxS))
+  const ans = m - s
+
+  const pool: number[] = []
+  for (let n = 0; n <= 10; n++) {
+    if (n !== ans) pool.push(n)
+  }
+  let w1 = pool[Math.floor(rng() * pool.length)]!
+  let w2 = pool[Math.floor(rng() * pool.length)]!
+  let guard = 0
+  while (w2 === w1 && guard++ < 24) {
+    w2 = pool[Math.floor(rng() * pool.length)]!
+  }
+  if (w2 === w1) w2 = pool.find((x) => x !== w1) ?? 0
+
+  type Tagged = { id: string; label: string; emoji: string; value: number }
+  const raw: Tagged[] = [
+    { id: 'a', label: String(ans), emoji: DIGIT_EMOJI[ans] ?? '🔢', value: ans },
+    { id: 'b', label: String(w1), emoji: DIGIT_EMOJI[w1] ?? '🔢', value: w1 },
+    { id: 'c', label: String(w2), emoji: DIGIT_EMOJI[w2] ?? '🔢', value: w2 },
+  ]
+  for (let i = raw.length - 1; i > 0; i--) {
+    const j = Math.floor(rng() * (i + 1))
+    const tmp = raw[i]!
+    raw[i] = raw[j]!
+    raw[j] = tmp
+  }
+  const correctId = raw.find((o) => o.value === ans)!.id
+  const options: PickOneOption[] = raw.map(({ id, label, emoji }) => ({ id, label, emoji }))
+  const prompt = locale === 'es' ? `¿Cuánto es ${m} − ${s}?` : `What is ${m} − ${s}?`
+  const successLine = `${m} − ${s} = ${ans}`
+  return { prompt, options, correctId, successLine }
 }
 
 const PACKS: Record<string, Record<Locale, PickOneLessonPayload>> = {
@@ -252,31 +307,16 @@ const PACKS: Record<string, Record<Locale, PickOneLessonPayload>> = {
       successLine: 'Un triángulo tiene 3 esquinas.',
     },
   },
-  'math-kids-subtract-within-10': {
-    en: {
-      prompt: 'What is 9 − 4?',
-      options: [
-        { id: 'a', label: '4', emoji: '4️⃣' },
-        { id: 'b', label: '5', emoji: '5️⃣' },
-        { id: 'c', label: '6', emoji: '6️⃣' },
-      ],
-      correctId: 'b',
-      successLine: '9 − 4 = 5',
-    },
-    es: {
-      prompt: '¿Cuánto es 9 − 4?',
-      options: [
-        { id: 'a', label: '4', emoji: '4️⃣' },
-        { id: 'b', label: '5', emoji: '5️⃣' },
-        { id: 'c', label: '6', emoji: '6️⃣' },
-      ],
-      correctId: 'b',
-      successLine: '9 − 4 = 5',
-    },
-  },
 }
 
-export function getPickOnePayload(lessonId: string, locale: Locale): PickOneLessonPayload | null {
+export function getPickOnePayload(
+  lessonId: string,
+  locale: Locale,
+  dayKey: string = getLocalDateKey(),
+): PickOneLessonPayload | null {
+  if (lessonId === 'math-kids-subtract-within-10') {
+    return buildSubtractWithin10Pick(lessonId, locale, dayKey)
+  }
   const row = PACKS[lessonId]
   if (!row) return null
   return row[locale] ?? row.en

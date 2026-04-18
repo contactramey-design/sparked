@@ -16,6 +16,8 @@ import { useTranslation } from './contexts/LocaleContext'
 import { useAgeBand } from './contexts/AgeBandContext'
 import { useB2CWeeklyEpisode } from './hooks/useB2CWeeklyEpisode'
 import { AscentPageChrome } from '@/design-system/ascent/AscentPageChrome'
+import { readTutorStateCode, writeTutorStateCode } from '@/ai-tutor/tutorService'
+import { US_STATES_PLUS_DC } from '@/ai-tutor/usStates'
 
 /** Parent view content only (used in merged Dashboard page and standalone /parent redirect) */
 export const ParentViewContent: React.FC = () => {
@@ -34,6 +36,11 @@ export const ParentViewContent: React.FC = () => {
   const [unlockErrorKey, setUnlockErrorKey] = useState<string | null>(null)
   const [academyUnlockErrorKey, setAcademyUnlockErrorKey] = useState<string | null>(null)
   const [subjectTracksLocalActivity, setSubjectTracksLocalActivity] = useState(false)
+  const [tutorSchoolState, setTutorSchoolState] = useState('')
+
+  useEffect(() => {
+    setTutorSchoolState(readTutorStateCode())
+  }, [])
 
   useEffect(() => {
     try {
@@ -164,6 +171,30 @@ export const ParentViewContent: React.FC = () => {
           <Link to="/weekly" className="primary-button mt-3 inline-block">
             {t('weekly.parentDashboard.weeklyTeaserLink')}
           </Link>
+        </div>
+
+        <div className="card rounded-2xl border border-teal-100/80">
+          <h3>{t('parentDashboard.tutorStateTitle')}</h3>
+          <p className="text-slate-700">{t('parentDashboard.tutorStateDesc')}</p>
+          <label className="mt-3 flex flex-col gap-2">
+            <span className="text-sm font-semibold text-slate-800">{t('aiTutor.stateLabel')}</span>
+            <select
+              className="min-h-[48px] w-full max-w-md rounded-xl border border-slate-300 bg-white px-3 text-base text-slate-900"
+              value={tutorSchoolState}
+              onChange={(e) => {
+                const v = e.target.value
+                setTutorSchoolState(v)
+                writeTutorStateCode(v)
+              }}
+            >
+              <option value="">{t('aiTutor.statePlaceholder')}</option>
+              {US_STATES_PLUS_DC.map((s) => (
+                <option key={s.code} value={s.code}>
+                  {s.name}
+                </option>
+              ))}
+            </select>
+          </label>
         </div>
 
         <div className="card rounded-2xl border border-teal-100/80">

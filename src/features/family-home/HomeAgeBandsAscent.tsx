@@ -74,7 +74,7 @@ export function HomeAgeBandsAscent() {
 
   return (
     <section
-      className="mx-auto max-w-6xl px-4 py-10 md:py-14"
+      className="mx-auto max-w-6xl px-4 py-6 md:py-9"
       aria-labelledby="home-age-ascent-title"
       data-home-theme="ascent"
     >
