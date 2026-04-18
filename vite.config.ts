@@ -22,6 +22,10 @@ export default defineConfig({
       strategies: 'injectManifest',
       srcDir: 'src',
       filename: 'sw.ts',
+      /** Main chunk (and similar assets) can exceed Workbox injectManifest default (2 MiB). */
+      injectManifest: {
+        maximumFileSizeToCacheInBytes: 8 * 1024 * 1024,
+      },
       devOptions: {
         enabled: false,
       },
