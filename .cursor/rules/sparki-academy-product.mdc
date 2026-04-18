@@ -1,0 +1,28 @@
+---
+description: Sparki Academy — COPPA, security, tutor gating, LiveAvatar platform (sparkiedu.com)
+alwaysApply: true
+---
+
+# Sparki Academy — product & compliance
+
+**Product:** COPPA-compliant edtech for ages 3–11. **Human Tutor** = real-time AI avatar via **LiveAvatar FULL Mode** (liveavatar.com). **Live:** sparkiedu.com.
+
+## Absolute rules
+
+1. **COPPA:** Children are never account holders; all accounts are **parent** accounts.
+2. **COPPA — tutor:** Tutor only if `children.tutor_enabled === true` **and** parent has an **active** subscription (verify before issuing tokens).
+3. **Security:** `LIVEAVATAR_API_KEY` (and all LiveAvatar secrets) are **server-only** — never `NEXT_PUBLIC_*`, never client bundles.
+4. **Security:** Token generation routes **always** verify subscription (and child ownership / flags) before calling LiveAvatar.
+5. **Sessions:** Hard cap **25 messages per tutor session** (enforce in app logic when chat/messaging exists).
+6. **Child-facing UI:** Minimum **20px** body text, minimum **48px** touch targets, **no external links** visible to children.
+
+## LiveAvatar (v1) — use this, not HeyGen streaming
+
+- Token: `POST https://api.liveavatar.com/v1/sessions/token`
+- Start: `POST https://api.liveavatar.com/v1/sessions/start`
+- Client SDK: `@heygen/liveavatar-web-sdk`
+- **Do not use:** `@heygen/streaming-avatar` (deprecated; do not add or recommend).
+
+## Stack reference (canonical)
+
+Next.js 14 App Router, TypeScript strict, Supabase (auth + Postgres + storage), Stripe (subscriptions), Tailwind only, Vercel. Primary app path: `sparki-academy-next/`.

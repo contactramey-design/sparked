@@ -1,0 +1,30 @@
+---
+description: Next.js app — TypeScript, API validation, RSC vs client (sparki-academy-next)
+globs: sparki-academy-next/**/*
+alwaysApply: false
+---
+
+# `sparki-academy-next` — code standards
+
+## TypeScript
+
+- **Strict mode.** No `any` — use `unknown` and type guards / Zod.
+
+## API routes (`app/api/**`)
+
+- Validate input with **Zod** before business logic.
+- **try/catch** async work; return meaningful JSON errors and appropriate HTTP status codes.
+- Never expose `LIVEAVATAR_API_KEY` or Stripe secrets to the client.
+
+## React / Next.js
+
+- Prefer **Server Components** for data fetching.
+- **`use client`** only when using hooks, events, or browser-only APIs (e.g. LiveKit, `sessionStorage`).
+
+## Styling
+
+- **Tailwind CSS only** for UI in this app (no CSS-in-JS stacks unless already legacy elsewhere).
+
+## Payments
+
+- Stripe: subscriptions (e.g. $9.99/mo with trial) — keep webhook + entitlement checks consistent with tutor token routes.
