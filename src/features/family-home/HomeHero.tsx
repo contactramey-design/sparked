@@ -88,7 +88,7 @@ export function HomeHero({ primaryCtaHref }: Props) {
           </div>
           <div className="home-hero-sparki relative z-[1] flex items-center justify-center">
             <img
-              src="/sparkiacademylogo.webp"
+              src="/sparkiacademylogo.png"
               alt={t('header.appName')}
               className="relative z-[1] h-auto max-h-40 w-auto max-w-[min(100%,280px)] object-contain drop-shadow-md motion-reduce:transition-none md:max-h-52"
               loading="eager"

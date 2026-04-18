@@ -82,7 +82,7 @@ export function AppShellHeader() {
       <header className={cn('app-header')}>
         <Link to="/" className="logo-placeholder flex min-h-[52px] items-center gap-2" aria-label={t('header.home')}>
           <img
-            src="/sparkiacademylogo.webp"
+            src="/sparkiacademylogo.png"
             alt={t('header.appName')}
             className="h-[40px] w-auto max-w-[140px] object-contain"
             loading="eager"
