@@ -14,5 +14,10 @@ export default async function handler(req, res) {
     homeworkAllowUnauth: process.env.ALLOW_UNAUTH_HOMEWORK === 'true',
     /** When true, AI Tutor APIs skip Stripe checkout (local dev only — do not enable in production). */
     tutorAllowUnauth: process.env.ALLOW_UNAUTH_TUTOR === 'true',
+    /**
+     * When true, /ai-tutor paywall is shown and tutor-chat + liveavatar-session require a valid checkout session.
+     * Default false: tutor + avatar work without Adventure Academy checkout (set to true when billing is ready).
+     */
+    aiTutorRequireCheckout: process.env.AI_TUTOR_REQUIRE_CHECKOUT === 'true',
   })
 }

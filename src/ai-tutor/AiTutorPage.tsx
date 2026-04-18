@@ -7,6 +7,7 @@ import InteractiveTutor from './InteractiveTutor'
 export default function AiTutorPage() {
   const { t } = useTranslation()
   const [tutorAllowUnauth, setTutorAllowUnauth] = useState(false)
+  const [tutorRequireCheckout, setTutorRequireCheckout] = useState(false)
   const [checkoutLoading, setCheckoutLoading] = useState(false)
   const [checkoutError, setCheckoutError] = useState<string | null>(null)
 
@@ -14,8 +15,11 @@ export default function AiTutorPage() {
     let cancelled = false
     fetch('/api/config')
       .then((r) => r.json())
-      .then((data: { tutorAllowUnauth?: boolean }) => {
-        if (!cancelled) setTutorAllowUnauth(Boolean(data.tutorAllowUnauth))
+      .then((data: { tutorAllowUnauth?: boolean; aiTutorRequireCheckout?: boolean }) => {
+        if (!cancelled) {
+          setTutorAllowUnauth(Boolean(data.tutorAllowUnauth))
+          setTutorRequireCheckout(Boolean(data.aiTutorRequireCheckout))
+        }
       })
       .catch(() => {})
     return () => {
@@ -63,7 +67,10 @@ export default function AiTutorPage() {
 
   const checkoutSessionId = getHomeworkCheckoutSessionId()
   const hasAcademy = getHasAcademySubscription()
-  const canUseApi = Boolean(tutorAllowUnauth || checkoutSessionId)
+  /** Paywall only when AI_TUTOR_REQUIRE_CHECKOUT=true on server (or legacy unauth / session in browser). */
+  const canUseApi = Boolean(
+    !tutorRequireCheckout || tutorAllowUnauth || checkoutSessionId,
+  )
 
   const startAcademyCheckout = async () => {
     if (checkoutLoading) return

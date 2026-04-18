@@ -3,18 +3,13 @@
  * Premium AI Tutor: GPT-4o with state- and age-aware system prompt.
  * Body JSON: { checkout_session_id, messages, age_band, state, subject }
  */
-import { verifyHomeworkCheckoutSession } from './lib/verifyBundleEntitlement.js'
+import { requireTutorCheckoutOrAllow } from './lib/tutorEntitlement.js'
 import { buildTutorSystemPrompt } from './tutor/lib/prompts.js'
 import { rateLimit } from './lib/rateLimit.js'
 
 const MAX_MESSAGES = 36
 const MAX_CONTENT = 6000
 const MODEL = 'gpt-4o'
-
-async function requireTutorEntitlement(checkoutSessionId) {
-  if (process.env.ALLOW_UNAUTH_TUTOR === 'true') return { ok: true }
-  return verifyHomeworkCheckoutSession((checkoutSessionId || '').trim())
-}
 
 function normalizeMessages(raw) {
   if (!Array.isArray(raw)) return []
@@ -69,7 +64,7 @@ export default async function handler(req, res) {
     return
   }
 
-  const ent = await requireTutorEntitlement(checkoutSessionId)
+  const ent = await requireTutorCheckoutOrAllow(checkoutSessionId)
   if (!ent.ok) {
     res.status(ent.status).json({
       error:

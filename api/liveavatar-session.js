@@ -3,15 +3,10 @@
  * LiveAvatar v1 session token (api.liveavatar.com). Key stays server-side.
  * Client starts the session with @heygen/liveavatar-web-sdk (not deprecated streaming-avatar).
  */
-import { verifyHomeworkCheckoutSession } from './lib/verifyBundleEntitlement.js'
+import { requireTutorCheckoutOrAllow } from './lib/tutorEntitlement.js'
 import { rateLimit } from './lib/rateLimit.js'
 
 const TOKEN_URL = 'https://api.liveavatar.com/v1/sessions/token'
-
-async function requireTutorEntitlement(checkoutSessionId) {
-  if (process.env.ALLOW_UNAUTH_TUTOR === 'true') return { ok: true }
-  return verifyHomeworkCheckoutSession((checkoutSessionId || '').trim())
-}
 
 function firstNonEmptyEnv(...names) {
   for (const name of names) {
@@ -67,7 +62,7 @@ export default async function handler(req, res) {
 
   const checkoutSessionId = typeof body.checkout_session_id === 'string' ? body.checkout_session_id.trim() : ''
 
-  const ent = await requireTutorEntitlement(checkoutSessionId)
+  const ent = await requireTutorCheckoutOrAllow(checkoutSessionId)
   if (!ent.ok) {
     res.status(ent.status).json({
       error:
@@ -137,9 +132,7 @@ export default async function handler(req, res) {
     const parsed = parseTokenResponse(raw, tokenRes.status)
 
     if (!tokenRes.ok || !parsed.ok) {
-      if (process.env.NODE_ENV !== 'production') {
-        console.error('[liveavatar-session]', tokenRes.status, raw.slice(0, 500))
-      }
+      console.error('[liveavatar-session]', tokenRes.status, raw.slice(0, 500))
       res.status(502).json({
         error: parsed.ok ? 'Could not create LiveAvatar session.' : parsed.error,
       })
