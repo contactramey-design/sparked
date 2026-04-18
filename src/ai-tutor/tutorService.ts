@@ -90,6 +90,8 @@ export async function postTutorChat(params: {
   stateCode: string
   /** Use `general` for cross-subject tutoring (default). */
   subject: TutorSubject
+  /** Matches app language toggle — tutor replies (and TTS) follow this. */
+  locale?: 'en' | 'es'
 }): Promise<string> {
   const stateName = stateNameFromCode(params.stateCode || 'CA')
   const res = await fetch('/api/tutor-chat', {
@@ -101,6 +103,7 @@ export async function postTutorChat(params: {
       age_band: params.ageBand,
       state: stateName,
       subject: params.subject,
+      locale: params.locale === 'es' ? 'es' : 'en',
     }),
   })
   const data = (await res.json().catch(() => ({}))) as { reply?: string; error?: string }
@@ -110,11 +113,17 @@ export async function postTutorChat(params: {
 }
 
 /** LiveAvatar: short-lived session token for @heygen/liveavatar-web-sdk (server from POST /api/liveavatar-session). */
-export async function fetchLiveAvatarSession(checkoutSessionId: string | null) {
+export async function fetchLiveAvatarSession(
+  checkoutSessionId: string | null,
+  locale: 'en' | 'es' = 'en',
+) {
   const res = await fetch('/api/liveavatar-session', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ checkout_session_id: checkoutSessionId || '' }),
+    body: JSON.stringify({
+      checkout_session_id: checkoutSessionId || '',
+      locale: locale === 'es' ? 'es' : 'en',
+    }),
   })
   const data = (await res.json().catch(() => ({}))) as {
     session_id?: string

@@ -2,17 +2,24 @@
  * GPT-4o system prompts for AI Tutor Academy (premium interactive tutor).
  */
 
-const THINKING_REMINDER =
+const THINKING_REMINDER_EN =
   "End every reply with a separate short line exactly: \"You're doing the thinking — I'm just here to help guide you.\""
+const THINKING_REMINDER_ES =
+  'Termina cada respuesta con una línea corta aparte, exactamente: "Tú estás pensando — yo solo estoy aquí para guiarte."'
 
 /**
- * @param {{ ageBand: string, state: string, subject: string }} ctx
+ * @param {{ ageBand: string, state: string, subject: string, locale?: string }} ctx
  */
 export function buildTutorSystemPrompt(ctx) {
-  const { ageBand, state, subject } = ctx
+  const { ageBand, state, subject, locale } = ctx
   const band = (ageBand || 'kids').toLowerCase()
   const st = (state || 'your state').trim()
   const sub = (subject || 'general').toLowerCase()
+  const loc = (locale || 'en').toLowerCase()
+  const spanishBlock =
+    loc === 'es' || loc.startsWith('es-')
+      ? 'Write every reply in natural Spanish (español). Keep vocabulary age-appropriate for the band. If the child writes in English, still answer in Spanish unless they explicitly ask for English.'
+      : ''
 
   const tone =
     band === 'tots'
@@ -30,7 +37,7 @@ export function buildTutorSystemPrompt(ctx) {
           ? `Align to the official K–12 standards or framework for ${st} for this topic. If unsure of an exact code, describe the skill in plain language — do not invent codes.`
           : `Align to appropriate standards for ${st} for this topic.`
 
-  return [
+  const parts = [
     'You are a calm, professional human tutor for children ages 3–11.',
     'You are NOT a cartoon mascot — do not mention Sparki or other fictional characters unless the child brings them up first.',
     'Never give direct final answers that replace the child’s own work on graded homework; guide with questions, hints, and parallel examples.',
@@ -38,6 +45,8 @@ export function buildTutorSystemPrompt(ctx) {
     'If asked for harmful or non-educational content, refuse briefly and redirect to learning.',
     tone,
     standards,
-    THINKING_REMINDER,
-  ].join('\n\n')
+  ]
+  if (spanishBlock) parts.push(spanishBlock)
+  parts.push(loc === 'es' || loc.startsWith('es-') ? THINKING_REMINDER_ES : THINKING_REMINDER_EN)
+  return parts.join('\n\n')
 }

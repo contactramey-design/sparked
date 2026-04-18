@@ -61,6 +61,8 @@ export default async function handler(req, res) {
   if (typeof body !== 'object' || body === null) body = {}
 
   const checkoutSessionId = typeof body.checkout_session_id === 'string' ? body.checkout_session_id.trim() : ''
+  const localeRaw = typeof body.locale === 'string' ? body.locale.trim().toLowerCase() : 'en'
+  const useSpanish = localeRaw === 'es' || localeRaw.startsWith('es-')
 
   const ent = await requireTutorCheckoutOrAllow(checkoutSessionId)
   if (!ent.ok) {
@@ -83,7 +85,9 @@ export default async function handler(req, res) {
   }
 
   const avatarId = firstNonEmptyEnv('LIVEAVATAR_AVATAR_ID', 'HEYGEN_TUTOR_AVATAR_ID')
-  const voiceId = firstNonEmptyEnv('LIVEAVATAR_VOICE_ID', 'HEYGEN_TUTOR_VOICE_ID')
+  const voiceIdDefault = firstNonEmptyEnv('LIVEAVATAR_VOICE_ID', 'HEYGEN_TUTOR_VOICE_ID')
+  const voiceIdEs = firstNonEmptyEnv('LIVEAVATAR_VOICE_ID_ES', 'HEYGEN_TUTOR_VOICE_ID_ES')
+  const voiceId = useSpanish && voiceIdEs ? voiceIdEs : voiceIdDefault
   const contextId = firstNonEmptyEnv('LIVEAVATAR_CONTEXT_ID')
 
   /** FULL mode when context + voice + non-placeholder avatar exist. */
@@ -110,7 +114,7 @@ export default async function handler(req, res) {
         avatar_persona: {
           voice_id: voiceId,
           context_id: contextId,
-          language: 'en',
+          language: useSpanish ? 'es' : 'en',
         },
       }
     : {

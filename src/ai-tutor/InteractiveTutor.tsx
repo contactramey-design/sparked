@@ -24,7 +24,7 @@ type Props = {
 }
 
 export default function InteractiveTutor({ checkoutSessionId }: Props) {
-  const { t } = useTranslation()
+  const { t, locale } = useTranslation()
   const { ageBand } = useAgeBand()
   const isTots = ageBand === 'tots'
 
@@ -41,9 +41,12 @@ export default function InteractiveTutor({ checkoutSessionId }: Props) {
   const [avatarMsg, setAvatarMsg] = useState<string | null>(null)
 
   const videoRef = useRef<HTMLVideoElement>(null)
+  const avatarStageRef = useRef<HTMLDivElement | null>(null)
   const avatarRef = useRef<LiveAvatarSession | null>(null)
   const audioAbortRef = useRef<AbortController | null>(null)
   const recognitionRef = useRef<{ stop: () => void } | null>(null)
+  const prevLocaleRef = useRef(locale)
+  const [avatarFullscreen, setAvatarFullscreen] = useState(false)
 
   useEffect(() => {
     setStateCode(readTutorStateCode())
@@ -99,6 +102,45 @@ export default function InteractiveTutor({ checkoutSessionId }: Props) {
     }
   }, [teardownAvatar, stopAudio])
 
+  useEffect(() => {
+    const onFs = () => {
+      const stage = avatarStageRef.current
+      const fsEl =
+        document.fullscreenElement ??
+        (document as unknown as { webkitFullscreenElement?: Element | null }).webkitFullscreenElement ??
+        null
+      setAvatarFullscreen(Boolean(stage && fsEl === stage))
+    }
+    document.addEventListener('fullscreenchange', onFs)
+    document.addEventListener('webkitfullscreenchange', onFs as EventListener)
+    return () => {
+      document.removeEventListener('fullscreenchange', onFs)
+      document.removeEventListener('webkitfullscreenchange', onFs as EventListener)
+    }
+  }, [])
+
+  const toggleAvatarFullscreen = useCallback(async () => {
+    const el = avatarStageRef.current
+    if (!el) return
+    const fsEl =
+      document.fullscreenElement ??
+      (document as unknown as { webkitFullscreenElement?: Element | null }).webkitFullscreenElement ??
+      null
+    try {
+      if (fsEl === el) {
+        if (document.exitFullscreen) await document.exitFullscreen()
+        else
+          (document as unknown as { webkitExitFullscreen?: () => void }).webkitExitFullscreen?.()
+      } else if (el.requestFullscreen) {
+        await el.requestFullscreen()
+      } else {
+        ;(el as unknown as { webkitRequestFullscreen?: () => void }).webkitRequestFullscreen?.()
+      }
+    } catch {
+      /* ignore — user gesture required; some browsers block */
+    }
+  }, [])
+
   const startAvatarSession = useCallback(async () => {
     setAvatarMsg(null)
     setAvatarBusy(true)
@@ -108,7 +150,7 @@ export default function InteractiveTutor({ checkoutSessionId }: Props) {
         '@heygen/liveavatar-web-sdk'
       )
 
-      const cfg = await fetchLiveAvatarSession(checkoutSessionId)
+      const cfg = await fetchLiveAvatarSession(checkoutSessionId, locale)
       /** Tots: no browser mic to LiveAvatar; parent-supervised typing + avatar lip-sync via repeat() only. */
       const session = new LiveAvatarSession(cfg.sessionToken, { voiceChat: !isTots })
       avatarRef.current = session
@@ -135,13 +177,36 @@ export default function InteractiveTutor({ checkoutSessionId }: Props) {
     } finally {
       setAvatarBusy(false)
     }
-  }, [checkoutSessionId, isTots, t, teardownAvatar])
+  }, [checkoutSessionId, isTots, locale, t, teardownAvatar])
+
+  useEffect(() => {
+    const prev = prevLocaleRef.current
+    prevLocaleRef.current = locale
+    if (prev === locale || !liveAvatar) return
+    let cancelled = false
+    void (async () => {
+      setAvatarBusy(true)
+      try {
+        await teardownAvatar()
+        if (cancelled) return
+        await startAvatarSession()
+      } catch {
+        if (!cancelled) setAvatarMsg(t('aiTutor.avatarStartFailed'))
+      } finally {
+        if (!cancelled) setAvatarBusy(false)
+      }
+    })()
+    return () => {
+      cancelled = true
+    }
+  }, [locale, liveAvatar, startAvatarSession, t, teardownAvatar])
 
   const speakReply = useCallback(
     async (text: string) => {
       stopAudio()
       const ac = new AbortController()
       audioAbortRef.current = ac
+      const voiceLocale = locale === 'es' ? 'es' : 'en'
 
       if (liveAvatar && avatarRef.current) {
         try {
@@ -153,10 +218,10 @@ export default function InteractiveTutor({ checkoutSessionId }: Props) {
       }
 
       if (!isTots && voiceOut) {
-        await playTtsStreamEphemeral(text, 'en', ac.signal)
+        await playTtsStreamEphemeral(text, voiceLocale, ac.signal)
       }
     },
-    [isTots, liveAvatar, voiceOut, stopAudio],
+    [isTots, liveAvatar, locale, voiceOut, stopAudio],
   )
 
   const onToggleVoiceOut = () => {
@@ -222,6 +287,7 @@ export default function InteractiveTutor({ checkoutSessionId }: Props) {
         ageBand,
         stateCode,
         subject: 'general',
+        locale,
       })
       const assistantMsg: ChatMessage = { role: 'assistant', content: reply }
       setMessages((m) => [...m, assistantMsg])
@@ -270,7 +336,7 @@ export default function InteractiveTutor({ checkoutSessionId }: Props) {
       return
     }
     const rec = new SR()
-    rec.lang = 'en-US'
+    rec.lang = locale === 'es' ? 'es-ES' : 'en-US'
     rec.interimResults = false
     rec.maxAlternatives = 1
     rec.onresult = (ev: Event) => {
@@ -406,10 +472,25 @@ export default function InteractiveTutor({ checkoutSessionId }: Props) {
           )}
 
           {liveAvatar && (
-            <div className="overflow-hidden rounded-2xl border border-slate-200 bg-slate-900 shadow-md md:rounded-3xl md:shadow-lg">
+            <div
+              ref={avatarStageRef}
+              className={cn(
+                'overflow-hidden rounded-2xl border border-slate-200 bg-slate-900 shadow-md md:rounded-3xl md:shadow-lg',
+                'supports-[height:100dvh]:[&:fullscreen]:min-h-[100dvh] [&:fullscreen]:max-h-none [&:fullscreen]:rounded-none [&:fullscreen]:border-0',
+              )}
+            >
+              <div className="flex flex-wrap items-center justify-end gap-2 border-b border-white/10 bg-slate-950/90 px-2 py-2 sm:px-3">
+                <button
+                  type="button"
+                  className="min-h-[44px] rounded-lg bg-white/10 px-3 text-sm font-semibold text-white hover:bg-white/20"
+                  onClick={() => void toggleAvatarFullscreen()}
+                >
+                  {avatarFullscreen ? t('aiTutor.avatarExitFullscreen') : t('aiTutor.avatarFullscreen')}
+                </button>
+              </div>
               <video
                 ref={videoRef}
-                className="aspect-video w-full max-h-[min(72vh,720px)] object-cover object-center"
+                className="aspect-video w-full max-h-[min(72vh,720px)] object-cover object-center [&:fullscreen]:max-h-none"
                 playsInline
                 muted={false}
                 autoPlay

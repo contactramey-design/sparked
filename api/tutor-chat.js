@@ -57,6 +57,8 @@ export default async function handler(req, res) {
   const ageBand = typeof body.age_band === 'string' ? body.age_band.trim() : 'kids'
   const state = typeof body.state === 'string' ? body.state.trim() : ''
   const subject = typeof body.subject === 'string' ? body.subject.trim() : 'general'
+  const localeRaw = typeof body.locale === 'string' ? body.locale.trim().toLowerCase() : 'en'
+  const locale = localeRaw === 'es' || localeRaw.startsWith('es-') ? 'es' : 'en'
   const messages = normalizeMessages(body.messages)
 
   if (messages.length === 0) {
@@ -81,7 +83,7 @@ export default async function handler(req, res) {
     return
   }
 
-  const system = buildTutorSystemPrompt({ ageBand, state, subject })
+  const system = buildTutorSystemPrompt({ ageBand, state, subject, locale })
   const openaiMessages = [{ role: 'system', content: system }, ...messages]
 
   try {
