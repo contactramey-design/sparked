@@ -18,6 +18,7 @@ import HomeworkHome from './features/homework/pages/HomeworkHome'
 import HomeworkUpload from './features/homework/pages/HomeworkUpload'
 import HomeworkResult from './features/homework/pages/HomeworkResult'
 import HomeworkHistory from './features/homework/pages/HomeworkHistory'
+import HomeworkAdventureVideoPage from './features/homework/pages/HomeworkAdventureVideoPage'
 import AiTutorLayout from './ai-tutor/AiTutorLayout'
 import AiTutorPage from './ai-tutor/AiTutorPage'
 import BooksPage from './BooksPage'
@@ -140,6 +141,7 @@ function AppShell() {
             <Route path="upload" element={<HomeworkUpload />} />
             <Route path="result/:jobId" element={<HomeworkResult />} />
             <Route path="history" element={<HomeworkHistory />} />
+            <Route path="adventure-video" element={<HomeworkAdventureVideoPage />} />
           </Route>
           <Route path="/ai-tutor" element={<AiTutorLayout />}>
             <Route index element={<AiTutorPage />} />

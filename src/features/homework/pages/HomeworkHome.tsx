@@ -27,6 +27,14 @@ export default function HomeworkHome() {
           {t('homeworkFeature.ctaHistory')}
         </Link>
       </div>
+
+      <div className="rounded-2xl border border-sky-200/80 bg-sky-50/90 p-5 shadow-sm">
+        <p className="m-0 text-base font-semibold text-sky-950">{t('homeworkFeature.adventureVideoCta')}</p>
+        <p className="mt-2 mb-4 text-sm text-slate-700">{t('homeworkFeature.adventureVideoIntro')}</p>
+        <Link to="/homework/adventure-video" className="primary-button inline-block text-center">
+          {t('homeworkFeature.adventureVideoOpen')}
+        </Link>
+      </div>
     </div>
   )
 }

@@ -25,6 +25,15 @@ function buildGovernancePacketBlob(t: (key: string, vars?: Record<string, string
     `--- ${t('governance.boardSummaryTitle')} ---`,
     t('governance.boardSummaryBody'),
     '',
+    `--- ${t('governance.strategicTitle')} ---`,
+    t('governance.strategicLead'),
+    '',
+    t('governance.strategicPillar1'),
+    t('governance.strategicPillar2'),
+    t('governance.strategicPillar3'),
+    t('governance.strategicPillar4'),
+    t('governance.strategicPillar5'),
+    '',
     t('governance.packetFooter'),
   ]
   return sections.join('\n')
@@ -61,6 +70,18 @@ export default function GovernanceOverviewContent({ compact = false }: Props) {
     [],
   )
 
+  const strategicPillarKeys = useMemo(
+    () =>
+      [
+        'governance.strategicPillar1',
+        'governance.strategicPillar2',
+        'governance.strategicPillar3',
+        'governance.strategicPillar4',
+        'governance.strategicPillar5',
+      ] as const,
+    [],
+  )
+
   return (
     <section className={`stack-lg ${compact ? '' : ''}`}>
       <Card className="print-break border-orange-200/80">
@@ -80,6 +101,22 @@ export default function GovernanceOverviewContent({ compact = false }: Props) {
           </div>
         </CardContent>
       </Card>
+
+      {!compact && (
+        <Card className="border-teal-100/90 print-break">
+          <CardHeader>
+            <CardTitle>{t('governance.strategicTitle')}</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3 text-sm text-slate-800 max-w-prose">
+            <p className="leading-relaxed">{t('governance.strategicLead')}</p>
+            <ul className="list-disc space-y-2 pl-5">
+              {strategicPillarKeys.map((key) => (
+                <li key={key}>{t(key)}</li>
+              ))}
+            </ul>
+          </CardContent>
+        </Card>
+      )}
 
       <Card>
         <CardHeader>

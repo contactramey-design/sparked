@@ -143,6 +143,18 @@ const server = http.createServer(async (req, res) => {
       await m.default(req, wrapped)
       return
     }
+    if (url === '/api/homework-adventure-claude' && req.method === 'POST') {
+      await readJsonBody(req)
+      const m = await import('../api/homework-adventure-claude.js')
+      await m.default(req, wrapped)
+      return
+    }
+    if (url === '/api/homework-adventure-tts' && req.method === 'POST') {
+      await readJsonBody(req)
+      const m = await import('../api/homework-adventure-tts.js')
+      await m.default(req, wrapped)
+      return
+    }
     if (url === '/api/generate-adventure-video' && req.method === 'POST') {
       await readJsonBody(req)
       const m = await import('../api/generate-adventure-video.js')
@@ -189,7 +201,7 @@ const server = http.createServer(async (req, res) => {
 
 server.listen(PORT, () => {
   console.log(
-    `Local API: http://localhost:${PORT} (config, setup-status, video-worker-health, tts, process-homework, homework/*, generate-visuals, generate-adventure-video, schools-generate-weekly-units, checkout, download-ebook)`,
+    `Local API: http://localhost:${PORT} (config, setup-status, video-worker-health, tts, process-homework, homework/*, homework-adventure-claude, homework-adventure-tts, generate-visuals, generate-adventure-video, schools-generate-weekly-units, checkout, download-ebook)`,
   )
 }).on('error', (err) => {
   if (err.code === 'EADDRINUSE') {
