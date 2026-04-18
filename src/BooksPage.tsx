@@ -21,7 +21,6 @@ const BooksPage: React.FC = () => {
         { label: t('marketingPages.breadcrumbHome'), to: '/' },
         { label: t('booksPage.title') },
       ]}
-      showKidWayfinding
     >
       <p className="mb-8 text-lg text-slate-600">{t('booksPage.subtitle')}</p>
 

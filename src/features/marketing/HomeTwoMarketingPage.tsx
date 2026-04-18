@@ -12,7 +12,6 @@ export default function HomeTwoMarketingPage() {
         { label: t('marketingPages.breadcrumbHome'), to: '/' },
         { label: t('marketingPages.home2Title') },
       ]}
-      showKidWayfinding
     >
       <div className="mx-auto max-w-6xl text-center">
         <p className="text-xs font-bold uppercase tracking-[0.14em] text-teal-800">{t('marketingPages.home2Kicker')}</p>

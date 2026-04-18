@@ -45,7 +45,6 @@ const TrackPage: React.FC = () => {
         { label: t('curriculum.chooseAdventure'), to: '/tracks' },
         { label: translatedTrack.title },
       ]}
-      showKidWayfinding
     >
       <section className="track-overview-page">
         <div className="track-age-band-toolbar">

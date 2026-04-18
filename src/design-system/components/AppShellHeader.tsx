@@ -2,8 +2,10 @@ import { useEffect, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import SparkiAvatar from '@/components/SparkiAvatar'
 import MainNav from '@/components/MainNav'
+import { KidWayfindingBar } from '@/design-system/ascent/KidWayfindingBar'
 import { useTranslation } from '@/contexts/LocaleContext'
 import { useSchoolShopHidden } from '@/hooks/useSchoolMode'
+import { shouldShowKidQuickNav } from '@/lib/kidQuickNav'
 import { isSchoolShellPath } from '@/lib/schoolShell'
 import { cn } from '@/lib/utils'
 
@@ -74,6 +76,9 @@ export function AppShellHeader() {
     hideShop: hideShopOnConsumer,
   }
 
+  const parentHome = new URLSearchParams(location.search).get('view') === 'parent'
+  const showKidQuickStrip = !isSchoolRoute && shouldShowKidQuickNav(location.pathname)
+
   return (
     <>
       <header className={cn('app-header')}>
@@ -116,6 +121,17 @@ export function AppShellHeader() {
           )}
         </div>
       </header>
+
+      {showKidQuickStrip ? (
+        <div className="kid-app-quick-nav border-b border-teal-100/80 bg-ascent-warm">
+          <div className="mx-auto max-w-6xl px-4 py-2 md:py-3">
+            {location.pathname === '/' && !parentHome ? (
+              <p className="mb-2 max-w-2xl text-sm leading-relaxed text-slate-600">{t('home.kidHomeChromeSubtitle')}</p>
+            ) : null}
+            <KidWayfindingBar className="mt-0 border-t-0 pt-0" />
+          </div>
+        </div>
+      ) : null}
 
       {narrowViewport && mobileMenuOpen ? (
         <>

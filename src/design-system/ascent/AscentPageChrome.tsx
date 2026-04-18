@@ -1,7 +1,6 @@
 import { Link } from 'react-router-dom'
 import { useTranslation } from '@/contexts/LocaleContext'
 import { cn } from '@/lib/utils'
-import { KidWayfindingBar } from './KidWayfindingBar'
 
 export type AscentBreadcrumbItem = { label: string; to?: string }
 
@@ -19,14 +18,9 @@ type Props = {
   /** Max width for the content column (default `max-w-6xl`). */
   contentMaxWidthClassName?: string
   /**
-   * Kid landing (home): same Ascent shell as inner pages but no duplicate giant H1 —
-   * breadcrumb strip + optional subtitle + wayfinding; hero below keeps the main title.
+   * Kid landing (home): content only — quick nav lives in `AppShellHeader`.
    */
   kidHomeLayout?: boolean
-  /** Shown under breadcrumb when `kidHomeLayout` */
-  kidHomeSubtitle?: string
-  /** Big shortcut chips to main kid hubs (Home, Adventures, This week, …) */
-  showKidWayfinding?: boolean
 }
 
 /**
@@ -42,8 +36,6 @@ export function AscentPageChrome({
   contentClassName,
   contentMaxWidthClassName = 'max-w-6xl',
   kidHomeLayout = false,
-  kidHomeSubtitle,
-  showKidWayfinding = false,
 }: Props) {
   const { t } = useTranslation()
 
@@ -84,13 +76,6 @@ export function AscentPageChrome({
   if (kidHomeLayout) {
     return (
       <div className={cn('min-h-[40vh] bg-gradient-to-b from-ascent-cream via-white to-slate-50/40 pb-16 pt-0', className)}>
-        <div className="border-b border-teal-100/80 bg-ascent-warm">
-          <div className="mx-auto max-w-6xl px-4 py-5 md:py-6">
-            {breadcrumbNav}
-            {kidHomeSubtitle ? <p className="mt-2 max-w-2xl text-sm leading-relaxed text-slate-600">{kidHomeSubtitle}</p> : null}
-            <KidWayfindingBar className="mt-4 border-t-0 pt-0" />
-          </div>
-        </div>
         <div className={cn('mx-auto px-4 py-6 md:py-10', contentMaxWidthClassName, contentClassName)}>{children}</div>
       </div>
     )
@@ -108,7 +93,6 @@ export function AscentPageChrome({
               {pageTitle}
             </h1>
           ) : null}
-          {showKidWayfinding ? <KidWayfindingBar /> : null}
         </div>
       </div>
       <div className={cn('mx-auto px-4 py-10 md:py-12', contentMaxWidthClassName, contentClassName)}>{children}</div>

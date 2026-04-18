@@ -42,7 +42,6 @@ const WeeklyAdventurePage: React.FC = () => {
           { label: t('weekly.weeklyPage.title') },
         ]}
         contentMaxWidthClassName="max-w-lg"
-        showKidWayfinding
       >
         <p className="text-slate-600">{t('weekly.weeklyPage.browseTracks')}</p>
         <Link to="/tracks" className="primary-button mt-4 inline-block">
@@ -60,7 +59,6 @@ const WeeklyAdventurePage: React.FC = () => {
         { label: t('weekly.weeklyPage.title') },
         { label: title },
       ]}
-      showKidWayfinding
     >
     <section className="weekly-adventure-page">
       {resolved.isBeforeSeasonStart && (

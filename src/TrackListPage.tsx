@@ -20,7 +20,6 @@ const TrackListPage: React.FC = () => {
         { label: t('marketingPages.breadcrumbHome'), to: '/' },
         { label: t('curriculum.chooseAdventure') },
       ]}
-      showKidWayfinding
     >
       <section className="dashboard">
         <div className="dashboard-top">

@@ -176,7 +176,6 @@ const HomePage: React.FC = () => {
     <AscentPageChrome
       key={locale}
       kidHomeLayout
-      kidHomeSubtitle={t('home.kidHomeChromeSubtitle')}
       contentMaxWidthClassName="max-w-6xl"
     >
       <section className="home-page">
