@@ -123,5 +123,9 @@ export default function AiTutorPage() {
     )
   }
 
-  return <InteractiveTutor checkoutSessionId={checkoutSessionId} />
+  const hasActiveSubscription = Boolean(tutorAllowUnauth || checkoutSessionId || hasAcademy)
+
+  return (
+    <InteractiveTutor checkoutSessionId={checkoutSessionId} hasActiveSubscription={hasActiveSubscription} />
+  )
 }

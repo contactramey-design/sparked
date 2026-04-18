@@ -4,12 +4,15 @@
  * Body JSON: { checkout_session_id, messages, age_band, state, subject }
  */
 import { requireTutorCheckoutOrAllow } from './lib/tutorEntitlement.js'
+import { verifyHomeworkCheckoutSession } from './lib/verifyBundleEntitlement.js'
 import { buildTutorSystemPrompt } from './tutor/lib/prompts.js'
 import { rateLimit } from './lib/rateLimit.js'
 
 const MAX_MESSAGES = 36
 const MAX_CONTENT = 6000
 const MODEL = 'gpt-4o'
+/** Free preview: max user turns without an active Adventure Academy / bundle subscription (server-enforced). */
+const FREE_TUTOR_USER_MESSAGES = 3
 
 function normalizeMessages(raw) {
   if (!Array.isArray(raw)) return []
@@ -75,6 +78,20 @@ export default async function handler(req, res) {
           : ent.message || 'Not allowed.',
     })
     return
+  }
+
+  if (process.env.ALLOW_UNAUTH_TUTOR !== 'true') {
+    const paid = await verifyHomeworkCheckoutSession(checkoutSessionId)
+    const userTurns = messages.filter((m) => m.role === 'user').length
+    if (!paid.ok && userTurns > FREE_TUTOR_USER_MESSAGES) {
+      res.status(403).json({
+        code: 'TUTOR_FREE_LIMIT',
+        error: 'TUTOR_FREE_LIMIT',
+        message:
+          'You have used your free tutor questions. Ask a parent to subscribe to Adventure Academy to keep chatting.',
+      })
+      return
+    }
   }
 
   const apiKey = process.env.OPENAI_API_KEY?.trim()

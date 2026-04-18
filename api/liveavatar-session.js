@@ -4,6 +4,7 @@
  * Client starts the session with @heygen/liveavatar-web-sdk (not deprecated streaming-avatar).
  */
 import { requireTutorCheckoutOrAllow } from './lib/tutorEntitlement.js'
+import { verifyHomeworkCheckoutSession } from './lib/verifyBundleEntitlement.js'
 import { rateLimit } from './lib/rateLimit.js'
 
 const TOKEN_URL = 'https://api.liveavatar.com/v1/sessions/token'
@@ -73,6 +74,17 @@ export default async function handler(req, res) {
           : ent.message || 'Not allowed.',
     })
     return
+  }
+
+  if (process.env.ALLOW_UNAUTH_TUTOR !== 'true') {
+    const paid = await verifyHomeworkCheckoutSession(checkoutSessionId)
+    if (!paid.ok) {
+      res.status(403).json({
+        error:
+          'Live video tutor is included with Adventure Academy. Ask a parent to subscribe from the Parent dashboard, then try again.',
+      })
+      return
+    }
   }
 
   const apiKey = firstNonEmptyEnv('LIVEAVATAR_API_KEY', 'HEYGEN_API_KEY')

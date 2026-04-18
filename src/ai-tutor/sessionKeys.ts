@@ -6,3 +6,5 @@ export const TUTOR_STATE_LOCAL_KEY = 'sparki_ai_tutor_state_code_v1'
 export const TUTOR_STATE_CHANGED_EVENT = 'sparki-tutor-state-changed'
 export const TUTOR_VOICE_CONSENT_KEY = 'sparki_ai_tutor_voice_consent_v1'
 export const TUTOR_MESSAGES_KEY = 'sparki_ai_tutor_messages_v1'
+/** localStorage — lifetime free tutor replies used without Adventure Academy (not cleared with chat). */
+export const TUTOR_FREE_TURNS_LOCAL_KEY = 'sparki_tutor_free_turns_used_v1'

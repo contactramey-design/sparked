@@ -1,5 +1,6 @@
 import type { AgeBandId } from '@/ageBand'
 import {
+  TUTOR_FREE_TURNS_LOCAL_KEY,
   TUTOR_MESSAGES_KEY,
   TUTOR_STATE_CHANGED_EVENT,
   TUTOR_STATE_KEY,
@@ -83,6 +84,28 @@ export function saveTutorMessages(messages: ChatMessage[]) {
   }
 }
 
+export const FREE_TUTOR_CAP = 3
+
+/** Successful tutor replies without subscription (persists across “clear chat”). */
+export function readTutorFreeTurnsUsed(): number {
+  try {
+    const raw = localStorage.getItem(TUTOR_FREE_TURNS_LOCAL_KEY)
+    const n = raw ? parseInt(raw, 10) : 0
+    return Number.isFinite(n) && n > 0 ? n : 0
+  } catch {
+    return 0
+  }
+}
+
+export function bumpTutorFreeTurnsUsed(): void {
+  try {
+    const next = Math.min(FREE_TUTOR_CAP + 2, readTutorFreeTurnsUsed() + 1)
+    localStorage.setItem(TUTOR_FREE_TURNS_LOCAL_KEY, String(next))
+  } catch {
+    /* ignore */
+  }
+}
+
 export async function postTutorChat(params: {
   checkoutSessionId: string | null
   messages: ChatMessage[]
@@ -106,8 +129,21 @@ export async function postTutorChat(params: {
       locale: params.locale === 'es' ? 'es' : 'en',
     }),
   })
-  const data = (await res.json().catch(() => ({}))) as { reply?: string; error?: string }
-  if (!res.ok) throw new Error(data.error || 'Tutor request failed')
+  const data = (await res.json().catch(() => ({}))) as {
+    reply?: string
+    error?: string
+    code?: string
+    message?: string
+  }
+  if (!res.ok) {
+    const msg =
+      (typeof data.message === 'string' && data.message) ||
+      (typeof data.error === 'string' && data.error) ||
+      'Tutor request failed'
+    const err = new Error(msg) as Error & { code?: string }
+    if (typeof data.code === 'string') err.code = data.code
+    throw err
+  }
   if (!data.reply) throw new Error('Empty tutor reply')
   return data.reply
 }

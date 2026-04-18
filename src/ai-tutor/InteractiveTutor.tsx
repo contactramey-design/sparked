@@ -5,10 +5,13 @@ import { useTranslation } from '@/contexts/LocaleContext'
 import { TutorConsentModal } from './TutorConsentModal'
 import type { LiveAvatarSession } from '@heygen/liveavatar-web-sdk'
 import {
+  FREE_TUTOR_CAP,
+  bumpTutorFreeTurnsUsed,
   fetchLiveAvatarSession,
   loadTutorMessages,
   playTtsStreamEphemeral,
   postTutorChat,
+  readTutorFreeTurnsUsed,
   readTutorStateCode,
   readVoiceConsent,
   saveTutorMessages,
@@ -21,9 +24,11 @@ import { stateNameFromCode } from './usStates'
 
 type Props = {
   checkoutSessionId: string | null
+  /** Adventure Academy (or dev unauth) — unlimited tutor; otherwise 3 free user messages then paywall. */
+  hasActiveSubscription: boolean
 }
 
-export default function InteractiveTutor({ checkoutSessionId }: Props) {
+export default function InteractiveTutor({ checkoutSessionId, hasActiveSubscription }: Props) {
   const { t, locale } = useTranslation()
   const { ageBand } = useAgeBand()
   const isTots = ageBand === 'tots'
@@ -240,6 +245,10 @@ export default function InteractiveTutor({ checkoutSessionId }: Props) {
 
   const onToggleLiveAvatar = async () => {
     if (!liveAvatar) {
+      if (!hasActiveSubscription) {
+        setError(t('aiTutor.avatarRequiresSubscription'))
+        return
+      }
       if (!readVoiceConsent()) {
         setConsentOpen(true)
         return
@@ -273,6 +282,11 @@ export default function InteractiveTutor({ checkoutSessionId }: Props) {
       return
     }
 
+    if (!hasActiveSubscription && readTutorFreeTurnsUsed() >= FREE_TUTOR_CAP) {
+      setError(t('aiTutor.freeLimitReached'))
+      return
+    }
+
     setError(null)
     setInput('')
     const userMsg: ChatMessage = { role: 'user', content: trimmed }
@@ -291,9 +305,17 @@ export default function InteractiveTutor({ checkoutSessionId }: Props) {
       })
       const assistantMsg: ChatMessage = { role: 'assistant', content: reply }
       setMessages((m) => [...m, assistantMsg])
+      if (!hasActiveSubscription) {
+        bumpTutorFreeTurnsUsed()
+      }
       await speakReply(reply)
     } catch (e) {
-      setError(e instanceof Error ? e.message : t('aiTutor.errorGeneric'))
+      const err = e as Error & { code?: string }
+      if (err.code === 'TUTOR_FREE_LIMIT') {
+        setError(t('aiTutor.freeLimitReached'))
+      } else {
+        setError(err instanceof Error ? err.message : t('aiTutor.errorGeneric'))
+      }
       setMessages((m) => m.slice(0, -1))
     } finally {
       setLoading(false)
@@ -306,8 +328,12 @@ export default function InteractiveTutor({ checkoutSessionId }: Props) {
     saveTutorMessages([])
   }
 
+  const freeTurnsUsed = readTutorFreeTurnsUsed()
+  const freeLocked = !hasActiveSubscription && freeTurnsUsed >= FREE_TUTOR_CAP
+  const freeRemaining = Math.max(0, FREE_TUTOR_CAP - freeTurnsUsed)
+
   const startSpeechInput = () => {
-    if (isTots || !voiceOut || !readVoiceConsent()) return
+    if (isTots || !voiceOut || !readVoiceConsent() || freeLocked) return
     const w = window as unknown as {
       SpeechRecognition?: new () => {
         lang: string
@@ -384,6 +410,7 @@ export default function InteractiveTutor({ checkoutSessionId }: Props) {
           <li>{t('aiTutor.chatRulesBullet3')}</li>
           <li>{t('aiTutor.chatRulesBullet4')}</li>
           <li>{t('aiTutor.chatRulesBullet5')}</li>
+          <li>{t('aiTutor.chatRulesBullet6')}</li>
         </ul>
         <p className="mt-4 border-t border-teal-100/80 pt-3 text-xs leading-relaxed text-slate-600">
           {t('aiTutor.chatRulesGrownUpNote')}
@@ -405,6 +432,24 @@ export default function InteractiveTutor({ checkoutSessionId }: Props) {
           </Link>
         </p>
       )}
+
+      {!hasActiveSubscription ? (
+        <div className="rounded-xl border border-indigo-200 bg-indigo-50/90 px-3 py-3 text-sm text-indigo-950 sm:px-4 sm:text-base">
+          <p>
+            {freeLocked
+              ? t('aiTutor.freeLimitReached')
+              : t('aiTutor.freeTeaserBanner', { remaining: freeRemaining })}
+          </p>
+          {freeLocked ? (
+            <Link
+              to="/?view=parent"
+              className="mt-2 inline-block min-h-[44px] font-semibold text-indigo-900 underline-offset-2 hover:underline"
+            >
+              {t('aiTutor.freeLimitParentCta')}
+            </Link>
+          ) : null}
+        </div>
+      ) : null}
 
       <div
         className={cn(
@@ -549,14 +594,14 @@ export default function InteractiveTutor({ checkoutSessionId }: Props) {
                   void send()
                 }
               }}
-              disabled={loading}
+              disabled={loading || freeLocked}
             />
             <div className="flex flex-col gap-2 sm:w-44">
               <button
                 type="button"
                 className="min-h-[52px] rounded-xl bg-sky-600 text-lg font-bold text-white disabled:opacity-50"
                 onClick={() => void send()}
-                disabled={loading}
+                disabled={loading || freeLocked}
               >
                 {loading ? t('aiTutor.sending') : t('aiTutor.send')}
               </button>
