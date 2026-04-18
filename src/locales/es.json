@@ -27,7 +27,17 @@
     "educatorsAria": "Información para docentes y escuelas — herramientas de aula y hoja de ruta",
     "mobileMenuOpen": "Abrir menú",
     "mobileMenuClose": "Cerrar menú",
-    "mobileMenuTitle": "Menú principal"
+    "mobileMenuTitle": "Menú principal",
+    "breadcrumbAria": "Ruta de navegación"
+  },
+  "kidWayfinding": {
+    "aria": "Enlaces rápidos — elige a dónde ir",
+    "home": "Inicio",
+    "tracks": "Aventuras",
+    "weekly": "Esta semana",
+    "daily": "Inicio rápido",
+    "homework": "Tarea",
+    "tutor": "Tutor"
   },
   "listenButton": {
     "heading": "Escuchar el encabezado",
@@ -899,6 +909,7 @@
     "voiceOff": "Voz desactivada",
     "avatarOn": "Video tutor en vivo activado",
     "avatarOff": "Video tutor en vivo desactivado",
+    "avatarPauseSpeech": "Pausar voz",
     "micOnce": "Hablar (una frase)",
     "totsVoiceNote": "Para Sparki Tots (3–5 años), la voz de lectura y el micrófono están desactivados: escribe tus preguntas. Padres: pueden activar el tutor en video en vivo (con permiso) para que el avatar diga las respuestas del tutor.",
     "emptyChat": "Haz una pregunta o describe qué estás practicando. El tutor guía — tú piensas.",
@@ -1266,6 +1277,7 @@
   },
   "home": {
     "joinAdventure": "¡Únete a la aventura!",
+    "kidHomeChromeSubtitle": "Toca un acceso abajo o baja para elegir tu edad y tu aventura — lo importante está a uno o dos toques.",
     "heroAscentRibbon": "Hábitos seguros, tarea y práctica por materias — para edades de 3 a 11",
     "heroAscentKicker": "Bienvenidas y bienvenidos, familias",
     "heroAscentTitleLead": "Mentes que exploran en",

@@ -15,6 +15,7 @@ import { HomeworkPreview } from '../components/HomeworkPreview'
 import { LanguageToggle } from '../components/LanguageToggle'
 import { ModeSelector } from '../components/ModeSelector'
 import { GenerateButton } from '../components/GenerateButton'
+import { useHomeworkSkipCheckoutGate } from '../hooks/useHomeworkAllowUnauth'
 
 function fileToDataUrl(file: File, maxBytes = 350_000): Promise<string | undefined> {
   return new Promise((resolve) => {
@@ -44,7 +45,7 @@ export default function HomeworkUpload() {
   const [allowed, setAllowed] = useState(false)
   const [loading, setLoading] = useState(false)
   const [phase, setPhase] = useState('')
-  const [homeworkAllowUnauth, setHomeworkAllowUnauth] = useState(false)
+  const homeworkSkipCheckoutGate = useHomeworkSkipCheckoutGate()
 
   useEffect(() => {
     if (gradeBandSynced.current) return
@@ -54,22 +55,9 @@ export default function HomeworkUpload() {
     setGradeBandId(band)
   }, [ageBand])
 
-  useEffect(() => {
-    let cancelled = false
-    fetch('/api/config')
-      .then((r) => r.json())
-      .then((data: { homeworkAllowUnauth?: boolean }) => {
-        if (!cancelled) setHomeworkAllowUnauth(Boolean(data.homeworkAllowUnauth))
-      })
-      .catch(() => {})
-    return () => {
-      cancelled = true
-    }
-  }, [])
-
   const checkoutSessionId = getHomeworkCheckoutSessionId()
   const needsCheckout =
-    import.meta.env.PROD && !checkoutSessionId && !homeworkAllowUnauth
+    import.meta.env.PROD && !checkoutSessionId && !homeworkSkipCheckoutGate
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()

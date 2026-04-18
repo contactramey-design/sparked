@@ -181,6 +181,7 @@ const UnitPage: React.FC = () => {
           { label: t('ageBand.unitNotInBandTitle') },
         ]}
         contentMaxWidthClassName="max-w-lg"
+        showKidWayfinding
       >
         <div className="rounded-3xl border border-teal-100 bg-white p-6 shadow-sm">
           <p className="muted text-slate-700">{t('ageBand.unitNotInBandBody')}</p>
@@ -365,6 +366,7 @@ const UnitPage: React.FC = () => {
         { label: displayUnit.title },
       ]}
       contentMaxWidthClassName="max-w-3xl"
+      showKidWayfinding
     >
     <section className="lesson-page unit-page-single">
       <div className="unit-cyber-layer">

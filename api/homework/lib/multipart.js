@@ -2,6 +2,13 @@ import { verifyHomeworkCheckoutSession } from '../../lib/verifyBundleEntitlement
 
 export const MAX_BODY_BYTES = 4.5 * 1024 * 1024
 
+/** When true, homework APIs require a valid Stripe checkout session (unless ALLOW_UNAUTH_HOMEWORK). Default: unset/false = open (matches AI_TUTOR_REQUIRE_CHECKOUT default). */
+export function isHomeworkEntitlementBypassed() {
+  if (process.env.ALLOW_UNAUTH_HOMEWORK === 'true') return true
+  if (process.env.HOMEWORK_REQUIRE_CHECKOUT === 'true') return false
+  return true
+}
+
 export async function parseMultipart(req) {
   const { IncomingForm } = await import('formidable')
   return new Promise((resolve, reject) => {
@@ -17,8 +24,7 @@ export async function parseMultipart(req) {
 }
 
 export async function requireHomeworkEntitlement(checkoutSessionId) {
-  const allowUnauth = process.env.ALLOW_UNAUTH_HOMEWORK === 'true'
-  if (allowUnauth) return { ok: true }
+  if (isHomeworkEntitlementBypassed()) return { ok: true }
   const entitlement = await verifyHomeworkCheckoutSession((checkoutSessionId || '').trim())
   if (!entitlement.ok) {
     return {

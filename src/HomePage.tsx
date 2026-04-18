@@ -174,7 +174,13 @@ const HomePage: React.FC = () => {
   }
 
   return (
-    <section className="home-page">
+    <AscentPageChrome
+      key={locale}
+      kidHomeLayout
+      kidHomeSubtitle={t('home.kidHomeChromeSubtitle')}
+      contentMaxWidthClassName="max-w-6xl"
+    >
+      <section className="home-page">
       {isLoggedIn && (
         <div className="home-floating-badges" aria-label={t('home.hiSparkles', { name: username || 'Explorer', count: displaySparkles })}>
           <button
@@ -261,6 +267,7 @@ const HomePage: React.FC = () => {
         ) : null}
       </div>
     </section>
+    </AscentPageChrome>
   )
 }
 

@@ -13,6 +13,7 @@ export default function HomeworkFeatureLayout() {
         { label: t('homeworkFeature.layoutTitle') },
       ]}
       className="homework-feature"
+      showKidWayfinding
     >
       <p className="homework-feature-reward-note -mt-2 mb-2 max-w-prose text-sm text-slate-600">{t('homeworkFeature.layoutRewardNote')}</p>
       <p className="mb-6 max-w-prose text-sm text-slate-600">{t('productTiers.academyLine')}</p>

@@ -17,6 +17,7 @@ export default function DailySparkQuestPage() {
         { label: t('retention.dailyQuestTitle') },
       ]}
       contentMaxWidthClassName="max-w-xl"
+      showKidWayfinding
     >
       <div className="card space-y-4 rounded-2xl border border-teal-100/80 p-6">
         <p className="text-slate-700">{t('retention.dailyQuestLead')}</p>

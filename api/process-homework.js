@@ -8,6 +8,7 @@
  * Returns: { title, subject, topic, steps } — homework-specific adventure JSON.
  * COPPA: Process image in memory only; do not store or log image bytes.
  */
+import { isHomeworkEntitlementBypassed } from './homework/lib/multipart.js'
 import { verifyHomeworkCheckoutSession } from './lib/verifyBundleEntitlement.js'
 
 const MAX_BODY_BYTES = 4.5 * 1024 * 1024 // 4.5 MB (Vercel limit)
@@ -190,8 +191,7 @@ export default async function handler(req, res) {
       return
     }
 
-    const allowUnauth = process.env.ALLOW_UNAUTH_HOMEWORK === 'true'
-    if (!allowUnauth) {
+    if (!isHomeworkEntitlementBypassed()) {
       const entitlement = await verifyHomeworkCheckoutSession(checkoutSessionId)
       if (!entitlement.ok) {
         res.status(entitlement.status).json({

@@ -27,7 +27,17 @@
     "educatorsAria": "Information for teachers and schools — classroom tools and roadmap",
     "mobileMenuOpen": "Open menu",
     "mobileMenuClose": "Close menu",
-    "mobileMenuTitle": "Main menu"
+    "mobileMenuTitle": "Main menu",
+    "breadcrumbAria": "Breadcrumb"
+  },
+  "kidWayfinding": {
+    "aria": "Quick links — pick where to go next",
+    "home": "Home",
+    "tracks": "Adventures",
+    "weekly": "This week",
+    "daily": "Quick start",
+    "homework": "Homework",
+    "tutor": "Tutor"
   },
   "listenButton": {
     "heading": "Listen to heading",
@@ -905,6 +915,7 @@
     "voiceOff": "Voice off",
     "avatarOn": "Live tutor video on",
     "avatarOff": "Live tutor video off",
+    "avatarPauseSpeech": "Pause speech",
     "micOnce": "Speak (one sentence)",
     "totsVoiceNote": "For Sparki Tots (ages 3–5), read-aloud voice and mic are off—type your questions. Parents: you can turn on Live video tutor (with permission) so the avatar speaks the tutor’s replies.",
     "emptyChat": "Ask a question or describe what you’re practicing. The tutor guides — you do the thinking.",
@@ -1277,6 +1288,7 @@
   },
   "home": {
     "joinAdventure": "Join the Adventure!",
+    "kidHomeChromeSubtitle": "Tap a shortcut below or scroll to pick your age and your adventure — everything important is one or two taps away.",
     "heroAscentRibbon": "Safe habits, homework help, and subject practice — built for ages 3–11",
     "heroAscentKicker": "Welcome, families",
     "heroAscentTitleLead": "Exploring minds at",

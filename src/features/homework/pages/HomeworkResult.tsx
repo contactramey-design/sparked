@@ -5,7 +5,7 @@ import { getHomeworkCheckoutSessionId } from '@/progress'
 import { explainWorksheet, storyFromLesson } from '../api/homeworkApi'
 import { requestHomeworkVisuals } from '../lib/visualGenerator'
 import { getHomeworkJob, saveHomeworkJob } from '../hooks/useHomeworkJob'
-import { useHomeworkAllowUnauth } from '../hooks/useHomeworkAllowUnauth'
+import { useHomeworkSkipCheckoutGate } from '../hooks/useHomeworkAllowUnauth'
 import { getAvatarPreset } from '../constants/avatarPresets'
 import { getAvatarDescriptionForGeneration } from '../lib/homeworkAvatarSession'
 import type { HomeworkJob } from '../types/homework'
@@ -48,7 +48,7 @@ export default function HomeworkResult() {
   }, [])
 
   const session = getHomeworkCheckoutSessionId()
-  const allowUnauthHomework = useHomeworkAllowUnauth()
+  const homeworkSkipCheckoutGate = useHomeworkSkipCheckoutGate()
 
   const autoVisualKey = jobId ? `sparki_hw_autovisual_ok_${jobId}` : ''
 
@@ -62,7 +62,7 @@ export default function HomeworkResult() {
       /* ignore */
     }
     const checkoutSessionId = getHomeworkCheckoutSessionId()
-    if (import.meta.env.PROD && !checkoutSessionId && !allowUnauthHomework) return
+    if (import.meta.env.PROD && !checkoutSessionId && !homeworkSkipCheckoutGate) return
 
     let cancelled = false
     ;(async () => {
@@ -89,7 +89,7 @@ export default function HomeworkResult() {
     return () => {
       cancelled = true
     }
-  }, [jobId, autoVisualKey, job?.story, job?.storyVisuals?.length, job?.isDemo, allowUnauthHomework, persist])
+  }, [jobId, autoVisualKey, job?.story, job?.storyVisuals?.length, job?.isDemo, homeworkSkipCheckoutGate, persist])
 
   const regenerateExplain = async () => {
     if (!job) return

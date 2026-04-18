@@ -183,6 +183,15 @@ export default function InteractiveTutor({ checkoutSessionId }: Props) {
     await teardownAvatar()
   }
 
+  const onPauseAvatarSpeech = () => {
+    stopAudio()
+    try {
+      avatarRef.current?.interrupt()
+    } catch {
+      /* ignore */
+    }
+  }
+
   const send = async () => {
     const trimmed = input.trim()
     if (!trimmed || loading) return
@@ -350,6 +359,16 @@ export default function InteractiveTutor({ checkoutSessionId }: Props) {
         >
           {liveAvatar ? t('aiTutor.avatarOn') : t('aiTutor.avatarOff')}
         </button>
+        {liveAvatar && (
+          <button
+            type="button"
+            className="min-h-[48px] rounded-xl border-2 border-amber-500/80 bg-amber-50 px-4 text-base font-semibold text-amber-950 disabled:opacity-50"
+            onClick={onPauseAvatarSpeech}
+            disabled={avatarBusy}
+          >
+            {t('aiTutor.avatarPauseSpeech')}
+          </button>
+        )}
         {!isTots && voiceOut && (
           <button
             type="button"

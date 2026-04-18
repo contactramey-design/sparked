@@ -11,6 +11,7 @@ export default function AiTutorLayout() {
         { label: t('marketingPages.breadcrumbHome'), to: '/' },
         { label: t('aiTutor.layoutTitle') },
       ]}
+      showKidWayfinding
     >
       <p className="mb-6 max-w-prose text-slate-600">{t('aiTutor.layoutSubtitle')}</p>
       <Outlet />

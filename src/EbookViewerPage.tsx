@@ -315,6 +315,7 @@ const EbookViewerPage: React.FC = () => {
           { label: ebookTitle },
         ]}
         contentMaxWidthClassName="max-w-2xl"
+        showKidWayfinding
       >
         <div className="card ebook-subscription-card rounded-2xl border border-teal-100/80 p-6">
           <p className="leading-relaxed text-slate-700">{t('ebookViewer.subscriptionCatalogBody')}</p>
@@ -341,6 +342,7 @@ const EbookViewerPage: React.FC = () => {
           { label: ebookTitle },
         ]}
         contentMaxWidthClassName="max-w-2xl"
+        showKidWayfinding
       >
         <div className="card rounded-2xl border border-teal-100/80 p-6" role="alert" aria-live="polite">
           <h3 className="m-0 font-heading text-lg text-teal-950">{t('ebookViewer.unlockToReadTitle')}</h3>
@@ -402,6 +404,7 @@ const EbookViewerPage: React.FC = () => {
         { label: ebookTitle },
       ]}
       contentMaxWidthClassName="max-w-4xl"
+      showKidWayfinding
     >
       <section className="lesson-page">
       <div

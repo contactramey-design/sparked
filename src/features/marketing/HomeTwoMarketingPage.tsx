@@ -1,14 +1,21 @@
 import { Link } from 'react-router-dom'
 import { useTranslation } from '@/contexts/LocaleContext'
 import { cn } from '@/lib/utils'
+import { AscentPageChrome } from '@/design-system/ascent/AscentPageChrome'
 
 export default function HomeTwoMarketingPage() {
   const { t } = useTranslation()
   return (
-    <div className="bg-gradient-to-b from-ascent-cream to-white pb-16 pt-4">
-      <div className="mx-auto max-w-6xl px-4 py-12 text-center md:py-16">
+    <AscentPageChrome
+      title={t('marketingPages.home2Title')}
+      breadcrumb={[
+        { label: t('marketingPages.breadcrumbHome'), to: '/' },
+        { label: t('marketingPages.home2Title') },
+      ]}
+      showKidWayfinding
+    >
+      <div className="mx-auto max-w-6xl text-center">
         <p className="text-xs font-bold uppercase tracking-[0.14em] text-teal-800">{t('marketingPages.home2Kicker')}</p>
-        <h1 className="mt-3 text-balance font-heading text-4xl font-extrabold text-slate-900 md:text-5xl">{t('marketingPages.home2Title')}</h1>
         <p className="mx-auto mt-5 max-w-2xl text-lg text-slate-600">{t('marketingPages.home2Lead')}</p>
         <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
           <Link
@@ -29,7 +36,7 @@ export default function HomeTwoMarketingPage() {
         </div>
       </div>
 
-      <div className="mx-auto grid max-w-6xl gap-4 px-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="mx-auto mt-12 grid max-w-6xl gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {(['home2Card1', 'home2Card2', 'home2Card3', 'home2Card4'] as const).map((key) => (
           <div key={key} className="rounded-2xl border border-slate-200 bg-white p-6 text-left shadow-sm">
             <h2 className="font-heading text-lg font-bold text-slate-900">{t(`marketingPages.${key}Title`)}</h2>
@@ -48,6 +55,6 @@ export default function HomeTwoMarketingPage() {
           {t('marketingPages.home2NewsletterCta')}
         </Link>
       </div>
-    </div>
+    </AscentPageChrome>
   )
 }
