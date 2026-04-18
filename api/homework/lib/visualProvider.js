@@ -38,16 +38,24 @@ export async function generateFluxSceneImage(prompt) {
   const { fal } = await import('@fal-ai/client')
   fal.config({ credentials: key })
 
-  const result = await fal.subscribe(FLUX_MODEL, {
-    input: {
-      prompt,
-      image_size: 'landscape_16_9',
-      num_images: 1,
-      output_format: 'jpeg',
-      safety_tolerance: 2,
-      enhance_prompt: false,
-    },
-  })
+  let result
+  try {
+    result = await fal.subscribe(FLUX_MODEL, {
+      input: {
+        prompt,
+        image_size: 'landscape_16_9',
+        num_images: 1,
+        output_format: 'jpeg',
+        safety_tolerance: 2,
+        enhance_prompt: false,
+      },
+    })
+  } catch (e) {
+    const msg = e?.message ? String(e.message) : 'Unknown error'
+    const status = e?.status ? String(e.status) : ''
+    const providerHint = status ? ` (status ${status})` : ''
+    throw new Error(`Image provider error${providerHint}: ${msg}`)
+  }
 
   const url = extractFirstImageUrl(result?.data)
   if (!url) {

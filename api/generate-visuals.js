@@ -11,9 +11,19 @@ import { generateFluxSceneImage } from './homework/lib/visualProvider.js'
 const MAX_SCENES = 6
 
 function safeError(e) {
-  const message = e.message || 'Something went wrong.'
+  const message = e?.message || 'Something went wrong.'
   if (message.includes('FAL_KEY')) return 'Scene art is not configured yet. Ask a grown-up to add FAL_KEY for this feature.'
-  if (message.includes('429') || message.includes('Rate limit') || message.includes('quota')) {
+  const m = String(message)
+  const lower = m.toLowerCase()
+  if (
+    lower.includes('insufficient') ||
+    lower.includes('balance') ||
+    lower.includes('payment required') ||
+    lower.includes('402')
+  ) {
+    return 'fal.ai credits are too low for scene art right now. Add credits (or switch to a cheaper model) and try again.'
+  }
+  if (m.includes('429') || lower.includes('rate limit') || lower.includes('quota')) {
     return 'Too many image requests. Please try again in a moment.'
   }
   if (message.includes('Image provider')) return 'Could not create scene art. Try again.'
