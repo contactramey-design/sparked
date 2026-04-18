@@ -281,7 +281,7 @@ export default function InteractiveTutor({ checkoutSessionId }: Props) {
   }
 
   return (
-    <div className="mx-auto max-w-4xl space-y-6 px-2 pb-10">
+    <div className="mx-auto max-w-3xl space-y-8 px-2 pb-10 pt-2">
       <TutorConsentModal
         open={consentOpen}
         title={t('aiTutor.consentTitle')}
@@ -298,89 +298,122 @@ export default function InteractiveTutor({ checkoutSessionId }: Props) {
         onDecline={() => setConsentOpen(false)}
       />
 
-      <div className="grid gap-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm md:grid-cols-2">
-        <label className="flex min-h-[52px] flex-col gap-1">
-          <span className="text-sm font-semibold text-slate-800">{t('aiTutor.stateLabel')}</span>
-          <select
-            className="min-h-[48px] rounded-xl border border-slate-300 px-3 text-lg text-slate-900"
-            value={stateCode}
-            onChange={(e) => {
-              setStateCode(e.target.value)
-              writeTutorStateCode(e.target.value)
-            }}
-          >
-            <option value="">{t('aiTutor.statePlaceholder')}</option>
-            {US_STATES_PLUS_DC.map((s) => (
-              <option key={s.code} value={s.code}>
-                {s.name}
-              </option>
-            ))}
-          </select>
-        </label>
+      <section
+        className="rounded-2xl border-2 border-teal-100 bg-gradient-to-b from-teal-50/90 to-white p-4 shadow-sm md:p-5"
+        aria-labelledby="tutor-chat-rules-heading"
+      >
+        <h2 id="tutor-chat-rules-heading" className="font-heading text-lg font-bold text-teal-950 md:text-xl">
+          {t('aiTutor.chatRulesTitle')}
+        </h2>
+        <p className="mt-2 text-sm leading-relaxed text-slate-700 md:text-base">{t('aiTutor.chatRulesLead')}</p>
+        <ul className="mt-4 list-disc space-y-2 pl-5 text-sm leading-snug text-slate-800 md:text-base">
+          <li>{t('aiTutor.chatRulesBullet1')}</li>
+          <li>{t('aiTutor.chatRulesBullet2')}</li>
+          <li>{t('aiTutor.chatRulesBullet3')}</li>
+          <li>{t('aiTutor.chatRulesBullet4')}</li>
+          <li>{t('aiTutor.chatRulesBullet5')}</li>
+        </ul>
+        <p className="mt-4 border-t border-teal-100/80 pt-3 text-xs leading-relaxed text-slate-600">
+          {t('aiTutor.chatRulesGrownUpNote')}
+        </p>
+      </section>
 
-        <fieldset className="min-h-[52px]">
-          <legend className="text-sm font-semibold text-slate-800">{t('aiTutor.subjectLabel')}</legend>
-          <div className="mt-2 flex flex-wrap gap-2">
-            {SUBJECTS.map((s) => (
-              <button
-                key={s.id}
-                type="button"
-                className={`min-h-[48px] min-w-[100px] rounded-xl border-2 px-3 text-base font-medium ${
-                  subject === s.id ? 'border-sky-600 bg-sky-50 text-sky-900' : 'border-slate-200 bg-white text-slate-700'
-                }`}
-                onClick={() => setSubject(s.id)}
-              >
-                {t(s.labelKey)}
-              </button>
-            ))}
-          </div>
-        </fieldset>
-      </div>
+      <section className="space-y-3" aria-labelledby="tutor-study-heading">
+        <h2 id="tutor-study-heading" className="font-heading text-base font-bold text-slate-900 md:text-lg">
+          {t('aiTutor.sectionStudySetup')}
+        </h2>
+        <div className="space-y-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+          <label className="flex min-h-[52px] flex-col gap-2">
+            <span className="text-sm font-semibold text-slate-800">{t('aiTutor.stateLabel')}</span>
+            <select
+              className="min-h-[48px] w-full max-w-md rounded-xl border border-slate-300 px-3 text-lg text-slate-900"
+              value={stateCode}
+              onChange={(e) => {
+                setStateCode(e.target.value)
+                writeTutorStateCode(e.target.value)
+              }}
+            >
+              <option value="">{t('aiTutor.statePlaceholder')}</option>
+              {US_STATES_PLUS_DC.map((s) => (
+                <option key={s.code} value={s.code}>
+                  {s.name}
+                </option>
+              ))}
+            </select>
+          </label>
 
-      <div className="flex flex-wrap gap-3 rounded-xl bg-slate-50 p-4">
-        {!isTots && (
+          <fieldset>
+            <legend className="text-sm font-semibold text-slate-800">{t('aiTutor.subjectLabel')}</legend>
+            <div className="mt-3 grid grid-cols-2 gap-2 sm:flex sm:flex-wrap">
+              {SUBJECTS.map((s) => (
+                <button
+                  key={s.id}
+                  type="button"
+                  className={`min-h-[48px] flex-1 rounded-xl border-2 px-3 text-base font-medium sm:min-w-[108px] ${
+                    subject === s.id ? 'border-sky-600 bg-sky-50 text-sky-900' : 'border-slate-200 bg-white text-slate-700'
+                  }`}
+                  onClick={() => setSubject(s.id)}
+                >
+                  {t(s.labelKey)}
+                </button>
+              ))}
+            </div>
+          </fieldset>
+        </div>
+      </section>
+
+      <details className="group rounded-2xl border border-slate-200 bg-slate-50/90 shadow-sm open:bg-slate-50">
+        <summary className="flex min-h-[52px] cursor-pointer list-none items-center rounded-2xl px-4 py-3 font-semibold text-slate-800 [&::-webkit-details-marker]:hidden">
+          {t('aiTutor.sectionSoundVideo')}
+          <span className="ml-auto text-sm font-normal text-slate-500 transition-transform group-open:-rotate-180">▾</span>
+        </summary>
+        <div className="flex flex-wrap gap-2 border-t border-slate-200 px-3 pb-4 pt-3">
+          {!isTots && (
+            <button
+              type="button"
+              className={`min-h-[48px] rounded-xl px-4 text-base font-semibold ${
+                voiceOut ? 'bg-sky-600 text-white' : 'border-2 border-slate-300 bg-white text-slate-800'
+              }`}
+              onClick={onToggleVoiceOut}
+            >
+              {voiceOut ? t('aiTutor.voiceOn') : t('aiTutor.voiceOff')}
+            </button>
+          )}
           <button
             type="button"
             className={`min-h-[48px] rounded-xl px-4 text-base font-semibold ${
-              voiceOut ? 'bg-sky-600 text-white' : 'border-2 border-slate-300 bg-white text-slate-800'
+              liveAvatar ? 'bg-indigo-600 text-white' : 'border-2 border-slate-300 bg-white text-slate-800'
             }`}
-            onClick={onToggleVoiceOut}
-          >
-            {voiceOut ? t('aiTutor.voiceOn') : t('aiTutor.voiceOff')}
-          </button>
-        )}
-        <button
-          type="button"
-          className={`min-h-[48px] rounded-xl px-4 text-base font-semibold ${
-            liveAvatar ? 'bg-indigo-600 text-white' : 'border-2 border-slate-300 bg-white text-slate-800'
-          }`}
-          onClick={() => void onToggleLiveAvatar()}
-          disabled={avatarBusy}
-        >
-          {liveAvatar ? t('aiTutor.avatarOn') : t('aiTutor.avatarOff')}
-        </button>
-        {liveAvatar && (
-          <button
-            type="button"
-            className="min-h-[48px] rounded-xl border-2 border-amber-500/80 bg-amber-50 px-4 text-base font-semibold text-amber-950 disabled:opacity-50"
-            onClick={onPauseAvatarSpeech}
+            onClick={() => void onToggleLiveAvatar()}
             disabled={avatarBusy}
           >
-            {t('aiTutor.avatarPauseSpeech')}
+            {liveAvatar ? t('aiTutor.avatarOn') : t('aiTutor.avatarOff')}
           </button>
-        )}
-        {!isTots && voiceOut && (
-          <button
-            type="button"
-            className="min-h-[48px] rounded-xl border-2 border-slate-300 bg-white px-4 text-base font-semibold text-slate-800"
-            onClick={startSpeechInput}
-          >
-            {t('aiTutor.micOnce')}
-          </button>
-        )}
-      </div>
+          {liveAvatar && (
+            <button
+              type="button"
+              className="min-h-[48px] rounded-xl border-2 border-amber-500/80 bg-amber-50 px-4 text-base font-semibold text-amber-950 disabled:opacity-50"
+              onClick={onPauseAvatarSpeech}
+              disabled={avatarBusy}
+            >
+              {t('aiTutor.avatarPauseSpeech')}
+            </button>
+          )}
+          {!isTots && voiceOut && (
+            <button
+              type="button"
+              className="min-h-[48px] rounded-xl border-2 border-slate-300 bg-white px-4 text-base font-semibold text-slate-800"
+              onClick={startSpeechInput}
+            >
+              {t('aiTutor.micOnce')}
+            </button>
+          )}
+        </div>
+      </details>
 
-      {isTots && <p className="rounded-xl bg-amber-50 px-4 py-3 text-sm text-amber-950">{t('aiTutor.totsVoiceNote')}</p>}
+      {isTots && (
+        <p className="rounded-xl bg-amber-50 px-4 py-3 text-sm leading-relaxed text-amber-950">{t('aiTutor.totsVoiceNote')}</p>
+      )}
 
       {liveAvatar && (
         <div className="overflow-hidden rounded-2xl border border-slate-200 bg-slate-900 shadow-md">
@@ -389,22 +422,27 @@ export default function InteractiveTutor({ checkoutSessionId }: Props) {
         </div>
       )}
 
-      <div
-        className="max-h-[min(50vh,420px)] space-y-3 overflow-y-auto rounded-2xl border border-slate-200 bg-slate-50 p-4"
-        aria-live="polite"
-      >
-        {messages.length === 0 && <p className="text-slate-600">{t('aiTutor.emptyChat')}</p>}
-        {messages.map((m, i) => (
-          <div
-            key={i}
-            className={`max-w-[95%] rounded-2xl px-4 py-3 text-base leading-relaxed ${
-              m.role === 'user' ? 'ml-auto bg-sky-600 text-white' : 'mr-auto bg-white text-slate-800 shadow-sm'
-            }`}
-          >
-            {m.content}
-          </div>
-        ))}
-      </div>
+      <section className="space-y-3" aria-labelledby="tutor-chat-heading">
+        <h2 id="tutor-chat-heading" className="font-heading text-base font-bold text-slate-900 md:text-lg">
+          {t('aiTutor.sectionChat')}
+        </h2>
+        <div
+          className="max-h-[min(48vh,380px)] space-y-3 overflow-y-auto rounded-2xl border border-slate-200 bg-slate-50 p-4"
+          aria-live="polite"
+        >
+          {messages.length === 0 && <p className="text-slate-600">{t('aiTutor.emptyChat')}</p>}
+          {messages.map((m, i) => (
+            <div
+              key={i}
+              className={`max-w-[95%] rounded-2xl px-4 py-3 text-base leading-relaxed ${
+                m.role === 'user' ? 'ml-auto bg-sky-600 text-white' : 'mr-auto bg-white text-slate-800 shadow-sm'
+              }`}
+            >
+              {m.content}
+            </div>
+          ))}
+        </div>
+      </section>
 
       {error && (
         <p className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-900" role="alert">
@@ -418,7 +456,7 @@ export default function InteractiveTutor({ checkoutSessionId }: Props) {
         </label>
         <textarea
           id="ai-tutor-input"
-          className="min-h-[120px] flex-1 resize-y rounded-2xl border-2 border-slate-300 p-4 text-lg text-slate-900"
+          className="min-h-[100px] flex-1 resize-y rounded-2xl border-2 border-slate-300 p-4 text-lg text-slate-900"
           placeholder={t('aiTutor.inputPlaceholder')}
           value={input}
           onChange={(e) => setInput(e.target.value)}
@@ -439,13 +477,17 @@ export default function InteractiveTutor({ checkoutSessionId }: Props) {
           >
             {loading ? t('aiTutor.sending') : t('aiTutor.send')}
           </button>
-          <button type="button" className="min-h-[48px] rounded-xl border-2 border-slate-300 text-base text-slate-700" onClick={clearChat}>
+          <button
+            type="button"
+            className="min-h-[48px] rounded-xl border-2 border-slate-300 text-base text-slate-700"
+            onClick={clearChat}
+          >
             {t('aiTutor.clearChat')}
           </button>
         </div>
       </div>
 
-      <p className="text-center text-xs text-slate-500">{t('aiTutor.footerHint')}</p>
+      <p className="text-center text-xs leading-relaxed text-slate-500">{t('aiTutor.footerHint')}</p>
     </div>
   )
 }
