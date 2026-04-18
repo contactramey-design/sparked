@@ -43,6 +43,7 @@ export function HomeHero({ primaryCtaHref }: Props) {
           <p className="home-tagline mt-4 max-w-xl text-balance text-base leading-relaxed text-slate-600 md:mx-0 md:text-lg">
             {t('home.heroAscentTagline')}
           </p>
+          <p className="mt-3 max-w-xl text-sm leading-relaxed text-slate-600 md:mx-0">{t('home.kidHomeChromeSubtitle')}</p>
           <p className="mt-5 max-w-xl text-sm font-medium text-slate-600 md:mx-0">{t('home.heroAgeTeaser')}</p>
 
           <div className="mt-8 flex flex-col items-stretch gap-3 sm:flex-row sm:flex-wrap md:justify-start">

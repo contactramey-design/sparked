@@ -921,6 +921,11 @@ h1, h2, h3 {
   gap: 0.65rem 1rem;
 }
 
+.app-footer--short {
+  padding: 0.65rem 1rem;
+  gap: 0.45rem 0.75rem;
+}
+
 .app-footer-stack {
   display: flex;
   flex-direction: column;

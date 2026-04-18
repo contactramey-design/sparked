@@ -76,7 +76,6 @@ export function AppShellHeader() {
     hideShop: hideShopOnConsumer,
   }
 
-  const parentHome = new URLSearchParams(location.search).get('view') === 'parent'
   const showKidQuickStrip = !isSchoolRoute && shouldShowKidQuickNav(location.pathname)
 
   return (
@@ -87,7 +86,14 @@ export function AppShellHeader() {
         </Link>
         <div className="app-titles">
           <h1>{t('header.appName')}</h1>
-          <p className={cn('app-header-tagline', 'hidden sm:block')}>{t('header.tagline')}</p>
+          <p
+            className={cn(
+              'app-header-tagline',
+              showKidQuickStrip ? 'hidden' : 'hidden sm:block',
+            )}
+          >
+            {t('header.tagline')}
+          </p>
         </div>
         <div className="header-nav-cluster">
           {isSchoolRoute ? (
@@ -124,10 +130,7 @@ export function AppShellHeader() {
 
       {showKidQuickStrip ? (
         <div className="kid-app-quick-nav border-b border-teal-100/80 bg-ascent-warm">
-          <div className="mx-auto max-w-6xl px-4 py-2 md:py-3">
-            {location.pathname === '/' && !parentHome ? (
-              <p className="mb-2 max-w-2xl text-sm leading-relaxed text-slate-600">{t('home.kidHomeChromeSubtitle')}</p>
-            ) : null}
+          <div className="mx-auto max-w-6xl px-4 py-2 md:py-2.5">
             <KidWayfindingBar className="mt-0 border-t-0 pt-0" />
           </div>
         </div>

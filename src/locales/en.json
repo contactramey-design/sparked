@@ -37,7 +37,9 @@
     "weekly": "This week",
     "daily": "Quick start",
     "homework": "Homework",
-    "tutor": "Tutor"
+    "tutor": "Tutor",
+    "practice": "Practice",
+    "more": "More"
   },
   "listenButton": {
     "heading": "Listen to heading",
@@ -72,6 +74,7 @@
   "nav": {
     "mainAriaLabel": "Main menu",
     "academy": "Academy",
+    "learning": "Learn",
     "shop": "Shop",
     "sectionLearn": "Learn",
     "sectionAgeBand": "Curriculum by age",
@@ -144,7 +147,9 @@
     "faq": "FAQ",
     "blog": "Blog",
     "services": "Programs",
-    "portfolio": "Gallery"
+    "portfolio": "Gallery",
+    "sparkiWebsite": "Sparki website",
+    "sparkiWebsiteAria": "Programs, blog, and company pages on the Sparki website"
   },
   "installBanner": {
     "title": "Install this on your iPad for offline use",
@@ -813,6 +818,13 @@
   "parentDashboard": {
     "title": "Parent & Grown-Up Progress View",
     "backToDashboard": "← Back to Dashboard",
+    "tabToday": "Today",
+    "tabBilling": "Billing & access",
+    "tabInsights": "Insights",
+    "tabIdeas": "Ideas",
+    "tabListAria": "Parent dashboard sections",
+    "tutorStateUnsetBanner": "Pick your state below so Adventure Tutor can align examples to your school standards.",
+    "unitsSummaryMobileSummary": "Show units table",
     "tutorStateTitle": "Tutor Academy — school state",
     "tutorStateDesc": "We use this to align examples and standards to your state. Your child can ask about any subject in the tutor chat; you only choose the state here.",
     "parentGuideTitle": "Parent Guide",
@@ -1361,6 +1373,12 @@
     "secondaryPractice": "Subject practice (math, reading & more)",
     "secondaryParents": "Parents — progress & Safety Pass",
     "chooseAdventure": "Choose your adventure",
+    "featuredAdventuresLead": "Start with these adventures — or see everything on Tracks.",
+    "adventureSeeAllCta": "See all adventures",
+    "adventureLinkPractice": "Practice hub",
+    "adventureLinkCoding": "AI & coding",
+    "tiersFootnoteShort": "Safety and previews are free; Academy unlocks full depth.",
+    "ageBandAccordionSummary": "Pick an age band (optional)",
     "tiersFootnote": "Free safety and previews · Adventure Academy for full subject depth and Homework Adventure · PDF ebooks in Shop.",
     "grownUpSignIn": "Grown-up? Sign in",
     "parentGuide": "Parent Guide",

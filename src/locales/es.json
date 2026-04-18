@@ -37,7 +37,9 @@
     "weekly": "Esta semana",
     "daily": "Inicio rápido",
     "homework": "Tarea",
-    "tutor": "Tutor"
+    "tutor": "Tutor",
+    "practice": "Práctica",
+    "more": "Más"
   },
   "listenButton": {
     "heading": "Escuchar el encabezado",
@@ -72,6 +74,7 @@
   "nav": {
     "mainAriaLabel": "Menú principal",
     "academy": "Academia",
+    "learning": "Aprender",
     "shop": "Tienda",
     "sectionLearn": "Aprender",
     "sectionAgeBand": "Currículo por edad",
@@ -144,7 +147,9 @@
     "faq": "Preguntas",
     "blog": "Blog",
     "services": "Programas",
-    "portfolio": "Galería"
+    "portfolio": "Galería",
+    "sparkiWebsite": "Sitio de Sparki",
+    "sparkiWebsiteAria": "Programas, blog y páginas de la empresa en el sitio de Sparki"
   },
   "installBanner": {
     "title": "Instálalo en tu iPad para usarlo sin internet",
@@ -808,6 +813,13 @@
   "parentDashboard": {
     "title": "Vista de progreso para adultos",
     "backToDashboard": "← Volver al panel",
+    "tabToday": "Hoy",
+    "tabBilling": "Pago y acceso",
+    "tabInsights": "Resumen",
+    "tabIdeas": "Ideas",
+    "tabListAria": "Secciones del panel para adultos",
+    "tutorStateUnsetBanner": "Elige tu estado abajo para que Academia Tutor alinee los ejemplos a los estándares de tu escuela.",
+    "unitsSummaryMobileSummary": "Ver tabla de unidades",
     "tutorStateTitle": "Academia Tutor — estado escolar",
     "tutorStateDesc": "Lo usamos para alinear ejemplos y estándares a tu estado. Tu hijo puede preguntar sobre cualquier materia en el chat del tutor; aquí solo eliges el estado.",
     "parentGuideTitle": "Guía para adultos",
@@ -1350,6 +1362,12 @@
     "secondaryPractice": "Práctica por materia (mate, lectura y más)",
     "secondaryParents": "Adultos — progreso y Pase de Seguridad",
     "chooseAdventure": "Elige tu aventura",
+    "featuredAdventuresLead": "Empieza con estas aventuras — o ve todo en Rutas.",
+    "adventureSeeAllCta": "Ver todas las aventuras",
+    "adventureLinkPractice": "Centro de práctica",
+    "adventureLinkCoding": "IA y programación",
+    "tiersFootnoteShort": "Seguridad y vistas previas gratis; Academy desbloquea todo el contenido.",
+    "ageBandAccordionSummary": "Elige edad (opcional)",
     "tiersFootnote": "Seguridad gratis y vistas previas · Adventure Academy para profundidad por materias y Aventura de Tareas · PDF en la Tienda.",
     "grownUpSignIn": "¿Eres adulto? Entrar",
     "parentGuide": "Guía para adultos",

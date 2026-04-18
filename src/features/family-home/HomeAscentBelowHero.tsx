@@ -7,7 +7,7 @@ function StatCard({ title, body }: { title: string; body: string }) {
   return (
     <div
       className={cn(
-        'rounded-2xl border border-slate-200/90 bg-gradient-to-br from-white to-slate-50/80 p-5 shadow-sm',
+        'rounded-2xl border border-slate-200/90 bg-white p-5 shadow-sm',
         'motion-safe:transition-shadow motion-safe:duration-200 motion-safe:hover:shadow-md',
       )}
     >

@@ -6,7 +6,7 @@ import { useTranslation } from '@/contexts/LocaleContext'
 import { useAuth } from '@/AuthContext'
 import { isTeacherUser } from '@/lib/supabaseUserRole'
 
-type NavKey = 'academy' | 'practice' | 'shop'
+type NavKey = 'learning' | 'shop' | 'academy'
 
 type Props = {
   variant: 'consumer' | 'school'
@@ -65,7 +65,7 @@ export default function MainNav({ variant, hideShop = false }: Props) {
     </Link>
   )
 
-  const consumerAcademy = (
+  const consumerLearning = (
     <>
       <SectionLabel>{t('nav.sectionAgeBand')}</SectionLabel>
       <div className="nav-dropdown-band-row" role="group" aria-label={t('nav.sectionAgeBand')}>
@@ -82,6 +82,7 @@ export default function MainNav({ variant, hideShop = false }: Props) {
         ))}
       </div>
       <NavDivider />
+      <SectionLabel>{t('nav.sectionLearn')}</SectionLabel>
       <ItemLink to="/tracks">{t('nav.academyAllCourses')}</ItemLink>
       <ItemLink to="/track/social-safety">{t('nav.academySafety')}</ItemLink>
       <ItemLink to="/track/ai-coding">{t('nav.academyAiCoding')}</ItemLink>
@@ -89,23 +90,17 @@ export default function MainNav({ variant, hideShop = false }: Props) {
       <ItemLink to="/homework">{t('nav.academyHomework')}</ItemLink>
       <ItemLink to="/ai-tutor">{t('nav.academyAiTutor')}</ItemLink>
       <NavDivider />
-      <SectionLabel>{t('nav.sectionGrownups')}</SectionLabel>
-      {!isLoggedIn && <ItemLink to="/login">{t('nav.academySignIn')}</ItemLink>}
-      {isLoggedIn && !kidLock && <ItemLink to="/?view=parent">{t('nav.academyParent')}</ItemLink>}
-    </>
-  )
-
-  const consumerPractice = (
-    <>
-      <p className="nav-dropdown-blurb muted text-sm leading-snug">{t('nav.practiceBlurb')}</p>
-      <p className="nav-dropdown-blurb muted text-xs leading-snug mt-1">{t('nav.practiceStructuredNote')}</p>
-      <NavDivider />
+      <p className="nav-dropdown-blurb muted text-xs leading-snug">{t('nav.practiceStructuredNote')}</p>
       <ItemLink to="/practice">{t('nav.practiceAllSubjects')}</ItemLink>
       <SectionLabel>{t('nav.practiceCoreLabel')}</SectionLabel>
       <ItemLink to="/practice/math">{t('nav.practiceMath')}</ItemLink>
       <ItemLink to="/practice/english">{t('nav.practiceEnglish')}</ItemLink>
       <ItemLink to="/practice/science">{t('nav.practiceScience')}</ItemLink>
       <ItemLink to="/practice/history">{t('nav.practiceHistory')}</ItemLink>
+      <NavDivider />
+      <SectionLabel>{t('nav.sectionGrownups')}</SectionLabel>
+      {!isLoggedIn && <ItemLink to="/login">{t('nav.academySignIn')}</ItemLink>}
+      {isLoggedIn && !kidLock && <ItemLink to="/?view=parent">{t('nav.academyParent')}</ItemLink>}
     </>
   )
 
@@ -182,8 +177,7 @@ export default function MainNav({ variant, hideShop = false }: Props) {
     <nav className="main-nav main-nav--two-tier" aria-label={t('nav.mainAriaLabel')} ref={wrapRef}>
       {variant === 'consumer' ? (
         <>
-          {renderDropdown('academy', t('nav.academy'), consumerAcademy)}
-          {renderDropdown('practice', t('nav.practice'), consumerPractice)}
+          {renderDropdown('learning', t('nav.learning'), consumerLearning)}
           {!hideShop ? renderDropdown('shop', t('nav.shop'), consumerShop) : null}
         </>
       ) : (

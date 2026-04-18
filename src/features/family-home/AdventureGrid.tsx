@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { useTranslation } from '@/contexts/LocaleContext'
 import { cn } from '@/lib/utils'
 
-/** Order: safety + homework first (heroes), AI Tutor tile, then practice + AI coding */
+/** Full catalog order — home page shows first 3 only; rest via “See all”. */
 const TIERS = [
   {
     id: 'safety',
@@ -18,7 +18,6 @@ const TIERS = [
   {
     id: 'aiTutor',
     path: '/ai-tutor',
-    /** Built-in gradient tile — no separate PNG required */
     tile: 'premiumAiTutor' as const,
   },
   {
@@ -32,6 +31,9 @@ const TIERS = [
     imageSrc: '/sparkiaicodingcardhomepage.png',
   },
 ] as const
+
+const FEATURED_COUNT = 3
+const featuredTiers = TIERS.slice(0, FEATURED_COUNT)
 
 function AdventureCard({
   tier,
@@ -90,7 +92,7 @@ function AdventureCard({
         )}
       </div>
       <div className="flex flex-1 flex-col gap-3 p-4">
-        <p className="text-sm leading-relaxed text-slate-600">{description}</p>
+        <p className="text-sm leading-relaxed text-slate-600 line-clamp-3">{description}</p>
         <span
           className={`mt-auto inline-flex min-h-11 items-center justify-center rounded-xl px-4 py-2 text-center text-sm font-bold text-white shadow-sm ${
             'tile' in tier && tier.tile === 'premiumAiTutor'
@@ -109,16 +111,34 @@ export function AdventureGrid() {
   const { t } = useTranslation()
 
   return (
-    <div className="home-tiers mt-10 md:mt-14">
-      <h2 className="home-tiers-title mb-6 text-center font-heading text-2xl text-blue-900 md:text-3xl">{t('home.chooseAdventure')}</h2>
-      <div className="home-tier-grid mx-auto grid max-w-6xl gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
-        {TIERS.map((tier) => (
+    <div className="home-tiers mt-8 md:mt-10">
+      <h2 className="home-tiers-title mb-2 text-center font-heading text-2xl text-slate-900 md:text-3xl">{t('home.chooseAdventure')}</h2>
+      <p className="mx-auto mb-6 max-w-2xl text-center text-sm text-slate-600">{t('home.featuredAdventuresLead')}</p>
+      <div className="home-tier-grid mx-auto grid max-w-6xl gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        {featuredTiers.map((tier) => (
           <AdventureCard key={tier.id} tier={tier} href={tier.path} />
         ))}
       </div>
-      <p className="home-tiers-footnote mx-auto mt-8 max-w-3xl text-center text-sm leading-relaxed text-slate-600">
-        {t('home.tiersFootnote')}
-      </p>
+      <div className="mx-auto mt-8 flex max-w-2xl flex-col items-center gap-3 sm:flex-row sm:justify-center sm:gap-4">
+        <Link
+          to="/tracks"
+          className="inline-flex min-h-11 items-center justify-center rounded-xl border-2 border-teal-600 bg-white px-6 text-sm font-bold text-teal-900 shadow-sm hover:bg-teal-50"
+        >
+          {t('home.adventureSeeAllCta')}
+        </Link>
+        <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-sm text-slate-600">
+          <Link to="/practice" className="font-semibold text-teal-800 underline-offset-2 hover:underline">
+            {t('home.adventureLinkPractice')}
+          </Link>
+          <span aria-hidden className="text-slate-300">
+            ·
+          </span>
+          <Link to="/track/ai-coding" className="font-semibold text-teal-800 underline-offset-2 hover:underline">
+            {t('home.adventureLinkCoding')}
+          </Link>
+        </div>
+      </div>
+      <p className="home-tiers-footnote mx-auto mt-6 max-w-2xl text-center text-xs leading-relaxed text-slate-500">{t('home.tiersFootnoteShort')}</p>
     </div>
   )
 }

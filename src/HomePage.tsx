@@ -219,11 +219,11 @@ const HomePage: React.FC = () => {
         <HomeHero primaryCtaHref={heroPrimaryHref} />
       </div>
 
+      <HomeAgeBandsAscent />
+
       <div id="home-adventures" className="home-adventure-wrap mx-auto max-w-6xl scroll-mt-24 px-4">
         <AdventureGrid />
       </div>
-
-      <HomeAgeBandsAscent />
 
       <div className="mx-auto mt-4 max-w-5xl px-4">
         <Link

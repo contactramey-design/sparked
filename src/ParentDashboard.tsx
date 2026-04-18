@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState, useId } from 'react'
 import { loadSchoolSubjectProgress } from '@/school/subjects/schoolSubjectProgress'
 import { Link } from 'react-router-dom'
 import { curriculum, getUnitsForBand } from './curriculum'
@@ -19,9 +19,13 @@ import { AscentPageChrome } from '@/design-system/ascent/AscentPageChrome'
 import { readTutorStateCode, writeTutorStateCode } from '@/ai-tutor/tutorService'
 import { US_STATES_PLUS_DC } from '@/ai-tutor/usStates'
 
+type ParentTabId = 'today' | 'billing' | 'insights' | 'ideas'
+
 /** Parent view content only (used in merged Dashboard page and standalone /parent redirect) */
 export const ParentViewContent: React.FC = () => {
   const { t } = useTranslation()
+  const tabListId = useId()
+  const [tab, setTab] = useState<ParentTabId>('today')
   const { ageBand } = useAgeBand()
   const weeklyEpisode = useB2CWeeklyEpisode()
   const weeklyWk = String(weeklyEpisode.resolved.weekIndex)
@@ -161,193 +165,273 @@ export const ParentViewContent: React.FC = () => {
     }
   }
 
+  const tabDefs: { id: ParentTabId; label: string }[] = [
+    { id: 'today', label: t('parentDashboard.tabToday') },
+    { id: 'billing', label: t('parentDashboard.tabBilling') },
+    { id: 'insights', label: t('parentDashboard.tabInsights') },
+    { id: 'ideas', label: t('parentDashboard.tabIdeas') },
+  ]
+
+  const unitsRows = getUnitsForBand(ageBand).map((unit) => {
+    const status = progress.units[unit.id]
+    const track = curriculum.tracks.find((tr) => tr.id === unit.trackId)
+
+    const scoreText = status && status.postScore >= 0 ? `${status.postScore}%` : '—'
+    const attemptsText = status ? status.attempts : 0
+    const statusText = status
+      ? status.mastered
+        ? t('parentDashboard.statusMastered')
+        : t('parentDashboard.statusInProgress')
+      : t('parentDashboard.statusNotStarted')
+
+    return (
+      <tr key={unit.id}>
+        <td>{track ? t(`curriculum.tracks.${track.id}.title`) || track.title : ''}</td>
+        <td>{t(`curriculum.units.${unit.id}.title`) || unit.title}</td>
+        <td>{scoreText}</td>
+        <td>{attemptsText}</td>
+        <td>{statusText}</td>
+      </tr>
+    )
+  })
+
+  const unitsTable = (
+    <table className="parent-table">
+      <thead>
+        <tr>
+          <th>{t('parentDashboard.tableTrack')}</th>
+          <th>{t('parentDashboard.tableUnit')}</th>
+          <th>{t('parentDashboard.tableBestScore')}</th>
+          <th>{t('parentDashboard.tableAttempts')}</th>
+          <th>{t('parentDashboard.tableStatus')}</th>
+        </tr>
+      </thead>
+      <tbody>{unitsRows}</tbody>
+    </table>
+  )
+
   return (
-    <div className="grid gap-4 md:grid-cols-2">
-        <div className="card weekly-parent-teaser rounded-2xl border border-teal-100/80">
-          <h3>{t('weekly.parentDashboard.weeklyTeaser')}</h3>
-          <p className="text-slate-700 mt-2">
-            <strong>{weeklyTitleShort}</strong>
-          </p>
-          <Link to="/weekly" className="primary-button mt-3 inline-block">
-            {t('weekly.parentDashboard.weeklyTeaserLink')}
-          </Link>
-        </div>
-
-        <div className="card rounded-2xl border border-teal-100/80">
-          <h3>{t('parentDashboard.tutorStateTitle')}</h3>
-          <p className="text-slate-700">{t('parentDashboard.tutorStateDesc')}</p>
-          <label className="mt-3 flex flex-col gap-2">
-            <span className="text-sm font-semibold text-slate-800">{t('aiTutor.stateLabel')}</span>
-            <select
-              className="min-h-[48px] w-full max-w-md rounded-xl border border-slate-300 bg-white px-3 text-base text-slate-900"
-              value={tutorSchoolState}
-              onChange={(e) => {
-                const v = e.target.value
-                setTutorSchoolState(v)
-                writeTutorStateCode(v)
-              }}
+    <div className="space-y-5">
+      <div
+        id={tabListId}
+        role="tablist"
+        aria-label={t('parentDashboard.tabListAria')}
+        className="flex gap-2 overflow-x-auto border-b border-teal-100/90 pb-2"
+      >
+        {tabDefs.map(({ id, label }) => {
+          const selected = tab === id
+          return (
+            <button
+              key={id}
+              type="button"
+              role="tab"
+              aria-selected={selected}
+              id={`${tabListId}-${id}`}
+              aria-controls={`${tabListId}-panel-${id}`}
+              tabIndex={selected ? 0 : -1}
+              onClick={() => setTab(id)}
+              className={
+                selected
+                  ? 'shrink-0 rounded-t-lg border border-b-0 border-teal-200 bg-white px-4 py-2.5 text-sm font-bold text-teal-950 shadow-sm'
+                  : 'shrink-0 rounded-t-lg border border-transparent px-4 py-2.5 text-sm font-semibold text-slate-600 hover:bg-teal-50/80 hover:text-teal-900'
+              }
             >
-              <option value="">{t('aiTutor.statePlaceholder')}</option>
-              {US_STATES_PLUS_DC.map((s) => (
-                <option key={s.code} value={s.code}>
-                  {s.name}
-                </option>
-              ))}
-            </select>
-          </label>
-        </div>
-
-        <div className="card rounded-2xl border border-teal-100/80">
-          <h3>{t('parentDashboard.conversationTitle')}</h3>
-          <p className="text-slate-700">{t('parentDashboard.conversationIntro')}</p>
-          <ul className="list-disc pl-5 text-sm text-slate-700 space-y-1 mt-2">
-            {conversationKeys.map((key) => (
-              <li key={key}>{t(`parentDashboard.${key}`)}</li>
-            ))}
-          </ul>
-        </div>
-
-        <div className="card rounded-2xl border border-teal-100/80">
-          <h3>{t('parentDashboard.parentGuideTitle')}</h3>
-          <p>{t('parentDashboard.parentGuideDesc')}</p>
-          <ul className="list-disc pl-5 text-sm text-slate-700 space-y-1 mt-2">
-            <li>{t('parentDashboard.guideBullet1')}</li>
-            <li>{t('parentDashboard.guideBullet2')}</li>
-            <li>{t('parentDashboard.guideBullet3')}</li>
-            <li>{t('parentDashboard.guideBullet4')}</li>
-          </ul>
-          <p className="login-coppa-note mt-3">
-            {t('parentDashboard.parentHandbookNote')}
-          </p>
-        </div>
-
-        <div className="card rounded-2xl border border-teal-100/80">
-          <h3>{t('parentDashboard.unlockSafetyTitle')}</h3>
-          <p>{t('parentDashboard.unlockSafetyDesc')}</p>
-
-          {hasSafetyPass ? (
-            <p className="welcome-subtitle">{t('parentDashboard.safetyPassActive')}</p>
-          ) : (
-            <>
-              <button
-                type="button"
-                className="primary-button"
-                onClick={() => void handleUnlock()}
-                disabled={unlockLoading}
-              >
-                {unlockLoading ? t('parentDashboard.openingCheckout') : t('parentDashboard.unlockSafetyButton')}
-              </button>
-              {checkoutStatus === 'cancel' && (
-                <p className="welcome-subtitle">{t('parentDashboard.checkoutCanceled')}</p>
-              )}
-              {unlockErrorKey && <p className="quiz-error">{t(unlockErrorKey)}</p>}
-            </>
-          )}
-        </div>
-
-        <div className="card rounded-2xl border border-teal-100/80">
-          <h3>{t('parentDashboard.unlockAcademyTitle')}</h3>
-          <p>{t('parentDashboard.unlockAcademyDesc')}</p>
-          <p className="text-sm text-slate-600 mt-2">{t('productTiers.summaryLine')}</p>
-
-          {hasAcademy ? (
-            <>
-              <p className="welcome-subtitle">{t('parentDashboard.academyActive')}</p>
-              <div className="mt-4 rounded-lg border border-emerald-200 bg-emerald-50/80 p-4 text-left">
-                <h4 className="font-bold text-emerald-900">{t('parentDashboard.academyIncludesTitle')}</h4>
-                <p className="text-sm text-slate-700 mt-1">{t('parentDashboard.academyIncludesIntro')}</p>
-                <ul className="list-disc pl-5 text-sm text-slate-800 space-y-1 mt-2">
-                  <li>{t('parentDashboard.academyIncludes1')}</li>
-                  <li>{t('parentDashboard.academyIncludes2')}</li>
-                  <li>{t('parentDashboard.academyIncludes3')}</li>
-                  <li>{t('parentDashboard.academyIncludes4')}</li>
-                </ul>
-              </div>
-            </>
-          ) : (
-            <>
-              <button
-                type="button"
-                className="primary-button mt-2"
-                onClick={() => void handleAcademyUnlock()}
-                disabled={academyUnlockLoading}
-              >
-                {academyUnlockLoading ? t('parentDashboard.openingCheckout') : t('parentDashboard.unlockAcademyButton')}
-              </button>
-              {academyUnlockErrorKey && <p className="quiz-error">{t(academyUnlockErrorKey)}</p>}
-            </>
-          )}
-        </div>
-
-        <div className="card rounded-2xl border border-teal-100/80">
-          <h3>{t('parentDashboard.lockKidViewTitle')}</h3>
-          <p>{t('parentDashboard.lockKidViewDesc')}</p>
-          <label className="parent-toggle">
-            <input
-              type="checkbox"
-              checked={kidLock}
-              onChange={(e) => setKidLock(e.target.checked)}
-            />
-            <span>{t('parentDashboard.lockToKidView')}</span>
-          </label>
-        </div>
-
-        <div className="card rounded-2xl border border-teal-100/80">
-          <h3>{t('parentDashboard.overallSparklesTitle')}</h3>
-          <p>
-            {t('parentDashboard.overallSparklesDesc')} <strong>{progress.totalSparkles}</strong>
-          </p>
-          <p className="welcome-subtitle">
-            {t('parentDashboard.sparklesNote')}
-          </p>
-        </div>
-
-        {subjectTracksLocalActivity ? (
-          <div className="card rounded-2xl border border-teal-100/80">
-            <p className="text-sm text-slate-700">{t('parentDashboard.schoolSubjectLocalNote')}</p>
-          </div>
-        ) : null}
-
-        <div className="card rounded-2xl border border-teal-100/80 md:col-span-2">
-          <h3>{t('parentDashboard.unitsSummaryTitle')}</h3>
-          <table className="parent-table">
-            <thead>
-              <tr>
-                <th>{t('parentDashboard.tableTrack')}</th>
-                <th>{t('parentDashboard.tableUnit')}</th>
-                <th>{t('parentDashboard.tableBestScore')}</th>
-                <th>{t('parentDashboard.tableAttempts')}</th>
-                <th>{t('parentDashboard.tableStatus')}</th>
-              </tr>
-            </thead>
-            <tbody>
-              {getUnitsForBand(ageBand).map((unit) => {
-                const status = progress.units[unit.id]
-                const track = curriculum.tracks.find((tr) => tr.id === unit.trackId)
-
-                const scoreText =
-                  status && status.postScore >= 0 ? `${status.postScore}%` : '—'
-                const attemptsText = status ? status.attempts : 0
-                const statusText = status
-                  ? status.mastered
-                    ? t('parentDashboard.statusMastered')
-                    : t('parentDashboard.statusInProgress')
-                  : t('parentDashboard.statusNotStarted')
-
-                return (
-                  <tr key={unit.id}>
-                    <td>{track ? (t(`curriculum.tracks.${track.id}.title`) || track.title) : ''}</td>
-                    <td>{t(`curriculum.units.${unit.id}.title`) || unit.title}</td>
-                    <td>{scoreText}</td>
-                    <td>{attemptsText}</td>
-                    <td>{statusText}</td>
-                  </tr>
-                )
-              })}
-            </tbody>
-          </table>
-        </div>
+              {label}
+            </button>
+          )
+        })}
       </div>
+
+      {tab === 'today' && (
+        <div
+          role="tabpanel"
+          id={`${tabListId}-panel-today`}
+          aria-labelledby={`${tabListId}-today`}
+          className="grid gap-4 md:grid-cols-2"
+        >
+          {!tutorSchoolState ? (
+            <div className="md:col-span-2 rounded-2xl border border-amber-200/90 bg-amber-50/90 p-4 text-sm text-amber-950 shadow-sm">
+              {t('parentDashboard.tutorStateUnsetBanner')}
+            </div>
+          ) : null}
+
+          <div className="card weekly-parent-teaser rounded-2xl border border-teal-100/80 p-5">
+            <h3 className="text-lg font-bold text-slate-900">{t('weekly.parentDashboard.weeklyTeaser')}</h3>
+            <p className="mt-2 text-slate-700">
+              <strong>{weeklyTitleShort}</strong>
+            </p>
+            <Link to="/weekly" className="primary-button mt-4 inline-block">
+              {t('weekly.parentDashboard.weeklyTeaserLink')}
+            </Link>
+          </div>
+
+          <div className="card rounded-2xl border border-teal-100/80 p-5">
+            <h3 className="text-lg font-bold text-slate-900">{t('parentDashboard.tutorStateTitle')}</h3>
+            <p className="mt-1 text-slate-700">{t('parentDashboard.tutorStateDesc')}</p>
+            <label className="mt-4 flex flex-col gap-2">
+              <span className="text-sm font-semibold text-slate-800">{t('aiTutor.stateLabel')}</span>
+              <select
+                className="min-h-[48px] w-full max-w-md rounded-xl border border-slate-300 bg-white px-3 text-base text-slate-900"
+                value={tutorSchoolState}
+                onChange={(e) => {
+                  const v = e.target.value
+                  setTutorSchoolState(v)
+                  writeTutorStateCode(v)
+                }}
+              >
+                <option value="">{t('aiTutor.statePlaceholder')}</option>
+                {US_STATES_PLUS_DC.map((s) => (
+                  <option key={s.code} value={s.code}>
+                    {s.name}
+                  </option>
+                ))}
+              </select>
+            </label>
+          </div>
+
+          <div className="card rounded-2xl border border-teal-100/80 p-5 md:col-span-2">
+            <h3 className="text-lg font-bold text-slate-900">{t('parentDashboard.lockKidViewTitle')}</h3>
+            <p className="mt-1 text-slate-700">{t('parentDashboard.lockKidViewDesc')}</p>
+            <label className="parent-toggle mt-4 inline-flex cursor-pointer items-center gap-2">
+              <input type="checkbox" checked={kidLock} onChange={(e) => setKidLock(e.target.checked)} />
+              <span>{t('parentDashboard.lockToKidView')}</span>
+            </label>
+          </div>
+        </div>
+      )}
+
+      {tab === 'billing' && (
+        <div
+          role="tabpanel"
+          id={`${tabListId}-panel-billing`}
+          aria-labelledby={`${tabListId}-billing`}
+          className="grid gap-4 md:grid-cols-2"
+        >
+          <div className="card rounded-2xl border border-teal-100/80 p-5">
+            <h3 className="text-lg font-bold text-slate-900">{t('parentDashboard.unlockSafetyTitle')}</h3>
+            <p className="mt-1 text-slate-700">{t('parentDashboard.unlockSafetyDesc')}</p>
+
+            {hasSafetyPass ? (
+              <p className="welcome-subtitle mt-3">{t('parentDashboard.safetyPassActive')}</p>
+            ) : (
+              <>
+                <button
+                  type="button"
+                  className="primary-button mt-4"
+                  onClick={() => void handleUnlock()}
+                  disabled={unlockLoading}
+                >
+                  {unlockLoading ? t('parentDashboard.openingCheckout') : t('parentDashboard.unlockSafetyButton')}
+                </button>
+                {checkoutStatus === 'cancel' && (
+                  <p className="welcome-subtitle mt-2">{t('parentDashboard.checkoutCanceled')}</p>
+                )}
+                {unlockErrorKey && <p className="quiz-error mt-2">{t(unlockErrorKey)}</p>}
+              </>
+            )}
+          </div>
+
+          <div className="card rounded-2xl border border-teal-100/80 p-5">
+            <h3 className="text-lg font-bold text-slate-900">{t('parentDashboard.unlockAcademyTitle')}</h3>
+            <p className="mt-1 text-slate-700">{t('parentDashboard.unlockAcademyDesc')}</p>
+            <p className="mt-2 text-sm text-slate-600">{t('productTiers.summaryLine')}</p>
+
+            {hasAcademy ? (
+              <>
+                <p className="welcome-subtitle mt-3">{t('parentDashboard.academyActive')}</p>
+                <div className="mt-4 rounded-xl border border-emerald-200 bg-emerald-50/80 p-4 text-left">
+                  <h4 className="font-bold text-emerald-900">{t('parentDashboard.academyIncludesTitle')}</h4>
+                  <p className="mt-1 text-sm text-slate-700">{t('parentDashboard.academyIncludesIntro')}</p>
+                  <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-slate-800">
+                    <li>{t('parentDashboard.academyIncludes1')}</li>
+                    <li>{t('parentDashboard.academyIncludes2')}</li>
+                    <li>{t('parentDashboard.academyIncludes3')}</li>
+                    <li>{t('parentDashboard.academyIncludes4')}</li>
+                  </ul>
+                </div>
+              </>
+            ) : (
+              <>
+                <button
+                  type="button"
+                  className="primary-button mt-4"
+                  onClick={() => void handleAcademyUnlock()}
+                  disabled={academyUnlockLoading}
+                >
+                  {academyUnlockLoading ? t('parentDashboard.openingCheckout') : t('parentDashboard.unlockAcademyButton')}
+                </button>
+                {academyUnlockErrorKey && <p className="quiz-error mt-2">{t(academyUnlockErrorKey)}</p>}
+              </>
+            )}
+          </div>
+        </div>
+      )}
+
+      {tab === 'insights' && (
+        <div
+          role="tabpanel"
+          id={`${tabListId}-panel-insights`}
+          aria-labelledby={`${tabListId}-insights`}
+          className="grid gap-4 md:grid-cols-2"
+        >
+          <div className="card rounded-2xl border border-teal-100/80 p-5">
+            <h3 className="text-lg font-bold text-slate-900">{t('parentDashboard.overallSparklesTitle')}</h3>
+            <p className="mt-2 text-slate-700">
+              {t('parentDashboard.overallSparklesDesc')} <strong>{progress.totalSparkles}</strong>
+            </p>
+            <p className="welcome-subtitle mt-2">{t('parentDashboard.sparklesNote')}</p>
+          </div>
+
+          {subjectTracksLocalActivity ? (
+            <div className="card rounded-2xl border border-teal-100/80 p-5">
+              <p className="text-sm text-slate-700">{t('parentDashboard.schoolSubjectLocalNote')}</p>
+            </div>
+          ) : null}
+
+          <div className="card rounded-2xl border border-teal-100/80 p-5 md:col-span-2">
+            <h3 className="text-lg font-bold text-slate-900">{t('parentDashboard.unitsSummaryTitle')}</h3>
+            <details className="mt-3 md:hidden">
+              <summary className="cursor-pointer text-sm font-semibold text-teal-900 underline-offset-2 hover:underline">
+                {t('parentDashboard.unitsSummaryMobileSummary')}
+              </summary>
+              <div className="mt-3 overflow-x-auto">{unitsTable}</div>
+            </details>
+            <div className="mt-3 hidden overflow-x-auto md:block">{unitsTable}</div>
+          </div>
+        </div>
+      )}
+
+      {tab === 'ideas' && (
+        <div
+          role="tabpanel"
+          id={`${tabListId}-panel-ideas`}
+          aria-labelledby={`${tabListId}-ideas`}
+          className="grid gap-4 md:grid-cols-2"
+        >
+          <div className="card rounded-2xl border border-teal-100/80 p-5 md:col-span-2">
+            <h3 className="text-lg font-bold text-slate-900">{t('parentDashboard.conversationTitle')}</h3>
+            <p className="mt-1 text-slate-700">{t('parentDashboard.conversationIntro')}</p>
+            <ul className="mt-3 list-disc space-y-1 pl-5 text-sm text-slate-700">
+              {conversationKeys.map((key) => (
+                <li key={key}>{t(`parentDashboard.${key}`)}</li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="card rounded-2xl border border-teal-100/80 p-5 md:col-span-2">
+            <h3 className="text-lg font-bold text-slate-900">{t('parentDashboard.parentGuideTitle')}</h3>
+            <p className="mt-1 text-slate-700">{t('parentDashboard.parentGuideDesc')}</p>
+            <ul className="mt-3 list-disc space-y-1 pl-5 text-sm text-slate-700">
+              <li>{t('parentDashboard.guideBullet1')}</li>
+              <li>{t('parentDashboard.guideBullet2')}</li>
+              <li>{t('parentDashboard.guideBullet3')}</li>
+              <li>{t('parentDashboard.guideBullet4')}</li>
+            </ul>
+            <p className="login-coppa-note mt-4">{t('parentDashboard.parentHandbookNote')}</p>
+          </div>
+        </div>
+      )}
+    </div>
   )
 }
 
