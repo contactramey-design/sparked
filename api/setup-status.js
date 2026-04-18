@@ -26,7 +26,7 @@ export default async function handler(req, res) {
   res.setHeader('Cache-Control', 'no-store, max-age=0')
   res.status(200).json({
     // Bump when setup-status shape changes — if missing in production, you are NOT on this deploy.
-    schemaVersion: 8,
+    schemaVersion: 9,
     /** Vercel injects these on deploy; use to confirm Production matches your latest Git push. */
     deployment: {
       environment: process.env.VERCEL_ENV ?? null,
@@ -64,18 +64,49 @@ export default async function handler(req, res) {
           : 'SPARKI_SERVICE_SECRET set but TTS_ALLOW_ORIGINS empty — video worker can call TTS; browser Listen needs TTS_ALLOW_ORIGINS (comma-separated https:// origins).'
         : 'SPARKI_SERVICE_SECRET unset — video worker /generate is not bearer-locked; TTS is open unless you set secret + TTS_ALLOW_ORIGINS. Recommended for production.',
     },
-    // AI Tutor Academy: /ai-tutor, POST /api/tutor-chat, /api/heygen-streaming-token, /api/tts-stream
+    // AI Tutor Academy: /ai-tutor, POST /api/tutor-chat, /api/liveavatar-session, /api/tts-stream
     aiTutor: {
       openaiConfigured: Boolean(process.env.OPENAI_API_KEY?.trim()),
-      heygenConfigured: Boolean(process.env.HEYGEN_API_KEY?.trim()),
-      heygenAvatarIdSet: Boolean(process.env.HEYGEN_TUTOR_AVATAR_ID?.trim()),
-      heygenVoiceIdSet: Boolean(process.env.HEYGEN_TUTOR_VOICE_ID?.trim()),
+      /** @deprecated Use liveAvatar; HEYGEN_API_KEY still works as fallback API key for LiveAvatar token. */
+      heygenStreamingTokenRouteLegacy: true,
+      liveAvatar: (() => {
+        const apiKey = Boolean(
+          process.env.LIVEAVATAR_API_KEY?.trim() || process.env.HEYGEN_API_KEY?.trim(),
+        )
+        const avatarId = (
+          process.env.LIVEAVATAR_AVATAR_ID || process.env.HEYGEN_TUTOR_AVATAR_ID || ''
+        ).trim()
+        const voiceId = (
+          process.env.LIVEAVATAR_VOICE_ID || process.env.HEYGEN_TUTOR_VOICE_ID || ''
+        ).trim()
+        const contextId = (process.env.LIVEAVATAR_CONTEXT_ID || '').trim()
+        const avatarOk = Boolean(avatarId) && avatarId !== 'default'
+        const fullModeReady = Boolean(contextId) && Boolean(voiceId) && avatarOk
+        const liteReady = avatarOk
+        return {
+          apiKeySet: apiKey,
+          avatarIdSet: avatarOk,
+          voiceIdSet: Boolean(voiceId),
+          contextIdSet: Boolean(contextId),
+          fullModeReady,
+          liteModeReady: liteReady,
+          message: !apiKey
+            ? 'Set LIVEAVATAR_API_KEY (or HEYGEN_API_KEY as fallback) for POST /api/liveavatar-session.'
+            : !avatarOk
+              ? 'Set LIVEAVATAR_AVATAR_ID or HEYGEN_TUTOR_AVATAR_ID to a real LiveAvatar avatar UUID (not "default").'
+              : fullModeReady
+                ? 'LiveAvatar FULL mode: token route will use avatar + voice + context.'
+                : liteReady
+                  ? 'LiveAvatar LITE mode: add LIVEAVATAR_CONTEXT_ID + LIVEAVATAR_VOICE_ID (or HEYGEN_TUTOR_VOICE_ID) for FULL mode and richer tutor behavior.'
+                  : 'Incomplete LiveAvatar env.',
+        }
+      })(),
       elevenLabsForTts: Boolean(elevenKey),
       message: !process.env.OPENAI_API_KEY?.trim()
         ? 'Add OPENAI_API_KEY for tutor chat (same as homework).'
-        : !process.env.HEYGEN_API_KEY?.trim()
-          ? 'HEYGEN_API_KEY unset — live video tutor will return 503 until set; text + ElevenLabs voice can still work.'
-          : 'HeyGen + OpenAI look configured for AI Tutor. Optional: HEYGEN_TUTOR_AVATAR_ID (default default), HEYGEN_TUTOR_VOICE_ID, HEYGEN_TUTOR_QUALITY.',
+        : !(process.env.LIVEAVATAR_API_KEY?.trim() || process.env.HEYGEN_API_KEY?.trim())
+          ? 'No LiveAvatar API key — set LIVEAVATAR_API_KEY or HEYGEN_API_KEY for live avatar; text + ElevenLabs voice can still work.'
+          : 'OpenAI + LiveAvatar token path configured. See liveAvatar object for FULL vs LITE readiness.',
     },
     // TTS: used by worker for video narration (and Listen buttons)
     tts: {

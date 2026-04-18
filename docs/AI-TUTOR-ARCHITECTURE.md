@@ -6,10 +6,10 @@ This document reconciles the **Vite + React** Sparki codebase with any external 
 
 | External / generic doc | Sparki implementation |
 | ---------------------- | ----------------------- |
-| Next.js `app/api/tutor/token` | `POST /api/heygen-streaming-token` — [`api/heygen-streaming-token.js`](../api/heygen-streaming-token.js) |
+| Next.js `app/api/tutor/token` | `POST /api/liveavatar-session` — [`api/liveavatar-session.js`](../api/liveavatar-session.js) (LiveAvatar v1 token only; client uses `@heygen/liveavatar-web-sdk`) |
 | Next.js `app/api/tutor/chat` | `POST /api/tutor-chat` — [`api/tutor-chat.js`](../api/tutor-chat.js) |
 | Next.js TTS route | `POST /api/tts-stream`, `POST /api/tts` — [`api/tts-stream.js`](../api/tts-stream.js), [`api/tts.js`](../api/tts.js) |
-| `NEXT_PUBLIC_HEYGEN_*` | Server-only `HEYGEN_API_KEY`; avatar/voice IDs: `HEYGEN_TUTOR_AVATAR_ID`, `HEYGEN_TUTOR_VOICE_ID`, optional `HEYGEN_TUTOR_QUALITY` — see [`api/setup-status.js`](../api/setup-status.js) and [`.env.example`](../.env.example) |
+| LiveAvatar env | Server-only `LIVEAVATAR_API_KEY` (or fallback `HEYGEN_API_KEY`); `LIVEAVATAR_AVATAR_ID` (or `HEYGEN_TUTOR_AVATAR_ID`, not `default`); FULL mode: `LIVEAVATAR_CONTEXT_ID` + voice (`LIVEAVATAR_VOICE_ID` or `HEYGEN_TUTOR_VOICE_ID`). See [`api/setup-status.js`](../api/setup-status.js) `aiTutor.liveAvatar` and [`.env.example`](../.env.example) |
 | Supabase `sessions` JSONB (Phase 2 idea) | **v1:** no server-side transcript persistence; tutor chat history in **sessionStorage** only — see [`src/ai-tutor/sessionKeys.ts`](../src/ai-tutor/sessionKeys.ts), [`src/ai-tutor/tutorService.ts`](../src/ai-tutor/tutorService.ts) |
 
 ## Client UI
@@ -17,27 +17,25 @@ This document reconciles the **Vite + React** Sparki codebase with any external 
 | Concern | Location |
 | ------- | -------- |
 | Route | `/ai-tutor` — [`src/App.tsx`](../src/App.tsx), [`src/ai-tutor/AiTutorPage.tsx`](../src/ai-tutor/AiTutorPage.tsx) |
-| Chat + optional HeyGen stream | [`src/ai-tutor/InteractiveTutor.tsx`](../src/ai-tutor/InteractiveTutor.tsx) |
+| Chat + optional LiveAvatar stream | [`src/ai-tutor/InteractiveTutor.tsx`](../src/ai-tutor/InteractiveTutor.tsx) |
 | Voice consent (Kids/Crew); Tots blocked | [`src/ai-tutor/TutorConsentModal.tsx`](../src/ai-tutor/TutorConsentModal.tsx) |
 | US state for prompts | [`src/ai-tutor/usStates.ts`](../src/ai-tutor/usStates.ts), persisted via tutor session helpers in `tutorService` |
 
-## HeyGen streaming SDK (pinned contract)
+## LiveAvatar Web SDK (client contract)
 
-The app uses **dynamic `import('@heygen/streaming-avatar')`** to limit bundle size.
+The app uses **dynamic `import('@heygen/liveavatar-web-sdk')`** to limit bundle size. **Do not** use `@heygen/streaming-avatar` (deprecated for new work).
 
-Verified usage in `InteractiveTutor.tsx` (re-check after every **major** `@heygen/streaming-avatar` upgrade):
+Verified usage in `InteractiveTutor.tsx`:
 
-- `new StreamingAvatar({ token })` after server token.
-- `avatar.createStartAvatar({ quality, avatarName, voice, activityIdleTimeout })` — `avatarName` is the HeyGen interactive avatar ID from env.
-- `avatar.on(StreamingEvents.STREAM_READY, …)` — attach `MediaStream` to `<video ref>.srcObject`.
-- `avatar.speak({ text, task_type: 'repeat', taskMode: 'sync' })` for lip-synced playback of assistant text.
-- `avatar.stopAvatar()` on teardown.
-
-Events and property names are SDK-version-specific; if `speak` fails, the UI falls back to **ElevenLabs** streaming TTS via `playTtsStreamEphemeral`.
+- `fetchLiveAvatarSession()` → `POST /api/liveavatar-session` → `{ session_id, session_token, mode }`.
+- `new LiveAvatarSession(sessionToken, { voiceChat: true })` then `await session.start()`.
+- `session.on(SessionEvent.SESSION_STREAM_READY, …)` then `session.attach(videoElement)`.
+- `session.repeat(text)` for lip-synced playback of assistant text; on failure, **ElevenLabs** via `playTtsStreamEphemeral`.
+- `await session.stop()` on teardown.
 
 ## Entitlement and dev flags
 
-- Production: Stripe **Adventure Academy** (or bundle) checkout session verified in `api/tutor-chat.js` / `api/heygen-streaming-token.js` via [`api/lib/verifyBundleEntitlement.js`](../api/lib/verifyBundleEntitlement.js).
+- Production: Stripe **Adventure Academy** (or bundle) checkout session verified in `api/tutor-chat.js` / `api/liveavatar-session.js` via [`api/lib/verifyBundleEntitlement.js`](../api/lib/verifyBundleEntitlement.js).
 - Local only: `ALLOW_UNAUTH_TUTOR=true` — see `.env.example`; **never** enable on public production without other controls.
 
 ## QA paths (adapt external checklists)

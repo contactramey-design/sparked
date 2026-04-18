@@ -89,22 +89,26 @@ export async function postTutorChat(params: {
   return data.reply
 }
 
-export async function fetchHeyGenSession(checkoutSessionId: string | null) {
-  const res = await fetch('/api/heygen-streaming-token', {
+/** LiveAvatar: short-lived session token for @heygen/liveavatar-web-sdk (server from POST /api/liveavatar-session). */
+export async function fetchLiveAvatarSession(checkoutSessionId: string | null) {
+  const res = await fetch('/api/liveavatar-session', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ checkout_session_id: checkoutSessionId || '' }),
   })
   const data = (await res.json().catch(() => ({}))) as {
-    token?: string
-    avatarId?: string
-    voiceId?: string
-    quality?: string
+    session_id?: string
+    session_token?: string
+    mode?: string
     error?: string
   }
   if (!res.ok) throw new Error(data.error || 'Could not start video tutor')
-  if (!data.token) throw new Error('Missing video token')
-  return data as { token: string; avatarId: string; voiceId?: string; quality: string }
+  if (!data.session_token || !data.session_id) throw new Error('Missing LiveAvatar session token')
+  return {
+    sessionId: data.session_id,
+    sessionToken: data.session_token,
+    mode: data.mode ?? 'unknown',
+  }
 }
 
 /** Non-streaming fallback — ephemeral in-memory playback only. */

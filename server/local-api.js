@@ -97,6 +97,12 @@ const server = http.createServer(async (req, res) => {
       await m.default(req, wrapped)
       return
     }
+    if (url === '/api/liveavatar-session' && req.method === 'POST') {
+      await readJsonBody(req)
+      const m = await import('../api/liveavatar-session.js')
+      await m.default(req, wrapped)
+      return
+    }
     if (url === '/api/process-homework' && req.method === 'POST') {
       const m = await import('../api/process-homework.js')
       await m.default(req, wrapped)

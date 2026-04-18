@@ -18,7 +18,7 @@
   },
   "dependencies": {
     "@fal-ai/client": "^1.9.5",
-    "@heygen/streaming-avatar": "^2.1.0",
+    "@heygen/liveavatar-web-sdk": "^0.0.13",
     "@radix-ui/react-dialog": "^1.1.15",
     "@radix-ui/react-slot": "^1.2.4",
     "@supabase/supabase-js": "^2.99.2",

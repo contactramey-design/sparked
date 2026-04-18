@@ -2,8 +2,9 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { useAgeBand } from '@/contexts/AgeBandContext'
 import { useTranslation } from '@/contexts/LocaleContext'
 import { TutorConsentModal } from './TutorConsentModal'
+import type { LiveAvatarSession } from '@heygen/liveavatar-web-sdk'
 import {
-  fetchHeyGenSession,
+  fetchLiveAvatarSession,
   loadTutorMessages,
   playTtsStreamEphemeral,
   postTutorChat,
@@ -46,9 +47,7 @@ export default function InteractiveTutor({ checkoutSessionId }: Props) {
   const [avatarMsg, setAvatarMsg] = useState<string | null>(null)
 
   const videoRef = useRef<HTMLVideoElement>(null)
-  /** HeyGen StreamingAvatar instance (loaded dynamically). */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const avatarRef = useRef<any>(null)
+  const avatarRef = useRef<LiveAvatarSession | null>(null)
   const audioAbortRef = useRef<AbortController | null>(null)
   const recognitionRef = useRef<{ stop: () => void } | null>(null)
 
@@ -70,11 +69,11 @@ export default function InteractiveTutor({ checkoutSessionId }: Props) {
   }, [])
 
   const teardownAvatar = useCallback(async () => {
-    const a = avatarRef.current
+    const session = avatarRef.current
     avatarRef.current = null
-    if (a) {
+    if (session) {
       try {
-        await a.stopAvatar()
+        await session.stop()
       } catch {
         /* ignore */
       }
@@ -98,48 +97,30 @@ export default function InteractiveTutor({ checkoutSessionId }: Props) {
     setAvatarBusy(true)
     await teardownAvatar()
     try {
-      const {
-        default: StreamingAvatar,
-        AvatarQuality,
-        StreamingEvents,
-        VoiceEmotion,
-      } = await import('@heygen/streaming-avatar')
+      const { LiveAvatarSession, SessionEvent, SessionDisconnectReason } = await import(
+        '@heygen/liveavatar-web-sdk'
+      )
 
-      const cfg = await fetchHeyGenSession(checkoutSessionId)
-      const avatar = new StreamingAvatar({ token: cfg.token })
-      avatarRef.current = avatar
+      const cfg = await fetchLiveAvatarSession(checkoutSessionId)
+      const session = new LiveAvatarSession(cfg.sessionToken, { voiceChat: true })
+      avatarRef.current = session
 
-      avatar.on(StreamingEvents.STREAM_READY, (evt: Event & { detail?: MediaStream }) => {
-        const stream = evt?.detail
+      const onStreamReady = () => {
         const el = videoRef.current
-        if (el && stream instanceof MediaStream) {
-          el.srcObject = stream
+        if (el) {
+          session.attach(el)
           void el.play().catch(() => {})
+        }
+      }
+      session.on(SessionEvent.SESSION_STREAM_READY, onStreamReady)
+
+      session.on(SessionEvent.SESSION_DISCONNECTED, (reason) => {
+        if (reason !== SessionDisconnectReason.CLIENT_INITIATED) {
+          setAvatarMsg(t('aiTutor.avatarDisconnected'))
         }
       })
 
-      avatar.on(StreamingEvents.STREAM_DISCONNECTED, () => {
-        setAvatarMsg(t('aiTutor.avatarDisconnected'))
-      })
-
-      const q =
-        cfg.quality === 'high'
-          ? AvatarQuality.High
-          : cfg.quality === 'low'
-            ? AvatarQuality.Low
-            : AvatarQuality.Medium
-
-      const voiceOpts =
-        cfg.voiceId && cfg.voiceId.length > 0
-          ? { voiceId: cfg.voiceId, rate: 1 as const, emotion: VoiceEmotion.SOOTHING }
-          : { rate: 1 as const, emotion: VoiceEmotion.SOOTHING }
-
-      await avatar.createStartAvatar({
-        quality: q,
-        avatarName: cfg.avatarId,
-        voice: voiceOpts,
-        activityIdleTimeout: 600,
-      })
+      await session.start()
     } catch (e) {
       setAvatarMsg(e instanceof Error ? e.message : t('aiTutor.avatarStartFailed'))
       setLiveAvatar(false)
@@ -156,11 +137,7 @@ export default function InteractiveTutor({ checkoutSessionId }: Props) {
 
       if (liveAvatar && avatarRef.current && !isTots && voiceOut) {
         try {
-          await avatarRef.current.speak({
-            text,
-            task_type: 'repeat',
-            taskMode: 'sync',
-          })
+          avatarRef.current.repeat(text)
         } catch {
           await playTtsStreamEphemeral(text, 'en', ac.signal)
         }

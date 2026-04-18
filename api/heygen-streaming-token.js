@@ -1,6 +1,7 @@
 /**
  * POST /api/heygen-streaming-token
- * Short-lived HeyGen streaming token + avatar config (never expose HEYGEN_API_KEY to client).
+ * Legacy HeyGen Streaming Avatar (api.heygen.com streaming.create_token).
+ * The app uses POST /api/liveavatar-session + @heygen/liveavatar-web-sdk instead; this file is kept for rollback only.
  */
 import { verifyHomeworkCheckoutSession } from './lib/verifyBundleEntitlement.js'
 import { rateLimit } from './lib/rateLimit.js'

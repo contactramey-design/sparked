@@ -40,10 +40,11 @@ Use this when configuring **Production** (and Preview if you need full flows the
 | Variable | Notes |
 |----------|--------|
 | `OPENAI_API_KEY` | Required for `POST /api/tutor-chat` (GPT-4o). |
-| `HEYGEN_API_KEY` | Required for live avatar (`POST /api/heygen-streaming-token`). Without it, text + voice-only still work. |
-| `HEYGEN_TUTOR_AVATAR_ID` | Optional; defaults to `default` in code. |
-| `HEYGEN_TUTOR_VOICE_ID` | Optional HeyGen voice for the streaming avatar. |
-| `HEYGEN_TUTOR_QUALITY` | Optional: `low`, `medium`, or `high`. |
+| `LIVEAVATAR_API_KEY` | Preferred for live avatar (`POST /api/liveavatar-session`). Fallback: `HEYGEN_API_KEY`. |
+| `LIVEAVATAR_AVATAR_ID` | Real LiveAvatar avatar UUID (or `HEYGEN_TUTOR_AVATAR_ID`). Not `default`. |
+| `LIVEAVATAR_CONTEXT_ID` | For FULL mode with voice; omit for LITE. |
+| `LIVEAVATAR_VOICE_ID` / `HEYGEN_TUTOR_VOICE_ID` | Voice UUID for FULL mode. |
+| `HEYGEN_API_KEY` | Optional fallback API key if `LIVEAVATAR_API_KEY` unset. |
 | `ELEVENLABS_API_KEY` | Same as Listen — needed for voice playback when not using avatar speech, and for `/api/tts-stream`. |
 | `ALLOW_UNAUTH_TUTOR` | Dev/staging only: skips Stripe on tutor APIs. **Do not** enable on public production. |
 
