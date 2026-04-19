@@ -27,6 +27,33 @@ function escapeHtml(s) {
     .replace(/"/g, '&quot;')
 }
 
+/** Reduce SSRF risk: only https to public hosts (Zapier/Make, etc.). */
+function isPermittedWebhookUrl(rawUrl) {
+  let u
+  try {
+    u = new URL(rawUrl)
+  } catch {
+    return false
+  }
+  if (u.protocol !== 'https:') return false
+  const host = u.hostname.toLowerCase()
+  if (host === 'localhost' || host === '127.0.0.1' || host === '0.0.0.0' || host.endsWith('.localhost')) {
+    return false
+  }
+  const ipv4 = /^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/.exec(host)
+  if (ipv4) {
+    const a = Number(ipv4[1])
+    const b = Number(ipv4[2])
+    if (a === 10) return false
+    if (a === 172 && b >= 16 && b <= 31) return false
+    if (a === 192 && b === 168) return false
+    if (a === 127) return false
+    if (a === 169 && b === 254) return false
+    if (a === 0) return false
+  }
+  return true
+}
+
 async function deliverViaResend({ email, locale }) {
   const apiKey = process.env.RESEND_API_KEY?.trim()
   const to = process.env.TUTOR_LEAD_NOTIFY_TO?.trim()
@@ -60,6 +87,12 @@ async function deliverViaResend({ email, locale }) {
 async function deliverViaWebhook({ email, locale }) {
   const url = process.env.TUTOR_LEAD_WEBHOOK_URL?.trim()
   if (!url) return { ok: false, reason: 'no_webhook' }
+  if (!isPermittedWebhookUrl(url)) {
+    if (process.env.NODE_ENV !== 'production') {
+      console.warn('[tutor-lead] TUTOR_LEAD_WEBHOOK_URL rejected (use https:// to a public host)')
+    }
+    return { ok: false, reason: 'bad_webhook_url' }
+  }
 
   const secret = process.env.TUTOR_LEAD_WEBHOOK_SECRET?.trim()
   const headers = { 'Content-Type': 'application/json' }

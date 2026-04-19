@@ -39,17 +39,6 @@ export default async function handler(req, res) {
     return
   }
 
-  const rl = rateLimit(req, { key: 'liveavatar-session', limit: 10, windowMs: 10 * 60 * 1000 })
-  res.setHeader('X-RateLimit-Limit', '10')
-  res.setHeader('X-RateLimit-Remaining', String(rl.remaining))
-  res.setHeader('X-RateLimit-Reset', String(Math.floor(rl.resetMs / 1000)))
-  if (!rl.ok) {
-    const retryAfterSec = Math.max(1, Math.ceil((rl.resetMs - Date.now()) / 1000))
-    res.setHeader('Retry-After', String(retryAfterSec))
-    res.status(429).json({ error: 'Too many video session requests. Please wait a moment and try again.' })
-    return
-  }
-
   let body = req.body
   if (typeof body === 'string') {
     try {
@@ -65,13 +54,38 @@ export default async function handler(req, res) {
   const useSpanish = localeRaw === 'es' || localeRaw.startsWith('es-')
 
   /**
+   * Unpaid live preview (empty checkout_session_id) burns LiveAvatar quota — extra per-IP hourly cap.
+   */
+  if (process.env.ALLOW_UNAUTH_TUTOR !== 'true' && !checkoutSessionId) {
+    const freeRl = rateLimit(req, { key: 'liveavatar-free-preview', limit: 8, windowMs: 60 * 60 * 1000 })
+    if (!freeRl.ok) {
+      const retryAfterSec = Math.max(1, Math.ceil((freeRl.resetMs - Date.now()) / 1000))
+      res.setHeader('Retry-After', String(retryAfterSec))
+      res.status(429).json({
+        error: 'Too many free live video starts. Try again later or subscribe to Adventure Academy.',
+      })
+      return
+    }
+  }
+
+  const rl = rateLimit(req, { key: 'liveavatar-session', limit: 10, windowMs: 10 * 60 * 1000 })
+  res.setHeader('X-RateLimit-Limit', '10')
+  res.setHeader('X-RateLimit-Remaining', String(rl.remaining))
+  res.setHeader('X-RateLimit-Reset', String(Math.floor(rl.resetMs / 1000)))
+  if (!rl.ok) {
+    const retryAfterSec = Math.max(1, Math.ceil((rl.resetMs - Date.now()) / 1000))
+    res.setHeader('Retry-After', String(retryAfterSec))
+    res.status(429).json({ error: 'Too many video session requests. Please wait a moment and try again.' })
+    return
+  }
+
+  /**
    * Paid: non-empty checkout_session_id must pass Adventure Academy verification.
    * Unpaid preview: empty id issues a token (same “free tier” window as text tutor; client limits turns; abuse bounded by rate limit).
    */
   if (process.env.ALLOW_UNAUTH_TUTOR !== 'true') {
-    const id = checkoutSessionId
-    if (id) {
-      const paid = await verifyHomeworkCheckoutSession(id)
+    if (checkoutSessionId) {
+      const paid = await verifyHomeworkCheckoutSession(checkoutSessionId)
       if (!paid.ok) {
         res.status(403).json({
           error:

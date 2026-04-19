@@ -1,44 +1,47 @@
 # Security overview
 
-This document summarizes how sensitive flows are protected and what to configure for production.
+How sensitive flows are protected, what is **not** a bug, and what to lock down before **public marketing**.
 
-## Verified strengths
+## Verified strengths (code)
 
-- **Homework pipeline** (`/api/homework/analyze`, `explain`, `story`, `/api/generate-visuals`): gated by `requireHomeworkEntitlement` unless `ALLOW_UNAUTH_HOMEWORK=true` (dev only).
-- **Legacy** `/api/process-homework`: same Stripe Adventure Academy session check when `ALLOW_UNAUTH_HOMEWORK` is not set.
-- **Ebook downloads** `/api/download-ebook`: allowlisted `ebookId`, Stripe session checks, PDFs under `private/ebooks/` (not `public/`).
-- **Teacher weekly generator** `/api/schools/generate-weekly-units`: requires valid Supabase JWT, verifies `school_classes.teacher_id === auth.uid()`, PDF size capped (~8.5 MB), text extraction capped.
-- **Checkout** `/api/create-checkout-session`: success/cancel URLs from env or trusted forwarded host; `returnTo` restricted to `/ebook/` paths.
-- **Cron** `/api/cron/cleanup-adventure-videos`: optional `CRON_SECRET` Bearer check; Blob token server-side only.
-- **No** `eval`, `dangerouslySetInnerHTML`, or shell `exec` in API code reviewed for this audit.
+- **Homework** (`/api/homework/*`, adventure video, `generate-visuals`, `generate-adventure-video`): gated by `requireHomeworkEntitlement` / Stripe Academy session unless `ALLOW_UNAUTH_HOMEWORK=true` (**never** set on public production). Multipart size capped (~4.5 MB) in `api/homework/lib/multipart.js`.
+- **Legacy** `/api/process-homework`: same Academy session check when unauth homework is off.
+- **Tutor text** `/api/tutor-chat`: rate-limited; unpaid users capped at **3 user messages** per request shape (server-enforced); then `TUTOR_FREE_LIMIT`.
+- **Live video** `/api/liveavatar-session`: paid path verifies Academy; **empty** `checkout_session_id` allows a preview token (aligned with free text tier) with **two** per-IP limits: `liveavatar-free-preview` (8/hour) + `liveavatar-session` (10/10 min). `ALLOW_UNAUTH_TUTOR=true` skips paid checks (**dev only**).
+- **Ebook downloads** `/api/download-ebook`: allowlisted `ebookId`; Stripe session or Academy; PDFs only from `private/ebooks/`.
+- **Checkout** `/api/create-checkout-session`: `returnTo` allowlist (`/ai-tutor`, `/homework`, `/ebook` only); Stripe secrets server-only.
+- **Tutor lead** `/api/tutor-lead`: honeypot fields rejected; email validation; rate limit 10/hour/IP; optional webhook URL must be **https** to a non-private host (SSRF guard).
+- **Teacher weekly** `/api/schools/generate-weekly-units`: Supabase JWT; verifies teacher owns class; PDF size capped.
+- **Cron** `/api/cron/*`: optional `CRON_SECRET` Bearer.
+- **TTS** `/api/tts`: `TTS_ALLOW_ORIGINS` + optional `SPARKI_SERVICE_SECRET` (see below).
+- **No** `eval`, `dangerouslySetInnerHTML`, or shell `exec` in reviewed API paths.
 
-## Hardening added (service auth)
+## Rate limiting (important caveat)
 
-1. **Video worker** `POST /generate`: if `SPARKI_SERVICE_SECRET` is set on the worker, requests must send `Authorization: Bearer <same secret>`. Vercel (`generate-adventure-video`, `generate-weekly-units`) sends this header when calling the worker.
-2. **`/api/generate-adventure-video`**: requires homework entitlement via `checkout_session_id` in JSON body (same model as homework APIs), unless `ALLOW_UNAUTH_HOMEWORK=true`.
-3. **`/api/tts`**: if `SPARKI_SERVICE_SECRET` and/or `TTS_ALLOW_ORIGINS` are set, anonymous internet abuse is reduced:
-   - Worker calls include `Authorization: Bearer SPARKI_SERVICE_SECRET`.
-   - Browsers must send an `Origin` (or `Referer`) that matches one of the comma-separated origins in `TTS_ALLOW_ORIGINS`.
-   - If **both** are unset, behavior matches the legacy **open** endpoint (acceptable for local dev; **not** recommended for public production).
+Several routes use `api/lib/rateLimit.js` (**in-memory, per serverless instance**). It helps against casual abuse but is **not** a global DDoS barrier. For marketing traffic, also use **Vercel firewall / bot protection**, monitor Stripe + OpenAI + LiveAvatar dashboards, and set billing alerts.
 
-## Remaining risks and mitigations
+## Production checklist (before ads)
 
-| Risk | Mitigation |
-|------|------------|
-| **OpenAI / FAL / ElevenLabs cost** if homework entitlements are bypassed | Keep `ALLOW_UNAUTH_HOMEWORK` unset in production; use Stripe test mode only on staging. |
-| **Supabase anon key in the client** | Expected for Supabase; rely on **RLS** and reviewed policies (`supabase/*.sql`). Never ship service role keys to the browser. |
-| **Rate limiting** | Not implemented in-app; use Vercel WAF / edge rules or a gateway if you see abuse. |
-| **`/api/setup-status`** | Intentionally public for ops; reveals which integrations are configured (no secrets). |
-| **Student class codes** | Low entropy codes are a product tradeoff; treat as “link sharing” sensitivity. |
+1. **Never** in Production: `ALLOW_UNAUTH_HOMEWORK`, `ALLOW_UNAUTH_TUTOR`, `ALLOW_FREE_TEST_EBOOK` (unless you consciously run a public costless demo).
+2. **Stripe**: Live keys only on Production; `STRIPE_WEBHOOK` signing secret if you add webhooks; never expose `STRIPE_SECRET_KEY` or price IDs as `NEXT_PUBLIC_*`.
+3. **`TTS_ALLOW_ORIGINS`**: List every real **`https://`** origin users hit (custom domain + `*.vercel.app` if used).
+4. **`SPARKI_SERVICE_SECRET`**: Same value on Vercel and the video worker so `/generate` is not anonymously callable.
+5. **`CRON_SECRET`**: Set on Vercel and on the Cron job so cleanup routes are not public.
+6. **`TUTOR_LEAD_WEBHOOK_URL`**: Must be `https://` to a public hostname (internal IPs and `http://` are rejected).
+7. **Supabase**: Anon key in the client is normal; enforce **RLS** on all tables (`supabase/*.sql`). **Never** put the service role key in the browser or in client env.
+8. **`GET /api/setup-status`**: Intentionally public for ops — shows which integrations are on (no secrets). Bump `schemaVersion` is the deploy fingerprint.
+9. **Dependency audit**: Run `npm audit` on a schedule; upgrade transitive deps when fixes exist.
 
-## Production checklist
+## Residual risks (honest)
 
-1. Set **`SPARKI_SERVICE_SECRET`** (same value) on **Vercel** and the **video worker** (Railway/Render).
-2. Set **`TTS_ALLOW_ORIGINS`** on Vercel to every **https://** origin users use (custom domain + Vercel URL if needed).
-3. Set **`CRON_SECRET`** on Vercel and match Vercel Cron’s secret.
-4. Leave **`ALLOW_UNAUTH_HOMEWORK`** and **`ALLOW_FREE_TEST_EBOOK`** unset in production.
-5. Confirm **`GET /api/setup-status`** shows `schemaVersion: 5` and review `serviceAuth` / `tts` blocks after deploy.
+| Risk | Notes |
+|------|--------|
+| **AI cost** (OpenAI, Anthropic, FAL, LiveAvatar, ElevenLabs) | Strong entitlements + rate limits reduce drive-by cost; not zero. Watch dashboards after launch. |
+| **Free LiveAvatar preview** | Empty `checkout_session_id` path is bounded by rate limits, not by “3 turns” server-side (same class as any unauthenticated API). |
+| **Prompt injection** | User/homework text goes to models; treat outputs as **untrusted** in any future server persistence or cross-user features. |
+| **Class join codes** | Low entropy; treat like shared links — rotate if leaked. |
+| **Forwarded `Origin` / `Host`** | Checkout success URL uses forwarded host when env URLs unset; Vercel sets these — avoid running the same app on an untrusted edge that forwards arbitrary hosts. |
 
 ## Dependency audit
 
-Run `npm audit` periodically. Current advisories are often **transitive** (e.g. `vite-plugin-pwa` / `workbox-build`). Prefer upgrading those packages on a branch when maintainers publish fixes; `--force` can introduce breaking changes.
+Run `npm audit` periodically. Many advisories are **transitive** (e.g. `vite-plugin-pwa` / `workbox-build`). Upgrade on a branch when maintainers publish fixes; avoid `--force` without testing.
