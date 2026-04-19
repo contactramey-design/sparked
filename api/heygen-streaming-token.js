@@ -3,7 +3,7 @@
  * Legacy HeyGen Streaming Avatar (api.heygen.com streaming.create_token).
  * The app uses POST /api/liveavatar-session + @heygen/liveavatar-web-sdk instead; this file is kept for rollback only.
  */
-import { requireTutorCheckoutOrAllow } from './lib/tutorEntitlement.js'
+import { verifyHomeworkCheckoutSession } from './lib/verifyBundleEntitlement.js'
 import { rateLimit } from './lib/rateLimit.js'
 
 export default async function handler(req, res) {
@@ -35,15 +35,15 @@ export default async function handler(req, res) {
 
   const checkoutSessionId = typeof body.checkout_session_id === 'string' ? body.checkout_session_id.trim() : ''
 
-  const ent = await requireTutorCheckoutOrAllow(checkoutSessionId)
-  if (!ent.ok) {
-    res.status(ent.status).json({
-      error:
-        ent.status === 403
-          ? 'Adventure Academy unlock required for live tutor video.'
-          : ent.message || 'Not allowed.',
-    })
-    return
+  if (process.env.ALLOW_UNAUTH_TUTOR !== 'true') {
+    const paid = await verifyHomeworkCheckoutSession(checkoutSessionId)
+    if (!paid.ok) {
+      res.status(403).json({
+        error:
+          'Live video tutor is included with Adventure Academy. Ask a parent to subscribe from the Parent dashboard, then try again.',
+      })
+      return
+    }
   }
 
   const apiKey = process.env.HEYGEN_API_KEY?.trim()

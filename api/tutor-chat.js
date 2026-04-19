@@ -3,7 +3,6 @@
  * Premium AI Tutor: GPT-4o with state- and age-aware system prompt.
  * Body JSON: { checkout_session_id, messages, age_band, state, subject }
  */
-import { requireTutorCheckoutOrAllow } from './lib/tutorEntitlement.js'
 import { verifyHomeworkCheckoutSession } from './lib/verifyBundleEntitlement.js'
 import { buildTutorSystemPrompt } from './tutor/lib/prompts.js'
 import { rateLimit } from './lib/rateLimit.js'
@@ -66,17 +65,6 @@ export default async function handler(req, res) {
 
   if (messages.length === 0) {
     res.status(400).json({ error: 'Send at least one user message.' })
-    return
-  }
-
-  const ent = await requireTutorCheckoutOrAllow(checkoutSessionId)
-  if (!ent.ok) {
-    res.status(ent.status).json({
-      error:
-        ent.status === 403
-          ? 'Adventure Academy unlock required. Ask a parent to subscribe, then try again.'
-          : ent.message || 'Not allowed.',
-    })
     return
   }
 

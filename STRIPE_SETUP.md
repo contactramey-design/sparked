@@ -1,4 +1,4 @@
-## Stripe setup (Adventure Academy subscription + 7‑day trial)
+## Stripe setup (Adventure Academy subscription)
 
 This project uses **Stripe Checkout (hosted page)** + the **Stripe Node SDK**.
 

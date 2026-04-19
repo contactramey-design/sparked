@@ -13,9 +13,7 @@ function homeworkCheckoutRequiredForClient() {
 
 function aiTutorCheckoutRequiredForClient() {
   if (process.env.ALLOW_UNAUTH_TUTOR === 'true') return false
-  if (process.env.AI_TUTOR_REQUIRE_CHECKOUT === 'false') return false
-  if (process.env.AI_TUTOR_REQUIRE_CHECKOUT === 'true') return true
-  return isVercelProduction()
+  return process.env.AI_TUTOR_REQUIRE_CHECKOUT === 'true'
 }
 
 export default async function handler(req, res) {
@@ -36,7 +34,8 @@ export default async function handler(req, res) {
     /** When true, AI Tutor APIs skip Stripe checkout (local dev only — do not enable in production). */
     tutorAllowUnauth: process.env.ALLOW_UNAUTH_TUTOR === 'true',
     /**
-     * Matches `api/lib/tutorEntitlement.js`: Vercel Production requires checkout for tutor chat unless opted out.
+     * True only when `AI_TUTOR_REQUIRE_CHECKOUT=true`. Default off: tutor text allows 3 free messages (see tutor-chat);
+     * paywall is after free tier. Live video still requires Academy server-side.
      */
     aiTutorRequireCheckout: aiTutorCheckoutRequiredForClient(),
     /** When true, Homework Adventure Video (Claude + TTS + worker) is disabled — set on Vercel while marketing other surfaces. */

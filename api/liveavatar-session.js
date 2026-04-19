@@ -3,7 +3,6 @@
  * LiveAvatar v1 session token (api.liveavatar.com). Key stays server-side.
  * Client starts the session with @heygen/liveavatar-web-sdk (not deprecated streaming-avatar).
  */
-import { requireTutorCheckoutOrAllow } from './lib/tutorEntitlement.js'
 import { verifyHomeworkCheckoutSession } from './lib/verifyBundleEntitlement.js'
 import { rateLimit } from './lib/rateLimit.js'
 
@@ -65,18 +64,7 @@ export default async function handler(req, res) {
   const localeRaw = typeof body.locale === 'string' ? body.locale.trim().toLowerCase() : 'en'
   const useSpanish = localeRaw === 'es' || localeRaw.startsWith('es-')
 
-  const ent = await requireTutorCheckoutOrAllow(checkoutSessionId)
-  if (!ent.ok) {
-    res.status(ent.status).json({
-      error:
-        ent.status === 403
-          ? 'Adventure Academy unlock required for live tutor video.'
-          : ent.message || 'Not allowed.',
-    })
-    return
-  }
-
-  /** Live video always needs a verified Adventure Academy session (text chat may still use free preview turns). */
+  /** Live video always needs a verified Adventure Academy session (text chat has 3 free messages without it). */
   if (process.env.ALLOW_UNAUTH_TUTOR !== 'true') {
     const paid = await verifyHomeworkCheckoutSession(checkoutSessionId)
     if (!paid.ok) {

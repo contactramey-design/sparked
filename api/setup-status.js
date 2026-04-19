@@ -28,7 +28,7 @@ export default async function handler(req, res) {
   res.setHeader('Cache-Control', 'no-store, max-age=0')
   res.status(200).json({
     // Bump when setup-status shape changes — if missing in production, you are NOT on this deploy.
-    schemaVersion: 14,
+    schemaVersion: 15,
     /** Vercel injects these on deploy; use to confirm Production matches your latest Git push. */
     deployment: {
       environment: process.env.VERCEL_ENV ?? null,
@@ -76,7 +76,7 @@ export default async function handler(req, res) {
     },
     // AI Tutor Academy: /ai-tutor, POST /api/tutor-chat, /api/liveavatar-session, /api/tts-stream
     aiTutor: {
-      /** Effective gate for tutor chat (see `api/lib/tutorEntitlement.js`). */
+      /** True only if `AI_TUTOR_REQUIRE_CHECKOUT=true` (opt-in). Text chat still allows 3 free messages without checkout. */
       requireCheckoutForTutor: isTutorCheckoutRequired(),
       openaiConfigured: Boolean(process.env.OPENAI_API_KEY?.trim()),
       /** @deprecated Use liveAvatar; HEYGEN_API_KEY still works as fallback API key for LiveAvatar token. */

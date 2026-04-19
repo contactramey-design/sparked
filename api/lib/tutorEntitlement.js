@@ -1,35 +1,15 @@
 /**
- * AI Tutor Stripe checkout gate for **text** (`tutor-chat`): shared with `liveavatar-session` for the
- * strict “no session at all” mode only.
+ * AI Tutor checkout flags (text chat uses 3 free user messages without a session; see `api/tutor-chat.js`).
+ * Live video (`liveavatar-session`, legacy heygen token) always verifies Adventure Academy unless
+ * `ALLOW_UNAUTH_TUTOR=true`.
  *
- * - Local / Preview: open unless `AI_TUTOR_REQUIRE_CHECKOUT=true`.
- * - Vercel Production: required unless `AI_TUTOR_REQUIRE_CHECKOUT=false` (free preview) or `ALLOW_UNAUTH_TUTOR=true`.
- * - **Live video** still always requires a verified subscription in `liveavatar-session.js` when unauth is off.
+ * `AI_TUTOR_REQUIRE_CHECKOUT=true` — optional: `GET /api/config` sets `aiTutorRequireCheckout` for UI/analytics.
+ * Production default is off so families get three free text messages before subscribing.
  */
-import { verifyHomeworkCheckoutSession } from './verifyBundleEntitlement.js'
-import { isVercelProduction } from './deployMode.js'
-
 /**
- * When true, /ai-tutor hard paywall + tutor-chat requires checkout before any messages.
- * Vercel Production defaults to required unless AI_TUTOR_REQUIRE_CHECKOUT=false (e.g. marketing preview).
+ * Opt-in strict mode. When true, `GET /api/config` reports `aiTutorRequireCheckout`.
+ * Default: false everywhere, including Vercel Production.
  */
 export function isTutorCheckoutRequired() {
-  if (process.env.ALLOW_UNAUTH_TUTOR === 'true') return false
-  if (process.env.AI_TUTOR_REQUIRE_CHECKOUT === 'false') return false
-  if (process.env.AI_TUTOR_REQUIRE_CHECKOUT === 'true') return true
-  return isVercelProduction()
-}
-
-/**
- * @param {string} checkoutSessionId
- * @returns {Promise<{ ok: true } | { ok: false, status: number, message: string }>}
- */
-export async function requireTutorCheckoutOrAllow(checkoutSessionId) {
-  if (process.env.ALLOW_UNAUTH_TUTOR === 'true') {
-    return { ok: true }
-  }
-  if (!isTutorCheckoutRequired()) {
-    return { ok: true }
-  }
-  return verifyHomeworkCheckoutSession((checkoutSessionId || '').trim())
+  return process.env.AI_TUTOR_REQUIRE_CHECKOUT === 'true'
 }
