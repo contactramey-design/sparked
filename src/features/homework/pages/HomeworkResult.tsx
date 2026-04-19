@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { useTranslation } from '@/contexts/LocaleContext'
 import { getHomeworkCheckoutSessionId } from '@/progress'
 import { explainWorksheet, storyFromLesson } from '../api/homeworkApi'
@@ -17,6 +17,12 @@ import { GenerateButton } from '../components/GenerateButton'
 import { AdventureVisuals } from '../components/AdventureVisuals'
 import { HomeworkQualityPanel } from '../components/HomeworkQualityPanel'
 import { HomeworkPedagogyBanner } from '../components/HomeworkPedagogyBanner'
+import {
+  buildHomeworkQuestForTutor,
+  bumpHomeworkQuestHandoffCount,
+  canHomeworkQuestHandoffToday,
+  saveHomeworkQuestForTutorSession,
+} from '../lib/homeworkQuestForTutor'
 
 function clearAutoVisualSessionFlag(jobId: string) {
   try {
@@ -28,6 +34,7 @@ function clearAutoVisualSessionFlag(jobId: string) {
 
 export default function HomeworkResult() {
   const { jobId } = useParams<{ jobId: string }>()
+  const navigate = useNavigate()
   const { t } = useTranslation()
   const [job, setJob] = useState<HomeworkJob | null>(null)
   const [loading, setLoading] = useState<'explain' | 'story' | 'fix' | null>(null)
@@ -217,6 +224,32 @@ export default function HomeworkResult() {
           />
           <PracticeCard questions={job.explanation.practiceQuestions} title={t('homeworkFeature.practiceHeading')} />
         </>
+      ) : null}
+
+      {job.story || job.explanation ? (
+        <div className="rounded-2xl border border-teal-200/80 bg-teal-50/60 p-4 sm:p-5">
+          <h3 className="text-lg font-bold text-teal-950">{t('homeworkFeature.continueWithTutorTitle')}</h3>
+          <p className="mt-2 text-sm text-slate-800 sm:text-base">{t('homeworkFeature.continueWithTutorBody')}</p>
+          <button
+            type="button"
+            className="primary-button mt-4 min-h-[52px] px-5 py-3 text-base font-bold disabled:cursor-not-allowed disabled:opacity-50"
+            disabled={!canHomeworkQuestHandoffToday()}
+            onClick={() => {
+              if (!job || !canHomeworkQuestHandoffToday()) {
+                setError(t('homeworkFeature.continueWithTutorLimit'))
+                return
+              }
+              saveHomeworkQuestForTutorSession(buildHomeworkQuestForTutor(job))
+              bumpHomeworkQuestHandoffCount()
+              navigate('/ai-tutor')
+            }}
+          >
+            {t('homeworkFeature.continueWithTutorCta')}
+          </button>
+          {!canHomeworkQuestHandoffToday() ? (
+            <p className="mt-2 text-sm text-amber-900">{t('homeworkFeature.continueWithTutorLimit')}</p>
+          ) : null}
+        </div>
       ) : null}
 
       {job.story ? (

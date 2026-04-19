@@ -5,6 +5,7 @@ import InteractiveTutor from './InteractiveTutor'
 export default function AiTutorPage() {
   const [tutorAllowUnauth, setTutorAllowUnauth] = useState(false)
   const [tutorLeadCaptureEnabled, setTutorLeadCaptureEnabled] = useState(false)
+  const [tutorVisualEnabled, setTutorVisualEnabled] = useState(false)
 
   useEffect(() => {
     let cancelled = false
@@ -14,10 +15,12 @@ export default function AiTutorPage() {
         (data: {
           tutorAllowUnauth?: boolean
           tutorLeadCaptureEnabled?: boolean
+          tutorVisualEnabled?: boolean
         }) => {
           if (!cancelled) {
             setTutorAllowUnauth(Boolean(data.tutorAllowUnauth))
             setTutorLeadCaptureEnabled(Boolean(data.tutorLeadCaptureEnabled))
+            setTutorVisualEnabled(Boolean(data.tutorVisualEnabled))
           }
         },
       )
@@ -74,6 +77,7 @@ export default function AiTutorPage() {
       checkoutSessionId={checkoutSessionId}
       hasActiveSubscription={hasActiveSubscription}
       tutorLeadCaptureEnabled={tutorLeadCaptureEnabled}
+      tutorVisualEnabled={tutorVisualEnabled}
     />
   )
 }

@@ -16,6 +16,8 @@ const KID_LOCK_KEY = 'sparki_academy_kid_lock'
 interface AuthContextValue {
   isLoggedIn: boolean
   user: User | null
+  /** Present when Supabase session exists — send to server APIs that need parent identity (never expose to children UI). */
+  accessToken: string | null
   /** True after the initial Supabase session check finishes (or immediately if Supabase is off). */
   authHydrated: boolean
   configured: boolean
@@ -32,6 +34,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [kidLock, setKidLockState] = useState(false)
   const [user, setUser] = useState<User | null>(null)
+  const [accessToken, setAccessToken] = useState<string | null>(null)
   const [authHydrated, setAuthHydrated] = useState(false)
   const configured = !!supabase
 
@@ -60,11 +63,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       .then(({ data }) => {
         if (cancelled) return
         setUser(data.session?.user ?? null)
+        setAccessToken(data.session?.access_token ?? null)
         setIsLoggedIn(!!data.session?.user)
       })
       .catch(() => {
         if (!cancelled) {
           setUser(null)
+          setAccessToken(null)
           setIsLoggedIn(false)
         }
       })
@@ -75,6 +80,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
       if (cancelled) return
       setUser(session?.user ?? null)
+      setAccessToken(session?.access_token ?? null)
       setIsLoggedIn(!!session?.user)
       try {
         // Keep compatibility with existing ProtectedRoute behavior
@@ -106,6 +112,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (supabase) await supabase.auth.signOut()
     } finally {
       setUser(null)
+      setAccessToken(null)
       setIsLoggedIn(false)
       clearPostLoginRedirect()
       try {
@@ -143,6 +150,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const value: AuthContextValue = {
     isLoggedIn,
     user,
+    accessToken,
     authHydrated,
     configured,
     signInWithEmail,

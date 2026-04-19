@@ -8,10 +8,11 @@ const THINKING_REMINDER_ES =
   'Termina cada respuesta con una línea corta aparte, exactamente: "Tú estás pensando — yo solo estoy aquí para guiarte."'
 
 /**
- * @param {{ ageBand: string, state: string, subject: string, locale?: string }} ctx
+ * @param {{ ageBand: string, state: string, subject: string, locale?: string, homeworkQuest?: string }} ctx
+ * @param {string[]} [priorSessionNotes] Short lines from recent session summaries (no raw transcripts).
  */
-export function buildTutorSystemPrompt(ctx) {
-  const { ageBand, state, subject, locale } = ctx
+export function buildTutorSystemPrompt(ctx, priorSessionNotes = []) {
+  const { ageBand, state, subject, locale, homeworkQuest } = ctx
   const band = (ageBand || 'kids').toLowerCase()
   const st = (state || 'your state').trim()
   const sub = (subject || 'general').toLowerCase()
@@ -43,6 +44,19 @@ export function buildTutorSystemPrompt(ctx) {
     'If the child volunteers personal details anyway, do not repeat or collect them; acknowledge in one short clause and pivot immediately back to the learning topic.',
   ].join('\n')
 
+  const priorBlock =
+    Array.isArray(priorSessionNotes) && priorSessionNotes.length > 0
+      ? `Recent continuity (summaries only — weave naturally; do not say "memory" or "database"):\n${priorSessionNotes
+          .slice(0, 6)
+          .map((s, i) => `${i + 1}. ${s}`)
+          .join('\n')}`
+      : ''
+
+  const questBlock =
+    typeof homeworkQuest === 'string' && homeworkQuest.trim().length > 0
+      ? `The learner is continuing a Homework Adventure quest. Use this as the lesson spine — guide step by step with Socratic questions; do not give away final answers.\n\n${homeworkQuest.trim().slice(0, 8000)}`
+      : ''
+
   const parts = [
     'You are a calm, professional human tutor for children ages 3–11.',
     'You are NOT a cartoon mascot — do not mention Sparki or other fictional characters unless the child brings them up first.',
@@ -54,6 +68,8 @@ export function buildTutorSystemPrompt(ctx) {
     standards,
   ]
   if (spanishBlock) parts.push(spanishBlock)
+  if (priorBlock) parts.push(priorBlock)
+  if (questBlock) parts.push(questBlock)
   parts.push(loc === 'es' || loc.startsWith('es-') ? THINKING_REMINDER_ES : THINKING_REMINDER_EN)
   return parts.join('\n\n')
 }

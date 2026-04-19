@@ -1,16 +1,22 @@
 /**
  * POST /api/tutor-chat
- * Premium AI Tutor: GPT-4o with state- and age-aware system prompt.
- * Body JSON: { checkout_session_id, messages, age_band, state, subject }
+ * Body: checkout_session_id, messages, age_band, state, subject, locale,
+ *       client_session_id?, access_token?, homework_quest? (optional string)
  */
 import { verifyHomeworkCheckoutSession } from './lib/verifyBundleEntitlement.js'
 import { buildTutorSystemPrompt } from './tutor/lib/prompts.js'
 import { rateLimit } from './lib/rateLimit.js'
+import {
+  estimateTutorChatCostUsd,
+  getServiceSupabase,
+  getUserIdFromJwt,
+  insertTutorApiEvent,
+  loadPriorSessionNotes,
+} from './lib/tutorTelemetry.js'
 
 const MAX_MESSAGES = 36
 const MAX_CONTENT = 6000
 const MODEL = 'gpt-4o'
-/** Free preview: max completed exchanges (count = user messages in thread) without Adventure Academy; 4th user message is rejected. */
 const FREE_TUTOR_USER_MESSAGES = 3
 
 function normalizeMessages(raw) {
@@ -62,6 +68,9 @@ export default async function handler(req, res) {
   const localeRaw = typeof body.locale === 'string' ? body.locale.trim().toLowerCase() : 'en'
   const locale = localeRaw === 'es' || localeRaw.startsWith('es-') ? 'es' : 'en'
   const messages = normalizeMessages(body.messages)
+  const clientSessionId = typeof body.client_session_id === 'string' ? body.client_session_id.trim().slice(0, 80) : ''
+  const accessToken = typeof body.access_token === 'string' ? body.access_token.trim() : ''
+  const homeworkQuest = typeof body.homework_quest === 'string' ? body.homework_quest.trim().slice(0, 8000) : ''
 
   if (messages.length === 0) {
     res.status(400).json({ error: 'Send at least one user message.' })
@@ -88,7 +97,21 @@ export default async function handler(req, res) {
     return
   }
 
-  const system = buildTutorSystemPrompt({ ageBand, state, subject, locale })
+  let priorNotes = []
+  const parentUserId = accessToken ? await getUserIdFromJwt(accessToken) : null
+  const sb = getServiceSupabase()
+  if (parentUserId && sb) {
+    try {
+      priorNotes = await loadPriorSessionNotes(sb, parentUserId)
+    } catch {
+      priorNotes = []
+    }
+  }
+
+  const system = buildTutorSystemPrompt(
+    { ageBand, state, subject, locale, homeworkQuest: homeworkQuest || undefined },
+    priorNotes,
+  )
   const openaiMessages = [{ role: 'system', content: system }, ...messages]
 
   try {
@@ -101,7 +124,7 @@ export default async function handler(req, res) {
       body: JSON.stringify({
         model: MODEL,
         messages: openaiMessages,
-        max_tokens: 900,
+        max_tokens: ageBand === 'tots' ? 320 : ageBand === 'crew' ? 1200 : 900,
         temperature: 0.65,
       }),
     })
@@ -127,7 +150,35 @@ export default async function handler(req, res) {
       return
     }
 
-    res.status(200).json({ reply: text })
+    const usage = data.usage || {}
+    const promptTokens = usage.prompt_tokens ?? 0
+    const completionTokens = usage.completion_tokens ?? 0
+    const estimatedCostUsd = estimateTutorChatCostUsd(promptTokens, completionTokens)
+
+    if (sb && clientSessionId) {
+      await insertTutorApiEvent(sb, {
+        event_type: 'tutor_chat',
+        model: MODEL,
+        prompt_tokens: promptTokens,
+        completion_tokens: completionTokens,
+        estimated_cost_usd: estimatedCostUsd,
+        checkout_session_id: checkoutSessionId || null,
+        client_session_id: clientSessionId,
+        parent_user_id: parentUserId,
+        age_band: ageBand,
+        metadata: {},
+      })
+    }
+
+    res.status(200).json({
+      reply: text,
+      usage: {
+        prompt_tokens: promptTokens,
+        completion_tokens: completionTokens,
+        total_tokens: usage.total_tokens ?? promptTokens + completionTokens,
+      },
+      estimated_cost_usd: estimatedCostUsd,
+    })
   } catch (e) {
     if (process.env.NODE_ENV !== 'production') {
       console.error('[tutor-chat]', e)

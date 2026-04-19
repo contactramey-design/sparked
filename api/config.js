@@ -49,5 +49,7 @@ export default async function handler(req, res) {
         Boolean(process.env.TUTOR_LEAD_NOTIFY_TO?.trim()) &&
         Boolean(process.env.RESEND_FROM_EMAIL?.trim())) ||
       Boolean(process.env.TUTOR_LEAD_WEBHOOK_URL?.trim()),
+    /** When true, POST /api/tutor-visual is enabled (DALL·E — costs apply; rate limited). */
+    tutorVisualEnabled: process.env.TUTOR_VISUAL_ENABLED === 'true',
   })
 }

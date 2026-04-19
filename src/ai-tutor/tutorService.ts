@@ -1,9 +1,12 @@
 import type { AgeBandId } from '@/ageBand'
 import {
+  TUTOR_CLIENT_SESSION_KEY,
   TUTOR_FREE_TURNS_LOCAL_KEY,
   TUTOR_LEAD_BONUS_CLAIMED_KEY,
   TUTOR_LEAD_MODAL_DISMISSED_SESSION_KEY,
   TUTOR_MESSAGES_KEY,
+  TUTOR_SESSION_STARTED_MS_KEY,
+  TUTOR_VISUAL_TURNS_KEY,
   TUTOR_STATE_CHANGED_EVENT,
   TUTOR_STATE_KEY,
   TUTOR_STATE_LOCAL_KEY,
@@ -165,6 +168,77 @@ export async function postTutorLeadEmail(email: string, locale: 'en' | 'es'): Pr
   }
 }
 
+export function readOrCreateTutorClientSessionId(): string {
+  try {
+    let id = sessionStorage.getItem(TUTOR_CLIENT_SESSION_KEY)
+    if (!id) {
+      id =
+        typeof crypto !== 'undefined' && 'randomUUID' in crypto
+          ? crypto.randomUUID()
+          : `tut-${Date.now()}-${Math.random().toString(36).slice(2, 11)}`
+      sessionStorage.setItem(TUTOR_CLIENT_SESSION_KEY, id)
+    }
+    return id
+  } catch {
+    return `tut-${Date.now()}`
+  }
+}
+
+export function readTutorSessionStartedMs(): number | null {
+  try {
+    const raw = sessionStorage.getItem(TUTOR_SESSION_STARTED_MS_KEY)
+    if (!raw) return null
+    const n = parseInt(raw, 10)
+    return Number.isFinite(n) ? n : null
+  } catch {
+    return null
+  }
+}
+
+export function ensureTutorSessionStartedMs() {
+  try {
+    if (sessionStorage.getItem(TUTOR_SESSION_STARTED_MS_KEY)) return
+    sessionStorage.setItem(TUTOR_SESSION_STARTED_MS_KEY, String(Date.now()))
+  } catch {
+    /* ignore */
+  }
+}
+
+/** New tutor tab session id + timers + optional illustration counter (call on Clear chat). */
+export function resetTutorTelemetrySessionKeys() {
+  try {
+    sessionStorage.removeItem(TUTOR_CLIENT_SESSION_KEY)
+    sessionStorage.removeItem(TUTOR_SESSION_STARTED_MS_KEY)
+    sessionStorage.removeItem(TUTOR_VISUAL_TURNS_KEY)
+  } catch {
+    /* ignore */
+  }
+}
+
+export function readTutorVisualTurnsUsed(): number {
+  try {
+    const n = parseInt(sessionStorage.getItem(TUTOR_VISUAL_TURNS_KEY) || '0', 10)
+    return Number.isFinite(n) ? n : 0
+  } catch {
+    return 0
+  }
+}
+
+export function bumpTutorVisualTurnsUsed() {
+  try {
+    const n = readTutorVisualTurnsUsed()
+    sessionStorage.setItem(TUTOR_VISUAL_TURNS_KEY, String(n + 1))
+  } catch {
+    /* ignore */
+  }
+}
+
+export type TutorChatResult = {
+  reply: string
+  estimated_cost_usd?: number
+  usage?: { prompt_tokens?: number; completion_tokens?: number; total_tokens?: number }
+}
+
 export async function postTutorChat(params: {
   checkoutSessionId: string | null
   messages: ChatMessage[]
@@ -174,7 +248,10 @@ export async function postTutorChat(params: {
   subject: TutorSubject
   /** Matches app language toggle — tutor replies (and TTS) follow this. */
   locale?: 'en' | 'es'
-}): Promise<string> {
+  clientSessionId?: string
+  accessToken?: string | null
+  homeworkQuest?: string
+}): Promise<TutorChatResult> {
   const stateName = stateNameFromCode(params.stateCode || 'CA')
   const res = await fetch('/api/tutor-chat', {
     method: 'POST',
@@ -186,6 +263,9 @@ export async function postTutorChat(params: {
       state: stateName,
       subject: params.subject,
       locale: params.locale === 'es' ? 'es' : 'en',
+      client_session_id: params.clientSessionId || readOrCreateTutorClientSessionId(),
+      access_token: params.accessToken || '',
+      homework_quest: params.homeworkQuest || '',
     }),
   })
   const data = (await res.json().catch(() => ({}))) as {
@@ -193,6 +273,8 @@ export async function postTutorChat(params: {
     error?: string
     code?: string
     message?: string
+    estimated_cost_usd?: number
+    usage?: { prompt_tokens?: number; completion_tokens?: number; total_tokens?: number }
   }
   if (!res.ok) {
     const msg =
@@ -204,7 +286,86 @@ export async function postTutorChat(params: {
     throw err
   }
   if (!data.reply) throw new Error('Empty tutor reply')
-  return data.reply
+  return {
+    reply: data.reply,
+    estimated_cost_usd: typeof data.estimated_cost_usd === 'number' ? data.estimated_cost_usd : undefined,
+    usage: data.usage,
+  }
+}
+
+export type TutorSessionEndParams = {
+  accessToken?: string | null
+  clientSessionId: string
+  checkoutSessionId: string | null
+  startedAtMs: number | null
+  endedAtMs: number
+  messageCount: number
+  sumEstimatedCostUsd: number
+  messages: ChatMessage[]
+  ageBand: AgeBandId
+  stateCode: string
+  subjectTag?: string
+  childLabel?: string | null
+}
+
+function serializeTutorSessionEndBody(params: TutorSessionEndParams) {
+  return JSON.stringify({
+    access_token: params.accessToken || '',
+    client_session_id: params.clientSessionId,
+    checkout_session_id: params.checkoutSessionId || '',
+    started_at_ms: params.startedAtMs || 0,
+    ended_at_ms: params.endedAtMs,
+    message_count: params.messageCount,
+    sum_estimated_cost_usd: params.sumEstimatedCostUsd,
+    messages: params.messages,
+    age_band: params.ageBand,
+    state_code: params.stateCode,
+    subject_tag: params.subjectTag || 'general',
+    child_label: params.childLabel || null,
+  })
+}
+
+export async function postTutorSessionEnd(params: TutorSessionEndParams): Promise<void> {
+  await fetch('/api/tutor-session-end', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: serializeTutorSessionEndBody(params),
+  })
+}
+
+/** Best-effort flush when the tab is closing (browser may still deliver the request). */
+export function postTutorSessionEndKeepalive(params: TutorSessionEndParams) {
+  try {
+    void fetch('/api/tutor-session-end', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: serializeTutorSessionEndBody(params),
+      keepalive: true,
+    })
+  } catch {
+    /* ignore */
+  }
+}
+
+export async function fetchTutorVisual(params: {
+  checkoutSessionId: string | null
+  clientSessionId: string
+  ageBand: AgeBandId
+  tutorReplySnippet: string
+}): Promise<string | null> {
+  const res = await fetch('/api/tutor-visual', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      checkout_session_id: params.checkoutSessionId || '',
+      client_session_id: params.clientSessionId,
+      age_band: params.ageBand,
+      tutor_reply_snippet: params.tutorReplySnippet.slice(0, 1200),
+    }),
+  })
+  const data = (await res.json().catch(() => ({}))) as { url?: string; error?: string }
+  if (!res.ok || !data.url) return null
+  return data.url
 }
 
 /** LiveAvatar: short-lived session token for @heygen/liveavatar-web-sdk (server from POST /api/liveavatar-session). */

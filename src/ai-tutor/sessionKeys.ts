@@ -12,3 +12,12 @@ export const TUTOR_FREE_TURNS_LOCAL_KEY = 'sparki_tutor_free_turns_used_v1'
 export const TUTOR_LEAD_BONUS_CLAIMED_KEY = 'sparki_tutor_lead_bonus_claimed_v1'
 /** sessionStorage — lead modal dismissed (“Not now”) until the tab session ends. */
 export const TUTOR_LEAD_MODAL_DISMISSED_SESSION_KEY = 'sparki_tutor_lead_modal_dismissed_v1'
+
+/** sessionStorage — stable id for this tab’s tutor session (telemetry + session end). */
+export const TUTOR_CLIENT_SESSION_KEY = 'sparki_tutor_client_session_v1'
+
+/** sessionStorage — wall-clock ms when first message was sent this session. */
+export const TUTOR_SESSION_STARTED_MS_KEY = 'sparki_tutor_session_started_ms_v1'
+
+/** sessionStorage — DALL·E tutor illustrations used this tab session (cap in client). */
+export const TUTOR_VISUAL_TURNS_KEY = 'sparki_tutor_visual_turns_v1'

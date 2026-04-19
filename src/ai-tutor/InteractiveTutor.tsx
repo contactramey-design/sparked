@@ -1,26 +1,36 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { TutorLeadCaptureModal } from './TutorLeadCaptureModal'
 import { Link } from 'react-router-dom'
 import { useAgeBand } from '@/contexts/AgeBandContext'
 import { useTranslation } from '@/contexts/LocaleContext'
 import { TutorConsentModal } from './TutorConsentModal'
 import type { LiveAvatarSession } from '@heygen/liveavatar-web-sdk'
+import { useAuth } from '@/AuthContext'
 import {
   FREE_TUTOR_CAP,
   bumpTutorFreeTurnsUsed,
+  bumpTutorVisualTurnsUsed,
   dismissTutorLeadModalForSession,
+  ensureTutorSessionStartedMs,
   fetchLiveAvatarSession,
+  fetchTutorVisual,
   hasTutorLeadBonusClaimed,
   loadTutorMessages,
   markTutorLeadBonusClaimed,
   playTtsStreamEphemeral,
   postTutorChat,
   postTutorLeadEmail,
+  postTutorSessionEnd,
+  postTutorSessionEndKeepalive,
+  readOrCreateTutorClientSessionId,
   readTutorFreeTurnsUsed,
   readTutorLeadModalDismissedThisSession,
+  readTutorSessionStartedMs,
   readTutorStateCode,
+  readTutorVisualTurnsUsed,
   readVoiceConsent,
   resetTutorFreeTurnsAfterLeadBonus,
+  resetTutorTelemetrySessionKeys,
   saveTutorMessages,
   writeVoiceConsent,
 } from './tutorService'
@@ -28,6 +38,11 @@ import { TUTOR_STATE_CHANGED_EVENT, TUTOR_STATE_LOCAL_KEY } from './sessionKeys'
 import type { ChatMessage } from './types'
 import { cn } from '@/lib/utils'
 import { stateNameFromCode } from './usStates'
+import {
+  clearHomeworkQuestForTutorSession,
+  readHomeworkQuestForTutorSession,
+} from '@/features/homework/lib/homeworkQuestForTutor'
+import { TutorTopicCard } from './TutorTopicCard'
 
 type Props = {
   checkoutSessionId: string | null
@@ -35,16 +50,21 @@ type Props = {
   hasActiveSubscription: boolean
   /** From GET /api/config — when true, free-limit users see email capture for +3 more messages. */
   tutorLeadCaptureEnabled: boolean
+  /** Server flag TUTOR_VISUAL_ENABLED — optional illustration per reply (rate + cost capped client-side). */
+  tutorVisualEnabled?: boolean
 }
 
 export default function InteractiveTutor({
   checkoutSessionId,
   hasActiveSubscription,
   tutorLeadCaptureEnabled,
+  tutorVisualEnabled = false,
 }: Props) {
   const { t, locale } = useTranslation()
   const { ageBand } = useAgeBand()
+  const { accessToken } = useAuth()
   const isTots = ageBand === 'tots'
+  const isCrew = ageBand === 'crew'
 
   const [stateCode, setStateCode] = useState('')
   const [messages, setMessages] = useState<ChatMessage[]>([])
@@ -71,6 +91,68 @@ export default function InteractiveTutor({
   const [leadBonusClaimed, setLeadBonusClaimed] = useState(() => hasTutorLeadBonusClaimed())
   /** Start expanded so phones see live video / voice controls without hunting for a collapsed panel. */
   const [soundVideoExpanded, setSoundVideoExpanded] = useState(true)
+
+  const [topicUser, setTopicUser] = useState('')
+  const [topicAssistant, setTopicAssistant] = useState('')
+  const [tutorImageUrl, setTutorImageUrl] = useState<string | null>(null)
+
+  const homeworkQuestRef = useRef(readHomeworkQuestForTutorSession())
+  const sumCostRef = useRef(0)
+  const sessionFlushedRef = useRef(false)
+  const messagesRef = useRef<ChatMessage[]>([])
+
+  useEffect(() => {
+    messagesRef.current = messages
+  }, [messages])
+
+  const buildSessionEndPayload = useCallback(() => {
+    const msgs = messagesRef.current
+    const clientSessionId = readOrCreateTutorClientSessionId()
+    return {
+      accessToken,
+      clientSessionId,
+      checkoutSessionId,
+      startedAtMs: readTutorSessionStartedMs(),
+      endedAtMs: Date.now(),
+      messageCount: msgs.length,
+      sumEstimatedCostUsd: sumCostRef.current,
+      messages: msgs,
+      ageBand,
+      stateCode,
+      subjectTag: 'general' as const,
+      childLabel: null as string | null,
+    }
+  }, [accessToken, checkoutSessionId, ageBand, stateCode])
+
+  const flushTutorSessionIfNeeded = useCallback(
+    (mode: 'keepalive' | 'await') => {
+      if (sessionFlushedRef.current) return
+      const msgs = messagesRef.current
+      if (msgs.length < 2) return
+      sessionFlushedRef.current = true
+      const payload = buildSessionEndPayload()
+      if (mode === 'keepalive') {
+        postTutorSessionEndKeepalive(payload)
+      } else {
+        void postTutorSessionEnd(payload)
+      }
+    },
+    [buildSessionEndPayload],
+  )
+
+  useEffect(() => {
+    const onPageHide = () => flushTutorSessionIfNeeded('keepalive')
+    window.addEventListener('pagehide', onPageHide)
+    return () => {
+      window.removeEventListener('pagehide', onPageHide)
+    }
+  }, [flushTutorSessionIfNeeded])
+
+  useEffect(() => {
+    return () => {
+      flushTutorSessionIfNeeded('keepalive')
+    }
+  }, [flushTutorSessionIfNeeded])
 
   useEffect(() => {
     setStateCode(readTutorStateCode())
@@ -187,6 +269,7 @@ export default function InteractiveTutor({
           tryPlay()
           window.setTimeout(tryPlay, 150)
           window.setTimeout(tryPlay, 600)
+          window.setTimeout(tryPlay, 1200)
         }
       }
       session.on(SessionEvent.SESSION_STREAM_READY, onStreamReady)
@@ -359,18 +442,50 @@ export default function InteractiveTutor({
     setLoading(true)
 
     try {
-      const reply = await postTutorChat({
+      ensureTutorSessionStartedMs()
+      const clientSessionId = readOrCreateTutorClientSessionId()
+      const questPayload = homeworkQuestRef.current.trim() || undefined
+      const { reply, estimated_cost_usd } = await postTutorChat({
         checkoutSessionId,
         messages: next,
         ageBand,
         stateCode,
         subject: 'general',
         locale,
+        clientSessionId,
+        accessToken,
+        homeworkQuest: questPayload,
       })
+      if (typeof estimated_cost_usd === 'number' && Number.isFinite(estimated_cost_usd)) {
+        sumCostRef.current += estimated_cost_usd
+      }
+      if (questPayload) {
+        homeworkQuestRef.current = ''
+        clearHomeworkQuestForTutorSession()
+      }
       const assistantMsg: ChatMessage = { role: 'assistant', content: reply }
       setMessages((m) => [...m, assistantMsg])
+      setTopicUser(trimmed)
+      setTopicAssistant(reply.slice(0, 400))
       if (!hasActiveSubscription) {
         bumpTutorFreeTurnsUsed()
+      }
+      if (
+        tutorVisualEnabled &&
+        hasActiveSubscription &&
+        readTutorVisualTurnsUsed() < 6 &&
+        reply.trim().length > 12
+      ) {
+        const url = await fetchTutorVisual({
+          checkoutSessionId,
+          clientSessionId,
+          ageBand,
+          tutorReplySnippet: reply,
+        })
+        if (url) {
+          bumpTutorVisualTurnsUsed()
+          setTutorImageUrl(url)
+        }
       }
       await speakReply(reply)
     } catch (e) {
@@ -390,6 +505,13 @@ export default function InteractiveTutor({
     stopAudio()
     setMessages([])
     saveTutorMessages([])
+    setTopicUser('')
+    setTopicAssistant('')
+    setTutorImageUrl(null)
+    sumCostRef.current = 0
+    sessionFlushedRef.current = false
+    resetTutorTelemetrySessionKeys()
+    homeworkQuestRef.current = readHomeworkQuestForTutorSession()
   }
 
   useEffect(() => {
@@ -445,8 +567,18 @@ export default function InteractiveTutor({
     rec.start()
   }
 
+  const bubbleText = isTots ? 'text-xl leading-relaxed md:text-xl' : isCrew ? 'text-base leading-relaxed md:text-lg' : 'text-lg leading-relaxed md:text-lg'
+  const chatMaxH = isTots ? 'max-h-[min(44vh,420px)] md:max-h-[min(52vh,520px)]' : isCrew ? 'max-h-[min(56vh,520px)] md:max-h-[min(62vh,600px)]' : 'max-h-[min(50vh,400px)] md:max-h-[min(58vh,560px)]'
+  const inputMaxLen = isTots ? 240 : isCrew ? 8000 : 2000
+
   return (
-    <div className="w-full space-y-6 pb-8 md:space-y-8">
+    <div
+      className={cn(
+        'w-full space-y-6 pb-8 md:space-y-8',
+        isTots && 'space-y-8 [&_section]:rounded-3xl',
+        isCrew && 'md:space-y-6',
+      )}
+    >
       <TutorConsentModal
         open={consentOpen}
         title={t('aiTutor.consentTitle')}
@@ -681,6 +813,8 @@ export default function InteractiveTutor({
                   ref={videoRef}
                   className="aspect-video w-full max-h-[min(72vh,720px)] object-cover object-center [&:fullscreen]:max-h-none"
                   playsInline
+                  // iOS Safari: inline playback in webviews / older WKWebView
+                  {...{ 'webkit-playsinline': 'true' } as React.HTMLAttributes<HTMLVideoElement>}
                   muted={false}
                   autoPlay
                 />
@@ -693,23 +827,53 @@ export default function InteractiveTutor({
         </div>
 
         <div className="min-w-0 space-y-6">
+          {(topicUser || topicAssistant) && (
+            <TutorTopicCard
+              title={t('aiTutor.topicCardHeading')}
+              userSnippet={topicUser}
+              assistantSnippet={topicAssistant}
+            />
+          )}
+          {tutorImageUrl ? (
+            <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+              <img
+                src={tutorImageUrl}
+                alt=""
+                className="mx-auto max-h-[min(40vh,320px)] w-full object-contain"
+              />
+            </div>
+          ) : null}
+
           <section className="space-y-3" aria-labelledby="tutor-chat-heading">
-            <h2 id="tutor-chat-heading" className="font-heading text-base font-bold text-slate-900 md:text-lg">
+            <h2
+              id="tutor-chat-heading"
+              className={cn(
+                'font-heading font-bold text-slate-900',
+                isTots ? 'text-lg md:text-xl' : isCrew ? 'text-base md:text-lg' : 'text-base md:text-lg',
+              )}
+            >
               {t('aiTutor.sectionChat')}
             </h2>
             <div
-              className="max-h-[min(50vh,400px)] space-y-3 overflow-y-auto rounded-2xl border border-slate-200 bg-slate-50 p-3 sm:p-4 md:max-h-[min(58vh,560px)]"
+              className={cn(
+                'space-y-3 overflow-y-auto rounded-2xl border border-slate-200 bg-slate-50 p-3 sm:p-4',
+                chatMaxH,
+              )}
               aria-live="polite"
             >
-              {messages.length === 0 && <p className="text-slate-600">{t('aiTutor.emptyChat')}</p>}
+              {messages.length === 0 && (
+                <p className={cn('text-slate-600', isTots ? 'text-xl' : 'text-base')}>{t('aiTutor.emptyChat')}</p>
+              )}
               {messages.map((m, i) => (
                 <div
                   key={i}
-                  className={`max-w-[min(100%,52rem)] rounded-2xl px-4 py-3 text-base leading-relaxed md:text-lg ${
+                  className={cn(
+                    'max-w-[min(100%,52rem)] rounded-2xl px-4 py-3',
+                    bubbleText,
                     m.role === 'user'
                       ? 'ml-auto bg-sky-600 text-white'
-                      : 'mr-auto bg-white text-slate-800 shadow-sm'
-                  }`}
+                      : 'mr-auto bg-white text-slate-800 shadow-sm',
+                  )}
                 >
                   {m.content}
                 </div>
@@ -729,8 +893,12 @@ export default function InteractiveTutor({
             </label>
             <textarea
               id="ai-tutor-input"
-              className="min-h-[100px] min-w-0 flex-1 resize-y rounded-2xl border-2 border-slate-300 p-3 text-lg text-slate-900 sm:p-4"
+              className={cn(
+                'min-h-[100px] min-w-0 flex-1 resize-y rounded-2xl border-2 border-slate-300 p-3 text-slate-900 sm:p-4',
+                isTots ? 'min-h-[120px] text-xl' : isCrew ? 'text-base' : 'text-lg',
+              )}
               placeholder={t('aiTutor.inputPlaceholder')}
+              maxLength={inputMaxLen}
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => {

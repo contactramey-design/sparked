@@ -91,6 +91,18 @@ const server = http.createServer(async (req, res) => {
       await m.default(req, wrapped)
       return
     }
+    if (url === '/api/tutor-session-end' && req.method === 'POST') {
+      await readJsonBody(req)
+      const m = await import('../api/tutor-session-end.js')
+      await m.default(req, wrapped)
+      return
+    }
+    if (url === '/api/tutor-visual' && req.method === 'POST') {
+      await readJsonBody(req)
+      const m = await import('../api/tutor-visual.js')
+      await m.default(req, wrapped)
+      return
+    }
     if (url === '/api/heygen-streaming-token' && req.method === 'POST') {
       await readJsonBody(req)
       const m = await import('../api/heygen-streaming-token.js')
