@@ -973,6 +973,8 @@
     "freeLimitReached": "You’ve used all free tutor questions. Ask a parent to subscribe to Adventure Academy to keep chatting.",
     "freeLimitParentCta": "Open Parent dashboard to subscribe",
     "avatarRequiresSubscription": "Live video tutor is included with Adventure Academy. Ask a parent to subscribe from the Parent dashboard first.",
+    "avatarFreeTriesBanner": "Live video tutor: {{remaining}} free tries left — then Adventure Academy is required.",
+    "avatarFreeLimitReached": "You’ve used all free live video tries. Ask a parent to subscribe to Adventure Academy to keep the video tutor on.",
     "speechNotSupported": "Speech input isn’t supported in this browser. Please type instead.",
     "consentTitle": "Turn on voice & video tutor?",
     "consentBody": "Voice and live video use your device microphone and a secure tutoring partner (HeyGen / ElevenLabs). We do not save recordings on your device. Audio is used in real time to help your child learn. By continuing, a parent or guardian agrees to this for this browsing session.",

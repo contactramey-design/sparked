@@ -1,6 +1,7 @@
 import type { AgeBandId } from '@/ageBand'
 import {
   TUTOR_FREE_TURNS_LOCAL_KEY,
+  TUTOR_LIVEAVATAR_FREE_STARTS_KEY,
   TUTOR_MESSAGES_KEY,
   TUTOR_STATE_CHANGED_EVENT,
   TUTOR_STATE_KEY,
@@ -106,6 +107,26 @@ export function bumpTutorFreeTurnsUsed(): void {
   }
 }
 
+/** LiveAvatar session starts without subscription (independent from text chat free turns). */
+export function readLiveAvatarFreeStartsUsed(): number {
+  try {
+    const raw = localStorage.getItem(TUTOR_LIVEAVATAR_FREE_STARTS_KEY)
+    const n = raw ? parseInt(raw, 10) : 0
+    return Number.isFinite(n) && n > 0 ? n : 0
+  } catch {
+    return 0
+  }
+}
+
+export function bumpLiveAvatarFreeStartsUsed(): void {
+  try {
+    const next = Math.min(FREE_TUTOR_CAP + 2, readLiveAvatarFreeStartsUsed() + 1)
+    localStorage.setItem(TUTOR_LIVEAVATAR_FREE_STARTS_KEY, String(next))
+  } catch {
+    /* ignore */
+  }
+}
+
 export async function postTutorChat(params: {
   checkoutSessionId: string | null
   messages: ChatMessage[]
@@ -152,6 +173,7 @@ export async function postTutorChat(params: {
 export async function fetchLiveAvatarSession(
   checkoutSessionId: string | null,
   locale: 'en' | 'es' = 'en',
+  liveAvatarFreeStartsUsed = 0,
 ) {
   const res = await fetch('/api/liveavatar-session', {
     method: 'POST',
@@ -159,6 +181,7 @@ export async function fetchLiveAvatarSession(
     body: JSON.stringify({
       checkout_session_id: checkoutSessionId || '',
       locale: locale === 'es' ? 'es' : 'en',
+      live_avatar_free_starts_used: liveAvatarFreeStartsUsed,
     }),
   })
   const data = (await res.json().catch(() => ({}))) as {
@@ -166,8 +189,18 @@ export async function fetchLiveAvatarSession(
     session_token?: string
     mode?: string
     error?: string
+    code?: string
+    message?: string
   }
-  if (!res.ok) throw new Error(data.error || 'Could not start video tutor')
+  if (!res.ok) {
+    const msg =
+      (typeof data.message === 'string' && data.message) ||
+      (typeof data.error === 'string' && data.error) ||
+      'Could not start video tutor'
+    const err = new Error(msg) as Error & { code?: string }
+    if (typeof data.code === 'string') err.code = data.code
+    throw err
+  }
   if (!data.session_token || !data.session_id) throw new Error('Missing LiveAvatar session token')
   return {
     sessionId: data.session_id,

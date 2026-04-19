@@ -967,6 +967,8 @@
     "freeLimitReached": "Ya usaste todas las preguntas gratis. Pide a un adulto que se suscriba a Adventure Academy para seguir chateando.",
     "freeLimitParentCta": "Abrir panel de padres para suscribirse",
     "avatarRequiresSubscription": "El tutor en video en vivo va con Adventure Academy. Pide a un adulto que se suscriba primero desde el panel de padres.",
+    "avatarFreeTriesBanner": "Tutor en video: te quedan {{remaining}} pruebas gratis; después hace falta Adventure Academy.",
+    "avatarFreeLimitReached": "Ya usaste todas las pruebas gratis de video. Pide a un adulto que se suscriba a Adventure Academy para seguir con el tutor en video.",
     "speechNotSupported": "Este navegador no admite entrada por voz. Escribe en su lugar.",
     "consentTitle": "¿Activar voz y video tutor?",
     "consentBody": "La voz y el video usan el micrófono y un socio seguro (HeyGen / ElevenLabs). No guardamos grabaciones en tu dispositivo; el audio se usa en tiempo real para aprender. Al continuar, un padre o tutor acepta esto para esta sesión.",

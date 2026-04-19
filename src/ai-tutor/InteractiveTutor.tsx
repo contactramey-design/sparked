@@ -6,11 +6,13 @@ import { TutorConsentModal } from './TutorConsentModal'
 import type { LiveAvatarSession } from '@heygen/liveavatar-web-sdk'
 import {
   FREE_TUTOR_CAP,
+  bumpLiveAvatarFreeStartsUsed,
   bumpTutorFreeTurnsUsed,
   fetchLiveAvatarSession,
   loadTutorMessages,
   playTtsStreamEphemeral,
   postTutorChat,
+  readLiveAvatarFreeStartsUsed,
   readTutorFreeTurnsUsed,
   readTutorStateCode,
   readVoiceConsent,
@@ -151,11 +153,20 @@ export default function InteractiveTutor({ checkoutSessionId, hasActiveSubscript
     setAvatarBusy(true)
     await teardownAvatar()
     try {
+      if (!hasActiveSubscription && readLiveAvatarFreeStartsUsed() >= FREE_TUTOR_CAP) {
+        setError(t('aiTutor.avatarFreeLimitReached'))
+        setLiveAvatar(false)
+        return
+      }
       const { LiveAvatarSession, SessionEvent, SessionDisconnectReason } = await import(
         '@heygen/liveavatar-web-sdk'
       )
 
-      const cfg = await fetchLiveAvatarSession(checkoutSessionId, locale)
+      const cfg = await fetchLiveAvatarSession(
+        checkoutSessionId,
+        locale,
+        readLiveAvatarFreeStartsUsed(),
+      )
       /** Tots: no browser mic to LiveAvatar; parent-supervised typing + avatar lip-sync via repeat() only. */
       const session = new LiveAvatarSession(cfg.sessionToken, { voiceChat: !isTots })
       avatarRef.current = session
@@ -176,13 +187,22 @@ export default function InteractiveTutor({ checkoutSessionId, hasActiveSubscript
       })
 
       await session.start()
+      if (!hasActiveSubscription) {
+        bumpLiveAvatarFreeStartsUsed()
+      }
     } catch (e) {
-      setAvatarMsg(e instanceof Error ? e.message : t('aiTutor.avatarStartFailed'))
+      const err = e as Error & { code?: string }
+      if (err.code === 'LIVEAVATAR_FREE_LIMIT') {
+        setError(t('aiTutor.avatarFreeLimitReached'))
+        setAvatarMsg(null)
+      } else {
+        setAvatarMsg(e instanceof Error ? e.message : t('aiTutor.avatarStartFailed'))
+      }
       setLiveAvatar(false)
     } finally {
       setAvatarBusy(false)
     }
-  }, [checkoutSessionId, isTots, locale, t, teardownAvatar])
+  }, [checkoutSessionId, hasActiveSubscription, isTots, locale, t, teardownAvatar])
 
   useEffect(() => {
     const prev = prevLocaleRef.current
@@ -245,8 +265,8 @@ export default function InteractiveTutor({ checkoutSessionId, hasActiveSubscript
 
   const onToggleLiveAvatar = async () => {
     if (!liveAvatar) {
-      if (!hasActiveSubscription) {
-        setError(t('aiTutor.avatarRequiresSubscription'))
+      if (!hasActiveSubscription && readLiveAvatarFreeStartsUsed() >= FREE_TUTOR_CAP) {
+        setError(t('aiTutor.avatarFreeLimitReached'))
         return
       }
       if (!readVoiceConsent()) {
@@ -331,6 +351,9 @@ export default function InteractiveTutor({ checkoutSessionId, hasActiveSubscript
   const freeTurnsUsed = readTutorFreeTurnsUsed()
   const freeLocked = !hasActiveSubscription && freeTurnsUsed >= FREE_TUTOR_CAP
   const freeRemaining = Math.max(0, FREE_TUTOR_CAP - freeTurnsUsed)
+  const liveAvatarStartsUsed = readLiveAvatarFreeStartsUsed()
+  const avatarVideoLocked = !hasActiveSubscription && liveAvatarStartsUsed >= FREE_TUTOR_CAP
+  const avatarVideoRemaining = Math.max(0, FREE_TUTOR_CAP - liveAvatarStartsUsed)
 
   const startSpeechInput = () => {
     if (isTots || !voiceOut || !readVoiceConsent() || freeLocked) return
@@ -440,7 +463,12 @@ export default function InteractiveTutor({ checkoutSessionId, hasActiveSubscript
               ? t('aiTutor.freeLimitReached')
               : t('aiTutor.freeTeaserBanner', { remaining: freeRemaining })}
           </p>
-          {freeLocked ? (
+          <p className="mt-2 border-t border-indigo-200/80 pt-2 text-sm">
+            {avatarVideoLocked
+              ? t('aiTutor.avatarFreeLimitReached')
+              : t('aiTutor.avatarFreeTriesBanner', { remaining: avatarVideoRemaining })}
+          </p>
+          {freeLocked || avatarVideoLocked ? (
             <Link
               to="/?view=parent"
               className="mt-2 inline-block min-h-[44px] font-semibold text-indigo-900 underline-offset-2 hover:underline"
@@ -484,7 +512,10 @@ export default function InteractiveTutor({ checkoutSessionId, hasActiveSubscript
                   liveAvatar ? 'bg-indigo-600 text-white' : 'border-2 border-slate-300 bg-white text-slate-800'
                 }`}
                 onClick={() => void onToggleLiveAvatar()}
-                disabled={avatarBusy}
+                disabled={
+                  avatarBusy ||
+                  (!liveAvatar && avatarVideoLocked)
+                }
               >
                 {liveAvatar ? t('aiTutor.avatarOn') : t('aiTutor.avatarOff')}
               </button>
