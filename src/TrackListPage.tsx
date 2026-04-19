@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { curriculum, getUnitsInTrackForBand, type TrackId } from './curriculum'
 import { useTranslation } from './contexts/LocaleContext'
 import { useAgeBand } from './contexts/AgeBandContext'
-import AgeBandSelector from './components/AgeBandSelector'
+import { AgeBandVisualPicker } from './features/family-home/AgeBandVisualPicker'
 import { AscentPageChrome } from '@/design-system/ascent/AscentPageChrome'
 
 const TrackListPage: React.FC = () => {
@@ -26,8 +26,8 @@ const TrackListPage: React.FC = () => {
           <div className="welcome-card card rounded-2xl border border-teal-100/80">
             <p className="welcome-subtitle text-slate-600">{t('curriculum.chooseAdventureSubtitle')}</p>
             <div className="track-list-age-band mt-4">
-              <p className="muted text-sm mb-2 font-semibold text-teal-900">{t('ageBand.forThisSession')}</p>
-              <AgeBandSelector variant="compact" />
+              <p className="muted mb-3 text-sm font-semibold text-teal-900">{t('ageBand.forThisSession')}</p>
+              <AgeBandVisualPicker />
             </div>
           </div>
         </div>

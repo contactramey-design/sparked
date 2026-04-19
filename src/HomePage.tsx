@@ -6,7 +6,6 @@ import { useTranslation } from './contexts/LocaleContext'
 import { useAgeBand } from './contexts/AgeBandContext'
 import { AdventureGrid } from './features/family-home/AdventureGrid'
 import { HomeAscentBelowHero } from './features/family-home/HomeAscentBelowHero'
-import { HomeAgeBandsAscent } from './features/family-home/HomeAgeBandsAscent'
 import { HomeHero } from './features/family-home/HomeHero'
 import { awardDailyLoginBonus, getPlayerStats } from './progress'
 import { ParentViewContent } from './ParentDashboard'
@@ -218,8 +217,6 @@ const HomePage: React.FC = () => {
       <div className="home-hero-wrap mx-auto max-w-6xl px-4">
         <HomeHero primaryCtaHref={heroPrimaryHref} />
       </div>
-
-      <HomeAgeBandsAscent />
 
       <div id="home-adventures" className="home-adventure-wrap mx-auto max-w-6xl scroll-mt-24 px-4">
         <AdventureGrid />

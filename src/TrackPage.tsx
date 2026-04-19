@@ -4,7 +4,7 @@ import { curriculum, getUnitsInTrackForBand, type TrackId } from './curriculum'
 import { getUnitStatus, isUnitLockedForTrack } from './progress'
 import { useTranslation, useLocale } from './contexts/LocaleContext'
 import { useAgeBand } from './contexts/AgeBandContext'
-import AgeBandSelector from './components/AgeBandSelector'
+import { AgeBandVisualPicker } from './features/family-home/AgeBandVisualPicker'
 import { useTranslatedTrack } from './hooks/useTranslatedCurriculum'
 import ListenButton from './components/ListenButton'
 import { VIDEO_POSTER_DATA_URL } from './videoPoster'
@@ -47,8 +47,9 @@ const TrackPage: React.FC = () => {
       ]}
     >
       <section className="track-overview-page">
-        <div className="track-age-band-toolbar">
-          <AgeBandSelector variant="compact" />
+        <div className="track-age-band-toolbar rounded-2xl border border-teal-100/70 bg-ascent-warm/50 p-4 shadow-sm">
+          <p className="mb-3 text-sm font-semibold text-teal-900">{t('ageBand.forThisSession')}</p>
+          <AgeBandVisualPicker />
         </div>
         <div className="mb-6 flex flex-col gap-3 rounded-2xl border border-teal-100/80 bg-white/90 p-4 shadow-sm sm:p-5">
           <div className="flex flex-wrap items-center gap-2">
