@@ -64,15 +64,21 @@ export default async function handler(req, res) {
   const localeRaw = typeof body.locale === 'string' ? body.locale.trim().toLowerCase() : 'en'
   const useSpanish = localeRaw === 'es' || localeRaw.startsWith('es-')
 
-  /** Live video always needs a verified Adventure Academy session (text chat has 3 free messages without it). */
+  /**
+   * Paid: non-empty checkout_session_id must pass Adventure Academy verification.
+   * Unpaid preview: empty id issues a token (same “free tier” window as text tutor; client limits turns; abuse bounded by rate limit).
+   */
   if (process.env.ALLOW_UNAUTH_TUTOR !== 'true') {
-    const paid = await verifyHomeworkCheckoutSession(checkoutSessionId)
-    if (!paid.ok) {
-      res.status(403).json({
-        error:
-          'Live video tutor is included with Adventure Academy. Ask a parent to subscribe from the Parent dashboard, then try again.',
-      })
-      return
+    const id = checkoutSessionId
+    if (id) {
+      const paid = await verifyHomeworkCheckoutSession(id)
+      if (!paid.ok) {
+        res.status(403).json({
+          error:
+            'Live video could not verify Adventure Academy. Ask a parent to subscribe from the Parent dashboard, or open Tutor from a device that still has free tries.',
+        })
+        return
+      }
     }
   }
 

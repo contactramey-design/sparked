@@ -303,10 +303,14 @@ export default function InteractiveTutor({
     }
   }
 
+  const freeTurnsUsed = readTutorFreeTurnsUsed()
+  const freeLocked = !hasActiveSubscription && freeTurnsUsed >= FREE_TUTOR_CAP
+  const freeRemaining = Math.max(0, FREE_TUTOR_CAP - freeTurnsUsed)
+
   const onToggleLiveAvatar = async () => {
     if (!liveAvatar) {
-      if (!hasActiveSubscription) {
-        setAvatarMsg(t('aiTutor.avatarRequiresSubscription'))
+      if (freeLocked) {
+        setAvatarMsg(t('aiTutor.freeLimitReached'))
         return
       }
       if (!readVoiceConsent()) {
@@ -387,10 +391,6 @@ export default function InteractiveTutor({
     setMessages([])
     saveTutorMessages([])
   }
-
-  const freeTurnsUsed = readTutorFreeTurnsUsed()
-  const freeLocked = !hasActiveSubscription && freeTurnsUsed >= FREE_TUTOR_CAP
-  const freeRemaining = Math.max(0, FREE_TUTOR_CAP - freeTurnsUsed)
 
   useEffect(() => {
     if (!tutorLeadCaptureEnabled || hasActiveSubscription) return
@@ -548,12 +548,6 @@ export default function InteractiveTutor({
         </div>
       ) : null}
 
-      {!hasActiveSubscription && !freeLocked ? (
-        <p className="rounded-xl border border-slate-200 bg-slate-50/90 px-3 py-3 text-sm text-slate-700 sm:px-4 sm:text-base">
-          {t('aiTutor.avatarRequiresSubscription')}
-        </p>
-      ) : null}
-
       <div
         className={cn(
           'flex flex-col gap-6',
@@ -609,9 +603,9 @@ export default function InteractiveTutor({
                 <span>
                   {liveAvatar
                     ? t('aiTutor.avatarStop')
-                    : hasActiveSubscription
-                      ? t('aiTutor.avatarStart')
-                      : t('aiTutor.avatarLockedShort')}
+                    : freeLocked
+                      ? t('aiTutor.avatarLockedShort')
+                      : t('aiTutor.avatarStart')}
                 </span>
                 <span className="mt-0.5 text-xs font-bold tracking-wide">
                   {liveAvatar ? t('aiTutor.toggleStateOn') : t('aiTutor.toggleStateOff')}

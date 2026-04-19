@@ -36,13 +36,16 @@ export default async function handler(req, res) {
   const checkoutSessionId = typeof body.checkout_session_id === 'string' ? body.checkout_session_id.trim() : ''
 
   if (process.env.ALLOW_UNAUTH_TUTOR !== 'true') {
-    const paid = await verifyHomeworkCheckoutSession(checkoutSessionId)
-    if (!paid.ok) {
-      res.status(403).json({
-        error:
-          'Live video tutor is included with Adventure Academy. Ask a parent to subscribe from the Parent dashboard, then try again.',
-      })
-      return
+    const id = checkoutSessionId
+    if (id) {
+      const paid = await verifyHomeworkCheckoutSession(id)
+      if (!paid.ok) {
+        res.status(403).json({
+          error:
+            'Live video could not verify Adventure Academy. Ask a parent to subscribe from the Parent dashboard.',
+        })
+        return
+      }
     }
   }
 

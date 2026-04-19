@@ -36,7 +36,7 @@ Verified usage in `InteractiveTutor.tsx`:
 
 ## Entitlement and dev flags
 
-- Production: Stripe **Adventure Academy** checkout session verified in `api/tutor-chat.js` / `api/liveavatar-session.js` via [`api/lib/verifyBundleEntitlement.js`](../api/lib/verifyBundleEntitlement.js).
+- Production: **`api/tutor-chat.js`** counts user turns and allows three without a paid session; **`api/liveavatar-session.js`** verifies Academy when `checkout_session_id` is non-empty, and allows a token when it is empty (free-tier preview; client limits when live is offered).
 - Local only: `ALLOW_UNAUTH_TUTOR=true` — see `.env.example`; **never** enable on public production without other controls.
 
 ## QA paths (adapt external checklists)

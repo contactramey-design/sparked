@@ -46,12 +46,12 @@ Use this when configuring **Production** (and Preview if you need full flows the
 | `HEYGEN_API_KEY` | Optional fallback API key if `LIVEAVATAR_API_KEY` unset. |
 | `ELEVENLABS_API_KEY` | Same as Listen — needed for voice playback when not using avatar speech, and for `/api/tts-stream`. |
 | `ALLOW_UNAUTH_TUTOR` | Dev/staging only: skips Stripe on tutor APIs. **Do not** enable on public production. |
-| `AI_TUTOR_REQUIRE_CHECKOUT` | **Unset (default):** text tutor allows **3 free user messages** without checkout; subscribe after that. **Live video** always requires a verified Adventure Academy session unless `ALLOW_UNAUTH_TUTOR=true`. Set to **`true`** only if you want `GET /api/config` → `aiTutorRequireCheckout` for optional UI (full-page tutor gate is not used by default). |
+| `AI_TUTOR_REQUIRE_CHECKOUT` | **Unset (default):** text tutor allows **3 free user messages** without checkout; subscribe after that. **Live video:** `POST /api/liveavatar-session` with an **empty** `checkout_session_id` still returns a token (free tier, same abuse envelope as text); a **non-empty** id must pass Academy verification. Set `AI_TUTOR_REQUIRE_CHECKOUT` to **`true`** only for optional `GET /api/config` → `aiTutorRequireCheckout`. `ALLOW_UNAUTH_TUTOR=true` skips paid checks entirely (dev only). |
 | `HOMEWORK_ADVENTURE_PAUSED` | Set to **`true`** to turn off Homework Adventure Video (Claude + TTS + worker) with a friendly “paused” UI while you market other features. |
 | `RESEND_API_KEY` + `RESEND_FROM_EMAIL` + `TUTOR_LEAD_NOTIFY_TO` | Optional: **`POST /api/tutor-lead`** emails you when a parent submits from the “3 more free messages” modal (`GET /api/config` → `tutorLeadCaptureEnabled`). |
 | `TUTOR_LEAD_WEBHOOK_URL` | Optional: same lead POST as JSON (Zapier/Make). Optional `TUTOR_LEAD_WEBHOOK_SECRET` → `Authorization: Bearer …`. |
 
-Entitlement: **`POST /api/tutor-chat`** allows **3 user messages** without a paid session, then returns `TUTOR_FREE_LIMIT` until Adventure Academy checkout is stored; with a valid session, unlimited. `ALLOW_UNAUTH_TUTOR=true` skips paid checks. **`POST /api/liveavatar-session`** always requires a verified paid session when `ALLOW_UNAUTH_TUTOR` is not set.
+Entitlement: **`POST /api/tutor-chat`** allows **3 user messages** without a paid session, then returns `TUTOR_FREE_LIMIT` until Adventure Academy checkout is stored; with a valid session, unlimited. `ALLOW_UNAUTH_TUTOR=true` skips paid checks. **`POST /api/liveavatar-session`**: empty `checkout_session_id` → token for unpaid preview (client should only call while free tries remain); non-empty id → must verify Academy unless `ALLOW_UNAUTH_TUTOR=true`.
 
 ## Optional scene art (homework)
 
