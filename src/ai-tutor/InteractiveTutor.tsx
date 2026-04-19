@@ -43,6 +43,7 @@ import {
   readHomeworkQuestForTutorSession,
 } from '@/features/homework/lib/homeworkQuestForTutor'
 import { TutorTopicCard } from './TutorTopicCard'
+import { TutorRulesKidPanel } from './TutorRulesKidPanel'
 
 type Props = {
   checkoutSessionId: string | null
@@ -568,14 +569,18 @@ export default function InteractiveTutor({
   }
 
   const bubbleText = isTots ? 'text-xl leading-relaxed md:text-xl' : isCrew ? 'text-base leading-relaxed md:text-lg' : 'text-lg leading-relaxed md:text-lg'
-  const chatMaxH = isTots ? 'max-h-[min(44vh,420px)] md:max-h-[min(52vh,520px)]' : isCrew ? 'max-h-[min(56vh,520px)] md:max-h-[min(62vh,600px)]' : 'max-h-[min(50vh,400px)] md:max-h-[min(58vh,560px)]'
+  const chatMaxH = isTots
+    ? 'max-h-[min(44vh,420px)] md:max-h-[min(52vh,520px)] lg:max-h-[min(68vh,640px)]'
+    : isCrew
+      ? 'max-h-[min(56vh,520px)] md:max-h-[min(62vh,600px)] lg:max-h-[min(72vh,680px)]'
+      : 'max-h-[min(50vh,400px)] md:max-h-[min(58vh,560px)] lg:max-h-[min(70vh,660px)]'
   const inputMaxLen = isTots ? 240 : isCrew ? 8000 : 2000
 
   return (
     <div
       className={cn(
-        'w-full space-y-6 pb-8 md:space-y-8',
-        isTots && 'space-y-8 [&_section]:rounded-3xl',
+        'w-full space-y-5 pb-10 md:space-y-6 md:pb-12 lg:space-y-7',
+        isTots && 'space-y-6 md:space-y-8 [&_section]:rounded-3xl',
         isCrew && 'md:space-y-6',
       )}
     >
@@ -610,36 +615,17 @@ export default function InteractiveTutor({
         onDismiss={onDismissTutorLeadModal}
       />
 
-      <section
-        className="rounded-2xl border-2 border-teal-100 bg-gradient-to-b from-teal-50/90 to-white p-3 shadow-sm sm:p-4 md:p-5"
-        aria-labelledby="tutor-chat-rules-heading"
-      >
-        <h2 id="tutor-chat-rules-heading" className="font-heading text-lg font-bold text-teal-950 md:text-xl">
-          {t('aiTutor.chatRulesTitle')}
-        </h2>
-        <p className="mt-2 text-sm leading-relaxed text-slate-700 md:text-base">{t('aiTutor.chatRulesLead')}</p>
-        <ul className="mt-4 list-disc space-y-2 pl-5 text-sm leading-snug text-slate-800 md:text-base">
-          <li>{t('aiTutor.chatRulesBullet1')}</li>
-          <li>{t('aiTutor.chatRulesBullet2')}</li>
-          <li>{t('aiTutor.chatRulesBullet3')}</li>
-          <li>{t('aiTutor.chatRulesBullet4')}</li>
-          <li>{t('aiTutor.chatRulesBullet5')}</li>
-          <li>{t('aiTutor.chatRulesBullet6')}</li>
-        </ul>
-        <p className="mt-4 border-t border-teal-100/80 pt-3 text-xs leading-relaxed text-slate-600">
-          {t('aiTutor.chatRulesGrownUpNote')}
-        </p>
-      </section>
+      <TutorRulesKidPanel />
 
       {stateCode ? (
-        <p className="rounded-xl border border-teal-200 bg-teal-50/90 px-4 py-3 text-sm leading-relaxed text-teal-950">
+        <p className="rounded-2xl border border-teal-200/90 bg-teal-50/95 px-4 py-4 text-base leading-relaxed text-teal-950 md:px-5 md:py-4 md:text-lg">
           {t('aiTutor.stateBanner', { state: stateNameFromCode(stateCode) })}{' '}
           <Link to="/?view=parent" className="font-semibold text-teal-900 underline-offset-2 hover:underline">
             {t('aiTutor.stateBannerParentLink')}
           </Link>
         </p>
       ) : (
-        <p className="rounded-xl border border-amber-200 bg-amber-50/90 px-4 py-3 text-sm leading-relaxed text-amber-950">
+        <p className="rounded-2xl border border-amber-200/90 bg-amber-50/95 px-4 py-4 text-base leading-relaxed text-amber-950 md:px-5 md:text-lg">
           {t('aiTutor.stateMissingBanner')}{' '}
           <Link to="/?view=parent" className="font-semibold text-amber-900 underline-offset-2 hover:underline">
             {t('aiTutor.stateMissingLink')}
@@ -648,7 +634,7 @@ export default function InteractiveTutor({
       )}
 
       {!hasActiveSubscription ? (
-        <div className="rounded-xl border border-indigo-200 bg-indigo-50/90 px-3 py-3 text-sm text-indigo-950 sm:px-4 sm:text-base">
+        <div className="rounded-2xl border border-indigo-200/90 bg-indigo-50/95 px-4 py-4 text-base text-indigo-950 sm:px-5 md:text-lg">
           <p>
             {freeLocked
               ? t('aiTutor.freeLimitReached')
@@ -658,7 +644,7 @@ export default function InteractiveTutor({
             <div className="mt-3 flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center">
               <button
                 type="button"
-                className="inline-flex min-h-[52px] items-center justify-center rounded-xl bg-teal-600 px-5 text-base font-bold text-white hover:bg-teal-700 disabled:opacity-60"
+                className="inline-flex min-h-[56px] items-center justify-center rounded-2xl bg-teal-600 px-6 text-lg font-bold text-white shadow-md hover:bg-teal-700 disabled:opacity-60 lg:min-h-[60px]"
                 onClick={() => void startAcademyCheckout()}
                 disabled={checkoutLoading}
               >
@@ -666,7 +652,7 @@ export default function InteractiveTutor({
               </button>
               <Link
                 to="/?view=parent"
-                className="inline-flex min-h-[44px] items-center font-semibold text-indigo-900 underline-offset-2 hover:underline"
+                className="inline-flex min-h-[52px] items-center text-lg font-semibold text-indigo-900 underline-offset-2 hover:underline"
               >
                 {t('aiTutor.freeLimitParentCta')}
               </Link>
@@ -682,16 +668,18 @@ export default function InteractiveTutor({
 
       <div
         className={cn(
-          'flex flex-col gap-6',
-          liveAvatar &&
-            'xl:grid xl:grid-cols-[minmax(0,1.2fr)_minmax(280px,26rem)] xl:items-start xl:gap-8',
+          'flex flex-col gap-6 lg:gap-8',
+          'lg:grid lg:items-start',
+          liveAvatar
+            ? 'lg:grid-cols-[minmax(0,1.12fr)_minmax(280px,28rem)]'
+            : 'lg:grid-cols-[minmax(280px,38%)_minmax(0,1fr)]',
         )}
       >
-        <div className="min-w-0 space-y-6">
-          <section className="rounded-2xl border border-slate-200 bg-slate-50/90 shadow-sm">
+        <div className="min-w-0 space-y-6 lg:sticky lg:top-3 lg:z-[1] lg:max-h-[calc(100dvh-6rem)] lg:overflow-y-auto lg:pb-2 lg:pr-1">
+          <section className="rounded-3xl border border-slate-200/90 bg-slate-50/95 shadow-md">
             <button
               type="button"
-              className="flex min-h-[52px] w-full cursor-pointer list-none items-center rounded-2xl px-3 py-3 text-left font-semibold text-slate-800 sm:px-4"
+              className="flex min-h-[56px] w-full cursor-pointer list-none items-center rounded-3xl px-4 py-3.5 text-left text-lg font-bold text-slate-800 sm:px-5 lg:min-h-[60px] lg:text-xl"
               aria-expanded={soundVideoExpanded}
               onClick={() => setSoundVideoExpanded((v) => !v)}
             >
@@ -707,13 +695,13 @@ export default function InteractiveTutor({
               </span>
             </button>
             {soundVideoExpanded ? (
-            <div className="flex flex-wrap items-end gap-2 border-t border-slate-200 px-2 pb-3 pt-2 sm:px-3 sm:pb-4 sm:pt-3">
+            <div className="flex flex-wrap items-end gap-3 border-t border-slate-200/80 px-3 pb-4 pt-3 sm:px-4 sm:pb-5 sm:pt-4 lg:gap-4">
               {!isTots && (
                 <button
                   type="button"
                   aria-pressed={voiceOut}
-                  className={`inline-flex min-h-[52px] min-w-[10.5rem] flex-col items-center justify-center rounded-xl px-4 py-2 text-center text-base font-semibold leading-tight ${
-                    voiceOut ? 'bg-sky-600 text-white' : 'border-2 border-slate-300 bg-white text-slate-800'
+                  className={`inline-flex min-h-[56px] min-w-[11rem] flex-col items-center justify-center rounded-2xl px-4 py-2.5 text-center text-base font-bold leading-tight lg:min-h-[60px] lg:text-lg ${
+                    voiceOut ? 'bg-sky-600 text-white shadow-md' : 'border-2 border-slate-300 bg-white text-slate-800'
                   }`}
                   onClick={onToggleVoiceOut}
                 >
@@ -726,8 +714,8 @@ export default function InteractiveTutor({
               <button
                 type="button"
                 aria-pressed={liveAvatar}
-                className={`inline-flex min-h-[52px] min-w-[10.5rem] flex-col items-center justify-center rounded-xl px-4 py-2 text-center text-base font-semibold leading-tight ${
-                  liveAvatar ? 'bg-indigo-600 text-white' : 'border-2 border-slate-300 bg-white text-slate-800'
+                className={`inline-flex min-h-[56px] min-w-[11rem] flex-col items-center justify-center rounded-2xl px-4 py-2.5 text-center text-base font-bold leading-tight lg:min-h-[60px] lg:text-lg ${
+                  liveAvatar ? 'bg-indigo-600 text-white shadow-md' : 'border-2 border-slate-300 bg-white text-slate-800'
                 }`}
                 onClick={() => void onToggleLiveAvatar()}
                 disabled={avatarBusy}
@@ -746,7 +734,7 @@ export default function InteractiveTutor({
               {liveAvatar && (
                 <button
                   type="button"
-                  className="min-h-[48px] rounded-xl border-2 border-amber-500/80 bg-amber-50 px-4 text-base font-semibold text-amber-950 disabled:opacity-50"
+                  className="min-h-[52px] rounded-2xl border-2 border-amber-500/80 bg-amber-50 px-5 text-base font-bold text-amber-950 disabled:opacity-50 lg:min-h-[56px] lg:text-lg"
                   onClick={onPauseAvatarSpeech}
                   disabled={avatarBusy}
                 >
@@ -757,7 +745,7 @@ export default function InteractiveTutor({
                 <div className="flex min-w-[min(100%,14rem)] flex-col gap-1">
                   <button
                     type="button"
-                    className="min-h-[48px] rounded-xl border-2 border-slate-300 bg-white px-4 text-base font-semibold text-slate-800"
+                    className="min-h-[52px] rounded-2xl border-2 border-slate-300 bg-white px-5 text-base font-bold text-slate-800 lg:min-h-[56px] lg:text-lg"
                     onClick={startSpeechInput}
                   >
                     {t('aiTutor.micOnce')}
@@ -826,7 +814,7 @@ export default function InteractiveTutor({
           )}
         </div>
 
-        <div className="min-w-0 space-y-6">
+        <div className="min-w-0 space-y-6 lg:min-h-0">
           {(topicUser || topicAssistant) && (
             <TutorTopicCard
               title={t('aiTutor.topicCardHeading')}
@@ -844,19 +832,19 @@ export default function InteractiveTutor({
             </div>
           ) : null}
 
-          <section className="space-y-3" aria-labelledby="tutor-chat-heading">
+          <section className="space-y-3 lg:space-y-4" aria-labelledby="tutor-chat-heading">
             <h2
               id="tutor-chat-heading"
               className={cn(
-                'font-heading font-bold text-slate-900',
-                isTots ? 'text-lg md:text-xl' : isCrew ? 'text-base md:text-lg' : 'text-base md:text-lg',
+                'font-heading font-extrabold tracking-tight text-slate-900',
+                isTots ? 'text-xl md:text-2xl' : isCrew ? 'text-lg md:text-xl' : 'text-lg md:text-2xl',
               )}
             >
               {t('aiTutor.sectionChat')}
             </h2>
             <div
               className={cn(
-                'space-y-3 overflow-y-auto rounded-2xl border border-slate-200 bg-slate-50 p-3 sm:p-4',
+                'space-y-3 overflow-y-auto rounded-3xl border-2 border-slate-200/90 bg-gradient-to-b from-white to-slate-50/90 p-4 shadow-inner sm:p-5',
                 chatMaxH,
               )}
               aria-live="polite"
@@ -868,7 +856,7 @@ export default function InteractiveTutor({
                 <div
                   key={i}
                   className={cn(
-                    'max-w-[min(100%,52rem)] rounded-2xl px-4 py-3',
+                    'max-w-[min(100%,52rem)] rounded-2xl px-4 py-3.5 shadow-sm md:px-5 md:py-4',
                     bubbleText,
                     m.role === 'user'
                       ? 'ml-auto bg-sky-600 text-white'
@@ -887,15 +875,15 @@ export default function InteractiveTutor({
             </p>
           )}
 
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-end">
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-stretch lg:gap-4">
             <label className="sr-only" htmlFor="ai-tutor-input">
               {t('aiTutor.inputLabel')}
             </label>
             <textarea
               id="ai-tutor-input"
               className={cn(
-                'min-h-[100px] min-w-0 flex-1 resize-y rounded-2xl border-2 border-slate-300 p-3 text-slate-900 sm:p-4',
-                isTots ? 'min-h-[120px] text-xl' : isCrew ? 'text-base' : 'text-lg',
+                'min-h-[120px] min-w-0 flex-1 resize-y rounded-3xl border-2 border-slate-300/90 bg-white p-4 text-slate-900 shadow-sm focus:border-sky-400 focus:outline-none focus:ring-2 focus:ring-sky-200 sm:p-5 lg:min-h-[140px]',
+                isTots ? 'min-h-[140px] text-xl' : isCrew ? 'text-lg' : 'text-xl',
               )}
               placeholder={t('aiTutor.inputPlaceholder')}
               maxLength={inputMaxLen}
@@ -909,10 +897,10 @@ export default function InteractiveTutor({
               }}
               disabled={loading || freeLocked}
             />
-            <div className="flex flex-col gap-2 sm:w-44">
+            <div className="flex shrink-0 flex-col gap-3 sm:flex-row sm:justify-end lg:w-52 lg:flex-col lg:justify-stretch xl:w-56">
               <button
                 type="button"
-                className="min-h-[52px] rounded-xl bg-sky-600 text-lg font-bold text-white disabled:opacity-50"
+                className="min-h-[56px] rounded-2xl bg-gradient-to-br from-sky-500 to-sky-700 px-6 text-xl font-extrabold text-white shadow-md transition hover:from-sky-600 hover:to-sky-800 disabled:opacity-50 lg:min-h-[60px] lg:flex-1 lg:text-2xl"
                 onClick={() => void send()}
                 disabled={loading || freeLocked}
               >
@@ -920,7 +908,7 @@ export default function InteractiveTutor({
               </button>
               <button
                 type="button"
-                className="min-h-[48px] rounded-xl border-2 border-slate-300 text-base text-slate-700"
+                className="min-h-[52px] rounded-2xl border-2 border-slate-300 bg-white text-lg font-bold text-slate-700 shadow-sm lg:min-h-[52px]"
                 onClick={clearChat}
               >
                 {t('aiTutor.clearChat')}
@@ -928,7 +916,7 @@ export default function InteractiveTutor({
             </div>
           </div>
 
-          <p className="text-center text-xs leading-relaxed text-slate-500 sm:text-left xl:text-center">
+          <p className="text-center text-sm leading-relaxed text-slate-500 sm:text-left lg:text-base xl:text-center">
             {t('aiTutor.footerHint')}
           </p>
         </div>
