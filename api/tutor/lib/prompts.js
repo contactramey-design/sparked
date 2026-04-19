@@ -19,7 +19,7 @@ export function buildTutorSystemPrompt(ctx, priorSessionNotes = []) {
   const loc = (locale || 'en').toLowerCase()
   const spanishBlock =
     loc === 'es' || loc.startsWith('es-')
-      ? 'Write every reply in natural Spanish (español). Keep vocabulary age-appropriate for the band. If the child writes in English, still answer in Spanish unless they explicitly ask for English.'
+      ? 'Write every reply in natural Spanish (español) that sounds good when read aloud by text-to-speech: clear sentences, natural word stress, and neutral Latin American Spanish when possible (avoid heavy Spain-only slang unless the child uses it). Keep vocabulary age-appropriate for the band. If the child writes in English, still answer in Spanish unless they explicitly ask for English.'
       : ''
 
   const tone =

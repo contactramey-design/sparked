@@ -9,6 +9,7 @@
  * If both unset, endpoint is open (legacy).
  */
 import { authorizeTtsRequest } from './lib/serviceAuth.js'
+import { applyElevenLabsLanguageCode } from './lib/elevenLabsTts.js'
 
 const ELEVENLABS_BASE = 'https://api.elevenlabs.io/v1/text-to-speech'
 const MAX_TEXT_LENGTH = 2500
@@ -74,9 +75,7 @@ export default async function handler(req, res) {
         similarity_boost: similarityBoost,
       },
     }
-    if (modelId.includes('multilingual')) {
-      payload.language_code = isSpanish ? 'es' : 'en'
-    }
+    applyElevenLabsLanguageCode(payload, modelId, isSpanish)
 
     const elevenUrl = `${ELEVENLABS_BASE}/${voiceId}?output_format=${encodeURIComponent(outputFormat)}`
 
