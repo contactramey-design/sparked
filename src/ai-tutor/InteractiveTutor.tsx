@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
+import { TutorLeadCaptureModal } from './TutorLeadCaptureModal'
 import { Link } from 'react-router-dom'
 import { useAgeBand } from '@/contexts/AgeBandContext'
 import { useTranslation } from '@/contexts/LocaleContext'
@@ -6,16 +7,20 @@ import { TutorConsentModal } from './TutorConsentModal'
 import type { LiveAvatarSession } from '@heygen/liveavatar-web-sdk'
 import {
   FREE_TUTOR_CAP,
-  bumpLiveAvatarFreeStartsUsed,
   bumpTutorFreeTurnsUsed,
+  dismissTutorLeadModalForSession,
   fetchLiveAvatarSession,
+  hasTutorLeadBonusClaimed,
   loadTutorMessages,
+  markTutorLeadBonusClaimed,
   playTtsStreamEphemeral,
   postTutorChat,
-  readLiveAvatarFreeStartsUsed,
+  postTutorLeadEmail,
   readTutorFreeTurnsUsed,
+  readTutorLeadModalDismissedThisSession,
   readTutorStateCode,
   readVoiceConsent,
+  resetTutorFreeTurnsAfterLeadBonus,
   saveTutorMessages,
   writeVoiceConsent,
 } from './tutorService'
@@ -28,9 +33,15 @@ type Props = {
   checkoutSessionId: string | null
   /** Adventure Academy (or dev unauth) — unlimited tutor; otherwise 3 free user messages then paywall. */
   hasActiveSubscription: boolean
+  /** From GET /api/config — when true, free-limit users see email capture for +3 more messages. */
+  tutorLeadCaptureEnabled: boolean
 }
 
-export default function InteractiveTutor({ checkoutSessionId, hasActiveSubscription }: Props) {
+export default function InteractiveTutor({
+  checkoutSessionId,
+  hasActiveSubscription,
+  tutorLeadCaptureEnabled,
+}: Props) {
   const { t, locale } = useTranslation()
   const { ageBand } = useAgeBand()
   const isTots = ageBand === 'tots'
@@ -54,6 +65,12 @@ export default function InteractiveTutor({ checkoutSessionId, hasActiveSubscript
   const recognitionRef = useRef<{ stop: () => void } | null>(null)
   const prevLocaleRef = useRef(locale)
   const [avatarFullscreen, setAvatarFullscreen] = useState(false)
+  const [checkoutLoading, setCheckoutLoading] = useState(false)
+  const [checkoutError, setCheckoutError] = useState<string | null>(null)
+  const [leadModalOpen, setLeadModalOpen] = useState(false)
+  const [leadBonusClaimed, setLeadBonusClaimed] = useState(() => hasTutorLeadBonusClaimed())
+  /** Start expanded so phones see live video / voice controls without hunting for a collapsed panel. */
+  const [soundVideoExpanded, setSoundVideoExpanded] = useState(true)
 
   useEffect(() => {
     setStateCode(readTutorStateCode())
@@ -153,20 +170,11 @@ export default function InteractiveTutor({ checkoutSessionId, hasActiveSubscript
     setAvatarBusy(true)
     await teardownAvatar()
     try {
-      if (!hasActiveSubscription && readLiveAvatarFreeStartsUsed() >= FREE_TUTOR_CAP) {
-        setError(t('aiTutor.avatarFreeLimitReached'))
-        setLiveAvatar(false)
-        return
-      }
       const { LiveAvatarSession, SessionEvent, SessionDisconnectReason } = await import(
         '@heygen/liveavatar-web-sdk'
       )
 
-      const cfg = await fetchLiveAvatarSession(
-        checkoutSessionId,
-        locale,
-        readLiveAvatarFreeStartsUsed(),
-      )
+      const cfg = await fetchLiveAvatarSession(checkoutSessionId, locale)
       /** Tots: no browser mic to LiveAvatar; parent-supervised typing + avatar lip-sync via repeat() only. */
       const session = new LiveAvatarSession(cfg.sessionToken, { voiceChat: !isTots })
       avatarRef.current = session
@@ -175,7 +183,10 @@ export default function InteractiveTutor({ checkoutSessionId, hasActiveSubscript
         const el = videoRef.current
         if (el) {
           session.attach(el)
-          void el.play().catch(() => {})
+          const tryPlay = () => void el.play().catch(() => {})
+          tryPlay()
+          window.setTimeout(tryPlay, 150)
+          window.setTimeout(tryPlay, 600)
         }
       }
       session.on(SessionEvent.SESSION_STREAM_READY, onStreamReady)
@@ -187,17 +198,8 @@ export default function InteractiveTutor({ checkoutSessionId, hasActiveSubscript
       })
 
       await session.start()
-      if (!hasActiveSubscription) {
-        bumpLiveAvatarFreeStartsUsed()
-      }
     } catch (e) {
-      const err = e as Error & { code?: string }
-      if (err.code === 'LIVEAVATAR_FREE_LIMIT') {
-        setError(t('aiTutor.avatarFreeLimitReached'))
-        setAvatarMsg(null)
-      } else {
-        setAvatarMsg(e instanceof Error ? e.message : t('aiTutor.avatarStartFailed'))
-      }
+      setAvatarMsg(e instanceof Error ? e.message : t('aiTutor.avatarStartFailed'))
       setLiveAvatar(false)
     } finally {
       setAvatarBusy(false)
@@ -263,10 +265,48 @@ export default function InteractiveTutor({ checkoutSessionId, hasActiveSubscript
     stopAudio()
   }
 
+  const onDismissTutorLeadModal = () => {
+    dismissTutorLeadModalForSession()
+    setLeadModalOpen(false)
+  }
+
+  const onSubmitTutorLead = async (email: string) => {
+    await postTutorLeadEmail(email, locale === 'es' ? 'es' : 'en')
+    markTutorLeadBonusClaimed()
+    setLeadBonusClaimed(true)
+    resetTutorFreeTurnsAfterLeadBonus()
+    setMessages([])
+    saveTutorMessages([])
+    setError(null)
+    setLeadModalOpen(false)
+  }
+
+  const startAcademyCheckout = async () => {
+    if (checkoutLoading) return
+    setCheckoutError(null)
+    setCheckoutLoading(true)
+    try {
+      const res = await fetch('/api/create-checkout-session', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ product: 'academy', returnTo: '/ai-tutor' }),
+      })
+      const data = (await res.json().catch(() => ({}))) as { url?: string; error?: string }
+      if (!res.ok || !data?.url) {
+        throw new Error(typeof data?.error === 'string' ? data.error : 'Unable to open checkout.')
+      }
+      window.location.assign(data.url)
+    } catch (e) {
+      setCheckoutError(e instanceof Error ? e.message : 'Unable to open checkout.')
+    } finally {
+      setCheckoutLoading(false)
+    }
+  }
+
   const onToggleLiveAvatar = async () => {
     if (!liveAvatar) {
-      if (!hasActiveSubscription && readLiveAvatarFreeStartsUsed() >= FREE_TUTOR_CAP) {
-        setError(t('aiTutor.avatarFreeLimitReached'))
+      if (!hasActiveSubscription) {
+        setAvatarMsg(t('aiTutor.avatarRequiresSubscription'))
         return
       }
       if (!readVoiceConsent()) {
@@ -351,9 +391,13 @@ export default function InteractiveTutor({ checkoutSessionId, hasActiveSubscript
   const freeTurnsUsed = readTutorFreeTurnsUsed()
   const freeLocked = !hasActiveSubscription && freeTurnsUsed >= FREE_TUTOR_CAP
   const freeRemaining = Math.max(0, FREE_TUTOR_CAP - freeTurnsUsed)
-  const liveAvatarStartsUsed = readLiveAvatarFreeStartsUsed()
-  const avatarVideoLocked = !hasActiveSubscription && liveAvatarStartsUsed >= FREE_TUTOR_CAP
-  const avatarVideoRemaining = Math.max(0, FREE_TUTOR_CAP - liveAvatarStartsUsed)
+
+  useEffect(() => {
+    if (!tutorLeadCaptureEnabled || hasActiveSubscription) return
+    if (!freeLocked || leadBonusClaimed) return
+    if (readTutorLeadModalDismissedThisSession()) return
+    setLeadModalOpen(true)
+  }, [freeLocked, tutorLeadCaptureEnabled, hasActiveSubscription, leadBonusClaimed])
 
   const startSpeechInput = () => {
     if (isTots || !voiceOut || !readVoiceConsent() || freeLocked) return
@@ -419,6 +463,21 @@ export default function InteractiveTutor({ checkoutSessionId, hasActiveSubscript
         onDecline={() => setConsentOpen(false)}
       />
 
+      <TutorLeadCaptureModal
+        open={leadModalOpen}
+        title={t('aiTutor.leadModalTitle')}
+        body={t('aiTutor.leadModalBody')}
+        parentNote={t('aiTutor.leadModalParentNote')}
+        privacyNote={t('aiTutor.leadModalPrivacy')}
+        emailLabel={t('aiTutor.leadModalEmailLabel')}
+        emailPlaceholder={t('aiTutor.leadModalEmailPlaceholder')}
+        submitLabel={t('aiTutor.leadModalSubmit')}
+        submittingLabel={t('aiTutor.leadModalSubmitting')}
+        dismissLabel={t('aiTutor.leadModalDismiss')}
+        onSubmit={onSubmitTutorLead}
+        onDismiss={onDismissTutorLeadModal}
+      />
+
       <section
         className="rounded-2xl border-2 border-teal-100 bg-gradient-to-b from-teal-50/90 to-white p-3 shadow-sm sm:p-4 md:p-5"
         aria-labelledby="tutor-chat-rules-heading"
@@ -463,20 +522,36 @@ export default function InteractiveTutor({ checkoutSessionId, hasActiveSubscript
               ? t('aiTutor.freeLimitReached')
               : t('aiTutor.freeTeaserBanner', { remaining: freeRemaining })}
           </p>
-          <p className="mt-2 border-t border-indigo-200/80 pt-2 text-sm">
-            {avatarVideoLocked
-              ? t('aiTutor.avatarFreeLimitReached')
-              : t('aiTutor.avatarFreeTriesBanner', { remaining: avatarVideoRemaining })}
-          </p>
-          {freeLocked || avatarVideoLocked ? (
-            <Link
-              to="/?view=parent"
-              className="mt-2 inline-block min-h-[44px] font-semibold text-indigo-900 underline-offset-2 hover:underline"
-            >
-              {t('aiTutor.freeLimitParentCta')}
-            </Link>
+          {freeLocked ? (
+            <div className="mt-3 flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center">
+              <button
+                type="button"
+                className="inline-flex min-h-[52px] items-center justify-center rounded-xl bg-teal-600 px-5 text-base font-bold text-white hover:bg-teal-700 disabled:opacity-60"
+                onClick={() => void startAcademyCheckout()}
+                disabled={checkoutLoading}
+              >
+                {checkoutLoading ? t('parentDashboard.openingCheckout') : t('parentDashboard.unlockAcademyButton')}
+              </button>
+              <Link
+                to="/?view=parent"
+                className="inline-flex min-h-[44px] items-center font-semibold text-indigo-900 underline-offset-2 hover:underline"
+              >
+                {t('aiTutor.freeLimitParentCta')}
+              </Link>
+            </div>
+          ) : null}
+          {freeLocked && checkoutError ? (
+            <p className="mt-2 text-sm font-semibold text-red-700" role="alert">
+              {checkoutError}
+            </p>
           ) : null}
         </div>
+      ) : null}
+
+      {!hasActiveSubscription && !freeLocked ? (
+        <p className="rounded-xl border border-slate-200 bg-slate-50/90 px-3 py-3 text-sm text-slate-700 sm:px-4 sm:text-base">
+          {t('aiTutor.avatarRequiresSubscription')}
+        </p>
       ) : null}
 
       <div
@@ -487,37 +562,60 @@ export default function InteractiveTutor({ checkoutSessionId, hasActiveSubscript
         )}
       >
         <div className="min-w-0 space-y-6">
-          <details className="group rounded-2xl border border-slate-200 bg-slate-50/90 shadow-sm open:bg-slate-50">
-            <summary className="flex min-h-[52px] cursor-pointer list-none items-center rounded-2xl px-3 py-3 font-semibold text-slate-800 sm:px-4 [&::-webkit-details-marker]:hidden">
+          <section className="rounded-2xl border border-slate-200 bg-slate-50/90 shadow-sm">
+            <button
+              type="button"
+              className="flex min-h-[52px] w-full cursor-pointer list-none items-center rounded-2xl px-3 py-3 text-left font-semibold text-slate-800 sm:px-4"
+              aria-expanded={soundVideoExpanded}
+              onClick={() => setSoundVideoExpanded((v) => !v)}
+            >
               {t('aiTutor.sectionSoundVideo')}
-              <span className="ml-auto text-sm font-normal text-slate-500 transition-transform group-open:-rotate-180">
+              <span
+                className={cn(
+                  'ml-auto text-sm font-normal text-slate-500 transition-transform',
+                  soundVideoExpanded && '-rotate-180',
+                )}
+                aria-hidden
+              >
                 ▾
               </span>
-            </summary>
-            <div className="flex flex-wrap gap-2 border-t border-slate-200 px-2 pb-3 pt-2 sm:px-3 sm:pb-4 sm:pt-3">
+            </button>
+            {soundVideoExpanded ? (
+            <div className="flex flex-wrap items-end gap-2 border-t border-slate-200 px-2 pb-3 pt-2 sm:px-3 sm:pb-4 sm:pt-3">
               {!isTots && (
                 <button
                   type="button"
-                  className={`min-h-[48px] rounded-xl px-4 text-base font-semibold ${
+                  aria-pressed={voiceOut}
+                  className={`inline-flex min-h-[52px] min-w-[10.5rem] flex-col items-center justify-center rounded-xl px-4 py-2 text-center text-base font-semibold leading-tight ${
                     voiceOut ? 'bg-sky-600 text-white' : 'border-2 border-slate-300 bg-white text-slate-800'
                   }`}
                   onClick={onToggleVoiceOut}
                 >
-                  {voiceOut ? t('aiTutor.voiceOn') : t('aiTutor.voiceOff')}
+                  <span>{t('aiTutor.voiceToggleTitle')}</span>
+                  <span className="mt-0.5 text-xs font-bold tracking-wide">
+                    {voiceOut ? t('aiTutor.toggleStateOn') : t('aiTutor.toggleStateOff')}
+                  </span>
                 </button>
               )}
               <button
                 type="button"
-                className={`min-h-[48px] rounded-xl px-4 text-base font-semibold ${
+                aria-pressed={liveAvatar}
+                className={`inline-flex min-h-[52px] min-w-[10.5rem] flex-col items-center justify-center rounded-xl px-4 py-2 text-center text-base font-semibold leading-tight ${
                   liveAvatar ? 'bg-indigo-600 text-white' : 'border-2 border-slate-300 bg-white text-slate-800'
                 }`}
                 onClick={() => void onToggleLiveAvatar()}
-                disabled={
-                  avatarBusy ||
-                  (!liveAvatar && avatarVideoLocked)
-                }
+                disabled={avatarBusy}
               >
-                {liveAvatar ? t('aiTutor.avatarOn') : t('aiTutor.avatarOff')}
+                <span>
+                  {liveAvatar
+                    ? t('aiTutor.avatarStop')
+                    : hasActiveSubscription
+                      ? t('aiTutor.avatarStart')
+                      : t('aiTutor.avatarLockedShort')}
+                </span>
+                <span className="mt-0.5 text-xs font-bold tracking-wide">
+                  {liveAvatar ? t('aiTutor.toggleStateOn') : t('aiTutor.toggleStateOff')}
+                </span>
               </button>
               {liveAvatar && (
                 <button
@@ -530,16 +628,28 @@ export default function InteractiveTutor({ checkoutSessionId, hasActiveSubscript
                 </button>
               )}
               {!isTots && voiceOut && (
-                <button
-                  type="button"
-                  className="min-h-[48px] rounded-xl border-2 border-slate-300 bg-white px-4 text-base font-semibold text-slate-800"
-                  onClick={startSpeechInput}
-                >
-                  {t('aiTutor.micOnce')}
-                </button>
+                <div className="flex min-w-[min(100%,14rem)] flex-col gap-1">
+                  <button
+                    type="button"
+                    className="min-h-[48px] rounded-xl border-2 border-slate-300 bg-white px-4 text-base font-semibold text-slate-800"
+                    onClick={startSpeechInput}
+                  >
+                    {t('aiTutor.micOnce')}
+                  </button>
+                  <span className="text-xs leading-snug text-slate-600">{t('aiTutor.micOnceSub')}</span>
+                </div>
               )}
+              {avatarMsg ? (
+                <p
+                  className="mt-1 w-full rounded-xl border border-amber-300/80 bg-amber-50 px-3 py-2 text-sm font-medium text-amber-950"
+                  role="status"
+                >
+                  {avatarMsg}
+                </p>
+              ) : null}
             </div>
-          </details>
+            ) : null}
+          </section>
 
           {isTots && (
             <p className="rounded-xl bg-amber-50 px-3 py-3 text-sm leading-relaxed text-amber-950 sm:px-4">
@@ -564,16 +674,26 @@ export default function InteractiveTutor({ checkoutSessionId, hasActiveSubscript
                   {avatarFullscreen ? t('aiTutor.avatarExitFullscreen') : t('aiTutor.avatarFullscreen')}
                 </button>
               </div>
-              <video
-                ref={videoRef}
-                className="aspect-video w-full max-h-[min(72vh,720px)] object-cover object-center [&:fullscreen]:max-h-none"
-                playsInline
-                muted={false}
-                autoPlay
-              />
-              {avatarMsg && (
-                <p className="bg-slate-800 px-3 py-2 text-sm text-amber-200 sm:px-4">{avatarMsg}</p>
-              )}
+              <div
+                className="relative block w-full cursor-pointer bg-black"
+                role="presentation"
+                tabIndex={-1}
+                onClick={() => {
+                  const el = videoRef.current
+                  if (el) void el.play().catch(() => {})
+                }}
+              >
+                <video
+                  ref={videoRef}
+                  className="aspect-video w-full max-h-[min(72vh,720px)] object-cover object-center [&:fullscreen]:max-h-none"
+                  playsInline
+                  muted={false}
+                  autoPlay
+                />
+              </div>
+              <p className="bg-slate-800 px-3 py-2 text-center text-xs text-slate-300 sm:px-4">
+                {t('aiTutor.videoTapToPlayHint')}
+              </p>
             </div>
           )}
         </div>

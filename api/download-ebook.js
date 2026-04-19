@@ -1,7 +1,7 @@
 import Stripe from 'stripe'
 import fs from 'node:fs'
 import path from 'node:path'
-import { verifyBundleCheckoutSession } from './lib/verifyBundleEntitlement.js'
+import { verifyHomeworkCheckoutSession } from './lib/verifyBundleEntitlement.js'
 
 const ALLOWED_EBOOK_IDS = new Set([
   'ebook-1',
@@ -12,11 +12,6 @@ const ALLOWED_EBOOK_IDS = new Set([
   'ebook-6',
   'bundle',
 ])
-
-// PDFs are stored outside `public/` for protection.
-// Expected location: `private/ebooks/<ebookId>.pdf`
-//
-// PDFs are stored in `private/ebooks/<ebookId>.pdf` (protected by this endpoint).
 
 export default async function handler(req, res) {
   try {
@@ -37,7 +32,6 @@ export default async function handler(req, res) {
       return
     }
 
-    // Dev-only: allow `ebook-1` without Stripe when ALLOW_FREE_TEST_EBOOK=true
     if (isFreeTestEbook && allowFreeTestEbook) {
       const pdfPath = path.join(process.cwd(), 'private', 'ebooks', `${ebookId}.pdf`)
       const pdfExists = await fs.promises
@@ -59,8 +53,7 @@ export default async function handler(req, res) {
     }
 
     const stripeSecretKey = process.env.STRIPE_SECRET_KEY
-    const safetyPassPriceOrProductId = process.env.STRIPE_SAFETY_PASS_PRICE_ID
-    if (!stripeSecretKey || !safetyPassPriceOrProductId) {
+    if (!stripeSecretKey) {
       res.status(500).json({ error: 'Server not configured for downloads.' })
       return
     }
@@ -85,14 +78,13 @@ export default async function handler(req, res) {
         return
       }
     } else {
-      const bundleCheck = await verifyBundleCheckoutSession(checkoutSessionId)
-      if (!bundleCheck.ok) {
-        res.status(bundleCheck.status).json({ error: 'Not entitled to download.' })
+      const academyCheck = await verifyHomeworkCheckoutSession(checkoutSessionId)
+      if (!academyCheck.ok) {
+        res.status(academyCheck.status).json({ error: 'Not entitled to download.' })
         return
       }
     }
 
-    // PDFs live outside `public/` so they can only be accessed via this protected endpoint.
     const pdfPath = path.join(process.cwd(), 'private', 'ebooks', `${ebookId}.pdf`)
     const pdfExists = await fs.promises
       .access(pdfPath)
@@ -108,7 +100,7 @@ export default async function handler(req, res) {
     res.setHeader('Content-Type', 'application/pdf')
     res.setHeader(
       'Content-Disposition',
-      `attachment; filename="${ebookId}.pdf"`
+      `attachment; filename="${ebookId}.pdf"`,
     )
     res.setHeader('Cache-Control', 'private, no-store')
     res.status(200).end(fileBuffer)
@@ -117,4 +109,3 @@ export default async function handler(req, res) {
     res.status(500).json({ error: message })
   }
 }
-

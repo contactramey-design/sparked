@@ -2,15 +2,14 @@
 
 ## Shipped in this pass
 
-- **Daily Spark Quest hub** at [`/daily`](../src/DailySparkQuestPage.tsx): static entry points to weekly adventure, safety track, homework, and practice (replace with a rotating “quest of the day” when content exists).
+- **Daily Spark Quest hub** at [`/daily`](../src/DailySparkQuestPage.tsx): static entry points to AI Tutor, safety track, homework, and practice (replace with a rotating “quest of the day” when content exists).
 - **Home card** on [`HomePage`](../src/HomePage.tsx) linking to `/daily`.
-- **Streaks + sparkles** already on the home page for logged-in learners; tie future rewards to homework completion and weekly opens.
+- **Streaks + sparkles** already on the home page for logged-in learners; tie future rewards to homework completion and tutor/practice engagement.
 
-## Next (real weekly + daily systems)
+## Next (daily systems)
 
-1. **Weekly adventure drop:** Drive [`WeeklyAdventurePage`](../src/WeeklyAdventurePage.tsx) from dated content (JSON or CMS) with clear “new this week” affordance.
-2. **Daily quest:** Pick one unit/activity server- or config-driven; store `lastDailyQuestDate` in localStorage to rotate once per calendar day.
-3. **Meaningful sparkles:** Award bonus sparkles when a homework job completes with story + visuals, and when weekly video is opened.
+1. **Daily quest:** Pick one unit/activity server- or config-driven; store `lastDailyQuestDate` in localStorage to rotate once per calendar day.
+2. **Meaningful sparkles:** Award bonus sparkles when a homework job completes with story + visuals, and when tutor or practice milestones are hit.
 
 ## Phase 3
 

@@ -19,6 +19,7 @@ This document reconciles the **Vite + React** Sparki codebase with any external 
 | Route | `/ai-tutor` — [`src/App.tsx`](../src/App.tsx), [`src/ai-tutor/AiTutorPage.tsx`](../src/ai-tutor/AiTutorPage.tsx) |
 | Chat + optional LiveAvatar stream | [`src/ai-tutor/InteractiveTutor.tsx`](../src/ai-tutor/InteractiveTutor.tsx) |
 | Voice consent (Kids/Crew); Tots blocked | [`src/ai-tutor/TutorConsentModal.tsx`](../src/ai-tutor/TutorConsentModal.tsx) |
+| Free-limit parent email (“+3 messages”) | [`src/ai-tutor/TutorLeadCaptureModal.tsx`](../src/ai-tutor/TutorLeadCaptureModal.tsx), `POST /api/tutor-lead` — [`api/tutor-lead.js`](../api/tutor-lead.js); gated by `GET /api/config` → `tutorLeadCaptureEnabled` |
 | US state for prompts | [`src/ai-tutor/usStates.ts`](../src/ai-tutor/usStates.ts), persisted via tutor session helpers in `tutorService` |
 
 ## LiveAvatar Web SDK (client contract)
@@ -35,7 +36,7 @@ Verified usage in `InteractiveTutor.tsx`:
 
 ## Entitlement and dev flags
 
-- Production: Stripe **Adventure Academy** (or bundle) checkout session verified in `api/tutor-chat.js` / `api/liveavatar-session.js` via [`api/lib/verifyBundleEntitlement.js`](../api/lib/verifyBundleEntitlement.js).
+- Production: Stripe **Adventure Academy** checkout session verified in `api/tutor-chat.js` / `api/liveavatar-session.js` via [`api/lib/verifyBundleEntitlement.js`](../api/lib/verifyBundleEntitlement.js).
 - Local only: `ALLOW_UNAUTH_TUTOR=true` — see `.env.example`; **never** enable on public production without other controls.
 
 ## QA paths (adapt external checklists)

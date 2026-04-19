@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useTranslation } from '@/contexts/LocaleContext'
 import { saveHomeworkJob } from '../hooks/useHomeworkJob'
@@ -6,6 +7,22 @@ import { buildDemoHomeworkJob, DEMO_JOB_ID } from '../demo/demoJob'
 export default function HomeworkHome() {
   const { t } = useTranslation()
   const navigate = useNavigate()
+  const [adventurePaused, setAdventurePaused] = useState(false)
+
+  useEffect(() => {
+    let cancelled = false
+    fetch('/api/config')
+      .then((r) => r.json())
+      .then((data: { homeworkAdventurePaused?: boolean }) => {
+        if (!cancelled) setAdventurePaused(Boolean(data.homeworkAdventurePaused))
+      })
+      .catch(() => {
+        if (!cancelled) setAdventurePaused(false)
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [])
 
   const tryDemo = () => {
     const demo = buildDemoHomeworkJob()
@@ -28,12 +45,28 @@ export default function HomeworkHome() {
         </Link>
       </div>
 
-      <div className="rounded-2xl border border-sky-200/80 bg-sky-50/90 p-5 shadow-sm">
-        <p className="m-0 text-base font-semibold text-sky-950">{t('homeworkFeature.adventureVideoCta')}</p>
-        <p className="mt-2 mb-4 text-sm text-slate-700">{t('homeworkFeature.adventureVideoIntro')}</p>
-        <Link to="/homework/adventure-video" className="primary-button inline-block text-center">
-          {t('homeworkFeature.adventureVideoOpen')}
-        </Link>
+      <div
+        className={`rounded-2xl border p-5 shadow-sm ${
+          adventurePaused
+            ? 'border-slate-200 bg-slate-100/90 text-slate-600'
+            : 'border-sky-200/80 bg-sky-50/90'
+        }`}
+      >
+        <p className={`m-0 text-base font-semibold ${adventurePaused ? 'text-slate-800' : 'text-sky-950'}`}>
+          {adventurePaused ? t('homeworkFeature.adventureVideoPausedTitle') : t('homeworkFeature.adventureVideoCta')}
+        </p>
+        <p className="mt-2 mb-4 text-sm leading-relaxed text-slate-700">
+          {adventurePaused ? t('homeworkFeature.adventureVideoPausedBody') : t('homeworkFeature.adventureVideoIntro')}
+        </p>
+        {adventurePaused ? (
+          <span className="inline-block rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm font-semibold text-slate-500">
+            {t('homeworkFeature.adventureVideoPausedBadge')}
+          </span>
+        ) : (
+          <Link to="/homework/adventure-video" className="primary-button inline-block text-center">
+            {t('homeworkFeature.adventureVideoOpen')}
+          </Link>
+        )}
       </div>
     </div>
   )

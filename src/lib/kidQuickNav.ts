@@ -4,7 +4,6 @@ export function shouldShowKidQuickNav(pathname: string): boolean {
   if (pathname.startsWith('/track/')) return true
   if (pathname.startsWith('/unit/')) return true
   if (pathname.startsWith('/lesson/')) return true
-  if (pathname.startsWith('/weekly')) return true
   if (pathname.startsWith('/daily')) return true
   if (pathname.startsWith('/homework')) return true
   if (pathname.startsWith('/ai-tutor')) return true

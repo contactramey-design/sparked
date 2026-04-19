@@ -23,7 +23,7 @@ Third-party APIs bill **your** accounts. The app does not enforce spend caps ser
 
 ## Stripe (optional)
 
-- **Used for:** Safety Pass / bundle checkout, ebook checkout, server-side entitlement checks ([api/lib/verifyBundleEntitlement.js](../api/lib/verifyBundleEntitlement.js)).
+- **Used for:** Adventure Academy checkout, per-ebook checkout, server-side entitlement checks ([api/lib/verifyBundleEntitlement.js](../api/lib/verifyBundleEntitlement.js)).
 - **Controls:** Stripe Dashboard → monitor failed payments and webhook health (if you add webhooks later).
 
 ## Vercel Blob + worker

@@ -10,10 +10,10 @@ function progressStorageKey(ageBand: AgeBandId): string {
   return `sparki_progress_${ageBand}_v1`
 }
 
-const SAFETY_PASS_KEY = 'sparki_safety_pass_v1'
-const SAFETY_PASS_CHECKOUT_SESSION_KEY = 'sparki_safety_pass_checkout_session_v1'
 const ACADEMY_SUB_KEY = 'sparki_academy_subscription_v1'
 const ACADEMY_CHECKOUT_SESSION_KEY = 'sparki_academy_checkout_session_v1'
+/** Per-ebook one-time checkout sessions (metadata entitlement_type === ebook). */
+const EBOOK_CHECKOUT_SESSIONS_KEY = 'sparki_ebook_checkout_sessions_v1'
 const DAILY_LOGIN_BONUS_LAST_DATE_KEY = 'sparki_daily_login_bonus_last_date_v1'
 
 export interface UnitProgress {
@@ -110,45 +110,42 @@ export function getTotalSparkles(ageBand: AgeBandId): number {
   return progress.totalSparkles
 }
 
-export function getHasSafetyPass(): boolean {
-  if (typeof window === 'undefined') return false
+function readEbookCheckoutSessions(): Record<string, string> {
+  if (typeof window === 'undefined') return {}
   try {
-    return window.localStorage.getItem(SAFETY_PASS_KEY) === 'true'
+    const raw = window.localStorage.getItem(EBOOK_CHECKOUT_SESSIONS_KEY)
+    if (!raw) return {}
+    const parsed = JSON.parse(raw) as unknown
+    if (!parsed || typeof parsed !== 'object') return {}
+    return parsed as Record<string, string>
   } catch {
-    return false
+    return {}
   }
 }
 
-export function setHasSafetyPass(value: boolean): void {
-  if (typeof window === 'undefined') return
-  try {
-    if (value) {
-      window.localStorage.setItem(SAFETY_PASS_KEY, 'true')
-    } else {
-      window.localStorage.removeItem(SAFETY_PASS_KEY)
-    }
-  } catch {
-    // ignore storage issues
-  }
-}
-
-export function getSafetyPassCheckoutSessionId(): string | null {
+export function getEbookCheckoutSessionId(ebookId: string): string | null {
   if (typeof window === 'undefined') return null
   try {
-    const raw = window.localStorage.getItem(SAFETY_PASS_CHECKOUT_SESSION_KEY)
-    return raw && raw.trim() ? raw : null
+    const sid = readEbookCheckoutSessions()[ebookId]
+    return sid && sid.trim() ? sid : null
   } catch {
     return null
   }
 }
 
-export function setSafetyPassCheckoutSessionId(sessionId: string | null): void {
+export function setEbookCheckoutSessionId(ebookId: string, sessionId: string | null): void {
   if (typeof window === 'undefined') return
   try {
+    const map = { ...readEbookCheckoutSessions() }
     if (sessionId) {
-      window.localStorage.setItem(SAFETY_PASS_CHECKOUT_SESSION_KEY, sessionId)
+      map[ebookId] = sessionId
     } else {
-      window.localStorage.removeItem(SAFETY_PASS_CHECKOUT_SESSION_KEY)
+      delete map[ebookId]
+    }
+    if (Object.keys(map).length === 0) {
+      window.localStorage.removeItem(EBOOK_CHECKOUT_SESSIONS_KEY)
+    } else {
+      window.localStorage.setItem(EBOOK_CHECKOUT_SESSIONS_KEY, JSON.stringify(map))
     }
   } catch {
     // ignore storage issues
@@ -200,14 +197,14 @@ export function setAcademyCheckoutSessionId(sessionId: string | null): void {
   }
 }
 
-/** Homework APIs accept Stripe checkout session from Adventure Academy or legacy Safety Pass bundle. */
+/** Homework / tutor APIs: Stripe checkout session for Adventure Academy subscription. */
 export function getHomeworkCheckoutSessionId(): string | null {
-  return getAcademyCheckoutSessionId() || getSafetyPassCheckoutSessionId()
+  return getAcademyCheckoutSessionId()
 }
 
 /** Full subject-track depth (beyond first free lesson per track on `/practice`). */
 export function hasFullSubjectPracticeAccess(): boolean {
-  return getHasAcademySubscription() || getHasSafetyPass()
+  return getHasAcademySubscription()
 }
 
 function updateGamification(progress: ChildProgress): void {

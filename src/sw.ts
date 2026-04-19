@@ -104,6 +104,7 @@ const SENSITIVE_API_PREFIXES = [
   '/api/generate-visuals',
   '/api/generate-adventure-video',
   '/api/tts',
+  '/api/tutor-lead',
   '/api/schools/',
 ]
 registerRoute(

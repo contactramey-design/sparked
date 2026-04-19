@@ -1,12 +1,17 @@
 import { verifyHomeworkCheckoutSession } from '../../lib/verifyBundleEntitlement.js'
+import { isVercelProduction } from '../../lib/deployMode.js'
 
 export const MAX_BODY_BYTES = 4.5 * 1024 * 1024
 
-/** When true, homework APIs require a valid Stripe checkout session (unless ALLOW_UNAUTH_HOMEWORK). Default: unset/false = open (matches AI_TUTOR_REQUIRE_CHECKOUT default). */
+/**
+ * When false, homework APIs verify Adventure Academy checkout session.
+ * Vercel Production defaults to verification unless HOMEWORK_REQUIRE_CHECKOUT=false or ALLOW_UNAUTH_HOMEWORK.
+ */
 export function isHomeworkEntitlementBypassed() {
   if (process.env.ALLOW_UNAUTH_HOMEWORK === 'true') return true
+  if (process.env.HOMEWORK_REQUIRE_CHECKOUT === 'false') return true
   if (process.env.HOMEWORK_REQUIRE_CHECKOUT === 'true') return false
-  return true
+  return !isVercelProduction()
 }
 
 export async function parseMultipart(req) {
@@ -32,7 +37,7 @@ export async function requireHomeworkEntitlement(checkoutSessionId) {
       status: entitlement.status,
       message:
         entitlement.status === 403
-          ? 'Parent unlock required. Subscribe to Adventure Academy (or complete Safety Pass checkout), then try again.'
+          ? 'Parent unlock required. Subscribe to Adventure Academy, then try again.'
           : entitlement.message,
     }
   }

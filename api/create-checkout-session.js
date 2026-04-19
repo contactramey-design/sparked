@@ -31,20 +31,9 @@ export default async function handler(req, res) {
       return res.status(500).json({ error: 'Missing STRIPE_SECRET_KEY' })
     }
 
-    const body = req?.body && typeof req.body === 'object' ? req.body : {}
-    const product = body.product === 'academy' ? 'academy' : 'bundle'
-    const priceOrProductId =
-      product === 'academy'
-        ? process.env.STRIPE_ACADEMY_PRICE_ID
-        : process.env.STRIPE_SAFETY_PASS_PRICE_ID
-
+    const priceOrProductId = process.env.STRIPE_ACADEMY_PRICE_ID
     if (!priceOrProductId) {
-      return res.status(500).json({
-        error:
-          product === 'academy'
-            ? 'Missing STRIPE_ACADEMY_PRICE_ID'
-            : 'Missing STRIPE_SAFETY_PASS_PRICE_ID',
-      })
+      return res.status(500).json({ error: 'Missing STRIPE_ACADEMY_PRICE_ID' })
     }
 
     const stripe = new Stripe(stripeSecretKey, {
@@ -53,29 +42,31 @@ export default async function handler(req, res) {
 
     const priceId = await resolvePriceIdFromEnv(stripe, priceOrProductId)
     if (!priceId) {
-      return res.status(500).json({ error: `Could not resolve Stripe price for ${product}` })
+      return res.status(500).json({ error: 'Could not resolve Stripe price for Adventure Academy' })
     }
 
-    const entitlementType = product === 'academy' ? 'academy' : 'bundle'
+    const entitlementType = 'academy'
 
     const origin =
       (req.headers['x-forwarded-proto'] && req.headers['x-forwarded-host'])
         ? `${req.headers['x-forwarded-proto']}://${req.headers['x-forwarded-host']}`
         : req.headers.origin
 
+    const body = req?.body && typeof req.body === 'object' ? req.body : {}
     const requestedReturnTo = typeof body?.returnTo === 'string' ? body.returnTo : null
-    const safeReturnTo =
+    const isSafeReturnPath =
       requestedReturnTo &&
       (requestedReturnTo === '/ai-tutor' ||
         requestedReturnTo.startsWith('/ai-tutor?') ||
+        requestedReturnTo === '/homework' ||
+        requestedReturnTo.startsWith('/homework?') ||
+        requestedReturnTo.startsWith('/homework/') ||
         requestedReturnTo.startsWith('/ebook/') ||
         requestedReturnTo.startsWith('/ebook?'))
-        ? requestedReturnTo
-        : null
+    const safeReturnTo = isSafeReturnPath ? requestedReturnTo : null
 
     let success_url =
       successUrlEnv || `${origin || ''}/?view=parent&checkout=success`
-    // Let the frontend store checkout session id and use it to validate entitlement for downloads.
     if (!success_url.includes('checkout_session_id=')) {
       success_url += `${success_url.includes('?') ? '&' : '?'}checkout_session_id={CHECKOUT_SESSION_ID}`
     }
@@ -91,8 +82,7 @@ export default async function handler(req, res) {
     const session = await stripe.checkout.sessions.create({
       mode: 'subscription',
       line_items: [{ price: priceId, quantity: 1 }],
-      // 7-day trial for Adventure Academy only; Safety Pass / bundle bills from day one.
-      ...(product === 'academy' ? { subscription_data: { trial_period_days: 7 } } : {}),
+      subscription_data: { trial_period_days: 7 },
       allow_promotion_codes: true,
       success_url,
       cancel_url,

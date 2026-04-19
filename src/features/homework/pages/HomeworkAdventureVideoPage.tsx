@@ -445,6 +445,22 @@ export default function HomeworkAdventureVideoPage() {
   const fileRef = useRef<HTMLInputElement>(null)
   const char = CHARACTERS[character]
 
+  const [adventurePaused, setAdventurePaused] = useState<boolean | null>(null)
+  useEffect(() => {
+    let cancelled = false
+    fetch('/api/config')
+      .then((r) => r.json())
+      .then((data: { homeworkAdventurePaused?: boolean }) => {
+        if (!cancelled) setAdventurePaused(Boolean(data.homeworkAdventurePaused))
+      })
+      .catch(() => {
+        if (!cancelled) setAdventurePaused(false)
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
   const handleFile = useCallback((f: File | null | undefined) => {
     if (!f) return
     if (!['image/png', 'image/jpeg', 'image/jpg', 'image/webp', 'application/pdf'].includes(f.type)) {
@@ -466,6 +482,12 @@ export default function HomeworkAdventureVideoPage() {
   }, [t])
 
   const generate = async () => {
+    if (adventurePaused !== false) {
+      if (adventurePaused === true) {
+        setError(t('homeworkFeature.adventureVideoPausedBody'))
+      }
+      return
+    }
     if (!fileData || !fileType) {
       setError(t('homeworkFeature.adventureVideoNeedUpload'))
       return
@@ -565,6 +587,22 @@ Create exactly 4 scenes that walk through the homework topic step by step. Make 
     setError(null)
     setFinished(false)
     setAdventureTitle('')
+  }
+
+  if (adventurePaused === true) {
+    return (
+      <>
+        <p className="mb-4 text-sm text-slate-600">
+          <Link to="/homework" className="font-semibold text-sky-800 underline-offset-2 hover:underline">
+            {t('homeworkFeature.adventureVideoBack')}
+          </Link>
+        </p>
+        <div className="mx-auto max-w-lg rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+          <h1 className="font-heading text-xl text-slate-900">{t('homeworkFeature.adventureVideoPausedTitle')}</h1>
+          <p className="mt-3 text-base leading-relaxed text-slate-700">{t('homeworkFeature.adventureVideoPausedBody')}</p>
+        </div>
+      </>
+    )
   }
 
   return (
@@ -857,17 +895,20 @@ Create exactly 4 scenes that walk through the homework topic step by step. Make 
                 <button
                   type="button"
                   onClick={() => void generate()}
-                  disabled={loading || !fileData}
+                  disabled={loading || !fileData || adventurePaused !== false}
                   style={{
                     width: '100%',
                     padding: '18px 24px',
-                    background: !fileData || loading ? '#CBD5E1' : `linear-gradient(135deg,${char.accent},${char.color})`,
+                    background:
+                      !fileData || loading || adventurePaused !== false
+                        ? '#CBD5E1'
+                        : `linear-gradient(135deg,${char.accent},${char.color})`,
                     color: '#fff',
                     border: 'none',
                     borderRadius: 14,
                     fontSize: 19,
                     fontWeight: 900,
-                    cursor: !fileData || loading ? 'not-allowed' : 'pointer',
+                    cursor: !fileData || loading || adventurePaused !== false ? 'not-allowed' : 'pointer',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',

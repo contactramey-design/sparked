@@ -5,7 +5,7 @@ This document summarizes how sensitive flows are protected and what to configure
 ## Verified strengths
 
 - **Homework pipeline** (`/api/homework/analyze`, `explain`, `story`, `/api/generate-visuals`): gated by `requireHomeworkEntitlement` unless `ALLOW_UNAUTH_HOMEWORK=true` (dev only).
-- **Legacy** `/api/process-homework`: same Stripe bundle check when `ALLOW_UNAUTH_HOMEWORK` is not set.
+- **Legacy** `/api/process-homework`: same Stripe Adventure Academy session check when `ALLOW_UNAUTH_HOMEWORK` is not set.
 - **Ebook downloads** `/api/download-ebook`: allowlisted `ebookId`, Stripe session checks, PDFs under `private/ebooks/` (not `public/`).
 - **Teacher weekly generator** `/api/schools/generate-weekly-units`: requires valid Supabase JWT, verifies `school_classes.teacher_id === auth.uid()`, PDF size capped (~8.5 MB), text extraction capped.
 - **Checkout** `/api/create-checkout-session`: success/cancel URLs from env or trusted forwarded host; `returnTo` restricted to `/ebook/` paths.

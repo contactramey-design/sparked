@@ -11,7 +11,7 @@ import SchoolJoinCard from './components/SchoolJoinCard'
 
 /**
  * Grown-up view for Sparki **School** flows: class join, weekly track, subject tracks.
- * Consumer “family” tools (Safety Pass, B2C weekly, full unit grades) stay on `/?view=parent`.
+ * Consumer “family” tools (billing, full unit grades) stay on `/?view=parent`.
  */
 const SchoolParentPage: React.FC = () => {
   const { t } = useTranslation()

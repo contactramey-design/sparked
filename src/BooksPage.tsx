@@ -48,18 +48,9 @@ const BooksPage: React.FC = () => {
               <strong>{book.price}</strong> · {t(book.storeLabelKey)}
             </p>
             <div className="book-actions">
-              {book.kind === 'subscription_bundle' ? (
-                <>
-                  <Link to="/?view=parent" className="primary-button">
-                    {t('booksPage.unlockSubscription')}
-                  </Link>
-                  <p className="book-subscription-hint muted text-sm mt-2">{t('booksPage.subscriptionHint')}</p>
-                </>
-              ) : (
-                <Link to={`/ebook?ebookId=${encodeURIComponent(book.id)}`} className="primary-button">
-                  {t('booksPage.readEbook')}
-                </Link>
-              )}
+              <Link to={`/ebook?ebookId=${encodeURIComponent(book.id)}`} className="primary-button">
+                {t('booksPage.readEbook')}
+              </Link>
             </div>
           </article>
         ))}

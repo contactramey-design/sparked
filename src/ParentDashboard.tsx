@@ -4,17 +4,14 @@ import { Link } from 'react-router-dom'
 import { curriculum, getUnitsForBand } from './curriculum'
 import {
   loadProgress,
-  getHasSafetyPass,
-  setHasSafetyPass,
-  setSafetyPassCheckoutSessionId,
   getHasAcademySubscription,
   setHasAcademySubscription,
   setAcademyCheckoutSessionId,
+  setEbookCheckoutSessionId,
 } from './progress'
 import { useAuth } from './AuthContext'
 import { useTranslation } from './contexts/LocaleContext'
 import { useAgeBand } from './contexts/AgeBandContext'
-import { useB2CWeeklyEpisode } from './hooks/useB2CWeeklyEpisode'
 import { AscentPageChrome } from '@/design-system/ascent/AscentPageChrome'
 import { readTutorStateCode, writeTutorStateCode } from '@/ai-tutor/tutorService'
 import { US_STATES_PLUS_DC } from '@/ai-tutor/usStates'
@@ -27,17 +24,11 @@ export const ParentViewContent: React.FC = () => {
   const tabListId = useId()
   const [tab, setTab] = useState<ParentTabId>('today')
   const { ageBand } = useAgeBand()
-  const weeklyEpisode = useB2CWeeklyEpisode()
-  const weeklyWk = String(weeklyEpisode.resolved.weekIndex)
-  const weeklyTitleShort = t(`weekly.season1.weeks.${weeklyWk}.title`)
   const progress = loadProgress(ageBand)
   const { kidLock, setKidLock } = useAuth()
   const [entitlementVersion, setEntitlementVersion] = useState(0)
-  const hasSafetyPass = entitlementVersion >= 0 && getHasSafetyPass()
   const hasAcademy = entitlementVersion >= 0 && getHasAcademySubscription()
-  const [unlockLoading, setUnlockLoading] = useState(false)
   const [academyUnlockLoading, setAcademyUnlockLoading] = useState(false)
-  const [unlockErrorKey, setUnlockErrorKey] = useState<string | null>(null)
   const [academyUnlockErrorKey, setAcademyUnlockErrorKey] = useState<string | null>(null)
   const [subjectTracksLocalActivity, setSubjectTracksLocalActivity] = useState(false)
   const [tutorSchoolState, setTutorSchoolState] = useState('')
@@ -80,8 +71,6 @@ export const ParentViewContent: React.FC = () => {
 
   useEffect(() => {
     if (checkoutStatus !== 'success') return
-    setUnlockErrorKey(null)
-
     // Capture checkout session id so the server can validate entitlement for downloads.
     try {
       const url = new URL(window.location.href)
@@ -92,9 +81,11 @@ export const ParentViewContent: React.FC = () => {
         if (entitlementType === 'academy') {
           setAcademyCheckoutSessionId(sessionId)
           setHasAcademySubscription(true)
-        } else if (entitlementType === 'bundle') {
-          setSafetyPassCheckoutSessionId(sessionId)
-          setHasSafetyPass(true)
+        } else if (entitlementType === 'ebook') {
+          const ebookId = url.searchParams.get('ebook_id')
+          if (ebookId) {
+            setEbookCheckoutSessionId(ebookId, sessionId)
+          }
         }
       }
 
@@ -105,7 +96,13 @@ export const ParentViewContent: React.FC = () => {
       url.searchParams.delete('returnTo')
       window.history.replaceState({}, '', url.toString())
 
-      if (returnTo && (returnTo.startsWith('/ebook/') || returnTo.startsWith('/ebook?'))) {
+      if (
+        returnTo &&
+        (returnTo.startsWith('/ebook/') ||
+          returnTo.startsWith('/ebook?') ||
+          returnTo.startsWith('/homework') ||
+          returnTo.startsWith('/ai-tutor'))
+      ) {
         window.location.replace(returnTo)
       } else {
         setEntitlementVersion((v) => v + 1)
@@ -115,31 +112,6 @@ export const ParentViewContent: React.FC = () => {
     }
   }, [checkoutStatus])
 
-  async function handleUnlock() {
-    setUnlockErrorKey(null)
-    setUnlockLoading(true)
-    try {
-      const res = await fetch('/api/create-checkout-session', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ product: 'bundle' }),
-      })
-
-      const data = await res.json().catch(() => ({}))
-      if (!res.ok) {
-        throw new Error('CHECKOUT_FAILED')
-      }
-      if (!data || typeof data.url !== 'string') {
-        throw new Error('Missing checkout URL')
-      }
-      window.location.assign(data.url)
-    } catch {
-      setUnlockErrorKey('parentDashboard.checkoutFailed')
-    } finally {
-      setUnlockLoading(false)
-    }
-  }
-
   async function handleAcademyUnlock() {
     setAcademyUnlockErrorKey(null)
     setAcademyUnlockLoading(true)
@@ -147,7 +119,7 @@ export const ParentViewContent: React.FC = () => {
       const res = await fetch('/api/create-checkout-session', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ product: 'academy' }),
+        body: JSON.stringify({ product: 'academy', returnTo: '/homework' }),
       })
 
       const data = await res.json().catch(() => ({}))
@@ -255,14 +227,20 @@ export const ParentViewContent: React.FC = () => {
             </div>
           ) : null}
 
-          <div className="card weekly-parent-teaser rounded-2xl border border-teal-100/80 p-5">
-            <h3 className="text-lg font-bold text-slate-900">{t('weekly.parentDashboard.weeklyTeaser')}</h3>
-            <p className="mt-2 text-slate-700">
-              <strong>{weeklyTitleShort}</strong>
-            </p>
-            <Link to="/weekly" className="primary-button mt-4 inline-block">
-              {t('weekly.parentDashboard.weeklyTeaserLink')}
-            </Link>
+          <div className="card rounded-2xl border border-teal-100/80 p-5">
+            <h3 className="text-lg font-bold text-slate-900">{t('parentDashboard.academyHubTitle')}</h3>
+            <p className="mt-2 text-slate-700">{t('parentDashboard.academyHubBody')}</p>
+            <div className="mt-4 flex flex-col gap-2 sm:flex-row">
+              <Link to="/homework" className="primary-button inline-block py-3 text-center">
+                {t('parentDashboard.academyHubHomework')}
+              </Link>
+              <Link
+                to="/ai-tutor"
+                className="secondary-button inline-block border-2 border-teal-200 py-3 text-center font-semibold text-teal-900"
+              >
+                {t('parentDashboard.academyHubTutor')}
+              </Link>
+            </div>
           </div>
 
           <div className="card rounded-2xl border border-teal-100/80 p-5">
@@ -305,32 +283,8 @@ export const ParentViewContent: React.FC = () => {
           role="tabpanel"
           id={`${tabListId}-panel-billing`}
           aria-labelledby={`${tabListId}-billing`}
-          className="grid gap-4 md:grid-cols-2"
+          className="grid gap-4 md:grid-cols-1"
         >
-          <div className="card rounded-2xl border border-teal-100/80 p-5">
-            <h3 className="text-lg font-bold text-slate-900">{t('parentDashboard.unlockSafetyTitle')}</h3>
-            <p className="mt-1 text-slate-700">{t('parentDashboard.unlockSafetyDesc')}</p>
-
-            {hasSafetyPass ? (
-              <p className="welcome-subtitle mt-3">{t('parentDashboard.safetyPassActive')}</p>
-            ) : (
-              <>
-                <button
-                  type="button"
-                  className="primary-button mt-4"
-                  onClick={() => void handleUnlock()}
-                  disabled={unlockLoading}
-                >
-                  {unlockLoading ? t('parentDashboard.openingCheckout') : t('parentDashboard.unlockSafetyButton')}
-                </button>
-                {checkoutStatus === 'cancel' && (
-                  <p className="welcome-subtitle mt-2">{t('parentDashboard.checkoutCanceled')}</p>
-                )}
-                {unlockErrorKey && <p className="quiz-error mt-2">{t(unlockErrorKey)}</p>}
-              </>
-            )}
-          </div>
-
           <div className="card rounded-2xl border border-teal-100/80 p-5">
             <h3 className="text-lg font-bold text-slate-900">{t('parentDashboard.unlockAcademyTitle')}</h3>
             <p className="mt-1 text-slate-700">{t('parentDashboard.unlockAcademyDesc')}</p>
@@ -360,6 +314,9 @@ export const ParentViewContent: React.FC = () => {
                 >
                   {academyUnlockLoading ? t('parentDashboard.openingCheckout') : t('parentDashboard.unlockAcademyButton')}
                 </button>
+                {checkoutStatus === 'cancel' && (
+                  <p className="welcome-subtitle mt-2">{t('parentDashboard.checkoutCanceled')}</p>
+                )}
                 {academyUnlockErrorKey && <p className="quiz-error mt-2">{t(academyUnlockErrorKey)}</p>}
               </>
             )}

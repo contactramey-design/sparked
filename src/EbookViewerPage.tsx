@@ -1,9 +1,9 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { Link, Navigate, useParams, useSearchParams } from 'react-router-dom'
+import { Navigate, useParams, useSearchParams } from 'react-router-dom'
 import * as pdfjsLib from 'pdfjs-dist'
 import type { PDFDocumentProxy } from 'pdfjs-dist'
 import { books } from './books'
-import { getSafetyPassCheckoutSessionId } from './progress'
+import { getAcademyCheckoutSessionId, getEbookCheckoutSessionId } from './progress'
 import { useTranslation } from './contexts/LocaleContext'
 import { useSchoolShopHidden } from './hooks/useSchoolMode'
 import { Button } from '@/components/ui/button'
@@ -36,7 +36,10 @@ const EbookViewerPage: React.FC = () => {
 
   const effectiveEbookId = (ebookId || ebookIdFromQuery || '').toString().trim()
 
-  const checkoutSessionId = getSafetyPassCheckoutSessionId()
+  const checkoutSessionId = useMemo(() => {
+    if (!effectiveEbookId) return null
+    return getEbookCheckoutSessionId(effectiveEbookId) || getAcademyCheckoutSessionId()
+  }, [effectiveEbookId])
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
   const viewportContainerRef = useRef<HTMLDivElement | null>(null)
@@ -64,11 +67,6 @@ const EbookViewerPage: React.FC = () => {
 
     if (!effectiveEbookId) {
       setEntitlementErrorKey('ebookViewer.errors.missingEbookId')
-      return
-    }
-
-    // Subscription bundle is not a PDF in the reader — Parent view handles checkout.
-    if (books.find((b) => b.id === effectiveEbookId)?.kind === 'subscription_bundle') {
       return
     }
 
@@ -249,8 +247,6 @@ const EbookViewerPage: React.FC = () => {
     window.location.assign(downloadUrl)
   }
 
-  const bundle = books.find((b) => b.id === 'bundle') ?? null
-  const bundlePrice = bundle?.price ?? '$9.99/mo'
   const ebookTitle = ebook ? t(ebook.titleKey) : t('ebookViewer.readerTitle')
 
   const handlePrev = () => {
@@ -277,7 +273,7 @@ const EbookViewerPage: React.FC = () => {
     if (dx >= 60) handlePrev()
   }
 
-  async function startTrial() {
+  async function startAcademyCheckout() {
     if (!effectiveEbookId) return
 
     setEntitlementErrorKey(null)
@@ -286,7 +282,7 @@ const EbookViewerPage: React.FC = () => {
       const res = await fetch('/api/create-checkout-session', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ returnTo: `/ebook?ebookId=${effectiveEbookId}` }),
+        body: JSON.stringify({ returnTo: `/ebook?ebookId=${encodeURIComponent(effectiveEbookId)}` }),
       })
 
       const data = await res.json().catch(() => ({}))
@@ -299,36 +295,6 @@ const EbookViewerPage: React.FC = () => {
       setEntitlementErrorKey('ebookViewer.errors.checkoutFailed')
       setLoadingPdf(false)
     }
-  }
-
-  const subscriptionCatalog = effectiveEbookId
-    ? books.find((b) => b.id === effectiveEbookId && b.kind === 'subscription_bundle')
-    : null
-
-  if (subscriptionCatalog) {
-    return (
-      <AscentPageChrome
-        title={ebookTitle}
-        breadcrumb={[
-          { label: t('marketingPages.breadcrumbHome'), to: '/' },
-          { label: t('footer.shop'), to: '/shop' },
-          { label: ebookTitle },
-        ]}
-        contentMaxWidthClassName="max-w-2xl"
-      >
-        <div className="card ebook-subscription-card rounded-2xl border border-teal-100/80 p-6">
-          <p className="leading-relaxed text-slate-700">{t('ebookViewer.subscriptionCatalogBody')}</p>
-          <div className="mt-4 flex flex-wrap gap-3">
-            <Link to="/?view=parent" className="primary-button">
-              {t('ebookViewer.openParentToSubscribe')}
-            </Link>
-            <button type="button" className="secondary-button" onClick={() => void startTrial()}>
-              {t('ebookViewer.bundleUnlockButton', { price: bundlePrice })}
-            </button>
-          </div>
-        </div>
-      </AscentPageChrome>
-    )
   }
 
   if (entitlementErrorKey) {
@@ -346,7 +312,7 @@ const EbookViewerPage: React.FC = () => {
           <h3 className="m-0 font-heading text-lg text-teal-950">{t('ebookViewer.unlockToReadTitle')}</h3>
           <p>{t(entitlementErrorKey)}</p>
           <>
-            {ebook && ebook.id !== 'bundle' ? (
+            {ebook ? (
               <button
                 type="button"
                 className="primary-button"
@@ -375,14 +341,14 @@ const EbookViewerPage: React.FC = () => {
               >
                 {t('ebookViewer.buyForButton', { price: ebook.price })}
               </button>
-            ) : (
-              <button type="button" className="primary-button" onClick={() => void startTrial()}>
-                {t('ebookViewer.startTrialButton')}
-              </button>
-            )}
+            ) : null}
 
-            <button type="button" className="secondary-button mt-3" onClick={() => void startTrial()}>
-              {t('ebookViewer.bundleUnlockButton', { price: bundlePrice })}
+            <button
+              type="button"
+              className="secondary-button mt-3"
+              onClick={() => void startAcademyCheckout()}
+            >
+              {t('ebookViewer.subscribeAcademyButton')}
             </button>
             <p className="login-coppa-note" style={{ marginTop: '0.75rem' }}>
               {t('ebookViewer.afterUnlockNote')}

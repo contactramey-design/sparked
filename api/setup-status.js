@@ -4,6 +4,8 @@
  */
 import { checkElevenLabsApiKey } from './lib/checkElevenLabsKey.js'
 import { getSparkiServiceSecret, parseTtsAllowOrigins } from './lib/serviceAuth.js'
+import { isTutorCheckoutRequired } from './lib/tutorEntitlement.js'
+import { isHomeworkEntitlementBypassed } from './homework/lib/multipart.js'
 
 export default async function handler(req, res) {
   if (req.method !== 'GET') {
@@ -26,7 +28,7 @@ export default async function handler(req, res) {
   res.setHeader('Cache-Control', 'no-store, max-age=0')
   res.status(200).json({
     // Bump when setup-status shape changes — if missing in production, you are NOT on this deploy.
-    schemaVersion: 10,
+    schemaVersion: 14,
     /** Vercel injects these on deploy; use to confirm Production matches your latest Git push. */
     deployment: {
       environment: process.env.VERCEL_ENV ?? null,
@@ -35,9 +37,17 @@ export default async function handler(req, res) {
     // Homework Adventure: create adventure from image
     homeworkAdventure: {
       configured: Boolean(process.env.OPENAI_API_KEY?.trim()),
-      message: process.env.OPENAI_API_KEY?.trim()
-        ? 'OpenAI key set — Create adventure will work.'
-        : 'Add OPENAI_API_KEY in Vercel (and .env locally), then redeploy.',
+      /** Matches `api/homework/lib/multipart.js` — Production verifies Stripe session unless opted out. */
+      requireCheckoutForHomeworkApis: !isHomeworkEntitlementBypassed(),
+      videoPaused: process.env.HOMEWORK_ADVENTURE_PAUSED === 'true',
+      message: (() => {
+        if (process.env.HOMEWORK_ADVENTURE_PAUSED === 'true') {
+          return 'HOMEWORK_ADVENTURE_PAUSED=true — Homework Adventure Video APIs return 503 until you unset it.'
+        }
+        return process.env.OPENAI_API_KEY?.trim()
+          ? 'OpenAI key set — Create adventure will work.'
+          : 'Add OPENAI_API_KEY in Vercel (and .env locally), then redeploy.'
+      })(),
     },
     // Story scene stills (Flux via fal.ai) — POST /api/generate-visuals
     sceneArt: {
@@ -66,8 +76,8 @@ export default async function handler(req, res) {
     },
     // AI Tutor Academy: /ai-tutor, POST /api/tutor-chat, /api/liveavatar-session, /api/tts-stream
     aiTutor: {
-      /** When true, tutor UI and APIs require Stripe checkout session. Default: open (no paywall). */
-      requireCheckoutForTutor: process.env.AI_TUTOR_REQUIRE_CHECKOUT === 'true',
+      /** Effective gate for tutor chat (see `api/lib/tutorEntitlement.js`). */
+      requireCheckoutForTutor: isTutorCheckoutRequired(),
       openaiConfigured: Boolean(process.env.OPENAI_API_KEY?.trim()),
       /** @deprecated Use liveAvatar; HEYGEN_API_KEY still works as fallback API key for LiveAvatar token. */
       heygenStreamingTokenRouteLegacy: true,
@@ -104,6 +114,11 @@ export default async function handler(req, res) {
         }
       })(),
       elevenLabsForTts: Boolean(elevenKey),
+      tutorLeadCapture:
+        (Boolean(process.env.RESEND_API_KEY?.trim()) &&
+          Boolean(process.env.TUTOR_LEAD_NOTIFY_TO?.trim()) &&
+          Boolean(process.env.RESEND_FROM_EMAIL?.trim())) ||
+        Boolean(process.env.TUTOR_LEAD_WEBHOOK_URL?.trim()),
       message: !process.env.OPENAI_API_KEY?.trim()
         ? 'Add OPENAI_API_KEY for tutor chat (same as homework).'
         : !(process.env.LIVEAVATAR_API_KEY?.trim() || process.env.HEYGEN_API_KEY?.trim())
@@ -128,12 +143,12 @@ export default async function handler(req, res) {
             ? `ElevenLabs rejected this key (HTTP ${ttsKeyCheck.httpStatus ?? '?'}) — paste a fresh xi-api-key from elevenlabs.io → Developers/API keys. Remove quotes/spaces; use Production env on Vercel; Redeploy.`
             : 'Could not verify key (network).',
     },
-    // Stripe: paid bundle, ebooks, homework entitlement (optional for free school-only pilots)
+    // Stripe: Adventure Academy, per-ebook purchases, homework/tutor entitlement (optional for free school-only pilots)
     stripe: {
       configured: Boolean(process.env.STRIPE_SECRET_KEY?.trim()),
       academyPriceConfigured: Boolean(process.env.STRIPE_ACADEMY_PRICE_ID?.trim()),
       message: process.env.STRIPE_SECRET_KEY?.trim()
-        ? 'STRIPE_SECRET_KEY set — verify STRIPE_SAFETY_PASS_PRICE_ID, STRIPE_ACADEMY_PRICE_ID, ebook price IDs, and checkout URLs in Production before promising paid flows.'
+        ? 'STRIPE_SECRET_KEY set — verify STRIPE_ACADEMY_PRICE_ID, ebook price IDs, and checkout URLs in Production before promising paid flows.'
         : 'No STRIPE_SECRET_KEY — scope pilot as free-only or homework without paid entitlement until Stripe is configured.',
     },
     // Blob: used by Vercel cron (cleanup) and by Railway worker (upload)

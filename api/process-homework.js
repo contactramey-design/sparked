@@ -3,7 +3,7 @@
  * Prefer the split pipeline: /api/homework/analyze → explain → story (see HOMEWORK-GENERATOR.md).
  * Body: multipart/form-data with field "image" (file).
  * Optional fields: checkout_session_id (required in production) — must be a Stripe Checkout session
- * for Adventure Academy or legacy Safety Pass bundle (active or trialing subscription).
+ * for Adventure Academy (active or trialing subscription).
  * Dev: set ALLOW_UNAUTH_HOMEWORK=true to skip server-side entitlement (local only).
  * Returns: { title, subject, topic, steps } — homework-specific adventure JSON.
  * COPPA: Process image in memory only; do not store or log image bytes.
@@ -197,7 +197,7 @@ export default async function handler(req, res) {
         res.status(entitlement.status).json({
           error:
             entitlement.status === 403
-              ? 'Parent unlock required. Complete Safety Pass checkout, then try again.'
+              ? 'Parent unlock required. Complete Adventure Academy checkout, then try again.'
               : entitlement.message,
         })
         return

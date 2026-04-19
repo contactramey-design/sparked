@@ -3,7 +3,7 @@ import { useTranslation } from '@/contexts/LocaleContext'
 import { AscentPageChrome } from '@/design-system/ascent/AscentPageChrome'
 
 /**
- * Lightweight retention hub: deep-links to weekly, safety, homework, practice.
+ * Lightweight retention hub: deep-links to tutor, safety, homework, practice.
  * Full “daily quest” rotation can replace static links later (Phase 2).
  */
 export default function DailySparkQuestPage() {
@@ -22,8 +22,8 @@ export default function DailySparkQuestPage() {
         <p className="text-slate-700">{t('retention.dailyQuestLead')}</p>
         <ul className="m-0 list-none space-y-3 p-0">
           <li>
-            <Link to="/weekly" className="primary-button inline-block w-full py-3 text-center">
-              {t('retention.dailyQuestWeeklyCta')}
+            <Link to="/ai-tutor" className="primary-button inline-block w-full py-3 text-center">
+              {t('retention.dailyQuestTutorCta')}
             </Link>
           </li>
           <li>

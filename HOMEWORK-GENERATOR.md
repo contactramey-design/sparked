@@ -35,7 +35,7 @@ Feature lives under [`src/features/homework/`](src/features/homework/):
 
 Shared code: [`api/homework/lib/multipart.js`](api/homework/lib/multipart.js) (multipart + Stripe entitlement), [`openai.js`](api/homework/lib/openai.js), [`prompts.js`](api/homework/lib/prompts.js) (child-safety rules), **[`homeworkSchemas.js`](api/homework/lib/homeworkSchemas.js)** (Zod runtime contracts).
 
-**Entitlement:** Same as legacy homework: `verifyBundleCheckoutSession` unless `ALLOW_UNAUTH_HOMEWORK=true`. Multipart handlers accept `checkout_session_id`; JSON handlers accept `checkout_session_id` in body.
+**Entitlement:** Same as homework: `verifyHomeworkCheckoutSession` (Adventure Academy) unless `ALLOW_UNAUTH_HOMEWORK=true`. Multipart handlers accept `checkout_session_id`; JSON handlers accept `checkout_session_id` in body.
 
 **Legacy:** [`api/process-homework.js`](api/process-homework.js) remains for older clients/scripts (single-shot vision + 5-step adventure). New UI uses the split pipeline above.
 

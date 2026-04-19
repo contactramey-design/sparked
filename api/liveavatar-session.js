@@ -76,32 +76,15 @@ export default async function handler(req, res) {
     return
   }
 
-  /** Free preview: up to 3 LiveAvatar token requests without subscription (client sends completed starts count). */
-  const FREE_LIVEAVATAR_STARTS = 3
+  /** Live video always needs a verified Adventure Academy session (text chat may still use free preview turns). */
   if (process.env.ALLOW_UNAUTH_TUTOR !== 'true') {
     const paid = await verifyHomeworkCheckoutSession(checkoutSessionId)
     if (!paid.ok) {
-      const raw = body.live_avatar_free_starts_used
-      const parsed =
-        typeof raw === 'number' && Number.isFinite(raw)
-          ? raw
-          : typeof raw === 'string'
-            ? parseInt(raw.trim(), 10)
-            : NaN
-      if (!Number.isFinite(parsed) || parsed < 0) {
-        res.status(400).json({ error: 'Missing or invalid live_avatar_free_starts_used.' })
-        return
-      }
-      const used = Math.min(FREE_LIVEAVATAR_STARTS + 5, Math.max(0, Math.floor(parsed)))
-      if (used >= FREE_LIVEAVATAR_STARTS) {
-        res.status(403).json({
-          code: 'LIVEAVATAR_FREE_LIMIT',
-          error: 'LIVEAVATAR_FREE_LIMIT',
-          message:
-            'You have used your free live video tries. Ask a parent to subscribe to Adventure Academy to keep using the video tutor.',
-        })
-        return
-      }
+      res.status(403).json({
+        error:
+          'Live video tutor is included with Adventure Academy. Ask a parent to subscribe from the Parent dashboard, then try again.',
+      })
+      return
     }
   }
 

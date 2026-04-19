@@ -11,7 +11,7 @@ import { rateLimit } from './lib/rateLimit.js'
 const MAX_MESSAGES = 36
 const MAX_CONTENT = 6000
 const MODEL = 'gpt-4o'
-/** Free preview: max user turns without an active Adventure Academy / bundle subscription (server-enforced). */
+/** Free preview: max completed exchanges (count = user messages in thread) without Adventure Academy; 4th user message is rejected. */
 const FREE_TUTOR_USER_MESSAGES = 3
 
 function normalizeMessages(raw) {
@@ -88,7 +88,7 @@ export default async function handler(req, res) {
         code: 'TUTOR_FREE_LIMIT',
         error: 'TUTOR_FREE_LIMIT',
         message:
-          'You have used your free tutor questions. Ask a parent to subscribe to Adventure Academy to keep chatting.',
+          'You have used your 3 free tutor replies. Ask a parent to subscribe to Adventure Academy to keep chatting.',
       })
       return
     }

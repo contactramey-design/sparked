@@ -5,6 +5,7 @@
  */
 import { authorizeTtsRequest } from './lib/serviceAuth.js'
 import { requireHomeworkEntitlement } from './homework/lib/multipart.js'
+import { isHomeworkAdventurePaused } from './lib/homeworkAdventurePaused.js'
 
 const ELEVENLABS_BASE = 'https://api.elevenlabs.io/v1/text-to-speech'
 const MAX_TEXT_LENGTH = 2500
@@ -34,6 +35,14 @@ export default async function handler(req, res) {
   const gate = authorizeTtsRequest(req)
   if (!gate.ok) {
     res.status(gate.status).json({ error: gate.message })
+    return
+  }
+
+  if (isHomeworkAdventurePaused()) {
+    res.status(503).json({
+      code: 'HOMEWORK_ADVENTURE_PAUSED',
+      error: 'Homework Adventure video is temporarily paused.',
+    })
     return
   }
 

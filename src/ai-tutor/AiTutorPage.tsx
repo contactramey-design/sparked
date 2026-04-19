@@ -8,6 +8,7 @@ export default function AiTutorPage() {
   const { t } = useTranslation()
   const [tutorAllowUnauth, setTutorAllowUnauth] = useState(false)
   const [tutorRequireCheckout, setTutorRequireCheckout] = useState(false)
+  const [tutorLeadCaptureEnabled, setTutorLeadCaptureEnabled] = useState(false)
   const [checkoutLoading, setCheckoutLoading] = useState(false)
   const [checkoutError, setCheckoutError] = useState<string | null>(null)
 
@@ -15,12 +16,19 @@ export default function AiTutorPage() {
     let cancelled = false
     fetch('/api/config')
       .then((r) => r.json())
-      .then((data: { tutorAllowUnauth?: boolean; aiTutorRequireCheckout?: boolean }) => {
-        if (!cancelled) {
-          setTutorAllowUnauth(Boolean(data.tutorAllowUnauth))
-          setTutorRequireCheckout(Boolean(data.aiTutorRequireCheckout))
-        }
-      })
+      .then(
+        (data: {
+          tutorAllowUnauth?: boolean
+          aiTutorRequireCheckout?: boolean
+          tutorLeadCaptureEnabled?: boolean
+        }) => {
+          if (!cancelled) {
+            setTutorAllowUnauth(Boolean(data.tutorAllowUnauth))
+            setTutorRequireCheckout(Boolean(data.aiTutorRequireCheckout))
+            setTutorLeadCaptureEnabled(Boolean(data.tutorLeadCaptureEnabled))
+          }
+        },
+      )
       .catch(() => {})
     return () => {
       cancelled = true
@@ -98,7 +106,7 @@ export default function AiTutorPage() {
     return (
       <div className="mx-auto max-w-xl space-y-6 rounded-2xl border border-teal-100 bg-white p-6 shadow-sm">
         <h2 className="font-heading text-xl text-slate-900">{t('aiTutor.paywallTitle')}</h2>
-        <p className="text-slate-700">{t('aiTutor.paywallDemoBody')}</p>
+        <p className="text-slate-700">{t('aiTutor.paywallBody')}</p>
         <div className="overflow-hidden rounded-2xl border border-slate-200 bg-slate-50">
           <div className="aspect-video w-full bg-gradient-to-br from-teal-50 via-white to-sky-50" />
         </div>
@@ -126,6 +134,10 @@ export default function AiTutorPage() {
   const hasActiveSubscription = Boolean(tutorAllowUnauth || checkoutSessionId || hasAcademy)
 
   return (
-    <InteractiveTutor checkoutSessionId={checkoutSessionId} hasActiveSubscription={hasActiveSubscription} />
+    <InteractiveTutor
+      checkoutSessionId={checkoutSessionId}
+      hasActiveSubscription={hasActiveSubscription}
+      tutorLeadCaptureEnabled={tutorLeadCaptureEnabled}
+    />
   )
 }

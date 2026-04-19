@@ -1,8 +1,8 @@
 // Ebook inventory. PDF files are stored in `private/ebooks/<ebookId>.pdf` and served via
 // the protected `/api/download-ebook` endpoint.
 
-/** PDF ebooks open in the in-app reader; subscription opens Parent / checkout flow. */
-export type BookCatalogKind = 'pdf_ebook' | 'subscription_bundle'
+/** PDF ebooks open in the in-app reader; paid access is per-ebook checkout or Adventure Academy. */
+export type BookCatalogKind = 'pdf_ebook'
 
 export interface BookConfig {
   id: string
@@ -82,15 +82,4 @@ export const books: BookConfig[] = [
     url: 'https://example.com/ebook-6',
     coverSrc: '/reddit ebook cover.png',
   },
-  {
-    id: 'bundle',
-    kind: 'subscription_bundle',
-    titleKey: 'books.bundle.title',
-    blurbKey: 'books.bundle.blurb',
-    price: '$9.99/mo',
-    storeLabelKey: 'books.bundle.storeLabel',
-    url: 'https://example.com/bundle',
-    coverSrc: '/bundlecover.webp',
-  },
 ]
-

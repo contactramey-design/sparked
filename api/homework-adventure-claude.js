@@ -4,10 +4,19 @@
  * Body: same shape as Anthropic expects, plus optional checkout_session_id (stripped before upstream).
  */
 import { requireHomeworkEntitlement } from './homework/lib/multipart.js'
+import { isHomeworkAdventurePaused } from './lib/homeworkAdventurePaused.js'
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     res.status(405).json({ error: 'Method not allowed' })
+    return
+  }
+
+  if (isHomeworkAdventurePaused()) {
+    res.status(503).json({
+      code: 'HOMEWORK_ADVENTURE_PAUSED',
+      error: 'Homework Adventure video is temporarily paused.',
+    })
     return
   }
 

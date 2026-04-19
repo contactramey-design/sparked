@@ -8,5 +8,7 @@ export const TUTOR_VOICE_CONSENT_KEY = 'sparki_ai_tutor_voice_consent_v1'
 export const TUTOR_MESSAGES_KEY = 'sparki_ai_tutor_messages_v1'
 /** localStorage — lifetime free tutor replies used without Adventure Academy (not cleared with chat). */
 export const TUTOR_FREE_TURNS_LOCAL_KEY = 'sparki_tutor_free_turns_used_v1'
-/** localStorage — successful LiveAvatar session starts without subscription (separate from text free turns). */
-export const TUTOR_LIVEAVATAR_FREE_STARTS_KEY = 'sparki_liveavatar_free_starts_used_v1'
+/** localStorage — user already claimed the one-time “email for +3 messages” tutor bonus on this device. */
+export const TUTOR_LEAD_BONUS_CLAIMED_KEY = 'sparki_tutor_lead_bonus_claimed_v1'
+/** sessionStorage — lead modal dismissed (“Not now”) until the tab session ends. */
+export const TUTOR_LEAD_MODAL_DISMISSED_SESSION_KEY = 'sparki_tutor_lead_modal_dismissed_v1'

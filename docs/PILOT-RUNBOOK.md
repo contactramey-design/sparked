@@ -46,7 +46,7 @@ Check only what you have verified end-to-end:
 
 ## What is **out of scope** unless tested
 
-- Paid checkout / Safety Pass (unless Stripe tested).
+- Paid checkout / Adventure Academy (unless Stripe tested).
 - Offline-first guarantees (PWA caches; network still needed for APIs).
 - Custom per-unit MP4s (may use placeholder videos until assets exist).
 

@@ -3,7 +3,7 @@ import { Link, useLocation } from 'react-router-dom'
 import { useTranslation } from '@/contexts/LocaleContext'
 import { cn } from '@/lib/utils'
 
-type HubKey = 'home' | 'tracks' | 'weekly' | 'daily' | 'homework' | 'tutor' | 'practice'
+type HubKey = 'home' | 'tracks' | 'daily' | 'homework' | 'tutor' | 'practice'
 
 function activeHub(pathname: string, search: string): HubKey | null {
   const parentHome = new URLSearchParams(search).get('view') === 'parent'
@@ -16,7 +16,6 @@ function activeHub(pathname: string, search: string): HubKey | null {
   ) {
     return 'tracks'
   }
-  if (pathname.startsWith('/weekly')) return 'weekly'
   if (pathname.startsWith('/daily')) return 'daily'
   if (pathname.startsWith('/homework')) return 'homework'
   if (pathname.startsWith('/ai-tutor')) return 'tutor'
@@ -32,7 +31,6 @@ const primaryLinks: { to: string; hub: HubKey; labelKey: string }[] = [
 
 const moreLinks: { to: string; hub: HubKey; labelKey: string }[] = [
   { to: '/', hub: 'home', labelKey: 'kidWayfinding.home' },
-  { to: '/weekly', hub: 'weekly', labelKey: 'kidWayfinding.weekly' },
   { to: '/daily', hub: 'daily', labelKey: 'kidWayfinding.daily' },
   { to: '/practice', hub: 'practice', labelKey: 'kidWayfinding.practice' },
 ]
@@ -53,7 +51,7 @@ function chipClass(isCurrent: boolean) {
 }
 
 /**
- * Compact kid hubs: three primary shortcuts + “More” for home, weekly, daily, practice.
+ * Compact kid hubs: three primary shortcuts + “More” for home, daily, practice.
  */
 export function KidWayfindingBar({ className }: Props) {
   const { t } = useTranslation()

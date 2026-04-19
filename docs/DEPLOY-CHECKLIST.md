@@ -5,7 +5,7 @@ Use this when configuring **Production** (and Preview if you need full flows the
 ## Verify after deploy
 
 1. Open **`GET /api/setup-status`** on your production origin (no auth). It reports OpenAI, FAL, video worker, ElevenLabs, Stripe, Blob, cron, service-auth, and **AI Tutor** (HeyGen + OpenAI) status.
-2. Open **`GET /api/config`** for client flags (`videoFeatureEnabled`, `homeworkAdventureConfigured`, `homeworkAllowUnauth`, `tutorAllowUnauth`).
+2. Open **`GET /api/config`** for client flags (`videoFeatureEnabled`, `homeworkAdventureConfigured`, `homeworkAdventurePaused`, `homeworkAllowUnauth`, `tutorAllowUnauth`, `aiTutorRequireCheckout`).
 
 ## Core homework / AI
 
@@ -14,13 +14,12 @@ Use this when configuring **Production** (and Preview if you need full flows the
 | `OPENAI_API_KEY` | Required for homework analyze/explain/story, process-homework, school weekly units. |
 | `ALLOW_UNAUTH_HOMEWORK` | Dev/staging only: skips Stripe for homework APIs. **Do not** set on public production without other gates. |
 
-## Stripe (Safety Pass, Adventure Academy, ebooks)
+## Stripe (Adventure Academy, ebooks)
 
 | Variable | Notes |
 |----------|--------|
 | `STRIPE_SECRET_KEY` | Live or test key per environment. |
-| `STRIPE_SAFETY_PASS_PRICE_ID` | Legacy bundle / Safety Pass checkout (`product: bundle` in `POST /api/create-checkout-session`). |
-| `STRIPE_ACADEMY_PRICE_ID` | Adventure Academy subscription (`product: academy`); homework APIs accept checkout sessions with `entitlement_type` `bundle` **or** `academy`. |
+| `STRIPE_ACADEMY_PRICE_ID` | Adventure Academy subscription; `POST /api/create-checkout-session` always creates Academy checkout with `entitlement_type` `academy`. Homework/tutor/PDF subscriber downloads verify this session. |
 | Checkout success/cancel URLs | Must allow `checkout_session_id` + `entitlement_type` query params (see `.env.example`). |
 | `STRIPE_EBOOK_*_PRICE_ID` | One per ebook product. |
 
@@ -47,8 +46,12 @@ Use this when configuring **Production** (and Preview if you need full flows the
 | `HEYGEN_API_KEY` | Optional fallback API key if `LIVEAVATAR_API_KEY` unset. |
 | `ELEVENLABS_API_KEY` | Same as Listen — needed for voice playback when not using avatar speech, and for `/api/tts-stream`. |
 | `ALLOW_UNAUTH_TUTOR` | Dev/staging only: skips Stripe on tutor APIs. **Do not** enable on public production. |
+| `AI_TUTOR_REQUIRE_CHECKOUT` | **Unset/false (typical for ads):** visitors can open `/ai-tutor` and use a small **free text preview**; **live video** still requires a verified Adventure Academy session server-side. **`true`:** hard paywall on `/ai-tutor` and no free text without checkout. |
+| `HOMEWORK_ADVENTURE_PAUSED` | Set to **`true`** to turn off Homework Adventure Video (Claude + TTS + worker) with a friendly “paused” UI while you market other features. |
+| `RESEND_API_KEY` + `RESEND_FROM_EMAIL` + `TUTOR_LEAD_NOTIFY_TO` | Optional: **`POST /api/tutor-lead`** emails you when a parent submits from the “3 more free messages” modal (`GET /api/config` → `tutorLeadCaptureEnabled`). |
+| `TUTOR_LEAD_WEBHOOK_URL` | Optional: same lead POST as JSON (Zapier/Make). Optional `TUTOR_LEAD_WEBHOOK_SECRET` → `Authorization: Bearer …`. |
 
-Entitlement matches homework: active **Adventure Academy** (or legacy bundle) checkout session, unless `ALLOW_UNAUTH_TUTOR=true`.
+Entitlement: **`POST /api/tutor-chat`** uses the same Adventure Academy checkout session for paid unlimited use; unpaid users are limited to a few exchanges unless `ALLOW_UNAUTH_TUTOR=true`. **`POST /api/liveavatar-session`** always requires a verified paid session when `ALLOW_UNAUTH_TUTOR` is not set.
 
 ## Optional scene art (homework)
 

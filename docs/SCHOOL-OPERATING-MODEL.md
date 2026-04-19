@@ -8,8 +8,8 @@ How the school pilot is meant to work for **teachers**, **students**, and **fami
 |----------|-------------|----------------|
 | **Teacher** | Create class, share code, assign weekly PDF unit, see who is stuck | [`/teacher/dashboard`](../src/TeacherDashboardPage.tsx), [`/teacher/generator`](../src/TeacherWeeklyGeneratorPage.tsx) |
 | **Student** | Join once, do this week’s work + optional subject practice | School Mode → [`/schools`](../src/SchoolsPage.tsx), weekly track, subject lessons |
-| **Family (school)** | Understand class setup, teacher note, links—without consumer Safety Pass noise | [`/schools/parent`](../src/SchoolParentPage.tsx) |
-| **Family (home)** | Safety tracks, homework, Safety Pass, sparkles | [`/?view=parent`](../src/ParentDashboard.tsx) |
+| **Family (school)** | Understand class setup, teacher note, links—without consumer checkout noise | [`/schools/parent`](../src/SchoolParentPage.tsx) |
+| **Family (home)** | Safety tracks, homework, billing, sparkles | [`/?view=parent`](../src/ParentDashboard.tsx) |
 
 ## Data truth (what syncs where)
 

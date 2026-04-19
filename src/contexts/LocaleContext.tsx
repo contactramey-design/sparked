@@ -9,9 +9,6 @@ import { mergeCurriculumBands } from '../locales/mergeCurriculumBands'
 import { mergeLocaleWithFallback } from '../locales/mergeMessages'
 import aiCodingGamesEn from '../locales/aiCodingGames-en.json'
 import aiCodingGamesEs from '../locales/aiCodingGames-es.json'
-import weeklyEn from '../locales/weekly-en.json'
-import weeklyEs from '../locales/weekly-es.json'
-
 const STORAGE_KEY = 'spark_academy_locale'
 
 export type Locale = 'en' | 'es'
@@ -23,7 +20,6 @@ const enFull = {
     curriculumBandPluginEn as { units?: Record<string, Record<string, unknown>> },
   ),
   aiCodingGames: aiCodingGamesEn as Record<string, unknown>,
-  weekly: weeklyEn as Record<string, unknown>,
 } as Record<string, unknown>
 const esFull = {
   ...es,
@@ -32,7 +28,6 @@ const esFull = {
     curriculumBandPluginEs as { units?: Record<string, Record<string, unknown>> },
   ),
   aiCodingGames: aiCodingGamesEs as Record<string, unknown>,
-  weekly: weeklyEs as Record<string, unknown>,
 } as Record<string, unknown>
 /** Spanish inherits English for any missing key (nested). */
 const esFullMerged = mergeLocaleWithFallback(enFull, esFull) as Record<string, unknown>

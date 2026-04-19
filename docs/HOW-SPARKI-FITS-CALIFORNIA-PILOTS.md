@@ -7,7 +7,7 @@ Short reference for curriculum leads, principals, and IT when discussing **suppl
 | Need | Where |
 |------|--------|
 | **School parent hub** (class join, weekly track, subject tracks) | **`/schools/parent`** — also **School hub** card “Open school parent hub”, and **Academy → Parent hub — school & class** when School Mode is on. |
-| **Family parent dashboard** (safety tracks, Safety Pass, sparkles, unit table) | **`/?view=parent`** or **`/parent`** (redirects by School Mode: consumer home parent view vs `/schools/parent`). Footer and Academy → Grown-ups use **`/parent`**. Shop subscription link still uses `/?view=parent` for checkout context. With kid lock: footer **Grown-up?** → `/parent`. |
+| **Family parent dashboard** (safety tracks, billing, sparkles, unit table) | **`/?view=parent`** or **`/parent`** (redirects by School Mode: consumer home parent view vs `/schools/parent`). Footer and Academy → Grown-ups use **`/parent`**. Shop subscription link still uses `/?view=parent` for checkout context. With kid lock: footer **Grown-up?** → `/parent`. |
 | **Teacher roster & tracking** (anonymous codes, CSV) | **Academy → Teacher sign in** (school theme: **Academy → Teacher tools → Teacher dashboard**) → tab **Roster & tracking**. Requires Supabase + teacher role. |
 | **Class join** (students) | **School Mode** on → **School hub** → enter class + student label. |
 

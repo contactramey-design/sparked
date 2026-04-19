@@ -6,6 +6,7 @@
  * Calls video worker with optional SPARKI_SERVICE_SECRET (Bearer) when set.
  */
 import { requireHomeworkEntitlement } from './homework/lib/multipart.js'
+import { isHomeworkAdventurePaused } from './lib/homeworkAdventurePaused.js'
 import { bearerAuthHeaders } from './lib/serviceAuth.js'
 export const config = {
   api: { responseLimit: false },
@@ -19,6 +20,14 @@ export default async function handler(req, res) {
 
   if (process.env.VIDEO_FEATURE_ENABLED !== 'true') {
     res.status(403).json({ error: 'Video generation is not available.' })
+    return
+  }
+
+  if (isHomeworkAdventurePaused()) {
+    res.status(503).json({
+      code: 'HOMEWORK_ADVENTURE_PAUSED',
+      error: 'Homework Adventure video is temporarily paused.',
+    })
     return
   }
 

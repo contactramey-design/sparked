@@ -54,7 +54,6 @@ import SchoolSubjectTrackPage from './school/subjects/SchoolSubjectTrackPage'
 import SchoolSubjectLessonPage from './school/subjects/SchoolSubjectLessonPage'
 import { SchoolAlignmentHubPage, SchoolAlignmentSubjectPage } from './school/subjects/SchoolAlignmentPages'
 import SchoolMathLegacyRedirect from './school/subjects/SchoolMathLegacyRedirect'
-import WeeklyAdventurePage from './WeeklyAdventurePage'
 import DailySparkQuestPage from './DailySparkQuestPage'
 import './App.css'
 
@@ -130,7 +129,7 @@ function AppShell() {
               </ProtectedRoute>
             }
           />
-          <Route path="/weekly" element={<WeeklyAdventurePage />} />
+          <Route path="/weekly" element={<Navigate to="/homework" replace />} />
           <Route path="/daily" element={<DailySparkQuestPage />} />
           <Route path="/tracks" element={<TrackListPage />} />
           <Route path="/track/:trackId" element={<TrackPage />} />

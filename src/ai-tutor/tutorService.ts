@@ -1,7 +1,8 @@
 import type { AgeBandId } from '@/ageBand'
 import {
   TUTOR_FREE_TURNS_LOCAL_KEY,
-  TUTOR_LIVEAVATAR_FREE_STARTS_KEY,
+  TUTOR_LEAD_BONUS_CLAIMED_KEY,
+  TUTOR_LEAD_MODAL_DISMISSED_SESSION_KEY,
   TUTOR_MESSAGES_KEY,
   TUTOR_STATE_CHANGED_EVENT,
   TUTOR_STATE_KEY,
@@ -87,7 +88,7 @@ export function saveTutorMessages(messages: ChatMessage[]) {
 
 export const FREE_TUTOR_CAP = 3
 
-/** Successful tutor replies without subscription (persists across “clear chat”). */
+/** Count of completed tutor exchanges without subscription (each assistant reply after you send = +1; persists across “clear chat”). */
 export function readTutorFreeTurnsUsed(): number {
   try {
     const raw = localStorage.getItem(TUTOR_FREE_TURNS_LOCAL_KEY)
@@ -100,30 +101,67 @@ export function readTutorFreeTurnsUsed(): number {
 
 export function bumpTutorFreeTurnsUsed(): void {
   try {
-    const next = Math.min(FREE_TUTOR_CAP + 2, readTutorFreeTurnsUsed() + 1)
+    const next = Math.min(FREE_TUTOR_CAP, readTutorFreeTurnsUsed() + 1)
     localStorage.setItem(TUTOR_FREE_TURNS_LOCAL_KEY, String(next))
   } catch {
     /* ignore */
   }
 }
 
-/** LiveAvatar session starts without subscription (independent from text chat free turns). */
-export function readLiveAvatarFreeStartsUsed(): number {
+export function hasTutorLeadBonusClaimed(): boolean {
   try {
-    const raw = localStorage.getItem(TUTOR_LIVEAVATAR_FREE_STARTS_KEY)
-    const n = raw ? parseInt(raw, 10) : 0
-    return Number.isFinite(n) && n > 0 ? n : 0
+    return localStorage.getItem(TUTOR_LEAD_BONUS_CLAIMED_KEY) === '1'
   } catch {
-    return 0
+    return false
   }
 }
 
-export function bumpLiveAvatarFreeStartsUsed(): void {
+export function markTutorLeadBonusClaimed(): void {
   try {
-    const next = Math.min(FREE_TUTOR_CAP + 2, readLiveAvatarFreeStartsUsed() + 1)
-    localStorage.setItem(TUTOR_LIVEAVATAR_FREE_STARTS_KEY, String(next))
+    localStorage.setItem(TUTOR_LEAD_BONUS_CLAIMED_KEY, '1')
   } catch {
     /* ignore */
+  }
+}
+
+/** Clears free-turn counter so the user gets another FREE_TUTOR_CAP exchanges (new chat avoids server thread limit). */
+export function resetTutorFreeTurnsAfterLeadBonus(): void {
+  try {
+    localStorage.removeItem(TUTOR_FREE_TURNS_LOCAL_KEY)
+  } catch {
+    /* ignore */
+  }
+}
+
+export function readTutorLeadModalDismissedThisSession(): boolean {
+  try {
+    return sessionStorage.getItem(TUTOR_LEAD_MODAL_DISMISSED_SESSION_KEY) === '1'
+  } catch {
+    return false
+  }
+}
+
+export function dismissTutorLeadModalForSession(): void {
+  try {
+    sessionStorage.setItem(TUTOR_LEAD_MODAL_DISMISSED_SESSION_KEY, '1')
+  } catch {
+    /* ignore */
+  }
+}
+
+export async function postTutorLeadEmail(email: string, locale: 'en' | 'es'): Promise<void> {
+  const res = await fetch('/api/tutor-lead', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email: email.trim(), locale, website: '' }),
+  })
+  const data = (await res.json().catch(() => ({}))) as { error?: string; message?: string; code?: string }
+  if (!res.ok) {
+    const msg =
+      (typeof data.error === 'string' && data.error) ||
+      (typeof data.message === 'string' && data.message) ||
+      'Could not save email'
+    throw new Error(msg)
   }
 }
 
@@ -170,18 +208,13 @@ export async function postTutorChat(params: {
 }
 
 /** LiveAvatar: short-lived session token for @heygen/liveavatar-web-sdk (server from POST /api/liveavatar-session). */
-export async function fetchLiveAvatarSession(
-  checkoutSessionId: string | null,
-  locale: 'en' | 'es' = 'en',
-  liveAvatarFreeStartsUsed = 0,
-) {
+export async function fetchLiveAvatarSession(checkoutSessionId: string | null, locale: 'en' | 'es' = 'en') {
   const res = await fetch('/api/liveavatar-session', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       checkout_session_id: checkoutSessionId || '',
       locale: locale === 'es' ? 'es' : 'en',
-      live_avatar_free_starts_used: liveAvatarFreeStartsUsed,
     }),
   })
   const data = (await res.json().catch(() => ({}))) as {
