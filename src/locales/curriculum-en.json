@@ -29,7 +29,7 @@
     },
     "social-safety": {
       "title": "Social Media Safety & Kindness",
-      "description": "SpArki helps you practice safe watching, kind comments, and healthy screen time."
+      "description": "SpArki helps you practice safe watching, kind comments, healthy screen time, and 2026 topics like AI-made media, privacy, and phishing-style tricks — always with a grown-up in the loop."
     },
     "early-foundations": {
       "title": "Sparki — Foundational Learning",
@@ -96,6 +96,7 @@
       "summary": "SpArki shows friendly examples of AI in schools, farms, and hospitals, and talks about when AI might be wrong.",
       "contentBlocks": [
         "Story: AI helps sort mail, suggest songs, and translate languages.",
+        "2026 note: Some pictures, voices, and videos online are made by AI — they can look real even when they are not.",
         "Pause: Think of one place you have seen AI (even if you did not know it yet)."
       ],
       "activity": {
@@ -238,6 +239,8 @@
         "Story: A classmate wants to post a photo of the whole class. SpArki helps them ask a grown-up before sharing.",
         "Rule: Keep your account private so only people you and a grown-up know can follow you.",
         "Rule: Never put your full name, school, or address in your bio.",
+        "AI media: Filters and “perfect” faces may be AI — compare to real life and talk with a grown-up about what is healthy to believe.",
+        "Privacy: Turn off location tags on posts when a grown-up says so; maps can reveal where you hang out.",
         "Pause: Think of one grown-up you can ask if you see a strange message online."
       ],
       "activity": {
@@ -284,6 +287,7 @@
         "Myth-buster: Snaps can be screenshotted or saved, so treat them like any other picture.",
         "Rule: Never send pictures you would not want a teacher or grown-up to see.",
         "Feelings: It is okay to break a streak if you need a break or feel uncomfortable.",
+        "Privacy: Location stickers and “quick add” can expose more than you think — let a grown-up help you choose safe settings.",
         "Pause: Think of one safe snap you could send, like a pet or a drawing."
       ],
       "activity": {
@@ -305,6 +309,7 @@
         "Rule: Use in-game safety settings and let a grown-up help set them up.",
         "Safety: Never share your real name, age, school, or address in chat.",
         "Boundary: You never have to join voice chat or private games with strangers.",
+        "AI & UGC: Player-made worlds and chatbots in games can push scams or creepy links — treat unknown links like “red light” until a grown-up checks.",
         "Pause: Practice what you would do if someone in a game makes you feel weird or scared."
       ],
       "activity": {
@@ -326,6 +331,7 @@
         "Rule: Only use voice chat with people you and a grown-up know.",
         "Safety: You can mute or leave any time a conversation feels bad.",
         "Kindness: Teasing that hurts is not okay, even if it is \"just a game.\"",
+        "Deepfakes (Crew): Voice or video that copies a real person can be faked — verify anything urgent through a second channel with a grown-up.",
         "Pause: Practice a sentence you could say to a grown-up if someone is yelling at you in a game."
       ],
       "activity": {
@@ -347,6 +353,7 @@
         "Idea: Anyone can post online, so not everything you read is true or kind.",
         "Rule: Stick to kid-friendly spaces a grown-up has checked first.",
         "Safety: Never click strange links or messages that promise prizes.",
+        "AI text: Bots can write convincing answers — cross-check important facts with trusted sites or a grown-up.",
         "Pause: Practice saying \"Can you check this with me?\" to a grown-up when you are unsure."
       ],
       "activity": {

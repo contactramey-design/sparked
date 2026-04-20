@@ -29,7 +29,7 @@
     },
     "social-safety": {
       "title": "Seguridad en redes sociales y amabilidad",
-      "description": "SpArki te ayuda a practicar el uso seguro de pantallas, comentarios amables y un tiempo de pantalla saludable."
+      "description": "SpArki te ayuda a practicar el uso seguro de pantallas, comentarios amables, tiempo de pantalla saludable y temas de 2026 como medios hechos con IA, privacidad y trampas tipo estafa — siempre con un adulto cerca."
     },
     "early-foundations": {
       "title": "Sparki — Aprendizaje fundamental",
@@ -96,6 +96,7 @@
       "summary": "SpArki muestra ejemplos amigables de la IA en escuelas, granjas y hospitales, y habla de cuándo la IA puede equivocarse.",
       "contentBlocks": [
         "Historia: La IA ayuda a ordenar el correo, sugerir canciones y traducir idiomas.",
+        "Nota 2026: Algunas imágenes, voces y videos en línea los hace la IA — pueden parecer reales aunque no lo sean.",
         "Pausa: Piensa en un lugar donde hayas visto la IA (aunque no lo supieras aún)."
       ],
       "activity": {
@@ -238,6 +239,8 @@
         "Historia: Un compañero quiere publicar una foto de toda la clase. SpArki les ayuda a preguntar a un adulto antes de compartir.",
         "Regla: Mantén tu cuenta privada para que solo las personas que tú y un adulto conocen puedan seguirte.",
         "Regla: Nunca pongas tu nombre completo, escuela o dirección en tu biografía.",
+        "Medios con IA: Los filtros y caras “perfectas” pueden ser IA — compara con la vida real y habla con un adulto sobre qué es saludable creer.",
+        "Privacidad: Apaga etiquetas de ubicación en publicaciones cuando un adulto lo diga; los mapas pueden mostrar dónde pasas el tiempo.",
         "Pausa: Piensa en un adulto al que puedas preguntar si ves un mensaje extraño en línea."
       ],
       "activity": {
@@ -263,6 +266,8 @@
         "Regla: Solo publica videos con el permiso de un adulto.",
         "Seguridad: Desactiva \"todos\" para que solo amigos que tú y un adulto conocen puedan ver tus videos.",
         "Amabilidad: Nunca tienes que responder a comentarios groseros. Está bien bloquear y reportar.",
+        "Video con IA: Algunos clips parecen reales pero son generados — si algo se siente “demasiado loco para ser verdad”, pausa y consulta a un adulto.",
+        "Trampas tipo estafa: robux/V-bucks gratis o premios “haz clic” suelen ser estafas — no toques antes de que un adulto revise.",
         "Pausa: Practica qué le dirías a un adulto si ves algo que te hace sentir mal en línea."
       ],
       "activity": {
@@ -284,6 +289,7 @@
         "Desmitificador: Los snaps pueden ser capturados o guardados, así que trátalos como cualquier otra foto.",
         "Regla: Nunca envíes fotos que no querrías que un profesor o adulto viera.",
         "Sentimientos: Está bien romper una racha si necesitas un descanso o te sientes incómodo.",
+        "Privacidad: Las pegatinas de ubicación y “agregar rápido” pueden enseñar más de lo que crees — pide ayuda a un adulto para ajustes seguros.",
         "Pausa: Piensa en un snap seguro que podrías enviar, como una mascota o un dibujo."
       ],
       "activity": {
@@ -305,6 +311,7 @@
         "Regla: Usa la configuración de seguridad del juego y deja que un adulto te ayude a configurarla.",
         "Seguridad: Nunca compartas tu nombre real, edad, escuela o dirección en el chat.",
         "Límite: Nunca tienes que unirte al chat de voz o juegos privados con desconocidos.",
+        "IA y contenido de usuarios: Mundos hechos por jugadores y chatbots pueden empujar estafas o enlaces raros — trata enlaces desconocidos como “luz roja” hasta que un adulto revise.",
         "Pausa: Practica qué harías si alguien en un juego te hace sentir raro o asustado."
       ],
       "activity": {
@@ -326,6 +333,7 @@
         "Regla: Solo usa el chat de voz con personas que tú y un adulto conocen.",
         "Seguridad: Puedes silenciar o irte cuando una conversación se sienta mal.",
         "Amabilidad: Las burlas que lastiman no están bien, aunque sea \"solo un juego\".",
+        "Deepfakes (Crew): La voz o el video que copia a una persona real puede ser falso — verifica lo urgente por un segundo canal con un adulto.",
         "Pausa: Practica una oración que podrías decirle a un adulto si alguien te grita en un juego."
       ],
       "activity": {
@@ -347,6 +355,7 @@
         "Idea: Cualquiera puede publicar en línea, así que no todo lo que lees es verdadero o amable.",
         "Regla: Quédate en espacios aptos para niños que un adulto haya revisado primero.",
         "Seguridad: Nunca hagas clic en enlaces o mensajes extraños que prometan premios.",
+        "Texto con IA: Los bots pueden escribir respuestas convincentes — contrasta datos importantes con sitios de confianza o un adulto.",
         "Pausa: Practica decir \"¿Puedes revisar esto conmigo?\" a un adulto cuando no estés seguro."
       ],
       "activity": {

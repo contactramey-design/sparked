@@ -251,6 +251,8 @@ export async function postTutorChat(params: {
   clientSessionId?: string
   accessToken?: string | null
   homeworkQuest?: string
+  /** Server-resolved curriculum pack slug (allowlist). */
+  tutorFocusSlug?: string
 }): Promise<TutorChatResult> {
   const stateName = stateNameFromCode(params.stateCode || 'CA')
   const res = await fetch('/api/tutor-chat', {
@@ -266,6 +268,7 @@ export async function postTutorChat(params: {
       client_session_id: params.clientSessionId || readOrCreateTutorClientSessionId(),
       access_token: params.accessToken || '',
       homework_quest: params.homeworkQuest || '',
+      tutor_focus_slug: params.tutorFocusSlug || '',
     }),
   })
   const data = (await res.json().catch(() => ({}))) as {

@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
+import { RefreshDashboardButton } from "@/components/refresh-dashboard-button";
 
 type TutorSessionRow = {
   created_at: string;
@@ -30,11 +31,14 @@ export default async function DashboardPage() {
 
   return (
     <div className="space-y-8">
-      <div>
-        <h1 className="text-2xl font-bold text-slate-900">Parent dashboard</h1>
-        <p className="mt-2 text-slate-600">
-          Overview of progress and account settings will appear here.
-        </p>
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+        <div>
+          <h1 className="text-2xl font-bold text-slate-900">Parent dashboard</h1>
+          <p className="mt-2 text-slate-600">
+            Session summaries from the legacy consumer AI Tutor appear below when Supabase telemetry is enabled on that deployment.
+          </p>
+        </div>
+        {user ? <RefreshDashboardButton /> : null}
       </div>
 
       <section className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
@@ -49,8 +53,11 @@ export default async function DashboardPage() {
       <section className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
         <h2 className="text-lg font-bold text-slate-900">AI Tutor sessions</h2>
         <p className="mt-1 text-sm text-slate-600">
-          Summaries and timing after each tutor tab closes (no full chat transcript in v1).
-          Rows require the legacy consumer tutor to run with Supabase telemetry configured.
+          Short bullet summaries and duration after each tutor tab ends — not full child chat logs (COPPA-aligned v1).
+        </p>
+        <p className="mt-2 text-xs text-slate-500">
+          Requires <code className="rounded bg-slate-100 px-1">tutor_sessions</code> in Supabase and server{" "}
+          <code className="rounded bg-slate-100 px-1">SUPABASE_SERVICE_ROLE_KEY</code> on the app that records sessions.
         </p>
         {!user ? (
           <p className="mt-4 text-sm text-slate-600">Sign in to load session summaries.</p>

@@ -41,6 +41,7 @@ export const ParentViewContent: React.FC = () => {
   const [tutorSessions, setTutorSessions] = useState<TutorSessionRow[]>([])
   const [tutorSessionsLoading, setTutorSessionsLoading] = useState(false)
   const [tutorSessionsError, setTutorSessionsError] = useState<string | null>(null)
+  const [tutorSessionsRefreshNonce, setTutorSessionsRefreshNonce] = useState(0)
   const [entitlementVersion, setEntitlementVersion] = useState(0)
   const hasAcademy = entitlementVersion >= 0 && getHasAcademySubscription()
   const [academyUnlockLoading, setAcademyUnlockLoading] = useState(false)
@@ -86,7 +87,7 @@ export const ParentViewContent: React.FC = () => {
     return () => {
       cancelled = true
     }
-  }, [tab, isLoggedIn, user?.id])
+  }, [tab, isLoggedIn, user?.id, tutorSessionsRefreshNonce])
 
   const conversationKeys = useMemo(() => {
     if (ageBand === 'tots') {
@@ -388,8 +389,21 @@ export const ParentViewContent: React.FC = () => {
           ) : null}
 
           <div className="card rounded-2xl border border-teal-100/80 p-5 md:col-span-2">
-            <h3 className="text-lg font-bold text-slate-900">{t('parentDashboard.tutorSessionsTitle')}</h3>
+            <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+              <h3 className="text-lg font-bold text-slate-900">{t('parentDashboard.tutorSessionsTitle')}</h3>
+              {supabase && isLoggedIn ? (
+                <button
+                  type="button"
+                  className="min-h-[44px] shrink-0 rounded-xl border-2 border-teal-200 bg-white px-4 text-sm font-semibold text-teal-900 hover:bg-teal-50 disabled:opacity-50"
+                  disabled={tutorSessionsLoading}
+                  onClick={() => setTutorSessionsRefreshNonce((n) => n + 1)}
+                >
+                  {t('parentDashboard.tutorSessionsRefresh')}
+                </button>
+              ) : null}
+            </div>
             <p className="mt-1 text-sm text-slate-700">{t('parentDashboard.tutorSessionsIntro')}</p>
+            <p className="mt-2 text-xs leading-relaxed text-slate-500">{t('parentDashboard.tutorSessionsTelemetryNote')}</p>
             {!supabase ? (
               <p className="mt-3 text-sm text-slate-600">{t('parentDashboard.tutorSessionsSupabaseOff')}</p>
             ) : !isLoggedIn ? (

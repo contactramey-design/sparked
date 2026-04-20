@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { TutorLeadCaptureModal } from './TutorLeadCaptureModal'
-import { Link } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import { useAgeBand } from '@/contexts/AgeBandContext'
 import { useTranslation } from '@/contexts/LocaleContext'
 import { TutorConsentModal } from './TutorConsentModal'
@@ -42,6 +42,13 @@ import {
   clearHomeworkQuestForTutorSession,
   readHomeworkQuestForTutorSession,
 } from '@/features/homework/lib/homeworkQuestForTutor'
+import {
+  clearTutorFocusSlugSession,
+  normalizeTutorFocusSlug,
+  readTutorFocusSlugSession,
+  saveTutorFocusSlugSession,
+  type TutorFocusSlug,
+} from '@/ai-tutor/tutorFocusStorage'
 import { TutorTopicCard } from './TutorTopicCard'
 import { TutorRulesKidPanel } from './TutorRulesKidPanel'
 
@@ -62,7 +69,8 @@ export default function InteractiveTutor({
   tutorVisualEnabled = false,
 }: Props) {
   const { t, locale } = useTranslation()
-  const { ageBand } = useAgeBand()
+  const { ageBand, setAgeBand } = useAgeBand()
+  const [searchParams] = useSearchParams()
   const { accessToken } = useAuth()
   const isTots = ageBand === 'tots'
   const isCrew = ageBand === 'crew'
@@ -98,6 +106,8 @@ export default function InteractiveTutor({
   const [tutorImageUrl, setTutorImageUrl] = useState<string | null>(null)
 
   const homeworkQuestRef = useRef(readHomeworkQuestForTutorSession())
+  const tutorFocusSlugRef = useRef(readTutorFocusSlugSession())
+  const [focusBannerSlug, setFocusBannerSlug] = useState<TutorFocusSlug | ''>(() => readTutorFocusSlugSession())
   const sumCostRef = useRef(0)
   const sessionFlushedRef = useRef(false)
   const messagesRef = useRef<ChatMessage[]>([])
@@ -105,6 +115,44 @@ export default function InteractiveTutor({
   useEffect(() => {
     messagesRef.current = messages
   }, [messages])
+
+  useEffect(() => {
+    const bandParam = searchParams.get('band')?.trim().toLowerCase()
+    if (bandParam === 'tots' || bandParam === 'kids' || bandParam === 'crew') {
+      setAgeBand(bandParam)
+    }
+    const focus = normalizeTutorFocusSlug(searchParams.get('focus'))
+    if (focus) {
+      saveTutorFocusSlugSession(focus)
+      tutorFocusSlugRef.current = focus
+      setFocusBannerSlug(focus)
+    }
+    if (focus || bandParam === 'tots' || bandParam === 'kids' || bandParam === 'crew') {
+      try {
+        const url = new URL(window.location.href)
+        url.searchParams.delete('focus')
+        url.searchParams.delete('band')
+        window.history.replaceState({}, '', url.toString())
+      } catch {
+        /* ignore */
+      }
+    }
+  }, [searchParams, setAgeBand])
+
+  function tutorFocusPackLabel(slug: TutorFocusSlug): string {
+    switch (slug) {
+      case 'ai-literacy':
+        return t('aiTutor.focusPackAiLiteracy')
+      case 'internet-safety':
+        return t('aiTutor.focusPackInternetSafety')
+      case 'ai-media-trust':
+        return t('aiTutor.focusPackAiMediaTrust')
+      case 'coding-challenge':
+        return t('aiTutor.focusPackCodingChallenge')
+      default:
+        return ''
+    }
+  }
 
   const buildSessionEndPayload = useCallback(() => {
     const msgs = messagesRef.current
@@ -456,6 +504,7 @@ export default function InteractiveTutor({
         clientSessionId,
         accessToken,
         homeworkQuest: questPayload,
+        tutorFocusSlug: tutorFocusSlugRef.current || undefined,
       })
       if (typeof estimated_cost_usd === 'number' && Number.isFinite(estimated_cost_usd)) {
         sumCostRef.current += estimated_cost_usd
@@ -513,6 +562,9 @@ export default function InteractiveTutor({
     sessionFlushedRef.current = false
     resetTutorTelemetrySessionKeys()
     homeworkQuestRef.current = readHomeworkQuestForTutorSession()
+    clearTutorFocusSlugSession()
+    tutorFocusSlugRef.current = ''
+    setFocusBannerSlug('')
   }
 
   useEffect(() => {
@@ -616,6 +668,13 @@ export default function InteractiveTutor({
       />
 
       <TutorRulesKidPanel />
+
+      {focusBannerSlug ? (
+        <p className="rounded-2xl border border-violet-200/90 bg-violet-50/95 px-4 py-4 text-base leading-relaxed text-violet-950 md:px-5 md:text-lg">
+          <span className="font-bold">{t('aiTutor.focusSessionLabel')}</span>{' '}
+          {tutorFocusPackLabel(focusBannerSlug)}
+        </p>
+      ) : null}
 
       {stateCode ? (
         <p className="rounded-2xl border border-teal-200/90 bg-teal-50/95 px-4 py-4 text-base leading-relaxed text-teal-950 md:px-5 md:py-4 md:text-lg">

@@ -895,6 +895,8 @@
     "tutorSessionsSupabaseOff": "Cloud sign-in is not configured on this build — session summaries stay server-side only when Supabase is enabled.",
     "tutorSessionsLoading": "Loading sessions…",
     "tutorSessionsEmpty": "No tutor sessions yet. After your child chats and closes the tutor tab (or leaves the page), a summary row can appear here.",
+    "tutorSessionsRefresh": "Refresh list",
+    "tutorSessionsTelemetryNote": "Rows need Supabase auth plus server env SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY on the deployment that records tutor sessions.",
     "tableTutorDate": "When",
     "tableTutorDuration": "Duration",
     "tableTutorMessages": "Messages",
@@ -953,6 +955,11 @@
     "chatRulesBullet5": "Sometimes AI makes a mistake — double-check big answers with a parent or teacher.",
     "chatRulesBullet6": "A good tutor here will never ask for secrets — only learning talk.",
     "chatRulesGrownUpNote": "Grown-ups: this is a product summary, not legal advice — see Terms & Privacy.",
+    "focusSessionLabel": "This session’s focus:",
+    "focusPackAiLiteracy": "AI literacy — how AI learns, errs, and how we check answers.",
+    "focusPackInternetSafety": "Internet safety — short scenarios and safe choices.",
+    "focusPackAiMediaTrust": "AI-made pictures, voices, and ads — trust and verify with a grown-up.",
+    "focusPackCodingChallenge": "Coding & blocks — step-by-step challenges (try the Coding Lab too).",
     "sectionSoundVideo": "Sound & video",
     "voiceToggleTitle": "Read replies aloud",
     "toggleStateOn": "ON",
@@ -1311,10 +1318,29 @@
     "home2NewsletterBody": "Parent view: checkout and subscription.",
     "home2NewsletterCta": "Go to parent view"
   },
+  "codingLab": {
+    "title": "Coding Lab",
+    "intro": "Try block coding in the browser, then chat with the AI Tutor for bite-sized challenges.",
+    "supervision": "These tools open trusted third-party sites in a frame. A grown-up should stay nearby, especially for younger learners.",
+    "tutorCta": "Open AI Tutor — coding focus",
+    "backToTrack": "Back to AI & coding track",
+    "blocklyTitle": "Blockly (puzzle blocks)",
+    "blocklyIframeTitle": "Blockly code demo",
+    "scratchTitle": "Scratch (sample project)",
+    "scratchIframeTitle": "Scratch project embed"
+  },
   "trackList": {
     "practiceCalloutTitle": "Subject practice hub",
     "practiceCalloutBody": "Math, reading, science, and history as lessons? Go to Practice — first lesson free per track. Safety & AI story paths stay on tracks and Weekly.",
-    "practiceCalloutLink": "Open Practice hub"
+    "practiceCalloutLink": "Open Practice hub",
+    "tutorFocusCalloutTitle": "Tutor focus sessions",
+    "tutorFocusCalloutBody": "Jump into the AI Tutor with a guided pack: AI literacy, safety scenarios, media trust, or coding challenges.",
+    "tutorFocusAiLiteracy": "AI literacy",
+    "tutorFocusSafety": "Safety scenarios",
+    "tutorFocusMedia": "AI media trust",
+    "tutorFocusCoding": "Coding challenges",
+    "codingLabLink": "Open Coding Lab (blocks)",
+    "tutorFocusCta": "Open tutor with this focus"
   },
   "comingSoon": {
     "title": "Coming Soon",

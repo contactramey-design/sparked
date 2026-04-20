@@ -1,10 +1,12 @@
 /**
  * POST /api/tutor-chat
  * Body: checkout_session_id, messages, age_band, state, subject, locale,
- *       client_session_id?, access_token?, homework_quest? (optional string)
+ *       client_session_id?, access_token?, homework_quest? (optional string),
+ *       tutor_focus_slug? (optional; server-resolved allowlist — see api/tutor/lib/focusPacks.js)
  */
 import { verifyHomeworkCheckoutSession } from './lib/verifyBundleEntitlement.js'
 import { buildTutorSystemPrompt } from './tutor/lib/prompts.js'
+import { resolveTutorFocusQuest } from './tutor/lib/focusPacks.js'
 import { rateLimit } from './lib/rateLimit.js'
 import {
   estimateTutorChatCostUsd,
@@ -71,6 +73,8 @@ export default async function handler(req, res) {
   const clientSessionId = typeof body.client_session_id === 'string' ? body.client_session_id.trim().slice(0, 80) : ''
   const accessToken = typeof body.access_token === 'string' ? body.access_token.trim() : ''
   const homeworkQuest = typeof body.homework_quest === 'string' ? body.homework_quest.trim().slice(0, 8000) : ''
+  const tutorFocusSlug = typeof body.tutor_focus_slug === 'string' ? body.tutor_focus_slug.trim().slice(0, 64) : ''
+  const tutorFocusQuest = tutorFocusSlug ? resolveTutorFocusQuest(tutorFocusSlug, ageBand, locale) : ''
 
   if (messages.length === 0) {
     res.status(400).json({ error: 'Send at least one user message.' })
@@ -109,7 +113,14 @@ export default async function handler(req, res) {
   }
 
   const system = buildTutorSystemPrompt(
-    { ageBand, state, subject, locale, homeworkQuest: homeworkQuest || undefined },
+    {
+      ageBand,
+      state,
+      subject,
+      locale,
+      homeworkQuest: homeworkQuest || undefined,
+      tutorFocusQuest: tutorFocusQuest || undefined,
+    },
     priorNotes,
   )
   const openaiMessages = [{ role: 'system', content: system }, ...messages]

@@ -8,11 +8,11 @@ const THINKING_REMINDER_ES =
   'Termina cada respuesta con una línea corta aparte, exactamente: "Tú estás pensando — yo solo estoy aquí para guiarte."'
 
 /**
- * @param {{ ageBand: string, state: string, subject: string, locale?: string, homeworkQuest?: string }} ctx
+ * @param {{ ageBand: string, state: string, subject: string, locale?: string, homeworkQuest?: string, tutorFocusQuest?: string }} ctx
  * @param {string[]} [priorSessionNotes] Short lines from recent session summaries (no raw transcripts).
  */
 export function buildTutorSystemPrompt(ctx, priorSessionNotes = []) {
-  const { ageBand, state, subject, locale, homeworkQuest } = ctx
+  const { ageBand, state, subject, locale, homeworkQuest, tutorFocusQuest } = ctx
   const band = (ageBand || 'kids').toLowerCase()
   const st = (state || 'your state').trim()
   const sub = (subject || 'general').toLowerCase()
@@ -70,6 +70,7 @@ export function buildTutorSystemPrompt(ctx, priorSessionNotes = []) {
   if (spanishBlock) parts.push(spanishBlock)
   if (priorBlock) parts.push(priorBlock)
   if (questBlock) parts.push(questBlock)
+  if (focusBlock) parts.push(focusBlock)
   parts.push(loc === 'es' || loc.startsWith('es-') ? THINKING_REMINDER_ES : THINKING_REMINDER_EN)
   return parts.join('\n\n')
 }

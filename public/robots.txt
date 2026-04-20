@@ -1,0 +1,5 @@
+# Sparki / Sparkyedu — consumer SPA (Vite). Static file served before SPA rewrite on Vercel.
+User-agent: *
+Allow: /
+
+Sitemap: https://sparkiedu.com/sitemap.xml
