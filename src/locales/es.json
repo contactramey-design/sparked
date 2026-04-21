@@ -921,28 +921,15 @@
     "academyLine": "Adventure Academy: suscripción para rutas completas + Aventura de Tareas (foto de tarea).",
     "summaryLine": "Vista previa gratis · ebooks sueltos · Academy para práctica y tareas completas."
   },
-  "codingLab": {
-    "title": "Laboratorio de código",
-    "intro": "Prueba bloques de código en el navegador y luego charla con el tutor de IA para retos cortos.",
-    "supervision": "Estas herramientas abren sitios de terceros confiables en un marco. Un adulto debería estar cerca, sobre todo con niños pequeños.",
-    "tutorCta": "Abrir tutor de IA — enfoque código",
-    "backToTrack": "Volver a la ruta de IA y código",
-    "blocklyTitle": "Blockly (bloques puzzle)",
-    "blocklyIframeTitle": "Demo de Blockly",
-    "scratchTitle": "Scratch (proyecto de ejemplo)",
-    "scratchIframeTitle": "Proyecto Scratch embebido"
-  },
   "trackList": {
     "practiceCalloutTitle": "Práctica por materias",
     "practiceCalloutBody": "¿Matemáticas, lectura, ciencias e historia tipo lección? Ve a Práctica — primera lección gratis por ruta. Seguridad e IA: rutas y Semanal.",
     "practiceCalloutLink": "Abrir práctica por materias",
     "tutorFocusCalloutTitle": "Sesiones con enfoque en el tutor",
-    "tutorFocusCalloutBody": "Entra al tutor de IA con un paquete guiado: alfabetización de IA, seguridad, medios con IA o retos de código.",
+    "tutorFocusCalloutBody": "Entra al tutor de IA con un paquete guiado: alfabetización de IA, seguridad o confianza en medios con IA.",
     "tutorFocusAiLiteracy": "Alfabetización de IA",
     "tutorFocusSafety": "Escenarios de seguridad",
     "tutorFocusMedia": "Confianza en medios con IA",
-    "tutorFocusCoding": "Retos de código",
-    "codingLabLink": "Abrir laboratorio de código (bloques)",
     "tutorFocusCta": "Abrir tutor con este enfoque"
   },
   "retention": {
@@ -978,7 +965,6 @@
     "focusPackAiLiteracy": "Alfabetización de IA — cómo aprende, se equivoca y cómo comprobamos respuestas.",
     "focusPackInternetSafety": "Seguridad en Internet — escenarios cortos y decisiones seguras.",
     "focusPackAiMediaTrust": "Imágenes, voces y anuncios hechos con IA — confiar y verificar con un adulto.",
-    "focusPackCodingChallenge": "Código y bloques — retos paso a paso (prueba también el Laboratorio de código).",
     "sectionSoundVideo": "Sonido y video",
     "voiceToggleTitle": "Leer respuestas en voz alta",
     "toggleStateOn": "SÍ",

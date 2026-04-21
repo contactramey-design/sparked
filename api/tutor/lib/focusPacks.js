@@ -3,7 +3,7 @@
  * Keep in sync with product expectations in docs/CSTA-ALIGNMENT.md.
  */
 
-const SLUGS = new Set(['ai-literacy', 'internet-safety', 'ai-media-trust', 'coding-challenge'])
+const SLUGS = new Set(['ai-literacy', 'internet-safety', 'ai-media-trust'])
 
 /**
  * @param {string} slug
@@ -101,23 +101,6 @@ export function resolveTutorFocusQuest(slug, ageBand, locale) {
       'Topics: photos/videos that look real but are generated; cloned voice; tricky ads.',
       'Crew: explain “deepfake” in plain language and how to verify with sources and adults.',
       'Kids/Tots: “screens can trick us with faces and voices”; always check with a trusted adult.',
-    ].join('\n')
-  }
-
-  if (s === 'coding-challenge') {
-    if (loc === 'es') {
-      return [
-        'Enfoque: pensamiento computacional y práctica con bloques.',
-        'El alumno puede estar en /coding-lab con Blockly o Scratch embebido; el tutor da retos cortos paso a paso.',
-        'No ejecutes código arbitrario del niño en el servidor; guía conceptos (secuencia, repetición, eventos).',
-        'Celebra intentos; si se atasca, ofrece un ejemplo paralelo más simple.',
-      ].join('\n')
-    }
-    return [
-      'Focus: computational thinking + block-based practice.',
-      'The learner may be on /coding-lab with Blockly or Scratch embed; tutor gives short step-by-step challenges.',
-      'Do not run arbitrary child code server-side; teach ideas (sequence, loops, events).',
-      'Celebrate tries; if stuck, offer a simpler parallel example.',
     ].join('\n')
   }
 

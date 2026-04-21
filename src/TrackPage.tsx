@@ -62,27 +62,6 @@ const TrackPage: React.FC = () => {
           </div>
         </div>
 
-        {track.id === 'ai-coding' ? (
-          <div className="mb-6 rounded-2xl border border-violet-100/90 bg-violet-50/50 p-4 shadow-sm sm:p-5">
-            <h3 className="m-0 font-heading text-lg font-bold text-violet-950">{t('trackList.tutorFocusCalloutTitle')}</h3>
-            <p className="welcome-subtitle mt-2 text-slate-700">{t('trackList.tutorFocusCalloutBody')}</p>
-            <div className="mt-4 flex flex-col gap-2 sm:flex-row sm:flex-wrap">
-              <Link
-                to={`/coding-lab?band=${ageBand}`}
-                className="inline-flex min-h-[48px] items-center justify-center rounded-xl border-2 border-violet-200 bg-white px-4 py-3 text-center text-base font-semibold text-violet-900 hover:bg-violet-50"
-              >
-                {t('trackList.codingLabLink')}
-              </Link>
-              <Link
-                to={`/ai-tutor?focus=coding-challenge&band=${ageBand}`}
-                className="primary-button inline-flex min-h-[48px] items-center justify-center px-4 py-3 text-center"
-              >
-                {t('trackList.tutorFocusCoding')}
-              </Link>
-            </div>
-          </div>
-        ) : null}
-
       {introVideoSrc ? (
         <div className="track-intro-video video-wrapper">
           <video

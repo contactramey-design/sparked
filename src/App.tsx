@@ -56,7 +56,6 @@ import { SchoolAlignmentHubPage, SchoolAlignmentSubjectPage } from './school/sub
 import SchoolMathLegacyRedirect from './school/subjects/SchoolMathLegacyRedirect'
 import DailySparkQuestPage from './DailySparkQuestPage'
 import AdventureMapPlaceholderPage from './AdventureMapPlaceholderPage'
-import CodingLabPage from './features/coding-playground/CodingLabPage'
 import './App.css'
 
 function LegacySchoolSubjectsRedirect() {
@@ -148,7 +147,7 @@ function AppShell() {
           <Route path="/ai-tutor" element={<AiTutorLayout />}>
             <Route index element={<AiTutorPage />} />
           </Route>
-          <Route path="/coding-lab" element={<CodingLabPage />} />
+          <Route path="/coding-lab" element={<Navigate to="/ai-tutor?focus=ai-literacy" replace />} />
           <Route path="/books" element={<BooksPage />} />
           <Route path="/shop" element={<BooksPage />} />
           <Route path="/ebook/:ebookId" element={<EbookViewerPage />} />

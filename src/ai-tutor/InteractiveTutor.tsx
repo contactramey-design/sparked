@@ -147,8 +147,6 @@ export default function InteractiveTutor({
         return t('aiTutor.focusPackInternetSafety')
       case 'ai-media-trust':
         return t('aiTutor.focusPackAiMediaTrust')
-      case 'coding-challenge':
-        return t('aiTutor.focusPackCodingChallenge')
       default:
         return ''
     }

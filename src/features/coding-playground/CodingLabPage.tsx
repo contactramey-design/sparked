@@ -4,7 +4,7 @@ import { AscentPageChrome } from '@/design-system/ascent/AscentPageChrome'
 import { useTranslation } from '@/contexts/LocaleContext'
 import { useAgeBand } from '@/contexts/AgeBandContext'
 
-/** Blockly demo (Google) + Scratch embed — tutor pairs via /ai-tutor?focus=coding-challenge */
+/** Preserved for future rebuild; not linked from live app. */
 export default function CodingLabPage() {
   const { t } = useTranslation()
   const { ageBand, setAgeBand } = useAgeBand()
@@ -40,7 +40,7 @@ export default function CodingLabPage() {
         <p className="m-0 max-w-3xl text-base text-slate-600">{t('codingLab.supervision')}</p>
         <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
           <Link
-            to={`/ai-tutor?focus=coding-challenge&band=${ageBand}`}
+            to={`/ai-tutor?focus=ai-literacy&band=${ageBand}`}
             className="primary-button inline-flex min-h-[48px] items-center justify-center px-5 py-3 text-center"
           >
             {t('codingLab.tutorCta')}
