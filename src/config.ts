@@ -37,7 +37,7 @@ export interface AppConfig {
 }
 
 export const appConfig: AppConfig = {
-  appName: "SpArki's Adventures Academy",
+  appName: 'Sparki Academy',
   welcomeMessage: 'Welcome, Junior AI Explorer!',
   tagline: 'Learning AI the safe, playful, and human-first way.',
   theme: {

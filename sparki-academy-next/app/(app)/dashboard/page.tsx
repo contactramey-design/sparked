@@ -1,5 +1,12 @@
 import { createClient } from "@/lib/supabase/server";
 import { RefreshDashboardButton } from "@/components/refresh-dashboard-button";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Parent dashboard",
+  description:
+    "Parent view for Sparki Academy — session summaries, billing context, and account visibility for the Human Tutor.",
+};
 
 type TutorSessionRow = {
   created_at: string;

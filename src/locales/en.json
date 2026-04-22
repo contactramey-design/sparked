@@ -1,6 +1,6 @@
 {
   "header": {
-    "appName": "SpArki's Adventures Academy",
+    "appName": "Sparki Academy",
     "tagline": "Playful learning at home — safety, adventures, homework help, and practice.",
     "home": "Home",
     "courses": "Courses",
@@ -1203,7 +1203,7 @@
     "title": "Privacy Policy",
     "lastUpdated": "Last updated: {date}",
     "coppaTitle": "Our Commitment to Children's Privacy (COPPA)",
-    "coppaBody": "SpArki's Adventures Academy is designed for families and is committed to complying with the Children's Online Privacy Protection Act (COPPA). We do not knowingly collect personal information from children under 13 without verifiable parental consent.",
+    "coppaBody": "Sparki Academy is designed for families and is committed to complying with the Children's Online Privacy Protection Act (COPPA). We do not knowingly collect personal information from children under 13 without verifiable parental consent.",
     "noCollectTitle": "Information We Do Not Collect from Children",
     "noCollectBody": "In the child-facing experience, we do not collect names, email addresses, photos, voice recordings, or any personally identifiable information (PII) from children. Children access content through a parent-managed session (e.g., a temporary link or this device after a parent has signed in). There is no child account or child login.",
     "parentOnlyTitle": "Parent-Only Features",
@@ -1231,7 +1231,7 @@
   },
   "contact": {
     "title": "Contact Us",
-    "intro": "For questions about SpArki's Adventures Academy, privacy, or parent controls, please reach out:",
+    "intro": "For questions about Sparki Academy, privacy, or parent controls, please reach out:",
     "pilotLead": "School pilot? Email program name and classroom count — we’ll send setup steps.",
     "email": "sydney@sparkiedu.com",
     "respondNote": "We aim to respond to family and privacy inquiries in a timely manner."

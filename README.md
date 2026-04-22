@@ -1,4 +1,4 @@
-# SpArki's Adventures Academy (SparkiEdU)
+# Sparki Academy (SparkiEdU)
 
 React + TypeScript + Vite — kids’ curriculum, school pilot tools (Supabase), homework adventure, and optional video worker.
 

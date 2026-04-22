@@ -31,7 +31,7 @@ export default defineConfig({
       },
       includeAssets: ['globalposter.png'],
       manifest: {
-        name: "Sparki's Adventures Academy",
+        name: 'Sparki Academy',
         short_name: 'Sparki',
         description: 'Safe AI, coding & homework adventures for kids',
         theme_color: '#3b82f6',

@@ -1,4 +1,20 @@
 import Link from "next/link";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Sparki Academy | Free AI Tutor for Kids Ages 3–11",
+  description:
+    "Free COPPA-compliant AI tutor for kids ages 3–11. Voice-interactive Human Tutor teaches online safety, AI literacy, math and reading in English and Spanish. Start free — no credit card required.",
+  openGraph: {
+    title: "Sparki Academy | Free AI Tutor for Kids Ages 3–11",
+    description:
+      "COPPA-safe voice-interactive AI tutor in English and Spanish. Free tier available.",
+    url: "https://www.sparkiedu.com",
+    siteName: "Sparki Academy",
+    images: [{ url: "/og-image.jpg", width: 1200, height: 630 }],
+    type: "website",
+  },
+};
 
 export default function HomePage() {
   return (

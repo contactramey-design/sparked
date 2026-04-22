@@ -4,7 +4,7 @@ import type { ReactNode } from "react";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://sparkiedu.com"),
+  metadataBase: new URL("https://www.sparkiedu.com"),
   title: {
     default: "Sparki Academy — Parent dashboard & tutor",
     template: "%s · Sparki Academy",
@@ -15,18 +15,18 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://sparkiedu.com/",
+    url: "https://www.sparkiedu.com/",
     siteName: "Sparki Academy",
     title: "Sparki Academy",
     description:
       "Parent dashboard, tutor telemetry, and subscription management — companion to the Sparki consumer app.",
-    images: [{ url: "https://sparkiedu.com/globalposter.png" }],
+    images: [{ url: "/og-image.jpg", width: 1200, height: 630 }],
   },
   twitter: {
     card: "summary_large_image",
     title: "Sparki Academy",
     description: "Parent dashboard and tutor tools for Sparki.",
-    images: ["https://sparkiedu.com/globalposter.png"],
+    images: ["/og-image.jpg"],
   },
   robots: { index: true, follow: true },
 };
