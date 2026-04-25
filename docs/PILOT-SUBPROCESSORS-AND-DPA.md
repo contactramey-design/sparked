@@ -17,7 +17,7 @@ Adjust the list to match **your** production configuration.
 
 ## Short “pilot terms” checklist
 
-1. **Purpose:** Limited-time evaluation of SpArki Academy (describe grades / subjects).
+1. **Purpose:** Limited-time evaluation of Sparki Academy (describe grades / subjects).
 2. **School responsibilities:** Consent, COPPA/FERPA alignment, acceptable use, point of contact.
 3. **Your responsibilities:** Security practices in good faith, support channel, incident notification window.
 4. **Data:** What you collect, retention, deletion on request (define process).

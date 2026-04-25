@@ -1,11 +1,12 @@
-import type { MetadataRoute } from "next";
-
-const host = "https://sparkiedu.com";
+import { MetadataRoute } from 'next'
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return [
-    { url: host, lastModified: new Date(), changeFrequency: "weekly", priority: 1 },
-    { url: `${host}/tutor`, changeFrequency: "weekly", priority: 0.75 },
-    { url: `${host}/dashboard`, changeFrequency: "weekly", priority: 0.6 },
-  ];
+    { url: 'https://www.sparkiedu.com', lastModified: new Date(), changeFrequency: 'weekly', priority: 1 },
+    { url: 'https://www.sparkiedu.com/tutor', lastModified: new Date(), changeFrequency: 'monthly', priority: 0.9 },
+    { url: 'https://www.sparkiedu.com/homework', lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
+    { url: 'https://www.sparkiedu.com/ai-literacy', lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
+    { url: 'https://www.sparkiedu.com/safety', lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
+    { url: 'https://www.sparkiedu.com/dashboard', lastModified: new Date(), changeFrequency: 'weekly', priority: 0.6 },
+  ]
 }

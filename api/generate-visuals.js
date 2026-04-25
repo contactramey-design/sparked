@@ -33,7 +33,7 @@ function safeError(e) {
 function normalizeStory(body) {
   const story = body.story
   if (!story || typeof story !== 'object') return null
-  const title = typeof story.title === 'string' ? story.title : 'SpArki story'
+  const title = typeof story.title === 'string' ? story.title : 'Sparki story'
   const scenes = Array.isArray(story.scenes) ? story.scenes : []
   const normalized = scenes
     .map((s, i) => ({

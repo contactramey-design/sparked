@@ -2,13 +2,13 @@
   "common": {
     "playAgain": "🔄 Jugar otra vez",
     "goToNextUnit": "Ir a {title} →",
-    "sparkiSays": "🤖 SpArki dice:",
+    "sparkiSays": "🤖 Sparki dice:",
     "youEarnedSparkles": "¡Ganaste {count} brillos!"
   },
   "exampleCollector": {
-    "title": "🤖 El recolector de ejemplos de SpArki",
+    "title": "🤖 El recolector de ejemplos de Sparki",
     "subtitle": "¡Aprende cómo la IA aprende con ejemplos!",
-    "intro": "¡Hola! Soy SpArki 🤖 La IA aprende con ejemplos, no con magia. Te mostraré cosas y tú las ordenarás en dos montones. ¡A ver si entiendes el patrón!",
+    "intro": "¡Hola! Soy Sparki 🤖 La IA aprende con ejemplos, no con magia. Te mostraré cosas y tú las ordenarás en dos montones. ¡A ver si entiendes el patrón!",
     "pilesLinePrefix": "Pondrás ",
     "pilesLineMid": " en un montón y ",
     "pilesLineSuffix": " en el otro.",
@@ -25,18 +25,18 @@
     "categoryDog": "Perros"
   },
   "bodyCodeChain": {
-    "title": "🤖 La cadena de código corporal de SpArki",
-    "subtitle": "¡Imita los movimientos de SpArki para ver cómo funciona el código!",
-    "intro": "¡Hola! Soy SpArki! 🤖 En cada ronda haré una secuencia de movimientos. Tú observas y recuerdas, ¡y luego haces exactamente lo mismo!",
+    "title": "🤖 La cadena de código corporal de Sparki",
+    "subtitle": "¡Imita los movimientos de Sparki para ver cómo funciona el código!",
+    "intro": "¡Hola! Soy Sparki! 🤖 En cada ronda haré una secuencia de movimientos. Tú observas y recuerdas, ¡y luego haces exactamente lo mismo!",
     "intro2": "Es como aprender código: sigue los pasos en orden. ¡Si aciertas, subes de nivel! 💪",
     "startGame": "🎮 ¡Vamos!",
     "sparkisTurn": "🎭 TURNO DE SPARKI 🎭",
     "roundOf": "Ronda {current} de {total}",
-    "watchInstruction": "Mira a SpArki actuar...",
+    "watchInstruction": "Mira a Sparki actuar...",
     "yourTurnInstruction": "¡Tu turno! Toca las acciones en orden.",
-    "watchSparkiMove": "▶️ ¡Ver a SpArki moverse!",
+    "watchSparkiMove": "▶️ ¡Ver a Sparki moverse!",
     "yourTurnHeading": "🎮 ¡TU TURNO! Haz estos movimientos:",
-    "feedbackWrongOrder": "❌ ¡Uy! No es el orden correcto. ¡Mira otra vez a SpArki!",
+    "feedbackWrongOrder": "❌ ¡Uy! No es el orden correcto. ¡Mira otra vez a Sparki!",
     "feedbackPerfectRound": "✅ ¡Perfecto! ¡Lo copiaste exacto! ¡Ronda {round} completa!",
     "completeTitle": "🎉 ¡Eres un maestro del código!",
     "completeBody": "¡Acertaste {correct} de {total} rondas perfectas! 🌟",
@@ -50,9 +50,9 @@
     }
   },
   "softwareExplorer": {
-    "title": "🗺️ El explorador de software de SpArki",
+    "title": "🗺️ El explorador de software de Sparki",
     "subtitle": "¡Descubre las herramientas que nos ayudan a hacer cosas increíbles!",
-    "intro": "¡Hola! Soy SpArki! 🤖 Ayúdame a explorar un mapa del tesoro y descubrir 6 herramientas de software escondidas. Tu trabajo es emparejar cada tarea (como \"Dibuja un arcoíris\") con la herramienta correcta. ¿Puedes encontrarlas todas?",
+    "intro": "¡Hola! Soy Sparki! 🤖 Ayúdame a explorar un mapa del tesoro y descubrir 6 herramientas de software escondidas. Tu trabajo es emparejar cada tarea (como \"Dibuja un arcoíris\") con la herramienta correcta. ¿Puedes encontrarlas todas?",
     "intro2": "¡El software es como una caja de herramientas: cada una hace cosas distintas! 🛠️✨",
     "startExploring": "🎮 ¡Empezar a explorar!",
     "whatShouldWeDo": "¿Qué deberíamos hacer?",
@@ -73,9 +73,9 @@
     }
   },
   "fairCode": {
-    "title": "🤖 La aventura del código justo de SpArki",
+    "title": "🤖 La aventura del código justo de Sparki",
     "subtitle": "¡Aprende sobre programación ética!",
-    "welcomeBody": "¡Hola! Soy SpArki! 🤖 Programar es genial, pero hay que hacerlo con JUSTICIA: pensar cómo nuestro código afecta a todos. Verás 6 situaciones donde eliges entre código justo y código injusto. Código justo = ¡todos ganan! 🤝 Código injusto = alguien sale perjudicado. 😢 ¿Listo para ser programador ético? ¡Vamos! 💪✨",
+    "welcomeBody": "¡Hola! Soy Sparki! 🤖 Programar es genial, pero hay que hacerlo con JUSTICIA: pensar cómo nuestro código afecta a todos. Verás 6 situaciones donde eliges entre código justo y código injusto. Código justo = ¡todos ganan! 🤝 Código injusto = alguien sale perjudicado. 😢 ¿Listo para ser programador ético? ¡Vamos! 💪✨",
     "startAdventure": "🎮 ¡Empezar aventura!",
     "whatWouldYouDo": "¿Qué harías TÚ? 🤔",
     "progress": "Progreso: {current}/{total}",
@@ -122,9 +122,9 @@
     }
   },
   "worldAI": {
-    "title": "🌍 El ayudante de IA mundial de SpArki",
+    "title": "🌍 El ayudante de IA mundial de Sparki",
     "subtitle": "¡Descubre dónde trabajan los ayudantes de IA en el mundo!",
-    "welcome": "¡Hola! Soy SpArki! 🤖 La IA está por todas partes: ayuda en escuelas, hospitales, granjas y casas. Tu trabajo: leer qué necesita alguien y elegir el LUGAR correcto donde la IA puede ayudar. 🌍 Piensa bien: a veces la IA se equivoca, ¡hay que ser listos! ¿Listo para ser experto en IA? 🧠✨",
+    "welcome": "¡Hola! Soy Sparki! 🤖 La IA está por todas partes: ayuda en escuelas, hospitales, granjas y casas. Tu trabajo: leer qué necesita alguien y elegir el LUGAR correcto donde la IA puede ayudar. 🌍 Piensa bien: a veces la IA se equivoca, ¡hay que ser listos! ¿Listo para ser experto en IA? 🧠✨",
     "welcome2": "Aprende cómo los ayudantes de IA mejoran el mundo y por qué hay que revisar su trabajo. 🧠🌟",
     "startExploring": "🎮 ¡Empezar a explorar!",
     "readNeedPickPlace": "¡Lee la necesidad, elige el lugar! 🌍",
@@ -159,12 +159,12 @@
     }
   },
   "gameQuiz": {
-    "defaultTitle": "Cuestionario de SpArki",
+    "defaultTitle": "Cuestionario de Sparki",
     "scoreSummary": "Acertaste {score} de {total}.",
-    "effortLine": "¡Haz lo que puedas! SpArki da brillos por esfuerzo y pensar con cuidado, no por ser perfecto.",
+    "effortLine": "¡Haz lo que puedas! Sparki da brillos por esfuerzo y pensar con cuidado, no por ser perfecto.",
     "submitted": "Enviado",
     "checkScore": "Ver mi puntuación",
-    "sparklesAdded": "¡SpArki añadió {count} brillos a tu total!",
+    "sparklesAdded": "¡Sparki añadió {count} brillos a tu total!",
     "alreadyMastered": "Ya dominaste esta unidad. ¡Sigue practicando cuando quieras!",
     "justMastered": "¡Trabajo increíble! Acabas de dominar esta unidad.",
     "goToNext": "Ir a {title} →"
@@ -177,6 +177,6 @@
     "codingVideoTitle": "Intro de programación",
     "codingVideoAria": "Video de introducción de programación",
     "videoUnsupported": "Lo sentimos, tu navegador no admite la etiqueta de video.",
-    "introPlaceholder": "Imagina a SpArki en el mundo de este recorrido: en IA y programación podría ordenar bloques brillantes; en Seguridad podría sostener un escudo amistoso con un corazón."
+    "introPlaceholder": "Imagina a Sparki en el mundo de este recorrido: en IA y programación podría ordenar bloques brillantes; en Seguridad podría sostener un escudo amistoso con un corazón."
   }
 }

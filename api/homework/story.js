@@ -32,7 +32,7 @@ function safeError(e) {
 }
 
 function normalizeStory(raw) {
-  const title = typeof raw.title === 'string' ? raw.title : 'SpArki story'
+  const title = typeof raw.title === 'string' ? raw.title : 'Sparki story'
   const recap = typeof raw.recap === 'string' ? raw.recap : ''
   const scenes = Array.isArray(raw.scenes)
     ? raw.scenes

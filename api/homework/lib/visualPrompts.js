@@ -4,10 +4,10 @@
  */
 
 const SPARKI_CORE_EN =
-  'SpArki: a friendly small blue robotic teddy bear with soft rounded panels, gentle LED eyes, and a warm smile—Pixar-style 3D, not photorealistic.'
+  'Sparki: a friendly small blue robotic teddy bear with soft rounded panels, gentle LED eyes, and a warm smile—Pixar-style 3D, not photorealistic.'
 
 const SPARKI_CORE_ES =
-  'SpArki: un osito de peluche robótico azul pequeño y amable, paneles redondeados, ojos LED suaves y sonrisa cálida—estilo 3D tipo Pixar, no fotorrealista.'
+  'Sparki: un osito de peluche robótico azul pequeño y amable, paneles redondeados, ojos LED suaves y sonrisa cálida—estilo 3D tipo Pixar, no fotorrealista.'
 
 /**
  * @param {string[]} squadNames

@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "AI literacy",
+  title: "AI Literacy for Kids | Sparki Academy",
   description:
-    "AI literacy for kids ages 3–11 — start a guided Sparki Academy tutor session on how AI learns, makes mistakes, and how to verify.",
+    "Learn how AI works with Sparki — interactive AI literacy adventures for children ages 3–11.",
 };
 
 export default function AiLiteracyPage() {

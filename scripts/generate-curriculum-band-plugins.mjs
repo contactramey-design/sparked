@@ -52,7 +52,7 @@ const en = {
         },
         quizQuestions: [
           { prompt: 'AI learns primarily from…', options: ['Random luck', 'Patterns in examples', 'Never changing rules'] },
-          { prompt: 'SpArki’s sorting story is closest to…', options: ['Learning from labeled examples', 'Sleep mode', 'Guessing passwords'] },
+          { prompt: 'Sparki’s sorting story is closest to…', options: ['Learning from labeled examples', 'Sleep mode', 'Guessing passwords'] },
           { prompt: 'Who should make the final call on important AI answers?', options: ['Only the app', 'Humans — us and trusted adults', 'Nobody'] },
         ],
         thinkPrompts: [

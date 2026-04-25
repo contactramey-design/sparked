@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Internet safety",
+  title: "Online Safety for Kids | Sparki Academy",
   description:
-    "Internet safety for kids ages 3–11 — COPPA-safe, tutor-led scenarios (privacy, strangers, links, AI-made media).",
+    "Free online safety ebooks and interactive adventures teaching children ages 3–11 to stay safe online.",
 };
 
 export default function SafetyPage() {

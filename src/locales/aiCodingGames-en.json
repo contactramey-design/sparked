@@ -2,13 +2,13 @@
   "common": {
     "playAgain": "🔄 Play Again",
     "goToNextUnit": "Go to {title} →",
-    "sparkiSays": "🤖 SpArki says:",
+    "sparkiSays": "🤖 Sparki says:",
     "youEarnedSparkles": "You earned {count} sparkles!"
   },
   "exampleCollector": {
-    "title": "🤖 SpArki's Example Collector",
+    "title": "🤖 Sparki's Example Collector",
     "subtitle": "Learn how AI learns from examples!",
-    "intro": "Hi! I'm SpArki 🤖 AI learns from examples, not magic. I'll show you items, and you sort them into two piles. Let's see if you understand the pattern!",
+    "intro": "Hi! I'm Sparki 🤖 AI learns from examples, not magic. I'll show you items, and you sort them into two piles. Let's see if you understand the pattern!",
     "pilesLinePrefix": "You'll get ",
     "pilesLineMid": " in one pile and ",
     "pilesLineSuffix": " in the other.",
@@ -25,18 +25,18 @@
     "categoryDog": "Dogs"
   },
   "bodyCodeChain": {
-    "title": "🤖 SpArki's Body Code Chain",
-    "subtitle": "Mirror SpArki's movements to learn how code works!",
-    "intro": "Hi! I'm SpArki! 🤖 In each round, I'll do a sequence of body movements. You watch and remember them, then YOU do the exact same movements!",
+    "title": "🤖 Sparki's Body Code Chain",
+    "subtitle": "Mirror Sparki's movements to learn how code works!",
+    "intro": "Hi! I'm Sparki! 🤖 In each round, I'll do a sequence of body movements. You watch and remember them, then YOU do the exact same movements!",
     "intro2": "It's like learning code—follow the instructions step-by-step. Get it right and you level up! 💪",
     "startGame": "🎮 Let's Go!",
-    "sparkisTurn": "🎭 SPARKI'S TURN 🎭",
+    "sparkisTurn": "🎭 Sparki's turn 🎭",
     "roundOf": "Round {current} of {total}",
-    "watchInstruction": "Watch SpArki perform...",
+    "watchInstruction": "Watch Sparki perform...",
     "yourTurnInstruction": "Your turn! Tap the actions in order.",
-    "watchSparkiMove": "▶️ Watch SpArki Move!",
+    "watchSparkiMove": "▶️ Watch Sparki Move!",
     "yourTurnHeading": "🎮 YOUR TURN! Do these movements:",
-    "feedbackWrongOrder": "❌ Oops! That's not the right order. Watch SpArki again!",
+    "feedbackWrongOrder": "❌ Oops! That's not the right order. Watch Sparki again!",
     "feedbackPerfectRound": "✅ Perfect! You copied it exactly! Round {round} complete!",
     "completeTitle": "🎉 You're a Code Master!",
     "completeBody": "You got {correct} out of {total} rounds perfect! 🌟",
@@ -50,9 +50,9 @@
     }
   },
   "softwareExplorer": {
-    "title": "🗺️ SpArki's Software Explorer",
+    "title": "🗺️ Sparki's Software Explorer",
     "subtitle": "Discover the tools that help us do amazing things!",
-    "intro": "Hi! I'm SpArki! 🤖 Help me explore a treasure map and discover 6 hidden software tools! Each chest contains a different tool. Your job is to match each task (like \"Draw a rainbow\") to the right software tool. Can you find them all?",
+    "intro": "Hi! I'm Sparki! 🤖 Help me explore a treasure map and discover 6 hidden software tools! Each chest contains a different tool. Your job is to match each task (like \"Draw a rainbow\") to the right software tool. Can you find them all?",
     "intro2": "Learn how software is like a toolbox—different tools help us do different things! 🛠️✨",
     "startExploring": "🎮 Start Exploring!",
     "whatShouldWeDo": "What should we do?",
@@ -73,9 +73,9 @@
     }
   },
   "fairCode": {
-    "title": "🤖 SpArki's Fair Code Adventure",
+    "title": "🤖 Sparki's Fair Code Adventure",
     "subtitle": "Learn about Ethical Coding!",
-    "welcomeBody": "Hi! I'm SpArki! 🤖 Writing code is awesome, but we need to code FAIRLY! That means thinking about how our code affects everyone. You'll face 6 situations where you choose between Fair Code and Unfair Code. Fair Code = everyone wins! 🤝 Unfair Code = someone gets hurt! 😢 Ready to become an Ethical Coder? Let's go! 💪✨",
+    "welcomeBody": "Hi! I'm Sparki! 🤖 Writing code is awesome, but we need to code FAIRLY! That means thinking about how our code affects everyone. You'll face 6 situations where you choose between Fair Code and Unfair Code. Fair Code = everyone wins! 🤝 Unfair Code = someone gets hurt! 😢 Ready to become an Ethical Coder? Let's go! 💪✨",
     "startAdventure": "🎮 Start Adventure!",
     "whatWouldYouDo": "What would YOU do? 🤔",
     "progress": "Progress: {current}/{total}",
@@ -122,9 +122,9 @@
     }
   },
   "worldAI": {
-    "title": "🌍 SpArki's World AI Helper",
+    "title": "🌍 Sparki's World AI Helper",
     "subtitle": "Discover where AI helpers work around the world!",
-    "welcome": "Hi! I'm SpArki! 🤖 AI is all around us! It helps at schools, hospitals, farms, and homes. Your job? Read what someone needs help with, then pick the RIGHT place where AI can help! 🌍 Think carefully—sometimes AI can make mistakes, so we need to be smart about it! Ready to become an AI Expert? 🧠✨",
+    "welcome": "Hi! I'm Sparki! 🤖 AI is all around us! It helps at schools, hospitals, farms, and homes. Your job? Read what someone needs help with, then pick the RIGHT place where AI can help! 🌍 Think carefully—sometimes AI can make mistakes, so we need to be smart about it! Ready to become an AI Expert? 🧠✨",
     "welcome2": "Learn how AI helpers around the world make places better—and why it's important to check their work! 🧠🌟",
     "startExploring": "🎮 Start Exploring!",
     "readNeedPickPlace": "Read the need, pick the place! 🌍",
@@ -159,12 +159,12 @@
     }
   },
   "gameQuiz": {
-    "defaultTitle": "SpArki's Quiz",
+    "defaultTitle": "Sparki's Quiz",
     "scoreSummary": "You got {score} out of {total} correct.",
-    "effortLine": "Try your best! SpArki gives sparkles for effort and careful thinking, not perfection.",
+    "effortLine": "Try your best! Sparki gives sparkles for effort and careful thinking, not perfection.",
     "submitted": "Submitted",
     "checkScore": "Check my score",
-    "sparklesAdded": "SpArki added {count} sparkles to your total!",
+    "sparklesAdded": "Sparki added {count} sparkles to your total!",
     "alreadyMastered": "You've already mastered this unit. Keep practicing anytime!",
     "justMastered": "Amazing work! You just mastered this unit.",
     "goToNext": "Go to {title} →"
@@ -177,6 +177,6 @@
     "codingVideoTitle": "Coding intro",
     "codingVideoAria": "Coding intro video",
     "videoUnsupported": "Sorry, your browser doesn't support the video tag.",
-    "introPlaceholder": "Imagine SpArki in this track's world – for AI & Coding, SpArki might be sorting glowing blocks; for Safety, SpArki might be holding a friendly shield with a heart."
+    "introPlaceholder": "Imagine Sparki in this track's world – for AI & Coding, Sparki might be sorting glowing blocks; for Safety, Sparki might be holding a friendly shield with a heart."
   }
 }

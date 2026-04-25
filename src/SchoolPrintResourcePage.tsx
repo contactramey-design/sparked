@@ -37,7 +37,7 @@ const SchoolPrintResourcePage: React.FC = () => {
 
       <article className="school-print-sheet prose prose-slate max-w-none">
         <header className="school-print-header mb-8 border-b-2 border-amber-400 pb-4">
-          <p className="text-sm font-bold uppercase tracking-wide text-amber-700">SpArki Academy</p>
+          <p className="text-sm font-bold uppercase tracking-wide text-amber-700">Sparki Academy</p>
           <h1 className="mt-2 text-3xl font-black text-slate-900">{title}</h1>
           <p className="text-slate-600">{t('schoolResources.sheetSubtitle')}</p>
         </header>

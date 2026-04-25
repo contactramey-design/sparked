@@ -3,9 +3,9 @@ import { TutorPageClient } from "./tutor-page-client";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Human Tutor",
+  title: "Sparki AI Tutor | Voice-Interactive Learning for Kids Ages 3–11",
   description:
-    "Start a Sparki Academy Human Tutor session (voice-interactive) with COPPA-aligned parent controls.",
+    "Talk with Sparki — a COPPA-safe, voice-interactive AI tutor in English and Spanish. Free to try.",
 };
 
 export default function TutorPage() {

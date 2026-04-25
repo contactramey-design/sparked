@@ -1,18 +1,18 @@
 {
-  "chooseAdventure": "Choose Your Adventure with SpArki",
-  "chooseAdventureSubtitle": "SpArki has adventures for every age: AI & coding, early learning for ages 3–5, and social media safety for ages 5–11. Pick a track to begin.",
-  "learnWithSparki": "Learn with SpArki",
+  "chooseAdventure": "Choose Your Adventure with Sparki",
+  "chooseAdventureSubtitle": "Sparki has adventures for every age: AI & coding, early learning for ages 3–5, and social media safety for ages 5–11. Pick a track to begin.",
+  "learnWithSparki": "Learn with Sparki",
   "backToTracks": "← Back to Tracks",
   "backToTrack": "← Back to Track",
   "unitsInTrack": "Units in this track",
-  "learnWithSparkiHeading": "Learn with SpArki",
+  "learnWithSparkiHeading": "Learn with Sparki",
   "lessonRoutePlaceholderTitle": "Lesson",
   "lessonRoutePlaceholderBody": "This project now focuses on unit-based learning. Individual lesson pages can be wired here later if needed.",
   "finishedShowQuiz": "Finished, show quiz",
   "pauseAndThink": "Pause & Think",
   "unitActivity": "Unit Activity",
   "okThoughtAboutIt": "OK, I thought about it!",
-  "storyTimeWithSparki": "Story Time with SpArki",
+  "storyTimeWithSparki": "Story Time with Sparki",
   "unitNumber": "Unit {num}",
   "lockedBadge": "Locked",
   "masteredBadge": "Mastered",
@@ -25,11 +25,11 @@
   "tracks": {
     "ai-coding": {
       "title": "AI, Coding & Software Adventures",
-      "description": "Join SpArki to learn what AI is, how code works, and how software helps people."
+      "description": "Join Sparki to learn what AI is, how code works, and how software helps people."
     },
     "social-safety": {
       "title": "Social Media Safety & Kindness",
-      "description": "SpArki helps you practice safe watching, kind comments, healthy screen time, and 2026 topics like AI-made media, privacy, and phishing-style tricks — always with a grown-up in the loop."
+      "description": "Sparki helps you practice safe watching, kind comments, healthy screen time, and 2026 topics like AI-made media, privacy, and phishing-style tricks — always with a grown-up in the loop."
     },
     "early-foundations": {
       "title": "Sparki — Foundational Learning",
@@ -39,9 +39,9 @@
   "units": {
     "ai-1-what-is-ai": {
       "title": "What Is AI?",
-      "summary": "SpArki shows how AI can sort and draw by learning from examples instead of magic.",
+      "summary": "Sparki shows how AI can sort and draw by learning from examples instead of magic.",
       "contentBlocks": [
-        "Story: SpArki helps sort toys into boxes using examples.",
+        "Story: Sparki helps sort toys into boxes using examples.",
         "Idea: AI learns from patterns in examples, not from magic.",
         "Pause: Look around the room and find 3 things you could sort."
       ],
@@ -51,17 +51,17 @@
       },
       "quizQuestions": [
         { "prompt": "AI learns from…", "options": ["Magic", "Examples", "Guessing once"] },
-        { "prompt": "SpArki uses AI to help…", "options": ["Sort toys", "Take naps", "Hide homework"] },
+        { "prompt": "Sparki uses AI to help…", "options": ["Sort toys", "Take naps", "Hide homework"] },
         { "prompt": "A pattern is something that…", "options": ["Happens one time", "Repeats again and again", "Is always random"] }
       ],
       "thinkPrompts": [
         { "label": "Think about this!", "text": "Look around the room. Can you find 3 things you could sort into groups? (e.g. toys, books, crayons)" },
-        { "label": "Think about this!", "text": "SpArki learns from examples, not magic. What is one example you could show a friend so they learn something new?" }
+        { "label": "Think about this!", "text": "Sparki learns from examples, not magic. What is one example you could show a friend so they learn something new?" }
       ]
     },
     "ai-2-coding-games": {
       "title": "Coding as Games",
-      "summary": "SpArki turns code into silly \"if this, then that\" games you can act out with your body.",
+      "summary": "Sparki turns code into silly \"if this, then that\" games you can act out with your body.",
       "contentBlocks": [
         "Game: If I clap, you jump. If I stomp, you spin—this is like an if/then rule.",
         "Idea: Code is a list of instructions the computer follows exactly."
@@ -93,7 +93,7 @@
     },
     "ai-4-ai-in-the-world": {
       "title": "AI in Our World",
-      "summary": "SpArki shows friendly examples of AI in schools, farms, and hospitals, and talks about when AI might be wrong.",
+      "summary": "Sparki shows friendly examples of AI in schools, farms, and hospitals, and talks about when AI might be wrong.",
       "contentBlocks": [
         "Story: AI helps sort mail, suggest songs, and translate languages.",
         "2026 note: Some pictures, voices, and videos online are made by AI — they can look real even when they are not.",
@@ -234,9 +234,9 @@
     },
     "safety-instagram": {
       "title": "Staying Safe on Instagram",
-      "summary": "SpArki shows how to share photos safely, keep your account private, and always ask a grown-up first.",
+      "summary": "Sparki shows how to share photos safely, keep your account private, and always ask a grown-up first.",
       "contentBlocks": [
-        "Story: A classmate wants to post a photo of the whole class. SpArki helps them ask a grown-up before sharing.",
+        "Story: A classmate wants to post a photo of the whole class. Sparki helps them ask a grown-up before sharing.",
         "Rule: Keep your account private so only people you and a grown-up know can follow you.",
         "Rule: Never put your full name, school, or address in your bio.",
         "AI media: Filters and “perfect” faces may be AI — compare to real life and talk with a grown-up about what is healthy to believe.",
@@ -261,7 +261,7 @@
     },
     "safety-tiktok": {
       "title": "Kind & Safe TikTok",
-      "summary": "SpArki explains how to keep videos private, turn off strangers, and handle mean comments kindly and safely.",
+      "summary": "Sparki explains how to keep videos private, turn off strangers, and handle mean comments kindly and safely.",
       "contentBlocks": [
         "Rule: Only post videos with a grown-up's permission.",
         "Safety: Turn off \"everyone\" so only friends you and a grown-up know can see your videos.",
@@ -282,7 +282,7 @@
     },
     "safety-snapchat": {
       "title": "Snaps, Streaks & Safety",
-      "summary": "SpArki teaches that snaps do not really \"disappear\" and that streaks are never more important than feelings or safety.",
+      "summary": "Sparki teaches that snaps do not really \"disappear\" and that streaks are never more important than feelings or safety.",
       "contentBlocks": [
         "Myth-buster: Snaps can be screenshotted or saved, so treat them like any other picture.",
         "Rule: Never send pictures you would not want a teacher or grown-up to see.",
@@ -304,7 +304,7 @@
     },
     "safety-roblox": {
       "title": "Safe Play on Roblox",
-      "summary": "SpArki shows how to use chat filters, block strangers, and never share private info while playing games.",
+      "summary": "Sparki shows how to use chat filters, block strangers, and never share private info while playing games.",
       "contentBlocks": [
         "Rule: Use in-game safety settings and let a grown-up help set them up.",
         "Safety: Never share your real name, age, school, or address in chat.",
@@ -326,7 +326,7 @@
     },
     "safety-fortnite": {
       "title": "Fortnite & Voice Chat Boundaries",
-      "summary": "SpArki explains how to mute, block, and set kind rules for talking to others in fast-paced games.",
+      "summary": "Sparki explains how to mute, block, and set kind rules for talking to others in fast-paced games.",
       "contentBlocks": [
         "Rule: Only use voice chat with people you and a grown-up know.",
         "Safety: You can mute or leave any time a conversation feels bad.",
@@ -348,7 +348,7 @@
     },
     "safety-reddit": {
       "title": "Reading Safely on Reddit & Forums",
-      "summary": "SpArki talks about how posts and comments are not always true, and how to avoid grown-up spaces and scary content.",
+      "summary": "Sparki talks about how posts and comments are not always true, and how to avoid grown-up spaces and scary content.",
       "contentBlocks": [
         "Idea: Anyone can post online, so not everything you read is true or kind.",
         "Rule: Stick to kid-friendly spaces a grown-up has checked first.",

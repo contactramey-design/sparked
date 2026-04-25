@@ -3,7 +3,7 @@
 ## What already works
 
 - **Story pipeline:** [`HomeworkUpload.tsx`](../src/features/homework/pages/HomeworkUpload.tsx) → analyze → explain → optional story → [`HomeworkResult.tsx`](../src/features/homework/pages/HomeworkResult.tsx).
-- **API:** [`api/generate-visuals.js`](../api/generate-visuals.js) validates entitlement, builds Pixar-style prompts via [`visualPrompts.js`](../api/homework/lib/visualPrompts.js) (SpArki + squad + child description), calls **Fal** Flux 1.1 in [`visualProvider.js`](../api/homework/lib/visualProvider.js), returns up to **6** scene image URLs.
+- **API:** [`api/generate-visuals.js`](../api/generate-visuals.js) validates entitlement, builds Pixar-style prompts via [`visualPrompts.js`](../api/homework/lib/visualPrompts.js) (Sparki + squad + child description), calls **Fal** Flux 1.1 in [`visualProvider.js`](../api/homework/lib/visualProvider.js), returns up to **6** scene image URLs.
 - **Client:** [`visualGenerator.ts`](../src/features/homework/lib/visualGenerator.ts) POSTs JSON; [`AdventureVisuals.tsx`](../src/features/homework/components/AdventureVisuals.tsx) manual **Generate** + horizontal strip of images.
 - **Avatars (before this pass):** Preset-only descriptions in [`avatarPresets.ts`](../src/features/homework/constants/avatarPresets.ts) — no session-persisted custom builder.
 

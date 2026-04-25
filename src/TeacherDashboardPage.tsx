@@ -122,7 +122,7 @@ function buildParentProgressSummary(opts: {
     `Join code: ${opts.classCode}`,
     `Exported: ${opts.exportedAt}`,
     '',
-    'What we are practicing in SpArki (anonymous class averages):',
+    'What we are practicing in Sparki (anonymous class averages):',
     `- Internet safety track: ${opts.safetyAvg}%`,
     `- AI & coding track: ${opts.aiAvg}%`,
     `- Homework adventures (when active): ${opts.homeworkAvg}%`,
@@ -133,7 +133,7 @@ function buildParentProgressSummary(opts: {
     'Teacher / class note for families:',
     opts.bulletin.trim() || '(No class note saved yet.)',
     '',
-    'Tip: SpArki uses anonymous labels on devices—not a full official roster.',
+    'Tip: Sparki uses anonymous labels on devices—not a full official roster.',
     'Ask your teacher if you need help joining from home with the class code.',
   ]
   return lines.join('\n')
@@ -152,7 +152,7 @@ function buildCountyPilotSummary(opts: {
   exportedAt: string
 }): string {
   const lines = [
-    'SpArki pilot — class summary (for principals / county / board packets)',
+    'Sparki pilot — class summary (for principals / county / board packets)',
     '',
     `Class: ${opts.className}`,
     `Join code: ${opts.classCode}`,

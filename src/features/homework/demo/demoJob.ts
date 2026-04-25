@@ -23,7 +23,7 @@ export function buildDemoHomeworkJob(): HomeworkJob {
     },
     explanation: {
       childExplanation:
-        'These problems ask you to find how many you have when you put two small groups together. You can use your fingers, draw dots, or count out loud—SpArki loves trying!',
+        'These problems ask you to find how many you have when you put two small groups together. You can use your fingers, draw dots, or count out loud—Sparki loves trying!',
       steps: [
         'Look at the first number—that is one group.',
         'Look at the second number—that is another group.',
@@ -37,13 +37,13 @@ export function buildDemoHomeworkJob(): HomeworkJob {
       parentNotes: 'Encourage counting strategies rather than memorization pressure at this age.',
     },
     story: {
-      title: 'SpArki and the Friendly Number Train',
+      title: 'Sparki and the Friendly Number Train',
       scenes: [
         {
           sceneNumber: 1,
-          summary: 'SpArki lines up colorful cars.',
+          summary: 'Sparki lines up colorful cars.',
           narration:
-            'SpArki chugged into Math Station and saw three shiny blue train cars waiting on the track.',
+            'Sparki chugged into Math Station and saw three shiny blue train cars waiting on the track.',
           teachingPoint: 'The first number tells you how many are in the first group.',
         },
         {
@@ -57,11 +57,11 @@ export function buildDemoHomeworkJob(): HomeworkJob {
           sceneNumber: 3,
           summary: 'Counting the whole train.',
           narration:
-            'SpArki walked the length of the train, tapping each car: 1, 2, 3… all the way to the caboose. Seven cars meant seven friends riding as one big train.',
+            'Sparki walked the length of the train, tapping each car: 1, 2, 3… all the way to the caboose. Seven cars meant seven friends riding as one big train.',
           teachingPoint: 'Addition means finding the total of both groups.',
         },
       ],
-      recap: 'Whenever you see a + sign, imagine SpArki coupling train cars: count every car once to find the total!',
+      recap: 'Whenever you see a + sign, imagine Sparki coupling train cars: count every car once to find the total!',
     },
   }
 }

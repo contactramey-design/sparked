@@ -78,7 +78,7 @@ If anything above fails, use the messages on `/api/setup-status` and the checkli
 1. Open your live app → go to **Homework Adventure** (e.g. `/homework`).
 2. Select a homework image (JPG/PNG) and click **Create adventure**.
 3. The **parent consent** modal should appear. Enter an email and check the box → **I agree**. The adventure should generate (OpenAI).
-4. You should see a **Create video** button. Click it. After the worker runs, a video player should appear with SpArki’s adventure.
+4. You should see a **Create video** button. Click it. After the worker runs, a video player should appear with Sparki’s adventure.
 
 If **Create video** never appears or you get 403, check:
 

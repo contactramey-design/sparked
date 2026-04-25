@@ -52,7 +52,7 @@ const CompletionCelebration: React.FC<CompletionCelebrationProps> = ({
     ctx.fillStyle = '#1e40af'
     ctx.textAlign = 'center'
     ctx.font = 'bold 24px system-ui'
-    ctx.fillText('SpArki Badge', width / 2, height / 2 - 20)
+    ctx.fillText('Sparki Badge', width / 2, height / 2 - 20)
 
     ctx.font = 'bold 18px system-ui'
     const name = explorerName || 'Explorer'
@@ -89,22 +89,22 @@ const CompletionCelebration: React.FC<CompletionCelebrationProps> = ({
           <p className="certificate-subtitle">presented to</p>
           <p className="certificate-name">{explorerName || 'Explorer'}</p>
           <p className="certificate-body">
-            for bravely completing the SpArki unit
+            for bravely completing the Sparki unit
           </p>
           <p className="certificate-unit">“{unitTitle}”</p>
           <p className="certificate-footer">
-            Keep shining bright and learning with SpArki!
+            Keep shining bright and learning with Sparki!
           </p>
         </div>
 
         <div className="completion-badge-section">
-          <h3>Your SpArki Badge</h3>
+          <h3>Your Sparki Badge</h3>
           <div className="completion-badge-wrap">
             <SparkiAvatar size="lg" static />
             <canvas
               ref={canvasRef}
               className="completion-badge-canvas"
-              aria-label="SpArki completion badge"
+              aria-label="Sparki completion badge"
             />
           </div>
           <button

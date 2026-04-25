@@ -3,9 +3,9 @@ import { RefreshDashboardButton } from "@/components/refresh-dashboard-button";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Parent dashboard",
+  title: "Parent Dashboard | Sparki Academy",
   description:
-    "Parent view for Sparki Academy — session summaries, billing context, and account visibility for the Human Tutor.",
+    "See what your child learned with Sparki today. Session summaries, progress, and account controls.",
 };
 
 type TutorSessionRow = {

@@ -63,7 +63,7 @@ const Dashboard: React.FC = () => {
           <div className="video-placeholder hero-image-wrapper">
             <img
               src="/sparkiacademylogo.webp"
-              alt="SpArki, a blue robotic teddy-bear teacher, welcoming you."
+              alt="Sparki, a blue robotic teddy-bear teacher, welcoming you."
               className="hero-image"
             />
           </div>

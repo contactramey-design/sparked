@@ -93,7 +93,7 @@ export const curriculum: CurriculumConfig = {
       id: 'ai-coding',
       title: 'AI, Coding & Software Adventures',
       description:
-        'Join SpArki to learn what AI is, how code works, and how software helps people.',
+        'Join Sparki to learn what AI is, how code works, and how software helps people.',
       order: 1,
       introVideoUrl: '/coding_intro.mp4',
     },
@@ -110,7 +110,7 @@ export const curriculum: CurriculumConfig = {
       id: 'social-safety',
       title: 'Social Media Safety & Kindness',
       description:
-        'SpArki helps you practice safe watching, kind comments, and healthy screen time.',
+        'Sparki helps you practice safe watching, kind comments, and healthy screen time.',
       order: 3,
       introVideoUrl: '/safety_into.mp4',
       introVideoPosterUrl: '/social-safety-covers/instagram.png',
@@ -122,13 +122,13 @@ export const curriculum: CurriculumConfig = {
       trackId: 'ai-coding',
       title: 'What Is AI?',
       summary:
-        'SpArki shows how AI can sort and draw by learning from examples instead of magic.',
+        'Sparki shows how AI can sort and draw by learning from examples instead of magic.',
       estMinutes: 20,
       ageGroup: 'age2',
       isFree: true,
       sparklesReward: 10,
       contentBlocks: [
-        'Story: SpArki helps sort toys into boxes using examples.',
+        'Story: Sparki helps sort toys into boxes using examples.',
         'Idea: AI learns from patterns in examples, not from magic.',
         'Pause: Look around the room and find 3 things you could sort.',
       ],
@@ -141,7 +141,7 @@ export const curriculum: CurriculumConfig = {
         },
         {
           id: 'ai-1-q2',
-          prompt: 'SpArki uses AI to help…',
+          prompt: 'Sparki uses AI to help…',
           options: ['Sort toys', 'Take naps', 'Hide homework'],
           correctIndex: 0,
         },
@@ -162,7 +162,7 @@ export const curriculum: CurriculumConfig = {
       videoUrl: '/coding_intro.mp4',
       thinkPrompts: [
         { label: 'Think about this!', text: 'Look around the room. Can you find 3 things you could sort into groups? (e.g. toys, books, crayons)' },
-        { label: 'Think about this!', text: 'SpArki learns from examples, not magic. What is one example you could show a friend so they learn something new?' },
+        { label: 'Think about this!', text: 'Sparki learns from examples, not magic. What is one example you could show a friend so they learn something new?' },
       ],
     },
     {
@@ -170,7 +170,7 @@ export const curriculum: CurriculumConfig = {
       trackId: 'ai-coding',
       title: 'Coding as Games',
       summary:
-        'SpArki turns code into silly “if this, then that” games you can act out with your body.',
+        'Sparki turns code into silly “if this, then that” games you can act out with your body.',
       estMinutes: 20,
       ageGroup: 'age2',
       isFree: true,
@@ -244,7 +244,7 @@ export const curriculum: CurriculumConfig = {
       trackId: 'ai-coding',
       title: 'AI in Our World',
       summary:
-        'SpArki shows friendly examples of AI in schools, farms, and hospitals, and talks about when AI might be wrong.',
+        'Sparki shows friendly examples of AI in schools, farms, and hospitals, and talks about when AI might be wrong.',
       estMinutes: 20,
       ageGroup: 'age2',
       isFree: true,
@@ -550,14 +550,14 @@ export const curriculum: CurriculumConfig = {
       trackId: 'social-safety',
       title: 'Staying Safe on Instagram',
       summary:
-        'SpArki shows how to share photos safely, keep your account private, and always ask a grown-up first.',
+        'Sparki shows how to share photos safely, keep your account private, and always ask a grown-up first.',
       estMinutes: 20,
       ageGroup: 'age2',
       ageBands: ['kids', 'crew'],
       isFree: true,
       sparklesReward: 10,
       contentBlocks: [
-        'Story: A classmate wants to post a photo of the whole class. SpArki helps them ask a grown-up before sharing.',
+        'Story: A classmate wants to post a photo of the whole class. Sparki helps them ask a grown-up before sharing.',
         'Rule: Keep your account private so only people you and a grown-up know can follow you.',
         'Rule: Never put your full name, school, or address in your bio.',
         'Pause: Think of one grown-up you can ask if you see a strange message online.',
@@ -615,7 +615,7 @@ export const curriculum: CurriculumConfig = {
       trackId: 'social-safety',
       title: 'Kind & Safe TikTok',
       summary:
-        'SpArki explains how to keep videos private, turn off strangers, and handle mean comments kindly and safely.',
+        'Sparki explains how to keep videos private, turn off strangers, and handle mean comments kindly and safely.',
       estMinutes: 20,
       ageGroup: 'age2',
       ageBands: ['kids', 'crew'],
@@ -675,7 +675,7 @@ export const curriculum: CurriculumConfig = {
       trackId: 'social-safety',
       title: 'Snaps, Streaks & Safety',
       summary:
-        'SpArki teaches that snaps do not really “disappear” and that streaks are never more important than feelings or safety.',
+        'Sparki teaches that snaps do not really “disappear” and that streaks are never more important than feelings or safety.',
       estMinutes: 20,
       ageGroup: 'age2',
       ageBands: ['kids', 'crew'],
@@ -735,7 +735,7 @@ export const curriculum: CurriculumConfig = {
       trackId: 'social-safety',
       title: 'Safe Play on Roblox',
       summary:
-        'SpArki shows how to use chat filters, block strangers, and never share private info while playing games.',
+        'Sparki shows how to use chat filters, block strangers, and never share private info while playing games.',
       estMinutes: 20,
       ageGroup: 'age2',
       ageBands: ['kids', 'crew'],
@@ -795,7 +795,7 @@ export const curriculum: CurriculumConfig = {
       trackId: 'social-safety',
       title: 'Fortnite & Voice Chat Boundaries',
       summary:
-        'SpArki explains how to mute, block, and set kind rules for talking to others in fast-paced games.',
+        'Sparki explains how to mute, block, and set kind rules for talking to others in fast-paced games.',
       estMinutes: 20,
       ageGroup: 'age2',
       ageBands: ['kids', 'crew'],
@@ -855,7 +855,7 @@ export const curriculum: CurriculumConfig = {
       trackId: 'social-safety',
       title: 'Reading Safely on Reddit & Forums',
       summary:
-        'SpArki talks about how posts and comments are not always true, and how to avoid grown-up spaces and scary content.',
+        'Sparki talks about how posts and comments are not always true, and how to avoid grown-up spaces and scary content.',
       estMinutes: 20,
       ageGroup: 'age2',
       ageBands: ['kids', 'crew'],
