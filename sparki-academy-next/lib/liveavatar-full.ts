@@ -52,10 +52,21 @@ function parseJsonResponse(rawText: string, status: number): unknown {
   }
 }
 
+export type CreateLiveAvatarFullSessionTokenOptions = {
+  /**
+   * LiveAvatar FULL mode: values for `${name}` placeholders in the context
+   * prompt / opening text. Keys not used by the context are ignored.
+   * @see https://docs.liveavatar.com/api-reference/sessions/create-session-token
+   */
+  dynamicVariables?: Record<string, string>;
+};
+
 /**
  * Step 1: Create FULL-mode session token (server-only; uses X-API-KEY).
  */
-export async function createLiveAvatarFullSessionToken(): Promise<{
+export async function createLiveAvatarFullSessionToken(
+  options?: CreateLiveAvatarFullSessionTokenOptions,
+): Promise<{
   session_id: string;
   session_token: string;
 }> {
@@ -64,21 +75,28 @@ export async function createLiveAvatarFullSessionToken(): Promise<{
   const voiceId = requireEnv("LIVEAVATAR_VOICE_ID");
   const contextId = requireEnv("LIVEAVATAR_CONTEXT_ID");
 
+  const payload: Record<string, unknown> = {
+    mode: "FULL",
+    avatar_id: avatarId,
+    avatar_persona: {
+      voice_id: voiceId,
+      context_id: contextId,
+      language: "en",
+    },
+  };
+
+  const dyn = options?.dynamicVariables;
+  if (dyn && Object.keys(dyn).length > 0) {
+    payload.dynamic_variables = dyn;
+  }
+
   const response = await fetch(`${LIVEAVATAR_BASE}/v1/sessions/token`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       "X-API-KEY": apiKey,
     },
-    body: JSON.stringify({
-      mode: "FULL",
-      avatar_id: avatarId,
-      avatar_persona: {
-        voice_id: voiceId,
-        context_id: contextId,
-        language: "en",
-      },
-    }),
+    body: JSON.stringify(payload),
     cache: "no-store",
   });
 

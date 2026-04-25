@@ -109,7 +109,10 @@ export function TutorSession({
           method: "POST",
           credentials: "same-origin",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ childId }),
+          body: JSON.stringify({
+            childId,
+            childDisplayName: childName.trim() || undefined,
+          }),
           signal: ac.signal,
         });
 
@@ -161,7 +164,7 @@ export function TutorSession({
       room.disconnect();
       roomRef.current = null;
     };
-  }, [childId]);
+  }, [childId, childName]);
 
   function disconnectRoom() {
     const r = roomRef.current;

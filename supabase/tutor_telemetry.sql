@@ -41,7 +41,9 @@ create table if not exists public.tutor_sessions (
   sum_estimated_cost_usd numeric(14, 8) not null default 0,
   summary_bullets jsonb,
   revisit_note text,
-  subject_tag text
+  subject_tag text,
+  child_id uuid,
+  parent_summary text
 );
 
 create index if not exists tutor_sessions_parent_created_idx

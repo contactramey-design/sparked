@@ -2,7 +2,7 @@
  * POST /api/tutor-session-end
  * End-of-tab tutor session: optional GPT-4o-mini summary, upsert tutor_sessions (no raw transcript stored).
  * Body: access_token?, client_session_id, checkout_session_id?, started_at_ms, ended_at_ms, message_count,
- *       sum_estimated_cost_usd, messages (short thread), age_band, state_code, subject_tag?, child_label?
+ *       sum_estimated_cost_usd, messages (short thread), age_band, state_code, subject_tag?, child_label?, child_id?
  */
 import { rateLimit } from './lib/rateLimit.js'
 import {
@@ -68,6 +68,10 @@ export default async function handler(req, res) {
   const stateCode = typeof body.state_code === 'string' ? body.state_code.trim().slice(0, 8) : ''
   const subjectTag = typeof body.subject_tag === 'string' ? body.subject_tag.trim().slice(0, 80) : 'general'
   const childLabel = typeof body.child_label === 'string' ? body.child_label.trim().slice(0, 80) : null
+  const childIdRaw = typeof body.child_id === 'string' ? body.child_id.trim() : ''
+  const childId = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(childIdRaw)
+    ? childIdRaw
+    : null
   const messages = normalizeThread(body.messages)
 
   const sb = getServiceSupabase()
@@ -140,11 +144,15 @@ export default async function handler(req, res) {
 
   const totalCost = Math.round((sumCost + summaryCostUsd) * 1_000_000) / 1_000_000
 
+  const parentSummary =
+    summaryBullets && summaryBullets.length ? summaryBullets.map((b) => String(b).trim()).filter(Boolean).join(' · ') : null
+
   await upsertTutorSessionAggregate(sb, {
     client_session_id: clientSessionId,
     checkout_session_id: checkoutSessionId || null,
     parent_user_id: parentUserId,
     child_label: childLabel,
+    child_id: childId,
     age_band: ageBand || null,
     state_code: stateCode || null,
     started_at: startedAtMs > 0 ? new Date(startedAtMs).toISOString() : null,
@@ -153,6 +161,7 @@ export default async function handler(req, res) {
     message_count: messageCount,
     sum_estimated_cost_usd: totalCost,
     summary_bullets: summaryBullets && summaryBullets.length ? summaryBullets : null,
+    parent_summary: parentSummary,
     revisit_note: revisitNote,
     subject_tag: subjectTag || 'general',
     updated_at: new Date().toISOString(),

@@ -1,3 +1,8 @@
+import {
+  DashboardDataPrivacy,
+  type DashboardChildOption,
+} from "@/components/dashboard-data-privacy";
+import { childDisplayName } from "@/lib/dashboard-coppa";
 import { createClient } from "@/lib/supabase/server";
 import { RefreshDashboardButton } from "@/components/refresh-dashboard-button";
 import type { Metadata } from "next";
@@ -18,13 +23,25 @@ type TutorSessionRow = {
   sum_estimated_cost_usd: number | string | null;
 };
 
-export default async function DashboardPage() {
+type DashboardPageProps = {
+  searchParams?: Record<string, string | string[] | undefined>;
+};
+
+export default async function DashboardPage({ searchParams }: DashboardPageProps) {
   const supabase = createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
+  const deletedRaw = searchParams?.deleted;
+  const deletedMessage =
+    typeof deletedRaw === "string" && deletedRaw.trim()
+      ? decodeURIComponent(deletedRaw.trim())
+      : null;
+
   let sessions: TutorSessionRow[] = [];
+  let childrenOptions: DashboardChildOption[] = [];
+
   if (user) {
     const { data } = await supabase
       .from("tutor_sessions")
@@ -34,6 +51,33 @@ export default async function DashboardPage() {
       .order("created_at", { ascending: false })
       .limit(30);
     sessions = (data as TutorSessionRow[]) ?? [];
+
+    const chFull = await supabase
+      .from("children")
+      .select("id, name, display_name, nickname")
+      .eq("parent_id", user.id)
+      .order("id", { ascending: true });
+
+    const chRes = chFull.error
+      ? await supabase
+          .from("children")
+          .select("id")
+          .eq("parent_id", user.id)
+          .order("id", { ascending: true })
+      : chFull;
+
+    if (!chRes.error && chRes.data) {
+      childrenOptions = chRes.data.map((row) => {
+        const rec = row as Record<string, string | null | undefined>;
+        return {
+          id: rec.id as string,
+          name:
+            "name" in rec || "display_name" in rec || "nickname" in rec
+              ? childDisplayName(rec)
+              : "Child",
+        };
+      });
+    }
   }
 
   return (
@@ -47,6 +91,15 @@ export default async function DashboardPage() {
         </div>
         {user ? <RefreshDashboardButton /> : null}
       </div>
+
+      {deletedMessage ? (
+        <div
+          className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-[15px] text-emerald-950 sm:text-base"
+          role="status"
+        >
+          All data for {deletedMessage} has been permanently deleted.
+        </div>
+      ) : null}
 
       <section className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
         <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-500">
@@ -134,6 +187,8 @@ export default async function DashboardPage() {
           </div>
         )}
       </section>
+
+      {user ? <DashboardDataPrivacy childrenList={childrenOptions} /> : null}
     </div>
   );
 }

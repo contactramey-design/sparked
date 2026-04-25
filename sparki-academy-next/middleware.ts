@@ -8,7 +8,15 @@ type CookieToSet = {
   options: CookieOptions;
 };
 
-const PROTECTED_PREFIXES = ["/tutor", "/dashboard"] as const;
+function isProtectedPath(pathname: string): boolean {
+  if (pathname === "/tutor" || pathname.startsWith("/tutor/")) {
+    return true;
+  }
+  if (pathname === "/dashboard" || pathname.startsWith("/dashboard/")) {
+    return true;
+  }
+  return false;
+}
 
 export async function middleware(request: NextRequest) {
   let response = NextResponse.next({
@@ -48,9 +56,7 @@ export async function middleware(request: NextRequest) {
   } = await supabase.auth.getUser();
 
   const pathname = request.nextUrl.pathname;
-  const isProtected = PROTECTED_PREFIXES.some(
-    (prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`),
-  );
+  const isProtected = isProtectedPath(pathname);
 
   if (isProtected && !user) {
     const redirectUrl = request.nextUrl.clone();

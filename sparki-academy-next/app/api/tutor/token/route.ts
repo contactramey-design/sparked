@@ -7,11 +7,18 @@ import {
   assertTutorTokenRateLimit,
   recordSuccessfulTutorTokenRequest,
 } from "@/lib/tutor-token-rate-limit";
+import {
+  buildMemoryContextString,
+  fetchRecentTutorSessionsForMemory,
+  memoryDynamicVariables,
+} from "@/lib/tutor-session-memory";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
 const TutorTokenBodySchema = z.object({
   childId: z.string().uuid(),
+  /** Used to match legacy `tutor_sessions.child_label` rows before `child_id` was stored. */
+  childDisplayName: z.string().min(1).max(120).optional(),
 });
 
 /** Subscription values that block tutor access (Stripe-style wording). */
@@ -69,7 +76,7 @@ export async function POST(request: Request) {
     );
   }
 
-  const { childId } = parsedBody.data;
+  const { childId, childDisplayName } = parsedBody.data;
 
   const rate = await assertTutorTokenRateLimit(childId);
   if (!rate.ok) {
@@ -133,8 +140,22 @@ export async function POST(request: Request) {
     );
   }
 
+  const recentSessions = await fetchRecentTutorSessionsForMemory(supabase, {
+    childId,
+    parentUserId: user.id,
+    childDisplayName: childDisplayName ?? null,
+    limit: 3,
+  });
+
+  const memoryContext = buildMemoryContextString(recentSessions);
+
+  const memoryVarKey =
+    process.env.LIVEAVATAR_MEMORY_DYNAMIC_VAR?.trim() || "session_memory";
+
   try {
-    const tokenResult = await createLiveAvatarFullSessionToken();
+    const tokenResult = await createLiveAvatarFullSessionToken({
+      dynamicVariables: memoryDynamicVariables(memoryContext, memoryVarKey),
+    });
     const started = await startLiveAvatarSession(tokenResult.session_token);
 
     if (started.session_id !== tokenResult.session_id) {
