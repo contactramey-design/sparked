@@ -226,6 +226,29 @@ export default function HomeworkResult() {
         </>
       ) : null}
 
+      {job.story ? (
+        <>
+          <StoryCard
+            story={job.story}
+            labels={{
+              title: t('homeworkFeature.storyHeading'),
+              scene: t('homeworkFeature.sceneLabel'),
+              recap: t('homeworkFeature.recapHeading'),
+              teachingPoint: t('homeworkFeature.teachingPoint'),
+              fictionNote: t('homeworkFeature.storyFictionNote'),
+            }}
+          />
+          <AdventureVisuals
+            story={job.story}
+            language={job.language}
+            checkoutSessionId={session}
+            avatarPresetId={job.avatarPresetId}
+            storyVisuals={job.storyVisuals}
+            onUpdateJob={(partial) => persist({ ...job, ...partial })}
+          />
+        </>
+      ) : null}
+
       {job.story || job.explanation ? (
         <div className="rounded-2xl border border-teal-200/80 bg-teal-50/60 p-4 sm:p-5">
           <h3 className="text-lg font-bold text-teal-950">{t('homeworkFeature.continueWithTutorTitle')}</h3>
@@ -250,29 +273,6 @@ export default function HomeworkResult() {
             <p className="mt-2 text-sm text-amber-900">{t('homeworkFeature.continueWithTutorLimit')}</p>
           ) : null}
         </div>
-      ) : null}
-
-      {job.story ? (
-        <>
-          <StoryCard
-            story={job.story}
-            labels={{
-              title: t('homeworkFeature.storyHeading'),
-              scene: t('homeworkFeature.sceneLabel'),
-              recap: t('homeworkFeature.recapHeading'),
-              teachingPoint: t('homeworkFeature.teachingPoint'),
-              fictionNote: t('homeworkFeature.storyFictionNote'),
-            }}
-          />
-          <AdventureVisuals
-            story={job.story}
-            language={job.language}
-            checkoutSessionId={session}
-            avatarPresetId={job.avatarPresetId}
-            storyVisuals={job.storyVisuals}
-            onUpdateJob={(partial) => persist({ ...job, ...partial })}
-          />
-        </>
       ) : null}
 
       {!job.isDemo ? (

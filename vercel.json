@@ -33,6 +33,9 @@
     "api/homework/story.js": {
       "maxDuration": 60
     },
+    "api/homework/save-session.js": {
+      "maxDuration": 30
+    },
     "api/generate-visuals.js": {
       "maxDuration": 120
     }

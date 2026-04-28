@@ -26,6 +26,7 @@ type TutorSessionRow = {
   summary_bullets: unknown
   revisit_note: string | null
   sum_estimated_cost_usd: number | string | null
+  parent_summary: string | null
 }
 
 type ParentTabId = 'today' | 'billing' | 'insights' | 'ideas'
@@ -71,7 +72,7 @@ export const ParentViewContent: React.FC = () => {
       const { data, error } = await supabase
         .from('tutor_sessions')
         .select(
-          'id, created_at, duration_seconds, message_count, subject_tag, summary_bullets, revisit_note, sum_estimated_cost_usd',
+          'id, created_at, duration_seconds, message_count, subject_tag, summary_bullets, revisit_note, sum_estimated_cost_usd, parent_summary',
         )
         .order('created_at', { ascending: false })
         .limit(40)
@@ -461,6 +462,8 @@ export const ParentViewContent: React.FC = () => {
                                   <li key={i}>{b}</li>
                                 ))}
                               </ul>
+                            ) : row.parent_summary?.trim() ? (
+                              row.parent_summary.trim()
                             ) : (
                               '—'
                             )}

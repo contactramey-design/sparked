@@ -13,6 +13,7 @@
     "deploy:vercel": "vercel deploy --prod --yes",
     "deploy:vercel:token": "bash scripts/vercel-deploy-token.sh",
     "build": "tsc -b && vite build",
+    "test:homework-sanitize": "node --test api/homework/lib/sanitize.test.mjs",
     "lint": "eslint .",
     "preview": "vite preview"
   },
@@ -22,6 +23,8 @@
     "@radix-ui/react-dialog": "^1.1.15",
     "@radix-ui/react-slot": "^1.2.4",
     "@supabase/supabase-js": "^2.99.2",
+    "@upstash/ratelimit": "^2.0.5",
+    "@upstash/redis": "^1.34.3",
     "@types/react-router-dom": "^5.3.3",
     "@vercel/blob": "^2.3.1",
     "animate.css": "^4.1.1",

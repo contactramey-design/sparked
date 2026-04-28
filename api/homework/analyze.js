@@ -1,11 +1,19 @@
 /**
  * POST /api/homework/analyze
- * multipart: image, language (en|es), optional gradeBand, subjectHint, checkout_session_id
+ * multipart: image (optional if worksheet_text), worksheet_text (optional if image),
+ * language (en|es), optional gradeBand, subjectHint, checkout_session_id, access_token
  */
 import { parseMultipart, requireHomeworkEntitlement } from './lib/multipart.js'
 import { openaiChatJson } from './lib/openai.js'
-import { analyzeSystemPrompt, analyzeUserContent } from './lib/prompts.js'
+import {
+  analyzeSystemPrompt,
+  analyzeTextSystemPrompt,
+  analyzeTextUserContent,
+  analyzeUserContent,
+} from './lib/prompts.js'
 import { assertHomeworkContract, homeworkAnalysisOutputSchema } from './lib/homeworkSchemas.js'
+import { sanitizeHomeworkAnalysisFields, sanitizeHomeworkText } from './lib/sanitize.js'
+import { enforceHomeworkParentRateLimit } from './lib/rateLimitHomeworkParent.js'
 
 export const config = {
   api: { bodyParser: false },
@@ -59,17 +67,17 @@ export default async function handler(req, res) {
     let gradeBand = ''
     let subjectHint = ''
     let checkoutSessionId = ''
+    let accessToken = ''
+    let worksheetText = ''
 
     try {
       const { fields, files } = await parseMultipart(req)
       const file = files?.image?.[0] ?? files?.image
-      if (!file?.filepath) {
-        res.status(400).json({ error: 'Missing or invalid "image" file' })
-        return
+      if (file?.filepath) {
+        const fs = await import('fs')
+        imageBuffer = await fs.promises.readFile(file.filepath)
+        mimeType = file.mimetype || mimeType
       }
-      const fs = await import('fs')
-      imageBuffer = await fs.promises.readFile(file.filepath)
-      mimeType = file.mimetype || mimeType
       const rawLocale = (fields?.language?.[0] ?? fields?.language ?? fields?.locale ?? '')
         .toString()
         .trim()
@@ -79,12 +87,24 @@ export default async function handler(req, res) {
       checkoutSessionId = (fields?.checkout_session_id?.[0] ?? fields?.checkout_session_id ?? '')
         .toString()
         .trim()
+      accessToken = (fields?.access_token?.[0] ?? fields?.access_token ?? '').toString().trim()
+      const rawText = (fields?.worksheet_text?.[0] ?? fields?.worksheet_text ?? '').toString().trim()
+      worksheetText = sanitizeHomeworkText(rawText).slice(0, 24_000)
+      gradeBand = sanitizeHomeworkText(gradeBand).slice(0, 200)
+      subjectHint = sanitizeHomeworkText(subjectHint).slice(0, 500)
     } catch (e) {
       if (e.code === 'LIMIT_FILE_SIZE' || e.message?.includes('maxFileSize')) {
         res.status(413).json({ error: 'Image too large. Please use an image under 4 MB.' })
         return
       }
-      res.status(400).json({ error: 'Invalid upload. Please send one image as multipart field "image".' })
+      res.status(400).json({ error: 'Invalid upload. Send an image as "image" and/or worksheet text as "worksheet_text".' })
+      return
+    }
+
+    const hasImage = Boolean(imageBuffer)
+    const hasText = worksheetText.length > 0
+    if (!hasImage && !hasText) {
+      res.status(400).json({ error: 'Provide a worksheet photo or paste worksheet text.' })
       return
     }
 
@@ -94,27 +114,43 @@ export default async function handler(req, res) {
       return
     }
 
-    const base64 = imageBuffer.toString('base64')
-    const dataUrl = `data:${mimeType || 'image/jpeg'};base64,${base64}`
+    const rl = await enforceHomeworkParentRateLimit({ accessToken, res })
+    if (!rl.ok) return
 
-    const userContent = analyzeUserContent(dataUrl, gradeBand, subjectHint, language)
-    const parsed = await openaiChatJson({
-      messages: [
-        { role: 'system', content: analyzeSystemPrompt(language) },
-        { role: 'user', content: userContent },
-      ],
-      max_tokens: 2000,
-    })
+    let parsed
+    if (hasImage) {
+      const base64 = imageBuffer.toString('base64')
+      const dataUrl = `data:${mimeType || 'image/jpeg'};base64,${base64}`
+      const userContent = analyzeUserContent(dataUrl, gradeBand, subjectHint, language)
+      parsed = await openaiChatJson({
+        messages: [
+          { role: 'system', content: analyzeSystemPrompt(language) },
+          { role: 'user', content: userContent },
+        ],
+        max_tokens: 2000,
+      })
+    } else {
+      const userText = analyzeTextUserContent(worksheetText, gradeBand, subjectHint, language)
+      parsed = await openaiChatJson({
+        messages: [
+          { role: 'system', content: analyzeTextSystemPrompt(language) },
+          { role: 'user', content: userText },
+        ],
+        max_tokens: 2000,
+      })
+    }
 
     const analysis = normalizeAnalysis(parsed, language)
+    const sanitized = sanitizeHomeworkAnalysisFields(analysis)
     const validated = assertHomeworkContract(
       homeworkAnalysisOutputSchema,
-      analysis,
+      sanitized,
       'model',
       'analyze',
     )
 
-    res.status(200).json(validated)
+    const payload = typeof rl.remaining === 'number' ? { ...validated, remaining: rl.remaining } : validated
+    res.status(200).json(payload)
   } catch (e) {
     console.error('[homework/analyze]', e.message || e)
     if (e && e.code === 'HOMEWORK_CONTRACT' && e.statusCode) {

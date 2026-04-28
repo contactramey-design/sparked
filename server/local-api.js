@@ -143,6 +143,12 @@ const server = http.createServer(async (req, res) => {
       await m.default(req, wrapped)
       return
     }
+    if (url === '/api/homework/save-session' && req.method === 'POST') {
+      await readJsonBody(req)
+      const m = await import('../api/homework/save-session.js')
+      await m.default(req, wrapped)
+      return
+    }
     if (url === '/api/homework/images' && req.method === 'POST') {
       await readJsonBody(req)
       const m = await import('../api/homework/images.js')

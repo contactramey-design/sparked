@@ -10,6 +10,7 @@ import {
   homeworkAnalysisInputSchema,
   homeworkExplanationSchema,
 } from './lib/homeworkSchemas.js'
+import { sanitizeHomeworkAnalysisFields } from './lib/sanitize.js'
 
 function safeError(e) {
   if (e && e.code === 'HOMEWORK_CONTRACT' && e.statusCode === 502) {
@@ -68,10 +69,11 @@ export default async function handler(req, res) {
     }
 
     const language = analysisValid.language === 'es' ? 'es' : 'en'
-    const userText = explainUserPayload({
+    const analysisForModel = sanitizeHomeworkAnalysisFields({
       ...analysisValid,
       language,
     })
+    const userText = explainUserPayload(analysisForModel)
 
     const parsed = await openaiChatJson({
       messages: [

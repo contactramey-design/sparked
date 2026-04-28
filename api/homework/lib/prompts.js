@@ -48,6 +48,39 @@ export function analyzeUserContent(dataUrl, gradeBand, subjectHint, language) {
   ]
 }
 
+export function analyzeTextSystemPrompt(language) {
+  const isEs = language === 'es'
+  if (isEs) {
+    return `Eres un asistente educativo que SOLO analiza texto de tareas escolares que un adulto pega en el cuadro de texto.
+${CHILD_SAFETY_RULES}
+
+Tu tarea: identificar asignatura y tema, reproducir o resumir fielmente el texto del ejercicio (sin inventar), y redactar un objetivo de aprendizaje claro.
+NO incluyas nombres de personas, nombres de escuelas, direcciones ni datos identificables en extractedText. Si aparecen, omítelos o generaliza.
+Responde SOLO con un objeto JSON con estas claves exactas:
+subject (string), topic (string), gradeBand (string o null), language ("es"), extractedText (string), learningObjective (string), confidence (número entre 0 y 1), needsReview (boolean).`
+  }
+  return `You are an educational assistant that ONLY analyzes worksheet/homework text pasted by a grown-up.
+${CHILD_SAFETY_RULES}
+
+Your job: identify subject and topic, faithfully reproduce or summarize the exercise text (do not invent), and state a clear learning objective.
+Do NOT include person names, school names, addresses, or identifiable details in extractedText. If they appear, omit or generalize.
+Respond ONLY with a JSON object with these exact keys:
+subject (string), topic (string), gradeBand (string or null), language ("en"), extractedText (string), learningObjective (string), confidence (number 0-1), needsReview (boolean).`
+}
+
+/** Plain string user message for text-only analyze (no vision). */
+export function analyzeTextUserContent(worksheetText, gradeBand, subjectHint, language) {
+  const isEs = language === 'es'
+  const grade = gradeBand ? (isEs ? `Banda de grado aproximada: ${gradeBand}.` : `Approximate grade band: ${gradeBand}.`) : ''
+  const hint = subjectHint
+    ? isEs
+      ? `Pista del adulto: ${subjectHint}.`
+      : `Grown-up hint: ${subjectHint}.`
+    : ''
+  const header = isEs ? 'Texto de la tarea:' : 'Worksheet text:'
+  return `${header}\n\n${worksheetText}\n\n${grade} ${hint}`.trim()
+}
+
 export function explainSystemPrompt(language) {
   const isEs = language === 'es'
   if (isEs) {

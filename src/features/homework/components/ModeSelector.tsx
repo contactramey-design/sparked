@@ -13,20 +13,20 @@ export function ModeSelector({ value, onChange, explainLabel, storyLabel }: Prop
       <button
         type="button"
         role="radio"
-        aria-checked={value === 'explain'}
-        className={`secondary-button flex-1 text-left ${value === 'explain' ? 'homework-mode--active' : ''}`}
-        onClick={() => onChange('explain')}
-      >
-        {explainLabel}
-      </button>
-      <button
-        type="button"
-        role="radio"
         aria-checked={value === 'story'}
         className={`secondary-button flex-1 text-left ${value === 'story' ? 'homework-mode--active' : ''}`}
         onClick={() => onChange('story')}
       >
         {storyLabel}
+      </button>
+      <button
+        type="button"
+        role="radio"
+        aria-checked={value === 'explain'}
+        className={`secondary-button flex-1 text-left ${value === 'explain' ? 'homework-mode--active' : ''}`}
+        onClick={() => onChange('explain')}
+      >
+        {explainLabel}
       </button>
     </div>
   )
