@@ -104,11 +104,14 @@ export default async function handler(req, res) {
     }
   }
 
-  const apiKey = firstNonEmptyEnv('LIVEAVATAR_API_KEY', 'HEYGEN_API_KEY')
+  const apiKey =
+    experienceMode === 'sparki'
+      ? firstNonEmptyEnv('LIVEAVATAR_SPARKI_API_KEY', 'LIVEAVATAR_API_KEY', 'HEYGEN_API_KEY')
+      : firstNonEmptyEnv('LIVEAVATAR_TUTOR_API_KEY', 'LIVEAVATAR_API_KEY', 'HEYGEN_API_KEY')
   if (!apiKey) {
     res.status(503).json({
       error:
-        'Live tutor video is not configured. Set LIVEAVATAR_API_KEY (preferred) or HEYGEN_API_KEY in Vercel.',
+        'Live tutor video is not configured. Set LIVEAVATAR_API_KEY (preferred) or HEYGEN_API_KEY in Vercel. Optional: LIVEAVATAR_TUTOR_API_KEY and LIVEAVATAR_SPARKI_API_KEY.',
     })
     return
   }

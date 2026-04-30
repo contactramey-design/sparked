@@ -82,9 +82,9 @@ export default async function handler(req, res) {
       /** @deprecated Use liveAvatar; HEYGEN_API_KEY still works as fallback API key for LiveAvatar token. */
       heygenStreamingTokenRouteLegacy: true,
       liveAvatar: (() => {
-        const apiKey = Boolean(
-          process.env.LIVEAVATAR_API_KEY?.trim() || process.env.HEYGEN_API_KEY?.trim(),
-        )
+        const apiKey = Boolean(process.env.LIVEAVATAR_API_KEY?.trim() || process.env.HEYGEN_API_KEY?.trim())
+        const tutorApiKey = Boolean(process.env.LIVEAVATAR_TUTOR_API_KEY?.trim())
+        const sparkiApiKey = Boolean(process.env.LIVEAVATAR_SPARKI_API_KEY?.trim())
         const tutorAvatarId = (
           process.env.LIVEAVATAR_TUTOR_AVATAR_ID ||
           process.env.LIVEAVATAR_AVATAR_ID ||
@@ -105,6 +105,8 @@ export default async function handler(req, res) {
         const liteReady = tutorAvatarOk
         return {
           apiKeySet: apiKey,
+          tutorApiKeySet: tutorApiKey,
+          sparkiApiKeySet: sparkiApiKey,
           tutorAvatarIdSet: tutorAvatarOk,
           sparkiAvatarIdSet: sparkiAvatarOk,
           voiceIdSet: Boolean(voiceId),
