@@ -40,7 +40,7 @@ export default function CodingLabPage() {
         <p className="m-0 max-w-3xl text-base text-slate-600">{t('codingLab.supervision')}</p>
         <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
           <Link
-            to={`/ai-tutor?focus=ai-literacy&band=${ageBand}`}
+            to={`/tutor?focus=ai-literacy&band=${ageBand}`}
             className="primary-button inline-flex min-h-[48px] items-center justify-center px-5 py-3 text-center"
           >
             {t('codingLab.tutorCta')}

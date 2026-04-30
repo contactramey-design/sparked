@@ -145,7 +145,9 @@ export const ParentViewContent: React.FC = () => {
         (returnTo.startsWith('/ebook/') ||
           returnTo.startsWith('/ebook?') ||
           returnTo.startsWith('/homework') ||
-          returnTo.startsWith('/ai-tutor'))
+          returnTo.startsWith('/ai-tutor') ||
+          returnTo.startsWith('/tutor') ||
+          returnTo.startsWith('/pricing'))
       ) {
         window.location.replace(returnTo)
       } else {
@@ -163,7 +165,7 @@ export const ParentViewContent: React.FC = () => {
       const res = await fetch('/api/create-checkout-session', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ product: 'academy', returnTo: '/homework' }),
+        body: JSON.stringify({ product: 'academy', returnTo: '/tutor' }),
       })
 
       const data = await res.json().catch(() => ({}))
@@ -279,7 +281,7 @@ export const ParentViewContent: React.FC = () => {
                 {t('parentDashboard.academyHubHomework')}
               </Link>
               <Link
-                to="/ai-tutor"
+                to="/tutor"
                 className="secondary-button inline-block border-2 border-teal-200 py-3 text-center font-semibold text-teal-900"
               >
                 {t('parentDashboard.academyHubTutor')}
@@ -346,6 +348,10 @@ export const ParentViewContent: React.FC = () => {
                     <li>{t('parentDashboard.academyIncludes3')}</li>
                     <li>{t('parentDashboard.academyIncludes4')}</li>
                   </ul>
+                </div>
+                <div className="mt-4 rounded-xl border border-violet-200/90 bg-violet-50/90 p-4 text-left">
+                  <h4 className="font-bold text-violet-950">{t('marketingFunnel.earlySubscriberTitle')}</h4>
+                  <p className="mt-1 text-sm text-slate-700">{t('marketingFunnel.earlySubscriberBody')}</p>
                 </div>
               </>
             ) : (

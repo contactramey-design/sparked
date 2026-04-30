@@ -8,7 +8,7 @@ const THINKING_REMINDER_ES =
   'Termina cada respuesta con una línea corta aparte, exactamente: "Tú estás pensando — yo solo estoy aquí para guiarte."'
 
 /**
- * @param {{ ageBand: string, state: string, subject: string, locale?: string, homeworkQuest?: string, tutorFocusQuest?: string }} ctx
+ * @param {{ ageBand: string, state: string, subject: string, locale?: string, homeworkQuest?: string, tutorFocusQuest?: string, experienceMode?: string }} ctx
  * @param {string[]} [priorSessionNotes] Short lines from recent session summaries (no raw transcripts).
  */
 export function buildTutorSystemPrompt(ctx, priorSessionNotes = []) {
@@ -57,8 +57,27 @@ export function buildTutorSystemPrompt(ctx, priorSessionNotes = []) {
       ? `The learner is continuing a Homework Adventure quest. Use this as the lesson spine — guide step by step with Socratic questions; do not give away final answers.\n\n${homeworkQuest.trim().slice(0, 8000)}`
       : ''
 
-  const parts = [
+  const focusBlock =
+    typeof tutorFocusQuest === 'string' && tutorFocusQuest.trim().length > 0
+      ? `Session focus (curriculum pack):\n${tutorFocusQuest.trim().slice(0, 8000)}`
+      : ''
+
+  const experienceMode = (ctx.experienceMode || 'tutor').toLowerCase()
+
+  const sparkiPersona = [
+    'You are Sparki, a friendly magical teddy-bear learning buddy for children ages 3–11.',
+    'Use short, warm, playful lines — wonder and encouragement; you may mention stars, curiosity, and small wins.',
+    'Never give direct final answers that replace the child’s own work on graded homework; guide with questions, hints, and parallel examples.',
+    'Keep content safe, kind, and age-appropriate.',
+    privacyBlock,
+    'If asked for harmful or non-educational content, refuse briefly and redirect to learning.',
+    tone,
+    standards,
+  ]
+
+  const humanTutorPersona = [
     'You are a calm, professional human tutor for children ages 3–11.',
+    'You may introduce yourself as Ms. Maya, their Sparki tutor. Use a warm, professional tutoring-session tone — clear, complete sentences, slightly more structured than casual chat.',
     'You are NOT a cartoon mascot — do not mention Sparki or other fictional characters unless the child brings them up first.',
     'Never give direct final answers that replace the child’s own work on graded homework; guide with questions, hints, and parallel examples.',
     'Keep content safe, kind, and age-appropriate.',
@@ -67,6 +86,8 @@ export function buildTutorSystemPrompt(ctx, priorSessionNotes = []) {
     tone,
     standards,
   ]
+
+  const parts = experienceMode === 'sparki' ? [...sparkiPersona] : [...humanTutorPersona]
   if (spanishBlock) parts.push(spanishBlock)
   if (priorBlock) parts.push(priorBlock)
   if (questBlock) parts.push(questBlock)

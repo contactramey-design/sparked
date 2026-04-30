@@ -75,6 +75,8 @@ export default async function handler(req, res) {
   const homeworkQuest = typeof body.homework_quest === 'string' ? body.homework_quest.trim().slice(0, 8000) : ''
   const tutorFocusSlug = typeof body.tutor_focus_slug === 'string' ? body.tutor_focus_slug.trim().slice(0, 64) : ''
   const tutorFocusQuest = tutorFocusSlug ? resolveTutorFocusQuest(tutorFocusSlug, ageBand, locale) : ''
+  const experienceModeRaw = typeof body.experience_mode === 'string' ? body.experience_mode.trim().toLowerCase() : ''
+  const experienceMode = experienceModeRaw === 'sparki' ? 'sparki' : 'tutor'
 
   if (messages.length === 0) {
     res.status(400).json({ error: 'Send at least one user message.' })
@@ -120,6 +122,7 @@ export default async function handler(req, res) {
       locale,
       homeworkQuest: homeworkQuest || undefined,
       tutorFocusQuest: tutorFocusQuest || undefined,
+      experienceMode,
     },
     priorNotes,
   )

@@ -264,7 +264,7 @@ export default function HomeworkResult() {
               }
               saveHomeworkQuestForTutorSession(buildHomeworkQuestForTutor(job))
               bumpHomeworkQuestHandoffCount()
-              navigate('/ai-tutor')
+              navigate('/tutor')
             }}
           >
             {t('homeworkFeature.continueWithTutorCta')}

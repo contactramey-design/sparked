@@ -8,7 +8,7 @@ const CARD_LINKS: Record<(typeof CARDS)[number], string> = {
   svc1: '/track/social-safety',
   svc2: '/practice',
   svc3: '/homework',
-  svc4: '/ai-tutor',
+  svc4: '/tutor',
 }
 
 export default function ServicesMarketingPage() {

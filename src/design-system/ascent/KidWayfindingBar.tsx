@@ -18,7 +18,7 @@ function activeHub(pathname: string, search: string): HubKey | null {
   }
   if (pathname.startsWith('/daily')) return 'daily'
   if (pathname.startsWith('/homework')) return 'homework'
-  if (pathname.startsWith('/ai-tutor')) return 'tutor'
+  if (pathname.startsWith('/tutor') || pathname.startsWith('/ai-tutor')) return 'tutor'
   if (pathname.startsWith('/practice')) return 'practice'
   return null
 }
@@ -26,7 +26,7 @@ function activeHub(pathname: string, search: string): HubKey | null {
 const primaryLinks: { to: string; hub: HubKey; labelKey: string }[] = [
   { to: '/tracks', hub: 'tracks', labelKey: 'kidWayfinding.tracks' },
   { to: '/homework', hub: 'homework', labelKey: 'kidWayfinding.homework' },
-  { to: '/ai-tutor', hub: 'tutor', labelKey: 'kidWayfinding.tutor' },
+  { to: '/tutor', hub: 'tutor', labelKey: 'kidWayfinding.tutor' },
 ]
 
 const moreLinks: { to: string; hub: HubKey; labelKey: string }[] = [

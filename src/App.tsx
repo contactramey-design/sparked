@@ -1,5 +1,5 @@
 import React from 'react'
-import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate, useLocation, useSearchParams } from 'react-router-dom'
 import { practicePathFromLegacySchoolSubjectsPath } from './lib/practiceRoutes'
 import { appConfig } from './config'
 import { AuthProvider } from './AuthContext'
@@ -19,8 +19,7 @@ import HomeworkUpload from './features/homework/pages/HomeworkUpload'
 import HomeworkResult from './features/homework/pages/HomeworkResult'
 import HomeworkHistory from './features/homework/pages/HomeworkHistory'
 import HomeworkAdventureVideoPage from './features/homework/pages/HomeworkAdventureVideoPage'
-import AiTutorLayout from './ai-tutor/AiTutorLayout'
-import AiTutorPage from './ai-tutor/AiTutorPage'
+import TutorFunnelPage from './ai-tutor/TutorFunnelPage'
 import BooksPage from './BooksPage'
 import EbookViewerPage from './EbookViewerPage'
 import PrivacyPage from './PrivacyPage'
@@ -55,6 +54,7 @@ import SchoolSubjectLessonPage from './school/subjects/SchoolSubjectLessonPage'
 import { SchoolAlignmentHubPage, SchoolAlignmentSubjectPage } from './school/subjects/SchoolAlignmentPages'
 import SchoolMathLegacyRedirect from './school/subjects/SchoolMathLegacyRedirect'
 import DailySparkQuestPage from './DailySparkQuestPage'
+import PricingPage from './PricingPage'
 import AdventureMapPlaceholderPage from './AdventureMapPlaceholderPage'
 import './App.css'
 
@@ -69,6 +69,12 @@ function SkipToMainLabel() {
   return <>{t('header.skipToMain')}</>
 }
 
+function AiTutorToTutorRedirect() {
+  const [searchParams] = useSearchParams()
+  const q = searchParams.toString()
+  return <Navigate to={q ? `/tutor?${q}` : '/tutor'} replace />
+}
+
 function AppShell() {
   const location = useLocation()
 
@@ -77,6 +83,7 @@ function AppShell() {
   // - Consumer blue on home, tracks, `/practice`, etc.
   // Note: `schoolMode` hides shop without changing pathname; it does not recolor by itself.
   const useSchoolTheme = isSchoolShellPath(location.pathname)
+  const tutorStandalone = location.pathname === '/tutor'
 
   const theme = useSchoolTheme
     ? {
@@ -98,15 +105,23 @@ function AppShell() {
 
   return (
     <div className="app" style={themeStyle} data-school-theme={useSchoolTheme ? 'true' : 'false'}>
-      <a href="#app-main" className="skip-link">
-        <SkipToMainLabel />
-      </a>
-      <InstallOnIpadBanner />
-      <OfflineBanner />
-      <AppShellHeader />
+      {!tutorStandalone ? (
+        <a href="#app-main" className="skip-link">
+          <SkipToMainLabel />
+        </a>
+      ) : null}
+      {!tutorStandalone ? <InstallOnIpadBanner /> : null}
+      {!tutorStandalone ? <OfflineBanner /> : null}
+      {!tutorStandalone ? <AppShellHeader /> : null}
       <main
         id="app-main"
-        className={useSchoolTheme ? 'app-main font-school' : 'app-main app-main--ascent'}
+        className={
+          tutorStandalone
+            ? 'app-main app-main--tutor-standalone min-h-[100dvh] max-w-none p-0'
+            : useSchoolTheme
+              ? 'app-main font-school'
+              : 'app-main app-main--ascent'
+        }
       >
         <Routes>
           <Route path="/" element={<HomePage />} />
@@ -144,10 +159,10 @@ function AppShell() {
             <Route path="history" element={<HomeworkHistory />} />
             <Route path="adventure-video" element={<HomeworkAdventureVideoPage />} />
           </Route>
-          <Route path="/ai-tutor" element={<AiTutorLayout />}>
-            <Route index element={<AiTutorPage />} />
-          </Route>
-          <Route path="/coding-lab" element={<Navigate to="/ai-tutor?focus=ai-literacy" replace />} />
+          <Route path="/tutor" element={<TutorFunnelPage />} />
+          <Route path="/ai-tutor" element={<AiTutorToTutorRedirect />} />
+          <Route path="/pricing" element={<PricingPage />} />
+          <Route path="/coding-lab" element={<Navigate to="/tutor?focus=ai-literacy" replace />} />
           <Route path="/books" element={<BooksPage />} />
           <Route path="/shop" element={<BooksPage />} />
           <Route path="/ebook/:ebookId" element={<EbookViewerPage />} />
@@ -181,7 +196,7 @@ function AppShell() {
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </main>
-      <AppShellFooter />
+      {!tutorStandalone ? <AppShellFooter /> : null}
     </div>
   )
 }

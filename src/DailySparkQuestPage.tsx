@@ -22,7 +22,7 @@ export default function DailySparkQuestPage() {
         <p className="text-slate-700">{t('retention.dailyQuestLead')}</p>
         <ul className="m-0 list-none space-y-3 p-0">
           <li>
-            <Link to="/ai-tutor" className="primary-button inline-block w-full py-3 text-center">
+            <Link to="/tutor" className="primary-button inline-block w-full py-3 text-center">
               {t('retention.dailyQuestTutorCta')}
             </Link>
           </li>

@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { TutorLeadCaptureModal } from './TutorLeadCaptureModal'
-import { Link, useSearchParams } from 'react-router-dom'
+import { Link, useLocation, useSearchParams } from 'react-router-dom'
 import { useAgeBand } from '@/contexts/AgeBandContext'
 import { useTranslation } from '@/contexts/LocaleContext'
 import { TutorConsentModal } from './TutorConsentModal'
@@ -51,6 +51,15 @@ import {
 } from '@/ai-tutor/tutorFocusStorage'
 import { TutorTopicCard } from './TutorTopicCard'
 import { TutorRulesKidPanel } from './TutorRulesKidPanel'
+import { startAcademyCheckout as openAcademyCheckout } from '@/lib/startAcademyCheckout'
+import {
+  readTutorExperienceMode,
+  writeTutorExperienceMode,
+  type TutorExperienceMode,
+} from '@/ai-tutor/tutorExperienceMode'
+
+/** Paid tutor sessions: max user messages per browser session (COPPA product cap). Free tier uses FREE_TUTOR_CAP server-side. */
+const TUTOR_SUBSCRIBED_USER_MESSAGE_CAP = 25
 
 type Props = {
   checkoutSessionId: string | null
@@ -60,6 +69,8 @@ type Props = {
   tutorLeadCaptureEnabled: boolean
   /** Server flag TUTOR_VISUAL_ENABLED — optional illustration per reply (rate + cost capped client-side). */
   tutorVisualEnabled?: boolean
+  /** Stripe `returnTo` after checkout (server allowlist). */
+  checkoutReturnPath?: string
 }
 
 export default function InteractiveTutor({
@@ -67,9 +78,12 @@ export default function InteractiveTutor({
   hasActiveSubscription,
   tutorLeadCaptureEnabled,
   tutorVisualEnabled = false,
+  checkoutReturnPath = '/tutor',
 }: Props) {
   const { t, locale } = useTranslation()
   const { ageBand, setAgeBand } = useAgeBand()
+  const location = useLocation()
+  const isStandaloneTutor = location.pathname === '/tutor'
   const [searchParams] = useSearchParams()
   const { accessToken } = useAuth()
   const isTots = ageBand === 'tots'
@@ -104,6 +118,14 @@ export default function InteractiveTutor({
   const [topicUser, setTopicUser] = useState('')
   const [topicAssistant, setTopicAssistant] = useState('')
   const [tutorImageUrl, setTutorImageUrl] = useState<string | null>(null)
+
+  const [experienceMode, setExperienceModeState] = useState<TutorExperienceMode>(() =>
+    readTutorExperienceMode(),
+  )
+  const setExperienceMode = (m: TutorExperienceMode) => {
+    writeTutorExperienceMode(m)
+    setExperienceModeState(m)
+  }
 
   const homeworkQuestRef = useRef(readHomeworkQuestForTutorSession())
   const tutorFocusSlugRef = useRef(readTutorFocusSlugSession())
@@ -203,11 +225,19 @@ export default function InteractiveTutor({
 
   useEffect(() => {
     setStateCode(readTutorStateCode())
-    setMessages(loadTutorMessages())
+    const loaded = loadTutorMessages()
+    if (isStandaloneTutor && loaded.length === 0) {
+      const mode = readTutorExperienceMode()
+      const line =
+        mode === 'sparki' ? t('aiTutor.sparkiOpeningLine') : t('aiTutor.tutorOpeningLine')
+      setMessages([{ role: 'assistant', content: line }])
+    } else {
+      setMessages(loaded)
+    }
     if (!isTots && readVoiceConsent()) {
       setVoiceOut(true)
     }
-  }, [isTots])
+  }, [isTots, isStandaloneTutor, t])
 
   useEffect(() => {
     const syncState = () => setStateCode(readTutorStateCode())
@@ -246,6 +276,14 @@ export default function InteractiveTutor({
     }
     setAvatarBusy(false)
   }, [])
+
+  useEffect(() => {
+    if (experienceMode !== 'sparki' || !liveAvatar) return
+    void (async () => {
+      await teardownAvatar()
+      setLiveAvatar(false)
+    })()
+  }, [experienceMode, liveAvatar, teardownAvatar])
 
   useEffect(() => {
     return () => {
@@ -318,6 +356,13 @@ export default function InteractiveTutor({
           window.setTimeout(tryPlay, 600)
           window.setTimeout(tryPlay, 1200)
         }
+        if (window.location.pathname === '/tutor' && readTutorExperienceMode() === 'tutor') {
+          try {
+            session.repeat(t('aiTutor.tutorOpeningAvatarLine'))
+          } catch {
+            /* ignore */
+          }
+        }
       }
       session.on(SessionEvent.SESSION_STREAM_READY, onStreamReady)
 
@@ -334,7 +379,7 @@ export default function InteractiveTutor({
     } finally {
       setAvatarBusy(false)
     }
-  }, [checkoutSessionId, hasActiveSubscription, isTots, locale, t, teardownAvatar])
+  }, [checkoutSessionId, isTots, locale, t, teardownAvatar])
 
   useEffect(() => {
     const prev = prevLocaleRef.current
@@ -416,16 +461,7 @@ export default function InteractiveTutor({
     setCheckoutError(null)
     setCheckoutLoading(true)
     try {
-      const res = await fetch('/api/create-checkout-session', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ product: 'academy', returnTo: '/ai-tutor' }),
-      })
-      const data = (await res.json().catch(() => ({}))) as { url?: string; error?: string }
-      if (!res.ok || !data?.url) {
-        throw new Error(typeof data?.error === 'string' ? data.error : 'Unable to open checkout.')
-      }
-      window.location.assign(data.url)
+      await openAcademyCheckout(checkoutReturnPath)
     } catch (e) {
       setCheckoutError(e instanceof Error ? e.message : 'Unable to open checkout.')
     } finally {
@@ -476,6 +512,14 @@ export default function InteractiveTutor({
       return
     }
 
+    if (hasActiveSubscription) {
+      const userTurnsSoFar = messages.filter((m) => m.role === 'user').length
+      if (userTurnsSoFar >= TUTOR_SUBSCRIBED_USER_MESSAGE_CAP) {
+        setError(t('aiTutor.sessionUserCapReached'))
+        return
+      }
+    }
+
     if (!hasActiveSubscription && readTutorFreeTurnsUsed() >= FREE_TUTOR_CAP) {
       setError(t('aiTutor.freeLimitReached'))
       return
@@ -503,6 +547,7 @@ export default function InteractiveTutor({
         accessToken,
         homeworkQuest: questPayload,
         tutorFocusSlug: tutorFocusSlugRef.current || undefined,
+        experienceMode: isStandaloneTutor ? experienceMode : 'tutor',
       })
       if (typeof estimated_cost_usd === 'number' && Number.isFinite(estimated_cost_usd)) {
         sumCostRef.current += estimated_cost_usd
@@ -634,6 +679,39 @@ export default function InteractiveTutor({
         isCrew && 'md:space-y-6',
       )}
     >
+      {isStandaloneTutor ? (
+        <div
+          className="flex w-full flex-col gap-2 rounded-2xl border border-slate-200/90 bg-white p-1 shadow-sm sm:flex-row sm:items-stretch"
+          role="group"
+          aria-label={t('aiTutor.modeToggleAria')}
+        >
+          <button
+            type="button"
+            className={cn(
+              'min-h-[48px] flex-1 rounded-xl px-4 text-base font-bold transition-colors',
+              experienceMode === 'sparki'
+                ? 'bg-indigo-600 text-white shadow-md'
+                : 'bg-transparent text-slate-700 hover:bg-slate-50',
+            )}
+            onClick={() => setExperienceMode('sparki')}
+          >
+            {t('aiTutor.modeSparki')}
+          </button>
+          <button
+            type="button"
+            className={cn(
+              'min-h-[48px] flex-1 rounded-xl px-4 text-base font-bold transition-colors',
+              experienceMode === 'tutor'
+                ? 'bg-teal-600 text-white shadow-md'
+                : 'bg-transparent text-slate-700 hover:bg-slate-50',
+            )}
+            onClick={() => setExperienceMode('tutor')}
+          >
+            {t('aiTutor.modeTutor')}
+          </button>
+        </div>
+      ) : null}
+
       <TutorConsentModal
         open={consentOpen}
         title={t('aiTutor.consentTitle')}
@@ -665,30 +743,31 @@ export default function InteractiveTutor({
         onDismiss={onDismissTutorLeadModal}
       />
 
-      <TutorRulesKidPanel />
+      {!isStandaloneTutor ? <TutorRulesKidPanel /> : null}
 
-      {focusBannerSlug ? (
+      {!isStandaloneTutor && focusBannerSlug ? (
         <p className="rounded-2xl border border-violet-200/90 bg-violet-50/95 px-4 py-4 text-base leading-relaxed text-violet-950 md:px-5 md:text-lg">
           <span className="font-bold">{t('aiTutor.focusSessionLabel')}</span>{' '}
           {tutorFocusPackLabel(focusBannerSlug)}
         </p>
       ) : null}
 
-      {stateCode ? (
+      {!isStandaloneTutor && stateCode ? (
         <p className="rounded-2xl border border-teal-200/90 bg-teal-50/95 px-4 py-4 text-base leading-relaxed text-teal-950 md:px-5 md:py-4 md:text-lg">
           {t('aiTutor.stateBanner', { state: stateNameFromCode(stateCode) })}{' '}
           <Link to="/?view=parent" className="font-semibold text-teal-900 underline-offset-2 hover:underline">
             {t('aiTutor.stateBannerParentLink')}
           </Link>
         </p>
-      ) : (
+      ) : null}
+      {!isStandaloneTutor && !stateCode ? (
         <p className="rounded-2xl border border-amber-200/90 bg-amber-50/95 px-4 py-4 text-base leading-relaxed text-amber-950 md:px-5 md:text-lg">
           {t('aiTutor.stateMissingBanner')}{' '}
           <Link to="/?view=parent" className="font-semibold text-amber-900 underline-offset-2 hover:underline">
             {t('aiTutor.stateMissingLink')}
           </Link>
         </p>
-      )}
+      ) : null}
 
       {!hasActiveSubscription ? (
         <div className="rounded-2xl border border-indigo-200/90 bg-indigo-50/95 px-4 py-4 text-base text-indigo-950 sm:px-5 md:text-lg">
@@ -727,12 +806,28 @@ export default function InteractiveTutor({
         className={cn(
           'flex flex-col gap-6 lg:gap-8',
           'lg:grid lg:items-start',
-          liveAvatar
-            ? 'lg:grid-cols-[minmax(0,1.12fr)_minmax(280px,28rem)]'
-            : 'lg:grid-cols-[minmax(280px,38%)_minmax(0,1fr)]',
+          isStandaloneTutor && experienceMode === 'sparki'
+            ? 'lg:grid-cols-1'
+            : liveAvatar
+              ? 'lg:grid-cols-[minmax(0,1.12fr)_minmax(280px,28rem)]'
+              : 'lg:grid-cols-[minmax(280px,38%)_minmax(0,1fr)]',
         )}
       >
         <div className="min-w-0 space-y-6 lg:sticky lg:top-3 lg:z-[1] lg:max-h-[calc(100dvh-6rem)] lg:overflow-y-auto lg:pb-2 lg:pr-1">
+          {isStandaloneTutor && experienceMode === 'sparki' ? (
+            <section className="rounded-3xl border border-indigo-500/35 bg-gradient-to-b from-slate-950 via-indigo-950 to-slate-900 px-4 py-6 text-center shadow-lg md:px-6">
+              <img
+                src="/adventure-assets/sparki-default.svg"
+                alt=""
+                className="mx-auto h-36 w-36 max-w-[min(100%,11rem)] object-contain md:h-44 md:w-44"
+              />
+              <p className="mt-4 font-heading text-xl font-bold text-amber-100">{t('aiTutor.sparkiModeTitle')}</p>
+              <p className="mt-2 text-base leading-relaxed text-amber-100/90">{t('aiTutor.sparkiModePlaceholder')}</p>
+              <p className="mt-4 text-2xl font-bold tabular-nums text-amber-200">
+                {t('aiTutor.sparkiStarsStub')}: 0
+              </p>
+            </section>
+          ) : null}
           <section className="rounded-3xl border border-slate-200/90 bg-slate-50/95 shadow-md">
             <button
               type="button"
@@ -775,7 +870,7 @@ export default function InteractiveTutor({
                   liveAvatar ? 'bg-indigo-600 text-white shadow-md' : 'border-2 border-slate-300 bg-white text-slate-800'
                 }`}
                 onClick={() => void onToggleLiveAvatar()}
-                disabled={avatarBusy}
+                disabled={avatarBusy || (isStandaloneTutor && experienceMode === 'sparki')}
               >
                 <span>
                   {liveAvatar
@@ -834,6 +929,9 @@ export default function InteractiveTutor({
               className={cn(
                 'overflow-hidden rounded-2xl border border-slate-200 bg-slate-900 shadow-md md:rounded-3xl md:shadow-lg',
                 'supports-[height:100dvh]:[&:fullscreen]:min-h-[100dvh] [&:fullscreen]:max-h-none [&:fullscreen]:rounded-none [&:fullscreen]:border-0',
+                isStandaloneTutor &&
+                  experienceMode === 'tutor' &&
+                  'ring-4 ring-teal-300/70 shadow-xl shadow-teal-900/20',
               )}
             >
               <div className="flex flex-wrap items-center justify-end gap-2 border-b border-white/10 bg-slate-950/90 px-2 py-2 sm:px-3">

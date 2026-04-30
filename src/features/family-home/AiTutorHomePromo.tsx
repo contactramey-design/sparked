@@ -8,7 +8,7 @@ export function AiTutorHomePromo() {
   const { t } = useTranslation()
   return (
     <Link
-      to="/ai-tutor"
+      to="/tutor"
       className="block rounded-2xl border border-indigo-200/90 bg-gradient-to-br from-indigo-600 via-sky-600 to-slate-800 px-5 py-5 shadow-md transition hover:shadow-lg hover:brightness-[1.03] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
     >
       <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between sm:gap-4">

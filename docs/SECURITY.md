@@ -9,7 +9,7 @@ How sensitive flows are protected, what is **not** a bug, and what to lock down 
 - **Tutor text** `/api/tutor-chat`: rate-limited; unpaid users capped at **3 user messages** per request shape (server-enforced); then `TUTOR_FREE_LIMIT`.
 - **Live video** `/api/liveavatar-session`: paid path verifies Academy; **empty** `checkout_session_id` allows a preview token (aligned with free text tier) with **two** per-IP limits: `liveavatar-free-preview` (8/hour) + `liveavatar-session` (10/10 min). `ALLOW_UNAUTH_TUTOR=true` skips paid checks (**dev only**).
 - **Ebook downloads** `/api/download-ebook`: allowlisted `ebookId`; Stripe session or Academy; PDFs only from `private/ebooks/`.
-- **Checkout** `/api/create-checkout-session`: `returnTo` allowlist (`/ai-tutor`, `/homework`, `/ebook` only); Stripe secrets server-only.
+- **Checkout** `/api/create-checkout-session`: `returnTo` allowlist (`/ai-tutor`, `/tutor`, `/pricing`, `/homework`, `/ebook` prefixes); Stripe secrets server-only.
 - **Tutor lead** `/api/tutor-lead`: honeypot fields rejected; email validation; rate limit 10/hour/IP; optional webhook URL must be **https** to a non-private host (SSRF guard).
 - **Teacher weekly** `/api/schools/generate-weekly-units`: Supabase JWT; verifies teacher owns class; PDF size capped.
 - **Cron** `/api/cron/*`: optional `CRON_SECRET` Bearer.

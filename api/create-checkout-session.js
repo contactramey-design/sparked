@@ -58,6 +58,10 @@ export default async function handler(req, res) {
       requestedReturnTo &&
       (requestedReturnTo === '/ai-tutor' ||
         requestedReturnTo.startsWith('/ai-tutor?') ||
+        requestedReturnTo === '/tutor' ||
+        requestedReturnTo.startsWith('/tutor?') ||
+        requestedReturnTo === '/pricing' ||
+        requestedReturnTo.startsWith('/pricing?') ||
         requestedReturnTo === '/homework' ||
         requestedReturnTo.startsWith('/homework?') ||
         requestedReturnTo.startsWith('/homework/') ||
@@ -79,12 +83,22 @@ export default async function handler(req, res) {
     const cancel_url =
       cancelUrlEnv || `${origin || ''}/?view=parent&checkout=cancel&entitlement_type=${entitlementType}`
 
+    /** Optional: set STRIPE_ACADEMY_TRIAL_DAYS (e.g. 7) to match Pricing page copy; else use Stripe Price/dashboard trial. */
+    const trialDaysRaw = process.env.STRIPE_ACADEMY_TRIAL_DAYS
+    const trialDays =
+      typeof trialDaysRaw === 'string' && /^\d+$/.test(trialDaysRaw.trim())
+        ? Math.min(90, Math.max(0, parseInt(trialDaysRaw.trim(), 10)))
+        : null
+    const subscriptionData =
+      trialDays !== null && trialDays > 0 ? { trial_period_days: trialDays } : undefined
+
     const session = await stripe.checkout.sessions.create({
       mode: 'subscription',
       line_items: [{ price: priceId, quantity: 1 }],
       allow_promotion_codes: true,
       success_url,
       cancel_url,
+      ...(subscriptionData ? { subscription_data: subscriptionData } : {}),
       metadata: {
         entitlement_type: entitlementType,
         stripePriceId: priceId,

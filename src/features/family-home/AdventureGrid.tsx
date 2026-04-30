@@ -17,7 +17,7 @@ const TIERS = [
   },
   {
     id: 'aiTutor',
-    path: '/ai-tutor',
+    path: '/tutor',
     tile: 'premiumAiTutor' as const,
   },
   {

@@ -2,6 +2,7 @@
  * POST /api/liveavatar-session
  * LiveAvatar v1 session token (api.liveavatar.com). Key stays server-side.
  * Client starts the session with @heygen/liveavatar-web-sdk (not deprecated streaming-avatar).
+ * Warmer “Ms. Maya” look: swap LIVEAVATAR_AVATAR_ID / persona in HeyGen (wardrobe + background), not in this file.
  */
 import { verifyHomeworkCheckoutSession } from './lib/verifyBundleEntitlement.js'
 import { rateLimit } from './lib/rateLimit.js'

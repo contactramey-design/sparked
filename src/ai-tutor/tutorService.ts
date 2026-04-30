@@ -253,6 +253,8 @@ export async function postTutorChat(params: {
   homeworkQuest?: string
   /** Server-resolved curriculum pack slug (allowlist). */
   tutorFocusSlug?: string
+  /** Sparki (bear) vs human tutor system prompt on the server. */
+  experienceMode?: 'sparki' | 'tutor'
 }): Promise<TutorChatResult> {
   const stateName = stateNameFromCode(params.stateCode || 'CA')
   const res = await fetch('/api/tutor-chat', {
@@ -269,6 +271,7 @@ export async function postTutorChat(params: {
       access_token: params.accessToken || '',
       homework_quest: params.homeworkQuest || '',
       tutor_focus_slug: params.tutorFocusSlug || '',
+      experience_mode: params.experienceMode === 'sparki' ? 'sparki' : 'tutor',
     }),
   })
   const data = (await res.json().catch(() => ({}))) as {

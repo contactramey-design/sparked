@@ -1,36 +1,34 @@
 import React, { useEffect, useId, useRef, useState } from 'react'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { ALL_AGE_BANDS, type AgeBandId } from '@/ageBand'
-import { useAgeBand } from '@/contexts/AgeBandContext'
+import { Link, useLocation } from 'react-router-dom'
 import { useTranslation } from '@/contexts/LocaleContext'
 import { useAuth } from '@/AuthContext'
 import { isTeacherUser } from '@/lib/supabaseUserRole'
 
-type NavKey = 'learning' | 'shop' | 'academy'
+type NavKey = 'academy'
 
 type Props = {
   variant: 'consumer' | 'school'
-  /** When true on consumer routes, show Academy only (e.g. school mode — shop hidden without duplicating school header links). */
+  /** Kept for AppShellHeader API compatibility. */
   hideShop?: boolean
 }
 
+const consumerNavLinkClass =
+  'inline-flex min-h-[48px] items-center rounded-xl px-3 text-sm font-bold text-slate-800 hover:bg-teal-50 hover:text-teal-900 sm:px-4 sm:text-base'
+
+function NavDividerStatic() {
+  return <div className="nav-dropdown-divider" role="presentation" />
+}
+
 /**
- * Consumer: Academy + Shop dropdowns. School theme: single menu (no shop) + internet safety links.
- * Touch targets ≥ 48px; Escape and outside-click close panels.
+ * Consumer: Home, Tutor, Pricing. School theme: pilot menu.
  */
-export default function MainNav({ variant, hideShop = false }: Props) {
+export default function MainNav({ variant }: Props) {
   const { t } = useTranslation()
-  const navigate = useNavigate()
   const location = useLocation()
-  const { setAgeBand, ageBand } = useAgeBand()
   const { isLoggedIn, kidLock, user } = useAuth()
   const [open, setOpen] = useState<NavKey | null>(null)
   const wrapRef = useRef<HTMLDivElement>(null)
   const baseId = useId()
-
-  useEffect(() => {
-    setOpen(null)
-  }, [location.pathname, location.search])
 
   useEffect(() => {
     const onDoc = (e: MouseEvent) => {
@@ -47,68 +45,36 @@ export default function MainNav({ variant, hideShop = false }: Props) {
     }
   }, [])
 
-  const pickBand = (band: AgeBandId) => {
-    setAgeBand(band)
-    navigate('/tracks')
+  const close = () => setOpen(null)
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- close dropdowns when the route changes
     setOpen(null)
-  }
+  }, [location.pathname, location.search])
 
-  const SectionLabel: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-    <p className="nav-dropdown-section-label">{children}</p>
-  )
-
-  const NavDivider: React.FC = () => <div className="nav-dropdown-divider" role="presentation" />
-
-  const ItemLink: React.FC<{ to: string; children: React.ReactNode }> = ({ to, children }) => (
-    <Link to={to} className="nav-dropdown-link" onClick={() => setOpen(null)}>
-      {children}
-    </Link>
-  )
-
-  const consumerLearning = (
+  const consumerFlat = (
     <>
-      <SectionLabel>{t('nav.sectionAgeBand')}</SectionLabel>
-      <div className="nav-dropdown-band-row" role="group" aria-label={t('nav.sectionAgeBand')}>
-        {ALL_AGE_BANDS.map((band) => (
-          <button
-            key={band}
-            type="button"
-            className={`nav-dropdown-band-btn ${ageBand === band ? 'nav-dropdown-band-btn--active' : ''}`}
-            onClick={() => pickBand(band)}
-          >
-            <span className="nav-dropdown-band-name">{t(`ageBand.names.${band}.short`)}</span>
-            <span className="nav-dropdown-band-ages">{t(`ageBand.names.${band}.ages`)}</span>
-          </button>
-        ))}
-      </div>
-      <NavDivider />
-      <SectionLabel>{t('nav.sectionLearn')}</SectionLabel>
-      <ItemLink to="/tracks">{t('nav.academyAllCourses')}</ItemLink>
-      <ItemLink to="/track/social-safety">{t('nav.academySafety')}</ItemLink>
-      <ItemLink to="/track/ai-coding">{t('nav.academyAiCoding')}</ItemLink>
-      <ItemLink to="/homework">{t('nav.academyHomework')}</ItemLink>
-      <ItemLink to="/ai-tutor">{t('nav.academyAiTutor')}</ItemLink>
-      <NavDivider />
-      <p className="nav-dropdown-blurb muted text-xs leading-snug">{t('nav.practiceStructuredNote')}</p>
-      <ItemLink to="/practice">{t('nav.practiceAllSubjects')}</ItemLink>
-      <SectionLabel>{t('nav.practiceCoreLabel')}</SectionLabel>
-      <ItemLink to="/practice/math">{t('nav.practiceMath')}</ItemLink>
-      <ItemLink to="/practice/english">{t('nav.practiceEnglish')}</ItemLink>
-      <ItemLink to="/practice/science">{t('nav.practiceScience')}</ItemLink>
-      <ItemLink to="/practice/history">{t('nav.practiceHistory')}</ItemLink>
-      <NavDivider />
-      <SectionLabel>{t('nav.sectionGrownups')}</SectionLabel>
-      {!isLoggedIn && <ItemLink to="/login">{t('nav.academySignIn')}</ItemLink>}
-      {isLoggedIn && !kidLock && <ItemLink to="/?view=parent">{t('nav.academyParent')}</ItemLink>}
-    </>
-  )
-
-  const consumerShop = (
-    <>
-      <ItemLink to="/shop">{t('nav.shopEbooks')}</ItemLink>
-      <NavDivider />
-      <p className="nav-dropdown-blurb muted text-xs leading-snug">{t('nav.shopParentHint')}</p>
-      <ItemLink to="/?view=parent">{t('footer.parentDashboard')}</ItemLink>
+      <Link
+        to="/"
+        className={consumerNavLinkClass}
+        aria-current={location.pathname === '/' ? 'page' : undefined}
+      >
+        {t('marketingFunnel.navHome')}
+      </Link>
+      <Link
+        to="/tutor"
+        className={consumerNavLinkClass}
+        aria-current={location.pathname === '/tutor' ? 'page' : undefined}
+      >
+        {t('marketingFunnel.navTutor')}
+      </Link>
+      <Link
+        to="/pricing"
+        className={consumerNavLinkClass}
+        aria-current={location.pathname === '/pricing' ? 'page' : undefined}
+      >
+        {t('marketingFunnel.navPricing')}
+      </Link>
     </>
   )
 
@@ -117,25 +83,51 @@ export default function MainNav({ variant, hideShop = false }: Props) {
 
   const schoolAcademy = (
     <>
-      <ItemLink to="/">{t('nav.schoolFamilyHome')}</ItemLink>
-      <ItemLink to="/practice">{t('nav.schoolSubjectsHub')}</ItemLink>
-      <ItemLink to="/schools/parent">{t('nav.schoolPilotClassJoin')}</ItemLink>
-      <NavDivider />
-      <ItemLink to="/track/social-safety">{t('nav.academySafety')}</ItemLink>
-      <ItemLink to="/track/ai-coding">{t('nav.academyAiCoding')}</ItemLink>
-      <NavDivider />
-      <ItemLink to="/for-schools">{t('nav.schoolForSchoolsOverview')}</ItemLink>
-      <ItemLink to="/compliance">{t('nav.schoolCompliance')}</ItemLink>
-      {showTeacherLinks || showTeacherSignIn ? <NavDivider /> : null}
-      {showTeacherLinks ? <ItemLink to="/teacher/dashboard">{t('nav.schoolTeacher')}</ItemLink> : null}
-      {showTeacherLinks ? <ItemLink to="/teacher/generator">{t('nav.schoolGenerator')}</ItemLink> : null}
+      <Link to="/" className="nav-dropdown-link" onClick={close}>
+        {t('nav.schoolFamilyHome')}
+      </Link>
+      <Link to="/practice" className="nav-dropdown-link" onClick={close}>
+        {t('nav.schoolSubjectsHub')}
+      </Link>
+      <Link to="/schools/parent" className="nav-dropdown-link" onClick={close}>
+        {t('nav.schoolPilotClassJoin')}
+      </Link>
+      <NavDividerStatic />
+      <Link to="/track/social-safety" className="nav-dropdown-link" onClick={close}>
+        {t('nav.academySafety')}
+      </Link>
+      <Link to="/track/ai-coding" className="nav-dropdown-link" onClick={close}>
+        {t('nav.academyAiCoding')}
+      </Link>
+      <NavDividerStatic />
+      <Link to="/for-schools" className="nav-dropdown-link" onClick={close}>
+        {t('nav.schoolForSchoolsOverview')}
+      </Link>
+      <Link to="/compliance" className="nav-dropdown-link" onClick={close}>
+        {t('nav.schoolCompliance')}
+      </Link>
+      {showTeacherLinks || showTeacherSignIn ? <NavDividerStatic /> : null}
+      {showTeacherLinks ? (
+        <Link to="/teacher/dashboard" className="nav-dropdown-link" onClick={close}>
+          {t('nav.schoolTeacher')}
+        </Link>
+      ) : null}
+      {showTeacherLinks ? (
+        <Link to="/teacher/generator" className="nav-dropdown-link" onClick={close}>
+          {t('nav.schoolGenerator')}
+        </Link>
+      ) : null}
       {showTeacherSignIn ? (
-        <ItemLink to="/login?redirect=%2Fteacher%2Fdashboard">{t('nav.teacherSignIn')}</ItemLink>
+        <Link to="/login?redirect=%2Fteacher%2Fdashboard" className="nav-dropdown-link" onClick={close}>
+          {t('nav.teacherSignIn')}
+        </Link>
       ) : null}
       {isLoggedIn && !kidLock ? (
         <>
-          <NavDivider />
-          <ItemLink to="/?view=parent">{t('footer.parentDashboard')}</ItemLink>
+          <NavDividerStatic />
+          <Link to="/?view=parent" className="nav-dropdown-link" onClick={close}>
+            {t('footer.parentDashboard')}
+          </Link>
         </>
       ) : null}
     </>
@@ -160,28 +152,28 @@ export default function MainNav({ variant, hideShop = false }: Props) {
             ▾
           </span>
         </button>
-        <div
-          id={panelId}
-          role="region"
-          className="nav-dropdown-panel"
-          hidden={!isOpen}
-        >
+        <div id={panelId} role="region" className="nav-dropdown-panel" hidden={!isOpen}>
           {panel}
         </div>
       </div>
     )
   }
 
+  if (variant === 'consumer') {
+    return (
+      <nav
+        className="main-nav main-nav--flat flex flex-wrap items-center gap-1 sm:gap-2"
+        aria-label={t('nav.mainAriaLabel')}
+        ref={wrapRef}
+      >
+        {consumerFlat}
+      </nav>
+    )
+  }
+
   return (
     <nav className="main-nav main-nav--two-tier" aria-label={t('nav.mainAriaLabel')} ref={wrapRef}>
-      {variant === 'consumer' ? (
-        <>
-          {renderDropdown('learning', t('nav.learning'), consumerLearning)}
-          {!hideShop ? renderDropdown('shop', t('nav.shop'), consumerShop) : null}
-        </>
-      ) : (
-        <>{renderDropdown('academy', t('nav.schoolMenuSchool'), schoolAcademy)}</>
-      )}
+      {renderDropdown('academy', t('nav.schoolMenuSchool'), schoolAcademy)}
     </nav>
   )
 }
