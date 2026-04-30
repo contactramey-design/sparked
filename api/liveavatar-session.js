@@ -56,12 +56,14 @@ export default async function handler(req, res) {
   const useSpanish = localeRaw === 'es' || localeRaw.startsWith('es-')
   const experienceModeRaw = typeof body.experience_mode === 'string' ? body.experience_mode.trim().toLowerCase() : ''
   const experienceMode = experienceModeRaw === 'sparki' ? 'sparki' : 'tutor'
+  const isDev = process.env.NODE_ENV !== 'production'
 
   /**
    * Unpaid live preview (empty checkout_session_id) burns LiveAvatar quota — extra per-IP hourly cap.
    */
   if (process.env.ALLOW_UNAUTH_TUTOR !== 'true' && !checkoutSessionId) {
-    const freeRl = rateLimit(req, { key: 'liveavatar-free-preview', limit: 8, windowMs: 60 * 60 * 1000 })
+    const freeLimit = isDev ? 250 : 50
+    const freeRl = rateLimit(req, { key: 'liveavatar-free-preview', limit: freeLimit, windowMs: 60 * 60 * 1000 })
     if (!freeRl.ok) {
       const retryAfterSec = Math.max(1, Math.ceil((freeRl.resetMs - Date.now()) / 1000))
       res.setHeader('Retry-After', String(retryAfterSec))
@@ -72,8 +74,9 @@ export default async function handler(req, res) {
     }
   }
 
-  const rl = rateLimit(req, { key: 'liveavatar-session', limit: 10, windowMs: 10 * 60 * 1000 })
-  res.setHeader('X-RateLimit-Limit', '10')
+  const sessionLimit = isDev ? 120 : 30
+  const rl = rateLimit(req, { key: 'liveavatar-session', limit: sessionLimit, windowMs: 10 * 60 * 1000 })
+  res.setHeader('X-RateLimit-Limit', String(sessionLimit))
   res.setHeader('X-RateLimit-Remaining', String(rl.remaining))
   res.setHeader('X-RateLimit-Reset', String(Math.floor(rl.resetMs / 1000)))
   if (!rl.ok) {
