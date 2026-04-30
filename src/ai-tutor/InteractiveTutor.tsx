@@ -278,14 +278,6 @@ export default function InteractiveTutor({
   }, [])
 
   useEffect(() => {
-    if (experienceMode !== 'sparki' || !liveAvatar) return
-    void (async () => {
-      await teardownAvatar()
-      setLiveAvatar(false)
-    })()
-  }, [experienceMode, liveAvatar, teardownAvatar])
-
-  useEffect(() => {
     return () => {
       void teardownAvatar()
       stopAudio()
@@ -341,7 +333,7 @@ export default function InteractiveTutor({
         '@heygen/liveavatar-web-sdk'
       )
 
-      const cfg = await fetchLiveAvatarSession(checkoutSessionId, locale)
+      const cfg = await fetchLiveAvatarSession(checkoutSessionId, locale, experienceMode)
       /** Tots: no browser mic to LiveAvatar; parent-supervised typing + avatar lip-sync via repeat() only. */
       const session = new LiveAvatarSession(cfg.sessionToken, { voiceChat: !isTots })
       avatarRef.current = session
@@ -379,7 +371,13 @@ export default function InteractiveTutor({
     } finally {
       setAvatarBusy(false)
     }
-  }, [checkoutSessionId, isTots, locale, t, teardownAvatar])
+  }, [checkoutSessionId, experienceMode, isTots, locale, t, teardownAvatar])
+
+  useEffect(() => {
+    if (!liveAvatar) return
+    void startAvatarSession()
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- intentional: restart avatar when mode changes
+  }, [experienceMode])
 
   useEffect(() => {
     const prev = prevLocaleRef.current
@@ -870,7 +868,7 @@ export default function InteractiveTutor({
                   liveAvatar ? 'bg-indigo-600 text-white shadow-md' : 'border-2 border-slate-300 bg-white text-slate-800'
                 }`}
                 onClick={() => void onToggleLiveAvatar()}
-                disabled={avatarBusy || (isStandaloneTutor && experienceMode === 'sparki')}
+                disabled={avatarBusy}
               >
                 <span>
                   {liveAvatar

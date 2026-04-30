@@ -8,6 +8,7 @@ import { verifyHomeworkCheckoutSession } from './lib/verifyBundleEntitlement.js'
 import { rateLimit } from './lib/rateLimit.js'
 
 const TOKEN_URL = 'https://api.liveavatar.com/v1/sessions/token'
+const SPARKI_AVATAR_ID_FALLBACK = 'f38cdfe96a2c4e03b2d1437d3176f8d3'
 
 function firstNonEmptyEnv(...names) {
   for (const name of names) {
@@ -53,6 +54,8 @@ export default async function handler(req, res) {
   const checkoutSessionId = typeof body.checkout_session_id === 'string' ? body.checkout_session_id.trim() : ''
   const localeRaw = typeof body.locale === 'string' ? body.locale.trim().toLowerCase() : 'en'
   const useSpanish = localeRaw === 'es' || localeRaw.startsWith('es-')
+  const experienceModeRaw = typeof body.experience_mode === 'string' ? body.experience_mode.trim().toLowerCase() : ''
+  const experienceMode = experienceModeRaw === 'sparki' ? 'sparki' : 'tutor'
 
   /**
    * Unpaid live preview (empty checkout_session_id) burns LiveAvatar quota — extra per-IP hourly cap.
@@ -106,11 +109,25 @@ export default async function handler(req, res) {
     return
   }
 
-  const avatarId = firstNonEmptyEnv('LIVEAVATAR_AVATAR_ID', 'HEYGEN_TUTOR_AVATAR_ID')
-  const voiceIdDefault = firstNonEmptyEnv('LIVEAVATAR_VOICE_ID', 'HEYGEN_TUTOR_VOICE_ID')
-  const voiceIdEs = firstNonEmptyEnv('LIVEAVATAR_VOICE_ID_ES', 'HEYGEN_TUTOR_VOICE_ID_ES')
+  const avatarId =
+    experienceMode === 'sparki'
+      ? firstNonEmptyEnv('LIVEAVATAR_SPARKI_AVATAR_ID') || SPARKI_AVATAR_ID_FALLBACK
+      : firstNonEmptyEnv('LIVEAVATAR_TUTOR_AVATAR_ID', 'LIVEAVATAR_AVATAR_ID', 'HEYGEN_TUTOR_AVATAR_ID')
+
+  const voiceIdDefault =
+    experienceMode === 'sparki'
+      ? firstNonEmptyEnv('LIVEAVATAR_SPARKI_VOICE_ID', 'LIVEAVATAR_VOICE_ID', 'HEYGEN_TUTOR_VOICE_ID')
+      : firstNonEmptyEnv('LIVEAVATAR_TUTOR_VOICE_ID', 'LIVEAVATAR_VOICE_ID', 'HEYGEN_TUTOR_VOICE_ID')
+
+  const voiceIdEs =
+    experienceMode === 'sparki'
+      ? firstNonEmptyEnv('LIVEAVATAR_SPARKI_VOICE_ID_ES', 'LIVEAVATAR_VOICE_ID_ES', 'HEYGEN_TUTOR_VOICE_ID_ES')
+      : firstNonEmptyEnv('LIVEAVATAR_TUTOR_VOICE_ID_ES', 'LIVEAVATAR_VOICE_ID_ES', 'HEYGEN_TUTOR_VOICE_ID_ES')
   const voiceId = useSpanish && voiceIdEs ? voiceIdEs : voiceIdDefault
-  const contextId = firstNonEmptyEnv('LIVEAVATAR_CONTEXT_ID')
+  const contextId =
+    experienceMode === 'sparki'
+      ? firstNonEmptyEnv('LIVEAVATAR_SPARKI_CONTEXT_ID', 'LIVEAVATAR_CONTEXT_ID')
+      : firstNonEmptyEnv('LIVEAVATAR_TUTOR_CONTEXT_ID', 'LIVEAVATAR_CONTEXT_ID')
 
   /** FULL mode when context + voice + non-placeholder avatar exist. */
   const useFull =

@@ -375,13 +375,18 @@ export async function fetchTutorVisual(params: {
 }
 
 /** LiveAvatar: short-lived session token for @heygen/liveavatar-web-sdk (server from POST /api/liveavatar-session). */
-export async function fetchLiveAvatarSession(checkoutSessionId: string | null, locale: 'en' | 'es' = 'en') {
+export async function fetchLiveAvatarSession(
+  checkoutSessionId: string | null,
+  locale: 'en' | 'es' = 'en',
+  experienceMode: 'sparki' | 'tutor' = 'tutor',
+) {
   const res = await fetch('/api/liveavatar-session', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       checkout_session_id: checkoutSessionId || '',
       locale: locale === 'es' ? 'es' : 'en',
+      experience_mode: experienceMode,
     }),
   })
   const data = (await res.json().catch(() => ({}))) as {
