@@ -1010,7 +1010,7 @@ export default function InteractiveTutor({
             </p>
           )}
 
-          {liveAvatar && (
+          {liveAvatar && !(isStandaloneTutor && experienceMode === 'sparki') && (
             <div
               ref={avatarStageRef}
               className={cn(
