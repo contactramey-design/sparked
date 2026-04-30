@@ -42,7 +42,8 @@ export default function PricingPage() {
           onClick={() => {
             setError(null)
             setLoading(true)
-            void startAcademyCheckout('/pricing')
+            // Route back into the tutor funnel after purchase so the unlock is immediately visible.
+            void startAcademyCheckout('/tutor')
               .catch((e) => setError(e instanceof Error ? e.message : 'Checkout failed'))
               .finally(() => setLoading(false))
           }}
