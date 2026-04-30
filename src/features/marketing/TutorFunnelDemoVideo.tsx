@@ -1,13 +1,18 @@
 import { useTranslation } from '@/contexts/LocaleContext'
 
-const DEFAULT_HOME_DEMO_VIDEO = '/0418.mov'
+const DEFAULT_HOME_DEMO_VIDEO_EN = '/0418.mov'
+const DEFAULT_HOME_DEMO_VIDEO_ES = '/0418-es.mp4'
 
 export function TutorFunnelDemoVideo() {
-  const { t } = useTranslation()
+  const { t, locale } = useTranslation()
   const url = (
-    import.meta.env.VITE_TUTOR_FUNNEL_DEMO_VIDEO_URL ||
-    import.meta.env.VITE_SCHOOL_DEMO_VIDEO_URL ||
-    DEFAULT_HOME_DEMO_VIDEO
+    locale === 'es'
+      ? import.meta.env.VITE_TUTOR_FUNNEL_DEMO_VIDEO_URL_ES ||
+        import.meta.env.VITE_SCHOOL_DEMO_VIDEO_URL_ES ||
+        DEFAULT_HOME_DEMO_VIDEO_ES
+      : import.meta.env.VITE_TUTOR_FUNNEL_DEMO_VIDEO_URL ||
+        import.meta.env.VITE_SCHOOL_DEMO_VIDEO_URL ||
+        DEFAULT_HOME_DEMO_VIDEO_EN
   ).trim()
 
   if (!url) {
@@ -23,6 +28,7 @@ export function TutorFunnelDemoVideo() {
   if (isDirectVideo) {
     return (
       <video
+        key={url}
         src={url}
         controls
         playsInline
