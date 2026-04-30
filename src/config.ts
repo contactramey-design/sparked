@@ -48,7 +48,7 @@ export const appConfig: AppConfig = {
     accentColor: '#ef4444',    // bright red accent
   },
   parentResources: {
-    handbookPdfUrl: 'https://example.com/parents-handbook.pdf',
+    handbookPdfUrl: '/parent-guide',
   },
   progress: {
     totalSparksStorageKey: 'spark_academy_total_sparks',

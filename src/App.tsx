@@ -56,6 +56,7 @@ import SchoolMathLegacyRedirect from './school/subjects/SchoolMathLegacyRedirect
 import DailySparkQuestPage from './DailySparkQuestPage'
 import PricingPage from './PricingPage'
 import AdventureMapPlaceholderPage from './AdventureMapPlaceholderPage'
+import ParentGuidePage from './ParentGuidePage'
 import './App.css'
 
 function LegacySchoolSubjectsRedirect() {
@@ -168,6 +169,7 @@ function AppShell() {
           <Route path="/ebook/:ebookId" element={<EbookViewerPage />} />
           <Route path="/ebook" element={<EbookViewerPage />} />
           <Route path="/parent" element={<ParentRedirect />} />
+          <Route path="/parent-guide" element={<ParentGuidePage />} />
           <Route path="/coming-soon" element={<ComingSoon />} />
           <Route path="/privacy" element={<PrivacyPage />} />
           <Route path="/compliance" element={<CompliancePage />} />

@@ -523,7 +523,12 @@ export const ParentViewContent: React.FC = () => {
               <li>{t('parentDashboard.guideBullet3')}</li>
               <li>{t('parentDashboard.guideBullet4')}</li>
             </ul>
-            <p className="login-coppa-note mt-4">{t('parentDashboard.parentHandbookNote')}</p>
+            <div className="mt-4 flex flex-wrap items-center gap-3">
+              <Link to="/parent-guide" className="secondary-button">
+                {t('parentDashboard.openParentGuide')}
+              </Link>
+              <p className="login-coppa-note">{t('parentDashboard.parentHandbookNote')}</p>
+            </div>
           </div>
         </div>
       )}
