@@ -842,15 +842,21 @@ export default function InteractiveTutor({
       <div
         className={cn(
           'flex flex-col gap-6 lg:gap-8',
-          'lg:grid lg:items-start',
+          !(isStandaloneTutor && experienceMode === 'sparki') && 'lg:grid lg:items-start',
           isStandaloneTutor && experienceMode === 'sparki'
-            ? 'lg:grid-cols-1'
+            ? ''
             : liveAvatar
               ? 'lg:grid-cols-[minmax(0,1.12fr)_minmax(280px,28rem)]'
               : 'lg:grid-cols-[minmax(280px,38%)_minmax(0,1fr)]',
         )}
       >
-        <div className="min-w-0 space-y-6 lg:sticky lg:top-3 lg:z-[1] lg:max-h-[calc(100dvh-6rem)] lg:overflow-y-auto lg:pb-2 lg:pr-1">
+        <div
+          className={cn(
+            'min-w-0 space-y-6',
+            !(isStandaloneTutor && experienceMode === 'sparki') &&
+              'lg:sticky lg:top-3 lg:z-[1] lg:max-h-[calc(100dvh-6rem)] lg:overflow-y-auto lg:pb-2 lg:pr-1',
+          )}
+        >
           {isStandaloneTutor && experienceMode === 'sparki' ? (
             <section className="rounded-3xl border border-indigo-500/35 bg-gradient-to-b from-slate-950 via-indigo-950 to-slate-900 px-4 py-6 text-center shadow-lg md:px-6">
               <p className="font-heading text-xl font-bold text-amber-100">{t('aiTutor.sparkiModeTitle')}</p>
