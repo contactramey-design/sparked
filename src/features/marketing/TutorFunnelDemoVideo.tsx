@@ -1,11 +1,13 @@
 import { useTranslation } from '@/contexts/LocaleContext'
 
+const DEFAULT_HOME_DEMO_VIDEO = '/0418.mov'
+
 export function TutorFunnelDemoVideo() {
   const { t } = useTranslation()
   const url = (
     import.meta.env.VITE_TUTOR_FUNNEL_DEMO_VIDEO_URL ||
     import.meta.env.VITE_SCHOOL_DEMO_VIDEO_URL ||
-    ''
+    DEFAULT_HOME_DEMO_VIDEO
   ).trim()
 
   if (!url) {
