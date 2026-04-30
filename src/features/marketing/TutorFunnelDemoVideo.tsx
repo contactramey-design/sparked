@@ -16,7 +16,7 @@ export function TutorFunnelDemoVideo() {
     )
   }
 
-  const isDirectVideo = /\.(mp4|webm|ogg)(\?|$)/i.test(url)
+  const isDirectVideo = /\.(mp4|webm|ogg|mov)(\?|$)/i.test(url)
 
   if (isDirectVideo) {
     return (
