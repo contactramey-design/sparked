@@ -380,6 +380,23 @@ export default function InteractiveTutor({
   }, [experienceMode])
 
   useEffect(() => {
+    if (!isStandaloneTutor) return
+    if (experienceMode !== 'sparki') return
+    if (!hasActiveSubscription) return
+    if (liveAvatar) return
+    if (!readVoiceConsent()) return
+    void (async () => {
+      try {
+        if (!isTots) setVoiceOut(true)
+        setLiveAvatar(true)
+        await startAvatarSession()
+      } catch {
+        /* ignore */
+      }
+    })()
+  }, [experienceMode, hasActiveSubscription, isStandaloneTutor, isTots, liveAvatar, startAvatarSession])
+
+  useEffect(() => {
     const prev = prevLocaleRef.current
     prevLocaleRef.current = locale
     if (prev === locale || !liveAvatar) return
@@ -814,14 +831,64 @@ export default function InteractiveTutor({
         <div className="min-w-0 space-y-6 lg:sticky lg:top-3 lg:z-[1] lg:max-h-[calc(100dvh-6rem)] lg:overflow-y-auto lg:pb-2 lg:pr-1">
           {isStandaloneTutor && experienceMode === 'sparki' ? (
             <section className="rounded-3xl border border-indigo-500/35 bg-gradient-to-b from-slate-950 via-indigo-950 to-slate-900 px-4 py-6 text-center shadow-lg md:px-6">
-              <img
-                src="/adventure-assets/sparki-default.svg"
-                alt=""
-                className="mx-auto h-36 w-36 max-w-[min(100%,11rem)] object-contain md:h-44 md:w-44"
-              />
-              <p className="mt-4 font-heading text-xl font-bold text-amber-100">{t('aiTutor.sparkiModeTitle')}</p>
+              <p className="font-heading text-xl font-bold text-amber-100">{t('aiTutor.sparkiModeTitle')}</p>
               <p className="mt-2 text-base leading-relaxed text-amber-100/90">{t('aiTutor.sparkiModePlaceholder')}</p>
-              <p className="mt-4 text-2xl font-bold tabular-nums text-amber-200">
+
+              {liveAvatar ? (
+                <div
+                  ref={avatarStageRef}
+                  className={cn(
+                    'mt-5 overflow-hidden rounded-2xl border border-white/10 bg-slate-900 shadow-md md:rounded-3xl md:shadow-lg',
+                    'supports-[height:100dvh]:[&:fullscreen]:min-h-[100dvh] [&:fullscreen]:max-h-none [&:fullscreen]:rounded-none [&:fullscreen]:border-0',
+                  )}
+                >
+                  <div className="flex flex-wrap items-center justify-end gap-2 border-b border-white/10 bg-slate-950/90 px-2 py-2 sm:px-3">
+                    <button
+                      type="button"
+                      className="min-h-[44px] rounded-lg bg-white/10 px-3 text-sm font-semibold text-white hover:bg-white/20"
+                      onClick={() => void toggleAvatarFullscreen()}
+                    >
+                      {avatarFullscreen ? t('aiTutor.avatarExitFullscreen') : t('aiTutor.avatarFullscreen')}
+                    </button>
+                  </div>
+                  <div
+                    className="relative block w-full cursor-pointer bg-black"
+                    role="presentation"
+                    tabIndex={-1}
+                    onClick={() => {
+                      const el = videoRef.current
+                      if (el) void el.play().catch(() => {})
+                    }}
+                  >
+                    <video
+                      ref={videoRef}
+                      className="aspect-video w-full max-h-[min(72vh,720px)] object-cover object-center [&:fullscreen]:max-h-none"
+                      playsInline
+                      // iOS Safari: inline playback in webviews / older WKWebView
+                      {...{ 'webkit-playsinline': 'true' } as React.HTMLAttributes<HTMLVideoElement>}
+                      muted={false}
+                      autoPlay
+                    />
+                  </div>
+                  <p className="bg-slate-800 px-3 py-2 text-center text-xs text-slate-300 sm:px-4">
+                    {t('aiTutor.videoTapToPlayHint')}
+                  </p>
+                </div>
+              ) : (
+                <div className="mt-5 flex flex-col items-center gap-3">
+                  <button
+                    type="button"
+                    className="min-h-[56px] w-full max-w-sm rounded-2xl bg-indigo-600 px-6 text-lg font-bold text-white shadow-md hover:bg-indigo-700 disabled:opacity-60"
+                    onClick={() => void onToggleLiveAvatar()}
+                    disabled={avatarBusy}
+                  >
+                    {freeLocked ? t('aiTutor.avatarLockedShort') : t('aiTutor.avatarStart')}
+                  </button>
+                  <p className="text-xs leading-snug text-amber-100/80">{t('aiTutor.videoTapToPlayHint')}</p>
+                </div>
+              )}
+
+              <p className="mt-5 text-2xl font-bold tabular-nums text-amber-200">
                 {t('aiTutor.sparkiStarsStub')}: 0
               </p>
             </section>
