@@ -6,6 +6,8 @@ const SLUG_TO_POST = {
   'internet-safety': 'post1',
   'adventure-academy': 'post2',
   'homework-at-home': 'post3',
+  'ai-in-schools': 'post4',
+  'coppa-ai-parent-controls': 'post5',
 } as const
 
 type Slug = keyof typeof SLUG_TO_POST
