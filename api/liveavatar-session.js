@@ -57,6 +57,7 @@ export default async function handler(req, res) {
   const experienceModeRaw = typeof body.experience_mode === 'string' ? body.experience_mode.trim().toLowerCase() : ''
   const experienceMode = experienceModeRaw === 'sparki' ? 'sparki' : 'tutor'
   const isDev = process.env.NODE_ENV !== 'production'
+  const debug = isDev || process.env.LIVEAVATAR_DEBUG === 'true'
 
   /**
    * Unpaid live preview (empty checkout_session_id) burns LiveAvatar quota — extra per-IP hourly cap.
@@ -179,8 +180,25 @@ export default async function handler(req, res) {
 
     if (!tokenRes.ok || !parsed.ok) {
       console.error('[liveavatar-session]', tokenRes.status, raw.slice(0, 500))
+      const baseError = parsed.ok ? 'Could not create LiveAvatar session.' : parsed.error
+      const hint =
+        typeof baseError === 'string' && baseError.toLowerCase().includes('avatar')
+          ? experienceMode === 'sparki'
+            ? 'LiveAvatar says the Sparki avatar was not found for this API key. Set LIVEAVATAR_SPARKI_AVATAR_ID in Vercel to the correct avatar id for Sparki.'
+            : 'LiveAvatar says the Tutor avatar was not found for this API key. Set LIVEAVATAR_TUTOR_AVATAR_ID (or LIVEAVATAR_AVATAR_ID) in Vercel to the correct avatar id for Maya.'
+          : ''
       res.status(502).json({
-        error: parsed.ok ? 'Could not create LiveAvatar session.' : parsed.error,
+        error: baseError,
+        message: hint || undefined,
+        debug: debug
+          ? {
+              experience_mode: experienceMode,
+              requested_mode: payload.mode,
+              avatar_id: avatarId,
+              has_voice: Boolean(voiceId),
+              has_context: Boolean(contextId),
+            }
+          : undefined,
       })
       return
     }
@@ -189,6 +207,12 @@ export default async function handler(req, res) {
       session_id: parsed.session_id,
       session_token: parsed.session_token,
       mode: payload.mode,
+      debug: debug
+        ? {
+            experience_mode: experienceMode,
+            avatar_id: avatarId,
+          }
+        : undefined,
     })
   } catch (e) {
     if (process.env.NODE_ENV !== 'production') {

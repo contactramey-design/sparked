@@ -85,27 +85,36 @@ export default async function handler(req, res) {
         const apiKey = Boolean(
           process.env.LIVEAVATAR_API_KEY?.trim() || process.env.HEYGEN_API_KEY?.trim(),
         )
-        const avatarId = (
-          process.env.LIVEAVATAR_AVATAR_ID || process.env.HEYGEN_TUTOR_AVATAR_ID || ''
+        const tutorAvatarId = (
+          process.env.LIVEAVATAR_TUTOR_AVATAR_ID ||
+          process.env.LIVEAVATAR_AVATAR_ID ||
+          process.env.HEYGEN_TUTOR_AVATAR_ID ||
+          ''
         ).trim()
+        const sparkiAvatarId = (process.env.LIVEAVATAR_SPARKI_AVATAR_ID || '').trim()
         const voiceId = (
-          process.env.LIVEAVATAR_VOICE_ID || process.env.HEYGEN_TUTOR_VOICE_ID || ''
+          process.env.LIVEAVATAR_TUTOR_VOICE_ID ||
+          process.env.LIVEAVATAR_VOICE_ID ||
+          process.env.HEYGEN_TUTOR_VOICE_ID ||
+          ''
         ).trim()
-        const contextId = (process.env.LIVEAVATAR_CONTEXT_ID || '').trim()
-        const avatarOk = Boolean(avatarId) && avatarId !== 'default'
-        const fullModeReady = Boolean(contextId) && Boolean(voiceId) && avatarOk
-        const liteReady = avatarOk
+        const contextId = (process.env.LIVEAVATAR_TUTOR_CONTEXT_ID || process.env.LIVEAVATAR_CONTEXT_ID || '').trim()
+        const tutorAvatarOk = Boolean(tutorAvatarId) && tutorAvatarId !== 'default'
+        const sparkiAvatarOk = Boolean(sparkiAvatarId) && sparkiAvatarId !== 'default'
+        const fullModeReady = Boolean(contextId) && Boolean(voiceId) && tutorAvatarOk
+        const liteReady = tutorAvatarOk
         return {
           apiKeySet: apiKey,
-          avatarIdSet: avatarOk,
+          tutorAvatarIdSet: tutorAvatarOk,
+          sparkiAvatarIdSet: sparkiAvatarOk,
           voiceIdSet: Boolean(voiceId),
           contextIdSet: Boolean(contextId),
           fullModeReady,
           liteModeReady: liteReady,
           message: !apiKey
             ? 'Set LIVEAVATAR_API_KEY (or HEYGEN_API_KEY as fallback) for POST /api/liveavatar-session.'
-            : !avatarOk
-              ? 'Set LIVEAVATAR_AVATAR_ID or HEYGEN_TUTOR_AVATAR_ID to a real LiveAvatar avatar UUID (not "default").'
+            : !tutorAvatarOk
+              ? 'Set LIVEAVATAR_TUTOR_AVATAR_ID (or LIVEAVATAR_AVATAR_ID / HEYGEN_TUTOR_AVATAR_ID) to a real LiveAvatar avatar id (not "default").'
               : fullModeReady
                 ? 'LiveAvatar FULL mode: token route will use avatar + voice + context.'
                 : liteReady
