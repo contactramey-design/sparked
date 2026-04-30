@@ -104,6 +104,10 @@ export default function InteractiveTutor({
   const videoRef = useRef<HTMLVideoElement>(null)
   const avatarStageRef = useRef<HTMLDivElement | null>(null)
   const avatarRef = useRef<LiveAvatarSession | null>(null)
+  const avatarStartInFlightRef = useRef(false)
+  const avatarLastStartKeyRef = useRef<string>('')
+  const sparkiAutoStartAttemptedRef = useRef(false)
+  const sparkiAutoStartCooldownUntilRef = useRef(0)
   const audioAbortRef = useRef<AbortController | null>(null)
   const recognitionRef = useRef<{ stop: () => void } | null>(null)
   const prevLocaleRef = useRef(locale)
@@ -325,6 +329,11 @@ export default function InteractiveTutor({
   }, [])
 
   const startAvatarSession = useCallback(async () => {
+    const startKey = `${experienceMode}:${locale}:${isTots ? 'tots' : 'nontots'}`
+    if (avatarStartInFlightRef.current) return
+    if (avatarLastStartKeyRef.current === startKey && Date.now() < sparkiAutoStartCooldownUntilRef.current) return
+    avatarStartInFlightRef.current = true
+    avatarLastStartKeyRef.current = startKey
     setAvatarMsg(null)
     setAvatarBusy(true)
     await teardownAvatar()
@@ -367,14 +376,17 @@ export default function InteractiveTutor({
       await session.start()
     } catch (e) {
       setAvatarMsg(e instanceof Error ? e.message : t('aiTutor.avatarStartFailed'))
-      setLiveAvatar(false)
+      // Prevent rapid retry loops (especially when an avatar_id is invalid or quota/rate limits hit).
+      sparkiAutoStartCooldownUntilRef.current = Date.now() + 30_000
     } finally {
       setAvatarBusy(false)
+      avatarStartInFlightRef.current = false
     }
   }, [checkoutSessionId, experienceMode, isTots, locale, t, teardownAvatar])
 
   useEffect(() => {
     if (!liveAvatar) return
+    if (avatarBusy || avatarStartInFlightRef.current) return
     void startAvatarSession()
     // eslint-disable-next-line react-hooks/exhaustive-deps -- intentional: restart avatar when mode changes
   }, [experienceMode])
@@ -382,9 +394,12 @@ export default function InteractiveTutor({
   useEffect(() => {
     if (!isStandaloneTutor) return
     if (experienceMode !== 'sparki') return
+    if (sparkiAutoStartAttemptedRef.current) return
+    if (Date.now() < sparkiAutoStartCooldownUntilRef.current) return
     if (!hasActiveSubscription) return
     if (liveAvatar) return
     if (!readVoiceConsent()) return
+    sparkiAutoStartAttemptedRef.current = true
     void (async () => {
       try {
         if (!isTots) setVoiceOut(true)
@@ -395,6 +410,13 @@ export default function InteractiveTutor({
       }
     })()
   }, [experienceMode, hasActiveSubscription, isStandaloneTutor, isTots, liveAvatar, startAvatarSession])
+
+  useEffect(() => {
+    // Reset Sparki auto-start attempt when leaving Sparki mode, so user can re-enter and auto-start once.
+    if (experienceMode !== 'sparki') {
+      sparkiAutoStartAttemptedRef.current = false
+    }
+  }, [experienceMode])
 
   useEffect(() => {
     const prev = prevLocaleRef.current
